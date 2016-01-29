@@ -4,7 +4,13 @@ module Nanoc::Extra::Checking::Checks
     def run
       require 'set'
 
-      item_rep_paths = Set.new(@items.map(&:reps).flatten.map(&:raw_path))
+      item_rep_paths =
+        Set.new(
+          @items
+            .flat_map(&:reps)
+            .map(&:unwrap)
+            .flat_map(&:raw_paths)
+            .flat_map(&:values))
 
       output_filenames.each do |f|
         next if pruner.filename_excluded?(f)
