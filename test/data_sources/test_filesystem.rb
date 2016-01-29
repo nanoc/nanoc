@@ -8,7 +8,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = SampleFilesystemDataSource.new(nil, nil, nil, nil)
 
     # Check
-    data_source.expects(:load_objects).with('content', 'item', Nanoc::Int::Item)
+    data_source.expects(:load_objects).with('content', Nanoc::Int::Item)
     data_source.items
   end
 
@@ -17,7 +17,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = SampleFilesystemDataSource.new(nil, nil, nil, nil)
 
     # Check
-    data_source.expects(:load_objects).with('layouts', 'layout', Nanoc::Int::Layout)
+    data_source.expects(:load_objects).with('layouts', Nanoc::Int::Layout)
     data_source.layouts
   end
 
@@ -261,7 +261,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
-    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal({ 'foo' => 'bar' }, result[0])
     assert_equal('', result[1])
   end
@@ -278,7 +278,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
-    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal({ 'foo' => 'bar' }, result[0])
     assert_equal('', result[1])
   end
@@ -295,7 +295,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
-    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal({ 'foo' => 'bar' }, result[0])
     assert_equal('', result[1])
   end
@@ -312,7 +312,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     assert_raises(RuntimeError) do
-      data_source.instance_eval { parse('test.html', nil, 'foobar') }
+      data_source.instance_eval { parse('test.html', nil) }
     end
   end
 
@@ -328,7 +328,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
-    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal(File.read('test.html'), result[1])
     assert_equal({},                     result[0])
   end
@@ -346,7 +346,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
-    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal({ 'foo' => 'bar' }, result[0])
     assert_equal("  \t\n  blah blah\n", result[1])
   end
@@ -364,7 +364,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
-    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal({ 'foo' => 'bar' }, result[0])
     assert_equal("  blah blah\n", result[1])
   end
@@ -382,7 +382,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
-    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal({}, result[0])
     assert_equal("\nblah blah\n-----", result[1])
   end
@@ -398,7 +398,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, encoding: 'utf-8')
 
-    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal({ 'utf8bomawareness' => 'high' }, result[0])
     assert_equal("content goes here\n", result[1])
   end
@@ -415,7 +415,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
-    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal({}, result[0])
     assert_equal(content, result[1])
   end
@@ -433,7 +433,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
-    result = data_source.instance_eval { parse('test.html', nil, 'foobar') }
+    result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal({}, result[0])
     assert_equal(content, result[1])
   end
@@ -447,7 +447,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     # Parse it
-    result = data_source.instance_eval { parse('test.html', 'test.yaml', 'foobar') }
+    result = data_source.instance_eval { parse('test.html', 'test.yaml') }
     assert_equal({ 'foo' => 'bar' }, result[0])
     assert_equal('blah blah', result[1])
   end
@@ -464,7 +464,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     assert_raises(Nanoc::DataSources::Filesystem::InvalidMetadataError) do
-      data_source.instance_eval { parse('test.html', nil, 'foobar') }
+      data_source.instance_eval { parse('test.html', nil) }
     end
   end
 
@@ -475,7 +475,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::FilesystemUnified.new(nil, nil, nil, nil)
 
     assert_raises(Nanoc::DataSources::Filesystem::InvalidMetadataError) do
-      data_source.instance_eval { parse('test.html', 'test.yaml', 'foobar') }
+      data_source.instance_eval { parse('test.html', 'test.yaml') }
     end
   end
 end
