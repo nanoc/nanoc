@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.1.3 (2016-01-30)
+
+Fixes:
+
+* Fixed crash in `check` command when the subject of an issue is nil (#804, #811)
+* Made stale check not ignore non-final snapshot paths (#809, #810)
+
 ## 4.1.2 (2016-01-16)
 
 Fixes:
