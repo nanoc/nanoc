@@ -31,7 +31,7 @@ Style/IndentArray:
 
 Lint/DuplicateMethods:
   Exclude:
-    - 'test/data_sources/test_filesystem_unified.rb'
+    - 'test/data_sources/test_filesystem.rb'
     - 'spec/spec_helper.rb'
 
 
