@@ -129,17 +129,21 @@ module Nanoc::Extra::Checking
       issues
     end
 
+    def subject_to_s(s)
+      s || '(global)'
+    end
+
     def print_issues(issues)
       require 'colored'
 
       return if issues.empty?
       puts 'Issues found!'
-      issues.group_by(&:subject).to_a.sort_by(&:first).each do |pair|
+      issues.group_by(&:subject).to_a.sort_by { |s| subject_to_s(s.first) }.each do |pair|
         subject = pair.first
         issues  = pair.last
         next if issues.empty?
 
-        puts "  #{subject}:"
+        puts "  #{subject_to_s(subject)}:"
         issues.each do |i|
           puts "    [ #{'ERROR'.red} ] #{i.check_class.identifier} - #{i.description}"
         end
