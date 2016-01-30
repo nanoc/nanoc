@@ -4,14 +4,6 @@ module Nanoc::Extra::Checking::Checks
     def run
       require 'set'
 
-      item_rep_paths =
-        Set.new(
-          @items
-            .flat_map(&:reps)
-            .map(&:unwrap)
-            .flat_map(&:raw_paths)
-            .flat_map(&:values))
-
       output_filenames.each do |f|
         next if pruner.filename_excluded?(f)
         next if item_rep_paths.include?(f)
@@ -23,6 +15,16 @@ module Nanoc::Extra::Checking::Checks
     end
 
     protected
+
+    def item_rep_paths
+      @item_rep_paths ||=
+        Set.new(
+          @items
+            .flat_map(&:reps)
+            .map(&:unwrap)
+            .flat_map(&:raw_paths)
+            .flat_map(&:values))
+    end
 
     def pruner
       exclude_config = @config.fetch(:prune, {}).fetch(:exclude, [])
