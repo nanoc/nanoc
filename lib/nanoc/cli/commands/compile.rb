@@ -70,7 +70,7 @@ module Nanoc::CLI::Commands
           unless rep.binary?
             new_contents = File.file?(path) ? File.read(path) : nil
             if old_contents[rep] && new_contents
-              generate_diff_for(rep, old_contents[rep], new_contents)
+              generate_diff_for(path, old_contents[rep], new_contents)
             end
             old_contents.delete(rep)
           end
@@ -95,14 +95,14 @@ module Nanoc::CLI::Commands
         @diff_threads.each(&:join)
       end
 
-      def generate_diff_for(rep, old_content, new_content)
+      def generate_diff_for(path, old_content, new_content)
         return if old_content == new_content
 
         @diff_threads << Thread.new do
           # Generate diff
           diff = diff_strings(old_content, new_content)
-          diff.sub!(/^--- .*/,    '--- ' + rep.raw_path)
-          diff.sub!(/^\+\+\+ .*/, '+++ ' + rep.raw_path)
+          diff.sub!(/^--- .*/,    '--- ' + path)
+          diff.sub!(/^\+\+\+ .*/, '+++ ' + path)
 
           # Write diff
           @diff_lock.synchronize do
