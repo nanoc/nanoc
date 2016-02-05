@@ -2,34 +2,39 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   include Nanoc::Helpers::LinkTo
 
   def test_link_to_with_path
-    # Check
     assert_equal(
       '<a href="/foo/">Foo</a>',
       link_to('Foo', '/foo/'),
     )
   end
 
-  def test_link_to_with_rep
-    # Create rep
-    rep = mock
-    rep.stubs(:path).returns('/bar/')
+  def test_link_to_with_item_without_reps_view
+    target = Nanoc::ItemWithoutRepsView.new(mock, {})
+    target.stubs(:path).returns('/bar/')
 
-    # Check
     assert_equal(
       '<a href="/bar/">Bar</a>',
-      link_to('Bar', rep),
+      link_to('Bar', target),
     )
   end
 
-  def test_link_to_with_item
-    # Create rep
-    item = mock
-    item.stubs(:path).returns('/bar/')
+  def test_link_to_with_item_with_reps_view
+    target = Nanoc::ItemWithRepsView.new(mock, {})
+    target.stubs(:path).returns('/bar/')
 
-    # Check
     assert_equal(
       '<a href="/bar/">Bar</a>',
-      link_to('Bar', item),
+      link_to('Bar', target),
+    )
+  end
+
+  def test_link_to_with_item_rep_view
+    target = Nanoc::ItemRepView.new(mock, {})
+    target.stubs(:path).returns('/bar/')
+
+    assert_equal(
+      '<a href="/bar/">Bar</a>',
+      link_to('Bar', target),
     )
   end
 
@@ -50,13 +55,11 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   end
 
   def test_link_to_to_nil_item_or_item_rep
-    obj = Object.new
-    def obj.path
-      nil
-    end
+    target = Nanoc::ItemRepView.new(mock, {})
+    target.stubs(:path).returns(nil)
 
     assert_raises RuntimeError do
-      link_to('Some Text', obj)
+      link_to('Some Text', target)
     end
   end
 
@@ -208,14 +211,18 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     YARD.parse(LIB_DIR + '/nanoc/helpers/link_to.rb')
 
     # Mock
-    @items = [mock, mock, mock]
+    @items = [
+      Nanoc::ItemRepView.new(mock, {}),
+      Nanoc::ItemRepView.new(mock, {}),
+      Nanoc::ItemRepView.new(mock, {}),
+    ]
     @items[0].stubs(:identifier).returns('/about/')
     @items[0].stubs(:path).returns('/about.html')
     @items[1].stubs(:identifier).returns('/software/')
     @items[1].stubs(:path).returns('/software.html')
     @items[2].stubs(:identifier).returns('/software/nanoc/')
     @items[2].stubs(:path).returns('/software/nanoc.html')
-    about_rep_vcard = mock
+    about_rep_vcard = Nanoc::ItemRepView.new(mock, {})
     about_rep_vcard.stubs(:path).returns('/about.vcf')
     @items[0].stubs(:rep).with(:vcard).returns(about_rep_vcard)
 
