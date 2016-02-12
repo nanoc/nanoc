@@ -10,7 +10,7 @@ module Nanoc::CLI::Commands
   class ShowPlugins < ::Nanoc::CLI::CommandRunner
     def run
       # Check arguments
-      if arguments.size != 0
+      if arguments.any?
         raise Nanoc::Int::Errors::GenericTrivial, "usage: #{command.usage}"
       end
 

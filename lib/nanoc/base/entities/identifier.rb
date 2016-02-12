@@ -124,7 +124,7 @@ module Nanoc
 
       extname = File.extname(@string)
 
-      if extname.size > 0
+      if !extname.empty?
         @string[0..-extname.size - 1]
       else
         @string
@@ -144,7 +144,7 @@ module Nanoc
     # @return [String]
     def without_exts
       extname = exts.join('.')
-      if extname.size > 0
+      if !extname.empty?
         @string[0..-extname.size - 2]
       else
         @string

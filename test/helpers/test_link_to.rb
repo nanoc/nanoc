@@ -6,14 +6,18 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     YARD.parse(LIB_DIR + '/nanoc/helpers/link_to.rb')
 
     # Mock
-    @items = [mock, mock, mock]
+    @items = [
+      Nanoc::ItemRepView.new(mock, {}),
+      Nanoc::ItemRepView.new(mock, {}),
+      Nanoc::ItemRepView.new(mock, {}),
+    ]
     @items[0].stubs(:identifier).returns('/about/')
     @items[0].stubs(:path).returns('/about.html')
     @items[1].stubs(:identifier).returns('/software/')
     @items[1].stubs(:path).returns('/software.html')
     @items[2].stubs(:identifier).returns('/software/nanoc/')
     @items[2].stubs(:path).returns('/software/nanoc.html')
-    about_rep_vcard = mock
+    about_rep_vcard = Nanoc::ItemRepView.new(mock, {})
     about_rep_vcard.stubs(:path).returns('/about.vcf')
     @items[0].stubs(:rep).with(:vcard).returns(about_rep_vcard)
 

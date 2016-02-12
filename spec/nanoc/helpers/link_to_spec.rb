@@ -49,6 +49,22 @@ describe Nanoc::Helpers::LinkTo, helper: true do
       it { is_expected.to eql('<a href="/target.html">Text</a>') }
     end
 
+    context 'with nil' do
+      let(:target) { nil }
+
+      it 'raises' do
+        expect { subject }.to raise_error(ArgumentError)
+      end
+    end
+
+    context 'with something else' do
+      let(:target) { :donkey }
+
+      it 'raises' do
+        expect { subject }.to raise_error(ArgumentError)
+      end
+    end
+
     context 'with nil path' do
       let(:item) { ctx.create_item('content', {}, '/target/') }
       let(:target) { ctx.create_rep(item, nil) }
