@@ -51,6 +51,10 @@ module Nanoc::Int
       @wrapped
     end
 
+    def key?(key)
+      @wrapped.key?(key)
+    end
+
     def [](key)
       @wrapped[key]
     end
