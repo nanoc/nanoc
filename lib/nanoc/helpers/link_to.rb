@@ -43,12 +43,16 @@ module Nanoc::Helpers
     #   # => '<a title="My super cool blog" href="/blog/">Blog</a>'
     def link_to(text, target, attributes = {})
       # Find path
-      if target.is_a?(String)
-        path = target
-      else
-        path = target.path
-        raise "Cannot create a link to #{target.inspect} because this target is not outputted (its routing rule returns nil)" if path.nil?
-      end
+      path =
+        case target
+        when String
+          target
+        when Nanoc::ItemWithRepsView, Nanoc::ItemWithoutRepsView, Nanoc::ItemRepView
+          raise "Cannot create a link to #{target.inspect} because this target is not outputted (its routing rule returns nil)" if target.path.nil?
+          target.path
+        else
+          raise ArgumentError, "Cannot link to #{target.inspect} (expected a string or an item, not a #{target.class.name})"
+        end
 
       # Join attributes
       attributes = attributes.reduce('') do |memo, (key, value)|
