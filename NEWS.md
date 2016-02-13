@@ -7,6 +7,18 @@ Features:
 * Allow creating items and layouts with a pre-calculated checksum (#793) [Ruben Verborgh]
 * Allow lazy-loading item/layout content and attributes (#794) [Ruben Verborgh]
 
+## 4.1.4 (2016-02-13)
+
+Fixes:
+
+* Added missing `Configuration#key?` method (#815, #820)
+* Made output diff use correct snapshot rather than `:last` (#813, #814)
+
+Enhancements:
+
+* Sped up item resolution in Sass filter (#821)
+* Made `#link_to` more resilient to unsupported argument types (#816, #819)
+
 ## 4.1.3 (2016-01-30)
 
 Fixes:

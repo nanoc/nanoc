@@ -18,11 +18,24 @@ module Nanoc::Filters
       engine.render
     end
 
+    def self.item_filename_map_for_site(site, items)
+      @item_filename_map ||= {}
+      @item_filename_map[site] ||=
+        {}.tap do |map|
+          items.each do |item|
+            if item.raw_filename
+              path = Pathname.new(item.raw_filename).realpath.to_s
+              map[path] = item
+            end
+          end
+        end
+    end
+
     def imported_filename_to_item(filename)
-      @items.find do |i|
-        i.raw_filename &&
-          Pathname.new(i.raw_filename).realpath == Pathname.new(filename).realpath
-      end
+      realpath = Pathname.new(filename).realpath.to_s
+
+      map = self.class.item_filename_map_for_site(@site, @items)
+      map[realpath]
     end
   end
 end

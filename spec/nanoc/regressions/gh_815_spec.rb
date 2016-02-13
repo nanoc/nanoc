@@ -1,4 +1,4 @@
-describe 'GH-813', site: true, stdio: true do
+describe 'GH-815', site: true, stdio: true do
   before do
     File.write('nanoc.yaml', "animal: \"donkey\"\n")
     File.write('content/foo.md', '<%= @config.key?(:animal) %>')
@@ -10,7 +10,7 @@ describe 'GH-813', site: true, stdio: true do
 EOS
   end
 
-  specify 'Nanoc generates diff for proper path' do
+  it 'handles #key? properly' do
     Nanoc::CLI.run(['compile'])
 
     expect(File.read('output/foo.txt')).to eql('true')
