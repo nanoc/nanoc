@@ -9,7 +9,7 @@ Fixes:
 
 Enhancements:
 
-* Sped up item resolution Sass filter (#821)
+* Sped up item resolution in Sass filter (#821)
 * Made `#link_to` more resilient to unsupported argument types (#816, #819)
 
 ## 4.1.3 (2016-01-30)
