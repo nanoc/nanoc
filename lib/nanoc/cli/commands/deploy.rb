@@ -13,78 +13,107 @@ option :n, :'dry-run',      'show what would be deployed'
 module Nanoc::CLI::Commands
   class Deploy < ::Nanoc::CLI::CommandRunner
     def run
+      prepare
+
+      case
+      when options[:'list-deployers']
+        list_deployers
+      when options[:list]
+        list_deploy_configs
+      else
+        deploy
+      end
+    end
+
+    private
+
+    def prepare
       load_site
       # FIXME: ugly to preprocess here
       site.compiler.action_provider.preprocess(site)
+    end
 
-      # List deployers
-      if options[:'list-deployers']
-        deployers      = Nanoc::Int::PluginRegistry.instance.find_all(Nanoc::Extra::Deployer)
-        deployer_names = deployers.keys.sort_by(&:to_s)
-        puts 'Available deployers:'
-        deployer_names.each do |name|
+    def list_deployers
+      deployers      = Nanoc::Int::PluginRegistry.instance.find_all(Nanoc::Extra::Deployer)
+      deployer_names = deployers.keys.sort_by(&:to_s)
+      puts 'Available deployers:'
+      deployer_names.each do |name|
+        puts "  #{name}"
+      end
+    end
+
+    def list_deploy_configs
+      if deploy_configs.empty?
+        puts 'No deployment configurations.'
+      else
+        puts 'Available deployment configurations:'
+        deploy_configs.keys.each do |name|
           puts "  #{name}"
         end
-        return
       end
+    end
 
-      # Get & list configs
-      deploy_configs = site.config.fetch(:deploy, {})
+    def deploy
+      deployer = deployer_for(deploy_config)
 
-      if options[:list]
-        if deploy_configs.empty?
-          puts 'No deployment configurations.'
-        else
-          puts 'Available deployment configurations:'
-          deploy_configs.keys.each do |name|
-            puts "  #{name}"
-          end
-        end
-        return
-      end
+      checks_successful = options[:'no-check'] ? true : check
+      return unless checks_successful
 
-      # Can't proceed further without a deploy config
+      deployer.run
+    end
+
+    def deploy_config
       if deploy_configs.empty?
         raise Nanoc::Int::Errors::GenericTrivial, 'The site has no deployment configurations.'
       end
 
-      # Get target
       target = options.fetch(:target, :default).to_sym
-      config = deploy_configs.fetch(target) do
+      deploy_configs.fetch(target) do
+        # FIXME: target name is unobvious
         raise Nanoc::Int::Errors::GenericTrivial, "The site has no deployment configuration for #{target}."
       end
+    end
 
-      # Get deployer
+    def deployer_for(config)
+      deployer_class_for_config(config).new(
+        site.config[:output_dir],
+        config,
+        dry_run: options[:'dry-run'],
+      )
+    end
+
+    def check
+      runner = Nanoc::Extra::Checking::Runner.new(site)
+      if runner.dsl_present?
+        puts 'Running issue checks…'
+        is_success = runner.run_for_deploy
+        if is_success
+          puts 'No issues found. Deploying!'
+        else
+          puts 'Issues found, deploy aborted.'
+        end
+        is_success
+      else
+        true
+      end
+    end
+
+    def deploy_configs
+      site.config.fetch(:deploy, {})
+    end
+
+    def deployer_class_for_config(config)
       names = Nanoc::Extra::Deployer.all.keys
       name = config.fetch(:kind) do
         $stderr.puts 'Warning: The specified deploy target does not have a kind attribute. Assuming rsync.'
         'rsync'
       end
+
       deployer_class = Nanoc::Extra::Deployer.named(name)
       if deployer_class.nil?
         raise Nanoc::Int::Errors::GenericTrivial, "The specified deploy target has an unrecognised kind “#{name}” (expected one of #{names.join(', ')})."
       end
-
-      # Check
-      unless options[:'no-check']
-        runner = Nanoc::Extra::Checking::Runner.new(site)
-        if runner.dsl_present?
-          puts 'Running issue checks…'
-          ok = runner.run_for_deploy
-          unless ok
-            puts 'Issues found, deploy aborted.'
-            return
-          end
-          puts 'No issues found. Deploying!'
-        end
-      end
-
-      # Run
-      deployer = deployer_class.new(
-        site.config[:output_dir],
-        config,
-        dry_run: options[:'dry-run'])
-      deployer.run
+      deployer_class
     end
   end
 end
