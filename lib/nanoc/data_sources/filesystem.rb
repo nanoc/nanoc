@@ -26,36 +26,15 @@ module Nanoc::DataSources
   # The metadata section can be omitted. If the file does not start with
   # three or five dashes, the entire file will be considered as content.
   #
-  # The identifier of items and layouts is determined as follows. A file with
-  # an `index.*` filename, such as `index.txt`, will have the filesystem path
-  # with the `index.*` part stripped as a identifier. For example:
+  # The identifier of items and layouts is the filename itself, without the
+  # root directory (as determined by the `content_dir` or `layouts_dir`
+  # configuration attribute, for items resp. layouts). For example:
   #
-  #     foo/bar/index.html → /foo/bar/
-  #
-  # In other cases, the identifier is calculated by stripping the extension.
-  # If the `allow_periods_in_identifiers` attribute in the configuration is
-  # true, only the last extension will be stripped if the file has multiple
-  # extensions; if it is false or unset, all extensions will be stripped.
-  # For example:
-  #
-  #     (`allow_periods_in_identifiers` set to true)
-  #     foo.entry.html → /foo.entry/
-  #
-  #     (`allow_periods_in_identifiers` set to false)
-  #     foo.html.erb → /foo/
+  #     foo/bar/index.html → /foo/bar/index.html
+  #     foo/bar.html       → /foo/bar.html
   #
   # Note that each item must have an unique identifier. Nanoc will display an
   # error if two items with the same identifier are found.
-  #
-  # Some more examples:
-  #
-  #     content/index.html          → /
-  #     content/foo.html            → /foo/
-  #     content/foo/index.html      → /foo/
-  #     content/foo/bar.html        → /foo/bar/
-  #     content/foo/bar.baz.html    → /foo/bar/ OR /foo/bar.baz/
-  #     content/foo/bar/index.html  → /foo/bar/
-  #     content/foo.bar/index.html  → /foo.bar/
   #
   # The file extension does not determine the filters to run on items; the
   # Rules file is used to specify processing instructors for each item.
