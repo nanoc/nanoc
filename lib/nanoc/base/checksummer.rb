@@ -48,74 +48,159 @@ module Nanoc::Int
 
       def update(obj, digest, visited = Set.new)
         digest.update(obj.class.to_s)
-        digest.update('<')
 
         if visited.include?(obj)
-          digest.update('recur>')
-          return
-        end
-
-        case obj
-        when ::String, ::Symbol, ::Numeric
-          digest.update(obj.to_s)
-        when nil, true, false
-        when ::Array, ::Nanoc::Int::IdentifiableCollection
-          obj.each do |el|
-            update(el, digest, visited + [obj])
-            digest.update(',')
-          end
-        when ::Hash, ::Nanoc::Int::Configuration
-          obj.each do |key, value|
-            update(key, digest, visited + [obj])
-            digest.update('=')
-            update(value, digest, visited + [obj])
-            digest.update(',')
-          end
-        when ::Pathname
-          filename = obj.to_s
-          if File.exist?(filename)
-            stat = File.stat(filename)
-            digest.update(stat.size.to_s + '-' + stat.mtime.to_i.to_s)
-          else
-            digest.update('???')
-          end
-        when Time
-          digest.update(obj.to_i.to_s)
-        when Nanoc::Identifier
-          update(obj.to_s, digest)
-        # TODO: Use RuleMemory rather than RulesCollection
-        when Nanoc::RuleDSL::RulesCollection, Nanoc::Int::CodeSnippet
-          update(obj.data, digest)
-        when Nanoc::Int::TextualContent
-          update(obj.string, digest)
-        when Nanoc::Int::BinaryContent
-          update(Pathname.new(obj.filename), digest)
-        when Nanoc::Int::Item, Nanoc::Int::Layout
-          if obj.checksum_data
-            digest.update('checksum_data=' + obj.checksum_data)
-          else
-            digest.update('content=')
-            update(obj.content, digest)
-
-            digest.update(',attributes=')
-            update(obj.attributes, digest, visited + [obj])
-
-            digest.update(',identifier=')
-            update(obj.identifier, digest)
-          end
-        when Nanoc::ItemWithRepsView, Nanoc::ItemWithoutRepsView, Nanoc::LayoutView, Nanoc::ConfigView, Nanoc::IdentifiableCollectionView
-          update(obj.unwrap, digest)
+          digest.update('<recur>')
         else
-          data = begin
-            Marshal.dump(obj)
-          rescue
-            obj.inspect
-          end
+          digest.update('<')
+          behavior_for(obj).update(obj, digest) { |o| update(o, digest, visited + [obj]) }
+          digest.update('>')
+        end
+      end
 
-          digest.update(data)
+      def behavior_for(obj)
+        case obj
+        when String, Symbol, Numeric
+          RawUpdateBehavior
+        when Pathname
+          PathnameUpdateBehavior
+        when Nanoc::Int::BinaryContent
+          BinaryContentUpdateBehavior
+        when Array, Nanoc::Int::IdentifiableCollection
+          ArrayUpdateBehavior
+        when Hash, Nanoc::Int::Configuration
+          HashUpdateBehavior
+        when Nanoc::Int::Item, Nanoc::Int::Layout
+          DocumentUpdateBehavior
+        when NilClass, TrueClass, FalseClass
+          NoUpdateBehavior
+        when Time
+          ToIToSUpdateBehavior
+        when Nanoc::Identifier
+          ToSUpdateBehavior
+        when Nanoc::RuleDSL::RulesCollection, Nanoc::Int::CodeSnippet
+          DataUpdateBehavior
+        when Nanoc::Int::TextualContent
+          StringUpdateBehavior
+        when Nanoc::View
+          UnwrapUpdateBehavior
+        else
+          RescueUpdateBehavior
+        end
+      end
+    end
+
+    class UpdateBehavior
+      def self.update(_obj, _digest)
+        raise NotImpementedError
+      end
+    end
+
+    class RawUpdateBehavior < UpdateBehavior
+      def self.update(obj, digest)
+        digest.update(obj.to_s)
+      end
+    end
+
+    class ToSUpdateBehavior < UpdateBehavior
+      def self.update(obj, _digest)
+        yield(obj.to_s)
+      end
+    end
+
+    class ToIToSUpdateBehavior < UpdateBehavior
+      def self.update(obj, digest)
+        digest.update(obj.to_i.to_s)
+      end
+    end
+
+    class StringUpdateBehavior < UpdateBehavior
+      def self.update(obj, _digest)
+        yield(obj.string)
+      end
+    end
+
+    class DataUpdateBehavior < UpdateBehavior
+      def self.update(obj, _digest)
+        yield(obj.data)
+      end
+    end
+
+    class NoUpdateBehavior < UpdateBehavior
+      def self.update(_obj, _digest)
+      end
+    end
+
+    class UnwrapUpdateBehavior < UpdateBehavior
+      def self.update(obj, _digest)
+        yield(obj.unwrap)
+      end
+    end
+
+    class ArrayUpdateBehavior < UpdateBehavior
+      def self.update(obj, digest)
+        obj.each do |el|
+          yield(el)
+          digest.update(',')
+        end
+      end
+    end
+
+    class HashUpdateBehavior < UpdateBehavior
+      def self.update(obj, digest)
+        obj.each do |key, value|
+          yield(key)
+          digest.update('=')
+          yield(value)
+          digest.update(',')
+        end
+      end
+    end
+
+    class DocumentUpdateBehavior < UpdateBehavior
+      def self.update(obj, digest)
+        if obj.checksum_data
+          digest.update('checksum_data=' + obj.checksum_data)
+        else
+          digest.update('content=')
+          yield(obj.content)
+
+          digest.update(',attributes=')
+          yield(obj.attributes)
+
+          digest.update(',identifier=')
+          yield(obj.identifier)
+        end
+      end
+    end
+
+    class PathnameUpdateBehavior < UpdateBehavior
+      def self.update(obj, digest)
+        filename = obj.to_s
+        if File.exist?(filename)
+          stat = File.stat(filename)
+          digest.update(stat.size.to_s + '-' + stat.mtime.to_i.to_s)
+        else
+          digest.update('???')
+        end
+      end
+    end
+
+    class BinaryContentUpdateBehavior < UpdateBehavior
+      def self.update(obj, _digest)
+        yield(Pathname.new(obj.filename))
+      end
+    end
+
+    class RescueUpdateBehavior < UpdateBehavior
+      def self.update(obj, digest)
+        data = begin
+          Marshal.dump(obj)
+        rescue
+          obj.inspect
         end
 
-        digest.update('>')
+        digest.update(data)
       end
     end
   end
