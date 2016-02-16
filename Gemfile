@@ -11,6 +11,7 @@ group :devel do
   gem 'rake'
   gem 'rdoc'
   gem 'rspec'
+  gem 'rspec-mocks'
   gem 'rubocop'
   gem 'simplecov', require: false
   gem 'vcr'
