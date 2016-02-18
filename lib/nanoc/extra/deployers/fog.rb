@@ -21,104 +21,165 @@ module Nanoc::Extra::Deployers
   #
   # @api private
   class Fog < ::Nanoc::Extra::Deployer
-    # @see Nanoc::Extra::Deployer#run
-    def run
-      require 'fog'
-
-      # Get params, unsetting anything we don't want to pass through to fog.
-      src      = File.expand_path(source_path)
-      bucket   = config.delete(:bucket) || config.delete(:bucket_name)
-      path     = config.delete(:path)
-      cdn_id   = config.delete(:cdn_id)
-
-      config.delete(:kind)
-
-      # Validate params
-      error 'The path requires no trailing slash' if path && path[-1, 1] == '/'
-
-      # Mock if necessary
-      if dry_run?
-        puts 'Dry run - simulation'
-        ::Fog.mock!
+    class FogWrapper
+      def initialize(directory, is_dry_run)
+        @directory = directory
+        @is_dry_run = is_dry_run
       end
 
-      # Get connection
-      puts 'Connecting'
-      connection = ::Fog::Storage.new(config)
+      def upload(source_filename, destination_key)
+        log_effectful("uploading #{source_filename} -> #{destination_key}")
 
-      # Get bucket
-      puts 'Getting bucket'
-      begin
-        directory = connection.directories.get(bucket, prefix: path)
-      rescue ::Excon::Errors::NotFound
-        should_create_bucket = true
-      end
-      should_create_bucket = true if directory.nil?
-
-      # Create bucket if necessary
-      if should_create_bucket
-        puts 'Creating bucket'
-        directory = connection.directories.create(key: bucket, prefix: path)
-      end
-
-      # Get list of remote files
-      files = directory.files
-      truncated = files.respond_to?(:is_truncated) && files.is_truncated
-      while truncated
-        set = directory.files.all(marker: files.last.key)
-        truncated = set.is_truncated
-        files += set
-      end
-      keys_to_destroy = files.map(&:key)
-      keys_to_invalidate = []
-      etags = read_etags(files)
-
-      # Upload all the files in the output folder to the clouds
-      puts 'Uploading local files'
-      FileUtils.cd(src) do
-        files = Dir['**/*'].select { |f| File.file?(f) }
-        files.each do |file_path|
-          key = path ? File.join(path, file_path) : file_path
-          upload(key, file_path, etags, keys_to_destroy, keys_to_invalidate, directory)
+        unless dry_run?
+          # FIXME: source_filename file is never closed
+          @directory.files.create(
+            key: destination_key,
+            body: File.open(source_filename),
+            public: true,
+          )
         end
       end
 
-      # delete extraneous remote files
-      puts 'Removing remote files'
-      keys_to_destroy.each do |key|
-        directory.files.get(key).destroy
-      end
+      def remove(keys)
+        keys.each do |key|
+          log_effectful("removing #{key}")
 
-      # invalidate CDN objects
-      if cdn_id
-        puts 'Invalidating CDN distribution'
-        keys_to_invalidate.concat(keys_to_destroy)
-        cdn = ::Fog::CDN.new(config)
-        # fog cannot mock CDN requests
-        unless dry_run?
-          distribution = cdn.get_distribution(cdn_id)
-          # usual limit per invalidation: 1000 objects
-          keys_to_invalidate.each_slice(1000) do |paths|
-            cdn.post_invalidation(distribution, paths)
+          unless dry_run?
+            @directory.files.get(key).destroy
           end
         end
       end
 
-      puts 'Done!'
+      def invalidate(keys, cdn, distribution)
+        keys.each_slice(1000) do |keys_slice|
+          keys_slice.each do |key|
+            log_effectful("invalidating #{key}")
+          end
+
+          unless dry_run?
+            cdn.post_invalidation(distribution, keys_slice)
+          end
+        end
+      end
+
+      def dry_run?
+        @is_dry_run
+      end
+
+      def log_effectful(s)
+        if @is_dry_run
+          puts "[dry run] #{s}"
+        else
+          puts s
+        end
+      end
+    end
+
+    # @see Nanoc::Extra::Deployer#run
+    def run
+      require 'fog'
+
+      src      = File.expand_path(source_path)
+      bucket   = config[:bucket] || config[:bucket_name]
+      path     = config[:path]
+      cdn_id   = config[:cdn_id]
+
+      # FIXME: confusing error message
+      raise 'The path requires no trailing slash' if path && path[-1, 1] == '/'
+
+      connection = connect
+      directory = get_or_create_bucket(connection, bucket, path)
+      wrapper = FogWrapper.new(directory, dry_run?)
+
+      remote_files = list_remote_files(directory)
+      etags = read_etags(remote_files)
+
+      modified_keys, retained_keys = upload_all(src, path, etags, wrapper)
+
+      removed_keys = remote_files.map(&:key) - retained_keys - modified_keys
+      wrapper.remove(removed_keys)
+
+      if cdn_id
+        cdn = ::Fog::CDN.new(config_for_fog)
+        distribution = cdn.get_distribution(cdn_id)
+        wrapper.invalidate(modified_keys + removed_keys, cdn, distribution)
+      end
     end
 
     private
 
-    def upload(key, file_path, etags, keys_to_destroy, keys_to_invalidate, dir)
-      keys_to_destroy.delete(key)
+    def config_for_fog
+      config.dup.tap do |c|
+        c.delete(:bucket)
+        c.delete(:bucket_name)
+        c.delete(:path)
+        c.delete(:cdn_id)
+        c.delete(:kind)
+      end
+    end
 
-      return unless needs_upload?(key, file_path, etags)
+    def connect
+      ::Fog::Storage.new(config_for_fog)
+    end
 
-      dir.files.create(
-        key: key,
-        body: File.open(file_path),
-        public: true)
-      keys_to_invalidate.push(key)
+    def get_or_create_bucket(connection, bucket, path)
+      directory =
+        begin
+          connection.directories.get(bucket, prefix: path)
+        rescue ::Excon::Errors::NotFound
+          nil
+        end
+
+      if directory
+        directory
+      elsif dry_run?
+        puts '[dry run] creating bucket'
+      else
+        puts 'creating bucket'
+        connection.directories.create(key: bucket, prefix: path)
+      end
+    end
+
+    def remote_key_for_local_filename(local_filename, src, path)
+      relative_local_filename = local_filename.sub(/\A#{src}\//, '')
+
+      if path
+        File.join(path, relative_local_filename)
+      else
+        relative_local_filename
+      end
+    end
+
+    def list_remote_files(directory)
+      if directory
+        [].tap do |files|
+          directory.files.each { |file| files << file }
+        end
+      else
+        []
+      end
+    end
+
+    def list_local_files(src)
+      Dir[src + '/**/*'].select { |f| File.file?(f) }
+    end
+
+    def upload_all(src, path, etags, wrapper)
+      modified_keys = []
+      retained_keys = []
+
+      local_files = list_local_files(src)
+      local_files.each do |file_path|
+        key = remote_key_for_local_filename(file_path, src, path)
+        if needs_upload?(key, file_path, etags)
+          wrapper.upload(file_path, key)
+          modified_keys.push(key)
+        else
+          retained_keys.push(key)
+        end
+      end
+
+      [modified_keys, retained_keys]
     end
 
     def needs_upload?(key, file_path, etags)
@@ -145,11 +206,6 @@ module Nanoc::Extra::Deployers
       when 'aws'
         Digest::MD5.file(file_path).hexdigest
       end
-    end
-
-    # Prints the given message on stderr and exits.
-    def error(msg)
-      raise RuntimeError.new(msg)
     end
   end
 end
