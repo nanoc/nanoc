@@ -1,9 +1,10 @@
 describe Nanoc::ItemRepView do
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker) }
+  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compiler: compiler) }
 
   let(:reps) { double(:reps) }
   let(:items) { double(:items) }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
+  let(:compiler) { double(:compiler) }
 
   describe '#frozen?' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }

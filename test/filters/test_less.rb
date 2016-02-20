@@ -1,7 +1,7 @@
 class Nanoc::Filters::LessTest < Nanoc::TestCase
   def view_context
     dependency_tracker = Nanoc::Int::DependencyTracker.new(nil)
-    Nanoc::ViewContext.new(reps: nil, items: nil, dependency_tracker: dependency_tracker)
+    Nanoc::ViewContext.new(reps: nil, items: nil, dependency_tracker: dependency_tracker, compiler: nil)
   end
 
   def test_filter

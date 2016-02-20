@@ -113,7 +113,7 @@ module Nanoc::Helpers
 
         # Create dependency
         if @item.nil? || item != @item.unwrap
-          dependency_tracker = @site._context.dependency_tracker
+          dependency_tracker = @config._context.dependency_tracker
           dependency_tracker.bounce(item.unwrap)
 
           unless rep.compiled?

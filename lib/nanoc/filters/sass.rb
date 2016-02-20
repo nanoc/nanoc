@@ -18,9 +18,9 @@ module Nanoc::Filters
       engine.render
     end
 
-    def self.item_filename_map_for_site(site, items)
+    def self.item_filename_map_for_config(config, items)
       @item_filename_map ||= {}
-      @item_filename_map[site] ||=
+      @item_filename_map[config] ||=
         {}.tap do |map|
           items.each do |item|
             if item.raw_filename
@@ -34,7 +34,7 @@ module Nanoc::Filters
     def imported_filename_to_item(filename)
       realpath = Pathname.new(filename).realpath.to_s
 
-      map = self.class.item_filename_map_for_site(@site, @items)
+      map = self.class.item_filename_map_for_config(@config, @items)
       map[realpath]
     end
   end

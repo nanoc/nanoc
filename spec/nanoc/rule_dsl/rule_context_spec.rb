@@ -13,14 +13,14 @@ describe(Nanoc::RuleDSL::RuleContext) do
   let(:site) { double(:site, items: items, layouts: layouts, config: config) }
   let(:executor) { double(:executor) }
   let(:reps) { double(:reps) }
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker) }
+  let(:compiler) { double(:compiler) }
+  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compiler: compiler) }
   let(:dependency_tracker) { double(:dependency_tracker) }
 
   describe '#initialize' do
     it 'wraps objects in view classes' do
       expect(subject.rep.class).to eql(Nanoc::ItemRepView)
       expect(subject.item.class).to eql(Nanoc::ItemWithoutRepsView)
-      expect(subject.site.class).to eql(Nanoc::SiteView)
       expect(subject.config.class).to eql(Nanoc::ConfigView)
       expect(subject.layouts.class).to eql(Nanoc::LayoutCollectionView)
       expect(subject.items.class).to eql(Nanoc::ItemCollectionWithoutRepsView)
@@ -29,7 +29,6 @@ describe(Nanoc::RuleDSL::RuleContext) do
     it 'contains the right objects' do
       expect(rule_context.rep.unwrap).to eql(rep)
       expect(rule_context.item.unwrap).to eql(item)
-      expect(rule_context.site.unwrap).to eql(site)
       expect(rule_context.config.unwrap).to eql(config)
       expect(rule_context.layouts.unwrap).to eql(layouts)
       expect(rule_context.items.unwrap).to eql(items)

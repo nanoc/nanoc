@@ -6,7 +6,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
     @reps = Nanoc::Int::ItemRepRepo.new
     dependency_tracker = Nanoc::Int::DependencyTracker.new(nil)
-    @view_context = Nanoc::ViewContext.new(reps: @reps, items: nil, dependency_tracker: dependency_tracker)
+    @view_context = Nanoc::ViewContext.new(reps: @reps, items: nil, dependency_tracker: dependency_tracker, compiler: :__irrelevant__)
 
     @items = nil
     @item = nil

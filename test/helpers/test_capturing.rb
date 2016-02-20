@@ -12,6 +12,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       reps: item_rep_repo_for(item),
       items: :__irrelevant__,
       dependency_tracker: :__irrelevant__,
+      compiler: :__irrelevant__,
     )
   end
 
@@ -65,7 +66,6 @@ head
 foot
 EOS
 
-    @site = Nanoc::SiteView.new(Nanoc::Int::SiteLoader.new.new_empty, nil)
     item = Nanoc::Int::Item.new('content', {}, '/')
     @item = Nanoc::ItemWithRepsView.new(item, view_context_for(item))
 

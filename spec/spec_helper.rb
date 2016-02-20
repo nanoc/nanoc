@@ -120,6 +120,7 @@ class HelperContext
       reps: @reps,
       items: @items,
       dependency_tracker: @dependency_tracker,
+      compiler: new_site.compiler,
     )
   end
 
@@ -183,6 +184,17 @@ class HelperContext
     Nanoc::Int::Compiler.new(site, params)
   end
 
+  def new_site
+    site = Nanoc::Int::Site.new(
+      config: @config,
+      code_snippets: [],
+      items: @items,
+      layouts: @layouts,
+    )
+    site.compiler = new_compiler_for(site)
+    site
+  end
+
   def assigns
     site = Nanoc::Int::Site.new(
       config: @config,
@@ -193,7 +205,6 @@ class HelperContext
     site.compiler = new_compiler_for(site)
 
     {
-      site: Nanoc::SiteView.new(site, view_context),
       config: Nanoc::MutableConfigView.new(@config, view_context),
       item_rep: @item_rep ? Nanoc::ItemRepView.new(@item_rep, view_context) : nil,
       item: @item ? Nanoc::ItemWithRepsView.new(@item, view_context) : nil,

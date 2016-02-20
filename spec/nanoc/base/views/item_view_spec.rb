@@ -2,10 +2,11 @@ describe Nanoc::ItemWithRepsView do
   let(:entity_class) { Nanoc::Int::Item }
   it_behaves_like 'a document view'
 
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker) }
+  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compiler: compiler) }
   let(:reps) { [] }
   let(:items) { [] }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
+  let(:compiler) { double(:compiler) }
 
   describe '#raw_content' do
     let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
