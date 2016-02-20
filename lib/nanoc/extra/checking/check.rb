@@ -26,7 +26,6 @@ module Nanoc::Extra::Checking
         items: Nanoc::ItemCollectionWithRepsView.new(site.items, view_context),
         layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
         config: Nanoc::ConfigView.new(site.config, view_context),
-        site: Nanoc::SiteView.new(site, view_context), # TODO: remove me
         output_filenames: output_filenames,
       }
 

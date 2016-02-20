@@ -40,7 +40,6 @@ module Nanoc::Helpers
         items: @items,
         layouts: @layouts,
         config: @config,
-        site: @site,
         content: @content,
       }
       filter = klass.new(assigns)

@@ -80,7 +80,7 @@ module Nanoc::Helpers
       raise Nanoc::Int::Errors::UnknownLayout.new(identifier) if layout.nil?
 
       # Visit
-      dependency_tracker = @site._context.dependency_tracker
+      dependency_tracker = @config._context.dependency_tracker
       dependency_tracker.bounce(layout)
 
       # Capture content, if any
@@ -95,11 +95,10 @@ module Nanoc::Helpers
         layout: layout,
         layouts: @layouts,
         config: @config,
-        site: @site,
       }.merge(other_assigns)
 
       # Get filter name
-      filter_name, filter_args = *@site.unwrap.compiler.filter_name_and_args_for_layout(layout)
+      filter_name, filter_args = *@config._context.compiler.filter_name_and_args_for_layout(layout)
       raise Nanoc::Int::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class

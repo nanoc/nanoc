@@ -6,6 +6,7 @@ shared_examples 'a document view' do
       reps: double(:reps),
       items: double(:items),
       dependency_tracker: dependency_tracker,
+      compiler: double(:compiler),
     )
   end
 

@@ -142,7 +142,6 @@ module Nanoc::Int
 
       view_context = create_view_context(dependency_tracker)
 
-      # TODO: Do not expose @site (necessary for captures store though…)
       content_or_filename_assigns.merge(
         item: Nanoc::ItemWithRepsView.new(rep.item, view_context),
         rep: Nanoc::ItemRepView.new(rep, view_context),
@@ -150,7 +149,6 @@ module Nanoc::Int
         items: Nanoc::ItemCollectionWithRepsView.new(site.items, view_context),
         layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
         config: Nanoc::ConfigView.new(site.config, view_context),
-        site: Nanoc::SiteView.new(site, view_context),
       )
     end
 
@@ -159,6 +157,7 @@ module Nanoc::Int
         reps: @reps,
         items: @site.items,
         dependency_tracker: dependency_tracker,
+        compiler: self,
       )
     end
 
