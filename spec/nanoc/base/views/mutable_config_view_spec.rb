@@ -5,7 +5,8 @@ describe Nanoc::MutableConfigView do
 
     it 'sets attributes' do
       view[:awesomeness] = 'rather high'
-      expect(config[:awesomeness]).to eq('rather high')
+      expect(config[:awesomeness]).to be_nil
+      expect(view.updated[:awesomeness]).to eq('rather high')
     end
   end
 end

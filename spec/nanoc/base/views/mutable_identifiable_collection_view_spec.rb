@@ -1,5 +1,13 @@
 shared_examples 'a mutable identifiable collection' do
-  let(:view) { described_class.new(wrapped, view_context) }
+  let(:view) { described_class.new(wrapped_with_deletions, view_context) }
+
+  let(:wrapped_with_deletions) do
+    Nanoc::Int::IdentifiableCollectionWithModifications.new(
+      wrapped,
+    )
+  end
+
+  let(:deleted_identifiers) { Set.new }
 
   let(:view_context) { double(:view_context) }
 
@@ -14,14 +22,24 @@ shared_examples 'a mutable identifiable collection' do
       end
     end
 
-    it 'deletes matching' do
+    it 'does not delete matching' do
       view.delete_if { |i| i.identifier == '/asdf/' }
-      expect(wrapped).to be_empty
+      expect(wrapped).not_to be_empty
     end
 
-    it 'deletes no non-matching' do
+    it 'marks matching as deleted' do
+      view.delete_if { |i| i.identifier == '/asdf/' }
+      expect(wrapped_with_deletions).to be_empty
+    end
+
+    it 'does not delete non-matching' do
       view.delete_if { |i| i.identifier == '/blah/' }
       expect(wrapped).not_to be_empty
+    end
+
+    it 'does not mark non-matching as deleted' do
+      view.delete_if { |i| i.identifier == '/blah/' }
+      expect(wrapped_with_deletions).not_to be_empty
     end
 
     it 'returns self' do
