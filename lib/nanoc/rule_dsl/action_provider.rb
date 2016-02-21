@@ -39,11 +39,9 @@ module Nanoc::RuleDSL
       @rule_memory_calculator.snapshots_defs_for(rep)
     end
 
-    def preprocess(site)
-      ctx = new_preprocessor_context(site)
-
+    def preprocess(_site, preprocessor_context)
       @rules_collection.preprocessors.each_value do |preprocessor|
-        ctx.instance_eval(&preprocessor)
+        preprocessor_context.instance_eval(&preprocessor)
       end
     end
 
@@ -61,24 +59,6 @@ module Nanoc::RuleDSL
       @rules_collection.postprocessors.each_value do |postprocessor|
         ctx.instance_eval(&postprocessor)
       end
-    end
-
-    # @api private
-    def new_preprocessor_context(site)
-      dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
-      view_context =
-        Nanoc::ViewContext.new(
-          reps: nil,
-          items: nil,
-          dependency_tracker: dependency_tracker,
-          compiler: nil,
-        )
-
-      Nanoc::Int::Context.new(
-        config: Nanoc::MutableConfigView.new(site.config, view_context),
-        items: Nanoc::MutableItemCollectionView.new(site.items, view_context),
-        layouts: Nanoc::MutableLayoutCollectionView.new(site.layouts, view_context),
-      )
     end
 
     # @api private

@@ -15,10 +15,7 @@ flag :n, :'dry-run', 'print files to be deleted instead of actually deleting the
 module Nanoc::CLI::Commands
   class Prune < ::Nanoc::CLI::CommandRunner
     def run
-      load_site
-      # FIXME: ugly to preprocess here
-      site.compiler.action_provider.preprocess(site)
-      site.compiler.build_reps
+      prepare
 
       if options.key?(:yes)
         Nanoc::Extra::Pruner.new(site, exclude: prune_config_exclude).run
@@ -33,6 +30,13 @@ module Nanoc::CLI::Commands
     end
 
     protected
+
+    def prepare
+      load_site
+      # FIXME: ugly
+      @site = site.compiler.preprocessed_site
+      site.compiler.build_reps
+    end
 
     def prune_config
       site.config[:prune] || {}

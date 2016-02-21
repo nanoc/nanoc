@@ -72,15 +72,26 @@ module Nanoc::Int
     end
 
     def run_all
-      @action_provider.preprocess(@site)
+      preprocess
+
       build_reps
       run
-      @action_provider.postprocess(@site, @reps)
+
+      @action_provider.postprocess(preprocessed_site, @reps)
+    end
+
+    def preprocess
+      # Done explicitly here, because it still has side effects
+      preprocessed_site
+    end
+
+    def preprocessed_site
+      @__preprocessed_site ||= Nanoc::Int::Preprocessor.new(@site, @action_provider).run
     end
 
     def run
       load_stores
-      @site.freeze
+      preprocessed_site.freeze
 
       # Determine which reps need to be recompiled
       forget_dependencies_if_outdated
@@ -104,13 +115,13 @@ module Nanoc::Int
     # @return [void]
     def store
       # Calculate rule memory
-      (@reps.to_a + @site.layouts.to_a).each do |obj|
+      (@reps.to_a + preprocessed_site.layouts.to_a).each do |obj|
         rule_memory_store[obj] = action_provider.memory_for(obj).serialize
       end
 
       # Calculate checksums
       objects_to_checksum =
-        site.items.to_a + site.layouts.to_a + site.code_snippets + [site.config]
+        preprocessed_site.items.to_a + preprocessed_site.layouts.to_a + preprocessed_site.code_snippets + [preprocessed_site.config]
       objects_to_checksum.each do |obj|
         checksum_store[obj] = Nanoc::Int::Checksummer.calc(obj)
       end
@@ -121,7 +132,7 @@ module Nanoc::Int
 
     def build_reps
       builder = Nanoc::Int::ItemRepBuilder.new(
-        site, action_provider, @reps)
+        preprocessed_site, action_provider, @reps)
       builder.run
     end
 
@@ -146,16 +157,16 @@ module Nanoc::Int
         item: Nanoc::ItemWithRepsView.new(rep.item, view_context),
         rep: Nanoc::ItemRepView.new(rep, view_context),
         item_rep: Nanoc::ItemRepView.new(rep, view_context),
-        items: Nanoc::ItemCollectionWithRepsView.new(site.items, view_context),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
-        config: Nanoc::ConfigView.new(site.config, view_context),
+        items: Nanoc::ItemCollectionWithRepsView.new(preprocessed_site.items, view_context),
+        layouts: Nanoc::LayoutCollectionView.new(preprocessed_site.layouts, view_context),
+        config: Nanoc::ConfigView.new(preprocessed_site.config, view_context),
       )
     end
 
     def create_view_context(dependency_tracker)
       Nanoc::ViewContext.new(
         reps: @reps,
-        items: @site.items,
+        items: preprocessed_site.items,
         dependency_tracker: dependency_tracker,
         compiler: self,
       )
@@ -257,7 +268,7 @@ module Nanoc::Int
     #
     # @return [void]
     def forget_dependencies_if_outdated
-      @site.items.each do |i|
+      preprocessed_site.items.each do |i|
         if @reps[i].any? { |r| outdatedness_checker.outdated?(r) }
           @dependency_store.forget_dependencies_for(i)
         end

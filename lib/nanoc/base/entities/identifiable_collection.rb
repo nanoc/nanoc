@@ -7,7 +7,11 @@ module Nanoc::Int
 
     def_delegator :@objects, :each
     def_delegator :@objects, :size
+
+    # TODO: remove (only used in tests)
     def_delegator :@objects, :<<
+
+    # TODO: remove (used when merging items/layouts from data sources)
     def_delegator :@objects, :concat
 
     def initialize(config)
@@ -42,10 +46,6 @@ module Nanoc::Int
 
     def empty?
       @objects.empty?
-    end
-
-    def delete_if(&block)
-      @objects.delete_if(&block)
     end
 
     protected
