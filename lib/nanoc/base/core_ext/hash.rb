@@ -15,10 +15,19 @@ module Nanoc::HashExtensions
     hash
   end
 
-  def __nanoc_make_immutable_and_symbolize_keys_recursively
+  def __nanoc_hamsterize
     inject(::Hamster::Hash.new) do |memo, (key, value)|
-      new_key   = key.respond_to?(:to_sym) ? key.to_sym : key
-      new_value = value.respond_to?(:__nanoc_make_immutable_and_symbolize_keys_recursively) ? value.__nanoc_make_immutable_and_symbolize_keys_recursively : value
+      new_key = key.respond_to?(:to_sym) ? key.to_sym : key
+
+      new_value =
+        if value.respond_to?(:__nanoc_hamsterize)
+          value.__nanoc_hamsterize
+        elsif value.respond_to?(:__nanoc_freeze_recursively)
+          value.__nanoc_freeze_recursively
+        else
+          value.freeze
+        end
+
       memo.put(new_key, new_value)
     end
   end

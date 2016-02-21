@@ -13,9 +13,18 @@ module Nanoc::ArrayExtensions
     array
   end
 
-  def __nanoc_make_immutable_and_symbolize_keys_recursively
+  def __nanoc_hamsterize
     reduce(Hamster::Vector.new) do |memo, elem|
-      memo.add(elem.respond_to?(:__nanoc_make_immutable_and_symbolize_keys_recursively) ? elem.__nanoc_make_immutable_and_symbolize_keys_recursively : elem)
+      new_elem =
+        if elem.respond_to?(:__nanoc_hamsterize)
+          elem.__nanoc_hamsterize
+        elsif elem.respond_to?(:__nanoc_freeze_recursively)
+          elem.__nanoc_freeze_recursively
+        else
+          elem.freeze
+        end
+
+      memo.add(new_elem)
     end
   end
 

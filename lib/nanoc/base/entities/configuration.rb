@@ -35,7 +35,7 @@ module Nanoc::Int
     #
     # @param [Hash] hash The actual configuration hash
     def initialize(hash = {})
-      @wrapped = hash.__nanoc_make_immutable_and_symbolize_keys_recursively
+      @wrapped = hash.__nanoc_hamsterize
     end
 
     def with_defaults
@@ -72,10 +72,8 @@ module Nanoc::Int
     end
 
     def []=(key, value)
-      # FIXME: mutable
-      # FIXME: return value is bad
       @wrapped = @wrapped.put(key, value)
-      self
+      value
     end
 
     def merge(hash)
@@ -87,8 +85,6 @@ module Nanoc::Int
     end
 
     def update(hash)
-      # FIXME: mutable
-      # FIXME: return value is bad
       hash.each_pair do |key, value|
         @wrapped = @wrapped.put(key, value)
       end
@@ -98,11 +94,6 @@ module Nanoc::Int
     def each
       @wrapped.each { |k, v| yield(k, v) }
       self
-    end
-
-    def freeze
-      super
-      @wrapped.__nanoc_freeze_recursively
     end
 
     # Returns an object that can be used for uniquely identifying objects.
