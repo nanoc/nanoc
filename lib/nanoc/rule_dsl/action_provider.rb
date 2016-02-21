@@ -49,7 +49,13 @@ module Nanoc::RuleDSL
 
     def postprocess(site, reps)
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
-      view_context = Nanoc::ViewContext.new(reps: reps, items: site.items, dependency_tracker: dependency_tracker, compiler: site.compiler)
+      view_context =
+        Nanoc::ViewContext.new(
+          reps: reps,
+          items: site.items,
+          dependency_tracker: dependency_tracker,
+          compiler: site.compiler,
+        )
       ctx = new_postprocessor_context(site, view_context)
 
       @rules_collection.postprocessors.each_value do |postprocessor|
@@ -59,10 +65,19 @@ module Nanoc::RuleDSL
 
     # @api private
     def new_preprocessor_context(site)
+      dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
+      view_context =
+        Nanoc::ViewContext.new(
+          reps: nil,
+          items: nil,
+          dependency_tracker: dependency_tracker,
+          compiler: nil,
+        )
+
       Nanoc::Int::Context.new(
-        config: Nanoc::MutableConfigView.new(site.config, nil),
-        items: Nanoc::MutableItemCollectionView.new(site.items, nil),
-        layouts: Nanoc::MutableLayoutCollectionView.new(site.layouts, nil),
+        config: Nanoc::MutableConfigView.new(site.config, view_context),
+        items: Nanoc::MutableItemCollectionView.new(site.items, view_context),
+        layouts: Nanoc::MutableLayoutCollectionView.new(site.layouts, view_context),
       )
     end
 
