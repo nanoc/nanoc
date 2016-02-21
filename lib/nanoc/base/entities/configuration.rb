@@ -35,7 +35,7 @@ module Nanoc::Int
     #
     # @param [Hash] hash The actual configuration hash
     def initialize(hash = {})
-      @wrapped = ::Hamster::Hash.new(hash.__nanoc_symbolize_keys_recursively)
+      @wrapped = hash.__nanoc_make_immutable_and_symbolize_keys_recursively
     end
 
     def with_defaults
