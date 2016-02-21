@@ -25,7 +25,7 @@ module Nanoc::HashExtensions
   #
   # @since 3.2.0
   def __nanoc_freeze_recursively
-    return if frozen?
+    return if frozen? && !is_a?(Hamster::Hash)
     freeze
     each_pair do |_key, value|
       if value.respond_to?(:__nanoc_freeze_recursively)
@@ -39,5 +39,10 @@ end
 
 # @api private
 class Hash
+  include Nanoc::HashExtensions
+end
+
+# @api private
+class ::Hamster::Hash
   include Nanoc::HashExtensions
 end

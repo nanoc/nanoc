@@ -35,7 +35,7 @@ module Nanoc::Int
     #
     # @param [Hash] hash The actual configuration hash
     def initialize(hash = {})
-      @wrapped = hash.__nanoc_symbolize_keys_recursively
+      @wrapped = ::Hamster::Hash.new(hash.__nanoc_symbolize_keys_recursively)
     end
 
     def with_defaults
@@ -72,7 +72,10 @@ module Nanoc::Int
     end
 
     def []=(key, value)
-      @wrapped[key] = value
+      # FIXME: mutable
+      # FIXME: return value is bad
+      @wrapped = @wrapped.put(key, value)
+      self
     end
 
     def merge(hash)
@@ -84,7 +87,12 @@ module Nanoc::Int
     end
 
     def update(hash)
-      @wrapped.update(hash)
+      # FIXME: mutable
+      # FIXME: return value is bad
+      hash.each_pair do |key, value|
+        @wrapped = @wrapped.put(key, value)
+      end
+      self
     end
 
     def each

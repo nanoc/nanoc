@@ -34,6 +34,9 @@ require 'time'
 require 'yaml'
 require 'English'
 
+# Load external requirements
+require 'hamster'
+
 # Load Nanoc
 require 'nanoc/version'
 require 'nanoc/base'
