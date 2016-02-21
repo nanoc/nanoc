@@ -7,44 +7,45 @@ module Nanoc::Int
 
     # The default configuration for a data source. A data source's
     # configuration overrides these options.
-    DEFAULT_DATA_SOURCE_CONFIG = {
-      type: 'filesystem',
-      items_root: '/',
-      layouts_root: '/',
-      config: {},
-      identifier_type: 'full',
-    }.freeze
+    DEFAULT_DATA_SOURCE_CONFIG =
+      Hamster::Hash.new(
+        type: 'filesystem',
+        items_root: '/',
+        layouts_root: '/',
+        config: Hamster::Hash.new,
+        identifier_type: 'full',
+      )
 
     # The default configuration for a site. A site's configuration overrides
     # these options: when a {Nanoc::Int::Site} is created with a configuration
     # that lacks some options, the default value will be taken from
     # `DEFAULT_CONFIG`.
-    DEFAULT_CONFIG = {
-      text_extensions: %w( adoc asciidoc atom css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim rdoc ).sort,
-      lib_dirs: %w( lib ),
-      commands_dirs: %w( commands ),
-      output_dir: 'output',
-      data_sources: [{}],
-      index_filenames: ['index.html'],
-      enable_output_diff: false,
-      prune: { auto_prune: false, exclude: ['.git', '.hg', '.svn', 'CVS'] },
-      string_pattern_type: 'glob',
-    }.freeze
+    DEFAULT_CONFIG =
+      Hamster::Hash.new(
+        text_extensions: %w( adoc asciidoc atom css erb haml htm html js less markdown md php rb sass scss txt xhtml xml coffee hb handlebars mustache ms slim rdoc ).sort,
+        lib_dirs: %w( lib ),
+        commands_dirs: %w( commands ),
+        output_dir: 'output',
+        data_sources: [Hamster::Hash.new],
+        index_filenames: ['index.html'],
+        enable_output_diff: false,
+        prune: Hamster::Hash.new(auto_prune: false, exclude: ['.git', '.hg', '.svn', 'CVS']),
+        string_pattern_type: 'glob',
+      )
 
     # Creates a new configuration with the given hash.
     #
     # @param [Hash] hash The actual configuration hash
-    def initialize(hash = {})
+    def initialize(hash = Hamster::Hash.new)
       @wrapped = hash.__nanoc_hamsterize
     end
 
     def with_defaults
-      new_wrapped = DEFAULT_CONFIG.merge(@wrapped)
-      new_wrapped[:data_sources] = new_wrapped[:data_sources].map do |ds|
-        DEFAULT_DATA_SOURCE_CONFIG.merge(ds)
-      end
-
-      self.class.new(new_wrapped)
+      self.class.new(
+        DEFAULT_CONFIG
+          .merge(@wrapped)
+          .put(:data_sources) { |dss| dss.map { |ds| DEFAULT_DATA_SOURCE_CONFIG.merge(ds) } },
+      )
     end
 
     def to_h
