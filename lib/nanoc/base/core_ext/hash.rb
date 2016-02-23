@@ -15,6 +15,23 @@ module Nanoc::HashExtensions
     hash
   end
 
+  def __nanoc_hamsterize
+    inject(::Hamster::Hash.new) do |memo, (key, value)|
+      new_key = key.respond_to?(:to_sym) ? key.to_sym : key
+
+      new_value =
+        if value.respond_to?(:__nanoc_hamsterize)
+          value.__nanoc_hamsterize
+        elsif value.respond_to?(:__nanoc_freeze_recursively)
+          value.__nanoc_freeze_recursively
+        else
+          value.freeze
+        end
+
+      memo.put(new_key, new_value)
+    end
+  end
+
   # Freezes the contents of the hash, as well as all hash values. The hash
   # values will be frozen using {#__nanoc_freeze_recursively} if they respond to
   # that message, or #freeze if they do not.
@@ -25,7 +42,7 @@ module Nanoc::HashExtensions
   #
   # @since 3.2.0
   def __nanoc_freeze_recursively
-    return if frozen?
+    return if frozen? && !is_a?(Hamster::Hash)
     freeze
     each_pair do |_key, value|
       if value.respond_to?(:__nanoc_freeze_recursively)
@@ -39,5 +56,10 @@ end
 
 # @api private
 class Hash
+  include Nanoc::HashExtensions
+end
+
+# @api private
+class ::Hamster::Hash
   include Nanoc::HashExtensions
 end

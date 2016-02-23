@@ -17,6 +17,15 @@ module Nanoc::Int
       ensure_identifier_uniqueness(@layouts, 'layout')
     end
 
+    def copy_with_config(config)
+      self.class.new(
+        config: config,
+        code_snippets: @code_snippets,
+        items: @items,
+        layouts: @layouts,
+      )
+    end
+
     # Compiles the site.
     #
     # @return [void]

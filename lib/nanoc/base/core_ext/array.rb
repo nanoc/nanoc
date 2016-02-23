@@ -13,6 +13,21 @@ module Nanoc::ArrayExtensions
     array
   end
 
+  def __nanoc_hamsterize
+    reduce(Hamster::Vector.new) do |memo, elem|
+      new_elem =
+        if elem.respond_to?(:__nanoc_hamsterize)
+          elem.__nanoc_hamsterize
+        elsif elem.respond_to?(:__nanoc_freeze_recursively)
+          elem.__nanoc_freeze_recursively
+        else
+          elem.freeze
+        end
+
+      memo.add(new_elem)
+    end
+  end
+
   # Freezes the contents of the array, as well as all array elements. The
   # array elements will be frozen using {#__nanoc_freeze_recursively} if they respond
   # to that message, or #freeze if they do not.
@@ -23,7 +38,7 @@ module Nanoc::ArrayExtensions
   #
   # @since 3.2.0
   def __nanoc_freeze_recursively
-    return if frozen?
+    return if frozen? && !is_a?(Hamster::Vector)
     freeze
     each do |value|
       if value.respond_to?(:__nanoc_freeze_recursively)
@@ -37,5 +52,10 @@ end
 
 # @api private
 class Array
+  include Nanoc::ArrayExtensions
+end
+
+# @api private
+class ::Hamster::Vector
   include Nanoc::ArrayExtensions
 end

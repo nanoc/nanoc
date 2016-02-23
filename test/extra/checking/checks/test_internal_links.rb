@@ -54,7 +54,7 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
     with_site do |site|
       # Create check
       check = Nanoc::Extra::Checking::Checks::InternalLinks.create(site)
-      site.config.update({ checks: { internal_links: { exclude: ['^/excluded\d+'] } } })
+      site = site.copy_with_config(Nanoc::Int::Configuration.new({ checks: { internal_links: { exclude: ['^/excluded\d+'] } } }))
 
       # Test
       assert check.send(:valid?, '/excluded1', 'output/origin')

@@ -72,10 +72,14 @@ module Nanoc::Int
     end
 
     def run_all
-      @action_provider.preprocess(@site)
+      preprocess
       build_reps
       run
       @action_provider.postprocess(@site, @reps)
+    end
+
+    def preprocess
+      @site = @action_provider.preprocess(@site)
     end
 
     def run
