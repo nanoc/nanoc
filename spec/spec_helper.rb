@@ -195,6 +195,10 @@ class HelperContext
     site
   end
 
+  def mutable_config_view
+    @_mutable_config_view ||= Nanoc::MutableConfigView.new(@config, view_context)
+  end
+
   def assigns
     site = Nanoc::Int::Site.new(
       config: @config,
@@ -205,7 +209,7 @@ class HelperContext
     site.compiler = new_compiler_for(site)
 
     {
-      config: Nanoc::MutableConfigView.new(@config, view_context),
+      config: mutable_config_view,
       item_rep: @item_rep ? Nanoc::ItemRepView.new(@item_rep, view_context) : nil,
       item: @item ? Nanoc::ItemWithRepsView.new(@item, view_context) : nil,
       items: Nanoc::ItemCollectionWithRepsView.new(@items, view_context),

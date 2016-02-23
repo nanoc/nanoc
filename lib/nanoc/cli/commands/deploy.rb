@@ -30,7 +30,7 @@ module Nanoc::CLI::Commands
     def prepare
       load_site
       # FIXME: ugly to preprocess here
-      site.compiler.action_provider.preprocess(site)
+      @site = site.compiler.action_provider.preprocess(site)
     end
 
     def list_deployers

@@ -45,6 +45,10 @@ module Nanoc::RuleDSL
       @rules_collection.preprocessors.each_value do |preprocessor|
         ctx.instance_eval(&preprocessor)
       end
+
+      config_mutator = ctx.config.unwrap
+      new_config = Nanoc::Int::Configuration.new(config_mutator.get)
+      site.copy_with_config(new_config)
     end
 
     def postprocess(site, reps)

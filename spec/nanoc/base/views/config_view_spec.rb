@@ -85,7 +85,7 @@ describe Nanoc::ConfigView do
       res = []
       view.each { |k, v| res << [k, v] }
 
-      expect(res).to eql([[:amount, 9000], [:animal, 'donkey']])
+      expect(res.sort).to eql([[:amount, 9000], [:animal, 'donkey']])
     end
   end
 end
