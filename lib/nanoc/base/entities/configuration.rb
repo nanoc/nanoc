@@ -168,24 +168,12 @@ module Nanoc::Int
       end
     end
 
-    def []=(key, value)
-      @wrapped = @wrapped.put(key, value)
-      value
-    end
-
     def merge(hash)
       self.class.new(@wrapped.merge(hash.to_h))
     end
 
     def without(key)
       self.class.new(@wrapped.reject { |k, _v| k == key })
-    end
-
-    def update(hash)
-      hash.each_pair do |key, value|
-        @wrapped = @wrapped.put(key, value)
-      end
-      self
     end
 
     def each

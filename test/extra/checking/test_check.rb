@@ -9,7 +9,7 @@ class Nanoc::Extra::Checking::CheckTest < Nanoc::TestCase
 
   def test_no_output_dir
     with_site do |site|
-      site.config[:output_dir] = 'non-existent'
+      site = site.copy_with_config(Nanoc::Int::Configuration.new(output_dir: 'non-existent'))
       assert_raises Nanoc::Extra::Checking::OutputDirNotFoundError do
         Nanoc::Extra::Checking::Check.create(site)
       end
