@@ -13,9 +13,13 @@ matrix:
   include:
     - rvm: jruby-9.0.4.0
       env: DISABLE_NOKOGIRI=1
+    - rvm: jruby-9.0.4.0
+      env: DISABLE_NOKOGIRI=0
   allow_failures:
     - rvm: jruby-9.0.4.0
       env: DISABLE_NOKOGIRI=1
+    - rvm: jruby-9.0.4.0
+      env: DISABLE_NOKOGIRI=0
     - rvm: ruby-head
 notifications:
   irc:
