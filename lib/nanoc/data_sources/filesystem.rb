@@ -379,20 +379,6 @@ module Nanoc::DataSources
         @attributes = attributes
         @attributes_data = attributes_data
       end
-
-      # TODO: remove me
-      def [](key)
-        case key
-        when 0
-          attributes
-        when 1
-          content
-        when 2
-          attributes_data
-        else
-          raise ArgumentError
-        end
-      end
     end
 
     class InvalidMetadataError < Nanoc::Error

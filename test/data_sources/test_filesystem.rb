@@ -798,8 +798,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil) }
-    assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal('', result[1])
+    assert_equal({ 'foo' => 'bar' }, result.attributes)
+    assert_equal('', result.content)
   end
 
   def test_parse_embedded_meta_only_2
@@ -815,8 +815,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil) }
-    assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal('', result[1])
+    assert_equal({ 'foo' => 'bar' }, result.attributes)
+    assert_equal('', result.content)
   end
 
   def test_parse_embedded_meta_only_3
@@ -832,8 +832,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil) }
-    assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal('', result[1])
+    assert_equal({ 'foo' => 'bar' }, result.attributes)
+    assert_equal('', result.content)
   end
 
   def test_parse_embedded_invalid_2
@@ -865,8 +865,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil) }
-    assert_equal(File.read('test.html'), result[1])
-    assert_equal({},                     result[0])
+    assert_equal(File.read('test.html'), result.content)
+    assert_equal({},                     result.attributes)
   end
 
   def test_parse_embedded_full_meta
@@ -883,8 +883,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil) }
-    assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal("  \t\n  blah blah\n", result[1])
+    assert_equal({ 'foo' => 'bar' }, result.attributes)
+    assert_equal("  \t\n  blah blah\n", result.content)
   end
 
   def test_parse_embedded_with_extra_spaces
@@ -901,8 +901,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil) }
-    assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal("  blah blah\n", result[1])
+    assert_equal({ 'foo' => 'bar' }, result.attributes)
+    assert_equal("  blah blah\n", result.content)
   end
 
   def test_parse_embedded_empty_meta
@@ -919,8 +919,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil) }
-    assert_equal({}, result[0])
-    assert_equal("\nblah blah\n-----", result[1])
+    assert_equal({}, result.attributes)
+    assert_equal("\nblah blah\n-----", result.content)
   end
 
   def test_parse_utf8_bom
@@ -935,8 +935,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, encoding: 'utf-8')
 
     result = data_source.instance_eval { parse('test.html', nil) }
-    assert_equal({ 'utf8bomawareness' => 'high' }, result[0])
-    assert_equal("content goes here\n", result[1])
+    assert_equal({ 'utf8bomawareness' => 'high' }, result.attributes)
+    assert_equal("content goes here\n", result.content)
   end
 
   def test_parse_embedded_no_meta
@@ -952,8 +952,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil) }
-    assert_equal({}, result[0])
-    assert_equal(content, result[1])
+    assert_equal({}, result.attributes)
+    assert_equal(content, result.content)
   end
 
   def test_parse_embedded_diff
@@ -970,8 +970,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil) }
-    assert_equal({}, result[0])
-    assert_equal(content, result[1])
+    assert_equal({}, result.attributes)
+    assert_equal(content, result.content)
   end
 
   def test_parse_external
@@ -984,8 +984,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse it
     result = data_source.instance_eval { parse('test.html', 'test.yaml') }
-    assert_equal({ 'foo' => 'bar' }, result[0])
-    assert_equal('blah blah', result[1])
+    assert_equal({ 'foo' => 'bar' }, result.attributes)
+    assert_equal('blah blah', result.content)
   end
 
   def test_parse_internal_bad_metadata
