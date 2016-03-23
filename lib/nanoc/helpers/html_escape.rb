@@ -35,7 +35,7 @@ module Nanoc::Helpers
         buffer << escaped_data
       elsif string
         unless string.is_a? String
-          raise 'The #html_escape or #h function needs either a ' \
+          raise ArgumentError, 'The #html_escape or #h function needs either a ' \
             "string or a block to HTML-escape, but #{string.class} was given"
         end
 
