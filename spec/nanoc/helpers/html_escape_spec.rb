@@ -23,5 +23,13 @@ describe Nanoc::Helpers::HTMLEscape, helper: true do
         expect { subject }.to raise_error(RuntimeError)
       end
     end
+
+    context 'given argument that is not a string' do
+      let(:string) { 1 }
+
+      it 'raises an ArgumentError' do
+        expect { subject }.to raise_error(ArgumentError)
+      end
+    end
   end
 end
