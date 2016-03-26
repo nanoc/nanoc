@@ -347,8 +347,6 @@ module Nanoc::DataSources
     # @return [ParseResult]
     def parse_with_frontmatter(content_filename)
       lv = Nanoc::Int::LazyValue.new(-> { read(content_filename) }).map do |data|
-        puts "READING #{content_filename}"
-
         if data !~ /\A-{3,5}\s*$/
           [data, {}]
         else
