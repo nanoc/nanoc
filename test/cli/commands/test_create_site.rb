@@ -74,7 +74,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       # Try with encoding = default encoding = utf-8
-      File.open('content/index.html', 'w') { |io| io.write("Hello <\xD6>!\n") }
+      File.open('content/index.html', 'w') { |io| io.write('Hello ' + 0xD6.chr + "!\n") }
       exception = assert_raises(RuntimeError) do
         Nanoc::Int::SiteLoader.new.new_from_cwd
       end

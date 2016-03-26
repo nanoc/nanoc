@@ -7,6 +7,13 @@ Features:
 * Allow creating items and layouts with a pre-calculated checksum (#793) [Ruben Verborgh]
 * Allow lazy-loading item/layout content and attributes (#794) [Ruben Verborgh]
 
+## 4.1.5 (2016-03-24)
+
+Fixes:
+
+* Fixed crash in `show-data` command (#833, #835)
+* Fixed preprocessor not being invoked before running checks (#841, #842)
+
 ## 4.1.4 (2016-02-13)
 
 Fixes:
