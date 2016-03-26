@@ -12,17 +12,19 @@ module Nanoc::Int
     def value
       if @value.key?(:raw)
         value = @value.delete(:raw)
-        @value[:final] = transform(value.respond_to?(:call) ? value.call : value)
+        @value[:final] = value.respond_to?(:call) ? value.call : value
         @value.__nanoc_freeze_recursively if frozen?
       end
       @value[:final]
     end
 
-    # @param [Object, Proc] value A value to be transformed
+    # Returns a new lazy value that will apply the given transformation when the value is requested.
     #
-    # @return [Object] The original value (override for more specific behavior)
-    def transform(value)
-      value
+    # @yield resolved value
+    #
+    # @return [Nanoc::Int::LazyValue]
+    def map
+      Nanoc::Int::LazyValue.new(-> { yield(value) })
     end
 
     # @return [void]
