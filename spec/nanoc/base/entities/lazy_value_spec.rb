@@ -1,11 +1,13 @@
 describe Nanoc::Int::LazyValue do
   describe '#value' do
-    let(:value_arg) { 'Hello world' }
+    let(:value_arg) { raise 'override me' }
     let(:lazy_value) { described_class.new(value_arg) }
 
     subject { lazy_value.value }
 
     context 'object' do
+      let(:value_arg) { 'Hello world' }
+
       it { is_expected.to equal(value_arg) }
     end
 
@@ -27,23 +29,6 @@ describe Nanoc::Int::LazyValue do
       it 'only calls the proc once' do
         expect(value_arg).to receive(:call).once.and_return('Hello proc')
 
-        subject
-        subject
-      end
-    end
-
-    context 'proc' do
-      it 'does not call the proc immediately' do
-        lazy_value
-      end
-
-      it 'returns proc return value' do
-        expect(value_arg).to receive(:call).once.and_return('Hello proc')
-        subject
-      end
-
-      it 'only calls the proc once' do
-        expect(value_arg).to receive(:call).once.and_return('Hello proc')
         subject
         subject
       end
