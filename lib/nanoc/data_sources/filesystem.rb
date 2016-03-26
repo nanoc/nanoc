@@ -121,11 +121,21 @@ module Nanoc::DataSources
       else
         parse_result = parse(content_filename, meta_filename)
 
+        filenames = [content_filename, meta_filename]
+        checksum_data = filenames.map do |filename|
+          if filename && File.file?(filename)
+            stat = File::Stat.new(filename)
+            "size=#{stat.size},mtime=#{stat.mtime}"
+          else
+            '?'
+          end
+        end.join(' ')
+
         ProtoDocument.new(
           is_binary: false,
           content: parse_result.content,
           attributes: parse_result.attributes,
-          checksum_data: "content=#{parse_result.content},meta=#{parse_result.attributes_data}",
+          checksum_data: checksum_data,
         )
       end
     end

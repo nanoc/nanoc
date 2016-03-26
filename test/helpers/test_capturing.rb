@@ -34,6 +34,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       File.open('content/includee.erb', 'w') do |io|
         io.write '{<% content_for :blah do %>Old content<% end %>}'
       end
+      FileUtils.touch('content/includee.erb', mtime: Time.now - 1)
       Nanoc::CLI.run(%w(compile))
       assert_equal '[Old content]', File.read('output/includer/index.html')
 
@@ -99,6 +100,7 @@ EOS
       File.open('content/includee.erb', 'w') do |io|
         io.write '{<% content_for :blah do %>Old content<% end %>}'
       end
+      FileUtils.touch('content/includee.erb', mtime: Time.now - 1)
       Nanoc::CLI.run(%w(compile))
       assert_equal '{[nil-Old content]}', File.read('output/includer/index.html')
 
@@ -150,6 +152,7 @@ EOS
       File.open('content/includer.erb', 'w') do |io|
         io.write 'Old-<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>'
       end
+      FileUtils.touch('content/includer.erb', mtime: Time.now - 1)
       Nanoc::CLI.run(%w(compile))
       assert_equal '{}', File.read('output/includee/index.html')
       assert_equal 'Old-Content', File.read('output/includer/index.html')
