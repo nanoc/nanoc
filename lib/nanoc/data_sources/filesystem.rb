@@ -183,7 +183,7 @@ module Nanoc::DataSources
         mtime: mtime_of(content_filename, meta_filename),
       }
 
-      extra_attributes.merge(proto_doc.attributes)
+      -> { extra_attributes.merge(proto_doc.attributes.call) }
     end
 
     def identifier_for(content_filename, meta_filename, dir_name)
@@ -339,31 +339,35 @@ module Nanoc::DataSources
 
     # @return [ParseResult]
     def parse_with_separate_meta_filename(content_filename, meta_filename)
-      content = content_filename ? lazy_read(content_filename) : ''
-      meta_raw = read(meta_filename)
-      meta = parse_metadata(meta_raw, meta_filename)
-      ParseResult.new(content: content, attributes: meta, attributes_data: meta_raw)
+      content = -> { content_filename ? lazy_read(content_filename) : '' }
+      meta = -> { parse_metadata(read(meta_filename), meta_filename) }
+      ParseResult.new(content: content, attributes: meta)
     end
 
     # @return [ParseResult]
     def parse_with_frontmatter(content_filename)
-      data = read(content_filename)
+      lv = Nanoc::Int::LazyValue.new(-> { read(content_filename) }).map do |data|
+        puts "READING #{content_filename}"
 
-      if data !~ /\A-{3,5}\s*$/
-        return ParseResult.new(content: data, attributes: {}, attributes_data: '')
+        if data !~ /\A-{3,5}\s*$/
+          [data, {}]
+        else
+          pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
+          if pieces.size < 4
+            raise RuntimeError.new(
+              "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
+            )
+          end
+
+          meta = parse_metadata(pieces[2], content_filename)
+          content = pieces[4]
+
+          [content, meta]
+        end
       end
 
-      pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
-      if pieces.size < 4
-        raise RuntimeError.new(
-          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
-        )
-      end
-
-      meta = parse_metadata(pieces[2], content_filename)
-      content = pieces[4]
-
-      ParseResult.new(content: content, attributes: meta, attributes_data: pieces[2])
+      # TODO: clean up
+      ParseResult.new(content: -> { lv.value[0] }, attributes: -> { lv.value[1] })
     end
 
     # @return [Hash]
@@ -382,12 +386,10 @@ module Nanoc::DataSources
     class ParseResult
       attr_reader :content
       attr_reader :attributes
-      attr_reader :attributes_data
 
-      def initialize(content:, attributes:, attributes_data:)
+      def initialize(content:, attributes:)
         @content = content
         @attributes = attributes
-        @attributes_data = attributes_data
       end
     end
 
@@ -401,10 +403,6 @@ module Nanoc::DataSources
       return if meta.is_a?(Hash)
 
       raise InvalidMetadataError.new(filename, meta.class)
-    end
-
-    def lazy_read(filename)
-      -> { read(filename) }
     end
 
     # Reads the content of the file with the given name and returns a string
