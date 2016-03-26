@@ -10,6 +10,29 @@ describe Nanoc::Int::LazyValue do
     end
 
     context 'proc' do
+      let(:value_arg) { double(:proc) }
+
+      it 'does not call the proc immediately' do
+        expect(value_arg).not_to receive(:call)
+
+        lazy_value
+      end
+
+      it 'returns proc return value' do
+        expect(value_arg).to receive(:call).once.and_return('Hello proc')
+
+        expect(subject).to eq('Hello proc')
+      end
+
+      it 'only calls the proc once' do
+        expect(value_arg).to receive(:call).once.and_return('Hello proc')
+
+        subject
+        subject
+      end
+    end
+
+    context 'proc' do
       it 'does not call the proc immediately' do
         lazy_value
       end
