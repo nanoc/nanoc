@@ -121,11 +121,21 @@ module Nanoc::DataSources
       else
         parse_result = parse(content_filename, meta_filename)
 
+        filenames = [content_filename, meta_filename]
+        checksum_data = filenames.map do |filename|
+          if filename && File.file?(filename)
+            stat = File::Stat.new(filename)
+            "size=#{stat.size},mtime=#{stat.mtime}"
+          else
+            '?'
+          end
+        end.join(' ')
+
         ProtoDocument.new(
           is_binary: false,
           content: parse_result.content,
           attributes: parse_result.attributes,
-          checksum_data: "content=#{parse_result.content},meta=#{parse_result.attributes_data}",
+          checksum_data: checksum_data,
         )
       end
     end
@@ -173,7 +183,7 @@ module Nanoc::DataSources
         mtime: mtime_of(content_filename, meta_filename),
       }
 
-      extra_attributes.merge(proto_doc.attributes)
+      -> { extra_attributes.merge(proto_doc.attributes.call) }
     end
 
     def identifier_for(content_filename, meta_filename, dir_name)
@@ -329,31 +339,33 @@ module Nanoc::DataSources
 
     # @return [ParseResult]
     def parse_with_separate_meta_filename(content_filename, meta_filename)
-      content = content_filename ? read(content_filename) : ''
-      meta_raw = read(meta_filename)
-      meta = parse_metadata(meta_raw, meta_filename)
-      ParseResult.new(content: content, attributes: meta, attributes_data: meta_raw)
+      content = -> { content_filename ? lazy_read(content_filename) : '' }
+      meta = -> { parse_metadata(read(meta_filename), meta_filename) }
+      ParseResult.new(content: content, attributes: meta)
     end
 
     # @return [ParseResult]
     def parse_with_frontmatter(content_filename)
-      data = read(content_filename)
+      lv = Nanoc::Int::LazyValue.new(-> { read(content_filename) }).map do |data|
+        if data !~ /\A-{3,5}\s*$/
+          [data, {}]
+        else
+          pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
+          if pieces.size < 4
+            raise RuntimeError.new(
+              "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
+            )
+          end
 
-      if data !~ /\A-{3,5}\s*$/
-        return ParseResult.new(content: data, attributes: {}, attributes_data: '')
+          meta = parse_metadata(pieces[2], content_filename)
+          content = pieces[4]
+
+          [content, meta]
+        end
       end
 
-      pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
-      if pieces.size < 4
-        raise RuntimeError.new(
-          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
-        )
-      end
-
-      meta = parse_metadata(pieces[2], content_filename)
-      content = pieces[4]
-
-      ParseResult.new(content: content, attributes: meta, attributes_data: pieces[2])
+      # TODO: clean up
+      ParseResult.new(content: -> { lv.value[0] }, attributes: -> { lv.value[1] })
     end
 
     # @return [Hash]
@@ -372,12 +384,10 @@ module Nanoc::DataSources
     class ParseResult
       attr_reader :content
       attr_reader :attributes
-      attr_reader :attributes_data
 
-      def initialize(content:, attributes:, attributes_data:)
+      def initialize(content:, attributes:)
         @content = content
         @attributes = attributes
-        @attributes_data = attributes_data
       end
     end
 
