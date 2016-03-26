@@ -1,97 +1,55 @@
 describe Nanoc::Int::LazyValue do
-  describe '#initialize' do
+  describe '#value' do
     let(:value_arg) { 'Hello world' }
+    let(:lazy_value) { described_class.new(value_arg) }
 
-    subject { described_class.new(value_arg) }
+    subject { lazy_value.value }
 
-    describe 'value arg' do
-      context 'object' do
-        it 'returns value' do
-          expect(subject.value).to equal(value_arg)
-        end
+    context 'object' do
+      it { is_expected.to equal(value_arg) }
+    end
+
+    context 'proc' do
+      it 'does not call the proc immediately' do
+        lazy_value
       end
 
-      context 'proc' do
-        call_count = 0
-        let(:value_arg) do
-          proc do
-            call_count += 1
-            'Hello proc'
-          end
-        end
+      it 'returns proc return value' do
+        expect(value_arg).to receive(:call).once.and_return('Hello proc')
+        subject
+      end
 
-        before do
-          call_count = 0
-        end
-
-        it 'does not call the proc immediately' do
-          expect(call_count).to eql(0)
-        end
-
-        it 'returns proc return value' do
-          expect(subject.value).to eq('Hello proc')
-        end
-
-        it 'only calls the proc once' do
-          subject.value
-          subject.value
-          expect(call_count).to eql(1)
-        end
+      it 'only calls the proc once' do
+        expect(value_arg).to receive(:call).once.and_return('Hello proc')
+        subject
+        subject
       end
     end
   end
 
-  describe '#transform' do
-    class TransformedLazyValue < described_class
-      attr_accessor :transform_count
+  describe '#map' do
+    let(:value_arg) { -> { 'Hello world' } }
+    let(:lazy_value) { described_class.new(value_arg) }
 
-      def initialize(value)
-        super(value)
-        @transform_count = 0
-      end
+    subject { lazy_value.map(&:upcase) }
 
-      def transform(value)
-        @transform_count += 1
-        'transformed ' + value
-      end
+    it 'does not call the proc immediately' do
+      expect(value_arg).not_to receive(:call)
+
+      subject
     end
 
-    let(:value_arg) { 'value' }
+    it 'returns proc return value' do
+      expect(value_arg).to receive(:call).once.and_return('Hello proc')
 
-    subject { TransformedLazyValue.new(value_arg) }
-
-    context 'object' do
-      it 'does not call transform immediately' do
-        expect(subject.transform_count).to eql(0)
-      end
-
-      it 'transforms the value' do
-        expect(subject.value).to eq('transformed value')
-      end
-
-      it 'only transforms once' do
-        subject.value
-        subject.value
-        expect(subject.transform_count).to eql(1)
-      end
+      expect(subject.value).to eql('HELLO PROC')
     end
 
-    context 'proc' do
-      let(:value_arg) { proc { 'value' } }
+    it 'only calls the proc once' do
+      expect(value_arg).to receive(:call).once.and_return('Hello proc')
 
-      it 'does not call transform immediately' do
-        expect(subject.transform_count).to eql(0)
-      end
-
-      it 'transforms the value' do
-        expect(subject.value).to eq('transformed value')
-      end
-
-      it 'only transforms once' do
-        subject.value
-        subject.value
-        expect(subject.transform_count).to eql(1)
-      end
+      expect(subject.value).to eql('HELLO PROC')
+      expect(subject.value).to eql('HELLO PROC')
     end
   end
 

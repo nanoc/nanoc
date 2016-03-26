@@ -25,7 +25,7 @@ module Nanoc
       # @param [String, nil] checksum_data Used to determine whether the document has changed
       def initialize(content, attributes, identifier, checksum_data: nil)
         @content = Nanoc::Int::Content.create(content)
-        @attributes = LazyAttributesValue.new(attributes)
+        @attributes = Nanoc::Int::LazyValue.new(attributes).map(&:__nanoc_symbolize_keys_recursively)
         @identifier = Nanoc::Identifier.from(identifier)
         @checksum_data = checksum_data
       end
@@ -56,12 +56,6 @@ module Nanoc
         other.respond_to?(:identifier) && identifier == other.identifier
       end
       alias eql? ==
-    end
-
-    class LazyAttributesValue < ::Nanoc::Int::LazyValue
-      def transform(value)
-        value.__nanoc_symbolize_keys_recursively
-      end
     end
   end
 end
