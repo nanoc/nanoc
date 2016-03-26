@@ -339,7 +339,7 @@ module Nanoc::DataSources
 
     # @return [ParseResult]
     def parse_with_separate_meta_filename(content_filename, meta_filename)
-      content = content_filename ? read(content_filename) : ''
+      content = content_filename ? lazy_read(content_filename) : ''
       meta_raw = read(meta_filename)
       meta = parse_metadata(meta_raw, meta_filename)
       ParseResult.new(content: content, attributes: meta, attributes_data: meta_raw)
@@ -401,6 +401,10 @@ module Nanoc::DataSources
       return if meta.is_a?(Hash)
 
       raise InvalidMetadataError.new(filename, meta.class)
+    end
+
+    def lazy_read(filename)
+      -> { read(filename) }
     end
 
     # Reads the content of the file with the given name and returns a string
