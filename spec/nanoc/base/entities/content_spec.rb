@@ -83,30 +83,26 @@ describe Nanoc::Int::TextualContent do
     end
 
     context 'with proc' do
-      call_count = 0
-      let(:content) do
-        described_class.new(proc do
-          call_count += 1
-          'foo'
-        end)
-      end
-
-      before do
-        call_count = 0
-      end
+      let(:content_proc) { -> { 'foo' } }
+      let(:content) { described_class.new(content_proc) }
 
       it 'does not call the proc immediately' do
-        expect(call_count).to eql(0)
+        expect(content_proc).not_to receive(:call)
+
+        content
       end
 
       it 'sets string' do
-        expect(content.string).to eq('foo')
+        expect(content_proc).to receive(:call).once.and_return('dataz')
+
+        expect(content.string).to eq('dataz')
       end
 
       it 'only calls the proc once' do
-        content.string
-        content.string
-        expect(call_count).to eql(1)
+        expect(content_proc).to receive(:call).once.and_return('dataz')
+
+        expect(content.string).to eq('dataz')
+        expect(content.string).to eq('dataz')
       end
     end
   end
