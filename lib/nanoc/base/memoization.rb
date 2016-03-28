@@ -1,3 +1,5 @@
+require 'weakref'
+
 module Nanoc::Int
   # Adds support for memoizing functions.
   #
@@ -5,6 +7,14 @@ module Nanoc::Int
   #
   # @since 3.2.0
   module Memoization
+    class Wrapper
+      attr_reader :value
+
+      def initialize(value)
+        @value = value
+      end
+    end
+
     # Memoizes the method with the given name. The modified method will cache
     # the results of the original method, so that calling a method twice with
     # the same arguments will short-circuit and return the cached results
@@ -39,24 +49,21 @@ module Nanoc::Int
     #
     # @return [void]
     def memoize(method_name)
-      # Alias
       original_method_name = '__nonmemoized_' + method_name.to_s
       alias_method original_method_name, method_name
 
-      # Redefine
       define_method(method_name) do |*args|
-        # Get cache
         @__memoization_cache ||= {}
         @__memoization_cache[method_name] ||= {}
+        method_cache = @__memoization_cache[method_name]
 
-        # Recalculate if necessary
-        unless @__memoization_cache[method_name].key?(args)
-          result = send(original_method_name, *args)
-          @__memoization_cache[method_name][args] = result
+        if method_cache.key?(args) && method_cache[args].weakref_alive?
+          method_cache[args].value
+        else
+          send(original_method_name, *args).tap do |r|
+            method_cache[args] = WeakRef.new(Wrapper.new(r))
+          end
         end
-
-        # Done
-        @__memoization_cache[method_name][args]
       end
     end
   end
