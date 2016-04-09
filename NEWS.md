@@ -6,6 +6,12 @@ Features:
 
 * Allow creating items and layouts with a pre-calculated checksum (#793) [Ruben Verborgh]
 * Allow lazy-loading item/layout content and attributes (#794) [Ruben Verborgh]
+* Added `exclude_origins` configuration option to internal links checker (#847)
+
+Enhancements:
+
+* Made `#html_escape` raise an appropriate error when the given argument is not a String (#840) [Micha Rosenbaum]
+* Improved memory usage of memoized values by using weak refs (#846)
 
 ## 4.1.5 (2016-03-24)
 
