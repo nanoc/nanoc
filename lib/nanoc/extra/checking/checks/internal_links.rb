@@ -34,7 +34,7 @@ module Nanoc::Extra::Checking::Checks
       return true if href == '.'
 
       # Skip hrefs that are specified in the exclude configuration
-      return true if excluded?(href)
+      return true if excluded?(href, origin)
 
       # Remove target
       path = href.sub(/#.*$/, '')
@@ -65,9 +65,20 @@ module Nanoc::Extra::Checking::Checks
       false
     end
 
-    def excluded?(href)
-      excludes = @config.fetch(:checks, {}).fetch(:internal_links, {}).fetch(:exclude, [])
+    def excluded?(href, origin)
+      config = @config.fetch(:checks, {}).fetch(:internal_links, {})
+      excluded_target?(href, config) || excluded_origin?(origin, config)
+    end
+
+    def excluded_target?(href, config)
+      excludes = config.fetch(:exclude_targets, config.fetch(:exclude, []))
       excludes.any? { |pattern| Regexp.new(pattern).match(href) }
+    end
+
+    def excluded_origin?(origin, config)
+      relative_origin = origin[@config[:output_dir].size..-1]
+      excludes = config.fetch(:exclude_origins, [])
+      excludes.any? { |pattern| Regexp.new(pattern).match(relative_origin) }
     end
   end
 end
