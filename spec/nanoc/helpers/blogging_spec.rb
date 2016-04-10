@@ -238,9 +238,12 @@ describe Nanoc::Helpers::Blogging do
   describe '#attribute_to_time' do
     subject { mod.attribute_to_time(arg) }
 
-    let(:around_noon_local) { Time.at(1_446_903_076 - Time.now.utc_offset) }
-    let(:around_noon_utc) { Time.at(1_446_903_076) }
-    let(:beginning_of_day_local) { Time.at(1_446_854_400 - Time.now.utc_offset) }
+    let(:noon_s) { 1_446_903_076 }
+    let(:beginning_of_day_s) { 1_446_854_400 }
+
+    let(:around_noon_local) { Time.at(noon_s - Time.at(noon_s).utc_offset) }
+    let(:around_noon_utc) { Time.at(noon_s) }
+    let(:beginning_of_day_local) { Time.at(beginning_of_day_s - Time.at(beginning_of_day_s).utc_offset) }
 
     context 'with Time instance' do
       let(:arg) { around_noon_utc }
