@@ -7,6 +7,7 @@ Features:
 * Allow creating items and layouts with a pre-calculated checksum (#793) [Ruben Verborgh]
 * Allow lazy-loading item/layout content and attributes (#794) [Ruben Verborgh]
 * Added `exclude_origins` configuration option to internal links checker (#847)
+* Added `ChildParent` helper, providing `#children_of` and `#parent_of` (#849)
 
 Enhancements:
 
