@@ -2,6 +2,7 @@ module Nanoc::Helpers
   autoload 'Blogging',    'nanoc/helpers/blogging'
   autoload 'Breadcrumbs', 'nanoc/helpers/breadcrumbs'
   autoload 'Capturing',   'nanoc/helpers/capturing'
+  autoload 'ChildParent', 'nanoc/helpers/child_parent'
   autoload 'Filtering',   'nanoc/helpers/filtering'
   autoload 'HTMLEscape',  'nanoc/helpers/html_escape'
   autoload 'LinkTo',      'nanoc/helpers/link_to'
