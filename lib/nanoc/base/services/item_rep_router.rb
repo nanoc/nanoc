@@ -28,6 +28,7 @@ module Nanoc::Int
     def route_rep(rep, snapshot_action, paths_to_reps)
       basic_path = snapshot_action.path
       return if basic_path.nil?
+      basic_path = basic_path.encode('UTF-8')
 
       # Check for duplicate paths
       if paths_to_reps.key?(basic_path)

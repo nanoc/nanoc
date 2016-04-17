@@ -87,6 +87,22 @@ describe(Nanoc::Int::ItemRepRouter) do
           subject
           expect(paths_to_reps).to have_key('/foo/index.html')
         end
+
+        context 'path is not UTF-8' do
+          let(:basic_path) { '/foo/index.html'.encode('ISO-8859-1') }
+
+          it 'sets the path as UTF-8' do
+            subject
+            expect(rep.paths).to eql(foo: '/foo/')
+            expect(rep.paths[:foo].encoding.to_s).to eql('UTF-8')
+          end
+
+          it 'sets the raw path as UTF-8' do
+            subject
+            expect(rep.raw_paths).to eql(foo: 'output/foo/index.html')
+            expect(rep.raw_paths[:foo].encoding.to_s).to eql('UTF-8')
+          end
+        end
       end
     end
   end
