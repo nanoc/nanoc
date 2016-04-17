@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.1.6 (2016-04-17)
+
+Fixes:
+
+* Strip index.html only if it is a full component (#850, #851)
+* Force UTF-8 for item rep paths (#837, #852)
+
 ## 4.1.5 (2016-03-24)
 
 Fixes:
