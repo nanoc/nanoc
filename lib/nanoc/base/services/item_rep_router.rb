@@ -42,10 +42,10 @@ module Nanoc::Int
 
     def strip_index_filename(basic_path)
       @site.config[:index_filenames].each do |index_filename|
-        rep_path_ending = basic_path[-index_filename.length..-1]
-        next unless rep_path_ending == index_filename
-
-        return basic_path[0..-index_filename.length - 1]
+        slashed_index_filename = '/' + index_filename
+        if basic_path.end_with?(slashed_index_filename)
+          return basic_path[0..-index_filename.length - 1]
+        end
       end
 
       basic_path
