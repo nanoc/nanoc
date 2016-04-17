@@ -13,7 +13,7 @@ module Nanoc
 
         @erbout = ''
         @rule_memory = {}
-        @config = Nanoc::Int::Configuration.new
+        @config = Nanoc::Int::Configuration.new.with_defaults
         @reps = Nanoc::Int::ItemRepRepo.new
         @items = Nanoc::Int::IdentifiableCollection.new(@config)
         @layouts = Nanoc::Int::IdentifiableCollection.new(@config)
