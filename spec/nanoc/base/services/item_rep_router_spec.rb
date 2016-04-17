@@ -87,14 +87,28 @@ describe(Nanoc::Int::ItemRepRouter) do
           subject
           expect(paths_to_reps).to have_key('/foo/index.html')
         end
+
+        context 'path is not UTF-8' do
+          let(:basic_path) { '/foo/index.html'.encode('ISO-8859-1') }
+
+          it 'sets the path as UTF-8' do
+            subject
+            expect(rep.paths).to eql(foo: '/foo/')
+            expect(rep.paths[:foo].encoding.to_s).to eql('UTF-8')
+          end
+
+          it 'sets the raw path as UTF-8' do
+            subject
+            expect(rep.raw_paths).to eql(foo: 'output/foo/index.html')
+            expect(rep.raw_paths[:foo].encoding.to_s).to eql('UTF-8')
+          end
+        end
       end
     end
   end
 
   describe '#strip_index_filename' do
     subject { item_rep_router.strip_index_filename(basic_path) }
-
-    # FIXME: This fails with /bar/fooindex.html
 
     context 'basic path ends with /index.html' do
       let(:basic_path) { '/bar/index.html' }
@@ -104,6 +118,11 @@ describe(Nanoc::Int::ItemRepRouter) do
     context 'basic path contains /index.html' do
       let(:basic_path) { '/bar/index.html/foo' }
       it { is_expected.to eql('/bar/index.html/foo') }
+    end
+
+    context 'basic path ends with xindex.html' do
+      let(:basic_path) { '/bar/xindex.html' }
+      it { is_expected.to eql('/bar/xindex.html') }
     end
 
     context 'basic path does not contain /index.html' do
