@@ -94,8 +94,6 @@ describe(Nanoc::Int::ItemRepRouter) do
   describe '#strip_index_filename' do
     subject { item_rep_router.strip_index_filename(basic_path) }
 
-    # FIXME: This fails with /bar/fooindex.html
-
     context 'basic path ends with /index.html' do
       let(:basic_path) { '/bar/index.html' }
       it { is_expected.to eql('/bar/') }
@@ -104,6 +102,11 @@ describe(Nanoc::Int::ItemRepRouter) do
     context 'basic path contains /index.html' do
       let(:basic_path) { '/bar/index.html/foo' }
       it { is_expected.to eql('/bar/index.html/foo') }
+    end
+
+    context 'basic path ends with xindex.html' do
+      let(:basic_path) { '/bar/xindex.html' }
+      it { is_expected.to eql('/bar/xindex.html') }
     end
 
     context 'basic path does not contain /index.html' do
