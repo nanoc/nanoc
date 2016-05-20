@@ -44,7 +44,7 @@ group :plugins do
   gem 'rainpress'
   gem 'rdiscount', '~> 2.2', platforms: [:ruby, :mswin]
   gem 'redcarpet', platforms: [:ruby, :mswin]
-  gem 'RedCloth'
+  gem 'RedCloth', platforms: :ruby
   gem 'rouge'
   gem 'rubypants'
   gem 'sass'
