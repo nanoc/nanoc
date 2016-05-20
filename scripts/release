@@ -71,9 +71,9 @@ puts
 puts "=== Reading release notes…"
 release_notes =
   File.readlines('NEWS.md')
-  .drop(4)
-  .take_while { |l| l !~ /^## / }
-  .join
+      .drop(4)
+      .take_while { |l| l !~ /^## / }
+      .join
 puts
 
 puts "=== Creating release on GitHub…"

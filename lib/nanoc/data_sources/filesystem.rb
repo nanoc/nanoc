@@ -234,9 +234,7 @@ module Nanoc::DataSources
       # Split data
       pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
       if pieces.size < 4
-        raise RuntimeError.new(
-          "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format.",
-        )
+        raise "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format."
       end
 
       # Parse
@@ -273,7 +271,7 @@ module Nanoc::DataSources
       begin
         data = File.read(filename)
       rescue => e
-        raise RuntimeError.new("Could not read #{filename}: #{e.inspect}")
+        raise "Could not read #{filename}: #{e.inspect}"
       end
 
       # Fix
@@ -304,7 +302,7 @@ module Nanoc::DataSources
 
     # Raises an invalid encoding error for the given filename and encoding.
     def raise_encoding_error(filename, encoding)
-      raise RuntimeError.new("Could not read #{filename} because the file is not valid #{encoding}.")
+      raise "Could not read #{filename} because the file is not valid #{encoding}."
     end
   end
 end

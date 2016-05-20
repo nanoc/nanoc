@@ -54,7 +54,8 @@ module Nanoc::RuleDSL
     # @return [void]
     def apply_to(rep, site:, executor:, view_context:)
       context = Nanoc::RuleDSL::RuleContext.new(
-        rep: rep, executor: executor, site: site, view_context: view_context)
+        rep: rep, executor: executor, site: site, view_context: view_context,
+      )
       context.instance_exec(matches(rep.item.identifier), &@block)
     end
 

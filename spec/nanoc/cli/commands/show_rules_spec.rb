@@ -19,7 +19,8 @@ describe Nanoc::CLI::Commands::ShowRules do
         :site,
         items: items,
         layouts: layouts,
-        compiler: compiler)
+        compiler: compiler,
+      )
     end
 
     let(:items) do
@@ -56,11 +57,14 @@ describe Nanoc::CLI::Commands::ShowRules do
     let(:rules_collection) do
       Nanoc::RuleDSL::RulesCollection.new.tap do |rc|
         rc.add_item_compilation_rule(
-          Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/dog.*'), :default, proc {}))
+          Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/dog.*'), :default, proc {}),
+        )
         rc.add_item_compilation_rule(
-          Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/*.md'), :default, proc {}))
+          Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/*.md'), :default, proc {}),
+        )
         rc.add_item_compilation_rule(
-          Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/**/*'), :text, proc {}))
+          Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/**/*'), :text, proc {}),
+        )
 
         rc.layout_filter_mapping[Nanoc::Int::Pattern.from('/*.haml')] = [:haml, {}]
         rc.layout_filter_mapping[Nanoc::Int::Pattern.from('/*.erb')] = [:erb, {}]

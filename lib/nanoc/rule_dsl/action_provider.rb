@@ -10,7 +10,8 @@ module Nanoc::RuleDSL
 
       rule_memory_calculator =
         Nanoc::RuleDSL::RuleMemoryCalculator.new(
-          rules_collection: rules_collection, site: site)
+          rules_collection: rules_collection, site: site,
+        )
 
       action_provider = new(rules_collection, rule_memory_calculator)
 

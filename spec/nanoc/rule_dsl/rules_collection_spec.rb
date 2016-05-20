@@ -190,33 +190,43 @@ describe Nanoc::RuleDSL::RulesCollection do
       [
         # Matching item, matching rep
         Nanoc::RuleDSL::Rule.new(
-          Nanoc::Int::Pattern.from('/foo.*'), :default, proc {}, snapshot_name: :a),
+          Nanoc::Int::Pattern.from('/foo.*'), :default, proc {}, snapshot_name: :a
+        ),
         Nanoc::RuleDSL::Rule.new(
-          Nanoc::Int::Pattern.from('/foo.*'), :default, proc {}, snapshot_name: :b),
+          Nanoc::Int::Pattern.from('/foo.*'), :default, proc {}, snapshot_name: :b
+        ),
 
         # Matching item, non-matching rep
         Nanoc::RuleDSL::Rule.new(
-          Nanoc::Int::Pattern.from('/foo.*'), :raw, proc {}, snapshot_name: :a),
+          Nanoc::Int::Pattern.from('/foo.*'), :raw, proc {}, snapshot_name: :a
+        ),
         Nanoc::RuleDSL::Rule.new(
-          Nanoc::Int::Pattern.from('/foo.*'), :raw, proc {}, snapshot_name: :b),
+          Nanoc::Int::Pattern.from('/foo.*'), :raw, proc {}, snapshot_name: :b
+        ),
 
         # Non-matching item, matching rep
         Nanoc::RuleDSL::Rule.new(
-          Nanoc::Int::Pattern.from('/bar.*'), :default, proc {}, snapshot_name: :a),
+          Nanoc::Int::Pattern.from('/bar.*'), :default, proc {}, snapshot_name: :a
+        ),
         Nanoc::RuleDSL::Rule.new(
-          Nanoc::Int::Pattern.from('/bar.*'), :default, proc {}, snapshot_name: :b),
+          Nanoc::Int::Pattern.from('/bar.*'), :default, proc {}, snapshot_name: :b
+        ),
 
         # Non-matching item, non-matching rep
         Nanoc::RuleDSL::Rule.new(
-          Nanoc::Int::Pattern.from('/bar.*'), :raw, proc {}, snapshot_name: :a),
+          Nanoc::Int::Pattern.from('/bar.*'), :raw, proc {}, snapshot_name: :a
+        ),
         Nanoc::RuleDSL::Rule.new(
-          Nanoc::Int::Pattern.from('/bar.*'), :raw, proc {}, snapshot_name: :b),
+          Nanoc::Int::Pattern.from('/bar.*'), :raw, proc {}, snapshot_name: :b
+        ),
 
         # Matching item, matching rep, but not the first
         Nanoc::RuleDSL::Rule.new(
-          Nanoc::Int::Pattern.from('/*.*'), :default, proc {}, snapshot_name: :a),
+          Nanoc::Int::Pattern.from('/*.*'), :default, proc {}, snapshot_name: :a
+        ),
         Nanoc::RuleDSL::Rule.new(
-          Nanoc::Int::Pattern.from('/*.*'), :default, proc {}, snapshot_name: :b),
+          Nanoc::Int::Pattern.from('/*.*'), :default, proc {}, snapshot_name: :b
+        ),
       ]
     end
 

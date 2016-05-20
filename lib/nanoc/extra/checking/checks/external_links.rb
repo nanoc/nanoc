@@ -24,7 +24,8 @@ module ::Nanoc::Extra::Checking::Checks
         filenames.each do |filename|
           add_issue(
             "broken reference to #{res.href}: #{res.explanation}",
-            subject: filename)
+            subject: filename,
+          )
         end
       end
     end

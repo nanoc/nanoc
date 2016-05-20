@@ -10,7 +10,8 @@ module Nanoc::Extra::Checking::Checks
 
         add_issue(
           'file without matching item',
-          subject: f)
+          subject: f,
+        )
       end
     end
 
@@ -23,7 +24,8 @@ module Nanoc::Extra::Checking::Checks
             .flat_map(&:reps)
             .map(&:unwrap)
             .flat_map(&:raw_paths)
-            .flat_map(&:values))
+            .flat_map(&:values),
+        )
     end
 
     def pruner

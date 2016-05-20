@@ -7,7 +7,8 @@ describe Nanoc::Int::ConfigLoader do
     context 'no config file present' do
       it 'errors' do
         expect { subject }.to raise_error(
-          Nanoc::Int::ConfigLoader::NoConfigFileFoundError)
+          Nanoc::Int::ConfigLoader::NoConfigFileFoundError,
+        )
       end
     end
 
@@ -108,7 +109,8 @@ describe Nanoc::Int::ConfigLoader do
       context 'parent config file is not present' do
         it 'errors' do
           expect { subject }.to raise_error(
-            Nanoc::Int::ConfigLoader::NoParentConfigFileFoundError)
+            Nanoc::Int::ConfigLoader::NoParentConfigFileFoundError,
+          )
         end
       end
 
@@ -121,7 +123,8 @@ describe Nanoc::Int::ConfigLoader do
 
           it 'errors' do
             expect { subject }.to raise_error(
-              Nanoc::Int::ConfigLoader::CyclicalConfigFileError)
+              Nanoc::Int::ConfigLoader::CyclicalConfigFileError,
+            )
           end
         end
 
@@ -132,7 +135,8 @@ describe Nanoc::Int::ConfigLoader do
 
           it 'errors' do
             expect { subject }.to raise_error(
-              Nanoc::Int::ConfigLoader::CyclicalConfigFileError)
+              Nanoc::Int::ConfigLoader::CyclicalConfigFileError,
+            )
           end
         end
 

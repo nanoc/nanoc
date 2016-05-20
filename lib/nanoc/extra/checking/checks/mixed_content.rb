@@ -15,7 +15,8 @@ module Nanoc::Extra::Checking::Checks
         fns.each do |filename|
           add_issue(
             "mixed content include: #{uri}",
-            subject: filename)
+            subject: filename,
+          )
         end
       end
     end
