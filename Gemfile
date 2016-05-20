@@ -41,7 +41,7 @@ group :plugins do
   gem 'pygments.rb', platforms: [:ruby, :mswin]
   gem 'rack'
   gem 'rainpress'
-  gem 'rdiscount', platforms: [:ruby, :mswin]
+  gem 'rdiscount', '~> 2.2', platforms: [:ruby, :mswin]
   gem 'redcarpet', platforms: [:ruby, :mswin]
   gem 'RedCloth'
   gem 'rouge'
