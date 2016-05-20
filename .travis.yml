@@ -10,13 +10,15 @@ branches:
 before_install: gem install bundler
 matrix:
   include:
-    - rvm: jruby-head
-      jdk: openjdk7
+    - rvm: jruby-9.0.5.0
       env: DISABLE_NOKOGIRI=1
+    - rvm: jruby-9.0.5.0
+      env: DISABLE_NOKOGIRI=0
   allow_failures:
-    - rvm: jruby-head
-      jdk: openjdk7
+    - rvm: jruby-9.0.5.0
       env: DISABLE_NOKOGIRI=1
+    - rvm: jruby-9.0.5.0
+      env: DISABLE_NOKOGIRI=0
     - rvm: ruby-head
 notifications:
   irc:
