@@ -39,7 +39,8 @@ module Nanoc::Int
       # Read
       apply_parent_config(
         Nanoc::Int::Configuration.new(YAML.load_file(filename)),
-        [filename]).with_defaults
+        [filename],
+      ).with_defaults
     end
 
     # @api private

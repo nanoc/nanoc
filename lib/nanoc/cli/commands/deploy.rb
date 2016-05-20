@@ -15,10 +15,9 @@ module Nanoc::CLI::Commands
     def run
       prepare
 
-      case
-      when options[:'list-deployers']
+      if options[:'list-deployers']
         list_deployers
-      when options[:list]
+      elsif options[:list]
         list_deploy_configs
       else
         deploy

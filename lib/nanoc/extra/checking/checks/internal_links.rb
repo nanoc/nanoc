@@ -21,7 +21,8 @@ module Nanoc::Extra::Checking::Checks
 
           add_issue(
             "broken reference to #{href}",
-            subject: filename)
+            subject: filename,
+          )
         end
       end
     end

@@ -28,7 +28,8 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
 
       # Create filter
       filter = ::Nanoc::Filters::Mustache.new(
-        { content: 'No Payne No Gayne', item: item })
+        { content: 'No Payne No Gayne', item: item },
+      )
 
       # Run filter
       result = filter.setup_and_run('Max says: {{yield}}.')

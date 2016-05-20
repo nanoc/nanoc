@@ -261,7 +261,8 @@ EOS
             input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
             filter.setup_and_run(
               input,
-              colorizers: { ruby: colorizer })
+              colorizers: { ruby: colorizer },
+            )
             flunk 'expected colorizer to raise if no executable is available'
           rescue
           end

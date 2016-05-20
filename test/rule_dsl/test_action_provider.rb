@@ -4,10 +4,12 @@ class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
 
     rule_memory_calculator =
       Nanoc::RuleDSL::RuleMemoryCalculator.new(
-        rules_collection: rules_collection, site: site)
+        rules_collection: rules_collection, site: site,
+      )
 
     action_provider = Nanoc::RuleDSL::ActionProvider.new(
-      rules_collection, rule_memory_calculator)
+      rules_collection, rule_memory_calculator
+    )
 
     Nanoc::RuleDSL::RulesLoader.new(site.config, rules_collection).load
 
@@ -21,12 +23,14 @@ class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
       # Create a bonus rules file
       File.write(
         'more_rules.rb',
-        "preprocess { @items['/index.*'][:preprocessed] = true }")
+        "preprocess { @items['/index.*'][:preprocessed] = true }",
+      )
 
       # Adjust normal rules file
       File.write(
         'Rules',
-        "include_rules 'more_rules'\n\npreprocess {}\n\n" + File.read('Rules'))
+        "include_rules 'more_rules'\n\npreprocess {}\n\n" + File.read('Rules'),
+      )
 
       # Create site and compiler
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
@@ -50,12 +54,14 @@ class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
       # Create a bonus rules file
       File.write(
         'more_rules.rb',
-        'postprocess {}')
+        'postprocess {}',
+      )
 
       # Adjust normal rules file
       File.write(
         'Rules',
-        "include_rules 'more_rules'\n\npostprocess {}\n\n" + File.read('Rules'))
+        "include_rules 'more_rules'\n\npostprocess {}\n\n" + File.read('Rules'),
+      )
 
       # Create site and compiler
       site = Nanoc::Int::SiteLoader.new.new_from_cwd

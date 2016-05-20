@@ -3,7 +3,8 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
     # Create deployer
     rsync = Nanoc::Extra::Deployers::Rsync.new(
       'output/',
-      {})
+      {},
+    )
 
     # Mock run_shell_cmd
     def rsync.run_shell_cmd(args)
@@ -23,7 +24,8 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
     # Create deployer
     rsync = Nanoc::Extra::Deployers::Rsync.new(
       'output/',
-      { dst: 'asdf/' })
+      { dst: 'asdf/' },
+    )
 
     # Mock run_shell_cmd
     def rsync.run_shell_cmd(args)
@@ -43,7 +45,8 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
     # Create deployer
     rsync = Nanoc::Extra::Deployers::Rsync.new(
       'output',
-      { dst: 'asdf' })
+      { dst: 'asdf' },
+    )
 
     # Mock run_shell_cmd
     def rsync.run_shell_cmd(args)
@@ -66,7 +69,8 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
     rsync = Nanoc::Extra::Deployers::Rsync.new(
       'output',
       { dst: 'asdf' },
-      dry_run: true)
+      dry_run: true,
+    )
 
     # Mock run_shell_cmd
     def rsync.run_shell_cmd(args)

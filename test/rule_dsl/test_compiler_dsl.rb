@@ -80,14 +80,16 @@ EOS
       # Create a bonus rules file
       File.write(
         'more_rules.rb',
-        "passthrough '/index.*'")
+        "passthrough '/index.*'",
+      )
 
       # Adjust normal rules file
       File.write(
         'Rules',
         "include_rules 'more_rules'\n\n" \
           "route '/**/*' do ; nil ; end\n\n" \
-          "compile '/**/*' do ; end\n")
+          "compile '/**/*' do ; end\n",
+      )
 
       # Create items
       File.write('content/index.html', 'hello!')

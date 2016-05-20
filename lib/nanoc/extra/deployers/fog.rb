@@ -117,7 +117,8 @@ module Nanoc::Extra::Deployers
       dir.files.create(
         key: key,
         body: File.open(file_path),
-        public: true)
+        public: true,
+      )
       keys_to_invalidate.push(key)
     end
 
@@ -149,7 +150,7 @@ module Nanoc::Extra::Deployers
 
     # Prints the given message on stderr and exits.
     def error(msg)
-      raise RuntimeError.new(msg)
+      raise msg
     end
   end
 end
