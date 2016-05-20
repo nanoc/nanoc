@@ -16,7 +16,8 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       checksum_store: Nanoc::Int::ChecksumStore.new(site: site),
       rule_memory_store: Nanoc::Int::RuleMemoryStore.new,
       dependency_store: Nanoc::Int::DependencyStore.new(
-        site.items.to_a + site.layouts.to_a),
+        site.items.to_a + site.layouts.to_a,
+      ),
       action_provider: action_provider,
       reps: reps,
     }

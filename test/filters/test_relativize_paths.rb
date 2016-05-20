@@ -9,8 +9,10 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -33,8 +35,10 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -57,8 +61,10 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -81,8 +87,10 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -117,8 +125,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -141,8 +151,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -165,8 +177,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -189,8 +203,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/woof/meow/'
     end
 
@@ -213,8 +229,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/woof/meow/'
     end
 
@@ -237,8 +255,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/woof/meow/'
     end
 
@@ -261,8 +281,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/woof/meow/'
     end
 
@@ -285,8 +307,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/woof/meow/'
     end
 
@@ -309,8 +333,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/woof/meow/'
     end
 
@@ -341,8 +367,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -365,8 +393,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -389,8 +419,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -413,8 +445,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 
@@ -440,8 +474,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/woof/meow/'
     end
 
@@ -464,8 +500,10 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/woof/meow/'
     end
 
@@ -489,8 +527,10 @@ EOS
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/bar/baz/'),
-          :blah)
+            '/foo/bar/baz/',
+          ),
+          :blah,
+        )
         @item_rep.paths[:last] = '/foo/bar/baz/'
       end
 
@@ -520,8 +560,10 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/bar/baz/'),
-          :blah)
+            '/foo/bar/baz/',
+          ),
+          :blah,
+        )
         @item_rep.paths[:last] = '/foo/bar/baz/'
       end
 
@@ -550,8 +592,10 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/bar/baz/'),
-          :blah)
+            '/foo/bar/baz/',
+          ),
+          :blah,
+        )
         @item_rep.paths[:last] = '/foo/bar/baz/'
       end
 
@@ -585,8 +629,10 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/bar/baz/'),
-          :blah)
+            '/foo/bar/baz/',
+          ),
+          :blah,
+        )
         @item_rep.paths[:last] = '/foo/bar/baz/'
       end
 
@@ -625,8 +671,10 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/bar/baz/'),
-          :blah)
+            '/foo/bar/baz/',
+          ),
+          :blah,
+        )
         @item_rep.paths[:last] = '/foo/bar/baz/'
       end
 
@@ -658,8 +706,10 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/baz/'),
-          :blah)
+            '/foo/baz/',
+          ),
+          :blah,
+        )
         @item_rep.paths[:last] = '/foo/baz/'
       end
 
@@ -690,8 +740,10 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/baz/'),
-          :blah)
+            '/foo/baz/',
+          ),
+          :blah,
+        )
         @item_rep.paths[:last] = '/foo/baz/'
       end
 
@@ -719,8 +771,10 @@ XML
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/'),
-        :blah)
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
       @item_rep.paths[:last] = '/foo/bar/baz/'
     end
 

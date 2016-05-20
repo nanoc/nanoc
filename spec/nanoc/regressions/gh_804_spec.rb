@@ -19,6 +19,8 @@ EOS
   it 'does not crash' do
     expect { Nanoc::CLI.run(%w( check donkey )) }.to(
       raise_error(Nanoc::Int::Errors::GenericTrivial, 'One or more checks failed').and(
-        output(/Issues found!\n  \(global\):\n    \[ (\e\[31m)?ERROR(\e\[0m)? \] donkey - Not enough donkeys\n  \/catlady.md:\n    \[ (\e\[31m)?ERROR(\e\[0m)? \] donkey - Too many cats\n/).to_stdout))
+        output(/Issues found!\n  \(global\):\n    \[ (\e\[31m)?ERROR(\e\[0m)? \] donkey - Not enough donkeys\n  \/catlady.md:\n    \[ (\e\[31m)?ERROR(\e\[0m)? \] donkey - Too many cats\n/).to_stdout,
+      ),
+    )
   end
 end

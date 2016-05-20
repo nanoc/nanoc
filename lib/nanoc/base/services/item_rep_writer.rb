@@ -12,7 +12,8 @@ module Nanoc::Int
 
       # Notify
       Nanoc::Int::NotificationCenter.post(
-        :will_write_rep, item_rep, raw_path)
+        :will_write_rep, item_rep, raw_path
+      )
 
       content = item_rep.snapshot_contents[:last]
       if content.binary?
@@ -32,7 +33,8 @@ module Nanoc::Int
 
       # Notify
       Nanoc::Int::NotificationCenter.post(
-        :rep_written, item_rep, raw_path, is_created, is_modified)
+        :rep_written, item_rep, raw_path, is_created, is_modified
+      )
     end
 
     def temp_filename

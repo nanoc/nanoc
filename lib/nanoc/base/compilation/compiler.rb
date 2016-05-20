@@ -90,9 +90,11 @@ module Nanoc::Int
       store
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
-        Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
+        Nanoc::Filter::TMP_BINARY_ITEMS_DIR,
+      )
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
-        Nanoc::Int::ItemRepWriter::TMP_TEXT_ITEMS_DIR)
+        Nanoc::Int::ItemRepWriter::TMP_TEXT_ITEMS_DIR,
+      )
     end
 
     def load_stores
@@ -121,7 +123,8 @@ module Nanoc::Int
 
     def build_reps
       builder = Nanoc::Int::ItemRepBuilder.new(
-        site, action_provider, @reps)
+        site, action_provider, @reps
+      )
       builder.run
     end
 

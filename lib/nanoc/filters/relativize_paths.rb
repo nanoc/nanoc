@@ -39,10 +39,9 @@ module Nanoc::Filters
       when :html, :xml, :xhtml
         relativize_html_like(content, params)
       else
-        raise RuntimeError.new(
-          'The relativize_paths needs to know the type of content to ' \
+        raise 'The relativize_paths needs to know the type of content to ' \
           'process. Pass a :type to the filter call (:html for HTML, ' \
-          ':xhtml for XHTML, :xml for XML, or :css for CSS).')
+          ':xhtml for XHTML, :xml for XML, or :css for CSS).'
       end
     end
 

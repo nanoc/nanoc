@@ -2,7 +2,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
   def test_read_etags_with_local_provider
     if_have 'fog' do
       fog = Nanoc::Extra::Deployers::Fog.new(
-        'output/', provider: 'local')
+        'output/', provider: 'local'
+      )
 
       files = [
         mock('file_a'),
@@ -16,7 +17,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
   def test_read_etags_with_aws_provider
     if_have 'fog' do
       fog = Nanoc::Extra::Deployers::Fog.new(
-        'output/', provider: 'aws')
+        'output/', provider: 'aws'
+      )
 
       files = [
         mock('file_a', key: 'key_a', etag: 'etag_a'),
@@ -35,7 +37,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
   def test_calc_local_etag_with_local_provider
     if_have 'fog' do
       fog = Nanoc::Extra::Deployers::Fog.new(
-        'output/', provider: 'local')
+        'output/', provider: 'local'
+      )
 
       file_path = 'blah.tmp'
       File.write(file_path, 'hallo')
@@ -47,21 +50,24 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
   def test_calc_local_etag_with_aws_provider
     if_have 'fog' do
       fog = Nanoc::Extra::Deployers::Fog.new(
-        'output/', provider: 'aws')
+        'output/', provider: 'aws'
+      )
 
       file_path = 'blah.tmp'
       File.write(file_path, 'hallo')
 
       assert_equal(
         '598d4c200461b81522a3328565c25f7c',
-        fog.send(:calc_local_etag, file_path))
+        fog.send(:calc_local_etag, file_path),
+      )
     end
   end
 
   def test_needs_upload_with_missing_remote_etag
     if_have 'fog' do
       fog = Nanoc::Extra::Deployers::Fog.new(
-        'output/', provider: 'aws')
+        'output/', provider: 'aws'
+      )
 
       file_path = 'blah.tmp'
       File.write(file_path, 'hallo')
@@ -76,7 +82,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
   def test_needs_upload_with_different_etags
     if_have 'fog' do
       fog = Nanoc::Extra::Deployers::Fog.new(
-        'output/', provider: 'aws')
+        'output/', provider: 'aws'
+      )
 
       file_path = 'blah.tmp'
       File.write(file_path, 'hallo')
@@ -91,7 +98,8 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
   def test_needs_upload_with_identical_etags
     if_have 'fog' do
       fog = Nanoc::Extra::Deployers::Fog.new(
-        'output/', provider: 'aws')
+        'output/', provider: 'aws'
+      )
 
       file_path = 'blah.tmp'
       File.write(file_path, 'hallo')

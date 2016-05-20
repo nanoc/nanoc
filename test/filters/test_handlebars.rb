@@ -5,11 +5,13 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
       item = Nanoc::Int::Item.new(
         'content',
         { title: 'Max Payne', protagonist: 'Max Payne', location: 'here' },
-        '/games/max-payne/')
+        '/games/max-payne/',
+      )
       layout = Nanoc::Int::Layout.new(
         'layout content',
         { name: 'Max Payne' },
-        '/default/')
+        '/default/',
+      )
       config = { animals: 'cats and dogs' }
 
       # Create filter
@@ -37,7 +39,8 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
       item = Nanoc::Int::Item.new(
         'content',
         { title: 'Max Payne', protagonist: 'Max Payne', location: 'here' },
-        '/games/max-payne/')
+        '/games/max-payne/',
+      )
 
       # Create filter
       assigns = {
