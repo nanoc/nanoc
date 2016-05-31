@@ -33,11 +33,15 @@ module Nanoc::Int
       string_pattern_type: 'glob',
     }.freeze
 
+    attr_reader :env
+
     contract Hash => C::Any
     # Creates a new configuration with the given hash.
     #
     # @param [Hash] hash The actual configuration hash
-    def initialize(hash = {})
+    # @param [Symbol, String] env The active environment for this configuration
+    def initialize(hash = {}, env = nil)
+      @env = env
       @wrapped = hash.__nanoc_symbolize_keys_recursively
     end
 
@@ -49,6 +53,21 @@ module Nanoc::Int
       end
 
       self.class.new(new_wrapped)
+    end
+
+    def with_environment(env = nil)
+      return self unless @wrapped.key? :environments
+
+      # Set active environment
+      env ||= ENV.fetch 'NANOC_ENVIRONMENT', :default
+
+      # Load given environment configuration
+      env_config = @wrapped[:environments][env.to_sym] || {}
+
+      # Handle specific properties
+      env_config[:output_dir] ||= File.join(@wrapped[:output_dir].to_s, env.to_s)
+
+      self.class.new(@wrapped, env).merge(env_config)
     end
 
     contract C::None => Hash
@@ -86,12 +105,12 @@ module Nanoc::Int
 
     contract C::Or[Hash, self] => self
     def merge(hash)
-      self.class.new(@wrapped.merge(hash.to_h))
+      self.class.new(@wrapped.merge(hash.to_h), @env)
     end
 
     contract C::Any => self
     def without(key)
-      self.class.new(@wrapped.reject { |k, _v| k == key })
+      self.class.new(@wrapped.reject { |k, _v| k == key }, @env)
     end
 
     contract C::Any => self

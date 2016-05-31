@@ -2,10 +2,10 @@ module Nanoc::Int
   # @api private
   class CompilerLoader
     def load(site)
-      rule_memory_store = Nanoc::Int::RuleMemoryStore.new
+      rule_memory_store = Nanoc::Int::RuleMemoryStore.new env: site.config.env
 
       dependency_store =
-        Nanoc::Int::DependencyStore.new(site.items.to_a + site.layouts.to_a)
+        Nanoc::Int::DependencyStore.new(site.items.to_a + site.layouts.to_a, env: site.config.env)
 
       checksum_store =
         Nanoc::Int::ChecksumStore.new(site: site)
@@ -25,7 +25,7 @@ module Nanoc::Int
         )
 
       params = {
-        compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
+        compiled_content_cache: Nanoc::Int::CompiledContentCache.new(env: site.config.env),
         checksum_store: checksum_store,
         rule_memory_store: rule_memory_store,
         dependency_store: dependency_store,

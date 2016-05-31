@@ -10,6 +10,10 @@ opt :d, :debug, 'enable debugging' do
   Nanoc::CLI.debug = true
 end
 
+opt :e, :env, 'set environment', argument: :optional do |value|
+  ENV.store 'NANOC_ENVIRONMENT', value || :default
+end
+
 opt :h, :help, 'show the help message and quit' do |_value, cmd|
   puts cmd.help
   exit 0

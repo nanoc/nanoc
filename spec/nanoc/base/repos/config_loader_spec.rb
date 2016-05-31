@@ -52,6 +52,25 @@ describe Nanoc::Int::ConfigLoader do
         expect(subject[:parent_config_file]).to be_nil
       end
     end
+
+    context 'config file present and environment defined' do
+      before do
+        File.write('nanoc.yaml', YAML.dump({ foo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } }))
+      end
+
+      it 'returns the configuration' do
+        expect(subject).to be_a(Nanoc::Int::Configuration)
+      end
+
+      it 'has the test environment custom option' do
+        allow(ENV).to receive(:fetch).with('NANOC_ENVIRONMENT', :default).and_return('test')
+        expect(subject[:foo]).to eq('test-bar')
+      end
+
+      it 'has the default environment custom option' do
+        expect(subject[:foo]).to eq('default-bar')
+      end
+    end
   end
 
   describe '.cwd_is_nanoc_site? + .config_filename_for_cwd' do

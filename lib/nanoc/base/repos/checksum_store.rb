@@ -6,7 +6,7 @@ module Nanoc::Int
   class ChecksumStore < ::Nanoc::Int::Store
     # @param [Nanoc::Int::Site] site
     def initialize(site: nil)
-      super('tmp/checksums', 1)
+      super(File.join('tmp', (site.config.env if site).to_s, 'checksums'), 1)
 
       @site = site
 
