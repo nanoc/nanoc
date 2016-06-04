@@ -6,6 +6,8 @@ Enhancements:
 
 * Dropped Ruby 2.1 support (#856)
 
+This release also includes the changes from 4.2.0b1.
+
 ## 4.1.6 (2016-04-17)
 
 Fixes:
@@ -86,6 +88,8 @@ Enhancements:
 
 * Added a base path to the Checks file, so that it supports `#require_relative` (#774)
 
+This release also includes the changes from 4.1.0a1 to 4.1.0rc2.
+
 ## 4.1.0rc2 (2015-12-13)
 
 Fixes:
@@ -161,6 +165,8 @@ Enhancements:
 Enhancements:
 
 * `#parent` and `#children` now raise an exception when used on items with a non-legacy identifier (#710)
+
+This release also includes the changes from 4.0.0a1 to 4.0.0rc3.
 
 ## 4.0.0rc3 (2015-09-20)
 
