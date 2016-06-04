@@ -1,5 +1,18 @@
 # Nanoc news
 
+## 4.2 (2016-06-04)
+
+Enhancements:
+
+* Dropped Ruby 2.1 support (#856)
+
+## 4.1.6 (2016-04-17)
+
+Fixes:
+
+* Strip index.html only if it is a full component (#850, #851)
+* Force UTF-8 for item rep paths (#837, #852)
+
 ## 4.2.0b1 (2016-04-17)
 
 Features:
@@ -13,13 +26,6 @@ Enhancements:
 
 * Made `#html_escape` raise an appropriate error when the given argument is not a String (#840) [Micha Rosenbaum]
 * Improved memory usage of memoized values by using weak refs (#846)
-
-## 4.1.6 (2016-04-17)
-
-Fixes:
-
-* Strip index.html only if it is a full component (#850, #851)
-* Force UTF-8 for item rep paths (#837, #852)
 
 ## 4.1.5 (2016-03-24)
 
