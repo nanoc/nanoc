@@ -2,6 +2,10 @@ module Nanoc
   module Int
     # @api private
     class Document
+      include Contracts::Core
+
+      C = Contracts
+
       # @return [Nanoc::Int::Content]
       attr_reader :content
 
@@ -16,6 +20,12 @@ module Nanoc
       # @return [String, nil]
       attr_accessor :checksum_data
 
+      CContent = C::Or[String, Nanoc::Int::Content]
+      CAttributes = C::Or[Hash, Proc]
+      CIdentifier = C::Or[String, Nanoc::Identifier]
+      CChecksumData = C::Optional[C::Maybe[String]]
+
+      Contract CContent, CAttributes, CIdentifier, C::KeywordArgs[checksum_data: CChecksumData] => C::Any
       # @param [String, Nanoc::Int::Content] content
       #
       # @param [Hash, Proc] attributes
@@ -30,13 +40,16 @@ module Nanoc
         @checksum_data = checksum_data
       end
 
+      Contract C::None => self
       # @return [void]
       def freeze
         super
         @content.freeze
         @attributes.freeze
+        self
       end
 
+      Contract C::None => String
       # @abstract
       #
       # @return Unique reference to this object
@@ -44,14 +57,17 @@ module Nanoc
         raise NotImplementedError
       end
 
+      Contract C::None => String
       def inspect
         "<#{self.class} identifier=\"#{identifier}\">"
       end
 
+      Contract C::None => C::Num
       def hash
         self.class.hash ^ identifier.hash
       end
 
+      Contract C::Any => C::Bool
       def ==(other)
         other.respond_to?(:identifier) && identifier == other.identifier
       end

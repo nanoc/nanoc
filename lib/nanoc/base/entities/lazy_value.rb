@@ -3,6 +3,10 @@ module Nanoc::Int
   #
   # @api private
   class LazyValue
+    include Contracts::Core
+
+    C = Contracts
+
     # @param [Object, Proc] value_or_proc A value or a proc to generate the value
     def initialize(value_or_proc)
       @value = { raw: value_or_proc }
@@ -18,6 +22,7 @@ module Nanoc::Int
       @value[:final]
     end
 
+    Contract C::Func[C::Any => C::Any] => self
     # Returns a new lazy value that will apply the given transformation when the value is requested.
     #
     # @yield resolved value
@@ -27,10 +32,12 @@ module Nanoc::Int
       Nanoc::Int::LazyValue.new(-> { yield(value) })
     end
 
+    Contract C::None => self
     # @return [void]
     def freeze
       super
       @value.__nanoc_freeze_recursively unless @value[:raw]
+      self
     end
   end
 end

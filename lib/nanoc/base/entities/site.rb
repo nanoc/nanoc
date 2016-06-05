@@ -1,8 +1,13 @@
 module Nanoc::Int
   # @api private
   class Site
+    include Contracts::Core
+
+    C = Contracts
+
     attr_accessor :compiler
 
+    Contract C::KeywordArgs[config: Nanoc::Int::Configuration, code_snippets: C::RespondTo[:each], items: C::RespondTo[:each], layouts: C::RespondTo[:each]] => C::Any
     # @param [Nanoc::Int::Configuration] config
     # @param [Enumerable<Nanoc::Int::CodeSnippet>] code_snippets
     # @param [Enumerable<Nanoc::Int::Item>] items
@@ -17,6 +22,7 @@ module Nanoc::Int
       ensure_identifier_uniqueness(@layouts, 'layout')
     end
 
+    Contract C::None => self
     # Compiles the site.
     #
     # @return [void]
@@ -24,8 +30,10 @@ module Nanoc::Int
     # @since 3.2.0
     def compile
       compiler.run_all
+      self
     end
 
+    Contract C::None => Nanoc::Int::Compiler
     # Returns the compiler for this site. Will create a new compiler if none
     # exists yet.
     #
@@ -39,6 +47,7 @@ module Nanoc::Int
     attr_reader :items
     attr_reader :layouts
 
+    Contract C::None => self
     # Prevents all further modifications to itself, its items, its layouts etc.
     #
     # @return [void]
@@ -47,8 +56,10 @@ module Nanoc::Int
       items.freeze
       layouts.freeze
       code_snippets.__nanoc_freeze_recursively
+      self
     end
 
+    Contract C::RespondTo[:each], String => self
     def ensure_identifier_uniqueness(objects, type)
       seen = Set.new
       objects.each do |obj|
@@ -57,6 +68,7 @@ module Nanoc::Int
         end
         seen << obj.identifier
       end
+      self
     end
   end
 end

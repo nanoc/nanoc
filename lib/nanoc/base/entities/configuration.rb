@@ -3,6 +3,10 @@ module Nanoc::Int
   #
   # @api private
   class Configuration
+    include Contracts::Core
+
+    C = Contracts
+
     NONE = Object.new.freeze
 
     # The default configuration for a data source. A data source's
@@ -31,6 +35,7 @@ module Nanoc::Int
       string_pattern_type: 'glob',
     }.freeze
 
+    Contract Hash => C::Any
     # Creates a new configuration with the given hash.
     #
     # @param [Hash] hash The actual configuration hash
@@ -38,6 +43,7 @@ module Nanoc::Int
       @wrapped = hash.__nanoc_symbolize_keys_recursively
     end
 
+    Contract C::None => self
     def with_defaults
       new_wrapped = DEFAULT_CONFIG.merge(@wrapped)
       new_wrapped[:data_sources] = new_wrapped[:data_sources].map do |ds|
@@ -47,18 +53,22 @@ module Nanoc::Int
       self.class.new(new_wrapped)
     end
 
+    Contract C::None => Hash
     def to_h
       @wrapped
     end
 
+    Contract C::Any => C::Bool
     def key?(key)
       @wrapped.key?(key)
     end
 
+    Contract C::Any => C::Any
     def [](key)
       @wrapped[key]
     end
 
+    Contract C::Any, C::Maybe[C::Any], C::Maybe[C::Func[C::None => C::Any]] => C::Any
     def fetch(key, fallback = NONE, &_block)
       @wrapped.fetch(key) do
         if !fallback.equal?(NONE)
@@ -71,30 +81,38 @@ module Nanoc::Int
       end
     end
 
+    Contract C::Any, C::Any => C::Any
     def []=(key, value)
       @wrapped[key] = value
     end
 
+    Contract C::Or[Hash, self] => self
     def merge(hash)
       self.class.new(@wrapped.merge(hash.to_h))
     end
 
+    Contract C::Any => self
     def without(key)
       self.class.new(@wrapped.reject { |k, _v| k == key })
     end
 
+    Contract C::Any => self
     def update(hash)
       @wrapped.update(hash)
+      self
     end
 
+    Contract C::Func[C::Any, C::Any => C::Any] => self
     def each
       @wrapped.each { |k, v| yield(k, v) }
       self
     end
 
+    Contract C::None => self
     def freeze
       super
       @wrapped.__nanoc_freeze_recursively
+      self
     end
 
     # Returns an object that can be used for uniquely identifying objects.
