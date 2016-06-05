@@ -1,27 +1,11 @@
 module Nanoc::Helpers
-  # Provides functionality for filtering parts of an item or a layout.
+  # @see http://nanoc.ws/doc/reference/helpers/#filtering
   module Filtering
     require 'nanoc/helpers/capturing'
     include Nanoc::Helpers::Capturing
 
-    # Filters the content in the given block and outputs it. This function
-    # does not return anything; instead, the filtered contents is directly
-    # appended to the output buffer (`_erbout`).
-    #
-    # This function has been tested with ERB and Haml. Other filters may not
-    # work correctly.
-    #
-    # @example Running a filter on a part of an item or layout
-    #
-    #   <p>Lorem ipsum dolor sit amet...</p>
-    #   <% filter :rubypants do %>
-    #     <p>Consectetur adipisicing elit...</p>
-    #   <% end %>
-    #
-    # @param [Symbol] filter_name The name of the filter to run on the
-    #   contents of the block
-    #
-    # @param [Hash] arguments Arguments to pass to the filter
+    # @param [Symbol] filter_name
+    # @param [Hash] arguments
     #
     # @return [void]
     def filter(filter_name, arguments = {}, &block)
