@@ -1,78 +1,16 @@
 module Nanoc::Helpers
-  # Provides functionality for rendering layouts as partials.
+  # @see http://nanoc.ws/doc/reference/helpers/#rendering
   module Rendering
     include Nanoc::Helpers::Capturing
 
-    # Renders the given layout. The given layout will be run through the first
-    # matching layout rule.
+    # @param [String] identifier
+    # @param [Hash] other_assigns
     #
-    # When this method is invoked _without_ a block, the return value will be
-    # the rendered layout (a string)  and `_erbout` will not be modified.
+    # @raise [Nanoc::Int::Errors::UnknownLayout]
+    # @raise [Nanoc::Int::Errors::CannotDetermineFilter]
+    # @raise [Nanoc::Int::Errors::UnknownFilter]
     #
-    # When this method is invoked _with_ a block, an empty string will be
-    # returned and the rendered content will be appended to `_erbout`. In this
-    # case, the content of the block will be captured (using the
-    # {Nanoc::Helpers::Capturing} helper) and this content will be made
-    # available with `yield`. In other words, a `yield` inside the partial
-    # will output the content of the block passed to the method.
-    #
-    # (For the curious: the reason why {#render} with a block has this
-    # behaviour of returning an empty string and modifying `_erbout` is
-    # because ERB does not support combining the `<%= ... %>` form with a
-    # method call that takes a block.)
-    #
-    # The assigns (`@item`, `@config`, …) will be available in the partial. It
-    # is also possible to pass custom assigns to the method; these assigns
-    # will be made available as instance variables inside the partial.
-    #
-    # @param [String] identifier The identifier of the layout that should be
-    #   rendered
-    #
-    # @param [Hash] other_assigns A hash containing extra assigns that will be
-    #   made available as instance variables in the partial
-    #
-    # @example Rendering a head and a foot partial around some text
-    #
-    #   <%= render 'head' %> - MIDDLE - <%= render 'foot' %>
-    #   # => "HEAD - MIDDLE - FOOT"
-    #
-    # @example Rendering a head partial with a custom title
-    #
-    #   # The 'head' layout
-    #   <h1><%= @title %></h1>
-    #
-    #   # The item/layout where the partial is rendered
-    #   <%= render 'head', :title => 'Foo' %>
-    #   # => "<h1>Foo</h1>"
-    #
-    # @example Yielding inside a partial
-    #
-    #   # The 'box' partial
-    #   <div class="box">
-    #     <%= yield %>
-    #   </div>
-    #
-    #   # The item/layout where the partial is rendered
-    #   <% render 'box' do %>
-    #     I'm boxy! Luvz!
-    #   <% end %>
-    #
-    #   # Result
-    #   <div class="box">
-    #     I'm boxy! Luvz!
-    #   </div>
-    #
-    # @raise [Nanoc::Int::Errors::UnknownLayout] if the given layout does not
-    #   exist
-    #
-    # @raise [Nanoc::Int::Errors::CannotDetermineFilter] if there is no layout
-    #   rule for the given layout
-    #
-    # @raise [Nanoc::Int::Errors::UnknownFilter] if the layout rule for the given
-    #   layout specifies an unknown filter
-    #
-    # @return [String, nil] The rendered partial, or nil if this method was
-    #   invoked with a block
+    # @return [String, nil]
     def render(identifier, other_assigns = {}, &block)
       # Find layout
       layout = @layouts[identifier]

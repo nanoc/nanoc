@@ -1,64 +1,14 @@
 module Nanoc::Helpers
-  # Provides functionality for “capturing” content in one place and reusing
-  # this content elsewhere.
-  #
-  # For example, suppose you want the sidebar of your site to contain a short
-  # summary of the item. You could put the summary in the meta file, but
-  # that’s not possible when the summary contains eRuby. You could also put
-  # the sidebar inside the actual item, but that’s not very pretty. Instead,
-  # you write the summary on the item itself, but capture it, and print it in
-  # the sidebar layout.
-  #
-  # This helper has been tested with ERB and Haml. Other filters may not work
-  # correctly.
-  #
-  # @example Capturing content for a summary
-  #
-  #   <% content_for :summary do %>
-  #     <p>On this item, Nanoc is introduced, blah blah.</p>
-  #   <% end %>
-  #
-  # @example Showing captured content in a sidebar
-  #
-  #   <div id="sidebar">
-  #     <h3>Summary</h3>
-  #     <%= content_for(@item, :summary) || '(no summary)' %>
-  #   </div>
+  # @see http://nanoc.ws/doc/reference/helpers/#capturing
   module Capturing
     # @overload content_for(name, params = {}, &block)
-    #
-    #   Captures the content inside the block and stores it so that it can be
-    #   referenced later on. The same method, {#content_for}, is used for
-    #   getting the captured content as well as setting it. When capturing,
-    #   the content of the block itself will not be outputted.
-    #
-    #   By default, capturing content with the same name will raise an error if the newly captured
-    #   content differs from the previously captured content. This behavior can be changed by
-    #   providing a different `:existing` option to this method:
-    #
-    #   * `:error`: When content already exists and is not identical, raise an error.
-    #
-    #   * `:overwrite`: Overwrite the previously captured content with the newly captured content.
-    #
-    #   * `:append`: Append the newly captured content to the previously captured content.
-    #
-    #   @param [Symbol, String] name The base name of the attribute into which
-    #     the content should be stored
-    #
-    #   @option params [Symbol] existing Can be either `:error`, `:overwrite`, or `:append`
-    #
+    #   @param [Symbol, String] name
+    #   @option params [Symbol] existing
     #   @return [void]
     #
     # @overload content_for(item, name)
-    #
-    #   Fetches the capture with the given name from the given item and
-    #   returns it.
-    #
-    #   @param [Nanoc::Int::Item] item The item for which to get the capture
-    #
-    #   @param [Symbol, String] name The name of the capture to fetch
-    #
-    #   @return [String] The stored captured content
+    #   @param [Symbol, String] name
+    #   @return [String]
     def content_for(*args, &block)
       if block_given? # Set content
         # Get args
@@ -125,10 +75,7 @@ module Nanoc::Helpers
       end
     end
 
-    # Evaluates the given block and returns its contents. The contents of the
-    # block is not outputted.
-    #
-    # @return [String] The captured result
+    # @return [String]
     def capture(&block)
       # Get erbout so far
       erbout = eval('_erbout', block.binding)

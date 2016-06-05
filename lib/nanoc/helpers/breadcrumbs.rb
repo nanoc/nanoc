@@ -1,6 +1,5 @@
 module Nanoc::Helpers
-  # Provides support for breadcrumbs, which allow the user to go up in the
-  # page hierarchy.
+  # @see http://nanoc.ws/doc/reference/helpers/#breadcrumbs
   module Breadcrumbs
     class CannotGetBreadcrumbsForNonLegacyItem < Nanoc::Int::Errors::Generic
       def initialize(identifier)
@@ -8,14 +7,7 @@ module Nanoc::Helpers
       end
     end
 
-    # Creates a breadcrumb trail leading from the current item to its parent,
-    # to its parent’s parent, etc, until the root item is reached. This
-    # function does not require that each intermediate item exist; for
-    # example, if there is no `/foo/` item, breadcrumbs for a `/foo/bar/` item
-    # will contain a `nil` element.
-    #
-    # @return [Array] The breadcrumbs, starting with the root item and ending
-    #   with the item itself
+    # @return [Array]
     def breadcrumbs_trail
       unless @item.identifier.legacy?
         raise CannotGetBreadcrumbsForNonLegacyItem.new(@item.identifier)

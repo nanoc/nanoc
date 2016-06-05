@@ -1,29 +1,12 @@
 module Nanoc::Helpers
-  # Contains functionality for HTML-escaping strings.
+  # @see http://nanoc.ws/doc/reference/helpers/#filtering
   module HTMLEscape
     require 'nanoc/helpers/capturing'
     include Nanoc::Helpers::Capturing
 
-    # Returns the HTML-escaped representation of the given string or the given
-    # block. Only `&`, `<`, `>` and `"` are escaped. When given a block, the
-    # contents of the block will be escaped and appended to the output buffer,
-    # `_erbout`.
+    # @param [String] string
     #
-    # @example Escaping a string
-    #
-    #     h('<br>')
-    #     # => '&lt;br&gt;'
-    #
-    # @example Escaping with a block
-    #
-    #     <% h do %>
-    #       <h1>Hello <em>world</em>!</h1>
-    #     <% end %>
-    #     # The buffer will now contain “&lt;h1&gt;Hello &lt;em&gt;world&lt;/em&gt;!&lt;/h1&gt;”
-    #
-    # @param [String] string The string to escape
-    #
-    # @return [String] The escaped string
+    # @return [String]
     def html_escape(string = nil, &block)
       if block_given?
         # Capture and escape block
