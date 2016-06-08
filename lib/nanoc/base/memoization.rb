@@ -15,6 +15,8 @@ module Nanoc::Int
       end
     end
 
+    NONE = Object.new
+
     # Memoizes the method with the given name. The modified method will cache
     # the results of the original method, so that calling a method twice with
     # the same arguments will short-circuit and return the cached results
@@ -57,12 +59,22 @@ module Nanoc::Int
         @__memoization_cache[method_name] ||= {}
         method_cache = @__memoization_cache[method_name]
 
-        if method_cache.key?(args) && method_cache[args].weakref_alive?
-          method_cache[args].value
-        else
+        value = NONE
+        if method_cache.key?(args)
+          value =
+            begin
+              method_cache[args].value
+            rescue WeakRef::RefError
+              NONE
+            end
+        end
+
+        if value.equal?(NONE)
           send(original_method_name, *args).tap do |r|
             method_cache[args] = WeakRef.new(Wrapper.new(r))
           end
+        else
+          value
         end
       end
     end
