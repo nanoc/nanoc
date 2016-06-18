@@ -406,40 +406,13 @@ after
 EOS
       expected_output = <<EOS
 before
-<pre><code class=\"language-ruby highlight\">  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
+<pre><code class=\"language-ruby\">  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
   <span class=\"k\">end</span></code></pre>
 after
 EOS
 
       # Run filter
       actual_output = filter.setup_and_run(input, default_colorizer: :rouge)
-      assert_equal(expected_output, actual_output)
-    end
-  end
-
-  def test_rouge_with_css_class
-    if_have 'rouge', 'nokogiri' do
-      # Create filter
-      filter = ::Nanoc::Filters::ColorizeSyntax.new
-
-      # Get input and expected output
-      input = <<EOS
-before
-<pre><code class="language-ruby">
-  def foo
-  end
-</code></pre>
-after
-EOS
-      expected_output = <<EOS
-before
-<pre><code class=\"language-ruby my-class\">  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
-  <span class=\"k\">end</span></code></pre>
-after
-EOS
-
-      # Run filter
-      actual_output = filter.setup_and_run(input, default_colorizer: :rouge, rouge: { css_class: 'my-class' })
       assert_equal(expected_output, actual_output)
     end
   end
