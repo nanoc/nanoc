@@ -3,9 +3,7 @@ module Nanoc::Int
   #
   # @api private
   class CodeSnippet
-    include Contracts::Core
-
-    C = Contracts
+    include Nanoc::Int::ContractsSupport
 
     # A string containing the actual code in this code snippet.
     #
@@ -17,7 +15,7 @@ module Nanoc::Int
     # @return [String]
     attr_reader :filename
 
-    Contract String, String => C::Any
+    contract String, String => C::Any
     # Creates a new code snippet.
     #
     # @param [String] data The raw source code which will be executed before
@@ -29,7 +27,7 @@ module Nanoc::Int
       @filename = filename
     end
 
-    Contract C::None => nil
+    contract C::None => nil
     # Loads the code by executing it.
     #
     # @return [void]
