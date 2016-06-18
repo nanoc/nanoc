@@ -12,8 +12,7 @@ module Nanoc::CLI::Commands
   class Check < ::Nanoc::CLI::CommandRunner
     def run
       validate_options_and_arguments
-      load_site
-      site.compiler.action_provider.preprocess(site)
+      load_site(preprocess: true)
 
       runner = Nanoc::Extra::Checking::Runner.new(site)
 

@@ -1,9 +1,6 @@
 require 'simplecov'
 SimpleCov.start
 
-require 'minitest/test'
-require 'minitest/spec'
-require 'minitest/mock'
 require 'minitest/autorun'
 require 'mocha/setup'
 require 'vcr'

@@ -9,7 +9,7 @@ EOS
 module Nanoc::CLI::Commands
   class ShowData < ::Nanoc::CLI::CommandRunner
     def run
-      load_site
+      load_site(preprocess: true)
 
       # Get data
       items   = site.items

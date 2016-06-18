@@ -5,6 +5,7 @@ gemspec
 group :devel do
   gem 'coveralls', require: false
   gem 'guard-rake'
+  gem 'fuubar'
   gem 'minitest', '~> 5.0'
   gem 'mocha'
   gem 'pry'
