@@ -1,3 +1,5 @@
+$CONTRACTS = true
+
 require 'simplecov'
 SimpleCov.start
 

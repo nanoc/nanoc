@@ -10,7 +10,7 @@ module Nanoc::Int
     end
 
     def contract(*args)
-      # TODO: conditionally enable for testing only (or CONTRACTS=true)
+      return unless ENV['CONTRACTS'] || $CONTRACTS
       Contract(*args)
     end
   end
