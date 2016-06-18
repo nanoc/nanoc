@@ -44,12 +44,16 @@ module Nanoc::CLI
     # Asserts that the current working directory contains a site and loads the site into memory.
     #
     # @return [void]
-    def load_site
+    def load_site(preprocess: false)
       print 'Loading site… '
       $stdout.flush
 
       if site.nil?
         raise ::Nanoc::Int::Errors::GenericTrivial, 'The current working directory does not seem to be a Nanoc site.'
+      end
+
+      if preprocess
+        site.compiler.action_provider.preprocess(site)
       end
 
       puts 'done'
