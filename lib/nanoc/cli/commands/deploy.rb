@@ -13,7 +13,7 @@ option :n, :'dry-run',      'show what would be deployed'
 module Nanoc::CLI::Commands
   class Deploy < ::Nanoc::CLI::CommandRunner
     def run
-      prepare
+      load_site(preprocess: true)
 
       if options[:'list-deployers']
         list_deployers
@@ -25,12 +25,6 @@ module Nanoc::CLI::Commands
     end
 
     private
-
-    def prepare
-      load_site
-      # FIXME: ugly to preprocess here
-      site.compiler.action_provider.preprocess(site)
-    end
 
     def list_deployers
       deployers      = Nanoc::Int::PluginRegistry.instance.find_all(Nanoc::Extra::Deployer)
