@@ -1,3 +1,5 @@
+$VERBOSE = false
+
 require 'simplecov'
 SimpleCov.start
 

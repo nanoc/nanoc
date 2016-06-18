@@ -10,14 +10,12 @@ module Nanoc
     #
     # @api private
     class Content
-      include Contracts::Core
-
-      C = Contracts
+      include Nanoc::Int::ContractsSupport
 
       # @return [String, nil]
       attr_reader :filename
 
-      Contract C::Maybe[String] => C::Any
+      contract C::Maybe[String] => C::Any
       # @param [String, nil] filename
       def initialize(filename)
         if filename && Pathname.new(filename).relative?
@@ -27,14 +25,14 @@ module Nanoc
         @filename = filename
       end
 
-      Contract C::None => self
+      contract C::None => self
       def freeze
         super
         @filename.freeze
         self
       end
 
-      Contract C::Or[Nanoc::Int::Content, String, Proc], C::KeywordArgs[binary: C::Optional[C::Bool], filename: C::Optional[C::Maybe[String]]] => self
+      contract C::Or[Nanoc::Int::Content, String, Proc], C::KeywordArgs[binary: C::Optional[C::Bool], filename: C::Optional[C::Maybe[String]]] => self
       # @param [Nanoc::Int::Content, String, Proc] content The uncompiled item
       #   content (if it is textual content) or the path to the filename
       #   containing the content (if this is binary content).
@@ -65,26 +63,26 @@ module Nanoc
 
     # @api private
     class TextualContent < Content
-      Contract C::None => String
+      contract C::None => String
       # @return [String]
       def string
         @string.value
       end
 
-      Contract C::Or[String, Proc], C::KeywordArgs[filename: C::Optional[C::Maybe[String]]] => C::Any
+      contract C::Or[String, Proc], C::KeywordArgs[filename: C::Optional[C::Maybe[String]]] => C::Any
       def initialize(string, filename: nil)
         super(filename)
         @string = Nanoc::Int::LazyValue.new(string)
       end
 
-      Contract C::None => self
+      contract C::None => self
       def freeze
         super
         @string.freeze
         self
       end
 
-      Contract C::None => C::Bool
+      contract C::None => C::Bool
       def binary?
         false
       end
@@ -103,7 +101,7 @@ module Nanoc
 
     # @api private
     class BinaryContent < Content
-      Contract C::None => C::Bool
+      contract C::None => C::Bool
       def binary?
         true
       end

@@ -1,19 +1,17 @@
 module Nanoc
   module Int
     class SnapshotDef
-      include Contracts::Core
-
-      C = Contracts
+      include Nanoc::Int::ContractsSupport
 
       attr_reader :name
 
-      Contract Symbol, C::Bool => C::Any
+      contract Symbol, C::Bool => C::Any
       def initialize(name, is_final)
         @name = name
         @is_final = is_final
       end
 
-      Contract C::None => C::Bool
+      contract C::None => C::Bool
       def final?
         @is_final
       end
