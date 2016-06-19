@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.2.1 (2016-06-19)
+
+Fixes:
+
+* Fixed an occasional `WeakRef::RefError` (#863, #865)
+* Fixed `show-data` command not running preprocessor (#867, #870)
+
 ## 4.2 (2016-06-04)
 
 Enhancements:
