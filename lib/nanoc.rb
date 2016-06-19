@@ -33,7 +33,6 @@ require 'thread'
 require 'time'
 require 'yaml'
 require 'English'
-require 'contracts'
 
 # Load Nanoc
 require 'nanoc/version'

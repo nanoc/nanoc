@@ -1,17 +1,60 @@
+require 'singleton'
+
 module Nanoc::Int
   # @api private
   module ContractsSupport
-    def self.included(base)
-      return if base.include?(::Contracts::Core)
+    class Ignorer
+      include Singleton
 
-      base.include(::Contracts::Core)
-      base.extend(self)
-      base.const_set('C', ::Contracts)
+      def method_missing(*_args)
+        self
+      end
     end
 
-    def contract(*args)
-      return unless ENV['CONTRACTS'] || $CONTRACTS
-      Contract(*args)
+    module DisabledContracts
+      Any         = Ignorer.instance
+      Bool        = Ignorer.instance
+      Num         = Ignorer.instance
+      KeywordArgs = Ignorer.instance
+      Optional    = Ignorer.instance
+      Maybe       = Ignorer.instance
+      None        = Ignorer.instance
+      ArrayOf     = Ignorer.instance
+      Or          = Ignorer.instance
+      Func        = Ignorer.instance
+      RespondTo   = Ignorer.instance
+
+      def contract(*args)
+      end
+    end
+
+    module EnabledContracts
+      def contract(*args)
+        Contract(*args)
+      end
+    end
+
+    def self.included(base)
+      contracts_loadable =
+        begin
+          require 'contracts'
+          true
+        rescue LoadError
+          false
+        end
+
+      should_enable = contracts_loadable && !ENV.key?('DISABLE_CONTRACTS')
+
+      if should_enable
+        unless base.include?(::Contracts::Core)
+          base.include(::Contracts::Core)
+          base.extend(EnabledContracts)
+          base.const_set('C', ::Contracts)
+        end
+      else
+        base.extend(DisabledContracts)
+        base.const_set('C', DisabledContracts)
+      end
     end
   end
 end
