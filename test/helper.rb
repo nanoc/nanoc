@@ -1,5 +1,4 @@
 $VERBOSE = false
-$CONTRACTS = true
 
 require 'simplecov'
 SimpleCov.start

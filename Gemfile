@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :devel do
+  gem 'contracts', '~> 0.14'
   gem 'coveralls', require: false
   gem 'guard-rake'
   gem 'fuubar'
