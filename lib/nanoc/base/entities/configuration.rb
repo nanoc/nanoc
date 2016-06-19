@@ -39,7 +39,7 @@ module Nanoc::Int
     # Configuration environments property key
     ENVIRONMENTS = :environments
 
-    contract Hash => C::Any
+    contract Hash, C::Maybe[String] => C::Any
     # Creates a new configuration with the given hash.
     #
     # @param [Hash] hash The actual configuration hash
