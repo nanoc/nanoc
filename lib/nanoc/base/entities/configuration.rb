@@ -33,13 +33,17 @@ module Nanoc::Int
       string_pattern_type: 'glob',
     }.freeze
 
+    # @return [String, nil] The active environment for the configuration
     attr_reader :env
+
+    # Configuration environments property key
+    ENVIRONMENTS = :environments
 
     contract Hash => C::Any
     # Creates a new configuration with the given hash.
     #
     # @param [Hash] hash The actual configuration hash
-    # @param [Symbol, String] env The active environment for this configuration
+    # @param [String, nil] env The active environment for this configuration
     def initialize(hash = {}, env = nil)
       @env = env
       @wrapped = hash.__nanoc_symbolize_keys_recursively
@@ -55,14 +59,14 @@ module Nanoc::Int
       self.class.new(new_wrapped)
     end
 
-    def with_environment(env = nil)
-      return self unless @wrapped.key? :environments
+    def with_environment
+      return self unless @wrapped.key?(ENVIRONMENTS)
 
       # Set active environment
-      env ||= ENV.fetch 'NANOC_ENVIRONMENT', :default
+      env = @env || ENV.fetch('NANOC_ENV', 'default')
 
       # Load given environment configuration
-      env_config = @wrapped[:environments][env.to_sym] || {}
+      env_config = @wrapped[ENVIRONMENTS].fetch(env.to_sym, {})
 
       # Handle specific properties
       env_config[:output_dir] ||= File.join(@wrapped[:output_dir].to_s, env.to_s)

@@ -18,12 +18,12 @@ describe Nanoc::Int::Configuration do
 
   context 'with environments defined' do
     let(:hash) { { foo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } } }
-    let(:config) { described_class.new(hash).with_environment(env) }
+    let(:config) { described_class.new(hash, env).with_environment }
 
     subject { config }
 
     context 'with existing environment' do
-      let(:env) { :test }
+      let(:env) { 'test' }
 
       it 'inherits options from given environment' do
         expect(subject[:foo]).to eq('test-bar')
@@ -31,7 +31,7 @@ describe Nanoc::Int::Configuration do
     end
 
     context 'with unknown environment' do
-      let(:env) { :wtf }
+      let(:env) { 'wtf' }
 
       it 'does not inherits options from any environment' do
         expect(subject[:foo]).to eq('bar')

@@ -34,6 +34,12 @@ module Nanoc::Int
       @version  = version
     end
 
+    # Logic for building tmp path from active environment and store name
+    # @api private
+    def self.tmp_path_for(env, store)
+      File.join('tmp', env.to_s, store)
+    end
+
     # @group Loading and storing data
 
     # @return The data that should be written to the disk

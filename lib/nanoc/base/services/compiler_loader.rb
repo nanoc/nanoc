@@ -2,7 +2,7 @@ module Nanoc::Int
   # @api private
   class CompilerLoader
     def load(site)
-      rule_memory_store = Nanoc::Int::RuleMemoryStore.new env: site.config.env
+      rule_memory_store = Nanoc::Int::RuleMemoryStore.new(env: site.config.env)
 
       dependency_store =
         Nanoc::Int::DependencyStore.new(site.items.to_a + site.layouts.to_a, env: site.config.env)

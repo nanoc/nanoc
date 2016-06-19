@@ -5,7 +5,7 @@ module Nanoc::Int
   # @api private
   class CompiledContentCache < ::Nanoc::Int::Store
     def initialize(env: nil)
-      super(File.join('tmp', env.to_s, 'compiled_content'), 2)
+      super(Nanoc::Int::Store.tmp_path_for(env, 'compiled_content'), 2)
 
       @cache = {}
     end
