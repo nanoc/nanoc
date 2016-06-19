@@ -22,6 +22,7 @@ module Nanoc::Int
 end
 
 require_relative 'base/core_ext'
+require_relative 'base/contracts_support'
 
 require_relative 'base/entities'
 require_relative 'base/repos'

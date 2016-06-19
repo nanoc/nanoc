@@ -1,6 +1,9 @@
 module Nanoc::Int
   # @api private
   class Pattern
+    include Nanoc::Int::ContractsSupport
+
+    contract C::Any => self
     def self.from(obj)
       case obj
       when Nanoc::Int::StringPattern, Nanoc::Int::RegexpPattern
@@ -28,41 +31,49 @@ module Nanoc::Int
   end
 
   # @api private
-  class StringPattern
+  class StringPattern < Pattern
     MATCH_OPTS = File::FNM_PATHNAME | File::FNM_EXTGLOB
 
+    contract String => C::Any
     def initialize(string)
       @string = string
     end
 
+    contract C::Or[Nanoc::Identifier, String] => C::Bool
     def match?(identifier)
       File.fnmatch(@string, identifier.to_s, MATCH_OPTS)
     end
 
+    contract C::Or[Nanoc::Identifier, String] => nil
     def captures(_identifier)
       nil
     end
 
+    contract C::None => String
     def to_s
       @string
     end
   end
 
   # @api private
-  class RegexpPattern
+  class RegexpPattern < Pattern
+    contract Regexp => C::Any
     def initialize(regexp)
       @regexp = regexp
     end
 
+    contract C::Or[Nanoc::Identifier, String] => C::Bool
     def match?(identifier)
       (identifier.to_s =~ @regexp) != nil
     end
 
+    contract C::Or[Nanoc::Identifier, String] => C::Maybe[C::ArrayOf[String]]
     def captures(identifier)
       matches = @regexp.match(identifier.to_s)
       matches && matches.captures
     end
 
+    contract C::None => String
     def to_s
       @regexp.to_s
     end
