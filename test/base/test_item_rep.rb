@@ -4,7 +4,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Int::Item.new(
       'blah blah blah', {}, '/'
     )
-    rep = Nanoc::Int::ItemRep.new(item, nil)
+    rep = Nanoc::Int::ItemRep.new(item, :donkeys)
     rep.snapshot_contents = {
       last: Nanoc::Int::TextualContent.new('last content'),
     }
@@ -19,7 +19,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Int::Item.new(
       'blah blah blah', {}, '/'
     )
-    rep = Nanoc::Int::ItemRep.new(item, nil)
+    rep = Nanoc::Int::ItemRep.new(item, :donkeys)
     rep.snapshot_contents = {
       pre: Nanoc::Int::TextualContent.new('pre content'),
       last: Nanoc::Int::TextualContent.new('last content'),
@@ -35,7 +35,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Int::Item.new(
       'blah blah blah', {}, '/'
     )
-    rep = Nanoc::Int::ItemRep.new(item, nil)
+    rep = Nanoc::Int::ItemRep.new(item, :donkeys)
     rep.snapshot_contents = {
       pre: Nanoc::Int::TextualContent.new('pre content'),
       last: Nanoc::Int::TextualContent.new('last content'),
@@ -51,7 +51,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Int::Item.new(
       'blah blah blah', {}, '/'
     )
-    rep = Nanoc::Int::ItemRep.new(item, nil)
+    rep = Nanoc::Int::ItemRep.new(item, :donkeys)
     rep.snapshot_contents = {
       pre: Nanoc::Int::TextualContent.new('pre content'),
       last: Nanoc::Int::TextualContent.new('last content'),
@@ -68,7 +68,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/'
     )
-    rep = Nanoc::Int::ItemRep.new(item, nil)
+    rep = Nanoc::Int::ItemRep.new(item, :donkeys)
     rep.expects(:compiled?).returns(false)
 
     # Check
@@ -82,7 +82,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/'
     )
-    rep = Nanoc::Int::ItemRep.new(item, nil)
+    rep = Nanoc::Int::ItemRep.new(item, :donkeys)
     rep.expects(:compiled?).returns(false)
     rep.snapshot_contents = {
       pre: Nanoc::Int::TextualContent.new('pre!'),
@@ -100,7 +100,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/'
     )
-    rep = Nanoc::Int::ItemRep.new(item, nil)
+    rep = Nanoc::Int::ItemRep.new(item, :donkeys)
     rep.expects(:compiled?).returns(false)
     rep.snapshot_defs = [
       Nanoc::Int::SnapshotDef.new(:pre, true),
@@ -120,7 +120,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     item = Nanoc::Int::Item.new(
       'blah blah', {}, '/'
     )
-    rep = Nanoc::Int::ItemRep.new(item, nil)
+    rep = Nanoc::Int::ItemRep.new(item, :donkeys)
     rep.expects(:compiled?).returns(false)
     rep.snapshot_defs = [
       Nanoc::Int::SnapshotDef.new(:pre, false),

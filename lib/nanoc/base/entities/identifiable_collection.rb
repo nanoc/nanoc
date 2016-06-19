@@ -1,6 +1,7 @@
 module Nanoc::Int
   # @api private
   class IdentifiableCollection
+    include Nanoc::Int::ContractsSupport
     include Enumerable
 
     extend Forwardable
@@ -10,12 +11,15 @@ module Nanoc::Int
     def_delegator :@objects, :<<
     def_delegator :@objects, :concat
 
+    # FIXME: use Nanoc::Int::Configuration
+    contract C::Any => C::Any
     def initialize(config)
       @config = config
 
       @objects = []
     end
 
+    contract C::None => self
     def freeze
       @objects.freeze
       @objects.each(&:freeze)
@@ -23,6 +27,7 @@ module Nanoc::Int
       super
     end
 
+    contract C::Any => C::Maybe[C::RespondTo[:identifier]]
     def [](arg)
       case arg
       when Nanoc::Identifier
@@ -36,16 +41,20 @@ module Nanoc::Int
       end
     end
 
+    contract C::None => C::ArrayOf[C::RespondTo[:identifier]]
     def to_a
       @objects
     end
 
+    contract C::None => C::Bool
     def empty?
       @objects.empty?
     end
 
+    contract C::Func[C::RespondTo[:identifier] => C::Bool] => self
     def delete_if(&block)
       @objects.delete_if(&block)
+      self
     end
 
     protected

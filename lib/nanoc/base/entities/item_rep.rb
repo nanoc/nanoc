@@ -1,6 +1,8 @@
 module Nanoc::Int
   # @api private
   class ItemRep
+    include Nanoc::Int::ContractsSupport
+
     # @return [Hash<Symbol,Nanoc::Int::Content>]
     attr_accessor :snapshot_contents
 
@@ -27,6 +29,7 @@ module Nanoc::Int
     attr_accessor :modified
     alias modified? modified
 
+    contract Nanoc::Int::Item, Symbol => C::Any
     # @param [Nanoc::Int::Item] item
     #
     # @param [Symbol] name
@@ -45,10 +48,12 @@ module Nanoc::Int
       @compiled = false
     end
 
+    contract C::None => C::Bool
     def binary?
       @snapshot_contents[:last].binary?
     end
 
+    contract C::KeywordArgs[snapshot: C::Optional[C::Maybe[Symbol]]] => String
     # Returns the compiled content from a given snapshot.
     #
     # @param [Symbol] snapshot The name of the snapshot from which to
@@ -90,6 +95,7 @@ module Nanoc::Int
       @snapshot_contents[snapshot_name].string
     end
 
+    contract Symbol => C::Bool
     # Checks whether content exists at a given snapshot.
     #
     # @return [Boolean] True if content exists for the snapshot with the
@@ -101,6 +107,7 @@ module Nanoc::Int
     end
     alias has_snapshot? snapshot?
 
+    contract C::KeywordArgs[snapshot: C::Optional[Symbol]] => C::Maybe[String]
     # Returns the item rep’s raw path. It includes the path to the output
     # directory and the full filename.
     #
@@ -112,6 +119,7 @@ module Nanoc::Int
       @raw_paths[snapshot]
     end
 
+    contract C::KeywordArgs[snapshot: C::Optional[Symbol]] => C::Maybe[String]
     # Returns the item rep’s path, as used when being linked to. It starts
     # with a slash and it is relative to the output directory. It does not
     # include the path to the output directory. It will not include the
@@ -125,6 +133,7 @@ module Nanoc::Int
       @paths[snapshot]
     end
 
+    contract C::None => nil
     # Resets the compilation progress for this item representation. This is
     # necessary when an unmet dependency is detected during compilation.
     #
@@ -133,6 +142,7 @@ module Nanoc::Int
     # @return [void]
     def forget_progress
       initialize_content
+      nil
     end
 
     # Returns an object that can be used for uniquely identifying objects.
