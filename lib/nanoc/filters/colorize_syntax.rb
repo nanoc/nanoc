@@ -319,7 +319,8 @@ module Nanoc::Filters
         start_line: params.fetch(:start_line, 1),
         wrap: params.fetch(:wrap, false),
       }
-      formatter = Rouge::Formatters::HTML.new(formatter_options)
+      formatter_cls = Rouge::Formatters.const_get(Rouge.version > '2' ? 'HTMLLegacy' : 'HTML')
+      formatter = formatter_cls.new(formatter_options)
       lexer = Rouge::Lexer.find_fancy(language, code) || Rouge::Lexers::PlainText
       formatter.format(lexer.lex(code))
     end
