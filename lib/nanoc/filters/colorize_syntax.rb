@@ -312,10 +312,36 @@ module Nanoc::Filters
     def rouge(code, language, params = {})
       require 'rouge'
 
-      formatter_options = {
-        css_class: params.fetch(:css_class, 'highlight'),
-      }
-      formatter = Rouge::Formatters::HTML.new(formatter_options)
+      if Rouge.version < '2' || params.fetch(:legacy, false)
+        # Rouge 1.x or Rouge 2.x legacy options
+        formatter_options = {
+          css_class: params.fetch(:css_class, 'highlight'),
+          inline_theme: params.fetch(:inline_theme, nil),
+          line_numbers: params.fetch(:line_numbers, false),
+          start_line: params.fetch(:start_line, 1),
+          wrap: params.fetch(:wrap, false),
+        }
+        formatter_cls = Rouge::Formatters.const_get(Rouge.version < '2' ? 'HTML' : 'HTMLLegacy')
+        formatter = formatter_cls.new(formatter_options)
+      elsif params.fetch(:inline, false)
+        # Rouge 2.x Inline formatter (require theme)
+        formatter = Rouge::Formatters::HTMLInline.new(params.fetch(:theme))
+      elsif params.fetch(:linewise, false)
+        # Rouge 2.x Linewise formatter (require formatter)
+        formatter_options = params.reject { |p| %i(linewise formatter).include?(p) }
+        formatter = Rouge::Formatters::HTMLLinewise.new(params.fetch(:formatter), formatter_options)
+      elsif params.fetch(:pygments, false)
+        # Rouge 2.x Pygments formatter (require formatter)
+        formatter = Rouge::Formatters::HTMLPygments.new(params.fetch(:formatter), params.fetch(:css_class, 'highlight'))
+      elsif params.fetch(:table, false)
+        # Rouge 2.x Table formatter (require formatter)
+        formatter_options = params.reject { |p| %i(table formatter).include?(p) }
+        formatter = Rouge::Formatters::HTMLTable.new(params.fetch(:formatter), formatter_options)
+      else
+        # Rouge 2.x default HTML formatter
+        formatter = Rouge::Formatters::HTML.new
+      end
+
       lexer = Rouge::Lexer.find_fancy(language, code) || Rouge::Lexers::PlainText
       formatter.format(lexer.lex(code))
     end
