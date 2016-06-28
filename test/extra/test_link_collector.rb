@@ -22,7 +22,7 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     end
 
     # Create validator
-    collector = Nanoc::Extra::LinkCollector.new(%w( file-a.html file-b.html ))
+    collector = Nanoc::Extra::LinkCollector.new(%w(file-a.html file-b.html))
 
     # Test
     hrefs_with_filenames = collector.filenames_per_href
@@ -58,7 +58,7 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     end
 
     # Create validator
-    collector = Nanoc::Extra::LinkCollector.new(%w( file-a.html file-b.html ), :external)
+    collector = Nanoc::Extra::LinkCollector.new(%w(file-a.html file-b.html), :external)
 
     # Test
     hrefs_with_filenames = collector.filenames_per_href
@@ -91,7 +91,7 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     end
 
     # Create validator
-    collector = Nanoc::Extra::LinkCollector.new(%w( file-a.html file-b.html ), :internal)
+    collector = Nanoc::Extra::LinkCollector.new(%w(file-a.html file-b.html), :internal)
 
     # Test
     hrefs_with_filenames = collector.filenames_per_href

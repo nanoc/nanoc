@@ -20,7 +20,7 @@ end
 EOS
 
   def test_load_custom_commands
-    Nanoc::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w(create_site foo)
 
     FileUtils.cd('foo') do
       # Create command
@@ -29,7 +29,7 @@ EOS
 
       # Run command
       begin
-        Nanoc::CLI.run %w( _test )
+        Nanoc::CLI.run %w(_test)
       rescue SystemExit
         assert false, 'Running _test should not cause system exit'
       end
@@ -41,7 +41,7 @@ EOS
   end
 
   def test_load_custom_commands_nested
-    Nanoc::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w(create_site foo)
     FileUtils.cd('foo') do
       # Create command
       FileUtils.mkdir_p('commands')
@@ -57,7 +57,7 @@ EOS
 
       # Run command
       begin
-        Nanoc::CLI.run %w( _test _sub )
+        Nanoc::CLI.run %w(_test _sub)
       rescue SystemExit
         assert false, 'Running _test sub should not cause system exit'
       end
@@ -69,7 +69,7 @@ EOS
   end
 
   def test_load_custom_commands_non_default_commands_dirs
-    Nanoc::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w(create_site foo)
     FileUtils.cd('foo') do
       File.open('nanoc.yaml', 'w') { |io| io.write('commands_dirs: [commands, commands_alt]') }
 
@@ -87,7 +87,7 @@ EOS
 
       # Run command
       begin
-        Nanoc::CLI.run %w( _test _sub )
+        Nanoc::CLI.run %w(_test _sub)
       rescue SystemExit
         assert false, 'Running _test sub should not cause system exit'
       end
@@ -99,7 +99,7 @@ EOS
   end
 
   def test_load_custom_commands_broken
-    Nanoc::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w(create_site foo)
 
     FileUtils.cd('foo') do
       # Create command
@@ -110,11 +110,11 @@ EOS
       position_before = $stderr.tell
       Nanoc::CLI::ErrorHandler.disable
       assert_raises RuntimeError do
-        Nanoc::CLI.run %w( _test )
+        Nanoc::CLI.run %w(_test)
       end
       Nanoc::CLI::ErrorHandler.enable
       assert_raises SystemExit do
-        Nanoc::CLI.run %w( _test )
+        Nanoc::CLI.run %w(_test)
       end
       position_after = $stderr.tell
 

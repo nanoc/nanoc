@@ -563,12 +563,12 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Write sample files
     FileUtils.mkdir_p('foo')
-    %w( foo.html foo.yaml bar.entry.html foo/qux.yaml ).each do |filename|
+    %w(foo.html foo.yaml bar.entry.html foo/qux.yaml).each do |filename|
       File.open(filename, 'w') { |io| io.write('test') }
     end
 
     # Write stray files
-    %w( foo.html~ foo.yaml.orig bar.entry.html.bak ).each do |filename|
+    %w(foo.html~ foo.yaml.orig bar.entry.html.bak).each do |filename|
       File.open(filename, 'w') { |io| io.write('test') }
     end
 
@@ -590,12 +590,12 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Write sample files
     FileUtils.mkdir_p('foo')
-    %w( foo.html foo.yaml bar.html.erb foo/qux.yaml ).each do |filename|
+    %w(foo.html foo.yaml bar.html.erb foo/qux.yaml).each do |filename|
       File.open(filename, 'w') { |io| io.write('test') }
     end
 
     # Write stray files
-    %w( foo.html~ foo.yaml.orig bar.entry.html.bak ).each do |filename|
+    %w(foo.html~ foo.yaml.orig bar.entry.html.bak).each do |filename|
       File.open(filename, 'w') { |io| io.write('test') }
     end
 
@@ -616,7 +616,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, nil)
 
     # Write sample files
-    %w( aaa/foo.html bbb/foo.html ccc/foo.html ).each do |filename|
+    %w(aaa/foo.html bbb/foo.html ccc/foo.html).each do |filename|
       FileUtils.mkdir_p(File.dirname(filename))
       File.open(filename, 'w') { |io| io.write('test') }
     end
@@ -636,7 +636,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, config)
 
     # Write sample files
-    %w( stuff/foo.html stuff/foo.md stuff/foo.yaml ).each do |filename|
+    %w(stuff/foo.html stuff/foo.md stuff/foo.yaml).each do |filename|
       FileUtils.mkdir_p(File.dirname(filename))
       File.open(filename, 'w') { |io| io.write('test') }
     end
@@ -655,7 +655,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, nil)
 
     # Write sample files
-    %w( foo.html foo.xhtml foo.txt foo.yaml bar.html qux.yaml ).each do |filename|
+    %w(foo.html foo.xhtml foo.txt foo.yaml bar.html qux.yaml).each do |filename|
       File.open(filename, 'w') { |io| io.write('test') }
     end
 

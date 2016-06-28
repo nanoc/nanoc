@@ -1,13 +1,13 @@
 class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
   def test_create_site_with_existing_name
-    Nanoc::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w(create_site foo)
     assert_raises(::Nanoc::Int::Errors::GenericTrivial) do
-      Nanoc::CLI.run %w( create_site foo )
+      Nanoc::CLI.run %w(create_site foo)
     end
   end
 
   def test_can_compile_new_site
-    Nanoc::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w(create_site foo)
 
     FileUtils.cd('foo') do
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
@@ -19,14 +19,14 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     FileUtils.mkdir('foo')
 
     FileUtils.cd('foo') do
-      Nanoc::CLI.run %w( create_site ./ )
+      Nanoc::CLI.run %w(create_site ./)
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
     end
   end
 
   def test_can_compile_new_site_with_binary_items
-    Nanoc::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w(create_site foo)
 
     FileUtils.cd('foo') do
       File.open('content/blah', 'w') { |io| io << 'asdf' }
@@ -40,7 +40,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
   def test_can_compile_site_in_nonempty_directory
     FileUtils.mkdir('foo')
     FileUtils.touch(File.join('foo', 'SomeFile.txt'))
-    Nanoc::CLI.run %w( create_site foo --force )
+    Nanoc::CLI.run %w(create_site foo --force)
 
     FileUtils.cd('foo') do
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
@@ -51,7 +51,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
   def test_compiled_site_output
     FileUtils.mkdir('foo')
     FileUtils.touch(File.join('foo', 'SomeFile.txt'))
-    Nanoc::CLI.run %w( create_site foo --force )
+    Nanoc::CLI.run %w(create_site foo --force)
 
     FileUtils.cd('foo') do
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
@@ -70,7 +70,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     original_encoding = Encoding.default_external
     Encoding.default_external = 'ISO-8859-1' # ew!
 
-    Nanoc::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w(create_site foo)
 
     FileUtils.cd('foo') do
       # Try with encoding = default encoding = utf-8
@@ -97,9 +97,9 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
   end
 
   def test_new_site_has_correct_stylesheets
-    Nanoc::CLI.run %w( create_site foo )
+    Nanoc::CLI.run %w(create_site foo)
     FileUtils.cd('foo') do
-      Nanoc::CLI.run %w( compile )
+      Nanoc::CLI.run %w(compile)
 
       assert File.file?('content/stylesheet.css')
       assert_match(/\/stylesheet.css/, File.read('output/index.html'))
@@ -109,12 +109,12 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
   def test_new_site_prunes_by_default
     FileUtils.mkdir('foo')
     FileUtils.touch(File.join('foo', 'SomeFile.txt'))
-    Nanoc::CLI.run %w( create_site foo --force )
+    Nanoc::CLI.run %w(create_site foo --force)
 
     FileUtils.cd('foo') do
       File.write('output/blah.txt', 'stuff')
 
-      Nanoc::CLI.run %w( compile )
+      Nanoc::CLI.run %w(compile)
 
       refute File.file?('output/blah.txt')
     end

@@ -13,7 +13,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       File.open('output2/index.html', 'w') { |io| io.write 'this is a index.' }
 
       assert_raises SystemExit do
-        Nanoc::CLI.run %w( prune )
+        Nanoc::CLI.run %w(prune)
       end
 
       assert File.file?('output2/index.html')
@@ -41,7 +41,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       File.open('output2/foo.html', 'w')   { |io| io.write 'this is a foo.' }
       File.open('output2/index.html', 'w') { |io| io.write 'this is a index.' }
 
-      Nanoc::CLI.run %w( prune --yes )
+      Nanoc::CLI.run %w(prune --yes)
 
       assert File.file?('output2/index.html')
       assert !File.file?('output2/foo.html')
@@ -61,7 +61,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       File.open('output2/foo.html', 'w')   { |io| io.write 'this is a foo.' }
       File.open('output2/index.html', 'w') { |io| io.write 'this is a index.' }
 
-      Nanoc::CLI.run %w( prune --dry-run )
+      Nanoc::CLI.run %w(prune --dry-run)
 
       assert File.file?('output2/index.html')
       assert File.file?('output2/foo.html')
@@ -94,7 +94,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       File.open('output/bad-dir/blah', 'w')   { |io| io.write 'stuff' }
       File.open('output/index.html', 'w')     { |io| io.write 'stuff' }
 
-      Nanoc::CLI.run %w( prune --yes )
+      Nanoc::CLI.run %w(prune --yes)
 
       assert File.file?('output/index.html')
       assert File.file?('output/good-dir/blah')
@@ -124,7 +124,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       File.open('output-real/some-file.html', 'w') { |io| io.write 'stuff' }
       File.open('output-real/index.html', 'w')     { |io| io.write 'stuff' }
 
-      Nanoc::CLI.run %w( prune --yes )
+      Nanoc::CLI.run %w(prune --yes)
 
       assert File.file?('output-real/index.html')
       assert !File.directory?('output-real/some-dir')
@@ -142,7 +142,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       FileUtils.mkdir_p('output/a/b/c')
       File.open('output/a/b/c/index.html', 'w') { |io| io.write 'stuff' }
 
-      Nanoc::CLI.run %w( prune --yes )
+      Nanoc::CLI.run %w(prune --yes)
 
       assert !File.file?('output/a/b/c/index.html')
       assert !File.directory?('output/a/b/c')

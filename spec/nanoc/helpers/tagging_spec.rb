@@ -32,7 +32,7 @@ describe Nanoc::Helpers::Tagging, helper: true do
     end
 
     context 'one tag' do
-      let(:item_attributes) { { tags: %w( donkey ) } }
+      let(:item_attributes) { { tags: %w(donkey) } }
 
       context 'implicit base_url' do
         it { is_expected.to eql('donkey') }
@@ -50,16 +50,16 @@ describe Nanoc::Helpers::Tagging, helper: true do
     end
 
     context 'two tags' do
-      let(:item_attributes) { { tags: %w( donkey giraffe ) } }
+      let(:item_attributes) { { tags: %w(donkey giraffe) } }
       it { is_expected.to eql('donkey, giraffe') }
     end
 
     context 'three tags' do
-      let(:item_attributes) { { tags: %w( donkey giraffe zebra ) } }
+      let(:item_attributes) { { tags: %w(donkey giraffe zebra) } }
       it { is_expected.to eql('donkey, giraffe, zebra') }
 
       context 'custom separator' do
-        let(:item_attributes) { { tags: %w( donkey giraffe zebra ) } }
+        let(:item_attributes) { { tags: %w(donkey giraffe zebra) } }
         let(:params) { { separator: ' / ' } }
         it { is_expected.to eql('donkey / giraffe / zebra') }
       end
