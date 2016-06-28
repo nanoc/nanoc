@@ -84,12 +84,12 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
       end
 
       context '--list-deployers' do
-        let(:command) { %w( deploy --list-deployers ) }
+        let(:command) { %w(deploy --list-deployers) }
         include_examples 'lists all deployers'
       end
 
       context '-D' do
-        let(:command) { %w( deploy -D ) }
+        let(:command) { %w(deploy -D) }
         include_examples 'lists all deployers'
       end
     end
@@ -133,19 +133,19 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
       end
 
       context '--list' do
-        let(:command) { %w( deploy --list ) }
+        let(:command) { %w(deploy --list) }
         include_examples 'lists all deployment configurations'
       end
 
       context '-L' do
-        let(:command) { %w( deploy -L ) }
+        let(:command) { %w(deploy -L) }
         include_examples 'lists all deployment configurations'
       end
     end
 
     describe 'deploying' do
       let(:run) { Nanoc::CLI.run(command) }
-      let(:command) { %w( deploy ) }
+      let(:command) { %w(deploy) }
 
       before do
         FileUtils.mkdir_p('output')
@@ -251,7 +251,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
         end
 
         context 'non-default target' do
-          let(:command) { %w( deploy --target production ) }
+          let(:command) { %w(deploy --target production) }
 
           context 'requested deploy config does not exist' do
             it 'errors' do

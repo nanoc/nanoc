@@ -3,7 +3,7 @@ class Nanoc::Extra::PiperTest < Nanoc::TestCase
     stdout = StringIO.new
     stderr = StringIO.new
 
-    cmd = %w( ls -l )
+    cmd = %w(ls -l)
 
     File.open('foo.txt', 'w') { |io| io.write('hi') }
     File.open('bar.txt', 'w') { |io| io.write('ho') }
@@ -21,7 +21,7 @@ class Nanoc::Extra::PiperTest < Nanoc::TestCase
     stderr = StringIO.new
 
     input = 'Hello World!'
-    cmd = %w( cat )
+    cmd = %w(cat)
 
     piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
     piper.run(cmd, input)
@@ -34,7 +34,7 @@ class Nanoc::Extra::PiperTest < Nanoc::TestCase
     stdout = StringIO.new
     stderr = StringIO.new
 
-    cmd = %w( cat kafhawilgoiwaejagoualjdsfilofiewaguihaifeowuiga )
+    cmd = %w(cat kafhawilgoiwaejagoualjdsfilofiewaguihaifeowuiga)
 
     piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
     assert_raises(Nanoc::Extra::Piper::Error) do

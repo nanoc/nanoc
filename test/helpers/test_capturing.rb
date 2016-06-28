@@ -71,7 +71,7 @@ EOS
 
     result = ::ERB.new(content).result(binding)
 
-    expected = %w( head before basic after foot )
+    expected = %w(head before basic after foot)
     actual   = result.scan(/[a-z]+/)
     assert_equal expected, actual
   end
