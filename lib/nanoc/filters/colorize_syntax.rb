@@ -314,6 +314,10 @@ module Nanoc::Filters
 
       formatter_options = {
         css_class: params.fetch(:css_class, 'highlight'),
+        inline_theme: params.fetch(:inline_theme, nil),
+        line_numbers: params.fetch(:line_numbers, false),
+        start_line: params.fetch(:start_line, 1),
+        wrap: params.fetch(:wrap, false),
       }
       formatter = Rouge::Formatters::HTML.new(formatter_options)
       lexer = Rouge::Lexer.find_fancy(language, code) || Rouge::Lexers::PlainText
