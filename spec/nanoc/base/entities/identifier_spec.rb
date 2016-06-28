@@ -244,7 +244,10 @@ describe Nanoc::Identifier do
       let(:prefix) { 'asdf' }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::Identifier::InvalidPrefixError)
+        expect { subject }.to raise_error(
+          Nanoc::Identifier::InvalidPrefixError,
+          'Invalid prefix (does not start with a slash): "asdf"',
+        )
       end
     end
 
@@ -252,7 +255,10 @@ describe Nanoc::Identifier do
       let(:prefix) { 'asdf/' }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::Identifier::InvalidPrefixError)
+        expect { subject }.to raise_error(
+          Nanoc::Identifier::InvalidPrefixError,
+          'Invalid prefix (does not start with a slash): "asdf/"',
+        )
       end
     end
 
