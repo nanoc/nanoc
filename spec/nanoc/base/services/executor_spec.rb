@@ -217,6 +217,22 @@ describe Nanoc::Int::Executor do
 
       expect { executor.filter(rep, :whatever) }.to raise_frozen_error
     end
+
+    it 'receives frozen filter args' do
+      filter_class = Class.new(::Nanoc::Filter) do
+        def run(_content, params = {})
+          params[:foo] = 'bar'
+          'asdf'
+        end
+      end
+
+      item = Nanoc::Int::Item.new('foo bar', {}, '/foo/')
+      rep = Nanoc::Int::ItemRep.new(item, :default)
+
+      expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
+
+      expect { executor.filter(rep, :whatever) }.to raise_frozen_error
+    end
   end
 
   describe '#layout' do
@@ -360,6 +376,19 @@ describe Nanoc::Int::Executor do
       it 'raises' do
         expect { subject }.to raise_error(Nanoc::Int::Errors::CannotLayoutBinaryItem)
       end
+    end
+
+    it 'receives frozen filter args' do
+      filter_class = Class.new(::Nanoc::Filter) do
+        def run(_content, params = {})
+          params[:foo] = 'bar'
+          'asdf'
+        end
+      end
+
+      expect(Nanoc::Filter).to receive(:named).with(:erb) { filter_class }
+
+      expect { subject }.to raise_frozen_error
     end
   end
 
