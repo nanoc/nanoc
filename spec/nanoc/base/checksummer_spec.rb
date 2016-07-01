@@ -132,9 +132,9 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Float<3.14>') }
   end
 
-  context 'Fixnum' do
+  context 'Fixnum/Integer' do
     let(:obj) { 3 }
-    it { is_expected.to eql('Fixnum<3>') }
+    it { is_expected.to match(/\A(Integer|Fixnum)<3>\z/) }
   end
 
   context 'Nanoc::Identifier' do

@@ -96,17 +96,17 @@ describe Nanoc::Int::RuleMemory do
     subject { rule_memory.serialize }
 
     before do
-      rule_memory.add_filter(:erb, { awesomeness: 123 })
+      rule_memory.add_filter(:erb, { awesomeness: 'high' })
       rule_memory.add_snapshot(:bar, true, '/foo.md')
-      rule_memory.add_layout('/default.erb', { somelayoutparam: 444 })
+      rule_memory.add_layout('/default.erb', { somelayoutparam: 'yes' })
     end
 
     example do
       expect(subject).to eql(
         [
-          [:filter, :erb, 'y9yyZGXu0J04TcDR9oFI3EJM4Vk='],
+          [:filter, :erb, 'PeWUm2PtXYtqeHJdTqnY7kkwAow='],
           [:snapshot, :bar, true, '/foo.md'],
-          [:layout, '/default.erb', 'PGQes7wXm3+K06vSBPYUJft57sM='],
+          [:layout, '/default.erb', '97LAe1pYTLKczxBsu+x4MmvqdkU='],
         ],
       )
     end
