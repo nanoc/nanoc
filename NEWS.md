@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.2.2 (???)
+
+Fixes:
+
+* Fixed confusing “invalid prefix” error message (#873, #879)
+* Ensured filter arguments are frozen, to prevent outdatedness checker errors (#881, #886)
+
+Enhancements:
+
+* Added specific handling for `Sass::Importers::Filesystem` in the checksummer, which should reduce unnecessary recompiles in sites using Compass (#866, #884)
+
 ## 4.2.1 (2016-06-19)
 
 Fixes:
