@@ -194,6 +194,12 @@ module Nanoc::Int
 
     class RescueUpdateBehavior < UpdateBehavior
       def self.update(obj, digest)
+        if obj.class.to_s == 'Sass::Importers::Filesystem'
+          digest.update('root=')
+          digest.update(obj.root)
+          return
+        end
+
         data = begin
           Marshal.dump(obj)
         rescue
