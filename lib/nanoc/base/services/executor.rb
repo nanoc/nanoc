@@ -21,6 +21,7 @@ module Nanoc
           # Run filter
           last = rep.snapshot_contents[:last]
           source = rep.binary? ? last.filename : last.string
+          filter_args.freeze
           result = filter.setup_and_run(source, filter_args)
           rep.snapshot_contents[:last] =
             if filter.class.to_binary?
@@ -48,6 +49,7 @@ module Nanoc
           raise Nanoc::Int::Errors::Generic, "Cannot find rule for layout matching #{layout_identifier}"
         end
         filter_args = filter_args.merge(extra_filter_args || {})
+        filter_args.freeze
 
         # Check whether item can be laid out
         raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(rep) if rep.binary?
