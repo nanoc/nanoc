@@ -1,3 +1,5 @@
+require 'hamster'
+
 module Nanoc::Int
   # Creates checksums for given objects.
   #
@@ -46,14 +48,14 @@ module Nanoc::Int
 
       private
 
-      def update(obj, digest, visited = Set.new)
+      def update(obj, digest, visited = Hamster::Set.new)
         digest.update(obj.class.to_s)
 
         if visited.include?(obj)
           digest.update('<recur>')
         else
           digest.update('<')
-          behavior_for(obj).update(obj, digest) { |o| update(o, digest, visited + [obj]) }
+          behavior_for(obj).update(obj, digest) { |o| update(o, digest, visited.add(obj)) }
           digest.update('>')
         end
       end
