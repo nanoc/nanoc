@@ -276,6 +276,14 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::ItemCollectionWithoutRepsView<Nanoc::Int::IdentifiableCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
   end
 
+  context 'Sass::Importers::Filesystem' do
+    let(:obj) { Sass::Importers::Filesystem.new('/foo') }
+
+    before { require 'sass' }
+
+    it { is_expected.to eql('Sass::Importers::Filesystem<root=/foo>') }
+  end
+
   context 'other marshal-able classes' do
     let(:obj) { klass.new('hello') }
 
