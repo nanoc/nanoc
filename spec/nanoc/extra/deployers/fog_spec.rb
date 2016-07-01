@@ -152,7 +152,7 @@ describe Nanoc::Extra::Deployers::Fog, stdio: true do
       it 'invalidates' do
         expect(::Fog::CDN).to receive(:new).with(provider: 'local', local_root: 'remote').and_return(cdn)
         expect(cdn).to receive(:get_distribution).with('donkey-cdn').and_return(distribution)
-        expect(cdn).to receive(:post_invalidation).with(distribution, ['etc/meow', 'woof'])
+        expect(cdn).to receive(:post_invalidation).with(distribution, contain_exactly('etc/meow', 'woof'))
 
         subject
       end
