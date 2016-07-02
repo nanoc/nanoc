@@ -6,10 +6,12 @@ Fixes:
 
 * Fixed confusing “invalid prefix” error message (#873, #879)
 * Ensured filter arguments are frozen, to prevent outdatedness checker errors (#881, #886)
+* Fixed issue with dependencies of items generated in the preprocessor not being tracked (#885, #891, #893)
 
 Enhancements:
 
 * Added specific handling for `Sass::Importers::Filesystem` in the checksummer, which should reduce unnecessary recompiles in sites using Compass (#866, #884)
+* Improved speed of checksummer (#864, #887)
 
 ## 4.2.1 (2016-06-19)
 
