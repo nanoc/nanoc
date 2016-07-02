@@ -2,7 +2,7 @@ module Nanoc::Int
   # @api private
   class DependencyStore < ::Nanoc::Int::Store
     # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout>]
-    attr_reader :objects
+    attr_accessor :objects
 
     # @param [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] objects
     def initialize(objects)
