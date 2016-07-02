@@ -33,7 +33,7 @@ describe Nanoc::Helpers::Blogging, helper: true do
     end
 
     it 'returns the two articles in descending order' do
-      expect(subject.map(&:identifier)).to eql(['/2/', '/1/'])
+      expect(subject.map(&:identifier)).to eq(['/2/', '/1/'])
     end
   end
 

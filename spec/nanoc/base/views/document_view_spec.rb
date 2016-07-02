@@ -33,35 +33,47 @@ shared_examples 'a document view' do
     context 'comparing with document with same identifier' do
       let(:other) { entity_class.new('content', {}, '/asdf/') }
 
-      it 'is equal' do
+      it 'is ==' do
         expect(view).to eq(other)
-        expect(view).to eql(other)
+      end
+
+      it 'is not eql?' do
+        expect(view).not_to eql(other)
       end
     end
 
     context 'comparing with document with different identifier' do
       let(:other) { entity_class.new('content', {}, '/fdsa/') }
 
-      it 'is not equal' do
+      it 'is not ==' do
         expect(view).not_to eq(other)
+      end
+
+      it 'is not eql?' do
         expect(view).not_to eql(other)
       end
     end
 
     context 'comparing with document view with same identifier' do
-      let(:other) { Nanoc::LayoutView.new(entity_class.new('content', {}, '/asdf/'), nil) }
+      let(:other) { other_view_class.new(entity_class.new('content', {}, '/asdf/'), nil) }
 
-      it 'is equal' do
+      it 'is ==' do
         expect(view).to eq(other)
-        expect(view).to eql(other)
+      end
+
+      it 'is not eql?' do
+        expect(view).not_to eql(other)
       end
     end
 
     context 'comparing with document view with different identifier' do
-      let(:other) { Nanoc::LayoutView.new(entity_class.new('content', {}, '/fdsa/'), nil) }
+      let(:other) { other_view_class.new(entity_class.new('content', {}, '/fdsa/'), nil) }
 
-      it 'is not equal' do
+      it 'is not ==' do
         expect(view).not_to eq(other)
+      end
+
+      it 'is not eql?' do
         expect(view).not_to eql(other)
       end
     end
@@ -69,8 +81,11 @@ shared_examples 'a document view' do
     context 'comparing with other object' do
       let(:other) { nil }
 
-      it 'is not equal' do
+      it 'is not ==' do
         expect(view).not_to eq(other)
+      end
+
+      it 'is not eql?' do
         expect(view).not_to eql(other)
       end
     end

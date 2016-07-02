@@ -69,7 +69,11 @@ module Nanoc
       def ==(other)
         other.respond_to?(:identifier) && identifier == other.identifier
       end
-      alias eql? ==
+
+      contract C::Any => C::Bool
+      def eql?(other)
+        other.is_a?(self.class) && identifier == other.identifier
+      end
     end
   end
 end

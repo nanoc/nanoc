@@ -76,7 +76,11 @@ module Nanoc
         false
       end
     end
-    alias eql? ==
+
+    contract C::Any => C::Bool
+    def eql?(other)
+      other.is_a?(self.class) && to_s == other.to_s
+    end
 
     contract C::None => C::Num
     def hash

@@ -32,9 +32,12 @@ describe Nanoc::ItemRepView do
       let(:other_item) { double(:other_item, identifier: '/foo/') }
       let(:other) { double(:other_item_rep, item: other_item, name: :jacques) }
 
-      it 'is equal' do
+      it 'is ==' do
         expect(view).to eq(other)
-        expect(view).to eql(other)
+      end
+
+      it 'is eql?' do
+        expect(view).not_to eql(other)
       end
     end
 
@@ -42,8 +45,11 @@ describe Nanoc::ItemRepView do
       let(:other_item) { double(:other_item, identifier: '/bar/') }
       let(:other) { double(:other_item_rep, item: other_item, name: :jacques) }
 
-      it 'is not equal' do
+      it 'is not ==' do
         expect(view).not_to eq(other)
+      end
+
+      it 'is not eql?' do
         expect(view).not_to eql(other)
       end
     end
@@ -52,8 +58,11 @@ describe Nanoc::ItemRepView do
       let(:other_item) { double(:other_item, identifier: '/foo/') }
       let(:other) { double(:other_item_rep, item: other_item, name: :marvin) }
 
-      it 'is not equal' do
+      it 'is not ==' do
         expect(view).not_to eq(other)
+      end
+
+      it 'is not eql?' do
         expect(view).not_to eql(other)
       end
     end
@@ -62,9 +71,12 @@ describe Nanoc::ItemRepView do
       let(:other_item) { double(:other_item, identifier: '/foo/') }
       let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), view_context) }
 
-      it 'is equal' do
+      it 'is ==' do
         expect(view).to eq(other)
-        expect(view).to eql(other)
+      end
+
+      it 'is eql?' do
+        expect(view).not_to eql(other)
       end
     end
 
