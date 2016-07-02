@@ -1,5 +1,6 @@
 describe Nanoc::ItemWithRepsView do
   let(:entity_class) { Nanoc::Int::Item }
+  let(:other_view_class) { Nanoc::LayoutView }
   it_behaves_like 'a document view'
 
   let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compiler: compiler) }

@@ -128,8 +128,11 @@ describe Nanoc::Identifier do
       let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
       let(:identifier_b) { described_class.new('/foo/bar//', type: :legacy) }
 
-      it 'is equal' do
+      it 'is ==' do
         expect(identifier_a).to eq(identifier_b)
+      end
+
+      it 'is eql?' do
         expect(identifier_a).to eql(identifier_b)
       end
     end
@@ -138,9 +141,12 @@ describe Nanoc::Identifier do
       let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
       let(:identifier_b) { '/foo/bar/' }
 
-      it 'is equal' do
+      it 'is ==' do
         expect(identifier_a).to eq(identifier_b.to_s)
-        expect(identifier_a).to eql(identifier_b.to_s)
+      end
+
+      it 'is not eql?' do
+        expect(identifier_a).not_to eql(identifier_b.to_s)
       end
     end
 
@@ -148,8 +154,11 @@ describe Nanoc::Identifier do
       let(:identifier_a) { described_class.new('//foo/bar/', type: :legacy) }
       let(:identifier_b) { described_class.new('/baz/qux//', type: :legacy) }
 
-      it 'is not equal' do
+      it 'is not ==' do
         expect(identifier_a).not_to eq(identifier_b)
+      end
+
+      it 'is not eql?' do
         expect(identifier_a).not_to eql(identifier_b)
       end
     end
@@ -160,6 +169,9 @@ describe Nanoc::Identifier do
 
       it 'is not equal' do
         expect(identifier_a).not_to eq(identifier_b)
+      end
+
+      it 'is not eql?' do
         expect(identifier_a).not_to eql(identifier_b)
       end
     end
