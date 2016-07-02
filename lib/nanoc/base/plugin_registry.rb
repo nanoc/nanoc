@@ -196,9 +196,7 @@ module Nanoc::Int
 
     def resolve(class_or_name, _klass)
       if class_or_name.is_a?(String)
-        class_or_name.scan(/\w+/).reduce(Kernel) do |memo, part|
-          memo.const_get(part)
-        end
+        Kernel.const_get(class_or_name)
       else
         class_or_name
       end
