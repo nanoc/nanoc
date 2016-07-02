@@ -136,7 +136,7 @@ module Nanoc::Int
     #   indefinitely. It should not be necessary to pass this a custom value.
     #
     # @return [Boolean] true if the object is outdated, false otherwise
-    def outdated_due_to_dependencies?(obj, processed = Set.new)
+    def outdated_due_to_dependencies?(obj, processed = Hamster::Set.new)
       # Convert from rep to item if necessary
       obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
 

@@ -1,5 +1,3 @@
-require 'hamster'
-
 module Nanoc::Int
   # Creates checksums for given objects.
   #
