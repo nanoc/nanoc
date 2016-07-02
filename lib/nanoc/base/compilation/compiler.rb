@@ -98,6 +98,10 @@ module Nanoc::Int
     end
 
     def load_stores
+      # FIXME: icky hack to update the dependency store’s list of objects
+      # (does not include preprocessed objects otherwise)
+      dependency_store.objects = site.items.to_a + site.layouts.to_a
+
       stores.each(&:load)
     end
 
