@@ -15,7 +15,13 @@ module Nanoc
     def ==(other)
       other.respond_to?(:item) && other.respond_to?(:name) && item == other.item && name == other.name
     end
-    alias eql? ==
+
+    # @see Object#eql?
+    def eql?(other)
+      other.is_a?(self.class) &&
+        item.eql?(other.item) &&
+        name.eql?(other.name)
+    end
 
     # @see Object#hash
     def hash
