@@ -88,4 +88,9 @@ describe Nanoc::ConfigView do
       expect(res).to eql([[:amount, 9000], [:animal, 'donkey']])
     end
   end
+
+  describe '#inspect' do
+    subject { view.inspect }
+    it { is_expected.to eql('<Nanoc::ConfigView>') }
+  end
 end

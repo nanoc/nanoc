@@ -331,4 +331,13 @@ describe Nanoc::ItemWithRepsView do
   describe '#raw_filename' do
     # TODO: implement
   end
+
+  describe '#inspect' do
+    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
+    let(:view) { described_class.new(item, nil) }
+
+    subject { view.inspect }
+
+    it { is_expected.to eql('<Nanoc::ItemWithRepsView identifier=/asdf/>') }
+  end
 end
