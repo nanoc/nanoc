@@ -77,5 +77,9 @@ module Nanoc
     def binary?
       @item_rep.binary?
     end
+
+    def inspect
+      "<#{self.class} item.identifier=#{item.identifier} name=#{name}>"
+    end
   end
 end

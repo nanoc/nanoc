@@ -23,5 +23,9 @@ module Nanoc
     def frozen?
       unwrap.frozen?
     end
+
+    def inspect
+      "<#{self.class}>"
+    end
   end
 end

@@ -32,4 +32,18 @@ describe Nanoc::MutableItemCollectionView do
       expect(ret).to equal(view)
     end
   end
+
+  describe '#inspect' do
+    let(:wrapped) do
+      Nanoc::Int::IdentifiableCollection.new(config)
+    end
+
+    let(:view) { described_class.new(wrapped, view_context) }
+    let(:view_context) { double(:view_context) }
+    let(:config) { { string_pattern_type: 'glob' } }
+
+    subject { view.inspect }
+
+    it { is_expected.to eql('<Nanoc::MutableItemCollectionView>') }
+  end
 end

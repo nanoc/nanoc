@@ -76,5 +76,9 @@ module Nanoc
     def raw_content
       unwrap.content.string
     end
+
+    def inspect
+      "<#{self.class} identifier=#{unwrap.identifier}>"
+    end
   end
 end

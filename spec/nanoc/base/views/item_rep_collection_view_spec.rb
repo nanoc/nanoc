@@ -129,4 +129,10 @@ describe Nanoc::ItemRepCollectionView do
       end
     end
   end
+
+  describe '#inspect' do
+    subject { view.inspect }
+
+    it { is_expected.to eql('<Nanoc::ItemRepCollectionView>') }
+  end
 end
