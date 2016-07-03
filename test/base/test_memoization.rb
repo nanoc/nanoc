@@ -25,6 +25,15 @@ class Nanoc::Int::MemoizationTest < Nanoc::TestCase
     memoize :run
   end
 
+  class Upcaser
+    extend Nanoc::Int::Memoization
+
+    def run(value)
+      value.upcase
+    end
+    memoize :run
+  end
+
   def test_normal
     sample1a = Sample1.new(10)
     sample1b = Sample1.new(15)
@@ -37,5 +46,18 @@ class Nanoc::Int::MemoizationTest < Nanoc::TestCase
       assert_equal 100 * 20 + 5, sample2a.run(5)
       assert_equal 100 * 25 + 7, sample2b.run(7)
     end
+  end
+
+  def test_weak_inspect
+    upcaser = Upcaser.new
+    10_000.times do |i|
+      upcaser.run("hello world #{i}")
+    end
+
+    GC.start
+    GC.start
+
+    # Should not raise
+    upcaser.inspect
   end
 end

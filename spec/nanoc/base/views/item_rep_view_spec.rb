@@ -212,4 +212,14 @@ describe Nanoc::ItemRepView do
       expect(subject._context).to equal(view_context)
     end
   end
+
+  describe '#inspect' do
+    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:view) { described_class.new(item_rep, view_context) }
+
+    subject { view.inspect }
+
+    it { is_expected.to eql('<Nanoc::ItemRepView item.identifier=/foo/ name=jacques>') }
+  end
 end

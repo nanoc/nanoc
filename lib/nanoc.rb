@@ -20,6 +20,9 @@ module Nanoc
   end
 end
 
+# Load external dependencies
+require 'hamster'
+
 # Load general requirements
 require 'digest'
 require 'enumerator'

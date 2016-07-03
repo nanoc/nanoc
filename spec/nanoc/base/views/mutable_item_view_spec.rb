@@ -10,4 +10,13 @@ describe Nanoc::MutableItemView do
     expect(view).not_to respond_to(:path)
     expect(view).not_to respond_to(:reps)
   end
+
+  describe '#inspect' do
+    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
+    let(:view) { described_class.new(item, nil) }
+
+    subject { view.inspect }
+
+    it { is_expected.to eql('<Nanoc::MutableItemView identifier=/asdf/>') }
+  end
 end

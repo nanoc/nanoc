@@ -8,6 +8,20 @@ module Nanoc::Int
   # @since 3.2.0
   module Memoization
     class Wrapper
+      attr_reader :ref
+
+      def initialize(ref)
+        @ref = ref
+      end
+
+      def inspect
+        @ref.inspect
+      rescue WeakRef::RefError
+        '<weak ref collected>'
+      end
+    end
+
+    class Value
       attr_reader :value
 
       def initialize(value)
@@ -63,7 +77,7 @@ module Nanoc::Int
         if method_cache.key?(args)
           value =
             begin
-              method_cache[args].value
+              method_cache[args].ref.value
             rescue WeakRef::RefError
               NONE
             end
@@ -71,7 +85,7 @@ module Nanoc::Int
 
         if value.equal?(NONE)
           send(original_method_name, *args).tap do |r|
-            method_cache[args] = WeakRef.new(Wrapper.new(r))
+            method_cache[args] = Wrapper.new(WeakRef.new(Value.new(r)))
           end
         else
           value
