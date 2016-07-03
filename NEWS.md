@@ -1,5 +1,17 @@
 # Nanoc news
 
+## 4.2.3 (???)
+
+Fixes:
+
+* Fixed issue with `#inspect` raising a `WeakRef::RefError` (#877, #897)
+
+Enhancements:
+
+* Sped up compiler (#894)
+* Improved `#inspect` output of some classes (#896)
+* Deprecated `Item#modified` and replaced it with `Item#modified_reps` (#898)
+
 ## 4.2.2 (2016-07-02)
 
 Fixes:
