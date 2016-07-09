@@ -14,6 +14,7 @@ IDENTICAL - The item was deemed outdated and has been recompiled, but the compil
 SKIP - The item was deemed not outdated and was therefore not recompiled
 
 EOS
+flag nil, :profile, 'profile compilation' if Nanoc::Feature.enabled?('PROFILER')
 
 module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
@@ -366,6 +367,28 @@ module Nanoc::CLI::Commands
       end
     end
 
+    # Records a profile using StackProf
+    class StackProfProfiler < Listener
+      PROFILE_FILE = 'tmp/stackprof_profile'.freeze
+
+      # @see Listener#enable_for?
+      def self.enable_for?(command_runner)
+        command_runner.options.fetch(:profile, false)
+      end
+
+      # @see Listener#start
+      def start
+        require 'stackprof'
+        StackProf.start(mode: :cpu)
+      end
+
+      # @see Listener#stop
+      def stop
+        StackProf.stop
+        StackProf.results(PROFILE_FILE)
+      end
+    end
+
     attr_accessor :listener_classes
 
     def initialize(options, arguments, command)
@@ -404,6 +427,7 @@ module Nanoc::CLI::Commands
         Nanoc::CLI::Commands::Compile::TimingRecorder,
         Nanoc::CLI::Commands::Compile::GCController,
         Nanoc::CLI::Commands::Compile::FileActionPrinter,
+        Nanoc::CLI::Commands::Compile::StackProfProfiler,
       ]
     end
 
