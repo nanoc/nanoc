@@ -15,9 +15,12 @@ module Nanoc::Int
       end
 
       def inspect
-        @ref.inspect
-      rescue WeakRef::RefError
-        '<weak ref collected>'
+        obj = @ref.object
+        if obj
+          obj.inspect
+        else
+          '<garbage collected>'
+        end
       end
     end
 
@@ -75,17 +78,13 @@ module Nanoc::Int
 
         value = NONE
         if method_cache.key?(args)
-          value =
-            begin
-              method_cache[args].ref.value
-            rescue WeakRef::RefError
-              NONE
-            end
+          object = method_cache[args].ref.object
+          value = object ? object.value : NONE
         end
 
         if value.equal?(NONE)
           send(original_method_name, *args).tap do |r|
-            method_cache[args] = Wrapper.new(WeakRef.new(Value.new(r)))
+            method_cache[args] = Wrapper.new(Ref::SoftReference.new(Value.new(r)))
           end
         else
           value
