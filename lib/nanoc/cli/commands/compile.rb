@@ -49,6 +49,18 @@ module Nanoc::CLI::Commands
       # @return [void]
       def stop
       end
+
+      # @api private
+      def start_safely
+        start
+        @_started = true
+      end
+
+      # @api private
+      def stop_safely
+        stop if @_started
+        @_started = false
+      end
     end
 
     # Generates diffs for every output file written
@@ -401,7 +413,7 @@ module Nanoc::CLI::Commands
         .select { |klass| klass.enable_for?(self) }
         .map    { |klass| klass.new(reps: reps) }
 
-      @listeners.each(&:start)
+      @listeners.each(&:start_safely)
     end
 
     def listeners
@@ -416,7 +428,7 @@ module Nanoc::CLI::Commands
     end
 
     def teardown_listeners
-      @listeners.each(&:stop)
+      @listeners.each(&:stop_safely)
     end
 
     def reps
