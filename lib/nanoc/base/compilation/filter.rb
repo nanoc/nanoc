@@ -38,6 +38,13 @@ module Nanoc
     extend Nanoc::Int::PluginRegistry::PluginMethods
 
     class << self
+      def define(ident)
+        filter_class = Class.new(::Nanoc::Filter) { identifier(ident) }
+        filter_class.send(:define_method, :run) do |content, params|
+          yield(content, params)
+        end
+      end
+
       # Sets the new type for the filter. The type can be `:binary` (default)
       # or `:text`. The given argument can either be a symbol indicating both
       # “from” and “to” types, or a hash where the only key is the “from” type
