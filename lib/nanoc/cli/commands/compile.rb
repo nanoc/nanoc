@@ -14,6 +14,7 @@ IDENTICAL - The item was deemed outdated and has been recompiled, but the compil
 SKIP - The item was deemed not outdated and was therefore not recompiled
 
 EOS
+flag nil, :profile, 'profile compilation' if Nanoc::Feature.enabled?('PROFILER')
 
 module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
@@ -48,6 +49,18 @@ module Nanoc::CLI::Commands
       #
       # @return [void]
       def stop
+      end
+
+      # @api private
+      def start_safely
+        start
+        @_started = true
+      end
+
+      # @api private
+      def stop_safely
+        stop if @_started
+        @_started = false
       end
     end
 
@@ -354,6 +367,28 @@ module Nanoc::CLI::Commands
       end
     end
 
+    # Records a profile using StackProf
+    class StackProfProfiler < Listener
+      PROFILE_FILE = 'tmp/stackprof_profile'.freeze
+
+      # @see Listener#enable_for?
+      def self.enable_for?(command_runner)
+        command_runner.options.fetch(:profile, false)
+      end
+
+      # @see Listener#start
+      def start
+        require 'stackprof'
+        StackProf.start(mode: :cpu)
+      end
+
+      # @see Listener#stop
+      def stop
+        StackProf.stop
+        StackProf.results(PROFILE_FILE)
+      end
+    end
+
     attr_accessor :listener_classes
 
     def initialize(options, arguments, command)
@@ -392,6 +427,7 @@ module Nanoc::CLI::Commands
         Nanoc::CLI::Commands::Compile::TimingRecorder,
         Nanoc::CLI::Commands::Compile::GCController,
         Nanoc::CLI::Commands::Compile::FileActionPrinter,
+        Nanoc::CLI::Commands::Compile::StackProfProfiler,
       ]
     end
 
@@ -401,7 +437,7 @@ module Nanoc::CLI::Commands
         .select { |klass| klass.enable_for?(self) }
         .map    { |klass| klass.new(reps: reps) }
 
-      @listeners.each(&:start)
+      @listeners.each(&:start_safely)
     end
 
     def listeners
@@ -416,7 +452,7 @@ module Nanoc::CLI::Commands
     end
 
     def teardown_listeners
-      @listeners.each(&:stop)
+      @listeners.each(&:stop_safely)
     end
 
     def reps

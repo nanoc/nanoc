@@ -22,6 +22,7 @@ end
 
 # Load external dependencies
 require 'hamster'
+require 'ref'
 
 # Load general requirements
 require 'digest'
