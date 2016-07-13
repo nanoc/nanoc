@@ -110,6 +110,11 @@ module Nanoc::CLI
       cmd = load_command_at(cmd_filename)
       add_command(cmd)
     end
+
+    if defined?(Bundler)
+      # Discover external commands through Bundler
+      Bundler.require(:nanoc)
+    end
   end
 
   # Loads site-specific commands.
