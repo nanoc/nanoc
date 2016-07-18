@@ -15,7 +15,10 @@ module Nanoc::Extra::Checking::Checks
       # TODO: de-duplicate this (duplicated in external links check)
       filenames = output_filenames.select { |f| File.extname(f) == '.html' }
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
-      hrefs_with_filenames.each_pair do |href, fns|
+      resource_uris_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_resource_uri
+
+      uris = hrefs_with_filenames.merge(resource_uris_with_filenames)
+      uris.each_pair do |href, fns|
         fns.each do |filename|
           next if valid?(href, filename)
 
