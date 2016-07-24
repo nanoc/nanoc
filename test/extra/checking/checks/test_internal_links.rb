@@ -16,6 +16,21 @@ class Nanoc::Extra::Checking::Checks::InternalLinksTest < Nanoc::TestCase
     end
   end
 
+  def test_resource_uris
+    with_site do |site|
+      # Create files
+      FileUtils.mkdir_p('output')
+      File.open('output/bar.html', 'w') { |io| io.write('<link rel="stylesheet" href="/styledinges.css">') }
+
+      # Create check
+      check = Nanoc::Extra::Checking::Checks::InternalLinks.create(site)
+      check.run
+
+      # Test
+      assert check.issues.size == 1
+    end
+  end
+
   def test_valid?
     with_site do |site|
       # Create files

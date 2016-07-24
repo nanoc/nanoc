@@ -12,6 +12,18 @@ module Nanoc::RuleDSL
       end
     end
 
+    class NoRuleMemoryForLayoutException < ::Nanoc::Error
+      def initialize(layout)
+        super("There is no layout rule specified for #{layout.inspect}")
+      end
+    end
+
+    class NoRuleMemoryForItemRepException < ::Nanoc::Error
+      def initialize(item)
+        super("There is no compilation rule specified for #{item.inspect}")
+      end
+    end
+
     # @api private
     attr_accessor :rules_collection
 
@@ -57,13 +69,15 @@ module Nanoc::RuleDSL
     #
     # @return [Nanoc::Int::RuleMemory]
     def new_rule_memory_for_rep(rep)
-      # FIXME: What if #compilation_rule_for returns nil?
-
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
       view_context = @site.compiler.create_view_context(dependency_tracker)
 
       executor = Nanoc::RuleDSL::RecordingExecutor.new(rep, @rules_collection, @site)
       rule = @rules_collection.compilation_rule_for(rep)
+
+      unless rule
+        raise NoRuleMemoryForItemRepException.new(rep)
+      end
 
       executor.snapshot(rep, :raw)
       executor.snapshot(rep, :pre, final: false)
@@ -83,7 +97,11 @@ module Nanoc::RuleDSL
     # @return [Nanoc::Int::RuleMemory]
     def new_rule_memory_for_layout(layout)
       res = @rules_collection.filter_for_layout(layout)
-      # FIXME: what if res is nil?
+
+      unless res
+        raise NoRuleMemoryForLayoutException.new(layout)
+      end
+
       Nanoc::Int::RuleMemory.new(layout).tap do |rm|
         rm.add_filter(res[0], res[1])
       end
