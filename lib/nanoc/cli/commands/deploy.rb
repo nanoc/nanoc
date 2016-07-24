@@ -62,8 +62,7 @@ module Nanoc::CLI::Commands
 
       target = options.fetch(:target, :default).to_sym
       deploy_configs.fetch(target) do
-        # FIXME: target name is unobvious
-        raise Nanoc::Int::Errors::GenericTrivial, "The site has no deployment configuration for #{target}."
+        raise Nanoc::Int::Errors::GenericTrivial, "The site has no deployment configuration named `#{target}`."
       end
     end
 
