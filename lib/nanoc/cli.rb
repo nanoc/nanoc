@@ -6,13 +6,6 @@ rescue LoadError => e
   exit 1
 end
 
-if Nanoc.on_windows?
-  begin
-    require 'Win32/Console/ANSI'
-  rescue LoadError
-  end
-end
-
 # @api private
 module Nanoc::CLI
   module Commands
@@ -208,15 +201,7 @@ module Nanoc::CLI
 
   # @return [Boolean] true if color support is present, false if not
   def self.enable_ansi_colors?(io)
-    unless io.tty?
-      return false
-    end
-
-    if Nanoc.on_windows?
-      return defined?(::Win32::Console::ANSI)
-    end
-
-    true
+    io.tty?
   end
 
   def self.after_setup_procs
