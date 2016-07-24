@@ -1,5 +1,18 @@
 # Nanoc news
 
+## 4.2.4 (2016-07-24)
+
+Fixes:
+
+* Fixed `UnmetDependency` errors in postprocessor (#913, #917)
+
+Enhancement:
+
+* Sped up Nanoc by not releasing cache memory as quickly (#902)
+* Let `internal_links` check also verify resource paths, such as scripts and images (#912) [Lorin Werthen]
+* Improved error reporting for errors in the Rules file (#908, #914, #915, #916)
+* Removed `win32console` support, as it’s deprecated and causing problems (#900, #918)
+
 ## 4.2.3 (2016-07-03)
 
 Fixes:
