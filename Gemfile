@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'json', '~> 2.0'
+
 group :devel do
   gem 'contracts', '~> 0.14'
   gem 'coveralls', require: false
