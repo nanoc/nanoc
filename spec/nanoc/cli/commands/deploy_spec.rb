@@ -202,7 +202,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
             it 'errors' do
               expect { run }.to raise_error(
                 Nanoc::Int::Errors::GenericTrivial,
-                'The site has no deployment configuration for default.',
+                'The site has no deployment configuration named `default`.',
               )
             end
 
@@ -257,7 +257,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
             it 'errors' do
               expect { run }.to raise_error(
                 Nanoc::Int::Errors::GenericTrivial,
-                'The site has no deployment configuration for production.',
+                'The site has no deployment configuration named `production`.',
               )
             end
 
