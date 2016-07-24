@@ -208,6 +208,21 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     end
   end
 
+  def test_compile_should_recompile_all_reps
+    Nanoc::CLI.run %w(create_site bar)
+
+    FileUtils.cd('bar') do
+      Nanoc::CLI.run %w(compile)
+
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site.compile
+
+      # At this point, even the already compiled items in the previous pass
+      # should have their compiled content assigned, so this should work:
+      site.compiler.reps[site.items['/index.*']][0].compiled_content
+    end
+  end
+
   def test_disallow_multiple_snapshots_with_the_same_name
     # Create site
     Nanoc::CLI.run %w(create_site bar)
