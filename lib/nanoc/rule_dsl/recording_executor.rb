@@ -22,6 +22,10 @@ module Nanoc
       end
 
       def layout(_rep, layout_identifier, extra_filter_args = {})
+        unless layout_identifier.is_a?(String)
+          raise ArgumentError.new('The layout passed to #layout must be a string')
+        end
+
         unless @rule_memory.any_layouts?
           @rule_memory.add_snapshot(:pre, true, nil)
         end

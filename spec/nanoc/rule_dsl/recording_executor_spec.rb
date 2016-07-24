@@ -55,6 +55,10 @@ describe Nanoc::RuleDSL::RecordingExecutor do
       expect(executor.rule_memory[1].layout_identifier).to eql('/default.*')
       expect(executor.rule_memory[1].params).to eql({ final: false })
     end
+
+    it 'fails when passed a symbol' do
+      expect { executor.layout(rep, :default, final: false) }.to raise_error(ArgumentError)
+    end
   end
 
   describe '#snapshot' do
