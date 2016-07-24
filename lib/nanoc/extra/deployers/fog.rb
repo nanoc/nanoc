@@ -84,8 +84,9 @@ module Nanoc::Extra::Deployers
       path     = config[:path]
       cdn_id   = config[:cdn_id]
 
-      # FIXME: confusing error message
-      raise 'The path requires no trailing slash' if path && path[-1, 1] == '/'
+      if path && path.end_with?('/')
+        raise "The path `#{path}` is not supposed to have a trailing slash"
+      end
 
       connection = connect
       directory = get_or_create_bucket(connection, bucket, path)
