@@ -21,58 +21,69 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
       let(:view_context) { double(:view_context) }
 
       before do
-        rules_proc = proc do
-          filter :erb, speed: :over_9000
-          layout '/default.*'
-          filter :typohero
-        end
-        rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
-        rules_collection.add_item_compilation_rule(rule)
-
         expect(compiler).to receive(:create_view_context).and_return(view_context)
       end
 
-      example do
-        subject
+      context 'no rules exist' do
+        it 'raises error' do
+          error = Nanoc::RuleDSL::RuleMemoryCalculator::NoRuleMemoryForItemRepException
+          expect { subject }.to raise_error(error)
+        end
+      end
 
-        expect(subject.size).to eql(8)
+      context 'rules exist' do
+        before do
+          rules_proc = proc do
+            filter :erb, speed: :over_9000
+            layout '/default.*'
+            filter :typohero
+          end
+          rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
+          rules_collection.add_item_compilation_rule(rule)
+        end
 
-        expect(subject[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
-        expect(subject[0].snapshot_name).to eql(:raw)
-        expect(subject[0]).to be_final
-        expect(subject[0].path).to be_nil
+        example do
+          subject
 
-        expect(subject[1]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
-        expect(subject[1].snapshot_name).to eql(:pre)
-        expect(subject[1]).not_to be_final
-        expect(subject[1].path).to be_nil
+          expect(subject.size).to eql(8)
 
-        expect(subject[2]).to be_a(Nanoc::Int::RuleMemoryActions::Filter)
-        expect(subject[2].filter_name).to eql(:erb)
-        expect(subject[2].params).to eql({ speed: :over_9000 })
+          expect(subject[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+          expect(subject[0].snapshot_name).to eql(:raw)
+          expect(subject[0]).to be_final
+          expect(subject[0].path).to be_nil
 
-        expect(subject[3]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
-        expect(subject[3].snapshot_name).to eql(:pre)
-        expect(subject[3]).to be_final
-        expect(subject[3].path).to be_nil
+          expect(subject[1]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+          expect(subject[1].snapshot_name).to eql(:pre)
+          expect(subject[1]).not_to be_final
+          expect(subject[1].path).to be_nil
 
-        expect(subject[4]).to be_a(Nanoc::Int::RuleMemoryActions::Layout)
-        expect(subject[4].layout_identifier).to eql('/default.*')
-        expect(subject[4].params).to be_nil
+          expect(subject[2]).to be_a(Nanoc::Int::RuleMemoryActions::Filter)
+          expect(subject[2].filter_name).to eql(:erb)
+          expect(subject[2].params).to eql({ speed: :over_9000 })
 
-        expect(subject[5]).to be_a(Nanoc::Int::RuleMemoryActions::Filter)
-        expect(subject[5].filter_name).to eql(:typohero)
-        expect(subject[5].params).to eql({})
+          expect(subject[3]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+          expect(subject[3].snapshot_name).to eql(:pre)
+          expect(subject[3]).to be_final
+          expect(subject[3].path).to be_nil
 
-        expect(subject[6]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
-        expect(subject[6].snapshot_name).to eql(:post)
-        expect(subject[6]).to be_final
-        expect(subject[6].path).to be_nil
+          expect(subject[4]).to be_a(Nanoc::Int::RuleMemoryActions::Layout)
+          expect(subject[4].layout_identifier).to eql('/default.*')
+          expect(subject[4].params).to be_nil
 
-        expect(subject[7]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
-        expect(subject[7].snapshot_name).to eql(:last)
-        expect(subject[7]).to be_final
-        expect(subject[7].path).to be_nil
+          expect(subject[5]).to be_a(Nanoc::Int::RuleMemoryActions::Filter)
+          expect(subject[5].filter_name).to eql(:typohero)
+          expect(subject[5].params).to eql({})
+
+          expect(subject[6]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+          expect(subject[6].snapshot_name).to eql(:post)
+          expect(subject[6]).to be_final
+          expect(subject[6].path).to be_nil
+
+          expect(subject[7]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+          expect(subject[7].snapshot_name).to eql(:last)
+          expect(subject[7]).to be_final
+          expect(subject[7].path).to be_nil
+        end
       end
     end
 
@@ -81,8 +92,8 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
 
       context 'no rules exist' do
         it 'raises error' do
-          expect { subject }.to raise_error(
-            Nanoc::RuleDSL::RuleMemoryCalculator::NoRuleMemoryForLayoutException)
+          error = Nanoc::RuleDSL::RuleMemoryCalculator::NoRuleMemoryForLayoutException
+          expect { subject }.to raise_error(error)
         end
       end
 
@@ -105,7 +116,8 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
       let(:obj) { :donkey }
 
       it 'errors' do
-        expect { subject }.to raise_error(Nanoc::RuleDSL::RuleMemoryCalculator::UnsupportedObjectTypeException)
+        error = Nanoc::RuleDSL::RuleMemoryCalculator::UnsupportedObjectTypeException
+        expect { subject }.to raise_error(error)
       end
     end
   end
