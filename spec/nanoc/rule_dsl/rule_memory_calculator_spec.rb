@@ -80,7 +80,10 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
       let(:obj) { Nanoc::Int::Layout.new('content', {}, '/default.erb') }
 
       context 'no rules exist' do
-        # FIXME: This case is broken
+        it 'raises error' do
+          expect { subject }.to raise_error(
+            Nanoc::RuleDSL::RuleMemoryCalculator::NoRuleMemoryForLayoutException)
+        end
       end
 
       context 'rule exists' do

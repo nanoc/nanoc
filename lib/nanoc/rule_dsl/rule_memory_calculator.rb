@@ -12,6 +12,12 @@ module Nanoc::RuleDSL
       end
     end
 
+    class NoRuleMemoryForLayoutException < ::Nanoc::Error
+      def initialize(layout)
+        super("There is no layout rule specified for #{layout.inspect}")
+      end
+    end
+
     # @api private
     attr_accessor :rules_collection
 
@@ -83,7 +89,11 @@ module Nanoc::RuleDSL
     # @return [Nanoc::Int::RuleMemory]
     def new_rule_memory_for_layout(layout)
       res = @rules_collection.filter_for_layout(layout)
-      # FIXME: what if res is nil?
+
+      unless res
+        raise NoRuleMemoryForLayoutException.new(layout)
+      end
+
       Nanoc::Int::RuleMemory.new(layout).tap do |rm|
         rm.add_filter(res[0], res[1])
       end
