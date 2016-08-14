@@ -161,7 +161,6 @@ module Nanoc::Int
     private
 
     def initialize_content
-      # FIXME: Where is :raw?
       @snapshot_contents = { last: @item.content }
     end
   end

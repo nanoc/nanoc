@@ -48,7 +48,7 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
 
   def new_error(amount_factor)
     backtrace_generator = lambda do |af|
-      if af == 0
+      if af.zero?
         raise 'finally!'
       else
         backtrace_generator.call(af - 1)

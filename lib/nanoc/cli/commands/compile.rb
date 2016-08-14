@@ -271,7 +271,7 @@ module Nanoc::CLI::Commands
       # @see Listener#start
       def start
         Nanoc::Int::NotificationCenter.on(:compilation_started) do |_rep|
-          if @gc_count % 20 == 0
+          if (@gc_count % 20).zero?
             GC.enable
             GC.start
             GC.disable

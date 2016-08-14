@@ -25,27 +25,27 @@ def run(*args)
   end
 end
 
-puts "=== Logging in to GitHub’s API…"
+puts '=== Logging in to GitHub’s API…'
 client = Octokit::Client.new(netrc: true)
 puts
 
-puts "=== Deleting old *.gem files…"
+puts '=== Deleting old *.gem files…'
 Dir['*.gem'].each do |fn|
   puts "  #{fn}…"
   FileUtils.rm_f(fn)
 end
 puts
 
-puts "=== Building new gem…"
+puts '=== Building new gem…'
 run('gem', 'build', 'nanoc.gemspec')
 puts
 
-puts "=== Reading version…"
+puts '=== Reading version…'
 require './lib/nanoc/version'
 puts "Version = #{Nanoc::VERSION}"
 puts
 
-puts "=== Verifying that release does not yet exist…"
+puts '=== Verifying that release does not yet exist…'
 releases = client.releases('nanoc/nanoc')
 release = releases.find { |r| r.tag_name == Nanoc::VERSION }
 if release
@@ -55,20 +55,20 @@ if release
 end
 puts
 
-puts "=== Creating Git tag…"
+puts '=== Creating Git tag…'
 run('git', 'tag', '--sign', '--annotate', Nanoc::VERSION, '--message', "Version #{Nanoc::VERSION}")
 puts
 
-puts "=== Pushing Git data…"
+puts '=== Pushing Git data…'
 run('git', 'push', 'origin')
 run('git', 'push', 'origin', '--tags')
 puts
 
-puts "=== Pushing gem…"
+puts '=== Pushing gem…'
 run('gem', 'push', "nanoc-#{Nanoc::VERSION}.gem")
 puts
 
-puts "=== Reading release notes…"
+puts '=== Reading release notes…'
 release_notes =
   File.readlines('NEWS.md')
       .drop(4)
@@ -76,7 +76,7 @@ release_notes =
       .join
 puts
 
-puts "=== Creating release on GitHub…"
+puts '=== Creating release on GitHub…'
 sleep 3 # Give GitHub some time to detect the new tag
 is_prerelease = Nanoc::VERSION =~ /a|b|rc/ || Nanoc::VERSION =~ /^0/
 client.create_release(

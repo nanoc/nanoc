@@ -85,7 +85,7 @@ describe Nanoc::Extra::Deployers::Fog, stdio: true do
         end
 
         it 'raises' do
-          expect { subject }.to raise_error('The path requires no trailing slash')
+          expect { subject }.to raise_error('The path `foo/` is not supposed to have a trailing slash')
         end
       end
 

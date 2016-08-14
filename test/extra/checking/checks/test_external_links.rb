@@ -52,7 +52,7 @@ class Nanoc::Extra::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
       # Create check
       check = Nanoc::Extra::Checking::Checks::ExternalLinks.create(site)
       def check.request_url_once(url, req_method = Net::HTTP::Head)
-        Net::HTTPResponse.new('1.1', (req_method == Net::HTTP::Head || url.path == '/405') ? '405' : '200', 'okay')
+        Net::HTTPResponse.new('1.1', req_method == Net::HTTP::Head || url.path == '/405' ? '405' : '200', 'okay')
       end
 
       # Test

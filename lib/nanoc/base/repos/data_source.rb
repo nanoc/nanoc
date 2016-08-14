@@ -61,7 +61,7 @@ module Nanoc
     #
     # @return [void]
     def use
-      up if @references == 0
+      up if @references.zero?
       @references += 1
     end
 
@@ -74,7 +74,7 @@ module Nanoc
     # @return [void]
     def unuse
       @references -= 1
-      down if @references == 0
+      down if @references.zero?
     end
 
     # Brings up the connection to the data. Depending on the way data is
