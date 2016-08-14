@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'json', '~> 2.0'
+gem 'ruby_dep', (RUBY_VERSION =~ /\A2.1/ ? '~> 1.3.1' : '~> 1.4')
 
 group :devel do
   gem 'contracts', '~> 0.14'
