@@ -6,7 +6,7 @@ module Nanoc::Int
   class ChecksumStore < ::Nanoc::Int::Store
     # @param [Nanoc::Int::Site] site
     def initialize(site: nil)
-      super(Nanoc::Int::Store.tmp_path_for(env: (site.config.env if site), store_name: 'checksums'), 1)
+      super(Nanoc::Int::Store.tmp_path_for(env_name: (site.config.env_name if site), store_name: 'checksums'), 1)
 
       @site = site
 

@@ -4,8 +4,8 @@ module Nanoc::Int
   #
   # @api private
   class RuleMemoryStore < ::Nanoc::Int::Store
-    def initialize(env: nil)
-      super(Nanoc::Int::Store.tmp_path_for(env: env, store_name: 'rule_memory'), 1)
+    def initialize(env_name: nil)
+      super(Nanoc::Int::Store.tmp_path_for(env_name: env_name, store_name: 'rule_memory'), 1)
 
       @rule_memories = {}
     end
