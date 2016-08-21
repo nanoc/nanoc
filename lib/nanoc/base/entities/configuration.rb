@@ -68,9 +68,6 @@ module Nanoc::Int
       # Load given environment configuration
       env_config = @wrapped[ENVIRONMENTS].fetch(env.to_sym, {})
 
-      # Handle specific properties
-      env_config[:output_dir] ||= File.join(@wrapped[:output_dir].to_s, env.to_s)
-
       self.class.new(@wrapped, env).merge(env_config)
     end
 
