@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.3 (???)
+
+Features:
+
+* Added `Nanoc::Filter.define`, to easily define filters (#895)
+* Made the `nanoc` Gemfile group be auto-required when Nanoc starts (#910) [whitequark]
+
 ## 4.2.4 (2016-07-24)
 
 Fixes:
