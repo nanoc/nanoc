@@ -6,7 +6,7 @@ module Nanoc::Int
 
     # @param [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] objects
     def initialize(objects, env: nil)
-      super(Nanoc::Int::Store.tmp_path_for(env, 'dependencies'), 4)
+      super(Nanoc::Int::Store.tmp_path_for(env: env, store_name: 'dependencies'), 4)
 
       @objects = objects
       @graph   = Nanoc::Int::DirectedGraph.new([nil] + @objects)

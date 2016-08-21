@@ -12,6 +12,8 @@ module Nanoc::Int
   #
   # @api private
   class Store
+    include Nanoc::Int::ContractsSupport
+
     # @return [String] The name of the file where data will be loaded from and
     #   stored to.
     attr_reader :filename
@@ -36,8 +38,9 @@ module Nanoc::Int
 
     # Logic for building tmp path from active environment and store name
     # @api private
-    def self.tmp_path_for(env, store)
-      File.join('tmp', env.to_s, store)
+    contract C::KeywordArgs[env: C::Maybe[String], store_name: String] => String
+    def self.tmp_path_for(env:, store_name:)
+      File.join('tmp', env.to_s, store_name)
     end
 
     # @group Loading and storing data

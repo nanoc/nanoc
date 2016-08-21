@@ -34,13 +34,13 @@ class Nanoc::Int::StoreTest < Nanoc::TestCase
   end
 
   def test_tmp_path_with_nil_env
-    tmp_path_for_checksum = Nanoc::Int::Store.tmp_path_for(nil, 'checksum')
+    tmp_path_for_checksum = Nanoc::Int::Store.tmp_path_for(env: nil, store_name: 'checksum')
     assert_equal('tmp/checksum', tmp_path_for_checksum)
   end
 
   def test_tmp_path_with_test_env
-    tmp_path_for_checksum = Nanoc::Int::Store.tmp_path_for('test', 'checksum')
-    tmp_path_for_dependencies = Nanoc::Int::Store.tmp_path_for(:test, 'dependencies')
+    tmp_path_for_checksum = Nanoc::Int::Store.tmp_path_for(env: 'test', store_name: 'checksum')
+    tmp_path_for_dependencies = Nanoc::Int::Store.tmp_path_for(env: 'test', store_name: 'dependencies')
     assert_equal('tmp/test/checksum', tmp_path_for_checksum)
     assert_equal('tmp/test/dependencies', tmp_path_for_dependencies)
   end
