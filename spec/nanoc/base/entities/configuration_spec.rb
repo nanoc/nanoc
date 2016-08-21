@@ -1,6 +1,6 @@
 describe Nanoc::Int::Configuration do
   let(:hash) { { foo: 'bar' } }
-  let(:config) { described_class.new(hash) }
+  let(:config) { described_class.new(hash: hash) }
 
   describe '#key?' do
     subject { config.key?(key) }
@@ -18,7 +18,7 @@ describe Nanoc::Int::Configuration do
 
   context 'with environments defined' do
     let(:hash) { { foo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } } }
-    let(:config) { described_class.new(hash, env_name).with_environment }
+    let(:config) { described_class.new(hash: hash, env_name: env_name).with_environment }
 
     subject { config }
 

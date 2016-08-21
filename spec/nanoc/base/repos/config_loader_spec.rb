@@ -107,7 +107,7 @@ describe Nanoc::Int::ConfigLoader do
   describe '#apply_parent_config' do
     subject { loader.apply_parent_config(config, processed_paths) }
 
-    let(:config) { Nanoc::Int::Configuration.new(foo: 'bar') }
+    let(:config) { Nanoc::Int::Configuration.new(hash: { foo: 'bar' }) }
 
     let(:processed_paths) { ['nanoc.yaml'] }
 
@@ -119,10 +119,7 @@ describe Nanoc::Int::ConfigLoader do
 
     context 'parent config file is set' do
       let(:config) do
-        Nanoc::Int::Configuration.new(
-          parent_config_file: 'foo.yaml',
-          foo: 'bar',
-        )
+        Nanoc::Int::Configuration.new(hash: { parent_config_file: 'foo.yaml', foo: 'bar' })
       end
 
       context 'parent config file is not present' do

@@ -41,12 +41,12 @@ module Nanoc::Int
     NANOC_ENV = 'NANOC_ENV'.freeze
     NANOC_ENV_DEFAULT = 'default'.freeze
 
-    contract Hash, C::Maybe[String] => C::Any
+    contract C::KeywordArgs[hash: C::Optional[Hash], env_name: C::Maybe[String]] => C::Any
     # Creates a new configuration with the given hash.
     #
     # @param [Hash] hash The actual configuration hash
     # @param [String, nil] env_name The active environment for this configuration
-    def initialize(hash = {}, env_name = nil)
+    def initialize(hash: {}, env_name: nil)
       @env_name = env_name
       @wrapped = hash.__nanoc_symbolize_keys_recursively
     end
@@ -58,7 +58,7 @@ module Nanoc::Int
         DEFAULT_DATA_SOURCE_CONFIG.merge(ds)
       end
 
-      self.class.new(new_wrapped)
+      self.class.new(hash: new_wrapped)
     end
 
     def with_environment
@@ -70,7 +70,7 @@ module Nanoc::Int
       # Load given environment configuration
       env_config = @wrapped[ENVIRONMENTS_CONFIG_KEY].fetch(env_name.to_sym, {})
 
-      self.class.new(@wrapped, env_name).merge(env_config)
+      self.class.new(hash: @wrapped, env_name: env_name).merge(env_config)
     end
 
     contract C::None => Hash
@@ -108,12 +108,12 @@ module Nanoc::Int
 
     contract C::Or[Hash, self] => self
     def merge(hash)
-      self.class.new(@wrapped.merge(hash.to_h), @env_name)
+      self.class.new(hash: @wrapped.merge(hash.to_h), env_name: @env_name)
     end
 
     contract C::Any => self
     def without(key)
-      self.class.new(@wrapped.reject { |k, _v| k == key }, @env_name)
+      self.class.new(hash: @wrapped.reject { |k, _v| k == key }, env_name: @env_name)
     end
 
     contract C::Any => self

@@ -158,7 +158,7 @@ describe Nanoc::Int::Checksummer do
   end
 
   context 'Nanoc::Int::Configuration' do
-    let(:obj) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
+    let(:obj) { Nanoc::Int::Configuration.new(hash: { 'foo' => 'bar' }) }
     it { is_expected.to eql('Nanoc::Int::Configuration<Symbol<foo>=String<bar>,>') }
   end
 
@@ -241,7 +241,7 @@ describe Nanoc::Int::Checksummer do
 
   context 'Nanoc::ConfigView' do
     let(:obj) { Nanoc::ConfigView.new(config, nil) }
-    let(:config) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
+    let(:config) { Nanoc::Int::Configuration.new(hash: { 'foo' => 'bar' }) }
 
     it { is_expected.to eql('Nanoc::ConfigView<Nanoc::Int::Configuration<Symbol<foo>=String<bar>,>>') }
   end
@@ -249,7 +249,7 @@ describe Nanoc::Int::Checksummer do
   context 'Nanoc::ItemCollectionWithRepsView' do
     let(:obj) { Nanoc::ItemCollectionWithRepsView.new(wrapped, nil) }
 
-    let(:config) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
+    let(:config) { Nanoc::Int::Configuration.new(hash: { 'foo' => 'bar' }) }
 
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
@@ -264,7 +264,7 @@ describe Nanoc::Int::Checksummer do
   context 'Nanoc::ItemCollectionWithoutRepsView' do
     let(:obj) { Nanoc::ItemCollectionWithoutRepsView.new(wrapped, nil) }
 
-    let(:config) { Nanoc::Int::Configuration.new({ 'foo' => 'bar' }) }
+    let(:config) { Nanoc::Int::Configuration.new(hash: { 'foo' => 'bar' }) }
 
     let(:wrapped) do
       Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|

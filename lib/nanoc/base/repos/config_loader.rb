@@ -38,7 +38,7 @@ module Nanoc::Int
 
       # Read
       apply_parent_config(
-        Nanoc::Int::Configuration.new(YAML.load_file(filename)),
+        Nanoc::Int::Configuration.new(hash: YAML.load_file(filename)),
         [filename],
       ).with_defaults.with_environment
     end
@@ -60,7 +60,7 @@ module Nanoc::Int
       end
 
       # Load
-      parent_config = Nanoc::Int::Configuration.new(YAML.load_file(parent_path))
+      parent_config = Nanoc::Int::Configuration.new(hash: YAML.load_file(parent_path))
       full_parent_config = apply_parent_config(parent_config, processed_paths + [parent_path])
       full_parent_config.merge(config.without(:parent_config_file))
     end
