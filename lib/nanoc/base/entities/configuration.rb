@@ -37,7 +37,9 @@ module Nanoc::Int
     attr_reader :env_name
 
     # Configuration environments property key
-    ENVIRONMENTS = :environments
+    ENVIRONMENTS_CONFIG_KEY = :environments
+    NANOC_ENV = 'NANOC_ENV'.freeze
+    NANOC_ENV_DEFAULT = 'default'.freeze
 
     contract Hash, C::Maybe[String] => C::Any
     # Creates a new configuration with the given hash.
@@ -60,13 +62,13 @@ module Nanoc::Int
     end
 
     def with_environment
-      return self unless @wrapped.key?(ENVIRONMENTS)
+      return self unless @wrapped.key?(ENVIRONMENTS_CONFIG_KEY)
 
       # Set active environment
-      env_name = @env_name || ENV.fetch('NANOC_ENV', 'default')
+      env_name = @env_name || ENV.fetch(NANOC_ENV, NANOC_ENV_DEFAULT)
 
       # Load given environment configuration
-      env_config = @wrapped[ENVIRONMENTS].fetch(env_name.to_sym, {})
+      env_config = @wrapped[ENVIRONMENTS_CONFIG_KEY].fetch(env_name.to_sym, {})
 
       self.class.new(@wrapped, env_name).merge(env_config)
     end

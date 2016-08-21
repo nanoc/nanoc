@@ -63,7 +63,7 @@ describe Nanoc::Int::ConfigLoader do
       end
 
       it 'has the test environment custom option' do
-        allow(ENV).to receive(:fetch).with('NANOC_ENV', 'default').and_return('test')
+        allow(ENV).to receive(:fetch).with(Nanoc::Int::Configuration::NANOC_ENV, Nanoc::Int::Configuration::NANOC_ENV_DEFAULT).and_return('test')
         expect(subject[:foo]).to eq('test-bar')
       end
 
