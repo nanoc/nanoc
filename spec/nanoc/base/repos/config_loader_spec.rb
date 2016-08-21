@@ -55,11 +55,15 @@ describe Nanoc::Int::ConfigLoader do
 
     context 'config file present and environment defined' do
       before do
-        File.write('nanoc.yaml', YAML.dump({ foo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } }))
+        File.write('nanoc.yaml', YAML.dump({ foo: 'bar', tofoo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } }))
       end
 
       it 'returns the configuration' do
         expect(subject).to be_a(Nanoc::Int::Configuration)
+      end
+
+      it 'has option defined not within environments' do
+        expect(subject[:tofoo]).to eq('bar')
       end
 
       it 'has the test environment custom option' do
