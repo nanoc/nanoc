@@ -13,9 +13,10 @@ module Nanoc::Helpers
     # @return [String, nil]
     def render(identifier, other_assigns = {}, &block)
       # Find layout
-      layout = @layouts[identifier]
-      layout ||= @layouts[identifier.__nanoc_cleaned_identifier]
-      raise Nanoc::Int::Errors::UnknownLayout.new(identifier) if layout.nil?
+      layout_view = @layouts[identifier]
+      layout_view ||= @layouts[identifier.__nanoc_cleaned_identifier]
+      raise Nanoc::Int::Errors::UnknownLayout.new(identifier) if layout_view.nil?
+      layout = layout_view.unwrap
 
       # Visit
       dependency_tracker = @config._context.dependency_tracker
@@ -30,7 +31,7 @@ module Nanoc::Helpers
         item: @item,
         item_rep: @item_rep,
         items: @items,
-        layout: layout,
+        layout: layout_view,
         layouts: @layouts,
         config: @config,
       }.merge(other_assigns)
@@ -51,7 +52,7 @@ module Nanoc::Helpers
         Nanoc::Int::NotificationCenter.post(:processing_started, layout)
 
         # Layout
-        content = layout.unwrap.content
+        content = layout.content
         arg = content.binary? ? content.filename : content.string
         result = filter.setup_and_run(arg, filter_args)
 

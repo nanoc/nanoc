@@ -12,11 +12,14 @@ module Nanoc::Int
       end
     end
 
+    include Nanoc::Int::ContractsSupport
+
     def initialize(dependency_store)
       @dependency_store = dependency_store
       @stack = []
     end
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
     def enter(obj)
       unless @stack.empty?
         Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj)
@@ -26,10 +29,12 @@ module Nanoc::Int
       @stack.push(obj)
     end
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
     def exit(_obj)
       @stack.pop
     end
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
     def bounce(obj)
       enter(obj)
       exit(obj)
