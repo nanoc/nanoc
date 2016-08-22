@@ -1,5 +1,13 @@
 # Nanoc news
 
+## 4.3.1 (???)
+
+Fixes:
+
+* Fixed “outdatedness of LayoutView” error (#927, #931)
+* Fixed bug causing some checks not to appear in `nanoc check --list` (#928, #930)
+* Fixed `@item`, … not being accessible in filters defined with `Nanoc::Filter.define` (#932, #934)
+
 ## 4.3 (2016-08-21)
 
 Features:
