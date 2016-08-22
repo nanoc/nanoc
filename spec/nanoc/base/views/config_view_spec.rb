@@ -1,6 +1,6 @@
 describe Nanoc::ConfigView do
   let(:config) do
-    Nanoc::Int::Configuration.new(hash)
+    Nanoc::Int::Configuration.new(hash: hash)
   end
 
   let(:hash) { { amount: 9000, animal: 'donkey' } }

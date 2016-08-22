@@ -5,7 +5,7 @@ module Nanoc::Int
     end
 
     def new_with_config(hash)
-      site_from_config(Nanoc::Int::Configuration.new(hash).with_defaults)
+      site_from_config(Nanoc::Int::Configuration.new(hash: hash).with_defaults)
     end
 
     def new_from_cwd
