@@ -38,10 +38,10 @@ module Nanoc
     extend Nanoc::Int::PluginRegistry::PluginMethods
 
     class << self
-      def define(ident)
+      def define(ident, &block)
         filter_class = Class.new(::Nanoc::Filter) { identifier(ident) }
         filter_class.send(:define_method, :run) do |content, params|
-          yield(content, params)
+          instance_exec(content, params, &block)
         end
       end
 
