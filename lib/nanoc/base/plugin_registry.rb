@@ -24,7 +24,8 @@ module Nanoc::Int
       #   @return [Array<Symbol>] The identifiers for this plugin
       def identifiers(*identifiers)
         if identifiers.empty?
-          Nanoc::Int::PluginRegistry.instance.identifiers_of(superclass, self)
+          registry = Nanoc::Int::PluginRegistry.instance
+          registry.identifiers_of(registry.root_class_of(self), self)
         else
           register(self, *identifiers)
         end
@@ -45,7 +46,8 @@ module Nanoc::Int
         if identifier
           identifiers(identifier)
         else
-          Nanoc::Int::PluginRegistry.instance.identifiers_of(superclass, self).first
+          registry = Nanoc::Int::PluginRegistry.instance
+          registry.identifiers_of(registry.root_class_of(self), self).first
         end
       end
 
@@ -59,13 +61,9 @@ module Nanoc::Int
       #
       # @return [void]
       def register(class_or_name, *identifiers)
-        # Find plugin class
-        klass = self
-        klass = klass.superclass while klass.superclass.respond_to?(:register)
-
-        # Register
         registry = Nanoc::Int::PluginRegistry.instance
-        registry.register(klass, class_or_name, *identifiers)
+        root = registry.root_class_of(self)
+        registry.register(root, class_or_name, *identifiers)
       end
 
       # @return [Hash<Symbol, Class>] All plugins of this type, with keys
@@ -157,6 +155,17 @@ module Nanoc::Int
       res = {}
       @identifiers_to_classes[klass].each_pair { |k, v| res[k] = resolve(v, k) }
       res
+    end
+
+    # @param [Class] klass
+    #
+    # @return [Class]
+    #
+    # @api private
+    def root_class_of(subclass)
+      root_class = subclass
+      root_class = root_class.superclass while root_class.superclass.respond_to?(:register)
+      root_class
     end
 
     # Returns a list of all plugins. The returned list of plugins is an array

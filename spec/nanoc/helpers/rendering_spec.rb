@@ -2,13 +2,20 @@ describe Nanoc::Helpers::Rendering, helper: true do
   describe '#render' do
     subject { helper.instance_eval { render('/partial.erb') } }
 
-    before do
-      layout = ctx.create_layout(layout_content, {}, layout_identifier)
-      ctx.update_rule_memory(layout, rule_memory_for_layout)
-    end
-
     let(:rule_memory_for_layout) do
       [Nanoc::Int::RuleMemoryActions::Filter.new(:erb, {})]
+    end
+
+    let(:layout_view) do
+      ctx.create_layout(layout_content, {}, layout_identifier)
+    end
+
+    let(:layout) do
+      layout_view.unwrap
+    end
+
+    before do
+      ctx.update_rule_memory(layout, rule_memory_for_layout)
     end
 
     context 'legacy identifier' do
@@ -19,7 +26,13 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
         context 'layout without instructions' do
           let(:layout_content) { 'blah' }
+
           it { is_expected.to eql('blah') }
+
+          it 'tracks proper dependencies' do
+            expect(ctx.dependency_tracker).to receive(:enter).with(layout)
+            subject
+          end
         end
 
         context 'layout with instructions' do

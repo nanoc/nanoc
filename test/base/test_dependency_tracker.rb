@@ -87,7 +87,10 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   end
 
   def test_enter_and_exit
-    items = [mock, mock]
+    items = [
+      Nanoc::Int::Item.new('Foo', {}, '/foo.md'),
+      Nanoc::Int::Item.new('Bar', {}, '/bar.md'),
+    ]
 
     store = Nanoc::Int::DependencyStore.new(items)
     tracker = Nanoc::Int::DependencyTracker.new(store)
