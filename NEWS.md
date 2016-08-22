@@ -136,7 +136,7 @@ Enhancements:
 
 * Made `#breadcrumbs_trail` explicitly fail when using full identifiers (#781, #783)
 
-## 4.1.0 (2015-12-18)
+## 4.1 (2015-12-18)
 
 Fixes:
 
@@ -220,7 +220,7 @@ Enhancements:
 
 * Lowered minimum required Ruby version from 2.2 to 2.1 (#732)
 
-## 4.0.0 (2015-11-07)
+## 4.0 (2015-11-07)
 
 Enhancements:
 
@@ -369,7 +369,7 @@ This is a major upgrade. For details on upgrading, see the [nanoc 4 upgrade guid
 
 This release provides no new features, but streamlines the API and functionality, in order to easen future development, both for features and for optimisations.
 
-## 3.8.0 (2015-05-04)
+## 3.8 (2015-05-04)
 
 Features:
 
@@ -443,7 +443,7 @@ Fixes:
 
 * Fixed bug which would cause nanoc to crash if no Gemfile is present (#447, #449)
 
-## 3.7.0 (2014-06-08)
+## 3.7 (2014-06-08)
 
 New features:
 
