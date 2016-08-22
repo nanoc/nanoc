@@ -416,4 +416,37 @@ EOS
       assert_equal(expected_output, actual_output)
     end
   end
+
+  def test_rouge_with_lines
+    if_have 'rouge', 'nokogiri' do
+      # Create filter
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
+
+      # Get input and expected output
+      input = <<EOS
+before
+<pre><code class="language-ruby">
+  def foo
+  end
+</code></pre>
+after
+EOS
+      expected_output = <<EOS
+before
+<pre><code class=\"language-ruby\"><table class=\"rouge-table\"><tbody><tr>
+<td class=\"rouge-gutter gl\"><pre class=\"lineno\">1
+2
+</pre></td>
+<td class=\"rouge-code\"><pre>  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
+  <span class=\"k\">end</span></pre></td>
+</tr></tbody></table></code></pre>
+after
+EOS
+
+      # Run filter
+      actual_output = filter.setup_and_run(input, default_colorizer: :rouge,
+                                                  rouge: { line_numbers: true })
+      assert_equal(expected_output, actual_output)
+    end
+  end
 end

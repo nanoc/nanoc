@@ -316,6 +316,9 @@ module Nanoc::Filters
         css_class: params.fetch(:css_class, 'highlight'),
       }
       formatter = Rouge::Formatters::HTML.new(formatter_options)
+      if params[:line_numbers]
+        formatter = Rouge::Formatters::HTMLTable.new(formatter)
+      end
       lexer = Rouge::Lexer.find_fancy(language, code) || Rouge::Lexers::PlainText
       formatter.format(lexer.lex(code))
     end
