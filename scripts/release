@@ -36,6 +36,12 @@ Dir['*.gem'].each do |fn|
 end
 puts
 
+puts '=== Verifying presence of release date…'
+unless File.readlines('NEWS.md').drop(3).first =~ /\d{4}-\d{2}-\d{2}$/
+  $stderr.puts 'No proper release date found!'
+  exit 1
+end
+
 puts '=== Building new gem…'
 run('gem', 'build', 'nanoc.gemspec')
 puts
