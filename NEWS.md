@@ -1,6 +1,10 @@
 # Nanoc news
 
-## 4.3.1 (???)
+## 4.3.2 (2016-08-23)
+
+Identical to 4.3.1, but with corrected release notes.
+
+## 4.3.1 (2016-08-23)
 
 Fixes:
 

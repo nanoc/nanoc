@@ -21,14 +21,6 @@ matrix:
     - rvm: jruby-9.0.5.0
       env: DISABLE_NOKOGIRI=0
     - rvm: ruby-head
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#nanoc"
-    template:
-      - "%{repository}/%{branch} %{commit} %{author}: %{message}"
-    use_notice: true
-    skip_join: true
 cache: bundler
 sudo: false
 git:
