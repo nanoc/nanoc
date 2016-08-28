@@ -1,16 +1,15 @@
 module Nanoc
   # @api private
   module Feature
-    FEATURES_VAR_NAME = 'NANOC_FEATURES'.freeze
-    ALL_VALUE = 'all'.freeze
+    PROFILER = 'profiler'.freeze
 
     def self.enabled_features
-      @enabled_features ||= Set.new(ENV.fetch(FEATURES_VAR_NAME, '').split(','))
+      @enabled_features ||= Set.new(ENV.fetch('NANOC_FEATURES', '').split(','))
     end
 
     def self.enabled?(feature_name)
       enabled_features.include?(feature_name) ||
-        enabled_features.include?(ALL_VALUE)
+        enabled_features.include?('all')
     end
 
     def self.reset_caches
