@@ -4,7 +4,10 @@ describe Nanoc::Feature do
 
     let(:feature_name) { 'magic' }
 
-    before { ENV['NANOC_FEATURES'] = '' }
+    before do
+      Nanoc::Feature.reset_caches
+      ENV['NANOC_FEATURES'] = ''
+    end
 
     context 'not set' do
       it { is_expected.not_to be }
