@@ -14,7 +14,7 @@ IDENTICAL - The item was deemed outdated and has been recompiled, but the compil
 SKIP - The item was deemed not outdated and was therefore not recompiled
 
 EOS
-flag nil, :profile, 'profile compilation' if Nanoc::Feature.enabled?('PROFILER')
+flag nil, :profile, 'profile compilation' if Nanoc::Feature.enabled?('profiler')
 
 module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
