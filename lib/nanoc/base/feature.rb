@@ -2,6 +2,7 @@ module Nanoc
   # @api private
   module Feature
     PROFILER = 'profiler'.freeze
+    ENVIRONMENTS = 'environments'.freeze
 
     def self.enabled_features
       @enabled_features ||= Set.new(ENV.fetch('NANOC_FEATURES', '').split(','))

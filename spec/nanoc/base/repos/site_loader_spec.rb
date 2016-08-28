@@ -158,6 +158,38 @@ describe Nanoc::Int::SiteLoader do
       end
     end
 
+    context 'environments defined' do
+      before do
+        File.write('nanoc.yaml', <<-EOS.gsub(/^ {10}/, ''))
+          animal: donkey
+          environments:
+            staging:
+              animal: giraffe
+        EOS
+      end
+
+      context 'environments feature disabled' do
+        before do
+          expect(Nanoc::Feature).to receive(:enabled?).with('environments').and_return(false)
+        end
+
+        it 'does not load environment' do
+          expect(subject.config[:animal]).to eq('donkey')
+        end
+      end
+
+      context 'environments feature enabled' do
+        before do
+          expect(Nanoc::Feature).to receive(:enabled?).with('environments').and_return(true)
+          expect(ENV).to receive(:fetch).with('NANOC_ENV', 'default').and_return('staging')
+        end
+
+        it 'does not load environment' do
+          expect(subject.config[:animal]).to eq('giraffe')
+        end
+      end
+    end
+
     context 'code snippet with data source implementation' do
       before do
         FileUtils.mkdir_p('lib')
