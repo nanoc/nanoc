@@ -1,11 +1,16 @@
 module Nanoc
   # @api private
   module Feature
-    TRUES = %w(y yes 1 t true).freeze
+    FEATURES_VAR_NAME = 'NANOC_FEATURES'.freeze
+    ALL_VALUE = 'all'.freeze
 
-    def self.enabled?(name)
-      env_name = "NANOC_FEATURE_#{name.upcase}"
-      TRUES.include?(ENV.fetch(env_name, 'f').downcase)
+    def self.enabled_features
+      Set.new(ENV.fetch(FEATURES_VAR_NAME, '').split(','))
+    end
+
+    def self.enabled?(feature_name)
+      enabled_features.include?(feature_name) ||
+        enabled_features.include?(ALL_VALUE)
     end
   end
 end
