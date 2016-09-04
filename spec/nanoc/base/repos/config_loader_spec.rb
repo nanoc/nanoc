@@ -56,7 +56,11 @@ describe Nanoc::Int::ConfigLoader do
     context 'config file present and environment defined' do
       before do
         File.write('nanoc.yaml', YAML.dump({ foo: 'bar', tofoo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } }))
+        expect(Nanoc::Feature).to receive(:enabled?).with('environments').and_return(true)
+        expect(ENV).to receive(:fetch).with('NANOC_ENV', 'default').and_return(active_env_name)
       end
+
+      let(:active_env_name) { 'default' }
 
       it 'returns the configuration' do
         expect(subject).to be_a(Nanoc::Int::Configuration)
@@ -66,9 +70,12 @@ describe Nanoc::Int::ConfigLoader do
         expect(subject[:tofoo]).to eq('bar')
       end
 
-      it 'has the test environment custom option' do
-        allow(ENV).to receive(:fetch).with(Nanoc::Int::Configuration::NANOC_ENV, Nanoc::Int::Configuration::NANOC_ENV_DEFAULT).and_return('test')
-        expect(subject[:foo]).to eq('test-bar')
+      context 'current env is test' do
+        let(:active_env_name) { 'test' }
+
+        it 'has the test environment custom option' do
+          expect(subject[:foo]).to eq('test-bar')
+        end
       end
 
       it 'has the default environment custom option' do

@@ -37,10 +37,18 @@ module Nanoc::Int
       raise NoConfigFileFoundError if filename.nil?
 
       # Read
-      apply_parent_config(
-        Nanoc::Int::Configuration.new(hash: YAML.load_file(filename)),
-        [filename],
-      ).with_defaults.with_environment
+      config =
+        apply_parent_config(
+          Nanoc::Int::Configuration.new(hash: YAML.load_file(filename)),
+          [filename],
+        ).with_defaults
+
+      # Load environment
+      if Nanoc::Feature.enabled?(Nanoc::Feature::ENVIRONMENTS)
+        config.with_environment
+      else
+        config
+      end
     end
 
     # @api private
