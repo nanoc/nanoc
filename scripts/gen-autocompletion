@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+require 'nanoc'
+require 'nanoc/cli'
+
+if File.file?('Gemfile') && !defined?(Bundler)
+  warn 'A Gemfile was detected, but Bundler is not loaded. This is probably not what you want. To run Nanoc with Bundler, use `bundle exec nanoc`.'
+end
+
+Nanoc::CLI.setup
+
+if ARGV.size != 1
+  $stderr.puts "usage: #{$0} [shell_name]"
+  exit 1
+end
+
+case ARGV[0]
+when 'fish'
+  puts Nanoc::Extra::FishAutocompletion.generate
+else
+  $stderr.puts "unknown shell name: #{ARGV[0]}"
+  exit 1
+end
