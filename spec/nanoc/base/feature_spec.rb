@@ -48,14 +48,17 @@ describe Nanoc::Feature do
   end
 
   describe '.define and .undefine' do
+    let(:feature_name) { 'testing123' }
+    after { Nanoc::Feature.undefine(feature_name) if defined?(Nanoc::Feature::TESTING123) }
+
     it 'can define' do
-      Nanoc::Feature.define('testing123', version: '4.3.x')
+      Nanoc::Feature.define(feature_name, version: '4.3.x')
       expect(Nanoc::Feature::TESTING123).not_to be_nil
     end
 
     it 'can undefine' do
-      Nanoc::Feature.define('testing123', version: '4.3.x')
-      Nanoc::Feature.undefine('testing123')
+      Nanoc::Feature.define(feature_name, version: '4.3.x')
+      Nanoc::Feature.undefine(feature_name)
       expect { Nanoc::Feature::TESTING123 }.to raise_error(NameError)
     end
   end
