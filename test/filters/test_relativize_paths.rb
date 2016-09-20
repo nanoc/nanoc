@@ -106,13 +106,13 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
   </body>
 </html>
 EOS
-    expected_match_0 = %r{<a href="\.\./\.\.">foo</a>}
-    expected_match_1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
+    expected0 = %r{<a href="\.\./\.\.">foo</a>}
+    expected1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
-    assert_match(expected_match_0, actual_content)
-    assert_match(expected_match_1, actual_content)
+    assert_match(expected0, actual_content)
+    assert_match(expected1, actual_content)
   end
 
   def test_filter_html_multiple

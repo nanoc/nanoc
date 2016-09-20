@@ -2,7 +2,7 @@ usage 'create-site [options] path'
 aliases :create_site, :cs
 summary 'create a site'
 description 'Create a new site at the given path. The site will use the `filesystem` data source.'
-flag nil, :force, 'Force creation of new site. Disregards previous existence of site in destination'
+flag nil, :force, 'force creation of new site'
 
 module Nanoc::CLI::Commands
   class CreateSite < ::Nanoc::CLI::CommandRunner
