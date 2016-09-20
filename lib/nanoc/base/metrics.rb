@@ -1,35 +1,41 @@
-require 'thread'
 require 'rbconfig'
+require 'thread'
 
 module Nanoc
   # @api private
   module Metrics
+    # Coordinates creating and asynchronously sending events
     class Collector
       def initialize
         @event_creator = EventCreator.new
-        @sender = Sender.new
+        @queue = EventQueue.new(sender: EventSender.new)
       end
 
       def send_started_event
-        @sender.send_async(@event_creator.new_started_event)
+        @queue << @event_creator.new_started_event
       end
 
       def send_compiled_event(site)
+        @queue << @event_creator.new_compiled_event(site)
       end
 
       def send_about_to_compile_event(site)
+        @queue << @event_creator.new_about_to_compile_event(site)
       end
     end
 
+    # Creates event entities
     class EventCreator
       def new_started_event
         StartedEvent.new(generic_params)
       end
 
       def new_compiled_event(site)
+        # TODO
       end
 
       def new_about_to_compile_event(site)
+        # TODO
       end
 
       private
@@ -103,6 +109,18 @@ module Nanoc
         @ruby_version = params.fetch(:ruby_version)
         @os = params.fetch(:os)
       end
+
+      def to_json_hash
+        {
+          nanoc_version: @nanoc_version,
+          ruby_version: @ruby_version,
+          os: @os,
+        }
+      end
+
+      def to_json
+        JSON.dump(to_json_hash)
+      end
     end
 
     class StartedEvent < Event
@@ -114,17 +132,34 @@ module Nanoc
     class CompiledEvent < Event
     end
 
-    class Sender
-      def initialize
+    # Synchronously sends out events
+    class EventSender
+      def send_sync(event)
+        # TODO
+      end
+    end
+
+    # Receives events to asynchronously send out
+    class EventQueue
+      def initialize(sender:)
         @queue = Queue.new
+        @thread = nil
+        @sender = sender
       end
 
-      def send(event)
+      def <<(event)
+        @queue << event
       end
 
       private
 
-      def send_sync(event)
+      def start_if_necessary
+        return if @thread
+
+        @thread = Thread.new do
+          # TODO: figure out a way to stop this thread
+          loop { @sender.send_sync(@queue.pop) }
+        end
       end
     end
   end

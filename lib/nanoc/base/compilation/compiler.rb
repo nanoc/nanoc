@@ -79,6 +79,8 @@ module Nanoc::Int
     end
 
     def run
+      metrics.send_about_to_compile_event(@site)
+
       load_stores
       @site.freeze
 
@@ -88,6 +90,8 @@ module Nanoc::Int
       @stack = []
       compile_reps
       store
+
+      metrics.send_compiled_event(@site)
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
         Nanoc::Filter::TMP_BINARY_ITEMS_DIR,
@@ -179,6 +183,10 @@ module Nanoc::Int
     end
 
     private
+
+    def metrics
+      @_metrics ||= Nanoc::Metrics::Collector.new
+    end
 
     def compile_reps
       # Listen to processing start/stop
