@@ -250,9 +250,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
           end
         end
 
-        context 'non-default target' do
-          let(:command) { %w(deploy --target production) }
-
+        shared_examples 'deploy with non-default target' do
           context 'requested deploy config does not exist' do
             it 'errors' do
               expect { run }.to raise_error(
@@ -302,6 +300,27 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
               let(:command) { (super() + ['--dry-run']) }
               include_examples 'no effective deploy'
             end
+          end
+        end
+
+        context 'non-default target, specified as argument' do
+          let(:command) { %w(deploy production) }
+          include_examples 'deploy with non-default target'
+        end
+
+        context 'non-default target, specified as option (--target)' do
+          let(:command) { %w(deploy --target production) }
+          include_examples 'deploy with non-default target'
+        end
+
+        context 'multiple targets specified' do
+          let(:command) { %w(deploy --target staging production) }
+
+          it 'errors' do
+            expect { run }.to raise_error(
+              Nanoc::Int::Errors::GenericTrivial,
+              'Only one deployment target can be specified on the command line.',
+            )
           end
         end
       end

@@ -1,4 +1,4 @@
-usage 'deploy [options]'
+usage 'deploy [target] [options]'
 summary 'deploy the compiled site'
 description "
 Deploys the compiled site. The compiled site contents in the output directory will be uploaded to the destination, which is specified using the `--target` option.
@@ -60,8 +60,18 @@ module Nanoc::CLI::Commands
         raise Nanoc::Int::Errors::GenericTrivial, 'The site has no deployment configurations.'
       end
 
-      target = options.fetch(:target, :default).to_sym
-      deploy_configs.fetch(target) do
+      if arguments.length > 1
+        raise Nanoc::Int::Errors::GenericTrivial, "usage: #{command.usage}"
+      end
+
+      target_from_arguments = arguments[0]
+      target_from_options = options.fetch(:target, nil)
+      if target_from_arguments && target_from_options
+        raise Nanoc::Int::Errors::GenericTrivial, 'Only one deployment target can be specified on the command line.'
+      end
+
+      target = target_from_arguments || target_from_options || :default
+      deploy_configs.fetch(target.to_sym) do
         raise Nanoc::Int::Errors::GenericTrivial, "The site has no deployment configuration named `#{target}`."
       end
     end
