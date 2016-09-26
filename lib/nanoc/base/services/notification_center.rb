@@ -67,6 +67,13 @@ module Nanoc::Int
         @notifications[name].reject! { |i| i[:id] == id }
       end
 
+      # @api private
+      #
+      # @return [void]
+      def reset
+        @notifications = nil
+      end
+
       private
 
       def initialize_if_necessary(name)

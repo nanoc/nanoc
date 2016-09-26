@@ -28,6 +28,10 @@ RSpec.configure do |c|
     end
   end
 
+  c.before(:each) do
+    Nanoc::Int::NotificationCenter.reset
+  end
+
   c.around(:each, stdio: true) do |example|
     orig_stdout = $stdout
     orig_stderr = $stderr
