@@ -74,6 +74,7 @@ module Nanoc::Int
     def run_all
       @action_provider.preprocess(@site)
       build_reps
+      prune
       run
       @action_provider.postprocess(@site, @reps)
     end
@@ -179,6 +180,20 @@ module Nanoc::Int
     end
 
     private
+
+    def prune
+      if site.config[:prune][:auto_prune]
+        Nanoc::Extra::Pruner.new(site, exclude: prune_config_exclude).run
+      end
+    end
+
+    def prune_config
+      site.config[:prune] || {}
+    end
+
+    def prune_config_exclude
+      prune_config[:exclude] || {}
+    end
 
     def compile_reps
       # Listen to processing start/stop
