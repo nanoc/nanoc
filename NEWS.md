@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.3.3 (2016-09-26)
+
+Fixes:
+
+* Fixed issue causing `Bundler::GemfileNotFound` to be thrown (#936) [Lorin Werthen]
+* Fixed issue when replacing a directory with a file or vice versa (#942, #946)
+
+Enhancements:
+
+* Modified the `compile` command to allow specifying the deploy target as argument (#945)
+
 ## 4.3.2 (2016-08-23)
 
 Identical to 4.3.1, but with corrected release notes.
@@ -25,7 +36,7 @@ Fixes:
 
 * Fixed `UnmetDependency` errors in postprocessor (#913, #917)
 
-Enhancement:
+Enhancements:
 
 * Sped up Nanoc by not releasing cache memory as quickly (#902)
 * Let `internal_links` check also verify resource paths, such as scripts and images (#912) [Lorin Werthen]

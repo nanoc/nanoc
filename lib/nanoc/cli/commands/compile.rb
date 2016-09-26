@@ -403,7 +403,6 @@ module Nanoc::CLI::Commands
 
       puts 'Compiling site…'
       run_listeners_while do
-        prune
         site.compile
       end
 
@@ -413,12 +412,6 @@ module Nanoc::CLI::Commands
     end
 
     protected
-
-    def prune
-      if site.config[:prune][:auto_prune]
-        Nanoc::Extra::Pruner.new(site, exclude: prune_config_exclude).run
-      end
-    end
 
     def default_listener_classes
       [
@@ -457,14 +450,6 @@ module Nanoc::CLI::Commands
 
     def reps
       site.compiler.reps
-    end
-
-    def prune_config
-      site.config[:prune] || {}
-    end
-
-    def prune_config_exclude
-      prune_config[:exclude] || {}
     end
   end
 end
