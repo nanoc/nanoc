@@ -403,8 +403,8 @@ module Nanoc::CLI::Commands
 
       puts 'Compiling site…'
       run_listeners_while do
-        site.compile
         prune
+        site.compile
       end
 
       time_after = Time.now
