@@ -26,6 +26,8 @@ module Nanoc::Extra
     def run
       require 'find'
 
+      return unless File.directory?(site.config[:output_dir])
+
       # Get compiled files
       # FIXME: requires #build_reps to have been called
       all_raw_paths = site.compiler.reps.flat_map { |r| r.raw_paths.values }
