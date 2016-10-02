@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.3.4 (2016-10-02)
+
+Fixes:
+
+* Fixed compilation crash when output directory does not exist and auto-pruning is enabled (#948, #949)
+
 ## 4.3.3 (2016-09-26)
 
 Fixes:
