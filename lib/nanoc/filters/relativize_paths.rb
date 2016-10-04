@@ -4,7 +4,7 @@ module Nanoc::Filters
     require 'nanoc/helpers/link_to'
     include Nanoc::Helpers::LinkTo
 
-    SELECTORS = ['*/@href', '*/@src', 'object/@data', 'param[@name="movie"]/@content', 'comment()'].freeze
+    SELECTORS = ['*/@href', '*/@src', 'object/@data', 'param[@name="movie"]/@content', 'form/@action', 'comment()'].freeze
 
     # Relativizes all paths in the given content, which can be HTML, XHTML, XML
     # or CSS. This filter is quite useful if a site needs to be hosted in a
