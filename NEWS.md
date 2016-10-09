@@ -641,7 +641,7 @@ Fixes:
 
 * Updated references to old web site and old repository
 * Made `require` errors mention Bundler if appropriate
-* Fixed bug which caused pruner not to delete directories in some cases [@reima]
+* Fixed bug which caused pruner not to delete directories in some cases [Matthias Reitinger]
 * Made `check` command exit with the proper exit status
 * Added support for the `HTML_TOC` Redcarpet renderer
 * Made `stale` check honor files excluded by the pruner
@@ -695,7 +695,7 @@ Fixes:
 
 * Made passthrough rules be inserted in the right place [Gregory Pakosz]
 * Fixed crashes in the progress indicator when compiling
-* Made auto-pruning honor excluded files [Greg Karékinian]
+* Made auto-pruning honor excluded files [Grégory Karékinian]
 * Made lack of which/where not crash watch command
 
 Improvements:
@@ -939,7 +939,7 @@ Changed:
 * The `filesystem` data source is now known as `filesystem_verbose`
 * Meta files and content files are now optional
 * The `filesystem_compact` and `filesystem_combined` data sources have been merged into a new `filesystem_unified` data source
-* The metadata section in `filesystem_unified` is now optional [Christopher Eppstein]
+* The metadata section in `filesystem_unified` is now optional [Chris Eppstein]
 * The `--server` autocompile option is now known as `--handler`
 * Assigns in filters are now available as instance variables and methods
 * The `#breadcrumbs_trail` function now allows missing parents
@@ -1216,7 +1216,7 @@ Removed:
 
 ## 1.2 (2007-06-05)
 
-* Sites now have an `assets` directory, whose contents are copied to the `output` directory when compiling [Soryu]
+* Sites now have an `assets` directory, whose contents are copied to the `output` directory when compiling [Stanley Rost]
 * Added support for non-eRuby layouts (Markaby, Haml, Liquid, …)
 * Added more filters (Markaby, Haml, Liquid, RDoc [Dmitry Bilunov])
 * Improved error reporting
