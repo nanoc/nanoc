@@ -28,6 +28,12 @@ RSpec.configure do |c|
     end
   end
 
+  c.around(:each, chdir: false) do |example|
+    FileUtils.cd(File.dirname(__FILE__) + '/..') do
+      example.run
+    end
+  end
+
   c.before(:each) do
     Nanoc::Int::NotificationCenter.reset
   end
@@ -83,5 +89,30 @@ RSpec::Matchers.define :raise_frozen_error do |_expected|
 
   failure_message_when_negated do |_actual|
     'expected that proc would not raise a frozen error'
+  end
+end
+
+RSpec::Matchers.define :be_humanly_sorted do
+  match do |actual|
+    actual == sort(actual)
+  end
+
+  description do
+    'be humanly sorted'
+  end
+
+  failure_message do |actual|
+    expected_order = []
+    actual.zip(sort(actual)).each do |a, b|
+      if a != b
+        expected_order << b
+      end
+    end
+
+    "expected collection to be sorted (incorrect order: #{expected_order.join(' < ')})"
+  end
+
+  def sort(x)
+    x.sort_by { |n| n.dup.unicode_normalize(:nfd).encode('ASCII', fallback: ->(_) { '' }).downcase }
   end
 end
