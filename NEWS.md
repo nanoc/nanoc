@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.3.5 (???)
+
+Fixes:
+
+* Handle `form/@action` in `relativize_paths` filter [Lorin Werthen] (#950)
+
 ## 4.3.4 (2016-10-02)
 
 Fixes:
