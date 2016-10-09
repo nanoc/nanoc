@@ -347,6 +347,32 @@ EOS
     assert_match(/<param (name="movie" )?content="..\/..\/example"/, actual_content)
   end
 
+  def test_filter_form
+    # Create filter with mock item
+    filter = Nanoc::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
+      @item_rep.paths[:last] = '/foo/bar/baz/'
+    end
+
+    # Set content
+    raw_content      = %(<form action="/example"></form>)
+    expected_content = %(<form action="../../../example"></form>)
+
+    # Test
+    actual_content = filter.setup_and_run(raw_content, type: :html)
+    assert_equal(expected_content, actual_content)
+  end
+
   def test_filter_implicit
     # Create filter with mock item
     filter = Nanoc::Filters::RelativizePaths.new
