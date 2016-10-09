@@ -52,6 +52,36 @@ describe Nanoc::Int::ConfigLoader do
         expect(subject[:parent_config_file]).to be_nil
       end
     end
+
+    context 'config file present and environment defined' do
+      before do
+        File.write('nanoc.yaml', YAML.dump({ foo: 'bar', tofoo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } }))
+        expect(Nanoc::Feature).to receive(:enabled?).with('environments').and_return(true)
+        expect(ENV).to receive(:fetch).with('NANOC_ENV', 'default').and_return(active_env_name)
+      end
+
+      let(:active_env_name) { 'default' }
+
+      it 'returns the configuration' do
+        expect(subject).to be_a(Nanoc::Int::Configuration)
+      end
+
+      it 'has option defined not within environments' do
+        expect(subject[:tofoo]).to eq('bar')
+      end
+
+      context 'current env is test' do
+        let(:active_env_name) { 'test' }
+
+        it 'has the test environment custom option' do
+          expect(subject[:foo]).to eq('test-bar')
+        end
+      end
+
+      it 'has the default environment custom option' do
+        expect(subject[:foo]).to eq('default-bar')
+      end
+    end
   end
 
   describe '.cwd_is_nanoc_site? + .config_filename_for_cwd' do
@@ -88,7 +118,7 @@ describe Nanoc::Int::ConfigLoader do
   describe '#apply_parent_config' do
     subject { loader.apply_parent_config(config, processed_paths) }
 
-    let(:config) { Nanoc::Int::Configuration.new(foo: 'bar') }
+    let(:config) { Nanoc::Int::Configuration.new(hash: { foo: 'bar' }) }
 
     let(:processed_paths) { ['nanoc.yaml'] }
 
@@ -100,10 +130,7 @@ describe Nanoc::Int::ConfigLoader do
 
     context 'parent config file is set' do
       let(:config) do
-        Nanoc::Int::Configuration.new(
-          parent_config_file: 'foo.yaml',
-          foo: 'bar',
-        )
+        Nanoc::Int::Configuration.new(hash: { parent_config_file: 'foo.yaml', foo: 'bar' })
       end
 
       context 'parent config file is not present' do

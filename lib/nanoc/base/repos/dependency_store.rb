@@ -5,8 +5,8 @@ module Nanoc::Int
     attr_accessor :objects
 
     # @param [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] objects
-    def initialize(objects)
-      super('tmp/dependencies', 4)
+    def initialize(objects, env_name: nil)
+      super(Nanoc::Int::Store.tmp_path_for(env_name: env_name, store_name: 'dependencies'), 4)
 
       @objects = objects
       @graph   = Nanoc::Int::DirectedGraph.new([nil] + @objects)

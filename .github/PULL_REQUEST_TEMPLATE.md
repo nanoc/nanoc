@@ -16,6 +16,7 @@
 
 * [ ] Tests
 * [ ] Documentation
+* [ ] Feature flags
 * [ ] …
 
 ### Detailed description
