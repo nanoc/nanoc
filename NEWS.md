@@ -6,6 +6,11 @@ Fixes:
 
 * Handle `form/@action` in `relativize_paths` filter [Lorin Werthen] (#950)
 
+Experimental features:
+
+* `profiler`: adds `--profile` option to the `compile` command to profile compilation (#903)
+* `environments`: adds support for Nanoc environments (#859)
+
 ## 4.3.4 (2016-10-02)
 
 Fixes:
