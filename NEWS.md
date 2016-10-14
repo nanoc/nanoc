@@ -4,7 +4,7 @@
 
 Fixes:
 
-* Handle `form/@action` in `relativize_paths` filter [Lorin Werthen] (#950)
+* Handle `form/@action` in `relativize_paths` filter (#950) [Lorin Werthen]
 
 Experimental features:
 
