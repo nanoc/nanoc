@@ -105,7 +105,7 @@ module Nanoc::Int
         return Reasons::ConfigurationModified if object_modified?(site.config)
 
         # Not outdated
-        return nil
+        nil
       when Nanoc::Int::Item
         @reps[obj].find { |rep| basic_outdatedness_reason_for(rep) }
       when Nanoc::Int::Layout
@@ -118,7 +118,7 @@ module Nanoc::Int
         return Reasons::SourceModified unless checksums_identical?(obj)
 
         # Not outdated
-        return nil
+        nil
       else
         raise "do not know how to check outdatedness of #{obj.inspect}"
       end
