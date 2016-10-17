@@ -5,3 +5,4 @@ doc/yardoc
 /.yardoc
 *~
 /Gemfile.lock
+*.gemfile.lock

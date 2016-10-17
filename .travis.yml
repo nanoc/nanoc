@@ -3,6 +3,9 @@ rvm:
   - 2.2.5
   - 2.3.1
   - ruby-head
+gemfile:
+  - gemfiles/rouge_1.gemfile
+  - gemfiles/rouge_2.gemfile
 branches:
   only:
     - "master"

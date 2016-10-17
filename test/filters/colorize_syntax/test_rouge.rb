@@ -80,7 +80,7 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get expected output
-      expected_rouge_1_output = <<EOS
+      expected_rouge1_output = <<EOS
 before
 <pre><code class="language-ruby"><table style="border-spacing: 0"><tbody><tr>
 <td class="gutter gl" style="text-align: right"><pre class="lineno">1
@@ -92,7 +92,7 @@ before
 after
 EOS
 
-      expected_rouge_2_output = <<EOS
+      expected_rouge2_output = <<EOS
 before
 <pre><code class="language-ruby"><table class="rouge-table"><tbody><tr>
 <td class="rouge-gutter gl"><pre class="lineno">1
@@ -111,7 +111,7 @@ EOS
         rouge: { legacy: true, line_numbers: true },
       )
 
-      assert_equal(Rouge.version < '2' ? expected_rouge_1_output : expected_rouge_2_output, actual_output)
+      assert_equal(Rouge.version < '2' ? expected_rouge1_output : expected_rouge2_output, actual_output)
     end
   end
 end
