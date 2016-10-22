@@ -30,7 +30,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @items << item
 
       # Create item 3
-      attrs = { mtime: Time.parse('2004-07-12'), changefreq: 'daily', priority: 0.5 }
+      attrs = { mtime: Time.parse('2004-07-12 00:00:00 +02:00'), changefreq: 'daily', priority: 0.5 }
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 3', attrs, '/item-three/'), @view_context)
       @items << item
       create_item_rep(item.unwrap, :three_a, '/item-three/a/')
@@ -70,8 +70,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       assert_equal '0.5',                              urls[3].css('> priority').inner_text
       assert_equal '',                                 urls[0].css('> lastmod').inner_text
       assert_equal '',                                 urls[1].css('> lastmod').inner_text
-      assert_equal '2004-07-12',                       urls[2].css('> lastmod').inner_text
-      assert_equal '2004-07-12',                       urls[3].css('> lastmod').inner_text
+      assert_equal '2004-07-11',                       urls[2].css('> lastmod').inner_text
+      assert_equal '2004-07-11',                       urls[3].css('> lastmod').inner_text
     end
   end
 

@@ -2,7 +2,7 @@
 module Nanoc::Extra::TimeExtensions
   # @return [String] The time in an ISO-8601 date format.
   def __nanoc_to_iso8601_date
-    strftime('%Y-%m-%d')
+    getutc.strftime('%Y-%m-%d')
   end
 
   # @return [String] The time in an ISO-8601 time format.
