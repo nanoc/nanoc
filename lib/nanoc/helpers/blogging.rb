@@ -1,9 +1,26 @@
 module Nanoc::Helpers
   # @see http://nanoc.ws/doc/reference/helpers/#blogging
   module Blogging
+    # @param item
+    #
+    # @return [Boolean]
+    def article?(item)
+      item[:kind] == 'article'
+    end
+
+    # TODO: document
+    def article_created_at(item)
+      attribute_to_time(item[:created_at])
+    end
+
+    # TODO: document
+    def article_updated_at(item)
+      attribute_to_time(item[:updated_at] || item[:created_at])
+    end
+
     # @return [Array]
     def articles
-      blk = -> { @items.select { |item| item[:kind] == 'article' } }
+      blk = -> { @items.select { |item| article?(item) } }
       if @items.frozen?
         @article_items ||= blk.call
       else
@@ -13,7 +30,7 @@ module Nanoc::Helpers
 
     # @return [Array]
     def sorted_articles
-      blk = -> { articles.sort_by { |a| attribute_to_time(a[:created_at]) }.reverse }
+      blk = -> { articles.sort_by { |a| article_created_at(a) }.reverse }
 
       if @items.frozen?
         @sorted_article_items ||= blk.call
@@ -62,7 +79,7 @@ module Nanoc::Helpers
         all = relevant_articles
 
         unless @preserve_order
-          all = all.sort_by { |a| attribute_to_time(a[:created_at]) }
+          all = all.sort_by { |a| article_created_at(a) }
         end
 
         all.reverse.first(limit)
@@ -94,7 +111,7 @@ module Nanoc::Helpers
         if relevant_articles.empty?
           raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: no articles')
         end
-        if relevant_articles.any? { |a| a[:created_at].nil? }
+        if relevant_articles.any? { |a| article_created_at(a).nil? }
           raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: one or more articles lack created_at')
         end
       end
@@ -109,7 +126,7 @@ module Nanoc::Helpers
           xml.title title
 
           # Add date
-          xml.updated(attribute_to_time(last_article[:created_at]).__nanoc_to_iso8601_time)
+          xml.updated(article_created_at(last_article).__nanoc_to_iso8601_time)
 
           # Add links
           xml.link(rel: 'alternate', href: root_url)
@@ -143,8 +160,8 @@ module Nanoc::Helpers
           xml.title a[:title], type: 'html'
 
           # Add dates
-          xml.published attribute_to_time(a[:created_at]).__nanoc_to_iso8601_time
-          xml.updated attribute_to_time(a[:updated_at] || a[:created_at]).__nanoc_to_iso8601_time
+          xml.published article_created_at(a).__nanoc_to_iso8601_time
+          xml.updated article_updated_at(a).__nanoc_to_iso8601_time
 
           # Add specific author information
           if a[:author_name] || a[:author_uri]
@@ -231,7 +248,7 @@ module Nanoc::Helpers
     def atom_tag_for(item)
       hostname, base_dir = %r{^.+?://([^/]+)(.*)$}.match(@config[:base_url])[1..2]
 
-      formatted_date = attribute_to_time(item[:created_at]).__nanoc_to_iso8601_date
+      formatted_date = article_created_at(item).__nanoc_to_iso8601_date
 
       'tag:' + hostname + ',' + formatted_date + ':' + base_dir + (item.path || item.identifier.to_s)
     end
