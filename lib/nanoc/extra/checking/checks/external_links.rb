@@ -12,6 +12,8 @@ module ::Nanoc::Extra::Checking::Checks
     identifiers :external_links, :elinks
 
     def run
+      require 'parallel'
+
       # Find all broken external hrefs
       # TODO: de-duplicate this (duplicated in internal links check)
       filenames = output_filenames.select { |f| File.extname(f) == '.html' && !excluded_file?(f) }
@@ -40,45 +42,8 @@ module ::Nanoc::Extra::Checking::Checks
       end
     end
 
-    class ArrayEnumerator
-      def initialize(array)
-        @array = array
-        @index = 0
-        @mutex = Mutex.new
-      end
-
-      def next
-        @mutex.synchronize do
-          @index += 1
-          return @array[@index - 1]
-        end
-      end
-    end
-
     def select_invalid(hrefs)
-      enum = ArrayEnumerator.new(hrefs.sort)
-      mutex = Mutex.new
-      invalid = Set.new
-
-      threads = []
-      10.times do
-        threads << Thread.new do
-          loop do
-            href = enum.next
-            break if href.nil?
-
-            res = validate(href)
-            next unless res
-
-            mutex.synchronize do
-              invalid << res
-            end
-          end
-        end
-      end
-      threads.each(&:join)
-
-      invalid
+      Parallel.map(hrefs, in_threads: 10) { |href| validate(href) }.compact
     end
 
     def validate(href)
