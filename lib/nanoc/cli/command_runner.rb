@@ -45,8 +45,8 @@ module Nanoc::CLI
     #
     # @return [void]
     def load_site(preprocess: false)
-      print 'Loading site… '
-      $stdout.flush
+      $stderr.print 'Loading site… '
+      $stderr.flush
 
       if site.nil?
         raise ::Nanoc::Int::Errors::GenericTrivial, 'The current working directory does not seem to be a Nanoc site.'
@@ -56,7 +56,7 @@ module Nanoc::CLI
         site.compiler.action_provider.preprocess(site)
       end
 
-      puts 'done'
+      $stderr.puts 'done'
     end
 
     # @return [Boolean] true if debug output is enabled, false if not

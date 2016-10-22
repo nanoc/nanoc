@@ -1,4 +1,4 @@
-describe Nanoc::CLI::Commands::ShowRules do
+describe Nanoc::CLI::Commands::ShowRules, stdio: true do
   describe '#run' do
     subject { runner.run }
 
@@ -73,7 +73,6 @@ describe Nanoc::CLI::Commands::ShowRules do
 
     let(:expected_out) do
       <<-EOS
-        Loading site… done
         \e[1m\e[33mItem /about.md\e[0m:
           Rep default: /*.md
           Rep text: /**/*
@@ -98,8 +97,12 @@ describe Nanoc::CLI::Commands::ShowRules do
         .gsub(/^ {8}/, '')
     end
 
-    it 'outputs item and layout rules' do
+    it 'writes item and layout rules to stdout' do
       expect { subject }.to output(expected_out).to_stdout
+    end
+
+    it 'writes status informaion to stderr' do
+      expect { subject }.to output("Loading site… done\n").to_stderr
     end
   end
 end
