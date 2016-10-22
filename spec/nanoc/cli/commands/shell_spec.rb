@@ -5,12 +5,24 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
       expect(Nanoc::CLI).to receive(:setup)
     end
 
+    around(:each) do |example|
+      Nanoc::Feature.enable(Nanoc::Feature::SHELL_EXEC) do
+        example.run
+      end
+    end
+
     it 'can be invoked' do
       context = Object.new
       allow(Nanoc::Int::Context).to receive(:new).with(anything).and_return(context)
       expect(context).to receive(:pry)
 
       Nanoc::CLI.run(['shell'])
+    end
+
+    it 'can be invoked with arguments' do
+      File.write('content/stuff.md', 'hi')
+
+      expect { Nanoc::CLI.run(['shell', '@items.to_a.first.identifier']) }.to output("/stuff.md\n").to_stdout
     end
   end
 

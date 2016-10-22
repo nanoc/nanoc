@@ -63,6 +63,22 @@ module Nanoc
     end
 
     # @api private
+    def self.enable(feature_name)
+      raise ArgumentError, 'no block given' unless block_given?
+
+      if enabled?(feature_name)
+        yield
+      else
+        begin
+          enabled_features << feature_name
+          yield
+        ensure
+          enabled_features.delete(feature_name)
+        end
+      end
+    end
+
+    # @api private
     def self.reset_caches
       @enabled_features = nil
     end
@@ -91,3 +107,4 @@ end
 
 Nanoc::Feature.define('profiler', version: '4.3')
 Nanoc::Feature.define('environments', version: '4.3')
+Nanoc::Feature.define('shell_exec', version: '4.3')
