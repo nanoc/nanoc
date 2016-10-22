@@ -53,33 +53,76 @@ describe Nanoc::Int::ConfigLoader do
       end
     end
 
-    context 'config file present and environment defined' do
-      before do
-        File.write('nanoc.yaml', YAML.dump({ foo: 'bar', tofoo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } }))
-        expect(Nanoc::Feature).to receive(:enabled?).with('environments').and_return(true)
-        expect(ENV).to receive(:fetch).with('NANOC_ENV', 'default').and_return(active_env_name)
-      end
-
+    context 'config file present, environment defined' do
       let(:active_env_name) { 'default' }
 
-      it 'returns the configuration' do
-        expect(subject).to be_a(Nanoc::Int::Configuration)
+      let(:config) do
+        {
+          foo: 'bar',
+          tofoo: 'bar',
+          environments: {
+            test: { foo: 'test-bar' },
+            default: { foo: 'default-bar' },
+          },
+        }
       end
 
-      it 'has option defined not within environments' do
-        expect(subject[:tofoo]).to eq('bar')
+      before do
+        File.write('nanoc.yaml', YAML.dump(config))
       end
 
-      context 'current env is test' do
-        let(:active_env_name) { 'test' }
+      context 'environments feature enabled' do
+        around(:each) do |example|
+          Nanoc::Feature.enable(Nanoc::Feature::ENVIRONMENTS) do
+            example.run
+          end
+        end
 
-        it 'has the test environment custom option' do
-          expect(subject[:foo]).to eq('test-bar')
+        before do
+          expect(ENV).to receive(:fetch).with('NANOC_ENV', 'default').and_return(active_env_name)
+        end
+
+        it 'returns the configuration' do
+          expect(subject).to be_a(Nanoc::Int::Configuration)
+        end
+
+        it 'has option defined not within environments' do
+          expect(subject[:tofoo]).to eq('bar')
+        end
+
+        context 'current env is test' do
+          let(:active_env_name) { 'test' }
+
+          it 'has the test environment custom option' do
+            expect(subject[:foo]).to eq('test-bar')
+          end
+        end
+
+        it 'has the default environment custom option' do
+          expect(subject[:foo]).to eq('default-bar')
         end
       end
 
-      it 'has the default environment custom option' do
-        expect(subject[:foo]).to eq('default-bar')
+      context 'environments feature disabled' do
+        it 'returns the configuration' do
+          expect(subject).to be_a(Nanoc::Int::Configuration)
+        end
+
+        it 'has option defined not within environments' do
+          expect(subject[:tofoo]).to eq('bar')
+        end
+
+        context 'current env is test' do
+          let(:active_env_name) { 'test' }
+
+          it 'has the test environment custom option' do
+            expect(subject[:foo]).to eq('bar')
+          end
+        end
+
+        it 'has the default environment custom option' do
+          expect(subject[:foo]).to eq('bar')
+        end
       end
     end
   end
