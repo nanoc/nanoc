@@ -278,9 +278,15 @@ module Nanoc::RuleDSL
         # Add leading/trailing slashes if necessary
         new_identifier = identifier.dup
         new_identifier[/^/] = '/' if identifier[0, 1] != '/'
-        new_identifier[/$/] = '/' unless ['*', '/'].include?(identifier[-1, 1])
+        new_identifier[/$/] = '/?' unless ['*', '/'].include?(identifier[-1, 1])
 
-        /^#{new_identifier.gsub('*', '(.*?)').gsub('+', '(.+?)')}$/
+        regex_string =
+          new_identifier
+          .gsub('.', '\.')
+          .gsub('*', '(.*?)')
+          .gsub('+', '(.+?)')
+
+        /^#{regex_string}$/
       else
         identifier
       end

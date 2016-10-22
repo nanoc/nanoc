@@ -319,7 +319,7 @@ EOS
     compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo') }
-    expected = %r{^/foo/$}
+    expected = %r{^/foo/?$}
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
@@ -333,7 +333,7 @@ EOS
     compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo/*/bar') }
-    expected = %r{^/foo/(.*?)/bar/$}
+    expected = %r{^/foo/(.*?)/bar/?$}
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
@@ -347,7 +347,7 @@ EOS
     compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('foo/*/bar/*/qux') }
-    expected = %r{^/foo/(.*?)/bar/(.*?)/qux/$}
+    expected = %r{^/foo/(.*?)/bar/(.*?)/qux/?$}
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
@@ -403,7 +403,7 @@ EOS
     compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, {})
 
     actual   = compiler_dsl.instance_eval { identifier_to_regex('/foo/+') }
-    expected = %r{^/foo/(.+?)/$}
+    expected = %r{^/foo/(.+?)/?$}
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
@@ -412,6 +412,20 @@ EOS
     assert_equal(expected.options,   actual.options)
     assert('/foo/bar/' =~ actual)
     refute('/foo/' =~ actual)
+  end
+
+  def test_identifier_to_regex_with_full_identifier
+    # Create compiler DSL
+    compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, {})
+
+    actual   = compiler_dsl.instance_eval { identifier_to_regex('/favicon.ico') }
+    expected = %r{^/favicon\.ico/?$}
+
+    assert_equal(expected.to_s, actual.to_s)
+
+    assert('/favicon.ico' =~ actual)
+    assert('/favicon.ico/' =~ actual)
+    refute('/faviconxico' =~ actual)
   end
 
   def test_dsl_has_no_access_to_compiler
