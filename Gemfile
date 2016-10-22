@@ -43,6 +43,7 @@ group :plugins do
   gem 'mustache', '~> 1.0'
   gem 'nokogiri', '~> 1.6'
   gem 'pandoc-ruby'
+  gem 'parallel'
   gem 'pygments.rb', platforms: [:ruby, :mswin]
   gem 'rack'
   gem 'rainpress'
