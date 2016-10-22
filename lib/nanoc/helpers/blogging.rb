@@ -244,7 +244,7 @@ module Nanoc::Helpers
       when DateTime
         arg.to_time
       when Date
-        Time.local(arg.year, arg.month, arg.day)
+        Time.utc(arg.year, arg.month, arg.day)
       when String
         Time.parse(arg)
       else

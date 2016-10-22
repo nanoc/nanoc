@@ -139,7 +139,7 @@ describe Nanoc::Helpers::Blogging, helper: true do
 
     let(:around_noon_local) { Time.at(noon_s - Time.at(noon_s).utc_offset) }
     let(:around_noon_utc) { Time.at(noon_s) }
-    let(:beginning_of_day_local) { Time.at(beginning_of_day_s - Time.at(beginning_of_day_s).utc_offset) }
+    let(:beginning_of_day_utc) { Time.at(beginning_of_day_s) }
 
     context 'with Time instance' do
       let(:arg) { around_noon_utc }
@@ -148,7 +148,7 @@ describe Nanoc::Helpers::Blogging, helper: true do
 
     context 'with Date instance' do
       let(:arg) { Date.new(2015, 11, 7) }
-      it { is_expected.to eql(beginning_of_day_local) }
+      it { is_expected.to eql(beginning_of_day_utc) }
     end
 
     context 'with DateTime instance' do
