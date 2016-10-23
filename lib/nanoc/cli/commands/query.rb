@@ -18,13 +18,13 @@ module Nanoc::CLI::Commands
     protected
 
     def fmt(thing)
-      case res
+      case thing
       when String
-        res
+        thing
       when Array
-        res.map(&:to_s).join("\n")
+        thing.map(&:inspect).join("\n")
       else
-        res.inspect
+        thing.inspect
       end
     end
 
