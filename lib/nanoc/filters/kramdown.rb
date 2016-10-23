@@ -12,8 +12,11 @@ module Nanoc::Filters
     def run(content, params = {})
       document = ::Kramdown::Document.new(content, params)
 
-      document.warnings.each do |warning|
-        $stderr.puts "kramdown warning: #{warning}"
+      if document.warnings.length != 0
+        $stderr.puts "kramdown warning(s) for #{@item_rep.inspect}"
+        document.warnings.each do |warning|
+          $stderr.puts "  #{warning}"
+        end
       end
 
       document.to_html
