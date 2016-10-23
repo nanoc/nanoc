@@ -1,4 +1,4 @@
-describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
+describe Nanoc::CLI::Commands::Query, site: true, stdio: true do
   describe '#run' do
     before do
       # Prevent double-loading
@@ -6,11 +6,9 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
     end
 
     it 'can be invoked' do
-      context = Object.new
-      allow(Nanoc::Int::Context).to receive(:new).with(anything).and_return(context)
-      expect(context).to receive(:pry)
+      File.write('content/stuff.md', 'hi')
 
-      Nanoc::CLI.run(['shell'])
+      expect { Nanoc::CLI.run(['query', '@items.to_a.first.identifier']) }.to output("/stuff.md\n").to_stdout
     end
   end
 

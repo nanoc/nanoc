@@ -12,12 +12,7 @@ module Nanoc::CLI::Commands
 
       load_site
 
-      ctx = Nanoc::Int::Context.new(env)
-      if arguments.any? && Nanoc::Feature.enabled?(Nanoc::Feature::SHELL_EXEC)
-        puts eval(arguments.join(' '), ctx.get_binding)
-      else
-        ctx.pry
-      end
+      Nanoc::Int::Context.new(env).pry
     end
 
     protected
