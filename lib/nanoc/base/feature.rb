@@ -91,3 +91,4 @@ end
 
 Nanoc::Feature.define('profiler', version: '4.3')
 Nanoc::Feature.define('environments', version: '4.3')
+Nanoc::Feature.define('query_command', version: '4.3')
