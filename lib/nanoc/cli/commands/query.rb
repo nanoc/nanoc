@@ -11,12 +11,22 @@ module Nanoc::CLI::Commands
   class Query < ::Nanoc::CLI::CommandRunner
     def run
       load_site
-
       ctx = Nanoc::Int::Context.new(env)
-      puts eval(arguments.join(' '), ctx.get_binding)
+      puts fmt(eval(arguments.join(' '), ctx.get_binding))
     end
 
     protected
+
+    def fmt(thing)
+      case res
+      when String
+        res
+      when Array
+        res.map(&:to_s).join("\n")
+      else
+        res.inspect
+      end
+    end
 
     def env
       self.class.env_for_site(site)
