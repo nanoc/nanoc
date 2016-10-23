@@ -3,7 +3,7 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
     attr_accessor :called_methods
 
     def initialize
-      @called_methods = Set.new
+      @called_methods = []
     end
 
     # rubocop:disable Style/MethodMissing
