@@ -1,5 +1,19 @@
 # Nanoc news
 
+## 4.3.6 (2016-10-23)
+
+Fixes:
+
+* Made legacy patterns properly support full identifiers (#957)
+* Fixed timezone issues in `#to_iso8601_date` (#961)
+* Fixed error when accessing item (rep) paths in shell command (#963)
+* Fixed issue that caused `#path` to be nil inside compilation rules (#964)
+* Made `__FILE__` in Checks file be a absolute path (#966)
+
+Enhancements:
+
+* Made the command line write status information to stderr, not stdout (#958)
+
 ## 4.3.5 (2016-10-14)
 
 Fixes:
