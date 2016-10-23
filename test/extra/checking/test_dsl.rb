@@ -20,4 +20,12 @@ class Nanoc::Extra::Checking::DSLTest < Nanoc::TestCase
       assert_equal 'hello', $greeting
     end
   end
+
+  def test_has_absolute_path
+    with_site do |_site|
+      File.write('Checks', '$stuff = __FILE__')
+      Nanoc::Extra::Checking::DSL.from_file('Checks')
+      assert($stuff.start_with?('/'))
+    end
+  end
 end
