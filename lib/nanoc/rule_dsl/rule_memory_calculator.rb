@@ -89,6 +89,17 @@ module Nanoc::RuleDSL
       executor.rule_memory
     end
 
+    # TODO: unify with #snapshots_defs_for maybe? (extend SnapshotDef with path?)
+    def paths_for_rep(rep)
+      snapshot_actions =
+        new_rule_memory_for_rep(rep)
+        .select { |a| a.is_a?(Nanoc::Int::RuleMemoryActions::Snapshot) }
+
+      snapshot_actions.each_with_object({}) do |action, paths|
+        paths[action.snapshot_name] = action.path
+      end
+    end
+
     # @param [Nanoc::Int::Layout] layout
     #
     # @return [Nanoc::Int::RuleMemory]

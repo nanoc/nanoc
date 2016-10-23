@@ -18,9 +18,8 @@ module Nanoc::Int
     def run
       paths_to_reps = {}
       @reps.each do |rep|
-        mem = @action_provider.memory_for(rep)
-        mem.snapshot_actions.each do |snapshot_action|
-          route_rep(rep, snapshot_action.path, snapshot_action.snapshot_name, paths_to_reps)
+        @action_provider.paths_for(rep).each do |snapshot_name, path|
+          route_rep(rep, path, snapshot_name, paths_to_reps)
         end
       end
     end

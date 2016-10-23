@@ -18,5 +18,9 @@ module Nanoc::Int
     def snapshots_defs_for(_rep)
       raise NotImplementedError
     end
+
+    def paths_for(_rep)
+      raise NotImplementedError
+    end
   end
 end
