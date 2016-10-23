@@ -18,25 +18,17 @@ describe(Nanoc::Int::ItemRepRouter) do
       ]
     end
 
-    let(:rule_memory_0) do
-      Nanoc::Int::RuleMemory.new(reps[0]).tap do |rm|
-        rm.add_filter(:erb, {})
-        rm.add_snapshot(:last, true, '/foo/index.html')
-      end
+    let(:paths_0) do
+      { last: '/foo/index.html' }
     end
 
-    let(:rule_memory_1) do
-      Nanoc::Int::RuleMemory.new(reps[1]).tap do |rm|
-        rm.add_snapshot(:pre, false, nil)
-        rm.add_filter(:erb, {})
-        rm.add_layout('/default.*', {})
-        rm.add_snapshot(:last, true, '/bar.html')
-      end
+    let(:paths_1) do
+      { last: '/bar.html' }
     end
 
     example do
-      expect(action_provider).to receive(:memory_for).with(reps[0]).and_return(rule_memory_0)
-      expect(action_provider).to receive(:memory_for).with(reps[1]).and_return(rule_memory_1)
+      expect(action_provider).to receive(:paths_for).with(reps[0]).and_return(paths_0)
+      expect(action_provider).to receive(:paths_for).with(reps[1]).and_return(paths_1)
 
       subject
 
@@ -49,9 +41,10 @@ describe(Nanoc::Int::ItemRepRouter) do
   end
 
   describe '#route_rep' do
-    subject { item_rep_router.route_rep(rep, snapshot_action, paths_to_reps) }
+    subject { item_rep_router.route_rep(rep, path, snapshot_name, paths_to_reps) }
 
-    let(:snapshot_action) { Nanoc::Int::RuleMemoryActions::Snapshot.new(:foo, true, basic_path) }
+    let(:path) { basic_path }
+    let(:snapshot_name) { :foo }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
     let(:item) { Nanoc::Int::Item.new('content', {}, '/foo.md') }
     let(:paths_to_reps) { {} }
