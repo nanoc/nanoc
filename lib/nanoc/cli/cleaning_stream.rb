@@ -56,6 +56,11 @@ module Nanoc::CLI
       @cached_is_tty ||= @stream.tty?
     end
 
+    # @see IO#isatty
+    def isatty
+      tty?
+    end
+
     # @see IO#flush
     def flush
       _nanoc_swallow_broken_pipe_errors_while do

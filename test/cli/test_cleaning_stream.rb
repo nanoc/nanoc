@@ -18,7 +18,7 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
   end
 
   def test_forward
-    methods = [:write, :<<, :tty?, :flush, :tell, :print, :puts, :string, :reopen, :exist?, :exists?, :close]
+    methods = [:write, :<<, :tty?, :tty?, :flush, :tell, :print, :puts, :string, :reopen, :exist?, :exists?, :close]
 
     s = Stream.new
     cs = Nanoc::CLI::CleaningStream.new(s)
@@ -26,6 +26,7 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
     cs.write('aaa')
     cs << 'bb'
     cs.tty?
+    cs.isatty
     cs.flush
     cs.tell
     cs.print('cc')
@@ -39,6 +40,16 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
     methods.each do |m|
       assert s.called_methods.include?(m), "expected #{m} to be called"
     end
+  end
+
+  def test_forward_tty_cached
+    s = Stream.new
+    cs = Nanoc::CLI::CleaningStream.new(s)
+
+    cs.tty?
+    cs.isatty
+
+    assert_equal [:tty?], s.called_methods
   end
 
   def test_works_with_logger
