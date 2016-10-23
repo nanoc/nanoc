@@ -10,11 +10,20 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params = {})
+      params = params.dup
+      warning_filters = params.delete(:warning_filters)
       document = ::Kramdown::Document.new(content, params)
 
-      if document.warnings.length != 0
+      if warning_filters
+        r = Regexp.union(warning_filters)
+        warnings = document.warnings.reject { |warning| r =~ warning }
+      else
+        warnings = document.warnings
+      end
+
+      if warnings.any?
         $stderr.puts "kramdown warning(s) for #{@item_rep.inspect}"
-        document.warnings.each do |warning|
+        warnings.each do |warning|
           $stderr.puts "  #{warning}"
         end
       end
