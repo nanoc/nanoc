@@ -20,13 +20,13 @@ module Nanoc::Int
       @reps.each do |rep|
         mem = @action_provider.memory_for(rep)
         mem.snapshot_actions.each do |snapshot_action|
-          route_rep(rep, snapshot_action, paths_to_reps)
+          route_rep(rep, snapshot_action.path, snapshot_action.snapshot_name, paths_to_reps)
         end
       end
     end
 
-    def route_rep(rep, snapshot_action, paths_to_reps)
-      basic_path = snapshot_action.path
+    def route_rep(rep, path, snapshot_name, paths_to_reps)
+      basic_path = path
       return if basic_path.nil?
       basic_path = basic_path.encode('UTF-8')
 
@@ -37,8 +37,8 @@ module Nanoc::Int
         paths_to_reps[basic_path] = rep
       end
 
-      rep.raw_paths[snapshot_action.snapshot_name] = @site.config[:output_dir] + basic_path
-      rep.paths[snapshot_action.snapshot_name] = strip_index_filename(basic_path)
+      rep.raw_paths[snapshot_name] = @site.config[:output_dir] + basic_path
+      rep.paths[snapshot_name] = strip_index_filename(basic_path)
     end
 
     def strip_index_filename(basic_path)

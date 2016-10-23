@@ -49,9 +49,10 @@ describe(Nanoc::Int::ItemRepRouter) do
   end
 
   describe '#route_rep' do
-    subject { item_rep_router.route_rep(rep, snapshot_action, paths_to_reps) }
+    subject { item_rep_router.route_rep(rep, path, snapshot_name, paths_to_reps) }
 
-    let(:snapshot_action) { Nanoc::Int::RuleMemoryActions::Snapshot.new(:foo, true, basic_path) }
+    let(:path) { basic_path }
+    let(:snapshot_name) { :foo }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
     let(:item) { Nanoc::Int::Item.new('content', {}, '/foo.md') }
     let(:paths_to_reps) { {} }
