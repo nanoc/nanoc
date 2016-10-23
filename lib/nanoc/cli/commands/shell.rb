@@ -21,11 +21,30 @@ module Nanoc::CLI::Commands
       self.class.env_for_site(site)
     end
 
+    def self.reps_for(site)
+      Nanoc::Int::ItemRepRepo.new.tap do |reps|
+        action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
+        builder = Nanoc::Int::ItemRepBuilder.new(site, action_provider, reps)
+        builder.run
+      end
+    end
+
+    def self.view_context_for(site)
+      Nanoc::ViewContext.new(
+        reps: reps_for(site),
+        items: site.items,
+        dependency_tracker: Nanoc::Int::DependencyTracker::Null.new,
+        compiler: nil,
+      )
+    end
+
     def self.env_for_site(site)
+      view_context = view_context_for(site)
+
       {
-        items: Nanoc::ItemCollectionWithRepsView.new(site.items, nil),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts, nil),
-        config: Nanoc::ConfigView.new(site.config, nil),
+        items: Nanoc::ItemCollectionWithRepsView.new(site.items, view_context),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
+        config: Nanoc::ConfigView.new(site.config, view_context),
       }
     end
   end
