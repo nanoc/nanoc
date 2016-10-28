@@ -67,8 +67,6 @@ after
     end
 
     context 'with 2.x', if: Rouge.version >= '2' do
-      subject { filter.setup_and_run(input, default_colorizer: :rouge, rouge: params) }
-
       context 'with default options' do
         it { is_expected.to eql output }
       end
@@ -114,72 +112,69 @@ after
         end
       end
 
-      context 'with inline' do
-        let(:inline) { true }
-        let(:params) { super().merge({ inline: inline, theme: theme }) }
+      context 'with formater' do
+        let(:params) { super().merge({ formatter: formatter }) }
 
-        context 'with github theme' do
-          let(:theme) { Rouge::Themes::Github.new }
-          let(:output) do
-            <<-EOS
+        context 'with inline' do
+          let(:formatter) { Rouge::Formatters::HTMLInline.new(theme) }
+
+          context 'with github theme' do
+            let(:theme) { Rouge::Themes::Github.new }
+            let(:output) do
+              <<-EOS
 before
 <pre><code class="language-ruby">  <span style="color: #000000;font-weight: bold">def</span> <span style="color: #990000;font-weight: bold">foo</span>
   <span style="color: #000000;font-weight: bold">end</span></code></pre>
 after
-            EOS
+              EOS
+            end
+
+            it { is_expected.to eql output }
           end
 
-          it { is_expected.to eql output }
-        end
-
-        context 'with colorful theme' do
-          let(:theme) { Rouge::Themes::Colorful.new }
-          let(:output) do
-            <<-EOS
+          context 'with colorful theme' do
+            let(:theme) { Rouge::Themes::Colorful.new }
+            let(:output) do
+              <<-EOS
 before
 <pre><code class="language-ruby">  <span style="color: #080;font-weight: bold">def</span> <span style="color: #06B;font-weight: bold">foo</span>
   <span style="color: #080;font-weight: bold">end</span></code></pre>
 after
-            EOS
+              EOS
+            end
+
+            it { is_expected.to eql output }
           end
-
-          it { is_expected.to eql output }
         end
-      end
 
-      context 'with linewise' do
-        let(:linewise) { true }
-        let(:formatter) { Rouge::Formatters::HTML.new }
-        let(:params) { super().merge({ linewise: linewise, formatter: formatter }) }
-        let(:output) do
-          <<-EOS
+        context 'with linewise' do
+          let(:formatter) { Rouge::Formatters::HTMLLinewise.new(Rouge::Formatters::HTML.new) }
+          let(:output) do
+            <<-EOS
 before
 <pre><code class="language-ruby"><div class="line-1">  <span class="k">def</span> <span class="nf">foo</span>
 </div>
 <div class="line-2">  <span class="k">end</span>
 </div></code></pre>
 after
-          EOS
+            EOS
+          end
+
+          it { is_expected.to eql output }
         end
 
-        it { is_expected.to eql output }
-      end
+        context 'with pygments' do
+          let(:wrap) { true }
+          let(:css_class) { 'codehilite' }
+          let(:formatter) { Rouge::Formatters::HTMLPygments.new(Rouge::Formatters::HTML.new) }
 
-      context 'with pygments' do
-        let(:wrap) { true }
-        let(:pygments) { true }
-        let(:formatter) { Rouge::Formatters::HTML.new }
-        let(:params) { super().merge({ pygments: pygments, formatter: formatter, css_class: css_class }) }
+          it { is_expected.to eql output }
+        end
 
-        it { is_expected.to eql output }
-      end
-
-      context 'with table' do
-        let(:table) { true }
-        let(:formatter) { Rouge::Formatters::HTML.new }
-        let(:params) { super().merge({ table: table, formatter: formatter }) }
-        let(:output) do
-          <<-EOS
+        context 'with table' do
+          let(:formatter) { Rouge::Formatters::HTMLTable.new(Rouge::Formatters::HTML.new) }
+          let(:output) do
+            <<-EOS
 before
 <pre><code class="language-ruby"><table class="rouge-table"><tbody><tr>
 <td class="rouge-gutter gl"><pre class="lineno">1
@@ -189,10 +184,11 @@ before
   <span class="k">end</span></pre></td>
 </tr></tbody></table></code></pre>
 after
-          EOS
-        end
+            EOS
+          end
 
-        it { is_expected.to eql output }
+          it { is_expected.to eql output }
+        end
       end
     end
   end
