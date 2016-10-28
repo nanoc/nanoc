@@ -206,7 +206,8 @@ module Nanoc::Int
       end
 
       # Find item reps to compile and compile them
-      selector = Nanoc::Int::ItemRepSelector.new(@reps)
+      outdated_reps = @reps.select { |r| outdatedness_checker.outdated?(r) }
+      selector = Nanoc::Int::ItemRepSelector.new(outdated_reps)
       selector.each do |rep|
         @stack = []
         compile_rep(rep)

@@ -1,4 +1,4 @@
-describe Nanoc::ItemRepCollectionView do
+shared_examples 'an item rep collection view' do
   let(:view) { described_class.new(wrapped, view_context) }
 
   let(:view_context) { double(:view_context) }
@@ -57,7 +57,7 @@ describe Nanoc::ItemRepCollectionView do
     it 'returns an array of item rep views' do
       expect(subject.class).to eq(Array)
       expect(subject.size).to eq(3)
-      expect(subject[0].class).to eql(Nanoc::ItemRepView)
+      expect(subject[0].class).to eql(expected_view_class)
       expect(subject[0].name).to eql(:foo)
     end
 
@@ -79,7 +79,7 @@ describe Nanoc::ItemRepCollectionView do
       let(:name) { :foo }
 
       it 'returns a view' do
-        expect(subject.class).to eq(Nanoc::ItemRepView)
+        expect(subject.class).to eq(expected_view_class)
         expect(subject.name).to eq(:foo)
       end
 
@@ -120,7 +120,7 @@ describe Nanoc::ItemRepCollectionView do
       let(:name) { :foo }
 
       it 'returns a view' do
-        expect(subject.class).to eq(Nanoc::ItemRepView)
+        expect(subject.class).to eq(expected_view_class)
         expect(subject.name).to eq(:foo)
       end
 
@@ -133,6 +133,11 @@ describe Nanoc::ItemRepCollectionView do
   describe '#inspect' do
     subject { view.inspect }
 
-    it { is_expected.to eql('<Nanoc::ItemRepCollectionView>') }
+    it { is_expected.to eql('<' + described_class.name + '>') }
   end
+end
+
+describe Nanoc::ItemRepCollectionView do
+  it_behaves_like 'an item rep collection view'
+  let(:expected_view_class) { Nanoc::ItemRepView }
 end

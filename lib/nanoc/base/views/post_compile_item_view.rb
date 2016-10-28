@@ -1,5 +1,9 @@
 module Nanoc
   class PostCompileItemView < Nanoc::ItemWithRepsView
+    def reps
+      Nanoc::PostCompileItemRepCollectionView.new(@context.reps[unwrap], @context)
+    end
+
     # @deprecated Use {#modified_reps} instead
     def modified
       modified_reps
