@@ -17,7 +17,7 @@ module Nanoc::Extra
     def initialize(site, dry_run: false, exclude: [])
       @site    = site
       @dry_run = dry_run
-      @exclude = exclude
+      @exclude = Set.new(exclude)
     end
 
     # Prunes all output files not managed by Nanoc.
@@ -37,23 +37,38 @@ module Nanoc::Extra
       present_files = []
       present_dirs = []
       Find.find(site.config[:output_dir] + '/') do |f|
-        present_files << f if File.file?(f)
-        present_dirs << f if File.directory?(f)
+        basename = File.basename(f)
+
+        case File.ftype(f)
+        when 'file'.freeze
+          unless exclude?(basename)
+            present_files << f
+          end
+        when 'directory'.freeze
+          if exclude?(basename)
+            Find.prune
+          else
+            present_dirs << f
+          end
+        end
       end
 
       # Remove stray files
       stray_files = (present_files - compiled_files)
       stray_files.each do |f|
-        next if filename_excluded?(f)
-        delete_file(f)
+        delete_file(f) unless exclude?(f)
       end
 
       # Remove empty directories
       present_dirs.reverse_each do |dir|
         next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
-        next if filename_excluded?(dir)
+        next if exclude?(dir)
         delete_dir(dir)
       end
+    end
+
+    def exclude?(component)
+      @exclude.include?(component)
     end
 
     # @param [String] filename The filename to check
