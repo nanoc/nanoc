@@ -11,7 +11,10 @@ module Nanoc::CLI::Commands
       load_site
 
       @c = Nanoc::CLI::ANSIStringColorizer
-      @reps = site.compiler.reps
+
+      compiler = site.compiler
+      compiler.build_reps
+      @reps = compiler.reps
 
       action_provider = site.compiler.action_provider
       unless action_provider.respond_to?(:rules_collection)

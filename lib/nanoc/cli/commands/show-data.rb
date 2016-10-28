@@ -20,6 +20,9 @@ module Nanoc::CLI::Commands
       compiler.load_stores
       dependency_store = compiler.dependency_store
 
+      # Build reps
+      compiler.build_reps
+
       # Print data
       print_item_dependencies(items, dependency_store)
       print_item_rep_paths(items)
