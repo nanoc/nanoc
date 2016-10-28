@@ -24,3 +24,5 @@ require_relative 'views/mutable_layout_collection_view'
 
 require_relative 'views/post_compile_item_view'
 require_relative 'views/post_compile_item_collection_view'
+require_relative 'views/post_compile_item_rep_view'
+require_relative 'views/post_compile_item_rep_collection_view'

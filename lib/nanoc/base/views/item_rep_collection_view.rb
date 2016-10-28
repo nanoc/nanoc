@@ -19,19 +19,24 @@ module Nanoc
       @item_reps
     end
 
+    # @api private
+    def view_class
+      Nanoc::ItemRepView
+    end
+
     def to_ary
-      @item_reps.map { |ir| Nanoc::ItemRepView.new(ir, @context) }
+      @item_reps.map { |ir| view_class.new(ir, @context) }
     end
 
     # Calls the given block once for each item rep, passing that item rep as a parameter.
     #
-    # @yieldparam [Nanoc::ItemRepView] item rep
+    # @yieldparam [Object] item rep view
     #
     # @yieldreturn [void]
     #
     # @return [self]
     def each
-      @item_reps.each { |ir| yield Nanoc::ItemRepView.new(ir, @context) }
+      @item_reps.each { |ir| yield view_class.new(ir, @context) }
       self
     end
 
@@ -51,7 +56,7 @@ module Nanoc
       case rep_name
       when Symbol
         res = @item_reps.find { |ir| ir.name == rep_name }
-        res && Nanoc::ItemRepView.new(res, @context)
+        res && view_class.new(res, @context)
       when Fixnum
         raise ArgumentError, "expected ItemRepCollectionView#[] to be called with a symbol (you likely want `.reps[:default]` rather than `.reps[#{rep_name}]`)"
       else
@@ -70,7 +75,7 @@ module Nanoc
     def fetch(rep_name)
       res = @item_reps.find { |ir| ir.name == rep_name }
       if res
-        Nanoc::ItemRepView.new(res, @context)
+        view_class.new(res, @context)
       else
         raise NoSuchItemRepError.new(rep_name)
       end
