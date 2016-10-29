@@ -1,5 +1,18 @@
 # Nanoc news
 
+## 4.3.7 (2016-10-29)
+
+Fixes:
+
+* Fixed issue with `show-data` and `show-rules` commands not showing all data (#970) [Chris Chapman]
+
+Enhancements:
+
+* Improved speed of `compile` command (#968)
+* Improved speed of `prune` command (#969)
+* Made kramdown warnings include affected item rep (#967) [Gregory Pakosz]
+* Made kramdown warnings configurable (#967) [Gregory Pakosz]
+
 ## 4.3.6 (2016-10-23)
 
 Fixes:
