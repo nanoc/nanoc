@@ -5,12 +5,6 @@ require 'nanoc'
 require 'nanoc/cli'
 require 'nanoc/spec'
 
-# FIXME: This should not be necessary (breaks SimpleCov)
-module Nanoc::CLI
-  def self.setup_cleaning_streams
-  end
-end
-
 Nanoc::CLI.setup
 
 RSpec.configure do |c|
