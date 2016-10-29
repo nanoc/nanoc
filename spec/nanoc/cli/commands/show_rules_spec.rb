@@ -97,6 +97,10 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true do
         .gsub(/^ {8}/, '')
     end
 
+    before do
+      expect(compiler).to receive(:build_reps).once
+    end
+
     it 'writes item and layout rules to stdout' do
       expect { subject }.to output(expected_out).to_stdout
     end
