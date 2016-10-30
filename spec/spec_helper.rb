@@ -59,6 +59,12 @@ RSpec.configure do |c|
   end
 
   c.include(Nanoc::Spec::HelperHelper, helper: true)
+
+  # Set focus if any
+  if ENV.fetch('FOCUS', false)
+    $stdout.puts "Focusing spec on '#{ENV['FOCUS']}'"
+    c.filter_run_including ENV['FOCUS'].to_sym => true
+  end
 end
 
 RSpec::Matchers.define :raise_frozen_error do |_expected|

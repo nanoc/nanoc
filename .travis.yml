@@ -3,9 +3,6 @@ rvm:
   - 2.2.5
   - 2.3.1
   - ruby-head
-gemfile:
-  - gemfiles/rouge_1.gemfile
-  - gemfiles/rouge_2.gemfile
 branches:
   only:
     - "master"
@@ -24,6 +21,9 @@ matrix:
     - rvm: jruby-9.0.5.0
       env: DISABLE_NOKOGIRI=0
     - rvm: ruby-head
+script:
+  - bundle exec rake
+  - bundle exec appraisal install && FOCUS=rouge bundle exec appraisal rake spec
 cache: bundler
 sudo: false
 git:
