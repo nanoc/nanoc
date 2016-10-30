@@ -88,7 +88,7 @@ sleep 3 # Give GitHub some time to detect the new tag
 is_prerelease = Nanoc::VERSION =~ /a|b|rc/ || Nanoc::VERSION =~ /^0/
 client.create_release(
   'nanoc/nanoc', Nanoc::VERSION,
-  prerelease: !!is_prerelease,
+  prerelease: !is_prerelease.nil?,
   body: release_notes
 )
 puts
