@@ -217,7 +217,7 @@ module Nanoc::CLI::Commands
         # Calculate stats
         count = samples.size
         min   = samples.min
-        tot   = samples.reduce(0) { |a, e| a + e }
+        tot   = samples.reduce(0) { |acc, elem| acc + elem }
         avg   = tot / count
         max   = samples.max
 

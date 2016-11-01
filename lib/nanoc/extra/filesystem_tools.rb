@@ -92,19 +92,24 @@ module Nanoc::Extra
     #
     # @raise [GenericTrivial] when pattern can not be handled
     def all_files_and_dirs_in(dir_name, extra_files)
-      patterns = ["#{dir_name}/**/*"]
-      case extra_files
-      when nil
-      when String
-        patterns << "#{dir_name}/#{extra_files}"
-      when Array
-        patterns.concat(extra_files.map { |extra_file| "#{dir_name}/#{extra_file}" })
-      else
-        raise(
-          Nanoc::Int::Errors::GenericTrivial,
-          "Do not know how to handle extra_files: #{extra_files.inspect}",
-        )
-      end
+      base_patterns = ["#{dir_name}/**/*"]
+
+      extra_patterns =
+        case extra_files
+        when nil
+          []
+        when String
+          ["#{dir_name}/#{extra_files}"]
+        when Array
+          extra_files.map { |extra_file| "#{dir_name}/#{extra_file}" }
+        else
+          raise(
+            Nanoc::Int::Errors::GenericTrivial,
+            "Do not know how to handle extra_files: #{extra_files.inspect}",
+          )
+        end
+
+      patterns = base_patterns + extra_patterns
       Dir.glob(patterns)
     end
     module_function :all_files_and_dirs_in
