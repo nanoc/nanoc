@@ -22,4 +22,10 @@ class Nanoc::Int::ContextTest < Nanoc::TestCase
     # Run
     assert_examples_correct 'Nanoc::Int::Context#initialize'
   end
+
+  def test_include
+    context = Nanoc::Int::Context.new({})
+    eval('include Nanoc::Helpers::HTMLEscape', context.get_binding)
+    assert_equal('&lt;&gt;', eval('h("<>")', context.get_binding))
+  end
 end
