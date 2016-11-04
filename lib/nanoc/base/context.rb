@@ -40,5 +40,10 @@ module Nanoc::Int
     def get_binding
       binding
     end
+
+    def include(mod)
+      metaclass = class << self; self; end
+      metaclass.instance_eval { include(mod) }
+    end
   end
 end
