@@ -10,7 +10,7 @@ describe Nanoc::ItemWithRepsView do
   let(:dependency_store) { Nanoc::Int::DependencyStore.new([]) }
   let(:compiler) { double(:compiler) }
 
-  let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md')}
+  let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md') }
 
   before do
     dependency_tracker.enter(base_item)

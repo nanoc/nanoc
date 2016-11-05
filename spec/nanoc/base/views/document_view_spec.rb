@@ -12,7 +12,7 @@ shared_examples 'a document view' do
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new([]) }
-  let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md')}
+  let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md') }
 
   before do
     dependency_tracker.enter(base_item)
