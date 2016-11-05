@@ -1,4 +1,4 @@
-module Nanoc::Extra::Checking
+module Nanoc::Checking
   # Runner is reponsible for running issue checks.
   #
   # @api private
@@ -67,7 +67,7 @@ module Nanoc::Extra::Checking
       unless @dsl_loaded
         @dsl =
           if dsl_present?
-            Nanoc::Extra::Checking::DSL.from_file(checks_filename)
+            Nanoc::Checking::DSL.from_file(checks_filename)
           else
             nil
           end
@@ -93,12 +93,12 @@ module Nanoc::Extra::Checking
     end
 
     def all_check_classes
-      Nanoc::Extra::Checking::Check.all.map(&:last).uniq
+      Nanoc::Checking::Check.all.map(&:last).uniq
     end
 
     def check_classes_named(n)
       n.map do |a|
-        klass = Nanoc::Extra::Checking::Check.named(a)
+        klass = Nanoc::Checking::Check.named(a)
         raise Nanoc::Int::Errors::GenericTrivial, "Unknown check: #{a}" if klass.nil?
         klass
       end

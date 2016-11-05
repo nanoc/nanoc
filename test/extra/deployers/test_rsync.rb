@@ -1,7 +1,7 @@
-class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
+class Nanoc::Deploying::Deployers::RsyncTest < Nanoc::TestCase
   def test_run_without_dst
     # Create deployer
-    rsync = Nanoc::Extra::Deployers::Rsync.new(
+    rsync = Nanoc::Deploying::Deployers::Rsync.new(
       'output/',
       {},
     )
@@ -22,7 +22,7 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
 
   def test_run_with_erroneous_dst
     # Create deployer
-    rsync = Nanoc::Extra::Deployers::Rsync.new(
+    rsync = Nanoc::Deploying::Deployers::Rsync.new(
       'output/',
       { dst: 'asdf/' },
     )
@@ -43,7 +43,7 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
 
   def test_run_everything_okay
     # Create deployer
-    rsync = Nanoc::Extra::Deployers::Rsync.new(
+    rsync = Nanoc::Deploying::Deployers::Rsync.new(
       'output',
       { dst: 'asdf' },
     )
@@ -57,7 +57,7 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
     rsync.run
 
     # Check args
-    opts = Nanoc::Extra::Deployers::Rsync::DEFAULT_OPTIONS
+    opts = Nanoc::Deploying::Deployers::Rsync::DEFAULT_OPTIONS
     assert_equal(
       ['rsync', opts, 'output/', 'asdf'].flatten,
       rsync.instance_eval { @shell_cms_args },
@@ -66,7 +66,7 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
 
   def test_run_everything_okay_dry
     # Create deployer
-    rsync = Nanoc::Extra::Deployers::Rsync.new(
+    rsync = Nanoc::Deploying::Deployers::Rsync.new(
       'output',
       { dst: 'asdf' },
       dry_run: true,
@@ -81,7 +81,7 @@ class Nanoc::Extra::Deployers::RsyncTest < Nanoc::TestCase
     rsync.run
 
     # Check args
-    opts = Nanoc::Extra::Deployers::Rsync::DEFAULT_OPTIONS
+    opts = Nanoc::Deploying::Deployers::Rsync::DEFAULT_OPTIONS
     assert_equal(
       ['echo', 'rsync', opts, 'output/', 'asdf'].flatten,
       rsync.instance_eval { @shell_cms_args },

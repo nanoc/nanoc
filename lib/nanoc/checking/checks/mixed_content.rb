@@ -1,9 +1,9 @@
-module Nanoc::Extra::Checking::Checks
+module Nanoc::Checking::Checks
   # A check that verifies HTML files do not reference external resources with
   # URLs that would trigger "mixed content" warnings.
   #
   # @api private
-  class MixedContent < ::Nanoc::Extra::Checking::Check
+  class MixedContent < ::Nanoc::Checking::Check
     PROTOCOL_PATTERN = /^(\w+):\/\//
 
     def run

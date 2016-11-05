@@ -1,4 +1,4 @@
-module Nanoc::Extra::Deployers
+module Nanoc::Deploying::Deployers
   # A deployer that deploys a site using [fog](https://github.com/geemus/fog).
   #
   # @example A deployment configuration with public and staging configurations
@@ -20,7 +20,7 @@ module Nanoc::Extra::Deployers
   #       bucket:     nanoc-site-staging
   #
   # @api private
-  class Fog < ::Nanoc::Extra::Deployer
+  class Fog < ::Nanoc::Deploying::Deployer
     class FogWrapper
       def initialize(directory, is_dry_run)
         @directory = directory
@@ -75,7 +75,7 @@ module Nanoc::Extra::Deployers
       end
     end
 
-    # @see Nanoc::Extra::Deployer#run
+    # @see Nanoc::Deploying::Deployer#run
     def run
       require 'fog'
 

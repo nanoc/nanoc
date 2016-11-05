@@ -1,4 +1,4 @@
-module Nanoc::Extra
+module Nanoc::Deploying
   # Represents a deployer, an object that allows uploading the compiled site
   # to a specific (remote) location.
   #
@@ -37,7 +37,7 @@ module Nanoc::Extra
     #
     # @abstract
     def run
-      raise NotImplementedError.new('Nanoc::Extra::Deployer subclasses must implement #run')
+      raise NotImplementedError.new('Nanoc::Deploying::Deployer subclasses must implement #run')
     end
   end
 end

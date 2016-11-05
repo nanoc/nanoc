@@ -1,6 +1,6 @@
-module ::Nanoc::Extra::Checking::Checks
+module ::Nanoc::Checking::Checks
   # @api private
-  class CSS < ::Nanoc::Extra::Checking::Checks::W3CValidator
+  class CSS < ::Nanoc::Checking::Checks::W3CValidator
     identifier :css
 
     def extension

@@ -1,4 +1,4 @@
-module Nanoc::Extra::Checking
+module Nanoc::Checking
   # @api private
   class Issue
     attr_reader :description

@@ -1,6 +1,6 @@
-module ::Nanoc::Extra::Checking::Checks
+module ::Nanoc::Checking::Checks
   # @api private
-  class W3CValidator < ::Nanoc::Extra::Checking::Check
+  class W3CValidator < ::Nanoc::Checking::Check
     def run
       require 'w3c_validators'
 

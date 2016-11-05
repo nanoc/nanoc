@@ -1,6 +1,6 @@
-describe Nanoc::Extra::Deployers::Fog, stdio: true do
+describe Nanoc::Deploying::Deployers::Fog, stdio: true do
   let(:deployer) do
-    Nanoc::Extra::Deployers::Fog.new(
+    Nanoc::Deploying::Deployers::Fog.new(
       'output/',
       config,
       dry_run: is_dry_run,

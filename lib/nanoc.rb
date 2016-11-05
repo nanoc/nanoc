@@ -41,6 +41,8 @@ require 'English'
 # Load Nanoc
 require 'nanoc/version'
 require 'nanoc/base'
+require 'nanoc/checking'
+require 'nanoc/deploying'
 require 'nanoc/extra'
 require 'nanoc/data_sources'
 require 'nanoc/filters'
