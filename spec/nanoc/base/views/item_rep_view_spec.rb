@@ -3,8 +3,15 @@ describe Nanoc::ItemRepView do
 
   let(:reps) { double(:reps) }
   let(:items) { double(:items) }
-  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
   let(:compiler) { double(:compiler) }
+
+  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+  let(:dependency_store) { Nanoc::Int::DependencyStore.new([]) }
+  let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md')}
+
+  before do
+    dependency_tracker.enter(base_item)
+  end
 
   describe '#frozen?' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
@@ -139,9 +146,8 @@ describe Nanoc::ItemRepView do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
     end
 
-    before do
-      expect(dependency_tracker).to receive(:enter).with(item)
-      expect(dependency_tracker).to receive(:exit).with(item)
+    it 'creates a dependency' do
+      expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
     end
 
     it { should eq('Hallo') }
@@ -164,9 +170,8 @@ describe Nanoc::ItemRepView do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
     end
 
-    before do
-      expect(dependency_tracker).to receive(:enter).with(item)
-      expect(dependency_tracker).to receive(:exit).with(item)
+    it 'creates a dependency' do
+      expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
     end
 
     it { should eq('/about/') }
@@ -189,9 +194,8 @@ describe Nanoc::ItemRepView do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
     end
 
-    before do
-      expect(dependency_tracker).to receive(:enter).with(item)
-      expect(dependency_tracker).to receive(:exit).with(item)
+    it 'creates a dependency' do
+      expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
     end
 
     it { should eq('output/about/index.html') }

@@ -6,8 +6,15 @@ describe Nanoc::ItemWithRepsView do
   let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compiler: compiler) }
   let(:reps) { [] }
   let(:items) { [] }
-  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
+  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+  let(:dependency_store) { Nanoc::Int::DependencyStore.new([]) }
   let(:compiler) { double(:compiler) }
+
+  let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md')}
+
+  before do
+    dependency_tracker.enter(base_item)
+  end
 
   describe '#raw_content' do
     let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
@@ -217,26 +224,28 @@ describe Nanoc::ItemWithRepsView do
     context 'requesting implicit default rep' do
       let(:params) { {} }
 
-      before do
-        expect(dependency_tracker).to receive(:enter).with(item)
-        expect(dependency_tracker).to receive(:exit).with(item)
-      end
-
       it { is_expected.to eq('Pre Hallo') }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      end
 
       context 'requesting explicit snapshot' do
         let(:params) { { snapshot: :specific } }
 
         it { is_expected.to eq('Specific Hallo') }
+
+        it 'creates a dependency' do
+          expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+        end
       end
     end
 
     context 'requesting explicit default rep' do
       let(:params) { { rep: :default } }
 
-      before do
-        expect(dependency_tracker).to receive(:enter).with(item)
-        expect(dependency_tracker).to receive(:exit).with(item)
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
       end
 
       it { is_expected.to eq('Pre Hallo') }
@@ -284,9 +293,8 @@ describe Nanoc::ItemWithRepsView do
     context 'requesting implicit default rep' do
       let(:params) { {} }
 
-      before do
-        expect(dependency_tracker).to receive(:enter).with(item)
-        expect(dependency_tracker).to receive(:exit).with(item)
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
       end
 
       it { is_expected.to eq('/about/') }
@@ -301,9 +309,8 @@ describe Nanoc::ItemWithRepsView do
     context 'requesting explicit default rep' do
       let(:params) { { rep: :default } }
 
-      before do
-        expect(dependency_tracker).to receive(:enter).with(item)
-        expect(dependency_tracker).to receive(:exit).with(item)
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
       end
 
       it { is_expected.to eq('/about/') }

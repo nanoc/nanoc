@@ -10,7 +10,13 @@ shared_examples 'a document view' do
     )
   end
 
-  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
+  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+  let(:dependency_store) { Nanoc::Int::DependencyStore.new([]) }
+  let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md')}
+
+  before do
+    dependency_tracker.enter(base_item)
+  end
 
   describe '#frozen?' do
     let(:document) { entity_class.new('content', {}, '/asdf/') }
@@ -96,19 +102,24 @@ shared_examples 'a document view' do
 
     subject { view[key] }
 
-    before do
-      expect(dependency_tracker).to receive(:enter).with(document)
-      expect(dependency_tracker).to receive(:exit).with(document)
-    end
-
     context 'with existant key' do
       let(:key) { :animal }
+
       it { is_expected.to eql('donkey') }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
+      end
     end
 
     context 'with non-existant key' do
       let(:key) { :weapon }
+
       it { is_expected.to eql(nil) }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
+      end
     end
   end
 
@@ -119,9 +130,8 @@ shared_examples 'a document view' do
 
     subject { view.attributes }
 
-    before do
-      expect(dependency_tracker).to receive(:enter).with(item)
-      expect(dependency_tracker).to receive(:exit).with(item)
+    it 'creates a dependency' do
+      expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
     end
 
     it 'returns attributes' do
@@ -134,17 +144,16 @@ shared_examples 'a document view' do
     let(:item) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
     let(:view) { described_class.new(item, view_context) }
 
-    before do
-      expect(dependency_tracker).to receive(:enter).with(item)
-      expect(dependency_tracker).to receive(:exit).with(item)
-    end
-
     context 'with existant key' do
       let(:key) { :animal }
 
       subject { view.fetch(key) }
 
       it { should eql?('donkey') }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      end
     end
 
     context 'with non-existant key' do
@@ -152,12 +161,22 @@ shared_examples 'a document view' do
 
       context 'with fallback' do
         subject { view.fetch(key, 'nothing sorry') }
+
         it { should eql?('nothing sorry') }
+
+        it 'creates a dependency' do
+          expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+        end
       end
 
       context 'with block' do
         subject { view.fetch(key) { 'nothing sorry' } }
+
         it { should eql?('nothing sorry') }
+
+        it 'creates a dependency' do
+          expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+        end
       end
 
       context 'with no fallback and no block' do
@@ -175,19 +194,24 @@ shared_examples 'a document view' do
 
     subject { view.key?(key) }
 
-    before do
-      expect(dependency_tracker).to receive(:enter).with(document)
-      expect(dependency_tracker).to receive(:exit).with(document)
-    end
-
     context 'with existant key' do
       let(:key) { :animal }
+
       it { should eql?(true) }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
+      end
     end
 
     context 'with non-existant key' do
       let(:key) { :weapon }
+
       it { should eql?(false) }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
+      end
     end
   end
 
