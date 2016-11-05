@@ -50,11 +50,11 @@ describe Nanoc::Int::ItemRepSelector do
     context 'linear dependencies' do
       let(:dependencies) do
         {
-          :a => [:b],
-          :b => [:c],
-          :c => [:d],
-          :d => [:e],
-          :e => [],
+          a: [:b],
+          b: [:c],
+          c: [:d],
+          d: [:e],
+          e: [],
         }
       end
 
@@ -78,7 +78,7 @@ describe Nanoc::Int::ItemRepSelector do
     context 'star dependencies' do
       let(:dependencies) do
         {
-          :a => [:b, :c, :d, :e],
+          a: [:b, :c, :d, :e],
         }
       end
 
@@ -93,7 +93,7 @@ describe Nanoc::Int::ItemRepSelector do
 
       let(:dependencies) do
         {
-          :a => [:b, :c, :d, :e],
+          a: [:b, :c, :d, :e],
         }
       end
 
