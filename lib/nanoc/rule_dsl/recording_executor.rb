@@ -1,6 +1,8 @@
 module Nanoc
   module RuleDSL
     class RecordingExecutor
+      include Nanoc::Int::ContractsSupport
+
       class PathWithoutInitialSlashError < ::Nanoc::Error
         def initialize(rep, basic_path)
           super("The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash.")
@@ -33,9 +35,13 @@ module Nanoc
         @rule_memory.add_layout(layout_identifier, extra_filter_args)
       end
 
+      Pathlike = C::Maybe[C::Or[String, Nanoc::Identifier]]
+      contract C::Any, Symbol, C::KeywordArgs[path: C::Optional[Pathlike], final: C::Optional[C::Bool]] => nil
       def snapshot(rep, snapshot_name, final: true, path: nil)
-        actual_path = final ? (path || basic_path_from_rules_for(rep, snapshot_name)) : nil
+        pathlike = final ? (path || basic_path_from_rules_for(rep, snapshot_name)) : nil
+        actual_path = pathlike && pathlike.to_s
         @rule_memory.add_snapshot(snapshot_name, final, actual_path)
+        nil
       end
 
       def basic_path_from_rules_for(rep, snapshot_name)

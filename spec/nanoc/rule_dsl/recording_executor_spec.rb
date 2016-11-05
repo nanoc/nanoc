@@ -109,8 +109,21 @@ describe Nanoc::RuleDSL::RecordingExecutor do
             end
           end
 
-          context 'explicit path given' do
+          context 'explicit path given as string' do
             let(:path) { '/routed-foo.html' }
+
+            it 'records' do
+              subject
+              expect(executor.rule_memory.size).to eql(1)
+              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+              expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
+              expect(executor.rule_memory[0].path).to eql('/routed-foo.html')
+              expect(executor.rule_memory[0]).to be_final
+            end
+          end
+
+          context 'explicit path given as identifier' do
+            let(:path) { Nanoc::Identifier.from('/routed-foo.html') }
 
             it 'records' do
               subject
