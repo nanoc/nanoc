@@ -8,5 +8,3 @@ module Nanoc::Extra
 end
 
 require 'nanoc/extra/core_ext'
-require 'nanoc/extra/deployer'
-require 'nanoc/extra/deployers'

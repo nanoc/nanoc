@@ -1,7 +1,7 @@
-class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
+class Nanoc::Deploying::Deployers::FogTest < Nanoc::TestCase
   def test_read_etags_with_local_provider
     if_have 'fog' do
-      fog = Nanoc::Extra::Deployers::Fog.new(
+      fog = Nanoc::Deploying::Deployers::Fog.new(
         'output/', provider: 'local'
       )
 
@@ -16,7 +16,7 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
 
   def test_read_etags_with_aws_provider
     if_have 'fog' do
-      fog = Nanoc::Extra::Deployers::Fog.new(
+      fog = Nanoc::Deploying::Deployers::Fog.new(
         'output/', provider: 'aws'
       )
 
@@ -36,7 +36,7 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
 
   def test_calc_local_etag_with_local_provider
     if_have 'fog' do
-      fog = Nanoc::Extra::Deployers::Fog.new(
+      fog = Nanoc::Deploying::Deployers::Fog.new(
         'output/', provider: 'local'
       )
 
@@ -49,7 +49,7 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
 
   def test_calc_local_etag_with_aws_provider
     if_have 'fog' do
-      fog = Nanoc::Extra::Deployers::Fog.new(
+      fog = Nanoc::Deploying::Deployers::Fog.new(
         'output/', provider: 'aws'
       )
 
@@ -65,7 +65,7 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
 
   def test_needs_upload_with_missing_remote_etag
     if_have 'fog' do
-      fog = Nanoc::Extra::Deployers::Fog.new(
+      fog = Nanoc::Deploying::Deployers::Fog.new(
         'output/', provider: 'aws'
       )
 
@@ -81,7 +81,7 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
 
   def test_needs_upload_with_different_etags
     if_have 'fog' do
-      fog = Nanoc::Extra::Deployers::Fog.new(
+      fog = Nanoc::Deploying::Deployers::Fog.new(
         'output/', provider: 'aws'
       )
 
@@ -97,7 +97,7 @@ class Nanoc::Extra::Deployers::FogTest < Nanoc::TestCase
 
   def test_needs_upload_with_identical_etags
     if_have 'fog' do
-      fog = Nanoc::Extra::Deployers::Fog.new(
+      fog = Nanoc::Deploying::Deployers::Fog.new(
         'output/', provider: 'aws'
       )
 

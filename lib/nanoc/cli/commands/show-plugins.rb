@@ -72,13 +72,13 @@ module Nanoc::CLI::Commands
     PLUGIN_CLASS_ORDER = [
       Nanoc::Filter,
       Nanoc::DataSource,
-      Nanoc::Extra::Deployer,
+      Nanoc::Deploying::Deployer,
     ].freeze
 
     PLUGIN_CLASSES = {
       Nanoc::Filter          => 'Filters',
       Nanoc::DataSource      => 'Data Sources',
-      Nanoc::Extra::Deployer => 'Deployers',
+      Nanoc::Deploying::Deployer => 'Deployers',
     }.freeze
 
     def name_for_plugin_class(klass)

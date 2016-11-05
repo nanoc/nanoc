@@ -1,4 +1,4 @@
-module Nanoc::Extra::Deployers
+module Nanoc::Deploying::Deployers
   # A deployer that deploys a site using rsync.
   #
   # The configuration has should include a `:dst` value, a string containing
@@ -18,7 +18,7 @@ module Nanoc::Extra::Deployers
   #       options: [ "-glpPrtvz" ]
   #
   # @api private
-  class Rsync < ::Nanoc::Extra::Deployer
+  class Rsync < ::Nanoc::Deploying::Deployer
     # Default rsync options
     DEFAULT_OPTIONS = [
       '--group',
@@ -35,7 +35,7 @@ module Nanoc::Extra::Deployers
       '--exclude=".git"',
     ].freeze
 
-    # @see Nanoc::Extra::Deployer#run
+    # @see Nanoc::Deploying::Deployer#run
     def run
       # Get params
       src = source_path + '/'
