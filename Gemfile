@@ -13,7 +13,7 @@ group :devel do
   gem 'mocha'
   gem 'pry'
   gem 'rake'
-  gem 'rdoc'
+  gem 'rdoc', '~> 5.0'
   gem 'rspec'
   gem 'rspec-mocks'
   gem 'rubocop'

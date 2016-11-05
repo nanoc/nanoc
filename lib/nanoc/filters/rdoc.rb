@@ -3,11 +3,6 @@ module Nanoc::Filters
   class RDoc < Nanoc::Filter
     requires 'rdoc'
 
-    def self.setup
-      gem 'rdoc', '~> 4.0'
-      super
-    end
-
     # Runs the content through [RDoc::Markup](http://docs.seattlerb.org/rdoc/RDoc/Markup.html).
     # This method takes no options.
     #
