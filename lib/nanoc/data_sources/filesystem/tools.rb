@@ -1,8 +1,8 @@
-module Nanoc::Extra
+class Nanoc::DataSources::Filesystem < Nanoc::DataSource
   # Contains useful functions for managing the filesystem.
   #
   # @api private
-  module FilesystemTools
+  module Tools
     # Error that is raised when too many symlink indirections are encountered.
     class MaxSymlinkDepthExceededError < ::Nanoc::Int::Errors::GenericTrivial
       # @return [String] The last filename that was attempted to be

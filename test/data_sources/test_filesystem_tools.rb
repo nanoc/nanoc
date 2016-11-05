@@ -1,4 +1,4 @@
-class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
+class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
   def setup
     super
     skip_unless_symlinks_supported
@@ -30,7 +30,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
       'dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md',
       'dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md',
     ]
-    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir0', nil).sort
+    actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir0', nil).sort
     assert_equal expected_files, actual_files
   end
 
@@ -44,8 +44,8 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
       File.symlink("../dir#{i}", "dir#{i - 1}/sub")
     end
 
-    assert_raises Nanoc::Extra::FilesystemTools::MaxSymlinkDepthExceededError do
-      Nanoc::Extra::FilesystemTools.all_files_in('dir0', nil)
+    assert_raises Nanoc::DataSources::Filesystem::Tools::MaxSymlinkDepthExceededError do
+      Nanoc::DataSources::Filesystem::Tools.all_files_in('dir0', nil)
     end
   end
 
@@ -59,7 +59,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.symlink('../bar', 'foo/barlink')
 
     expected_files = ['foo/barlink/y.md', 'foo/x.md']
-    actual_files   = Nanoc::Extra::FilesystemTools.all_files_in('foo', nil).sort
+    actual_files   = Nanoc::DataSources::Filesystem::Tools.all_files_in('foo', nil).sort
     assert_equal expected_files, actual_files
   end
 
@@ -72,7 +72,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
 
     # Check
     expected_files = ['dir/bar-link', 'dir/foo']
-    actual_files   = Nanoc::Extra::FilesystemTools.all_files_in('dir', nil).sort
+    actual_files   = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', nil).sort
     assert_equal expected_files, actual_files
   end
 
@@ -83,7 +83,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.symlink('baz', 'qux')
 
     expected = File.expand_path('foo')
-    actual   = Nanoc::Extra::FilesystemTools.resolve_symlink('qux')
+    actual   = Nanoc::DataSources::Filesystem::Tools.resolve_symlink('qux')
     assert_equal expected, actual
   end
 
@@ -94,8 +94,8 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
       File.symlink("symlink-#{i - 1}", "symlink-#{i}")
     end
 
-    assert_raises Nanoc::Extra::FilesystemTools::MaxSymlinkDepthExceededError do
-      Nanoc::Extra::FilesystemTools.resolve_symlink('symlink-7')
+    assert_raises Nanoc::DataSources::Filesystem::Tools::MaxSymlinkDepthExceededError do
+      Nanoc::DataSources::Filesystem::Tools.resolve_symlink('symlink-7')
     end
   end
 
@@ -105,7 +105,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.open('dir/.DS_Store', 'w') { |io| io.write('o hai') }
     File.open('dir/.htaccess', 'w') { |io| io.write('o hai') }
 
-    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', nil).sort
+    actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', nil).sort
     assert_equal [], actual_files
   end
 
@@ -114,7 +114,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     FileUtils.mkdir_p('dir')
     File.open('dir/.other', 'w') { |io| io.write('o hai') }
 
-    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', '**/.other').sort
+    actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', '**/.other').sort
     assert_equal ['dir/.other'], actual_files
   end
 
@@ -124,7 +124,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     File.open('dir/.other', 'w') { |io| io.write('o hai') }
     File.open('dir/.DS_Store', 'w') { |io| io.write('o hai') }
 
-    actual_files = Nanoc::Extra::FilesystemTools.all_files_in('dir', ['**/.other', '**/.DS_Store']).sort
+    actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', ['**/.other', '**/.DS_Store']).sort
     assert_equal ['dir/.other', 'dir/.DS_Store'].sort, actual_files.sort
   end
 
@@ -136,7 +136,7 @@ class Nanoc::Extra::FilesystemToolsTest < Nanoc::TestCase
     pattern = { dotfiles: '**/.other' }
 
     assert_raises Nanoc::Int::Errors::GenericTrivial, "Do not know how to handle extra_files: #{pattern.inspect}" do
-      Nanoc::Extra::FilesystemTools.all_files_in('dir0', pattern)
+      Nanoc::DataSources::Filesystem::Tools.all_files_in('dir0', pattern)
     end
   end
 end
