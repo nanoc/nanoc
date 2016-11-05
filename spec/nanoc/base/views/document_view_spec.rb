@@ -124,14 +124,12 @@ shared_examples 'a document view' do
   end
 
   describe '#attributes' do
-    # FIXME: rename :item to :document (and remove duplicate :view)
-    let(:item) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(item, view_context) }
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
 
     subject { view.attributes }
 
     it 'creates a dependency' do
-      expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
     end
 
     it 'returns attributes' do
@@ -140,9 +138,7 @@ shared_examples 'a document view' do
   end
 
   describe '#fetch' do
-    # FIXME: rename :item to :document (and remove duplicate :view)
-    let(:item) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
-    let(:view) { described_class.new(item, view_context) }
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
 
     context 'with existant key' do
       let(:key) { :animal }
@@ -152,7 +148,7 @@ shared_examples 'a document view' do
       it { should eql?('donkey') }
 
       it 'creates a dependency' do
-        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
       end
     end
 
@@ -165,7 +161,7 @@ shared_examples 'a document view' do
         it { should eql?('nothing sorry') }
 
         it 'creates a dependency' do
-          expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+          expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
         end
       end
 
@@ -175,7 +171,7 @@ shared_examples 'a document view' do
         it { should eql?('nothing sorry') }
 
         it 'creates a dependency' do
-          expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+          expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
         end
       end
 
