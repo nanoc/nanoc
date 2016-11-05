@@ -1,12 +1,8 @@
-### Pull request creation checklist
-
-* Ensure that the change is covered by tests, and that all tests pass.
-
-* When creating a PR for a feature or enhancement, ensure that the change is in line with Nanoc’s philosophy. When in doubt, as on the [Nanoc discussion forum](https://groups.google.com/forum/#!forum/nanoc) or on the [Nanoc Gitter channel](https://gitter.im/nanoc/nanoc).
-
-### Summary
-
 (Summarise the change in a single line.)
+
+### Detailed description
+
+(Describe the change in detail.)
 
 ### To do
 
@@ -16,10 +12,6 @@
 * [ ] Documentation
 * [ ] Feature flags
 * [ ] …
-
-### Detailed description
-
-(Describe the change in detail.)
 
 ### Related issues
 
