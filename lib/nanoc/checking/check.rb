@@ -1,4 +1,4 @@
-module Nanoc::Extra::Checking
+module Nanoc::Checking
   # @api private
   class OutputDirNotFoundError < Nanoc::Int::Errors::Generic
     def initialize(directory_path)
@@ -15,7 +15,7 @@ module Nanoc::Extra::Checking
     def self.create(site)
       output_dir = site.config[:output_dir]
       unless File.exist?(output_dir)
-        raise Nanoc::Extra::Checking::OutputDirNotFoundError.new(output_dir)
+        raise Nanoc::Checking::OutputDirNotFoundError.new(output_dir)
       end
       output_filenames = Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
 
@@ -39,7 +39,7 @@ module Nanoc::Extra::Checking
     end
 
     def run
-      raise NotImplementedError.new('Nanoc::Extra::Checking::Check subclasses must implement #run')
+      raise NotImplementedError.new('Nanoc::Checking::Check subclasses must implement #run')
     end
 
     def add_issue(desc, subject: nil)

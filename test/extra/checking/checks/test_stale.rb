@@ -1,11 +1,11 @@
-class Nanoc::Extra::Checking::Checks::StaleTest < Nanoc::TestCase
+class Nanoc::Checking::Checks::StaleTest < Nanoc::TestCase
   def check_class
-    Nanoc::Extra::Checking::Checks::Stale
+    Nanoc::Checking::Checks::Stale
   end
 
   def calc_issues
     site = Nanoc::Int::SiteLoader.new.new_from_cwd
-    runner = Nanoc::Extra::Checking::Runner.new(site)
+    runner = Nanoc::Checking::Runner.new(site)
     runner.run_checks([check_class])
   end
 

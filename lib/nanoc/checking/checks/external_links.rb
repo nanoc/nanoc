@@ -4,11 +4,11 @@ require 'nokogiri'
 require 'timeout'
 require 'uri'
 
-module ::Nanoc::Extra::Checking::Checks
+module ::Nanoc::Checking::Checks
   # A validator that verifies that all external links point to a location that exists.
   #
   # @api private
-  class ExternalLinks < ::Nanoc::Extra::Checking::Check
+  class ExternalLinks < ::Nanoc::Checking::Check
     identifiers :external_links, :elinks
 
     def run

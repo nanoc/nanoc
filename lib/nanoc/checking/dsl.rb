@@ -1,4 +1,4 @@
-module Nanoc::Extra::Checking
+module Nanoc::Checking
   # @api private
   class DSL
     attr_reader :deploy_checks
@@ -15,7 +15,7 @@ module Nanoc::Extra::Checking
     end
 
     def check(identifier, &block)
-      klass = Class.new(::Nanoc::Extra::Checking::Check)
+      klass = Class.new(::Nanoc::Checking::Check)
       klass.send(:define_method, :run, &block)
       klass.send(:identifier, identifier)
     end

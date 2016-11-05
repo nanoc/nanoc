@@ -1,4 +1,4 @@
-class Nanoc::Extra::Checking::Checks::HTMLTest < Nanoc::TestCase
+class Nanoc::Checking::Checks::HTMLTest < Nanoc::TestCase
   def test_run_ok
     VCR.use_cassette('html_run_ok') do
       with_site do |site|
@@ -8,7 +8,7 @@ class Nanoc::Extra::Checking::Checks::HTMLTest < Nanoc::TestCase
         File.open('output/style.css', 'w') { |io| io.write('h1 { coxlor: rxed; }') }
 
         # Run check
-        check = Nanoc::Extra::Checking::Checks::HTML.create(site)
+        check = Nanoc::Checking::Checks::HTML.create(site)
         check.run
 
         # Check
@@ -26,7 +26,7 @@ class Nanoc::Extra::Checking::Checks::HTMLTest < Nanoc::TestCase
         File.open('output/style.css', 'w') { |io| io.write('h1 { coxlor: rxed; }') }
 
         # Run check
-        check = Nanoc::Extra::Checking::Checks::HTML.create(site)
+        check = Nanoc::Checking::Checks::HTML.create(site)
         check.run
 
         # Check

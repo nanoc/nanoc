@@ -1,6 +1,6 @@
-module ::Nanoc::Extra::Checking::Checks
+module ::Nanoc::Checking::Checks
   # @api private
-  class HTML < ::Nanoc::Extra::Checking::Checks::W3CValidator
+  class HTML < ::Nanoc::Checking::Checks::W3CValidator
     identifier :html
 
     def extension

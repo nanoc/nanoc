@@ -1,6 +1,6 @@
-module Nanoc::Extra::Checking::Checks
+module Nanoc::Checking::Checks
   # @api private
-  class Stale < ::Nanoc::Extra::Checking::Check
+  class Stale < ::Nanoc::Checking::Check
     def run
       require 'set'
 
