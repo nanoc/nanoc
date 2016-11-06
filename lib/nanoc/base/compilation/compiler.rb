@@ -183,7 +183,7 @@ module Nanoc::Int
 
     def prune
       if site.config[:prune][:auto_prune]
-        Nanoc::Pruner.new(site, exclude: prune_config_exclude).run
+        Nanoc::Pruner.new(site.config, site, exclude: prune_config_exclude).run
       end
     end
 

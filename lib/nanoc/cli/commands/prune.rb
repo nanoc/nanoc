@@ -19,9 +19,9 @@ module Nanoc::CLI::Commands
       site.compiler.build_reps
 
       if options.key?(:yes)
-        Nanoc::Pruner.new(site, exclude: prune_config_exclude).run
+        Nanoc::Pruner.new(site.config, site, exclude: prune_config_exclude).run
       elsif options.key?(:'dry-run')
-        Nanoc::Pruner.new(site, exclude: prune_config_exclude, dry_run: true).run
+        Nanoc::Pruner.new(site.config, site, exclude: prune_config_exclude, dry_run: true).run
       else
         $stderr.puts 'WARNING: Since the prune command is a destructive command, it requires an additional --yes flag in order to work.'
         $stderr.puts

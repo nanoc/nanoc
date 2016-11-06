@@ -7,6 +7,8 @@ module Nanoc
     # @return [Nanoc::Int::Site] The site this pruner belongs to
     attr_reader :site
 
+    # @param [Nanoc::Int::Configuration] config
+    #
     # @param [Nanoc::Int::Site] site The site for which a pruner is created
     #
     # @param [Boolean] dry_run true if the files to be deleted
@@ -14,12 +16,13 @@ module Nanoc
     #   should actually be deleted.
     #
     # @param [Enumerable<String>] exclude
-    def initialize(site, dry_run: false, exclude: [])
+    def initialize(config, site, dry_run: false, exclude: [])
+      @config  = config
       @site    = site
       @dry_run = dry_run
       @exclude = Set.new(exclude)
 
-      # TODO: do not pass in site, but config + item reps
+      # TODO: pass in item rep collection instead of site
     end
 
     # Prunes all output files not managed by Nanoc.
@@ -28,7 +31,7 @@ module Nanoc
     def run
       require 'find'
 
-      return unless File.directory?(site.config[:output_dir])
+      return unless File.directory?(@config[:output_dir])
 
       # Get compiled files
       # FIXME: requires #build_reps to have been called
@@ -36,7 +39,7 @@ module Nanoc
       compiled_files = all_raw_paths.flatten.compact.select { |f| File.file?(f) }
 
       # Get present files and dirs
-      present_files, present_dirs = files_and_dirs_in(site.config[:output_dir] + '/')
+      present_files, present_dirs = files_and_dirs_in(@config[:output_dir] + '/')
 
       # Remove stray files
       stray_files = (present_files - compiled_files)
