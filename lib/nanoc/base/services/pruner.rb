@@ -4,25 +4,20 @@ module Nanoc
   #
   # @api private
   class Pruner
-    # @return [Nanoc::Int::Site] The site this pruner belongs to
-    attr_reader :site
-
     # @param [Nanoc::Int::Configuration] config
     #
-    # @param [Nanoc::Int::Site] site The site for which a pruner is created
+    # @param [Nanoc::Int::ItemRepRepo] reps
     #
     # @param [Boolean] dry_run true if the files to be deleted
     #   should only be printed instead of actually deleted, false if the files
     #   should actually be deleted.
     #
     # @param [Enumerable<String>] exclude
-    def initialize(config, site, dry_run: false, exclude: [])
+    def initialize(config, reps, dry_run: false, exclude: [])
       @config  = config
-      @site    = site
+      @reps    = reps
       @dry_run = dry_run
       @exclude = Set.new(exclude)
-
-      # TODO: pass in item rep collection instead of site
     end
 
     # Prunes all output files not managed by Nanoc.
@@ -35,7 +30,7 @@ module Nanoc
 
       # Get compiled files
       # FIXME: requires #build_reps to have been called
-      all_raw_paths = site.compiler.reps.flat_map { |r| r.raw_paths.values }
+      all_raw_paths = @reps.flat_map { |r| r.raw_paths.values }
       compiled_files = all_raw_paths.flatten.compact.select { |f| File.file?(f) }
 
       # Get present files and dirs
