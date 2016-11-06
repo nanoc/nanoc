@@ -18,6 +18,8 @@ module Nanoc
       @site    = site
       @dry_run = dry_run
       @exclude = Set.new(exclude)
+
+      # TODO: do not pass in site, but config + item reps
     end
 
     # Prunes all output files not managed by Nanoc.
@@ -34,24 +36,7 @@ module Nanoc
       compiled_files = all_raw_paths.flatten.compact.select { |f| File.file?(f) }
 
       # Get present files and dirs
-      present_files = []
-      present_dirs = []
-      Find.find(site.config[:output_dir] + '/') do |f|
-        basename = File.basename(f)
-
-        case File.ftype(f)
-        when 'file'.freeze
-          unless exclude?(basename)
-            present_files << f
-          end
-        when 'directory'.freeze
-          if exclude?(basename)
-            Find.prune
-          else
-            present_dirs << f
-          end
-        end
-      end
+      present_files, present_dirs = files_and_dirs_in(site.config[:output_dir] + '/')
 
       # Remove stray files
       stray_files = (present_files - compiled_files)
@@ -79,6 +64,31 @@ module Nanoc
       @exclude.any? { |e| pathname.__nanoc_include_component?(e) }
     end
 
+    # @api private
+    def files_and_dirs_in(dir)
+      present_files = []
+      present_dirs = []
+
+      Find.find(dir) do |f|
+        basename = File.basename(f)
+
+        case File.ftype(f)
+        when 'file'.freeze
+          unless exclude?(basename)
+            present_files << f
+          end
+        when 'directory'.freeze
+          if exclude?(basename)
+            Find.prune
+          else
+            present_dirs << f
+          end
+        end
+      end
+
+      [present_files, present_dirs]
+    end
+
     protected
 
     def delete_file(file)
@@ -91,6 +101,8 @@ module Nanoc
     end
 
     def delete_dir(dir)
+      # TODO: deduplicate code
+
       if @dry_run
         puts dir
       else
