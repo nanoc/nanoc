@@ -1,7 +1,7 @@
 module Nanoc::Int
   # @api private
   class CompilerLoader
-    def load(site)
+    def load(site, action_provider: nil)
       rule_memory_store = Nanoc::Int::RuleMemoryStore.new(env_name: site.config.env_name)
 
       dependency_store =
@@ -12,7 +12,7 @@ module Nanoc::Int
 
       item_rep_repo = Nanoc::Int::ItemRepRepo.new
 
-      action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
+      action_provider ||= Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
 
       outdatedness_checker =
         Nanoc::Int::OutdatednessChecker.new(
