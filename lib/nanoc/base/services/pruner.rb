@@ -90,22 +90,19 @@ module Nanoc
     protected
 
     def delete_file(file)
-      if @dry_run
-        puts file
-      else
-        Nanoc::CLI::Logger.instance.file(:high, :delete, file)
-        FileUtils.rm(file)
-      end
+      log_delete_and_run(file) { FileUtils.rm(file) }
     end
 
     def delete_dir(dir)
-      # TODO: deduplicate code
+      log_delete_and_run(dir) { Dir.rmdir(dir) }
+    end
 
+    def log_delete_and_run(thing)
       if @dry_run
-        puts dir
+        puts thing
       else
-        Nanoc::CLI::Logger.instance.file(:high, :delete, dir)
-        Dir.rmdir(dir)
+        Nanoc::CLI::Logger.instance.file(:high, :delete, thing)
+        yield
       end
     end
   end
