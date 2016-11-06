@@ -32,7 +32,7 @@ EOS
 
   context 'with pruning' do
     before do
-      Nanoc::Extra::Pruner.new(site).run
+      Nanoc::Pruner.new(site).run
     end
 
     it 'does not prune written snapshots' do

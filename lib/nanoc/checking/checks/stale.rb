@@ -30,7 +30,7 @@ module Nanoc::Checking::Checks
 
     def pruner
       exclude_config = @config.fetch(:prune, {}).fetch(:exclude, [])
-      @pruner ||= Nanoc::Extra::Pruner.new(@site, exclude: exclude_config)
+      @pruner ||= Nanoc::Pruner.new(@site, exclude: exclude_config)
     end
   end
 end
