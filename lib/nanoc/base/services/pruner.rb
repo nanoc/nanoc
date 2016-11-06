@@ -1,3 +1,5 @@
+require 'find'
+
 module Nanoc
   # Responsible for finding and deleting files in the site’s output directory
   # that are not managed by Nanoc.
@@ -24,30 +26,13 @@ module Nanoc
     #
     # @return [void]
     def run
-      require 'find'
-
       return unless File.directory?(@config[:output_dir])
 
-      # Get compiled files
-      # FIXME: requires #build_reps to have been called
-      all_raw_paths = @reps.flat_map { |r| r.raw_paths.values }
-      compiled_files = all_raw_paths.flatten.compact.select { |f| File.file?(f) }
-
-      # Get present files and dirs
+      compiled_files = @reps.flat_map { |r| r.raw_paths.values }.compact
       present_files, present_dirs = files_and_dirs_in(@config[:output_dir] + '/')
 
-      # Remove stray files
-      stray_files = (present_files - compiled_files)
-      stray_files.each do |f|
-        delete_file(f) unless exclude?(f)
-      end
-
-      # Remove empty directories
-      present_dirs.reverse_each do |dir|
-        next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
-        next if exclude?(dir)
-        delete_dir(dir)
-      end
+      remove_stray_files(present_files, compiled_files)
+      remove_empty_directories(present_dirs)
     end
 
     def exclude?(component)
@@ -60,6 +45,22 @@ module Nanoc
     def filename_excluded?(filename)
       pathname = Pathname.new(filename)
       @exclude.any? { |e| pathname.__nanoc_include_component?(e) }
+    end
+
+    # @api private
+    def remove_stray_files(present_files, compiled_files)
+      (present_files - compiled_files).each do |f|
+        delete_file(f) unless exclude?(f)
+      end
+    end
+
+    # @api private
+    def remove_empty_directories(present_dirs)
+      present_dirs.reverse_each do |dir|
+        next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
+        next if exclude?(dir)
+        delete_dir(dir)
+      end
     end
 
     # @api private
