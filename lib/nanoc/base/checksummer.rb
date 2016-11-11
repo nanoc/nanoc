@@ -84,9 +84,21 @@ module Nanoc::Int
           StringUpdateBehavior
         when Nanoc::View
           UnwrapUpdateBehavior
+        when Nanoc::RuleDSL::RuleContext
+          RuleContextUpdateBehavior
         else
           RescueUpdateBehavior
         end
+      end
+    end
+
+    class RuleContextUpdateBehavior
+      def self.update(obj, _digest)
+        yield(obj.item)
+        yield(obj.rep)
+        yield(obj.items)
+        yield(obj.layouts)
+        yield(obj.config)
       end
     end
 
