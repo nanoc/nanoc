@@ -5,16 +5,16 @@ gemspec
 group :devel do
   gem 'contracts', '~> 0.14'
   gem 'coveralls', require: false
+  gem 'fuubar'
   gem 'guard-rake'
   gem 'json', '~> 2.0'
-  gem 'fuubar'
   gem 'minitest', '~> 5.0'
   gem 'mocha'
   gem 'pry'
   gem 'rake'
   gem 'rdoc', '~> 5.0'
-  gem 'rspec'
   gem 'rspec-mocks'
+  gem 'rspec'
   gem 'rubocop'
   gem 'simplecov', require: false
   gem 'vcr'
