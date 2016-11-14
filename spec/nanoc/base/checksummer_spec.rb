@@ -225,6 +225,21 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::ItemWithRepsView<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>>') }
   end
 
+  context 'Nanoc::Int::ItemRep' do
+    let(:obj) { Nanoc::Int::ItemRep.new(item, :pdf) }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
+
+    it { is_expected.to eql('Nanoc::Int::ItemRep<item=Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,name=Symbol<pdf>>') }
+  end
+
+  context 'Nanoc::ItemRepView' do
+    let(:obj) { Nanoc::ItemRepView.new(rep, :_unused_context) }
+    let(:rep) { Nanoc::Int::ItemRep.new(item, :pdf) }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
+
+    it { is_expected.to eql('Nanoc::ItemRepView<Nanoc::Int::ItemRep<item=Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
+  end
+
   context 'Nanoc::ItemWithoutRepsView' do
     let(:obj) { Nanoc::ItemWithoutRepsView.new(item, nil) }
     let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
