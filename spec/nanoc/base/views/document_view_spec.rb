@@ -145,7 +145,7 @@ shared_examples 'a document view' do
 
       subject { view.fetch(key) }
 
-      it { should eql?('donkey') }
+      it { is_expected.to eql('donkey') }
 
       it 'creates a dependency' do
         expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
@@ -158,7 +158,7 @@ shared_examples 'a document view' do
       context 'with fallback' do
         subject { view.fetch(key, 'nothing sorry') }
 
-        it { should eql?('nothing sorry') }
+        it { is_expected.to eql('nothing sorry') }
 
         it 'creates a dependency' do
           expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
@@ -168,7 +168,7 @@ shared_examples 'a document view' do
       context 'with block' do
         subject { view.fetch(key) { 'nothing sorry' } }
 
-        it { should eql?('nothing sorry') }
+        it { is_expected.to eql('nothing sorry') }
 
         it 'creates a dependency' do
           expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
@@ -193,7 +193,7 @@ shared_examples 'a document view' do
     context 'with existant key' do
       let(:key) { :animal }
 
-      it { should eql?(true) }
+      it { is_expected.to eql(true) }
 
       it 'creates a dependency' do
         expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
@@ -203,7 +203,7 @@ shared_examples 'a document view' do
     context 'with non-existant key' do
       let(:key) { :weapon }
 
-      it { should eql?(false) }
+      it { is_expected.to eql(false) }
 
       it 'creates a dependency' do
         expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])

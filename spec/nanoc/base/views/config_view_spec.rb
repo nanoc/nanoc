@@ -25,12 +25,12 @@ describe Nanoc::ConfigView do
 
     context 'with existant key' do
       let(:key) { :animal }
-      it { should eql?('donkey') }
+      it { is_expected.to eql('donkey') }
     end
 
     context 'with non-existant key' do
       let(:key) { :weapon }
-      it { should eql?(nil) }
+      it { is_expected.to eql(nil) }
     end
   end
 
@@ -40,7 +40,7 @@ describe Nanoc::ConfigView do
 
       subject { view.fetch(key) }
 
-      it { should eql?('donkey') }
+      it { is_expected.to eql('donkey') }
     end
 
     context 'with non-existant key' do
@@ -48,12 +48,12 @@ describe Nanoc::ConfigView do
 
       context 'with fallback' do
         subject { view.fetch(key, 'nothing sorry') }
-        it { should eql?('nothing sorry') }
+        it { is_expected.to eql('nothing sorry') }
       end
 
       context 'with block' do
         subject { view.fetch(key) { 'nothing sorry' } }
-        it { should eql?('nothing sorry') }
+        it { is_expected.to eql('nothing sorry') }
       end
 
       context 'with no fallback and no block' do
@@ -71,12 +71,12 @@ describe Nanoc::ConfigView do
 
     context 'with existant key' do
       let(:key) { :animal }
-      it { should eql?(true) }
+      it { is_expected.to eql(true) }
     end
 
     context 'with non-existant key' do
       let(:key) { :weapon }
-      it { should eql?(false) }
+      it { is_expected.to eql(false) }
     end
   end
 
