@@ -72,6 +72,8 @@ module Nanoc::Int
           HashUpdateBehavior
         when Nanoc::Int::Item, Nanoc::Int::Layout
           DocumentUpdateBehavior
+        when Nanoc::Int::ItemRep
+          ItemRepUpdateBehavior
         when NilClass, TrueClass, FalseClass
           NoUpdateBehavior
         when Time
@@ -84,9 +86,26 @@ module Nanoc::Int
           StringUpdateBehavior
         when Nanoc::View
           UnwrapUpdateBehavior
+        when Nanoc::RuleDSL::RuleContext
+          RuleContextUpdateBehavior
         else
           RescueUpdateBehavior
         end
+      end
+    end
+
+    class RuleContextUpdateBehavior
+      def self.update(obj, digest)
+        digest.update('item=')
+        yield(obj.item)
+        digest.update(',rep=')
+        yield(obj.rep)
+        digest.update(',items=')
+        yield(obj.items)
+        digest.update(',layouts=')
+        yield(obj.layouts)
+        digest.update(',config=')
+        yield(obj.config)
       end
     end
 
@@ -171,6 +190,15 @@ module Nanoc::Int
           digest.update(',identifier=')
           yield(obj.identifier)
         end
+      end
+    end
+
+    class ItemRepUpdateBehavior < UpdateBehavior
+      def self.update(obj, digest)
+        digest.update('item=')
+        yield(obj.item)
+        digest.update(',name=')
+        yield(obj.name)
       end
     end
 
