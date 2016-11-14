@@ -2,12 +2,11 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'json', '~> 2.0'
-
 group :devel do
   gem 'contracts', '~> 0.14'
   gem 'coveralls', require: false
   gem 'guard-rake'
+  gem 'json', '~> 2.0'
   gem 'fuubar'
   gem 'minitest', '~> 5.0'
   gem 'mocha'
