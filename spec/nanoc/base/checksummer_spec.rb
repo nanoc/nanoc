@@ -291,6 +291,49 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::ItemCollectionWithoutRepsView<Nanoc::Int::IdentifiableCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
   end
 
+  context 'Nanoc::RuleDSL::RuleContext' do
+    let(:obj) { Nanoc::RuleDSL::RuleContext.new(rep: rep, site: site, executor: executor, view_context: view_context) }
+
+    let(:rep) { Nanoc::Int::ItemRep.new(item, :pdf) }
+    let(:item) { Nanoc::Int::Item.new('stuff', {}, '/stuff.md') }
+
+    let(:site) do
+      Nanoc::Int::Site.new(config: config, code_snippets: code_snippets, items: items, layouts: layouts)
+    end
+
+    let(:config) { Nanoc::Int::Configuration.new(hash: { 'foo' => 'bar' }) }
+    let(:code_snippets) { [Nanoc::Int::CodeSnippet.new('asdf', '/bob.rb')] }
+    let(:items) { [item] }
+    let(:layouts) { [Nanoc::Int::Layout.new('asdf', {}, '/foo.md')] }
+
+    let(:executor) { :_unused_ }
+    let(:view_context) { :_unused_ }
+
+    let(:expected_item_checksum) { 'Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<stuff>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</stuff.md>>>' }
+    let(:expected_item_rep_checksum) { 'Nanoc::Int::ItemRep<item=' + expected_item_checksum + ',name=Symbol<pdf>>' }
+    let(:expected_layout_checksum) { 'Nanoc::Int::Layout<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>' }
+    let(:expected_config_checksum) { 'Nanoc::Int::Configuration<Symbol<foo>=String<bar>,>' }
+
+    let(:expected_checksum) do
+      [
+        'Nanoc::RuleDSL::RuleContext<',
+        'item=',
+        'Nanoc::ItemWithoutRepsView<' + expected_item_checksum + '>',
+        ',rep=',
+        'Nanoc::ItemRepView<' + expected_item_rep_checksum + '>',
+        ',items=',
+        'Nanoc::ItemCollectionWithoutRepsView<Array<' + expected_item_checksum + ',>>',
+        ',layouts=',
+        'Nanoc::LayoutCollectionView<Array<' + expected_layout_checksum + ',>>',
+        ',config=',
+        'Nanoc::ConfigView<' + expected_config_checksum + '>',
+        '>',
+      ].join('')
+    end
+
+    it { is_expected.to eql(expected_checksum) }
+  end
+
   context 'Sass::Importers::Filesystem' do
     let(:obj) { Sass::Importers::Filesystem.new('/foo') }
 

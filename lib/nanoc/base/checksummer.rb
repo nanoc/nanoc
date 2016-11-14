@@ -95,11 +95,16 @@ module Nanoc::Int
     end
 
     class RuleContextUpdateBehavior
-      def self.update(obj, _digest)
+      def self.update(obj, digest)
+        digest.update('item=')
         yield(obj.item)
+        digest.update(',rep=')
         yield(obj.rep)
+        digest.update(',items=')
         yield(obj.items)
+        digest.update(',layouts=')
         yield(obj.layouts)
+        digest.update(',config=')
         yield(obj.config)
       end
     end
