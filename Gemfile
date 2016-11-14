@@ -43,7 +43,7 @@ group :plugins do
   gem 'nokogiri', '~> 1.6'
   gem 'pandoc-ruby'
   gem 'parallel'
-  gem 'pygments.rb', platforms: [:ruby, :mswin]
+  gem 'pygments.rb', github: 'tmm1/pygments.rb', platforms: [:ruby, :mswin]
   gem 'rack'
   gem 'rainpress'
   gem 'rdiscount', '~> 2.2', platforms: [:ruby, :mswin]
