@@ -150,6 +150,8 @@ module Nanoc::CLI
 
     def _nanoc_swallow_broken_pipe_errors_while
       yield
+    rescue IOError => e
+      raise unless e.message == 'closed stream'
     rescue Errno::EPIPE
     end
   end
