@@ -10,6 +10,7 @@ group :devel do
   gem 'guard-rake'
   gem 'fuubar'
   gem 'minitest', '~> 5.0'
+  gem 'minitest-documentation'
   gem 'mocha'
   gem 'pry'
   gem 'rake'
