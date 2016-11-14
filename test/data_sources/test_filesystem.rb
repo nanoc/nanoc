@@ -483,24 +483,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal nil,            data_source.send(:filename_for, '/foo', nil)
   end
 
-  def test_compile_huge_site
-    if_implemented do
-      # Create data source
-      data_source = new_data_source
-
-      # Create a lot of items
-      count = Process.getrlimit(Process::RLIMIT_NOFILE)[0] + 5
-      count.times do |i|
-        FileUtils.mkdir_p("content/#{i}")
-        File.open("content/#{i}/#{i}.html", 'w') { |io| io << "This is item #{i}." }
-        File.open("content/#{i}/#{i}.yaml", 'w') { |io| io << "title: Item #{i}"   }
-      end
-
-      # Read all items
-      data_source.items
-    end
-  end
-
   def test_compile_iso_8859_1_site
     # Check encoding
     unless ''.respond_to?(:encode)
