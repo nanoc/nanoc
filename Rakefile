@@ -23,7 +23,6 @@ namespace :test do
 end
 
 RSpec::Core::RakeTask.new(:spec) do |t|
-  t.rspec_opts = '-r ./spec/spec_helper.rb --format Fuubar --color'
   t.verbose = false
 end
 
