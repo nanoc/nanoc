@@ -64,7 +64,7 @@ module Nanoc::Helpers
         # Create dependency
         if @item.nil? || item != @item.unwrap
           dependency_tracker = @config._context.dependency_tracker
-          dependency_tracker.bounce(item.unwrap)
+          dependency_tracker.bounce(item.unwrap, hard: true)
 
           unless rep.compiled?
             raise Nanoc::Int::Errors::UnmetDependency.new(rep)
