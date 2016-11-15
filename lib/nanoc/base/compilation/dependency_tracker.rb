@@ -23,7 +23,7 @@ module Nanoc::Int
     def enter(obj, hard: false)
       unless @stack.empty?
         Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj)
-        @dependency_store.record_dependency(@stack.last, obj)
+        @dependency_store.record_dependency(@stack.last, obj, hard: hard)
       end
 
       @stack.push(obj)

@@ -61,9 +61,13 @@ module Nanoc::Int
     #   outdated if the destination is outdated
     #
     # @return [void]
-    def record_dependency(src, dst)
+    def record_dependency(src, dst, hard:)
       # Warning! dst and src are *reversed* here!
       @graph.add_edge(dst, src) unless src == dst
+
+      if hard
+        # TODO: also add to @hard_graph
+      end
     end
 
     # Empties the list of dependencies for the given object. This is necessary

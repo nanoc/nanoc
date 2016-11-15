@@ -19,7 +19,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     store = Nanoc::Int::DependencyStore.new(items)
 
     # Record some dependencies
-    store.record_dependency(items[0], items[1])
+    store.record_dependency(items[0], items[1], hard: false)
 
     # Verify dependencies
     assert_contains_exactly [items[1]], store.objects_causing_outdatedness_of(items[0])
@@ -33,8 +33,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     store = Nanoc::Int::DependencyStore.new(items)
 
     # Record some dependencies
-    store.record_dependency(items[0], items[0])
-    store.record_dependency(items[0], items[1])
+    store.record_dependency(items[0], items[0], hard: false)
+    store.record_dependency(items[0], items[1], hard: false)
 
     # Verify dependencies
     assert_contains_exactly [items[1]], store.objects_causing_outdatedness_of(items[0])
@@ -48,9 +48,9 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     store = Nanoc::Int::DependencyStore.new(items)
 
     # Record some dependencies
-    store.record_dependency(items[0], items[1])
-    store.record_dependency(items[0], items[1])
-    store.record_dependency(items[0], items[1])
+    store.record_dependency(items[0], items[1], hard: false)
+    store.record_dependency(items[0], items[1], hard: false)
+    store.record_dependency(items[0], items[1], hard: false)
 
     # Verify dependencies
     assert_contains_exactly [items[1]], store.objects_causing_outdatedness_of(items[0])
@@ -64,8 +64,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     store = Nanoc::Int::DependencyStore.new(items)
 
     # Record some dependencies
-    store.record_dependency(items[0], items[1])
-    store.record_dependency(items[1], items[2])
+    store.record_dependency(items[0], items[1], hard: false)
+    store.record_dependency(items[1], items[2], hard: false)
 
     # Verify dependencies
     assert_contains_exactly [items[1]], store.objects_causing_outdatedness_of(items[0])
@@ -79,8 +79,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     store = Nanoc::Int::DependencyStore.new(items)
 
     # Record some dependencies
-    store.record_dependency(items[0], items[1])
-    store.record_dependency(items[1], items[2])
+    store.record_dependency(items[0], items[1], hard: false)
+    store.record_dependency(items[1], items[2], hard: false)
 
     # Verify dependencies
     assert_contains_exactly [items[0]], store.objects_outdated_due_to(items[1])
@@ -99,9 +99,9 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     store = Nanoc::Int::DependencyStore.new(items)
 
     # Record some dependencies
-    store.record_dependency(items[0], items[1])
-    store.record_dependency(items[1], items[2])
-    store.record_dependency(items[1], items[3])
+    store.record_dependency(items[0], items[1], hard: false)
+    store.record_dependency(items[1], items[2], hard: false)
+    store.record_dependency(items[1], items[3], hard: false)
 
     # Store
     store.store
@@ -137,9 +137,9 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     store = Nanoc::Int::DependencyStore.new(old_items)
 
     # Record some dependencies
-    store.record_dependency(old_items[0], old_items[1])
-    store.record_dependency(old_items[1], old_items[2])
-    store.record_dependency(old_items[1], old_items[3])
+    store.record_dependency(old_items[0], old_items[1], hard: false)
+    store.record_dependency(old_items[1], old_items[2], hard: false)
+    store.record_dependency(old_items[1], old_items[3], hard: false)
 
     # Store
     store.store
@@ -169,8 +169,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     store = Nanoc::Int::DependencyStore.new(items)
 
     # Record some dependencies
-    store.record_dependency(items[0], items[1])
-    store.record_dependency(items[1], nil)
+    store.record_dependency(items[0], items[1], hard: false)
+    store.record_dependency(items[1], nil, hard: false)
 
     # Store
     store.store
@@ -199,8 +199,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     store = Nanoc::Int::DependencyStore.new(items)
 
     # Record some dependencies
-    store.record_dependency(items[0], items[1])
-    store.record_dependency(nil,      items[2])
+    store.record_dependency(items[0], items[1], hard: false)
+    store.record_dependency(nil,      items[2], hard: false)
 
     # Store
     store.store
@@ -225,8 +225,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     store = Nanoc::Int::DependencyStore.new(items)
 
     # Record some dependencies
-    store.record_dependency(items[0], items[1])
-    store.record_dependency(items[1], items[2])
+    store.record_dependency(items[0], items[1], hard: false)
+    store.record_dependency(items[1], items[2], hard: false)
     assert_contains_exactly [items[1]], store.objects_causing_outdatedness_of(items[0])
 
     # Forget dependencies
