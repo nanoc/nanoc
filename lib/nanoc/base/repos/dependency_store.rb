@@ -9,7 +9,9 @@ module Nanoc::Int
       super(Nanoc::Int::Store.tmp_path_for(env_name: env_name, store_name: 'dependencies'), 4)
 
       @objects = objects
-      @graph   = Nanoc::Int::DirectedGraph.new([nil] + @objects)
+
+      @graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
+      @hard_graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
     end
 
     # Returns the direct dependencies for the given object.
@@ -31,6 +33,11 @@ module Nanoc::Int
     #   the given object
     def objects_causing_outdatedness_of(object)
       @graph.direct_predecessors_of(object)
+    end
+
+    # TODO: document
+    def objects_needed_for_compiled_content_of(object)
+      @hard_graph.direct_predecessors_of(object)
     end
 
     # Returns the direct inverse dependencies for the given object.
@@ -62,11 +69,12 @@ module Nanoc::Int
     #
     # @return [void]
     def record_dependency(src, dst, hard:)
-      # Warning! dst and src are *reversed* here!
-      @graph.add_edge(dst, src) unless src == dst
+      unless src == dst
+        @graph.add_edge(dst, src)
 
-      if hard
-        # TODO: also add to @hard_graph
+        if hard
+          @hard_graph.add_edge(dst, src)
+        end
       end
     end
 
@@ -81,6 +89,8 @@ module Nanoc::Int
     # @return [void]
     def forget_dependencies_for(object)
       @graph.delete_edges_to(object)
+
+      # FIXME: also for @hard_graph?
     end
 
     protected
