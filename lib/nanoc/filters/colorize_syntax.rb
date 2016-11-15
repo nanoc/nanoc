@@ -312,10 +312,21 @@ module Nanoc::Filters
     def rouge(code, language, params = {})
       require 'rouge'
 
-      formatter_options = {
-        css_class: params.fetch(:css_class, 'highlight'),
-      }
-      formatter = Rouge::Formatters::HTML.new(formatter_options)
+      if Rouge.version < '2' || params.fetch(:legacy, false)
+        # Rouge 1.x or Rouge 2.x legacy options
+        formatter_options = {
+          css_class: params.fetch(:css_class, 'highlight'),
+          inline_theme: params.fetch(:inline_theme, nil),
+          line_numbers: params.fetch(:line_numbers, false),
+          start_line: params.fetch(:start_line, 1),
+          wrap: params.fetch(:wrap, false),
+        }
+        formatter_cls = Rouge::Formatters.const_get(Rouge.version < '2' ? 'HTML' : 'HTMLLegacy')
+        formatter = formatter_cls.new(formatter_options)
+      else
+        formatter = params.fetch(:formatter, Rouge::Formatters::HTML.new)
+      end
+
       lexer = Rouge::Lexer.find_fancy(language, code) || Rouge::Lexers::PlainText
       formatter.format(lexer.lex(code))
     end
