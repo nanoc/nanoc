@@ -99,11 +99,14 @@ module Nanoc::Int
       {
         edges: @graph.edges,
         vertices: @graph.vertices.map { |obj| obj && obj.reference },
+        hard_edges: @hard_graph.edges,
+        hard_vertices: @hard_graph.vertices.map { |obj| obj && obj.reference },
       }
     end
 
     def data=(new_data)
       @graph = load_graph_from(new_data[:vertices], new_data[:edges])
+      @hard_graph = load_graph_from(new_data[:hard_vertices], new_data[:hard_edges])
     end
 
     def load_graph_from(vertices_data, edges_data)
