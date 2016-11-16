@@ -89,8 +89,7 @@ module Nanoc::Int
     # @return [void]
     def forget_dependencies_for(object)
       @graph.delete_edges_to(object)
-
-      # FIXME: also for @hard_graph?
+      @hard_graph.delete_edges_to(object)
     end
 
     protected
