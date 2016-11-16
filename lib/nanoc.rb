@@ -27,6 +27,7 @@ require 'ref'
 # Load general requirements
 require 'digest'
 require 'enumerator'
+require 'fiber'
 require 'fileutils'
 require 'forwardable'
 require 'pathname'

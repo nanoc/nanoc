@@ -89,7 +89,8 @@ module Nanoc::Int
         end
       is_usable_snapshot = @snapshot_contents[snapshot_name] && (compiled? || !is_still_moving)
       unless is_usable_snapshot
-        raise Nanoc::Int::Errors::UnmetDependency.new(self)
+        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(self))
+        return compiled_content(snapshot: snapshot)
       end
 
       @snapshot_contents[snapshot_name].string
@@ -131,18 +132,6 @@ module Nanoc::Int
     # @return [String] The item rep’s path
     def path(snapshot: :last)
       @paths[snapshot]
-    end
-
-    contract C::None => nil
-    # Resets the compilation progress for this item representation. This is
-    # necessary when an unmet dependency is detected during compilation.
-    #
-    # @api private
-    #
-    # @return [void]
-    def forget_progress
-      initialize_content
-      nil
     end
 
     # Returns an object that can be used for uniquely identifying objects.

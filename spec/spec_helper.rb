@@ -5,6 +5,8 @@ require 'nanoc'
 require 'nanoc/cli'
 require 'nanoc/spec'
 
+require 'timecop'
+
 Nanoc::CLI.setup
 
 RSpec.configure do |c|

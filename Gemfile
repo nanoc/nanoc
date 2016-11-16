@@ -17,6 +17,7 @@ group :devel do
   gem 'rspec'
   gem 'rubocop'
   gem 'simplecov', require: false
+  gem 'timecop'
   gem 'vcr'
   gem 'webmock'
   gem 'yard'

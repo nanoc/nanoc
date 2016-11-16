@@ -200,7 +200,7 @@ module Nanoc
       # Raise unmet dependency error if necessary
       items.each do |item|
         rep = orig_items.sample._context.reps[item].find { |r| !r.compiled? }
-        raise Nanoc::Int::Errors::UnmetDependency.new(rep) if rep
+        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep)) if rep
       end
     end
   end
