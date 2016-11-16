@@ -3,8 +3,9 @@ module Nanoc::Int
   #
   # @api private
   class ItemRepSelector
-    def initialize(reps)
+    def initialize(reps, dependency_store)
       @reps = reps
+      @dependency_store = dependency_store
     end
 
     def each
@@ -12,7 +13,7 @@ module Nanoc::Int
 
       loop do
         break if graph.roots.empty?
-        rep = graph.roots.each { |e| break e }
+        rep = graph.roots.min_by { |e| @dependency_store.objects_needed_for_compiled_content_of(e).size }
 
         begin
           yield(rep)
@@ -30,10 +31,13 @@ module Nanoc::Int
 
     def handle_dependency_error(e, rep, graph)
       other_rep = e.rep
+
       graph.add_edge(other_rep, rep)
       unless graph.vertices.include?(other_rep)
         graph.add_vertex(other_rep)
       end
+
+      @dependency_store.record_dependency(rep.item, other_rep.item, hard: true)
     end
   end
 end

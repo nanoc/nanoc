@@ -19,11 +19,11 @@ module Nanoc::Int
       @stack = []
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
-    def enter(obj)
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[hard: C::Optional[C::Bool]] => C::Any
+    def enter(obj, hard: false)
       unless @stack.empty?
-        Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj)
-        @dependency_store.record_dependency(@stack.last, obj)
+        Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj, hard)
+        @dependency_store.record_dependency(@stack.last, obj, hard: hard)
       end
 
       @stack.push(obj)
@@ -34,9 +34,9 @@ module Nanoc::Int
       @stack.pop
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
-    def bounce(obj)
-      enter(obj)
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[hard: C::Optional[C::Bool]] => C::Any
+    def bounce(obj, hard: false)
+      enter(obj, hard: hard)
       exit(obj)
     end
   end

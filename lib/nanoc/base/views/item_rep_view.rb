@@ -42,7 +42,7 @@ module Nanoc
     #
     # @return [String] The content at the given snapshot.
     def compiled_content(snapshot: nil)
-      @context.dependency_tracker.bounce(unwrap.item)
+      @context.dependency_tracker.bounce(unwrap.item, hard: true)
       @item_rep.compiled_content(snapshot: snapshot)
     end
 

@@ -9,7 +9,9 @@ module Nanoc::Int
       super(Nanoc::Int::Store.tmp_path_for(env_name: env_name, store_name: 'dependencies'), 4)
 
       @objects = objects
-      @graph   = Nanoc::Int::DirectedGraph.new([nil] + @objects)
+
+      @graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
+      @hard_graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
     end
 
     # Returns the direct dependencies for the given object.
@@ -31,6 +33,11 @@ module Nanoc::Int
     #   the given object
     def objects_causing_outdatedness_of(object)
       @graph.direct_predecessors_of(object)
+    end
+
+    # TODO: document
+    def objects_needed_for_compiled_content_of(object)
+      @hard_graph.direct_predecessors_of(object)
     end
 
     # Returns the direct inverse dependencies for the given object.
@@ -61,9 +68,16 @@ module Nanoc::Int
     #   outdated if the destination is outdated
     #
     # @return [void]
-    def record_dependency(src, dst)
-      # Warning! dst and src are *reversed* here!
-      @graph.add_edge(dst, src) unless src == dst
+    def record_dependency(src, dst, hard:)
+      # src “is needed for” dst
+
+      unless src == dst
+        @graph.add_edge(dst, src)
+
+        if hard
+          @hard_graph.add_edge(dst, src)
+        end
+      end
     end
 
     # Empties the list of dependencies for the given object. This is necessary
@@ -85,24 +99,30 @@ module Nanoc::Int
       {
         edges: @graph.edges,
         vertices: @graph.vertices.map { |obj| obj && obj.reference },
+        hard_edges: @hard_graph.edges,
+        hard_vertices: @hard_graph.vertices.map { |obj| obj && obj.reference },
       }
     end
 
     def data=(new_data)
-      # Create new graph
-      @graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
+      @graph = load_graph_from(new_data[:vertices], new_data[:edges])
+      @hard_graph = load_graph_from(new_data[:hard_vertices], new_data[:hard_edges])
+    end
+
+    def load_graph_from(vertices_data, edges_data)
+      graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
 
       # Load vertices
-      previous_objects = new_data[:vertices].map do |reference|
+      previous_objects = vertices_data.map do |reference|
         @objects.find { |obj| reference == obj.reference }
       end
 
       # Load edges
-      new_data[:edges].each do |edge|
+      edges_data.each do |edge|
         from_index, to_index = *edge
         from = from_index && previous_objects[from_index]
         to   = to_index && previous_objects[to_index]
-        @graph.add_edge(from, to)
+        graph.add_edge(from, to)
       end
 
       # Record dependency from all items on new items
@@ -110,9 +130,11 @@ module Nanoc::Int
       new_objects.each do |new_obj|
         @objects.each do |obj|
           next unless obj.is_a?(Nanoc::Int::Item)
-          @graph.add_edge(new_obj, obj)
+          graph.add_edge(new_obj, obj)
         end
       end
+
+      graph
     end
   end
 end

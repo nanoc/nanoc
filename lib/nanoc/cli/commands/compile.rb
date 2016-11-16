@@ -285,8 +285,8 @@ module Nanoc::CLI::Commands
         Nanoc::Int::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
           puts "*** Ended filtering #{rep.inspect} with #{filter_name}"
         end
-        Nanoc::Int::NotificationCenter.on(:dependency_created) do |src, dst|
-          puts "*** Dependency created from #{src.inspect} onto #{dst.inspect}"
+        Nanoc::Int::NotificationCenter.on(:dependency_created) do |src, dst, hard|
+          puts "*** Dependency (#{hard ? 'hard' : 'soft'}) created from #{src.inspect} onto #{dst.inspect}"
         end
       end
     end
