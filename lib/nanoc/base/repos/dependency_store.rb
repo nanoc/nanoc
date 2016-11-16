@@ -103,20 +103,23 @@ module Nanoc::Int
     end
 
     def data=(new_data)
-      # Create new graph
-      @graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
+      @graph = load_graph_from(new_data[:vertices], new_data[:edges])
+    end
+
+    def load_graph_from(vertices_data, edges_data)
+      graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
 
       # Load vertices
-      previous_objects = new_data[:vertices].map do |reference|
+      previous_objects = vertices_data.map do |reference|
         @objects.find { |obj| reference == obj.reference }
       end
 
       # Load edges
-      new_data[:edges].each do |edge|
+      edges_data.each do |edge|
         from_index, to_index = *edge
         from = from_index && previous_objects[from_index]
         to   = to_index && previous_objects[to_index]
-        @graph.add_edge(from, to)
+        graph.add_edge(from, to)
       end
 
       # Record dependency from all items on new items
@@ -124,9 +127,11 @@ module Nanoc::Int
       new_objects.each do |new_obj|
         @objects.each do |obj|
           next unless obj.is_a?(Nanoc::Int::Item)
-          @graph.add_edge(new_obj, obj)
+          graph.add_edge(new_obj, obj)
         end
       end
+
+      graph
     end
   end
 end
