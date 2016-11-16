@@ -22,7 +22,7 @@ module Nanoc::Int
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[hard: C::Optional[C::Bool]] => C::Any
     def enter(obj, hard: false)
       unless @stack.empty?
-        Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj)
+        Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj, hard)
         @dependency_store.record_dependency(@stack.last, obj, hard: hard)
       end
 
