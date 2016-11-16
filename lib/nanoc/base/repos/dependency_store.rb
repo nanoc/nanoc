@@ -69,6 +69,8 @@ module Nanoc::Int
     #
     # @return [void]
     def record_dependency(src, dst, hard:)
+      # src “is needed for” dst
+
       unless src == dst
         @graph.add_edge(dst, src)
 
@@ -89,7 +91,6 @@ module Nanoc::Int
     # @return [void]
     def forget_dependencies_for(object)
       @graph.delete_edges_to(object)
-      @hard_graph.delete_edges_to(object)
     end
 
     protected
