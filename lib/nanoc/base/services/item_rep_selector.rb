@@ -31,10 +31,13 @@ module Nanoc::Int
 
     def handle_dependency_error(e, rep, graph)
       other_rep = e.rep
+
       graph.add_edge(other_rep, rep)
       unless graph.vertices.include?(other_rep)
         graph.add_vertex(other_rep)
       end
+
+      @dependency_store.record_dependency(rep.item, other_rep.item, hard: true)
     end
   end
 end
