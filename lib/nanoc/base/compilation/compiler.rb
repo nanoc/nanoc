@@ -205,9 +205,13 @@ module Nanoc::Int
         rep.snapshot_defs = action_provider.snapshots_defs_for(rep)
       end
 
-      # Find item reps to compile and compile them
+      # Find item reps to compile
       outdated_reps = @reps.select { |r| outdatedness_checker.outdated?(r) }
-      selector = Nanoc::Int::ItemRepSelector.new(outdated_reps)
+      dependent_reps = outdated_reps.flat_map { |r| @dependency_store.objects_needed_for_compiled_content_of(r) }
+      reps_to_compile = Set.new(outdated_reps + dependent_reps)
+
+      # Compile
+      selector = Nanoc::Int::ItemRepSelector.new(reps_to_compile)
       selector.each do |rep|
         @stack = []
         compile_rep(rep)
