@@ -207,11 +207,15 @@ module Nanoc::Int
 
       # Find item reps to compile
       outdated_reps = @reps.select { |r| outdatedness_checker.outdated?(r) }
-      dependent_reps = outdated_reps.flat_map { |r| @dependency_store.objects_needed_for_compiled_content_of(r) }
+      outdated_reps.each { |r| puts "+++ Found outdated rep to recompile: #{r.inspect}" }
+      dependent_items = outdated_reps.flat_map { |r| @dependency_store.objects_needed_for_compiled_content_of(r.item) }
+      dependent_items.each { |i| puts "+++ Found dependent item to recompile: #{i.inspect}" }
+      dependent_reps = dependent_items.flat_map { |i| @reps[i] }
+      dependent_reps.each { |r| puts "+++ Found dependent rep to recompile: #{r.inspect}" }
       reps_to_compile = Set.new(outdated_reps + dependent_reps)
 
       # Compile
-      selector = Nanoc::Int::ItemRepSelector.new(reps_to_compile)
+      selector = Nanoc::Int::ItemRepSelector.new(reps_to_compile, @dependency_store)
       selector.each do |rep|
         @stack = []
         compile_rep(rep)
