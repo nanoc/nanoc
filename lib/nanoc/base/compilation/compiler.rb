@@ -227,30 +227,44 @@ module Nanoc::Int
     #
     # @return [void]
     def compile_rep(rep)
-      dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
+      @fibers ||= {}
+      @fibers[rep] ||=
+        Fiber.new do
+          begin
+            dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
+            dependency_tracker.enter(rep.item)
 
-      Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
-      Nanoc::Int::NotificationCenter.post(:processing_started,  rep)
-      dependency_tracker.enter(rep.item)
+            if can_reuse_content_for_rep?(rep)
+              Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
+              rep.snapshot_contents = compiled_content_cache[rep]
+            else
+              recalculate_content_for_rep(rep, dependency_tracker)
+            end
 
-      if can_reuse_content_for_rep?(rep)
-        Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
-        rep.snapshot_contents = compiled_content_cache[rep]
-      else
-        recalculate_content_for_rep(rep, dependency_tracker)
+            rep.compiled = true
+            compiled_content_cache[rep] = rep.snapshot_contents
+
+            @fibers.delete(rep)
+          ensure
+            dependency_tracker.exit(rep.item)
+          end
+        end
+
+      fiber = @fibers[rep]
+      while fiber.alive?
+        Nanoc::Int::NotificationCenter.post(:processing_started, rep)
+        Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+        res = fiber.resume
+
+        if res.is_a?(Nanoc::Int::Errors::UnmetDependency)
+          Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res)
+          Nanoc::Int::NotificationCenter.post(:processing_ended, rep)
+          raise(res)
+        end
       end
 
-      rep.compiled = true
-      compiled_content_cache[rep] = rep.snapshot_contents
-
-      Nanoc::Int::NotificationCenter.post(:processing_ended,  rep)
       Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)
-    rescue => e
-      rep.forget_progress
-      Nanoc::Int::NotificationCenter.post(:compilation_failed, rep, e)
-      raise e
-    ensure
-      dependency_tracker.exit(rep.item)
+      Nanoc::Int::NotificationCenter.post(:processing_ended, rep)
     end
 
     # @return [Boolean]

@@ -164,19 +164,55 @@ module Nanoc::CLI::Commands
 
       # @param [Enumerable<Nanoc::Int::ItemRep>] reps
       def initialize(reps:)
-        @times = {}
+        # rep ->
+        #   filter_name ->
+        #     accum -> 0.0
+        #     last_start -> nil
+        @times_per_rep = {}
 
         @reps = reps
       end
 
       # @see Listener#start
       def start
-        Nanoc::Int::NotificationCenter.on(:filtering_started) do |_rep, filter_name|
-          @times[filter_name] ||= []
-          @times[filter_name] << { start: Time.now }
+        Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, filter_name|
+          @times_per_rep[rep] ||= {}
+          @times_per_rep[rep][filter_name] ||= {}
+
+          @times_per_rep[rep][filter_name][:last_start] = Time.now
+          @times_per_rep[rep][filter_name][:accum] ||= []
+          @times_per_rep[rep][filter_name][:suspended] = false
         end
-        Nanoc::Int::NotificationCenter.on(:filtering_ended) do |_rep, filter_name|
-          @times[filter_name].last[:stop] = Time.now
+
+        Nanoc::Int::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
+          times = @times_per_rep[rep][filter_name]
+          last_start = @times_per_rep[rep][filter_name][:last_start]
+
+          times[:accum] << (Time.now - last_start)
+          @times_per_rep[rep][filter_name].delete(:last_start)
+        end
+
+        Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, _exception|
+          @times_per_rep.fetch(rep, {}).each do |_filter_name, times|
+            if times[:last_start]
+              times[:accum] << (Time.now - times[:last_start])
+              times.delete(:last_start)
+              times[:suspended] = true
+
+              break
+            end
+          end
+        end
+
+        Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
+          @times_per_rep.fetch(rep, {}).each do |filter_name, times|
+            if times[:suspended]
+              @times_per_rep[rep][filter_name][:last_start] = Time.now
+              times[:suspended] = false
+
+              break
+            end
+          end
         end
       end
 
@@ -236,24 +272,16 @@ module Nanoc::CLI::Commands
       def durations_per_filter
         @_durations_per_filter ||= begin
           result = {}
-          @times.keys.each do |filter_name|
-            durations = durations_for_filter(filter_name)
-            if durations
-              result[filter_name] = durations
+
+          @times_per_rep.each do |_rep, times_per_filter|
+            times_per_filter.each do |filter_name, data|
+              result[filter_name] ||= []
+              result[filter_name].concat(data[:accum])
             end
           end
+
           result
         end
-      end
-
-      def durations_for_filter(filter_name)
-        result = []
-        @times[filter_name].each do |sample|
-          if sample[:start] && sample[:stop]
-            result << sample[:stop] - sample[:start]
-          end
-        end
-        result
       end
     end
 
@@ -273,7 +301,7 @@ module Nanoc::CLI::Commands
           puts "*** Ended compilation of #{rep.inspect}"
           puts
         end
-        Nanoc::Int::NotificationCenter.on(:compilation_failed) do |rep, e|
+        Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, e|
           puts "*** Suspended compilation of #{rep.inspect}: #{e.message}"
         end
         Nanoc::Int::NotificationCenter.on(:cached_content_used) do |rep|
@@ -295,6 +323,7 @@ module Nanoc::CLI::Commands
     class FileActionPrinter < Listener
       def initialize(reps:)
         @start_times = {}
+        @acc_durations = {}
 
         @reps = reps
       end
@@ -302,10 +331,18 @@ module Nanoc::CLI::Commands
       # @see Listener#start
       def start
         Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
-          @start_times[rep.raw_path] = Time.now
+          @start_times[rep] = Time.now
+          @acc_durations[rep] ||= 0.0
         end
-        Nanoc::Int::NotificationCenter.on(:rep_written) do |_rep, path, is_created, is_modified|
-          duration = path && @start_times[path] ? Time.now - @start_times[path] : nil
+
+        Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep|
+          @acc_durations[rep] += Time.now - @start_times[rep]
+        end
+
+        Nanoc::Int::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+          @acc_durations[rep] += Time.now - @start_times[rep]
+          duration = @acc_durations[rep]
+
           action =
             if is_created then :create
             elsif is_modified then :update

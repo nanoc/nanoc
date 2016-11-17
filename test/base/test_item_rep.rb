@@ -72,7 +72,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     rep.expects(:compiled?).returns(false)
 
     # Check
-    assert_raises(Nanoc::Int::Errors::UnmetDependency) do
+    assert_raises(FiberError) do
       rep.compiled_content
     end
   end
@@ -90,7 +90,7 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
     }
 
     # Check
-    assert_raises(Nanoc::Int::Errors::UnmetDependency) do
+    assert_raises(FiberError) do
       rep.compiled_content(snapshot: :pre)
     end
   end
