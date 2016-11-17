@@ -23,48 +23,109 @@ describe Nanoc::Int::Compiler do
 
   let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new }
 
-  describe '#compile_rep' do
-    subject { compiler.send(:compile_rep, rep) }
+  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:item) { Nanoc::Int::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
 
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
-    let(:item) { Nanoc::Int::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
+  let(:other_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
+  let(:other_item) { Nanoc::Int::Item.new('other content', {}, '/other.md') }
 
-    let(:other_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
-    let(:other_item) { Nanoc::Int::Item.new('other content', {}, '/other.md') }
+  let(:site) do
+    Nanoc::Int::Site.new(
+      config: config,
+      code_snippets: code_snippets,
+      items: items,
+      layouts: layouts,
+    )
+  end
 
-    let(:site) do
-      Nanoc::Int::Site.new(
-        config: config,
-        code_snippets: code_snippets,
-        items: items,
-        layouts: layouts,
-      )
+  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+  let(:layouts) { [] }
+  let(:code_snippets) { [] }
+
+  let(:items) do
+    Nanoc::Int::IdentifiableCollection.new(config).tap do |col|
+      col << item
+      col << other_item
+    end
+  end
+
+  let(:memory) do
+    [
+      Nanoc::Int::RuleMemoryActions::Filter.new(:erb, {}),
+    ]
+  end
+
+  before do
+    reps << rep
+    reps << other_rep
+
+    allow(outdatedness_checker).to receive(:outdated?).with(rep).and_return(true)
+    allow(outdatedness_checker).to receive(:outdated?).with(other_rep).and_return(true)
+
+    allow(action_provider).to receive(:memory_for).with(rep).and_return(memory)
+    allow(action_provider).to receive(:memory_for).with(other_rep).and_return(memory)
+  end
+
+  describe '#compile_reps' do
+    subject { compiler.send(:compile_reps) }
+
+    before do
+      allow(action_provider).to receive(:snapshots_defs_for).with(rep).and_return(snapshot_defs_for_rep)
+      allow(action_provider).to receive(:snapshots_defs_for).with(other_rep).and_return(snapshot_defs_for_rep)
     end
 
-    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
-    let(:layouts) { [] }
-    let(:code_snippets) { [] }
+    let(:snapshot_defs_for_rep) do
+      [Nanoc::Int::SnapshotDef.new(:last, true)]
+    end
 
-    let(:items) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |col|
-        col << item
-        col << other_item
+    let(:snapshot_defs_for_other_rep) do
+      [Nanoc::Int::SnapshotDef.new(:last, true)]
+    end
+
+    it 'keeps the compilation stack in a good state' do
+      expect(compiler.stack).to be_empty
+      subject
+      expect(compiler.stack).to be_empty
+    end
+
+    context 'exception' do
+      let(:item) { Nanoc::Int::Item.new('<%= raise "lol" %>', {}, '/hi.md') }
+
+      it 'keeps the compilation stack in a good state' do
+        expect(compiler.stack).to be_empty
+        expect { subject }.to raise_error(RuntimeError)
+        expect(compiler.stack).to eql([rep])
       end
     end
 
-    let(:memory) do
-      [
-        Nanoc::Int::RuleMemoryActions::Filter.new(:erb, {}),
-      ]
-    end
+    context 'interrupted compilation' do
+      let(:item) { Nanoc::Int::Item.new('other=<%= @items["/other.*"].compiled_content %>', {}, '/hi.md') }
 
-    before do
-      reps << rep
-      reps << other_rep
+      before do
+        expect(outdatedness_checker).to receive(:outdated?).with(other_rep).and_return(true)
+        expect(action_provider).to receive(:memory_for).with(other_rep).and_return(memory)
+      end
 
-      expect(outdatedness_checker).to receive(:outdated?).with(rep).and_return(true)
-      expect(action_provider).to receive(:memory_for).with(rep).and_return(memory)
+      it 'keeps the compilation stack in a good state' do
+        expect(compiler.stack).to be_empty
+        subject
+        expect(compiler.stack).to be_empty
+      end
+
+      context 'exception' do
+        let(:item) { Nanoc::Int::Item.new('other=<%= @items["/other.*"].compiled_content %><% raise "lol" %>', {}, '/hi.md') }
+
+        it 'keeps the compilation stack in a good state' do
+          expect(compiler.stack).to be_empty
+          expect { subject }.to raise_error(RuntimeError)
+          expect(compiler.stack).to eql([rep])
+        end
+      end
     end
+  end
+
+  describe '#compile_rep' do
+    subject { compiler.send(:compile_rep, rep) }
 
     it 'generates expected output' do
       expect(rep.snapshot_contents[:last].string).to eql(item.content.string)
@@ -99,6 +160,19 @@ describe Nanoc::Int::Compiler do
         compiler.send(:compile_rep, rep)
 
         expect(rep.snapshot_contents[:last].string).to eql('other=other content')
+      end
+
+      it 'keeps the compilation stack in a good state' do
+        expect(compiler.stack).to be_empty
+
+        expect { compiler.send(:compile_rep, rep) }.to raise_error(Nanoc::Int::Errors::UnmetDependency)
+        expect(compiler.stack).to be_empty
+
+        compiler.send(:compile_rep, other_rep)
+        expect(compiler.stack).to be_empty
+
+        compiler.send(:compile_rep, rep)
+        expect(compiler.stack).to be_empty
       end
 
       it 'generates notifications in the proper order' do
