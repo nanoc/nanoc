@@ -55,61 +55,6 @@ class Nanoc::Filters::LessTest < Nanoc::TestCase
     end
   end
 
-  def test_recompile_includes
-    if_have 'less' do
-      with_site do |site|
-        # Create two less files
-        Dir['content/*'].each { |i| FileUtils.rm(i) }
-        File.open('content/a.less', 'w') do |io|
-          io.write('@import "b.less";')
-        end
-        File.open('content/b.less', 'w') do |io|
-          io.write('p { color: red; }')
-        end
-
-        # Update rules
-        File.open('Rules', 'w') do |io|
-          io.write "compile '*' do\n"
-          io.write "  filter :less\n"
-          io.write "end\n"
-          io.write "\n"
-          io.write "route '/a/' do\n"
-          io.write "  item.identifier.chop + '.css'\n"
-          io.write "end\n"
-          io.write "\n"
-          io.write "route '/b/' do\n"
-          io.write "  nil\n"
-          io.write "end\n"
-        end
-
-        # Compile
-        site = Nanoc::Int::SiteLoader.new.new_from_cwd
-        site.compile
-
-        # Check
-        assert Dir['output/*'].size == 1
-        assert File.file?('output/a.css')
-        refute File.file?('output/b.css')
-        assert_match(/^p\s*\{\s*color:\s*red;?\s*\}/, File.read('output/a.css'))
-
-        # Update included file
-        File.open('content/b.less', 'w') do |io|
-          io.write('p { color: blue; }')
-        end
-
-        # Recompile
-        site = Nanoc::Int::SiteLoader.new.new_from_cwd
-        site.compile
-
-        # Recheck
-        assert Dir['output/*'].size == 1
-        assert File.file?('output/a.css')
-        refute File.file?('output/b.css')
-        assert_match(/^p\s*\{\s*color:\s*blue;?\s*\}/, File.read('output/a.css'))
-      end
-    end
-  end
-
   def test_compression
     if_have 'less' do
       # Create item
