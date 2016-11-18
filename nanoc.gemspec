@@ -30,5 +30,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('parallel', '~> 1.9')
 
   s.add_development_dependency('bundler', '>= 1.7.10', '< 2.0')
-  s.add_development_dependency 'appraisal'
+  s.add_development_dependency('appraisal', '~> 2.1')
 end
