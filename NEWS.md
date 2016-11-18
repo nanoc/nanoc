@@ -1,5 +1,19 @@
 # Nanoc news
 
+## 4.3.8 (2016-11-18)
+
+Enhancements:
+
+* Improved support for Rouge 1.x and 2.x (#880) [Rémi Barraquand]
+* Added `#include` to the `nanoc shell` command (#973)
+* Improved speed of full and incremental compilations (#977, #985)
+
+Fixes:
+
+* Made routing rules and `#write` calls accept an identifier, and not just a string (#976)
+* Removed GC speed-up hacks, which became counterproductive in Ruby 2.2 (#975)
+* Fixed issue which caused items to be always recompiled if `rep`/`item_rep` or `self` are used in those items’ rules (#982)
+
 ## 4.3.7 (2016-10-29)
 
 Fixes:
