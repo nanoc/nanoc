@@ -25,5 +25,19 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
         expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql('Hello there! Nanoc loves you! <3')
       end
     end
+
+    it 'serves /index.xhtml as /' do
+      File.write('output/index.xhtml', 'Hello there! Nanoc loves you! <3')
+      run_nanoc_cmd(['view', '--port', '50385']) do
+        expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql('Hello there! Nanoc loves you! <3')
+      end
+    end
+
+    it 'does not serve other files as /' do
+      File.write('output/index.html666', 'Hello there! Nanoc loves you! <3')
+      run_nanoc_cmd(['view', '--port', '50385']) do
+        expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql("File not found: /\n")
+      end
+    end
   end
 end
