@@ -36,4 +36,67 @@ describe Nanoc::Filter do
       end
     end
   end
+
+  describe '#depend_on' do
+    subject { filter.depend_on(item_views) }
+
+    let(:filter) { Nanoc::Filters::ERB.new(assigns) }
+    let(:item_views) { [item_view] }
+
+    let(:item) { Nanoc::Int::Item.new('foo', {}, '/stuff.md') }
+    let(:item_view) { Nanoc::ItemWithRepsView.new(item, view_context) }
+    let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+
+    let(:view_context) do
+      Nanoc::ViewContext.new(
+        reps: reps,
+        items: double(:items),
+        dependency_tracker: dependency_tracker,
+        compiler: double(:compiler),
+      )
+    end
+
+    let(:dependency_tracker) { double(:dependency_tracker) }
+
+    let(:reps) { Nanoc::Int::ItemRepRepo.new }
+
+    let(:assigns) do
+      {
+        item: item_view,
+      }
+    end
+
+    before do
+      reps << rep
+
+      expect(dependency_tracker).to receive(:bounce).with(item)
+    end
+
+    context 'rep is compiled' do
+      before do
+        rep.compiled = true
+      end
+
+      example do
+        fiber = Fiber.new { subject }
+
+        # resume 1
+        expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
+      end
+    end
+
+    context 'rep is not compiled' do
+      example do
+        fiber = Fiber.new { subject }
+
+        # resume 1
+        res = fiber.resume
+        expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
+        expect(res.rep).to eql(rep)
+
+        # resume 2
+        expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
+      end
+    end
+  end
 end
