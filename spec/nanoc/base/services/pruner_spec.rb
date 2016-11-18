@@ -19,6 +19,10 @@ describe Nanoc::Pruner do
 
   let(:item) { Nanoc::Int::Item.new('asdf', {}, '/a.md') }
 
+  it 'is accessible through Nanoc::Extra::Pruner' do
+    expect(Nanoc::Extra::Pruner).to equal(Nanoc::Pruner)
+  end
+
   describe '#files_and_dirs_in' do
     subject { pruner.files_and_dirs_in('output/') }
 

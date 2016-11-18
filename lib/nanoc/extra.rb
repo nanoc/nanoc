@@ -12,6 +12,9 @@ module Nanoc::Extra
 
   # @deprecated
   Deployer = Nanoc::Deploying::Deployer
+
+  # @deprecated
+  Pruner = Nanoc::Pruner
 end
 
 require 'nanoc/extra/core_ext'
