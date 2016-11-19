@@ -181,11 +181,19 @@ module Nanoc::Int
         if obj.checksum_data
           digest.update('checksum_data=' + obj.checksum_data)
         else
-          digest.update('content=')
-          yield(obj.content)
+          if obj.content_checksum_data
+            digest.update('content_checksum_data=' + obj.content_checksum_data)
+          else
+            digest.update('content=')
+            yield(obj.content)
+          end
 
-          digest.update(',attributes=')
-          yield(obj.attributes)
+          if obj.attributes_checksum_data
+            digest.update(',attributes_checksum_data=' + obj.attributes_checksum_data)
+          else
+            digest.update(',attributes=')
+            yield(obj.attributes)
+          end
 
           digest.update(',identifier=')
           yield(obj.identifier)

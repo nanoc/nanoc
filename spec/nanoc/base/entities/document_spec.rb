@@ -4,8 +4,19 @@ shared_examples 'a document' do
     let(:attributes_arg) { { 'title' => 'Home' } }
     let(:identifier_arg) { '/home.md' }
     let(:checksum_data_arg) { 'abcdef' }
+    let(:content_checksum_data_arg) { 'con-cs' }
+    let(:attributes_checksum_data_arg) { 'attr-cs' }
 
-    subject { described_class.new(content_arg, attributes_arg, identifier_arg, checksum_data: checksum_data_arg) }
+    subject do
+      described_class.new(
+        content_arg,
+        attributes_arg,
+        identifier_arg,
+        checksum_data: checksum_data_arg,
+        content_checksum_data: content_checksum_data_arg,
+        attributes_checksum_data: attributes_checksum_data_arg,
+      )
+    end
 
     describe 'content arg' do
       context 'string' do
@@ -80,6 +91,18 @@ shared_examples 'a document' do
     describe 'checksum_data arg' do
       it 'reuses checksum_data' do
         expect(subject.checksum_data).to eql(checksum_data_arg)
+      end
+    end
+
+    describe 'content_checksum_data arg' do
+      it 'reuses content_checksum_data' do
+        expect(subject.content_checksum_data).to eql(content_checksum_data_arg)
+      end
+    end
+
+    describe 'attributes_checksum_data arg' do
+      it 'reuses attributes_checksum_data' do
+        expect(subject.attributes_checksum_data).to eql(attributes_checksum_data_arg)
       end
     end
   end

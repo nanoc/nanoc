@@ -196,6 +196,18 @@ describe Nanoc::Int::Checksummer do
 
       it { is_expected.to eql('Nanoc::Int::Item<checksum_data=abcdef>') }
     end
+
+    context 'with content checksum' do
+      let(:obj) { Nanoc::Int::Item.new('asdf', { 'foo' => 'bar' }, '/foo.md', content_checksum_data: 'con-cs') }
+
+      it { is_expected.to eql('Nanoc::Int::Item<content_checksum_data=con-cs,attributes=Hash<Symbol<foo>=String<bar>,>,identifier=Nanoc::Identifier<String</foo.md>>>') }
+    end
+
+    context 'with attributes checksum' do
+      let(:obj) { Nanoc::Int::Item.new('asdf', { 'foo' => 'bar' }, '/foo.md', attributes_checksum_data: 'attr-cs') }
+
+      it { is_expected.to eql('Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes_checksum_data=attr-cs,identifier=Nanoc::Identifier<String</foo.md>>>') }
+    end
   end
 
   context 'Nanoc::Int::Layout' do

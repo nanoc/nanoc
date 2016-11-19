@@ -18,24 +18,41 @@ module Nanoc
       # @return [String, nil]
       attr_accessor :checksum_data
 
+      # @return [String, nil]
+      attr_accessor :content_checksum_data
+
+      # @return [String, nil]
+      attr_accessor :attributes_checksum_data
+
       c_content = C::Or[String, Nanoc::Int::Content]
       c_attributes = C::Or[Hash, Proc]
       c_identifier = C::Or[String, Nanoc::Identifier]
-      c_checksum_data = C::Optional[C::Maybe[String]]
+      c_checksum_data = C::KeywordArgs[
+        checksum_data: C::Optional[C::Maybe[String]],
+        content_checksum_data: C::Optional[C::Maybe[String]],
+        attributes_checksum_data: C::Optional[C::Maybe[String]],
+      ]
 
-      contract c_content, c_attributes, c_identifier, C::KeywordArgs[checksum_data: c_checksum_data] => C::Any
+      contract c_content, c_attributes, c_identifier, c_checksum_data => C::Any
       # @param [String, Nanoc::Int::Content] content
       #
       # @param [Hash, Proc] attributes
       #
       # @param [String, Nanoc::Identifier] identifier
       #
-      # @param [String, nil] checksum_data Used to determine whether the document has changed
-      def initialize(content, attributes, identifier, checksum_data: nil)
+      # @param [String, nil] checksum_data
+      #
+      # @param [String, nil] content_checksum_data
+      #
+      # @param [String, nil] attributes_checksum_data
+      def initialize(content, attributes, identifier, checksum_data: nil, content_checksum_data: nil, attributes_checksum_data: nil)
         @content = Nanoc::Int::Content.create(content)
         @attributes = Nanoc::Int::LazyValue.new(attributes).map(&:__nanoc_symbolize_keys_recursively)
         @identifier = Nanoc::Identifier.from(identifier)
+
         @checksum_data = checksum_data
+        @content_checksum_data = content_checksum_data
+        @attributes_checksum_data = attributes_checksum_data
       end
 
       contract C::None => self
