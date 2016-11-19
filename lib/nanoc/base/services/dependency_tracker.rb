@@ -24,8 +24,8 @@ module Nanoc::Int
       @stack = []
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
-    def enter(obj)
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+    def enter(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
       unless @stack.empty?
         Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj)
         @dependency_store.record_dependency(@stack.last, obj)
@@ -39,9 +39,9 @@ module Nanoc::Int
       @stack.pop
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
-    def bounce(obj)
-      enter(obj)
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+    def bounce(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
+      enter(obj, raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
       exit
     end
   end

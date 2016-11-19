@@ -293,7 +293,7 @@ describe Nanoc::Int::Executor do
       let(:layout_content) { 'head <%= @layout[:bug] %> foot' }
 
       it 'exposes @layout as view' do
-        allow(dependency_tracker).to receive(:enter).with(layout)
+        allow(dependency_tracker).to receive(:enter).with(layout, raw_content: false, attributes: false, compiled_content: false, path: false)
         allow(dependency_tracker).to receive(:exit)
         subject
         expect(rep.snapshot_contents[:last].string).to eq('head Gum Emperor foot')
