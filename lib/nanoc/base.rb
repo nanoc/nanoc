@@ -7,7 +7,6 @@ end
 module Nanoc::Int
   # Load helper classes
   autoload 'Context',              'nanoc/base/context'
-  autoload 'Checksummer',          'nanoc/base/checksummer'
   autoload 'DirectedGraph',        'nanoc/base/directed_graph'
   autoload 'Errors',               'nanoc/base/errors'
   autoload 'Memoization',          'nanoc/base/memoization'
