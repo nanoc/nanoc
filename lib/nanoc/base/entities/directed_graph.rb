@@ -208,7 +208,7 @@ module Nanoc::Int
 
     def props_for(from, to)
       # TODO: test
-      @edge_props[[from, to]]
+      @edge_props.fetch([from, to], {})
     end
 
     # @return [Array] The list of all vertices in this graph.

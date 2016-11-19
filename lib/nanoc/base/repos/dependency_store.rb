@@ -193,7 +193,16 @@ module Nanoc::Int
       new_objects.each do |new_obj|
         @objects.each do |obj|
           next unless obj.is_a?(Nanoc::Int::Item)
-          @graph.add_edge(new_obj, obj)
+          @graph.add_edge(
+            new_obj,
+            obj,
+            props: {
+              raw_content: true,
+              attributes: true,
+              compiled_content: true,
+              path: true,
+            },
+          )
         end
       end
     end
