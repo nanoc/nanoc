@@ -213,13 +213,15 @@ module Nanoc::Int
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Bool
     def content_checksums_identical?(obj)
-      checksum_store.content_checksum_for(obj) == calc_checksum(obj.content)
+      checksum_store.content_checksum_for(obj) ==
+        (obj.content_checksum_data || Nanoc::Int::Checksummer.calc(obj.content))
     end
     memoize :content_checksums_identical?
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Bool
     def attributes_checksums_identical?(obj)
-      checksum_store.attributes_checksum_for(obj) == calc_checksum(obj.attributes)
+      checksum_store.attributes_checksum_for(obj) ==
+        (obj.attributes_checksum_data || Nanoc::Int::Checksummer.calc(obj.attributes))
     end
     memoize :attributes_checksums_identical?
 

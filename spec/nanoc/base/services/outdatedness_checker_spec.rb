@@ -86,4 +86,57 @@ describe Nanoc::Int::OutdatednessChecker do
       # …
     end
   end
+
+  describe '#{content,attributes}_checksums_identical?' do
+    subject do
+      [
+        outdatedness_checker.send(:content_checksums_identical?, new_obj),
+        outdatedness_checker.send(:attributes_checksums_identical?, new_obj),
+      ]
+    end
+
+    let(:checksum_store) { Nanoc::Int::ChecksumStore.new }
+
+    let(:stored_obj) { raise 'override me' }
+    let(:new_obj)    { raise 'override me' }
+
+    shared_examples 'a document' do
+      let(:stored_obj) { klass.new('a', {}, '/foo.md') }
+      let(:new_obj)    { klass.new('a', {}, '/foo.md') }
+
+      context 'not stored' do
+        it { is_expected.to eql([false, false]) }
+      end
+
+      context 'stored' do
+        before { checksum_store.add(stored_obj) }
+
+        context 'but content changed afterwards' do
+          let(:new_obj) { klass.new('aaaaaaaa', {}, '/foo.md') }
+          it { is_expected.to eql([false, true]) }
+        end
+
+        context 'but attributes changed afterwards' do
+          let(:new_obj) { klass.new('a', { animal: 'donkey' }, '/foo.md') }
+          it { is_expected.to eql([true, false]) }
+        end
+
+        context 'and unchanged' do
+          it { is_expected.to eql([true, true]) }
+        end
+      end
+    end
+
+    context 'item' do
+      let(:klass) { Nanoc::Int::Item }
+      it_behaves_like 'a document'
+    end
+
+    context 'layout' do
+      let(:klass) { Nanoc::Int::Layout }
+      it_behaves_like 'a document'
+    end
+
+    # …
+  end
 end
