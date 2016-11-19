@@ -118,9 +118,7 @@ module Nanoc::Int
       # Calculate checksums
       objects_to_checksum =
         site.items.to_a + site.layouts.to_a + site.code_snippets + [site.config]
-      objects_to_checksum.each do |obj|
-        checksum_store[obj] = Nanoc::Int::Checksummer.calc(obj)
-      end
+      objects_to_checksum.each { |obj| checksum_store.add(obj) }
 
       # Store
       stores.each(&:store)

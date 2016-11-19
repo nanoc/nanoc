@@ -97,7 +97,8 @@ module Nanoc::Int
 
         # Outdated if checksums are missing or different
         return Reasons::NotEnoughData unless checksums_available?(obj.item)
-        return Reasons::SourceModified unless checksums_identical?(obj.item)
+        return Reasons::SourceModified unless content_checksums_identical?(obj.item)
+        return Reasons::SourceModified unless attributes_checksums_identical?(obj.item)
 
         # Outdated if compiled file doesn't exist (yet)
         return Reasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
@@ -121,7 +122,8 @@ module Nanoc::Int
 
         # Outdated if checksums are missing or different
         return Reasons::NotEnoughData unless checksums_available?(obj)
-        return Reasons::SourceModified unless checksums_identical?(obj)
+        return Reasons::SourceModified unless content_checksums_identical?(obj)
+        return Reasons::SourceModified unless attributes_checksums_identical?(obj)
 
         # Not outdated
         nil
@@ -180,7 +182,7 @@ module Nanoc::Int
     end
     memoize :rule_memory_differs_for
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet] => String
+    contract C::Any => String
     # @param obj The object to create a checksum for
     #
     # @return [String] The digest
@@ -189,7 +191,7 @@ module Nanoc::Int
     end
     memoize :calc_checksum
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet] => C::Bool
+    contract C::Any => C::Bool
     # @param obj
     #
     # @return [Boolean] false if either the new or the old checksum for the
@@ -199,7 +201,7 @@ module Nanoc::Int
     end
     memoize :checksums_available?
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet] => C::Bool
+    contract C::Any => C::Bool
     # @param obj
     #
     # @return [Boolean] false if the old and new checksums for the given
@@ -209,7 +211,19 @@ module Nanoc::Int
     end
     memoize :checksums_identical?
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet] => C::Bool
+    contract C::Any => C::Bool
+    def content_checksums_identical?(obj)
+      checksum_store.content_checksum_for(obj) == calc_checksum(obj.content)
+    end
+    memoize :content_checksums_identical?
+
+    contract C::Any => C::Bool
+    def attributes_checksums_identical?(obj)
+      checksum_store.attributes_checksum_for(obj) == calc_checksum(obj.attributes)
+    end
+    memoize :attributes_checksums_identical?
+
+    contract C::Any => C::Bool
     # @param obj
     #
     # @return [Boolean] true if the old and new checksums for the given object

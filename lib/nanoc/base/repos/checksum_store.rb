@@ -23,13 +23,22 @@ module Nanoc::Int
       @checksums[obj.reference]
     end
 
-    # Sets the checksum for the given object.
-    #
-    # @param [#reference] obj The object for which to set the checksum
-    #
-    # @param [String] checksum The checksum
-    def []=(obj, checksum)
-      @checksums[obj.reference] = checksum
+    # Calculates and stores the checksum for the given object.
+    def add(obj)
+      if obj.is_a?(Document)
+        @checksums[[obj.reference, :content]] = Nanoc::Int::Checksummer.calc(obj.content)
+        @checksums[[obj.reference, :attributes]] = Nanoc::Int::Checksummer.calc(obj.attributes)
+      end
+
+      @checksums[obj.reference] = Nanoc::Int::Checksummer.calc(obj)
+    end
+
+    def content_checksum_for(obj)
+      @checksums[[obj.reference, :content]]
+    end
+
+    def attributes_checksum_for(obj)
+      @checksums[[obj.reference, :attributes]]
     end
 
     protected
