@@ -31,9 +31,9 @@ describe Nanoc::DataSources::Filesystem do
 
         let(:expected_attributes) do
           {
-            content_filename: "foo/bar.html",
-            extension: "html",
-            filename: "foo/bar.html",
+            content_filename: 'foo/bar.html',
+            extension: 'html',
+            filename: 'foo/bar.html',
             meta_filename: nil,
             mtime: now,
             num: 1,
@@ -43,7 +43,7 @@ describe Nanoc::DataSources::Filesystem do
         it 'loads that file' do
           expect(subject.size).to eq(1)
 
-          expect(subject[0].content.string).to eq("test 1")
+          expect(subject[0].content.string).to eq('test 1')
           expect(subject[0].attributes).to eq(expected_attributes)
           expect(subject[0].identifier).to eq(Nanoc::Identifier.new('/bar/'))
           expect(subject[0].checksum_data).to be_nil
