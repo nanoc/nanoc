@@ -246,7 +246,7 @@ module Nanoc::Int
 
             @fibers.delete(rep)
           ensure
-            dependency_tracker.exit(rep.item)
+            dependency_tracker.exit
           end
         end
 

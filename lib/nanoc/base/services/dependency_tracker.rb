@@ -8,8 +8,8 @@ module Nanoc::Int
       def enter(_obj)
       end
 
-      contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
-      def exit(_obj)
+      contract C::None => C::Any
+      def exit
       end
 
       contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
@@ -34,15 +34,15 @@ module Nanoc::Int
       @stack.push(obj)
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
-    def exit(_obj)
+    contract C::None => C::Any
+    def exit
       @stack.pop
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
     def bounce(obj)
       enter(obj)
-      exit(obj)
+      exit
     end
   end
 end

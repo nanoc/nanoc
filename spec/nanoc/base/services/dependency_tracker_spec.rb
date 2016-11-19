@@ -107,7 +107,7 @@ describe Nanoc::Int::DependencyTracker do
       subject do
         tracker.enter(item_a)
         tracker.enter(item_b)
-        tracker.exit(item_b)
+        tracker.exit
         tracker.enter(item_c)
       end
 

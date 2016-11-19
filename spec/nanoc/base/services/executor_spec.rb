@@ -294,7 +294,7 @@ describe Nanoc::Int::Executor do
 
       it 'exposes @layout as view' do
         allow(dependency_tracker).to receive(:enter).with(layout)
-        allow(dependency_tracker).to receive(:exit).with(layout)
+        allow(dependency_tracker).to receive(:exit)
         subject
         expect(rep.snapshot_contents[:last].string).to eq('head Gum Emperor foot')
       end
