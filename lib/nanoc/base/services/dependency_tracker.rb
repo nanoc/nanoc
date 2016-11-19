@@ -2,12 +2,17 @@ module Nanoc::Int
   # @api private
   class DependencyTracker
     class Null
+      include Nanoc::Int::ContractsSupport
+
+      contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
       def enter(_obj)
       end
 
+      contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
       def exit(_obj)
       end
 
+      contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
       def bounce(_obj)
       end
     end
