@@ -45,11 +45,11 @@ module Nanoc::Int
       end
 
       def calc_for_content_of(obj)
-        obj.content_checksum_data || Nanoc::Int::Checksummer.calc(obj.content)
+        obj.content_checksum_data || obj.checksum_data || Nanoc::Int::Checksummer.calc(obj.content)
       end
 
       def calc_for_attributes_of(obj)
-        obj.attributes_checksum_data || Nanoc::Int::Checksummer.calc(obj.attributes)
+        obj.attributes_checksum_data || obj.checksum_data || Nanoc::Int::Checksummer.calc(obj.attributes)
       end
 
       private

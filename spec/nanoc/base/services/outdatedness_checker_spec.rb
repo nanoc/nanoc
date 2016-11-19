@@ -102,27 +102,95 @@ describe Nanoc::Int::OutdatednessChecker do
 
     shared_examples 'a document' do
       let(:stored_obj) { klass.new('a', {}, '/foo.md') }
-      let(:new_obj)    { klass.new('a', {}, '/foo.md') }
+      let(:new_obj)    { stored_obj }
 
-      context 'not stored' do
-        it { is_expected.to eql([false, false]) }
+      context 'no checksum data' do
+        context 'not stored' do
+          it { is_expected.to eql([false, false]) }
+        end
+
+        context 'stored' do
+          before { checksum_store.add(stored_obj) }
+
+          context 'but content changed afterwards' do
+            let(:new_obj) { klass.new('aaaaaaaa', {}, '/foo.md') }
+            it { is_expected.to eql([false, true]) }
+          end
+
+          context 'but attributes changed afterwards' do
+            let(:new_obj) { klass.new('a', { animal: 'donkey' }, '/foo.md') }
+            it { is_expected.to eql([true, false]) }
+          end
+
+          context 'and unchanged' do
+            it { is_expected.to eql([true, true]) }
+          end
+        end
       end
 
-      context 'stored' do
-        before { checksum_store.add(stored_obj) }
+      context 'checksum_data' do
+        let(:stored_obj) { klass.new('a', {}, '/foo.md', checksum_data: 'cs-data') }
+        let(:new_obj)    { stored_obj }
 
-        context 'but content changed afterwards' do
-          let(:new_obj) { klass.new('aaaaaaaa', {}, '/foo.md') }
-          it { is_expected.to eql([false, true]) }
+        context 'not stored' do
+          it { is_expected.to eql([false, false]) }
         end
 
-        context 'but attributes changed afterwards' do
-          let(:new_obj) { klass.new('a', { animal: 'donkey' }, '/foo.md') }
-          it { is_expected.to eql([true, false]) }
+        context 'stored' do
+          before { checksum_store.add(stored_obj) }
+
+          context 'but checksum data afterwards' do
+            let(:new_obj) { klass.new('a', {}, '/foo.md', checksum_data: 'cs-data-new') }
+            it { is_expected.to eql([false, false]) }
+          end
+
+          context 'and unchanged' do
+            it { is_expected.to eql([true, true]) }
+          end
+        end
+      end
+
+      context 'content_checksum_data' do
+        let(:stored_obj) { klass.new('a', {}, '/foo.md', content_checksum_data: 'cs-data') }
+        let(:new_obj)    { stored_obj }
+
+        context 'not stored' do
+          it { is_expected.to eql([false, false]) }
         end
 
-        context 'and unchanged' do
-          it { is_expected.to eql([true, true]) }
+        context 'stored' do
+          before { checksum_store.add(stored_obj) }
+
+          context 'but checksum data afterwards' do
+            let(:new_obj) { klass.new('a', {}, '/foo.md', content_checksum_data: 'cs-data-new') }
+            it { is_expected.to eql([false, true]) }
+          end
+
+          context 'and unchanged' do
+            it { is_expected.to eql([true, true]) }
+          end
+        end
+      end
+
+      context 'attributes_checksum_data' do
+        let(:stored_obj) { klass.new('a', {}, '/foo.md', attributes_checksum_data: 'cs-data') }
+        let(:new_obj)    { stored_obj }
+
+        context 'not stored' do
+          it { is_expected.to eql([false, false]) }
+        end
+
+        context 'stored' do
+          before { checksum_store.add(stored_obj) }
+
+          context 'but checksum data afterwards' do
+            let(:new_obj) { klass.new('a', {}, '/foo.md', attributes_checksum_data: 'cs-data-new') }
+            it { is_expected.to eql([true, false]) }
+          end
+
+          context 'and unchanged' do
+            it { is_expected.to eql([true, true]) }
+          end
         end
       end
     end
