@@ -44,11 +44,7 @@ module Nanoc::Int
         ).with_defaults
 
       # Load environment
-      if Nanoc::Feature.enabled?(Nanoc::Feature::ENVIRONMENTS)
-        config.with_environment
-      else
-        config
-      end
+      config.with_environment
     end
 
     # @api private

@@ -90,4 +90,3 @@ module Nanoc
 end
 
 Nanoc::Feature.define('profiler', version: '4.3')
-Nanoc::Feature.define('environments', version: '4.3')
