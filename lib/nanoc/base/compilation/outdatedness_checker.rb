@@ -97,8 +97,8 @@ module Nanoc::Int
 
         # Outdated if checksums are missing or different
         return Reasons::NotEnoughData unless checksums_available?(obj.item)
-        return Reasons::SourceModified unless content_checksums_identical?(obj.item)
-        return Reasons::SourceModified unless attributes_checksums_identical?(obj.item)
+        return Reasons::ContentModified unless content_checksums_identical?(obj.item)
+        return Reasons::AttributesModified unless attributes_checksums_identical?(obj.item)
 
         # Outdated if compiled file doesn't exist (yet)
         return Reasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
@@ -122,8 +122,8 @@ module Nanoc::Int
 
         # Outdated if checksums are missing or different
         return Reasons::NotEnoughData unless checksums_available?(obj)
-        return Reasons::SourceModified unless content_checksums_identical?(obj)
-        return Reasons::SourceModified unless attributes_checksums_identical?(obj)
+        return Reasons::ContentModified unless content_checksums_identical?(obj)
+        return Reasons::AttributesModified unless attributes_checksums_identical?(obj)
 
         # Not outdated
         nil
