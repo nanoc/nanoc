@@ -14,6 +14,38 @@ module Nanoc::Int
 
     Reasons = Nanoc::Int::OutdatednessReasons
 
+    class Details
+      attr_reader :reason
+
+      def initialize(reason:, raw_content: false, attributes: false, compiled_content: false, path: false)
+        @reason = reason
+        @raw_content = raw_content
+        @attributes = attributes
+        @compiled_content = compiled_content
+        @path = path
+      end
+
+      # item, item rep, layout
+      def raw_content_outdated?
+        @raw_content
+      end
+
+      # item, item rep, layout
+      def attributes_outdated?
+        @attributes
+      end
+
+      # item, item rep, layout
+      def compiled_content_outdated?
+        @compiled_content
+      end
+
+      # item, item rep
+      def path_outdated?
+        @path
+      end
+    end
+
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::Int::ChecksumStore] checksum_store
     # @param [Nanoc::Int::DependencyStore] dependency_store
@@ -78,52 +110,120 @@ module Nanoc::Int
       !basic_outdatedness_reason_for(obj).nil?
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
-    # Calculates the reason why the given object is outdated. This method does
-    # not take dependencies into account; use {#outdatedness_reason_for?} if
-    # you want to include dependencies in the outdatedness check.
-    #
-    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
-    #   whose outdatedness reason should be calculated.
-    #
-    # @return [Reasons::Generic, nil] The reason why the
-    #   given object is outdated, or nil if the object is not outdated.
-    def basic_outdatedness_reason_for(obj)
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Details]
+    def basic_outdatedness_details_for(obj)
       case obj
       when Nanoc::Int::ItemRep
-        # Outdated if rules outdated
-        return Reasons::RulesModified if
-          rule_memory_differs_for(obj)
+        # Outdated if rules are outdated
+        if rule_memory_differs_for(obj)
+          return Details.new(
+            reason: Reasons::RulesModified,
+            compiled_content: true,
+            path: true,
+          )
+        end
 
-        # Outdated if checksums are missing or different
-        return Reasons::NotEnoughData unless checksums_available?(obj.item)
-        return Reasons::ContentModified unless content_checksums_identical?(obj.item)
-        return Reasons::AttributesModified unless attributes_checksums_identical?(obj.item)
+        # Outdated if checksums are missing
+        unless checksums_available?(obj.item)
+          return Details.new(
+            reason: Reasons::NotEnoughData,
+            raw_content: true,
+            attributes: true,
+            compiled_content: true,
+            path: true,
+          )
+        end
+
+        # Outdated if content checksums are different
+        unless content_checksums_identical?(obj.item)
+          return Details.new(
+            reason: Reasons::ContentModified,
+            raw_content: true,
+            attributes: true,
+            compiled_content: true,
+            path: true,
+          )
+        end
+
+        # Outdated if attributes checksums are different
+        unless attributes_checksums_identical?(obj.item)
+          return Details.new(
+            reason: Reasons::AttributesModified,
+            raw_content: true,
+            attributes: true,
+            compiled_content: true,
+            path: true,
+          )
+        end
 
         # Outdated if compiled file doesn't exist (yet)
-        return Reasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
+        if obj.raw_path && !File.file?(obj.raw_path)
+          return Details.new(
+            reason: Reasons::NotWritten,
+            compiled_content: true,
+          )
+        end
 
         # Outdated if code snippets outdated
-        return Reasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
-          object_modified?(cs)
+        if site.code_snippets.any? { |cs| object_modified?(cs) }
+          return Details.new(
+            reason: Reasons::CodeSnippetsModified,
+            raw_content: true,
+            attributes: true,
+            compiled_content: true,
+            path: true,
+          )
         end
 
         # Outdated if configuration outdated
-        return Reasons::ConfigurationModified if object_modified?(site.config)
+        if object_modified?(site.config)
+          return Details.new(
+            reason: Reasons::ConfigurationModified,
+            compiled_content: true,
+            path: true,
+          )
+        end
 
         # Not outdated
         nil
       when Nanoc::Int::Item
-        @reps[obj].lazy.map { |rep| basic_outdatedness_reason_for(rep) }.find { |s| s }
+        # TODO: find all, then OR them together
+        @reps[obj].lazy.map { |rep| basic_outdatedness_details_for(rep) }.find { |d| d }
       when Nanoc::Int::Layout
         # Outdated if rules outdated
-        return Reasons::RulesModified if
-          rule_memory_differs_for(obj)
+        if rule_memory_differs_for(obj)
+          return Details.new(
+            reason: Reasons::RulesModified,
+            compiled_content: true,
+          )
+        end
 
-        # Outdated if checksums are missing or different
-        return Reasons::NotEnoughData unless checksums_available?(obj)
-        return Reasons::ContentModified unless content_checksums_identical?(obj)
-        return Reasons::AttributesModified unless attributes_checksums_identical?(obj)
+        # Outdated if checksums are missing
+        unless checksums_available?(obj)
+          return Details.new(
+            reason: Reasons::NotEnoughData,
+            raw_content: true,
+            attributes: true,
+          )
+        end
+
+        # Outdated if content checksums are different
+        unless content_checksums_identical?(obj)
+          return Details.new(
+            reason: Reasons::ContentModified,
+            raw_content: true,
+            attributes: true,
+          )
+        end
+
+        # Outdated if attributes checksums are different
+        unless attributes_checksums_identical?(obj)
+          return Details.new(
+            reason: Reasons::AttributesModified,
+            raw_content: true,
+            attributes: true,
+          )
+        end
 
         # Not outdated
         nil
@@ -131,7 +231,12 @@ module Nanoc::Int
         raise "do not know how to check outdatedness of #{obj.inspect}"
       end
     end
-    memoize :basic_outdatedness_reason_for
+    memoize :basic_outdatedness_details_for
+
+    def basic_outdatedness_reason_for(obj)
+      details = basic_outdatedness_details_for(obj)
+      details ? details.reason : nil
+    end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout], Hamster::Set => C::Bool
     # Checks whether the given object is outdated due to dependencies.
