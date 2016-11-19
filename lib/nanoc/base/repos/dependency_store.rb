@@ -138,11 +138,12 @@ module Nanoc::Int
     #
     # @return [void]
     def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false)
+      existing_props = @graph.props_for(dst, src)
       props = {
-        raw_content: raw_content,
-        attributes: attributes,
-        compiled_content: compiled_content,
-        path: path,
+        raw_content: raw_content || existing_props.fetch(:raw_content, false),
+        attributes: attributes || existing_props.fetch(:attributes, false),
+        compiled_content: compiled_content || existing_props.fetch(:compiled_content, false),
+        path: path || existing_props.fetch(:path, false),
       }
 
       # Warning! dst and src are *reversed* here!
