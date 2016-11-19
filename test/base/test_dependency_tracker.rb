@@ -1,7 +1,10 @@
 class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_initialize
     # Mock items
-    items = [mock, mock]
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+    ]
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
@@ -13,7 +16,10 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
   def test_record_dependency
     # Mock items
-    items = [mock, mock]
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+    ]
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
@@ -27,7 +33,10 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
   def test_record_dependency_no_self
     # Mock items
-    items = [mock, mock]
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+    ]
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
@@ -42,7 +51,10 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
   def test_record_dependency_no_doubles
     # Mock items
-    items = [mock, mock]
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+    ]
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
@@ -58,7 +70,11 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
   def test_objects_causing_outdatedness_of
     # Mock items
-    items = [mock, mock, mock]
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+      Nanoc::Int::Item.new('c', {}, '/c.md'),
+    ]
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
@@ -73,7 +89,11 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
   def test_objects_outdated_due_to
     # Mock items
-    items = [mock, mock, mock]
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+      Nanoc::Int::Item.new('c', {}, '/c.md'),
+    ]
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
@@ -88,12 +108,12 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
   def test_store_graph_and_load_graph_simple
     # Mock items
-    items = [mock('0'), mock('1'), mock('2'), mock('3')]
-    items.each { |i| i.stubs(:type).returns(:item) }
-    items[0].stubs(:reference).returns([:item, '/aaa/'])
-    items[1].stubs(:reference).returns([:item, '/bbb/'])
-    items[2].stubs(:reference).returns([:item, '/ccc/'])
-    items[3].stubs(:reference).returns([:item, '/ddd/'])
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+      Nanoc::Int::Item.new('c', {}, '/c.md'),
+      Nanoc::Int::Item.new('d', {}, '/d.md'),
+    ]
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
@@ -122,12 +142,12 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
   def test_store_graph_and_load_graph_with_removed_items
     # Mock items
-    items = [mock('0'), mock('1'), mock('2'), mock('3')]
-    items.each { |i| i.stubs(:type).returns(:item) }
-    items[0].stubs(:reference).returns([:item, '/aaa/'])
-    items[1].stubs(:reference).returns([:item, '/bbb/'])
-    items[2].stubs(:reference).returns([:item, '/ccc/'])
-    items[3].stubs(:reference).returns([:item, '/ddd/'])
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+      Nanoc::Int::Item.new('c', {}, '/c.md'),
+      Nanoc::Int::Item.new('d', {}, '/d.md'),
+    ]
 
     # Create new and old lists
     old_items = [items[0], items[1], items[2], items[3]]
@@ -159,11 +179,11 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
   def test_store_graph_with_nils_in_dst
     # Mock items
-    items = [mock('0'), mock('1'), mock('2')]
-    items.each { |i| i.stubs(:type).returns(:item) }
-    items[0].stubs(:reference).returns([:item, '/aaa/'])
-    items[1].stubs(:reference).returns([:item, '/bbb/'])
-    items[2].stubs(:reference).returns([:item, '/ccc/'])
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+      Nanoc::Int::Item.new('c', {}, '/c.md'),
+    ]
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
@@ -189,11 +209,11 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
   def test_store_graph_with_nils_in_src
     # Mock items
-    items = [mock('0'), mock('1'), mock('2')]
-    items.each { |i| i.stubs(:type).returns(:item) }
-    items[0].stubs(:reference).returns([:item, '/aaa/'])
-    items[1].stubs(:reference).returns([:item, '/bbb/'])
-    items[2].stubs(:reference).returns([:item, '/ccc/'])
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+      Nanoc::Int::Item.new('c', {}, '/c.md'),
+    ]
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
@@ -219,7 +239,11 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
 
   def test_forget_dependencies_for
     # Mock items
-    items = [mock, mock, mock]
+    items = [
+      Nanoc::Int::Item.new('a', {}, '/a.md'),
+      Nanoc::Int::Item.new('b', {}, '/b.md'),
+      Nanoc::Int::Item.new('c', {}, '/c.md'),
+    ]
 
     # Create
     store = Nanoc::Int::DependencyStore.new(items)
