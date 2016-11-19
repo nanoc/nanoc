@@ -358,7 +358,7 @@ module Nanoc::DataSources
     def parse_metadata(data, filename)
       begin
         meta = YAML.load(data) || {}
-      rescue Exception => e
+      rescue => e
         raise "Could not parse YAML for #{filename}: #{e.message}"
       end
 

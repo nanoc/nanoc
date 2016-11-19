@@ -51,9 +51,6 @@ Eval:
 RegexpLiteral:
   Enabled: false
 
-RescueException:
-  Enabled: false
-
 ClassAndModuleChildren:
   Enabled: false
 
