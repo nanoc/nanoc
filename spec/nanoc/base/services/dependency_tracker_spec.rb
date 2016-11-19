@@ -200,8 +200,8 @@ describe Nanoc::Int::DependencyTracker do
                 attributes: false,
                 compiled_content: false,
                 path: true,
-              )
-            ]
+              ),
+            ],
           )
       end
     end

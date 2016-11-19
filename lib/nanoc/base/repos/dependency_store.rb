@@ -66,11 +66,11 @@ module Nanoc::Int
 
       def eql?(other)
         from == other.from &&
-        to == other.to &&
-        raw_content? == other.raw_content? &&
-        attributes? == other.attributes? &&
-        compiled_content? == other.compiled_content? &&
-        path? == other.path?
+          to == other.to &&
+          raw_content? == other.raw_content? &&
+          attributes? == other.attributes? &&
+          compiled_content? == other.compiled_content? &&
+          path? == other.path?
       end
 
       def ==(other)
