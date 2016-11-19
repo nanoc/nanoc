@@ -40,8 +40,12 @@ module Nanoc::Int
       'The rules file has been modified since the last time the site was compiled.',
     )
 
-    SourceModified = Generic.new(
-      'The source file of this item has been modified since the last time the site was compiled.',
+    ContentModified = Generic.new(
+      'The content of this item has been modified since the last time the site was compiled.',
+    )
+
+    AttributesModified = Generic.new(
+      'The attributes of this item have been modified since the last time the site was compiled.',
     )
   end
 end

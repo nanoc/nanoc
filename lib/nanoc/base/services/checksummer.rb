@@ -44,6 +44,14 @@ module Nanoc::Int
         digest.to_s
       end
 
+      def calc_for_content_of(obj)
+        obj.content_checksum_data || obj.checksum_data || Nanoc::Int::Checksummer.calc(obj.content)
+      end
+
+      def calc_for_attributes_of(obj)
+        obj.attributes_checksum_data || obj.checksum_data || Nanoc::Int::Checksummer.calc(obj.attributes)
+      end
+
       private
 
       def update(obj, digest, visited = Hamster::Set.new)
@@ -181,11 +189,19 @@ module Nanoc::Int
         if obj.checksum_data
           digest.update('checksum_data=' + obj.checksum_data)
         else
-          digest.update('content=')
-          yield(obj.content)
+          if obj.content_checksum_data
+            digest.update('content_checksum_data=' + obj.content_checksum_data)
+          else
+            digest.update('content=')
+            yield(obj.content)
+          end
 
-          digest.update(',attributes=')
-          yield(obj.attributes)
+          if obj.attributes_checksum_data
+            digest.update(',attributes_checksum_data=' + obj.attributes_checksum_data)
+          else
+            digest.update(',attributes=')
+            yield(obj.attributes)
+          end
 
           digest.update(',identifier=')
           yield(obj.identifier)

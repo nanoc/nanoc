@@ -72,7 +72,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
     end
   end
 
-  def test_outdated_if_item_checksum_is_different
+  def test_outdated_if_item_content_checksum_is_different
     # Compile once
     with_site(name: 'foo') do |site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
@@ -83,7 +83,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
       site.compile
     end
 
-    # Create new item
+    # Update item
     FileUtils.cd('foo') do
       File.open('content/new.html', 'w') { |io| io.write('o hello DIFFERENT!!!') }
     end
@@ -95,7 +95,34 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load_stores
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/new/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::SourceModified, outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::ContentModified, outdatedness_checker.outdatedness_reason_for(rep)
+    end
+  end
+
+  def test_outdated_if_item_attributes_checksum_is_different
+    # Compile once
+    with_site(name: 'foo') do |site|
+      File.open('content/index.html', 'w') { |io| io.write('o hello') }
+      File.open('content/new.html', 'w') { |io| io.write('o hello too') }
+      File.open('lib/stuff.rb', 'w') { |io| io.write('$foo = 123') }
+
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site.compile
+    end
+
+    # Update item
+    FileUtils.cd('foo') do
+      File.open('content/new.html', 'w') { |io| io.write("---\ntitle: donkey\n---\no hello too") }
+    end
+
+    # Check
+    with_site(name: 'foo') do |site|
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site.compiler.build_reps
+      site.compiler.load_stores
+      outdatedness_checker = site.compiler.send :outdatedness_checker
+      rep = site.compiler.reps[site.items.find { |i| i.identifier == '/new/' }][0]
+      assert_equal ::Nanoc::Int::OutdatednessReasons::AttributesModified, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 

@@ -4,6 +4,8 @@ module Nanoc::Int
   #
   # @api private
   class ChecksumStore < ::Nanoc::Int::Store
+    include Nanoc::Int::ContractsSupport
+
     # @param [Nanoc::Int::Site] site
     def initialize(site: nil)
       super(Nanoc::Int::Store.tmp_path_for(env_name: (site.config.env_name if site), store_name: 'checksums'), 1)
@@ -13,6 +15,7 @@ module Nanoc::Int
       @checksums = {}
     end
 
+    contract C::Any => C::Maybe[String]
     # Returns the old checksum for the given object. This makes sense for
     # items, layouts and code snippets.
     #
@@ -23,13 +26,24 @@ module Nanoc::Int
       @checksums[obj.reference]
     end
 
-    # Sets the checksum for the given object.
-    #
-    # @param [#reference] obj The object for which to set the checksum
-    #
-    # @param [String] checksum The checksum
-    def []=(obj, checksum)
-      @checksums[obj.reference] = checksum
+    # Calculates and stores the checksum for the given object.
+    def add(obj)
+      if obj.is_a?(Nanoc::Int::Document)
+        @checksums[[obj.reference, :content]] = Nanoc::Int::Checksummer.calc_for_content_of(obj)
+        @checksums[[obj.reference, :attributes]] = Nanoc::Int::Checksummer.calc_for_attributes_of(obj)
+      end
+
+      @checksums[obj.reference] = Nanoc::Int::Checksummer.calc(obj)
+    end
+
+    contract C::Any => C::Maybe[String]
+    def content_checksum_for(obj)
+      @checksums[[obj.reference, :content]]
+    end
+
+    contract C::Any => C::Maybe[String]
+    def attributes_checksum_for(obj)
+      @checksums[[obj.reference, :attributes]]
     end
 
     protected

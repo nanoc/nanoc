@@ -76,11 +76,12 @@ module Nanoc::DataSources
 
     class ProtoDocument
       attr_reader :attributes
-      attr_reader :checksum_data
+      attr_reader :content_checksum_data
+      attr_reader :attributes_checksum_data
       attr_reader :is_binary
       alias binary? is_binary
 
-      def initialize(is_binary:, content: nil, filename: nil, attributes:, checksum_data: nil)
+      def initialize(is_binary:, content: nil, filename: nil, attributes:, content_checksum_data: nil, attributes_checksum_data: nil)
         if content.nil? && filename.nil?
           raise ArgumentError, '#initialize needs at least content or filename'
         end
@@ -89,7 +90,8 @@ module Nanoc::DataSources
         @content = content
         @filename = filename
         @attributes = attributes
-        @checksum_data = checksum_data
+        @content_checksum_data = content_checksum_data
+        @attributes_checksum_data = attributes_checksum_data
       end
 
       def content
@@ -125,7 +127,8 @@ module Nanoc::DataSources
           is_binary: false,
           content: parse_result.content,
           attributes: parse_result.attributes,
-          checksum_data: "content=#{parse_result.content},meta=#{parse_result.attributes_data}",
+          content_checksum_data: parse_result.content,
+          attributes_checksum_data: parse_result.attributes_data,
         )
       end
     end
@@ -157,7 +160,13 @@ module Nanoc::DataSources
           attributes = attributes_for(proto_doc, content_filename, meta_filename)
           identifier = identifier_for(content_filename, meta_filename, dir_name)
 
-          res << klass.new(content, attributes, identifier, checksum_data: proto_doc.checksum_data)
+          res << klass.new(
+            content,
+            attributes,
+            identifier,
+            content_checksum_data: proto_doc.content_checksum_data,
+            attributes_checksum_data: proto_doc.attributes_checksum_data,
+          )
         end
       end
 
