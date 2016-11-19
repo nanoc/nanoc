@@ -206,6 +206,11 @@ module Nanoc::Int
       @successors[from] ||= recursively_find_vertices(from, :direct_successors_of)
     end
 
+    def props_for(from, to)
+      # TODO: test
+      @edge_props[[from, to]]
+    end
+
     # @return [Array] The list of all vertices in this graph.
     def vertices
       @vertices.keys.sort_by { |v| @vertices[v] }

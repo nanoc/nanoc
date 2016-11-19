@@ -4,16 +4,16 @@ module Nanoc::Int
     class Null
       include Nanoc::Int::ContractsSupport
 
-      contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
-      def enter(_obj)
+      contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+      def enter(_obj, raw_content: false, attributes: false, compiled_content: false, path: false)
       end
 
       contract C::None => C::Any
       def exit
       end
 
-      contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout] => C::Any
-      def bounce(_obj)
+      contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+      def bounce(_obj, raw_content: false, attributes: false, compiled_content: false, path: false)
       end
     end
 

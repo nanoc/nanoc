@@ -63,6 +63,31 @@ module Nanoc::Int
       def path?
         @path
       end
+
+      def eql?(other)
+        from == other.from &&
+        to == other.to &&
+        raw_content? == other.raw_content? &&
+        attributes? == other.attributes? &&
+        compiled_content? == other.compiled_content? &&
+        path? == other.path?
+      end
+
+      def ==(other)
+        eql?(other)
+      end
+
+      def hash
+        [
+          self.class,
+          @from,
+          @to,
+          @raw_content,
+          @attributes,
+          @compiled_content,
+          @path,
+        ].hash
+      end
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Dependency]
@@ -70,13 +95,15 @@ module Nanoc::Int
       objects_causing_outdatedness_of(object).map do |other_object|
         # TODO: Find proper details
 
+        props = @graph.props_for(other_object, object)
+
         Dependency.new(
           from: other_object,
           to: object,
-          raw_content: true,
-          attributes: true,
-          compiled_content: true,
-          path: true,
+          raw_content: props[:raw_content],
+          attributes: props[:attributes],
+          compiled_content: props[:compiled_content],
+          path: props[:path],
         )
       end
     end
