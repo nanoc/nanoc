@@ -45,7 +45,7 @@ module Nanoc::Int
     )
 
     AttributesModified = Generic.new(
-      'The atributes of this item have been modified since the last time the site was compiled.',
+      'The attributes of this item have been modified since the last time the site was compiled.',
     )
   end
 end
