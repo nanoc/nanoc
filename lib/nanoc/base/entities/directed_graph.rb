@@ -218,8 +218,8 @@ module Nanoc::Int
     def edges
       result = []
       @vertices.each_pair do |v1, i1|
-        direct_successors_of(v1).map { |v2| @vertices[v2] }.each do |i2|
-          result << [i1, i2]
+        direct_successors_of(v1).map { |v2| [@vertices[v2], v2] }.each do |i2, v2|
+          result << [i1, i2, @edge_props[[v1, v2]]]
         end
       end
       result
