@@ -5,6 +5,8 @@ module Nanoc::Int
   class OutdatednessChecker
     extend Nanoc::Int::Memoization
 
+    include Nanoc::Int::ContractsSupport
+
     attr_reader :checksum_store
     attr_reader :dependency_store
     attr_reader :rule_memory_store
@@ -73,6 +75,7 @@ module Nanoc::Int
       !basic_outdatedness_reason_for(obj).nil?
     end
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
     # Calculates the reason why the given object is outdated. This method does
     # not take dependencies into account; use {#outdatedness_reason_for?} if
     # you want to include dependencies in the outdatedness check.
@@ -107,7 +110,7 @@ module Nanoc::Int
         # Not outdated
         nil
       when Nanoc::Int::Item
-        @reps[obj].find { |rep| basic_outdatedness_reason_for(rep) }
+        @reps[obj].lazy.map { |rep| basic_outdatedness_reason_for(rep) }.find { |s| s }
       when Nanoc::Int::Layout
         # Outdated if rules outdated
         return Reasons::RulesModified if
