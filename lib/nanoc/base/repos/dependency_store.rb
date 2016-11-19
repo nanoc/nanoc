@@ -155,10 +155,10 @@ module Nanoc::Int
 
       # Load edges
       new_data[:edges].each do |edge|
-        from_index, to_index, _props = *edge
+        from_index, to_index, props = *edge
         from = from_index && previous_objects[from_index]
         to   = to_index && previous_objects[to_index]
-        @graph.add_edge(from, to)
+        @graph.add_edge(from, to, props: props)
       end
 
       # Record dependency from all items on new items
