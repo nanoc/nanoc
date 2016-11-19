@@ -29,10 +29,8 @@ module Nanoc::Int
     # Calculates and stores the checksum for the given object.
     def add(obj)
       if obj.is_a?(Nanoc::Int::Document)
-        @checksums[[obj.reference, :content]] =
-          obj.content_checksum_data || Nanoc::Int::Checksummer.calc(obj.content)
-        @checksums[[obj.reference, :attributes]] =
-          obj.attributes_checksum_data || Nanoc::Int::Checksummer.calc(obj.attributes)
+        @checksums[[obj.reference, :content]] = Nanoc::Int::Checksummer.calc_for_content_of(obj)
+        @checksums[[obj.reference, :attributes]] = Nanoc::Int::Checksummer.calc_for_attributes_of(obj)
       end
 
       @checksums[obj.reference] = Nanoc::Int::Checksummer.calc(obj)

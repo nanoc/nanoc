@@ -44,6 +44,14 @@ module Nanoc::Int
         digest.to_s
       end
 
+      def calc_for_content_of(obj)
+        obj.content_checksum_data || Nanoc::Int::Checksummer.calc(obj.content)
+      end
+
+      def calc_for_attributes_of(obj)
+        obj.attributes_checksum_data || Nanoc::Int::Checksummer.calc(obj.attributes)
+      end
+
       private
 
       def update(obj, digest, visited = Hamster::Set.new)
