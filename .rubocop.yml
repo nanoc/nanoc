@@ -66,8 +66,6 @@ Lint/IneffectiveAccessModifier:
 Lint/UselessAccessModifier:
   Enabled: false
 
-Style/FrozenStringLiteralComment:
-  Enabled: false
 
 
 # ----- DISABLED (hard) -----
