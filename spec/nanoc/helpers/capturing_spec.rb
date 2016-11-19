@@ -100,7 +100,8 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
         context 'other item is not yet compiled' do
           it 'raises an unmet dependency error' do
-            expect(ctx.dependency_tracker).to receive(:bounce).with(item.unwrap)
+            expect(ctx.dependency_tracker).to receive(:bounce)
+              .with(item.unwrap, raw_content: true, attributes: true, compiled_content: true, path: true)
             expect { subject }.to raise_error(FiberError)
           end
         end
@@ -112,7 +113,8 @@ describe Nanoc::Helpers::Capturing, helper: true do
           end
 
           it 'returns the captured content' do
-            expect(ctx.dependency_tracker).to receive(:bounce).with(item.unwrap)
+            expect(ctx.dependency_tracker).to receive(:bounce)
+              .with(item.unwrap, raw_content: true, attributes: true, compiled_content: true, path: true)
             expect(subject).to eql('other captured foo')
           end
         end

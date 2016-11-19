@@ -67,7 +67,10 @@ module Nanoc
         filter = klass.new(assigns_for(rep).merge({ layout: layout_view }))
 
         # Visit
-        @dependency_tracker.bounce(layout)
+        @dependency_tracker.bounce(
+          layout,
+          raw_content: true, attributes: false, compiled_content: false, path: false,
+        )
 
         begin
           # Notify start
