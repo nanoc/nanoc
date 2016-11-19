@@ -31,7 +31,7 @@ describe Nanoc::Int::RuleMemory do
         rule_memory.add_filter(:foo, {})
       end
 
-      it { is_expected.to be_a(Nanoc::Int::RuleMemoryActions::Filter) }
+      it { is_expected.to be_a(Nanoc::Int::ProcessingActions::Filter) }
     end
   end
 
@@ -40,7 +40,7 @@ describe Nanoc::Int::RuleMemory do
       rule_memory.add_filter(:foo, donkey: 123)
 
       expect(rule_memory.size).to eql(1)
-      expect(rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Filter)
+      expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
       expect(rule_memory[0].filter_name).to eql(:foo)
       expect(rule_memory[0].params).to eql(donkey: 123)
     end
@@ -51,7 +51,7 @@ describe Nanoc::Int::RuleMemory do
       rule_memory.add_layout('/foo.*', donkey: 123)
 
       expect(rule_memory.size).to eql(1)
-      expect(rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Layout)
+      expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Layout)
       expect(rule_memory[0].layout_identifier).to eql('/foo.*')
       expect(rule_memory[0].params).to eql(donkey: 123)
     end
@@ -63,7 +63,7 @@ describe Nanoc::Int::RuleMemory do
         rule_memory.add_snapshot(:before_layout, false, '/foo.md')
 
         expect(rule_memory.size).to eql(1)
-        expect(rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+        expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
         expect(rule_memory[0].snapshot_name).to eql(:before_layout)
         expect(rule_memory[0].path).to eql('/foo.md')
         expect(rule_memory[0]).not_to be_final

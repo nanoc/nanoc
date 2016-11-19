@@ -51,7 +51,7 @@ describe Nanoc::Int::Compiler do
 
   let(:memory) do
     [
-      Nanoc::Int::RuleMemoryActions::Filter.new(:erb, {}),
+      Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
     ]
   end
 

@@ -172,7 +172,7 @@ module Nanoc::Int
     # @api private
     def filter_name_and_args_for_layout(layout)
       mem = action_provider.memory_for(layout)
-      if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::RuleMemoryActions::Filter)
+      if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::ProcessingActions::Filter)
         # FIXME: Provide a nicer error message
         raise Nanoc::Int::Errors::Generic, "No rule memory found for #{layout.identifier}"
       end
@@ -278,11 +278,11 @@ module Nanoc::Int
 
       action_provider.memory_for(rep).each do |action|
         case action
-        when Nanoc::Int::RuleMemoryActions::Filter
+        when Nanoc::Int::ProcessingActions::Filter
           executor.filter(rep, action.filter_name, action.params)
-        when Nanoc::Int::RuleMemoryActions::Layout
+        when Nanoc::Int::ProcessingActions::Layout
           executor.layout(rep, action.layout_identifier, action.params)
-        when Nanoc::Int::RuleMemoryActions::Snapshot
+        when Nanoc::Int::ProcessingActions::Snapshot
           executor.snapshot(rep, action.snapshot_name, final: action.final?, path: action.path)
         else
           raise "Internal inconsistency: unknown action #{action.inspect}"

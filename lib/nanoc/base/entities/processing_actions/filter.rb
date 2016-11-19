@@ -1,5 +1,5 @@
-module Nanoc::Int::RuleMemoryActions
-  class Filter < Nanoc::Int::RuleMemoryAction
+module Nanoc::Int::ProcessingActions
+  class Filter < Nanoc::Int::ProcessingAction
     # filter :foo
     # filter :foo, params
 

@@ -3,8 +3,8 @@ require_relative 'entities/directed_graph'
 
 require_relative 'entities/identifier'
 require_relative 'entities/content'
-require_relative 'entities/rule_memory_action'
-require_relative 'entities/rule_memory_actions'
+require_relative 'entities/processing_action'
+require_relative 'entities/processing_actions'
 
 require_relative 'entities/code_snippet'
 require_relative 'entities/configuration'

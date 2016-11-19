@@ -1,4 +1,4 @@
-describe Nanoc::Int::RuleMemoryActions::Filter do
+describe Nanoc::Int::ProcessingActions::Filter do
   let(:action) { described_class.new(:foo, awesome: true) }
 
   describe '#serialize' do
@@ -13,6 +13,6 @@ describe Nanoc::Int::RuleMemoryActions::Filter do
 
   describe '#inspect' do
     subject { action.inspect }
-    it { is_expected.to eql('<Nanoc::Int::RuleMemoryActions::Filter :foo, "sJYzLjHGo1e4ytuDfnOLkqrt9QE=">') }
+    it { is_expected.to eql('<Nanoc::Int::ProcessingActions::Filter :foo, "sJYzLjHGo1e4ytuDfnOLkqrt9QE=">') }
   end
 end

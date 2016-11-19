@@ -1,5 +1,5 @@
-module Nanoc::Int::RuleMemoryActions
-  class Layout < Nanoc::Int::RuleMemoryAction
+module Nanoc::Int::ProcessingActions
+  class Layout < Nanoc::Int::ProcessingAction
     # layout '/foo.erb'
     # layout '/foo.erb', params
 

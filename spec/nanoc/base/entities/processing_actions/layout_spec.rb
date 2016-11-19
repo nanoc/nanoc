@@ -1,4 +1,4 @@
-describe Nanoc::Int::RuleMemoryActions::Layout do
+describe Nanoc::Int::ProcessingActions::Layout do
   let(:action) { described_class.new('/foo.erb', awesome: true) }
 
   describe '#serialize' do
@@ -13,6 +13,6 @@ describe Nanoc::Int::RuleMemoryActions::Layout do
 
   describe '#inspect' do
     subject { action.inspect }
-    it { is_expected.to eql('<Nanoc::Int::RuleMemoryActions::Layout "/foo.erb", "sJYzLjHGo1e4ytuDfnOLkqrt9QE=">') }
+    it { is_expected.to eql('<Nanoc::Int::ProcessingActions::Layout "/foo.erb", "sJYzLjHGo1e4ytuDfnOLkqrt9QE=">') }
   end
 end

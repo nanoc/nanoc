@@ -1,4 +1,4 @@
-describe Nanoc::Int::RuleMemoryAction do
+describe Nanoc::Int::ProcessingAction do
   let(:action) { described_class.new }
 
   it 'is abstract' do

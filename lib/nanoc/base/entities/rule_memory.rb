@@ -13,38 +13,38 @@ module Nanoc::Int
       @actions.size
     end
 
-    contract Numeric => C::Maybe[Nanoc::Int::RuleMemoryAction]
+    contract Numeric => C::Maybe[Nanoc::Int::ProcessingAction]
     def [](idx)
       @actions[idx]
     end
 
     contract Symbol, Hash => self
     def add_filter(filter_name, params)
-      @actions << Nanoc::Int::RuleMemoryActions::Filter.new(filter_name, params)
+      @actions << Nanoc::Int::ProcessingActions::Filter.new(filter_name, params)
       self
     end
 
     contract String, C::Maybe[Hash] => self
     def add_layout(layout_identifier, params)
-      @actions << Nanoc::Int::RuleMemoryActions::Layout.new(layout_identifier, params)
+      @actions << Nanoc::Int::ProcessingActions::Layout.new(layout_identifier, params)
       self
     end
 
     contract Symbol, C::Bool, C::Maybe[String] => self
     def add_snapshot(snapshot_name, final, path)
       will_add_snapshot(snapshot_name) if final
-      @actions << Nanoc::Int::RuleMemoryActions::Snapshot.new(snapshot_name, final, path)
+      @actions << Nanoc::Int::ProcessingActions::Snapshot.new(snapshot_name, final, path)
       self
     end
 
-    contract C::None => C::ArrayOf[Nanoc::Int::RuleMemoryAction]
+    contract C::None => C::ArrayOf[Nanoc::Int::ProcessingAction]
     def snapshot_actions
-      @actions.select { |a| a.is_a?(Nanoc::Int::RuleMemoryActions::Snapshot) }
+      @actions.select { |a| a.is_a?(Nanoc::Int::ProcessingActions::Snapshot) }
     end
 
     contract C::None => C::Bool
     def any_layouts?
-      @actions.any? { |a| a.is_a?(Nanoc::Int::RuleMemoryActions::Layout) }
+      @actions.any? { |a| a.is_a?(Nanoc::Int::ProcessingActions::Layout) }
     end
 
     # TODO: Add contract
@@ -52,7 +52,7 @@ module Nanoc::Int
       map(&:serialize)
     end
 
-    contract C::Func[Nanoc::Int::RuleMemoryAction => C::Any] => self
+    contract C::Func[Nanoc::Int::ProcessingAction => C::Any] => self
     def each
       @actions.each { |a| yield(a) }
       self

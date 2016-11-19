@@ -1,4 +1,4 @@
-describe Nanoc::Int::RuleMemoryActions::Snapshot do
+describe Nanoc::Int::ProcessingActions::Snapshot do
   let(:action) { described_class.new(:before_layout, true, '/foo.md') }
 
   describe '#serialize' do
@@ -13,6 +13,6 @@ describe Nanoc::Int::RuleMemoryActions::Snapshot do
 
   describe '#inspect' do
     subject { action.inspect }
-    it { is_expected.to eql('<Nanoc::Int::RuleMemoryActions::Snapshot :before_layout, true, "/foo.md">') }
+    it { is_expected.to eql('<Nanoc::Int::ProcessingActions::Snapshot :before_layout, true, "/foo.md">') }
   end
 end

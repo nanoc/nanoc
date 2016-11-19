@@ -3,7 +3,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
     subject { helper.instance_eval { render('/partial.erb') } }
 
     let(:rule_memory_for_layout) do
-      [Nanoc::Int::RuleMemoryActions::Filter.new(:erb, {})]
+      [Nanoc::Int::ProcessingActions::Filter.new(:erb, {})]
     end
 
     let(:layout_view) do
@@ -91,7 +91,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
       context 'layout with unknown filter' do
         let(:rule_memory_for_layout) do
-          [Nanoc::Int::RuleMemoryActions::Filter.new(:donkey, {})]
+          [Nanoc::Int::ProcessingActions::Filter.new(:donkey, {})]
         end
 
         let(:layout_content) { 'blah' }
@@ -103,7 +103,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
       context 'layout without filter' do
         let(:rule_memory_for_layout) do
-          [Nanoc::Int::RuleMemoryActions::Filter.new(nil, {})]
+          [Nanoc::Int::ProcessingActions::Filter.new(nil, {})]
         end
 
         let(:layout_content) { 'blah' }

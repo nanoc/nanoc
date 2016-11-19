@@ -1,5 +1,5 @@
-module Nanoc::Int::RuleMemoryActions
-  class Snapshot < Nanoc::Int::RuleMemoryAction
+module Nanoc::Int::ProcessingActions
+  class Snapshot < Nanoc::Int::ProcessingAction
     # snapshot :before_layout
     # snapshot :before_layout, final: true
     # snapshot :before_layout, path: '/about.md'

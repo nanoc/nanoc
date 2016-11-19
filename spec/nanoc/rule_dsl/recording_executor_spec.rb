@@ -10,7 +10,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
       executor.filter(rep, :erb)
 
       expect(executor.rule_memory.size).to eql(1)
-      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Filter)
+      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
       expect(executor.rule_memory[0].filter_name).to eql(:erb)
       expect(executor.rule_memory[0].params).to eql({})
     end
@@ -19,7 +19,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
       executor.filter(rep, :erb, x: 123)
 
       expect(executor.rule_memory.size).to eql(1)
-      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Filter)
+      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
       expect(executor.rule_memory[0].filter_name).to eql(:erb)
       expect(executor.rule_memory[0].params).to eql({ x: 123 })
     end
@@ -31,12 +31,12 @@ describe Nanoc::RuleDSL::RecordingExecutor do
 
       expect(executor.rule_memory.size).to eql(2)
 
-      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
       expect(executor.rule_memory[0].snapshot_name).to eql(:pre)
       expect(executor.rule_memory[0]).to be_final
       expect(executor.rule_memory[0].path).to be_nil
 
-      expect(executor.rule_memory[1]).to be_a(Nanoc::Int::RuleMemoryActions::Layout)
+      expect(executor.rule_memory[1]).to be_a(Nanoc::Int::ProcessingActions::Layout)
       expect(executor.rule_memory[1].layout_identifier).to eql('/default.*')
       expect(executor.rule_memory[1].params).to eql({})
     end
@@ -46,12 +46,12 @@ describe Nanoc::RuleDSL::RecordingExecutor do
 
       expect(executor.rule_memory.size).to eql(2)
 
-      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
       expect(executor.rule_memory[0].snapshot_name).to eql(:pre)
       expect(executor.rule_memory[0]).to be_final
       expect(executor.rule_memory[0].path).to be_nil
 
-      expect(executor.rule_memory[1]).to be_a(Nanoc::Int::RuleMemoryActions::Layout)
+      expect(executor.rule_memory[1]).to be_a(Nanoc::Int::ProcessingActions::Layout)
       expect(executor.rule_memory[1].layout_identifier).to eql('/default.*')
       expect(executor.rule_memory[1].params).to eql({ final: false })
     end
@@ -83,7 +83,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
       it 'records' do
         subject
         expect(executor.rule_memory.size).to eql(1)
-        expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+        expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
         expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
         expect(executor.rule_memory[0].path).to be_nil
         expect(executor.rule_memory[0]).to be_final
@@ -102,7 +102,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
             it 'records' do
               subject
               expect(executor.rule_memory.size).to eql(1)
-              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
               expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
               expect(executor.rule_memory[0].path).to be_nil
               expect(executor.rule_memory[0]).to be_final
@@ -115,7 +115,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
             it 'records' do
               subject
               expect(executor.rule_memory.size).to eql(1)
-              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
               expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
               expect(executor.rule_memory[0].path).to eql('/routed-foo.html')
               expect(executor.rule_memory[0]).to be_final
@@ -128,7 +128,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
             it 'records' do
               subject
               expect(executor.rule_memory.size).to eql(1)
-              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
               expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
               expect(executor.rule_memory[0].path).to eql('/routed-foo.html')
               expect(executor.rule_memory[0]).to be_final
@@ -169,7 +169,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
             it 'records' do
               subject
               expect(executor.rule_memory.size).to eql(1)
-              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
               expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
               expect(executor.rule_memory[0].path).to eql('/routed-foo.html')
               expect(executor.rule_memory[0]).to be_final
@@ -182,7 +182,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
             it 'uses the explicit path' do
               subject
               expect(executor.rule_memory.size).to eql(1)
-              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+              expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
               expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
               expect(executor.rule_memory[0].path).to eql('/routed-foo-from-path.html')
               expect(executor.rule_memory[0]).to be_final
@@ -198,7 +198,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
           subject
 
           expect(executor.rule_memory.size).to eql(1)
-          expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+          expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
           expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
           expect(executor.rule_memory[0].path).to be_nil
           expect(executor.rule_memory[0]).not_to be_final
@@ -211,7 +211,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
             subject
 
             expect(executor.rule_memory.size).to eql(1)
-            expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+            expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
             expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
             expect(executor.rule_memory[0].path).to be_nil
             expect(executor.rule_memory[0]).not_to be_final
@@ -242,7 +242,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
             subject
 
             expect(executor.rule_memory.size).to eql(1)
-            expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+            expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
             expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
             expect(executor.rule_memory[0].path).to be_nil
             expect(executor.rule_memory[0]).not_to be_final
@@ -255,7 +255,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
       executor.snapshot(rep, :foo, final: false)
 
       expect(executor.rule_memory.size).to eql(1)
-      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
       expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
       expect(executor.rule_memory[0]).not_to be_final
     end
@@ -270,10 +270,10 @@ describe Nanoc::RuleDSL::RecordingExecutor do
       executor.snapshot(rep, :bar)
 
       expect(executor.rule_memory.size).to eql(2)
-      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+      expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
       expect(executor.rule_memory[0].snapshot_name).to eql(:foo)
       expect(executor.rule_memory[0]).to be_final
-      expect(executor.rule_memory[1]).to be_a(Nanoc::Int::RuleMemoryActions::Snapshot)
+      expect(executor.rule_memory[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
       expect(executor.rule_memory[1].snapshot_name).to eql(:bar)
       expect(executor.rule_memory[1]).to be_final
     end
