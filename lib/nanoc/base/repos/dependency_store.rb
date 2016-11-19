@@ -111,8 +111,15 @@ module Nanoc::Int
     #
     # @return [void]
     def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false)
+      props = {
+        raw_content: raw_content,
+        attributes: attributes,
+        compiled_content: compiled_content,
+        path: path,
+      }
+
       # Warning! dst and src are *reversed* here!
-      @graph.add_edge(dst, src) unless src == dst
+      @graph.add_edge(dst, src, props: props) unless src == dst
     end
 
     # Empties the list of dependencies for the given object. This is necessary
