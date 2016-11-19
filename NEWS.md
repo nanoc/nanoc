@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.4.0 (2015-11-19)
+
+Features:
+
+* Added support for Nanoc environments (#859)
+
 ## 4.3.8 (2016-11-18)
 
 Enhancements:
