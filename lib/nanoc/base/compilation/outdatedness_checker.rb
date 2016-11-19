@@ -33,6 +33,7 @@ module Nanoc::Int
       @objects_outdated_due_to_dependencies = {}
     end
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
     # Checks whether the given object is outdated and therefore needs to be
     # recompiled.
     #
@@ -44,6 +45,7 @@ module Nanoc::Int
       !outdatedness_reason_for(obj).nil?
     end
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
     # Calculates the reason why the given object is outdated.
     #
     # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
@@ -62,6 +64,7 @@ module Nanoc::Int
 
     private
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
     # Checks whether the given object is outdated and therefore needs to be
     # recompiled. This method does not take dependencies into account; use
     # {#outdated?} if you want to include dependencies in the outdatedness
@@ -128,6 +131,7 @@ module Nanoc::Int
     end
     memoize :basic_outdatedness_reason_for
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout], Hamster::Set => C::Bool
     # Checks whether the given object is outdated due to dependencies.
     #
     # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
@@ -165,6 +169,7 @@ module Nanoc::Int
       is_outdated
     end
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
     # @param [Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The layout or item
     #   representation to check the rule memory for
     #
@@ -175,6 +180,7 @@ module Nanoc::Int
     end
     memoize :rule_memory_differs_for
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet] => String
     # @param obj The object to create a checksum for
     #
     # @return [String] The digest
@@ -183,15 +189,17 @@ module Nanoc::Int
     end
     memoize :calc_checksum
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet] => C::Bool
     # @param obj
     #
     # @return [Boolean] false if either the new or the old checksum for the
     #   given object is not available, true if both checksums are available
     def checksums_available?(obj)
-      checksum_store[obj] && calc_checksum(obj)
+      checksum_store[obj] && calc_checksum(obj) ? true : false
     end
     memoize :checksums_available?
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet] => C::Bool
     # @param obj
     #
     # @return [Boolean] false if the old and new checksums for the given
@@ -201,6 +209,7 @@ module Nanoc::Int
     end
     memoize :checksums_identical?
 
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet] => C::Bool
     # @param obj
     #
     # @return [Boolean] true if the old and new checksums for the given object
