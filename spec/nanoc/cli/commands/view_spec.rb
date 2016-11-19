@@ -4,11 +4,11 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
       pid = fork { Nanoc::CLI.run(cmd) }
 
       # Wait for server to start up
-      10.times do
+      20.times do |i|
         begin
           Net::HTTP.get('0.0.0.0', '/', 50_385)
         rescue Errno::ECONNREFUSED
-          sleep 0.1
+          sleep(0.1 * 1.2**i)
           retry
         end
         break
