@@ -98,6 +98,7 @@ module Nanoc::Int
       @graph.direct_successors_of(object).compact
     end
 
+    contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
     # Records a dependency from `src` to `dst` in the dependency graph. When
     # `dst` is oudated, `src` will also become outdated.
     #
@@ -109,7 +110,7 @@ module Nanoc::Int
     #   outdated if the destination is outdated
     #
     # @return [void]
-    def record_dependency(src, dst)
+    def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false)
       # Warning! dst and src are *reversed* here!
       @graph.add_edge(dst, src) unless src == dst
     end
