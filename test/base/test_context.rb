@@ -17,7 +17,7 @@ class Nanoc::Int::ContextTest < Nanoc::TestCase
 
   def test_example
     # Parse
-    YARD.parse(LIB_DIR + '/nanoc/base/context.rb')
+    YARD.parse(LIB_DIR + '/nanoc/base/entities/context.rb')
 
     # Run
     assert_examples_correct 'Nanoc::Int::Context#initialize'

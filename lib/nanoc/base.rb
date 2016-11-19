@@ -6,8 +6,6 @@ end
 # @api private
 module Nanoc::Int
   # Load helper classes
-  autoload 'Context',              'nanoc/base/context'
-  autoload 'DirectedGraph',        'nanoc/base/directed_graph'
   autoload 'Errors',               'nanoc/base/errors'
   autoload 'Memoization',          'nanoc/base/memoization'
   autoload 'PluginRegistry',       'nanoc/base/plugin_registry'

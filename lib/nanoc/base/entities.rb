@@ -1,3 +1,6 @@
+require_relative 'entities/context'
+require_relative 'entities/directed_graph'
+
 require_relative 'entities/identifier'
 require_relative 'entities/content'
 require_relative 'entities/rule_memory_action'
