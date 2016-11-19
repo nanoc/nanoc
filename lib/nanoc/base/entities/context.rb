@@ -37,9 +37,11 @@ module Nanoc::Int
     # Returns a binding for this instance.
     #
     # @return [Binding] A binding for this instance
+    # rubocop:disable Style/AccessorMethodName
     def get_binding
       binding
     end
+    # rubocop:enable Style/AccessorMethodName
 
     def include(mod)
       metaclass = class << self; self; end

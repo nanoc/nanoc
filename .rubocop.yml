@@ -38,6 +38,11 @@ Lint/DuplicateMethods:
 Lint/UnifiedInteger:
   Enabled: false
 
+Eval:
+  Exclude:
+    - 'test/**/*.rb'
+    - 'spec/**/*.rb'
+
 
 # ----- TO ENABLE LATER -----
 
@@ -73,18 +78,6 @@ Style/FrozenStringLiteralComment:
 # Hash parameters should not have braces, but this cop is unable to distinguish
 # between has parameters and methods that take a hash as a param.
 BracesAroundHashParameters:
-  Enabled: false
-
-# Nanoc relies on eval in several cases (code snippets and some helpers).
-Eval:
-  Enabled: false
-
-# We use get_binding to extract the binding
-AccessorMethodName:
-  Enabled: false
-
-# We use _erbout.
-Lint/UnderscorePrefixedVariableName:
   Enabled: false
 
 # Rubocop trips up on this.
