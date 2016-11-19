@@ -7,7 +7,7 @@ class Nanoc::Int::ChecksumStoreTest < Nanoc::TestCase
     pstore = PStore.new('tmp/checksums')
     pstore.transaction do
       pstore[:data] = { [:item, '/moo/'] => 'zomg' }
-      pstore[:version] = 1
+      pstore[:version] = 2
     end
 
     # Check
