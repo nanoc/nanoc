@@ -1,6 +1,8 @@
 module Nanoc::Int
   # @api private
   class DependencyStore < ::Nanoc::Int::Store
+    include Nanoc::Int::ContractsSupport
+
     # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout>]
     attr_accessor :objects
 
@@ -31,6 +33,52 @@ module Nanoc::Int
     #   the given object
     def objects_causing_outdatedness_of(object)
       @graph.direct_predecessors_of(object)
+    end
+
+    class Dependency
+      attr_reader :from
+      attr_reader :to
+
+      def initialize(from:, to:, raw_content:, attributes:, compiled_content:, path:)
+        @from             = from
+        @to               = to
+        @raw_content      = raw_content
+        @attributes       = attributes
+        @compiled_content = compiled_content
+        @path             = path
+      end
+
+      def raw_content?
+        @raw_content
+      end
+
+      def attributes?
+        @attributes
+      end
+
+      def compiled_content?
+        @compiled_content
+      end
+
+      def path?
+        @path
+      end
+    end
+
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Dependency]
+    def dependencies_causing_outdatedness_of(object)
+      objects_causing_outdatedness_of(object).map do |other_object|
+        # TODO: Find proper details
+
+        Dependency.new(
+          from: other_object,
+          to: object,
+          raw_content: true,
+          attributes: true,
+          compiled_content: true,
+          path: true,
+        )
+      end
     end
 
     # Returns the direct inverse dependencies for the given object.

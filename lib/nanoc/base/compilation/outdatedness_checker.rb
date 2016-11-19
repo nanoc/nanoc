@@ -265,8 +265,23 @@ module Nanoc::Int
       return false if processed.include?(obj)
 
       # Calculate
-      is_outdated = dependency_store.objects_causing_outdatedness_of(obj).any? do |other|
-        other.nil? || basic_outdated?(other) || outdated_due_to_dependencies?(other, processed.merge([obj]))
+      is_outdated = dependency_store.dependencies_causing_outdatedness_of(obj).any? do |dependency|
+        other = dependency.from
+
+        if other.nil?
+          true
+        else
+          basic_details = basic_outdatedness_details_for(other)
+          dependency_matches =
+            basic_details && (
+              (basic_details.raw_content_outdated? && dependency.raw_content?) ||
+              (basic_details.attributes_outdated? && dependency.attributes?) ||
+              (basic_details.compiled_content_outdated? && dependency.compiled_content?) ||
+              (basic_details.path_outdated? && dependency.path?)
+            )
+
+          dependency_matches || outdated_due_to_dependencies?(other, processed.merge([obj]))
+        end
       end
 
       # Cache
