@@ -294,7 +294,7 @@ describe Nanoc::Int::Executor do
 
       it 'exposes @layout as view' do
         allow(dependency_tracker).to receive(:enter)
-          .with(layout, raw_content: false, attributes: false, compiled_content: false, path: false)
+          .with(layout, raw_content: true, attributes: false, compiled_content: false, path: false)
         allow(dependency_tracker).to receive(:enter)
           .with(layout, raw_content: false, attributes: true, compiled_content: false, path: false)
         allow(dependency_tracker).to receive(:exit)
