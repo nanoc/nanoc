@@ -31,7 +31,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
           it 'tracks proper dependencies' do
             expect(ctx.dependency_tracker).to receive(:enter)
-              .with(layout, raw_content: false, attributes: false, compiled_content: false, path: false)
+              .with(layout, raw_content: true, attributes: false, compiled_content: false, path: false)
             subject
           end
         end
