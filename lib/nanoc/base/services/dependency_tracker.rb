@@ -28,8 +28,14 @@ module Nanoc::Int
     def enter(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
       unless @stack.empty?
         Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj)
-        # TODO: use props
-        @dependency_store.record_dependency(@stack.last, obj)
+        @dependency_store.record_dependency(
+          @stack.last,
+          obj,
+          raw_content: raw_content,
+          attributes: attributes,
+          compiled_content: compiled_content,
+          path: path,
+        )
       end
 
       @stack.push(obj)
