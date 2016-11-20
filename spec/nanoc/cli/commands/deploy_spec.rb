@@ -75,7 +75,7 @@ describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
         let(:run) { Nanoc::CLI.run(command) }
 
         it 'lists all deployers' do
-          expect { run }.to output(/Available deployers:\n  fog\n  rsync/).to_stdout
+          expect { run }.to output(/Available deployers:\n  fog\n  git\n  rsync/).to_stdout
         end
 
         include_examples 'no effective deploy'

@@ -76,6 +76,8 @@ RSpec.configure do |c|
   end
 end
 
+RSpec::Matchers.define_negated_matcher :not_match, :match
+
 RSpec::Matchers.define :raise_frozen_error do |_expected|
   match do |actual|
     begin
