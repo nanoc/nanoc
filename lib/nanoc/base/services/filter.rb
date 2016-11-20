@@ -195,7 +195,7 @@ module Nanoc
 
       # Notify
       dependency_tracker = @assigns[:item]._context.dependency_tracker
-      items.each { |item| dependency_tracker.bounce(item) }
+      items.each { |item| dependency_tracker.bounce(item, compiled_content: true) }
 
       # Raise unmet dependency error if necessary
       items.each do |item|
