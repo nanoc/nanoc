@@ -36,19 +36,19 @@ module Nanoc
 
     # @see Hash#[]
     def [](key)
-      @context.dependency_tracker.bounce(unwrap)
+      @context.dependency_tracker.bounce(unwrap, attributes: true)
       unwrap.attributes[key]
     end
 
     # @return [Hash]
     def attributes
-      @context.dependency_tracker.bounce(unwrap)
+      @context.dependency_tracker.bounce(unwrap, attributes: true)
       unwrap.attributes
     end
 
     # @see Hash#fetch
     def fetch(key, fallback = NONE, &_block)
-      @context.dependency_tracker.bounce(unwrap)
+      @context.dependency_tracker.bounce(unwrap, attributes: true)
 
       if unwrap.attributes.key?(key)
         unwrap.attributes[key]
@@ -63,7 +63,7 @@ module Nanoc
 
     # @see Hash#key?
     def key?(key)
-      @context.dependency_tracker.bounce(unwrap)
+      @context.dependency_tracker.bounce(unwrap, attributes: true)
       unwrap.attributes.key?(key)
     end
 

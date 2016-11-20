@@ -35,7 +35,7 @@ describe Nanoc::Int::DependencyTracker do
     end
   end
 
-  describe '#enter and exit' do
+  describe '#enter and #exit' do
     context 'enter' do
       subject do
         tracker.enter(item_a)
@@ -175,6 +175,34 @@ describe Nanoc::Int::DependencyTracker do
 
       example do
         expect { subject }.not_to change { store.objects_outdated_due_to(item_a) }
+      end
+    end
+  end
+
+  describe '#enter and #exit with props' do
+    context 'enter + bounce' do
+      subject do
+        tracker.enter(item_a, compiled_content: true)
+        tracker.bounce(item_b, path: true)
+      end
+
+      it_behaves_like 'a null dependency tracker'
+
+      it 'changes predecessors of item A' do
+        expect { subject }.to change { store.dependencies_causing_outdatedness_of(item_a) }
+          .from([])
+          .to(
+            [
+              Nanoc::Int::DependencyStore::Dependency.new(
+                from: item_b,
+                to: item_a,
+                raw_content: false,
+                attributes: false,
+                compiled_content: false,
+                path: true,
+              ),
+            ],
+          )
       end
     end
   end

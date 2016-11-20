@@ -41,6 +41,8 @@ module Nanoc::Int
       @from_graph = {}
       @to_graph   = {}
 
+      @edge_props = {}
+
       @roots = Set.new(@vertices.keys)
 
       invalidate_caches
@@ -55,7 +57,7 @@ module Nanoc::Int
     # @param to   Vertex where the edge should end
     #
     # @return [void]
-    def add_edge(from, to)
+    def add_edge(from, to, props: nil)
       add_vertex(from)
       add_vertex(to)
 
@@ -64,6 +66,10 @@ module Nanoc::Int
 
       @to_graph[to] ||= Set.new
       @to_graph[to] << from
+
+      if props
+        @edge_props[[from, to]] = props
+      end
 
       @roots.delete(to)
 
@@ -86,6 +92,8 @@ module Nanoc::Int
 
       @to_graph[to] ||= Set.new
       @to_graph[to].delete(from)
+
+      @edge_props.delete([from, to])
 
       @roots.add(to) if @to_graph[to].empty?
 
@@ -119,6 +127,7 @@ module Nanoc::Int
 
       @from_graph[from].each do |to|
         @to_graph[to].delete(from)
+        @edge_props.delete([from, to])
         @roots.add(to) if @to_graph[to].empty?
       end
       @from_graph.delete(from)
@@ -134,6 +143,7 @@ module Nanoc::Int
 
       @to_graph[to].each do |from|
         @from_graph[from].delete(to)
+        @edge_props.delete([from, to])
       end
       @to_graph.delete(to)
       @roots.add(to)
@@ -196,6 +206,11 @@ module Nanoc::Int
       @successors[from] ||= recursively_find_vertices(from, :direct_successors_of)
     end
 
+    def props_for(from, to)
+      # TODO: test
+      @edge_props.fetch([from, to], {})
+    end
+
     # @return [Array] The list of all vertices in this graph.
     def vertices
       @vertices.keys.sort_by { |v| @vertices[v] }
@@ -208,8 +223,8 @@ module Nanoc::Int
     def edges
       result = []
       @vertices.each_pair do |v1, i1|
-        direct_successors_of(v1).map { |v2| @vertices[v2] }.each do |i2|
-          result << [i1, i2]
+        direct_successors_of(v1).map { |v2| [@vertices[v2], v2] }.each do |i2, v2|
+          result << [i1, i2, @edge_props[[v1, v2]]]
         end
       end
       result

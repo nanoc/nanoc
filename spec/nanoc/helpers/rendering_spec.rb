@@ -30,7 +30,8 @@ describe Nanoc::Helpers::Rendering, helper: true do
           it { is_expected.to eql('blah') }
 
           it 'tracks proper dependencies' do
-            expect(ctx.dependency_tracker).to receive(:enter).with(layout)
+            expect(ctx.dependency_tracker).to receive(:enter)
+              .with(layout, raw_content: true, attributes: true, compiled_content: true, path: true)
             subject
           end
         end

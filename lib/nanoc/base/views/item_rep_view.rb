@@ -42,7 +42,7 @@ module Nanoc
     #
     # @return [String] The content at the given snapshot.
     def compiled_content(snapshot: nil)
-      @context.dependency_tracker.bounce(unwrap.item)
+      @context.dependency_tracker.bounce(unwrap.item, compiled_content: true)
       @item_rep.compiled_content(snapshot: snapshot)
     end
 
@@ -56,7 +56,7 @@ module Nanoc
     #
     # @return [String] The item rep’s path.
     def path(snapshot: :last)
-      @context.dependency_tracker.bounce(unwrap.item)
+      @context.dependency_tracker.bounce(unwrap.item, path: true)
       @item_rep.path(snapshot: snapshot)
     end
 
@@ -69,7 +69,7 @@ module Nanoc
 
     # @api private
     def raw_path(snapshot: :last)
-      @context.dependency_tracker.bounce(unwrap.item)
+      @context.dependency_tracker.bounce(unwrap.item, path: true)
       @item_rep.raw_path(snapshot: snapshot)
     end
 

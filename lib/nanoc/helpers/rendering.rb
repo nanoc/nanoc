@@ -20,7 +20,7 @@ module Nanoc::Helpers
 
       # Visit
       dependency_tracker = @config._context.dependency_tracker
-      dependency_tracker.bounce(layout)
+      dependency_tracker.bounce(layout, raw_content: true, attributes: true, compiled_content: true, path: true)
 
       # Capture content, if any
       captured_content = block_given? ? capture(&block) : nil

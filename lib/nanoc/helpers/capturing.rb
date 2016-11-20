@@ -64,7 +64,7 @@ module Nanoc::Helpers
         # Create dependency
         if @item.nil? || item != @item.unwrap
           dependency_tracker = @config._context.dependency_tracker
-          dependency_tracker.bounce(item.unwrap)
+          dependency_tracker.bounce(item.unwrap, raw_content: true, attributes: true, compiled_content: true, path: true)
 
           unless rep.compiled?
             Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep))
