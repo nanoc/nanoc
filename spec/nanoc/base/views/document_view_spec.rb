@@ -218,4 +218,16 @@ shared_examples 'a document view' do
 
     it { should == described_class.hash ^ '/foo/'.hash }
   end
+
+  describe '#raw_content' do
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
+
+    subject { view.raw_content }
+
+    it { is_expected.to eql('stuff') }
+
+    it 'creates a dependency' do
+      expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
+    end
+  end
 end

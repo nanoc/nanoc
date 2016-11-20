@@ -74,6 +74,7 @@ module Nanoc
 
     # @api private
     def raw_content
+      @context.dependency_tracker.bounce(unwrap)
       unwrap.content.string
     end
 
