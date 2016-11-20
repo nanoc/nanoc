@@ -264,6 +264,17 @@ shared_examples 'a document view' do
       it 'creates a dependency' do
         expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
       end
+
+      it 'creates a dependency with the right props' do
+        subject
+        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+        expect(dep.attributes?).to eq(true)
+
+        expect(dep.raw_content?).to eq(false)
+        expect(dep.compiled_content?).to eq(false)
+        expect(dep.path?).to eq(false)
+      end
     end
 
     context 'with non-existant key' do
@@ -273,6 +284,17 @@ shared_examples 'a document view' do
 
       it 'creates a dependency' do
         expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
+      end
+
+      it 'creates a dependency with the right props' do
+        subject
+        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+        expect(dep.attributes?).to eq(true)
+
+        expect(dep.raw_content?).to eq(false)
+        expect(dep.compiled_content?).to eq(false)
+        expect(dep.path?).to eq(false)
       end
     end
   end

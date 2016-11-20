@@ -63,7 +63,7 @@ module Nanoc
 
     # @see Hash#key?
     def key?(key)
-      @context.dependency_tracker.bounce(unwrap)
+      @context.dependency_tracker.bounce(unwrap, attributes: true)
       unwrap.attributes.key?(key)
     end
 
