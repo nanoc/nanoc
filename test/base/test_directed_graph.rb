@@ -44,7 +44,7 @@ class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
     graph.add_edge(1, 2)
     graph.add_edge(2, 3)
 
-    assert_equal [[0, 1], [1, 2]], graph.edges.sort
+    assert_equal [[0, 1, nil], [1, 2, nil]], graph.edges.sort
   end
 
   def test_edges_with_new_vertices
@@ -55,7 +55,50 @@ class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
     graph.add_edge(3, 2)
     assert_equal [1, 2, 3], graph.vertices
 
-    assert_equal [[0, 1], [2, 1]], graph.edges.sort
+    assert_equal [[0, 1, nil], [2, 1, nil]], graph.edges.sort
+  end
+
+  def test_edge_with_props
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
+    graph.add_edge(1, 2, props: { donkey: 14 })
+    graph.add_edge(2, 3, props: { giraffe: 3 })
+
+    assert_equal [[0, 1, { donkey: 14 }], [1, 2, { giraffe: 3 }]], graph.edges.sort
+  end
+
+  def test_props_for
+    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3, 4])
+    graph.add_edge(1, 2, props: { donkey: 14 })
+    graph.add_edge(2, 3, props: { giraffe: 3 })
+    graph.add_edge(3, 4)
+
+    assert_equal({ donkey: 14 }, graph.props_for(1, 2))
+    assert_equal({ giraffe: 3 }, graph.props_for(2, 3))
+    assert_equal(nil, graph.props_for(3, 4))
+  end
+
+  def test_props_for_with_deleted_edge
+    graph = Nanoc::Int::DirectedGraph.new([1, 2])
+    graph.add_edge(1, 2, props: { donkey: 14 })
+    graph.delete_edge(1, 2)
+
+    assert_equal(nil, graph.props_for(1, 2))
+  end
+
+  def test_props_for_with_deleted_edges_from
+    graph = Nanoc::Int::DirectedGraph.new([1, 2])
+    graph.add_edge(1, 2, props: { donkey: 14 })
+    graph.delete_edges_from(1)
+
+    assert_equal(nil, graph.props_for(1, 2))
+  end
+
+  def test_props_for_with_deleted_edges_to
+    graph = Nanoc::Int::DirectedGraph.new([1, 2])
+    graph.add_edge(1, 2, props: { donkey: 14 })
+    graph.delete_edges_to(2)
+
+    assert_equal(nil, graph.props_for(1, 2))
   end
 
   def test_add_edge

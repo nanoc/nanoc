@@ -65,8 +65,10 @@ module Nanoc::Int
     #
     # @return [void]
     def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false) # rubocop:disable Lint/UnusedMethodArgument
+      props = { donkey: 14 }
+
       # Warning! dst and src are *reversed* here!
-      @graph.add_edge(dst, src) unless src == dst
+      @graph.add_edge(dst, src, props: props) unless src == dst
     end
 
     # Empties the list of dependencies for the given object. This is necessary
@@ -102,7 +104,7 @@ module Nanoc::Int
 
       # Load edges
       new_data[:edges].each do |edge|
-        from_index, to_index = *edge
+        from_index, to_index, _props = *edge
         from = from_index && previous_objects[from_index]
         to   = to_index && previous_objects[to_index]
         @graph.add_edge(from, to)
