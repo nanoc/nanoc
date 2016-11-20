@@ -64,8 +64,10 @@ module Nanoc::Int
     #   outdated if the destination is outdated
     #
     # @return [void]
-    def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false) # rubocop:disable Lint/UnusedMethodArgument
-      props = { donkey: 14 }
+    def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false)
+      existing_props = @graph.props_for(dst, src) || {}
+      new_props = { raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path }
+      props = merge_props(existing_props, new_props)
 
       # Warning! dst and src are *reversed* here!
       @graph.add_edge(dst, src, props: props) unless src == dst
@@ -85,6 +87,13 @@ module Nanoc::Int
     end
 
     protected
+
+    def merge_props(p1, p2)
+      keys = (p1.keys + p2.keys).uniq
+      keys.each_with_object({}) do |key, memo|
+        memo[key] = p1.fetch(key, false) || p2.fetch(key, false)
+      end
+    end
 
     def data
       {
