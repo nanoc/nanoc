@@ -114,4 +114,37 @@ describe Nanoc::Int::DependencyStore do
       end
     end
   end
+
+  describe 'reloading' do
+    before do
+      store.record_dependency(obj_a, obj_b, compiled_content: true)
+      store.record_dependency(obj_a, obj_b, attributes: true)
+
+      store.store
+      store.load
+    end
+
+    it 'has the right dependencies for item A' do
+      deps = store.dependencies_causing_outdatedness_of(obj_a)
+      expect(deps.size).to eql(1)
+
+      expect(deps[0].from).to eql(obj_b)
+      expect(deps[0].to).to eql(obj_a)
+
+      expect(deps[0].raw_content?).to eq(false)
+      expect(deps[0].attributes?).to eq(true)
+      expect(deps[0].compiled_content?).to eq(true)
+      expect(deps[0].path?).to eq(false)
+    end
+
+    it 'has the right dependencies for item B' do
+      deps = store.dependencies_causing_outdatedness_of(obj_b)
+      expect(deps).to be_empty
+    end
+
+    it 'has the right dependencies for item C' do
+      deps = store.dependencies_causing_outdatedness_of(obj_c)
+      expect(deps).to be_empty
+    end
+  end
 end
