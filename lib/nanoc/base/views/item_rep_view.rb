@@ -69,7 +69,7 @@ module Nanoc
 
     # @api private
     def raw_path(snapshot: :last)
-      @context.dependency_tracker.bounce(unwrap.item)
+      @context.dependency_tracker.bounce(unwrap.item, path: true)
       @item_rep.raw_path(snapshot: snapshot)
     end
 
