@@ -65,8 +65,13 @@ module Nanoc::CLI::Commands
       sorted_with_prev(items) do |item, prev|
         puts if prev
         puts "item #{item.identifier} depends on:"
-        predecessors = dependency_store.objects_causing_outdatedness_of(item).sort_by { |i| i ? i.identifier : '' }
-        predecessors.each do |pred|
+        dependencies =
+          dependency_store
+            .dependencies_causing_outdatedness_of(item)
+            .sort_by { |dep| dep.from ? dep.from.identifier : '' }
+        dependencies.each do |dep|
+          pred = dep.from
+
           type =
             case pred
             when Nanoc::Int::Layout
@@ -77,13 +82,19 @@ module Nanoc::CLI::Commands
               'item'
             end
 
+          props = ''
+          props << (dep.raw_content? ? 'r' : ' ')
+          props << (dep.attributes? ? 'a' : ' ')
+          props << (dep.compiled_content? ? 'c' : ' ')
+          props << (dep.path? ? 'p' : ' ')
+
           if pred
-            puts "  [ #{format '%6s', type} ] #{pred.identifier}"
+            puts "  [ #{format '%6s', type} ] (#{props}) #{pred.identifier}"
           else
             puts '  ( removed item )'
           end
         end
-        puts '  (nothing)' if predecessors.empty?
+        puts '  (nothing)' if dependencies.empty?
       end
     end
 

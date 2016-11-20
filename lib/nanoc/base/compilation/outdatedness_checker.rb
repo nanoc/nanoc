@@ -141,7 +141,7 @@ module Nanoc::Int
             raw_content: true,
             attributes: true,
             compiled_content: true,
-            path: true,
+            path: false, # FIXME
           )
         end
 
@@ -152,7 +152,7 @@ module Nanoc::Int
             raw_content: true,
             attributes: true,
             compiled_content: true,
-            path: true,
+            path: false, # FIXME
           )
         end
 
@@ -272,6 +272,7 @@ module Nanoc::Int
           true
         else
           basic_details = basic_outdatedness_details_for(other)
+          # p [obj, other, basic_details, dependency]
           dependency_matches =
             basic_details && (
               (basic_details.raw_content_outdated? && dependency.raw_content?) ||
@@ -280,7 +281,22 @@ module Nanoc::Int
               (basic_details.path_outdated? && dependency.path?)
             )
 
-          dependency_matches || outdated_due_to_dependencies?(other, processed.merge([obj]))
+          red = "\e[31m"
+          green = "\e[32m"
+          reset = "\e[0m"
+
+          p [obj, other]
+          print(dependency_matches ? red : green)
+          puts "dependency_matches=#{dependency_matches}"
+          print reset
+
+          outdated_due_to_dependencies = outdated_due_to_dependencies?(other, processed.merge([obj]))
+          print(outdated_due_to_dependencies ? red : green)
+          puts "outdated_due_to_dependencies=#{outdated_due_to_dependencies}"
+          print reset
+          puts
+
+          dependency_matches || outdated_due_to_dependencies
         end
       end
 
