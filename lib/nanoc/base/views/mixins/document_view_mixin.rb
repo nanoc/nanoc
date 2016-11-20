@@ -48,7 +48,7 @@ module Nanoc
 
     # @see Hash#fetch
     def fetch(key, fallback = NONE, &_block)
-      @context.dependency_tracker.bounce(unwrap)
+      @context.dependency_tracker.bounce(unwrap, attributes: true)
 
       if unwrap.attributes.key?(key)
         unwrap.attributes[key]
