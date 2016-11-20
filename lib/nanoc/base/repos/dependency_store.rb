@@ -1,6 +1,50 @@
 module Nanoc::Int
   # @api private
   class DependencyStore < ::Nanoc::Int::Store
+    # A dependency between two items/layouts.
+    class Dependency
+      include Nanoc::Int::ContractsSupport
+
+      contract C::None => C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+      attr_reader :from
+
+      contract C::None => C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+      attr_reader :to
+
+      contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+      def initialize(from, to, raw_content:, attributes:, compiled_content:, path:)
+        @from             = from
+        @to               = to
+
+        @raw_content      = raw_content
+        @attributes       = attributes
+        @compiled_content = compiled_content
+        @path             = path
+      end
+
+      contract C::None => C::Bool
+      def raw_content?
+        @raw_content
+      end
+
+      contract C::None => C::Bool
+      def attributes?
+        @attributes
+      end
+
+      contract C::None => C::Bool
+      def compiled_content?
+        @compiled_content
+      end
+
+      contract C::None => C::Bool
+      def path?
+        @path
+      end
+    end
+
+    include Nanoc::Int::ContractsSupport
+
     # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout>]
     attr_accessor :objects
 
@@ -10,6 +54,22 @@ module Nanoc::Int
 
       @objects = objects
       @graph   = Nanoc::Int::DirectedGraph.new([nil] + @objects)
+    end
+
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Dependency]
+    def dependencies_causing_outdatedness_of(object)
+      objects_causing_outdatedness_of(object).map do |other_object|
+        props = @graph.props_for(other_object, object) || {}
+
+        Dependency.new(
+          other_object,
+          object,
+          raw_content: props.fetch(:raw_content, false),
+          attributes: props.fetch(:attributes, false),
+          compiled_content: props.fetch(:compiled_content, false),
+          path: props.fetch(:path, false),
+        )
+      end
     end
 
     # Returns the direct dependencies for the given object.
@@ -50,6 +110,7 @@ module Nanoc::Int
       @graph.direct_successors_of(object).compact
     end
 
+    contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
     # Records a dependency from `src` to `dst` in the dependency graph. When
     # `dst` is oudated, `src` will also become outdated.
     #
@@ -61,9 +122,13 @@ module Nanoc::Int
     #   outdated if the destination is outdated
     #
     # @return [void]
-    def record_dependency(src, dst)
+    def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false)
+      existing_props = @graph.props_for(dst, src) || {}
+      new_props = { raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path }
+      props = merge_props(existing_props, new_props)
+
       # Warning! dst and src are *reversed* here!
-      @graph.add_edge(dst, src) unless src == dst
+      @graph.add_edge(dst, src, props: props) unless src == dst
     end
 
     # Empties the list of dependencies for the given object. This is necessary
@@ -80,6 +145,13 @@ module Nanoc::Int
     end
 
     protected
+
+    def merge_props(p1, p2)
+      keys = (p1.keys + p2.keys).uniq
+      keys.each_with_object({}) do |key, memo|
+        memo[key] = p1.fetch(key, false) || p2.fetch(key, false)
+      end
+    end
 
     def data
       {
@@ -99,10 +171,10 @@ module Nanoc::Int
 
       # Load edges
       new_data[:edges].each do |edge|
-        from_index, to_index = *edge
+        from_index, to_index, props = *edge
         from = from_index && previous_objects[from_index]
         to   = to_index && previous_objects[to_index]
-        @graph.add_edge(from, to)
+        @graph.add_edge(from, to, props: props)
       end
 
       # Record dependency from all items on new items

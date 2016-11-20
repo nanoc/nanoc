@@ -69,7 +69,7 @@ describe Nanoc::Filter do
     before do
       reps << rep
 
-      expect(dependency_tracker).to receive(:bounce).with(item)
+      expect(dependency_tracker).to receive(:bounce).with(item, compiled_content: true)
     end
 
     context 'rep is compiled' do

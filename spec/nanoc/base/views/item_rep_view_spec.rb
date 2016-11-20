@@ -150,6 +150,17 @@ describe Nanoc::ItemRepView do
       expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
     end
 
+    it 'creates a dependency with the right props' do
+      subject
+      dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+      expect(dep.compiled_content?).to eq(true)
+
+      expect(dep.raw_content?).to eq(false)
+      expect(dep.attributes?).to eq(false)
+      expect(dep.path?).to eq(false)
+    end
+
     it { should eq('Hallo') }
   end
 
@@ -174,6 +185,17 @@ describe Nanoc::ItemRepView do
       expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
     end
 
+    it 'creates a dependency with the right props' do
+      subject
+      dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+      expect(dep.path?).to eq(true)
+
+      expect(dep.raw_content?).to eq(false)
+      expect(dep.attributes?).to eq(false)
+      expect(dep.compiled_content?).to eq(false)
+    end
+
     it { should eq('/about/') }
   end
 
@@ -196,6 +218,17 @@ describe Nanoc::ItemRepView do
 
     it 'creates a dependency' do
       expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+    end
+
+    it 'creates a dependency with the right props' do
+      subject
+      dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+      expect(dep.path?).to eq(true)
+
+      expect(dep.raw_content?).to eq(false)
+      expect(dep.attributes?).to eq(false)
+      expect(dep.compiled_content?).to eq(false)
     end
 
     it { should eq('output/about/index.html') }

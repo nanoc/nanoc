@@ -122,8 +122,8 @@ EOS
       assert_match SAMPLE_XML_OUT, result
 
       # Verify dependencies
-      obj = @dependency_store.objects_causing_outdatedness_of(@base_item)[0]
-      refute_nil obj
+      dep = @dependency_store.dependencies_causing_outdatedness_of(@base_item)[0]
+      refute_nil dep
     end
   end
 
@@ -148,8 +148,8 @@ EOS
       assert_match SAMPLE_XML_OUT_WITH_PARAMS, result
 
       # Verify dependencies
-      obj = @dependency_store.objects_causing_outdatedness_of(@base_item)[0]
-      refute_nil obj
+      dep = @dependency_store.dependencies_causing_outdatedness_of(@base_item)[0]
+      refute_nil dep
     end
   end
 
@@ -174,8 +174,8 @@ EOS
       assert_match SAMPLE_XML_OUT_WITH_OMIT_XML_DECL, result
 
       # Verify dependencies
-      obj = @dependency_store.objects_causing_outdatedness_of(@base_item)[0]
-      refute_nil obj
+      dep = @dependency_store.dependencies_causing_outdatedness_of(@base_item)[0]
+      refute_nil dep
     end
   end
 end
