@@ -16,15 +16,6 @@ describe Nanoc::ItemWithRepsView do
     dependency_tracker.enter(base_item)
   end
 
-  describe '#raw_content' do
-    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
-    let(:view) { described_class.new(item, nil) }
-
-    subject { view.raw_content }
-
-    it { should eq('content') }
-  end
-
   describe '#parent' do
     let(:item) do
       Nanoc::Int::Item.new('me', {}, identifier)
