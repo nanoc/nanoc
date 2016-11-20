@@ -42,7 +42,7 @@ module Nanoc
 
     # @return [Hash]
     def attributes
-      @context.dependency_tracker.bounce(unwrap)
+      @context.dependency_tracker.bounce(unwrap, attributes: true)
       unwrap.attributes
     end
 
