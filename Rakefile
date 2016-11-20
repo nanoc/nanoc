@@ -10,7 +10,7 @@ end
 
 Coveralls::RakeTask.new
 
-SUBDIRS = %w(* base cli data_sources extra filters helpers).freeze
+SUBDIRS = %w(* base checking cli data_sources deploying extra filters helpers).freeze
 
 namespace :test do
   SUBDIRS.each do |dir|
