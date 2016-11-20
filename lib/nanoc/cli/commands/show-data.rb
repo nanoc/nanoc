@@ -62,6 +62,13 @@ module Nanoc::CLI::Commands
     def print_item_dependencies(items, dependency_store)
       print_header('Item dependencies')
 
+      puts 'Legend:'
+      puts '  r = dependency on raw content'
+      puts '  a = dependency on attributes'
+      puts '  c = dependency on compiled content'
+      puts '  p = dependency on the path'
+      puts
+
       sorted_with_prev(items) do |item, prev|
         puts if prev
         puts "item #{item.identifier} depends on:"
@@ -81,8 +88,6 @@ module Nanoc::CLI::Commands
             when Nanoc::Int::Item
               'item'
             end
-
-          # TODO: print property legend
 
           props = ''
           props << (dep.raw_content? ? 'r' : '_')
