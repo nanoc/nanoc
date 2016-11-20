@@ -36,7 +36,7 @@ module Nanoc
 
     # @see Hash#[]
     def [](key)
-      @context.dependency_tracker.bounce(unwrap)
+      @context.dependency_tracker.bounce(unwrap, attributes: true)
       unwrap.attributes[key]
     end
 
