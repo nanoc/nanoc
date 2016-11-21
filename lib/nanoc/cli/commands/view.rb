@@ -46,7 +46,7 @@ module Nanoc::CLI::Commands
         use Rack::Head
         use Adsf::Rack::IndexFileFinder,
             root: site.config[:output_dir],
-            index_filenames: %w(index.html index.xhtml)
+            index_filenames: site.config[:index_filenames]
         run Rack::File.new(site.config[:output_dir])
       end.to_app
 

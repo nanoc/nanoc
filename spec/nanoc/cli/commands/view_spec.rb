@@ -19,17 +19,32 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
       Process.kill('TERM', pid)
     end
 
-    it 'serves /index.html as /' do
-      File.write('output/index.html', 'Hello there! Nanoc loves you! <3')
-      run_nanoc_cmd(['view', '--port', '50385']) do
-        expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql('Hello there! Nanoc loves you! <3')
+    context 'default configuration' do
+      it 'serves /index.html as /' do
+        File.write('output/index.html', 'Hello there! Nanoc loves you! <3')
+        run_nanoc_cmd(['view', '--port', '50385']) do
+          expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql('Hello there! Nanoc loves you! <3')
+        end
+      end
+
+      it 'does not serve /index.xhtml as /' do
+        File.write('output/index.xhtml', 'Hello there! Nanoc loves you! <3')
+        run_nanoc_cmd(['view', '--port', '50385']) do
+          expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql("File not found: /\n")
+        end
       end
     end
 
-    it 'serves /index.xhtml as /' do
-      File.write('output/index.xhtml', 'Hello there! Nanoc loves you! <3')
-      run_nanoc_cmd(['view', '--port', '50385']) do
-        expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql('Hello there! Nanoc loves you! <3')
+    context 'index_filenames including index.xhtml' do
+      before do
+        File.write('nanoc.yaml', 'index_filenames: [index.xhtml]')
+      end
+
+      it 'serves /index.xhtml as /' do
+        File.write('output/index.xhtml', 'Hello there! Nanoc loves you! <3')
+        run_nanoc_cmd(['view', '--port', '50385']) do
+          expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql('Hello there! Nanoc loves you! <3')
+        end
       end
     end
 
