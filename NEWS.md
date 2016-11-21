@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.4.1 (2016-11-21)
+
+Fixes:
+
+* Fixed an issue where the `xsl` filter would not generate a correct dependency on the layout (#996)
+
+Enhancements:
+
+* Made `view` command use index filenames specified in the `index_filenames` site configuration attribute (#998)
+
 ## 4.4.0 (2016-11-19)
 
 Features:
