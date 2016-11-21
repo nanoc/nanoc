@@ -67,7 +67,6 @@ run('git', 'tag', '--sign', '--annotate', Nanoc::VERSION, '--message', "Version 
 puts
 
 puts '=== Pushing Git data…'
-run('git', 'push', 'origin')
 run('git', 'push', 'origin', '--tags')
 puts
 
