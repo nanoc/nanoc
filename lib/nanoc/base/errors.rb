@@ -10,9 +10,9 @@ module Nanoc::Int
     class GenericTrivial < Generic
     end
 
-    # TODO: document
-    # TODO: Rename to ItemRepCompilationError
-    class WithItemRepError < Generic
+    # Error that is raised when compilation of an item rep fails. The
+    # underlying error is available by calling `#unwrap`.
+    class CompilationError < Generic
       attr_reader :item_rep
 
       def initialize(wrapped, item_rep)

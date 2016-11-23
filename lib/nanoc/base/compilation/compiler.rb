@@ -192,7 +192,7 @@ module Nanoc::Int
     def handle_errors_while(item_rep)
       yield
     rescue => e
-      raise Nanoc::Int::Errors::WithItemRepError.new(e, item_rep)
+      raise Nanoc::Int::Errors::CompilationError.new(e, item_rep)
     end
 
     # Compiles the given item representation.

@@ -49,7 +49,7 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
   def test_write_error_message_wrapped
     stream = StringIO.new
     @handler.send(:write_error_message, stream, new_wrapped_error(new_error), verbose: true)
-    refute_match(/WithItemRepError/, stream.string)
+    refute_match(/CompilationError/, stream.string)
   end
 
   def test_write_stack_trace_wrapped
@@ -76,7 +76,7 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
   def new_wrapped_error(wrapped)
     item = Nanoc::Int::Item.new('asdf', {}, '/about.md')
     item_rep = Nanoc::Int::ItemRep.new(item, :latex)
-    raise Nanoc::Int::Errors::WithItemRepError.new(wrapped, item_rep)
+    raise Nanoc::Int::Errors::CompilationError.new(wrapped, item_rep)
   rescue => e
     return e
   end

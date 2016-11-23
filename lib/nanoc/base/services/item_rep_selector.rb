@@ -31,7 +31,7 @@ module Nanoc::Int
 
     def handle_error(e, rep, graph)
       case e
-      when Nanoc::Int::Errors::WithItemRepError
+      when Nanoc::Int::Errors::CompilationError
         handle_error(e.unwrap, rep, graph)
       when Nanoc::Int::Errors::UnmetDependency
         handle_dependency_error(e, rep, graph)
