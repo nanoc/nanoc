@@ -322,10 +322,8 @@ describe Nanoc::Int::Executor do
       end
 
       it 'sends notifications' do
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_started, layout).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_ended, layout).ordered
 
         subject
       end

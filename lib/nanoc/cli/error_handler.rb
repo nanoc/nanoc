@@ -161,11 +161,6 @@ module Nanoc::CLI
       site && site.compiler
     end
 
-    # @return [Array] The current compilation stack
-    def stack
-      (compiler && compiler.stack) || []
-    end
-
     # @return [Hash<String, Array>] A hash containing the gem names as keys and gem versions as value
     def gems_and_versions
       gems = {}

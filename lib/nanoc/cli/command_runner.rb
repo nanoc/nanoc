@@ -65,12 +65,5 @@ module Nanoc::CLI
     def debug?
       Nanoc::CLI.debug?
     end
-
-    protected
-
-    # @return [Array] The compilation stack.
-    def stack
-      (site && site.compiler.stack) || []
-    end
   end
 end

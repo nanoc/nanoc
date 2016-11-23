@@ -16,25 +16,10 @@ module Nanoc::Int
   #   this item representation (either successfully or with failure). Has one
   #   argument: the item representation itself.
   #
-  # * `processing_started` — indicates that the compiler has started
-  #   processing the specified object, which can be an item representation
-  #   (when it is compiled) or a layout (when it is used to lay out an item
-  #   representation or when it is used as a partial)
-  #
-  # * `processing_ended` — indicates that the compiler has finished processing
-  #   the specified object.
-  #
   # @api private
   class Compiler
     # @api private
     attr_reader :site
-
-    # The compilation stack. When the compiler begins compiling a rep or a
-    # layout, it will be placed on the stack; when it is done compiling the
-    # rep or layout, it will be removed from the stack.
-    #
-    # @return [Array] The compilation stack
-    attr_reader :stack
 
     # @api private
     attr_reader :compiled_content_cache
@@ -67,8 +52,6 @@ module Nanoc::Int
       @outdatedness_checker   = outdatedness_checker
       @reps                   = reps
       @action_provider        = action_provider
-
-      @stack = []
     end
 
     def run_all
@@ -86,7 +69,6 @@ module Nanoc::Int
       # Determine which reps need to be recompiled
       forget_dependencies_if_outdated
 
-      @stack = []
       compile_reps
       store
     ensure
@@ -194,10 +176,6 @@ module Nanoc::Int
     end
 
     def compile_reps
-      # Listen to processing start/stop
-      Nanoc::Int::NotificationCenter.on(:processing_started, self) { |obj| @stack.push(obj) }
-      Nanoc::Int::NotificationCenter.on(:processing_ended, self) { |_obj| @stack.pop }
-
       # Assign snapshots
       @reps.each do |rep|
         rep.snapshot_defs = action_provider.snapshots_defs_for(rep)
@@ -207,12 +185,8 @@ module Nanoc::Int
       outdated_reps = @reps.select { |r| outdatedness_checker.outdated?(r) }
       selector = Nanoc::Int::ItemRepSelector.new(outdated_reps)
       selector.each do |rep|
-        @stack = []
         handle_errors_while(rep) { compile_rep(rep) }
       end
-    ensure
-      Nanoc::Int::NotificationCenter.remove(:processing_started, self)
-      Nanoc::Int::NotificationCenter.remove(:processing_ended,   self)
     end
 
     def handle_errors_while(item_rep)
@@ -256,19 +230,16 @@ module Nanoc::Int
 
       fiber = @fibers[rep]
       while fiber.alive?
-        Nanoc::Int::NotificationCenter.post(:processing_started, rep)
         Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
         res = fiber.resume
 
         if res.is_a?(Nanoc::Int::Errors::UnmetDependency)
           Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res)
-          Nanoc::Int::NotificationCenter.post(:processing_ended, rep)
           raise(res)
         end
       end
 
       Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)
-      Nanoc::Int::NotificationCenter.post(:processing_ended, rep)
     end
 
     # @return [Boolean]

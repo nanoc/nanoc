@@ -47,28 +47,20 @@ module Nanoc::Helpers
       # Create filter
       filter = filter_class.new(assigns)
 
-      begin
-        # Notify start
-        Nanoc::Int::NotificationCenter.post(:processing_started, layout)
+      # Layout
+      content = layout.content
+      arg = content.binary? ? content.filename : content.string
+      result = filter.setup_and_run(arg, filter_args)
 
-        # Layout
-        content = layout.content
-        arg = content.binary? ? content.filename : content.string
-        result = filter.setup_and_run(arg, filter_args)
-
-        # Append to erbout if we have a block
-        if block_given?
-          # Append result and return nothing
-          erbout = eval('_erbout', block.binding)
-          erbout << result
-          ''
-        else
-          # Return result
-          result
-        end
-      ensure
-        # Notify end
-        Nanoc::Int::NotificationCenter.post(:processing_ended, layout)
+      # Append to erbout if we have a block
+      if block_given?
+        # Append result and return nothing
+        erbout = eval('_erbout', block.binding)
+        erbout << result
+        ''
+      else
+        # Return result
+        result
       end
     end
   end
