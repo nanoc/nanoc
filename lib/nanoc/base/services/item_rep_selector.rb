@@ -18,8 +18,7 @@ module Nanoc::Int
           yield(rep)
           graph.delete_vertex(rep)
         rescue => e
-          is_success = handle_error(e, rep, graph)
-          raise(e) unless is_success
+          handle_error(e, rep, graph)
         end
       end
 
@@ -30,14 +29,17 @@ module Nanoc::Int
     end
 
     def handle_error(e, rep, graph)
-      case e
-      when Nanoc::Int::Errors::CompilationError
-        handle_error(e.unwrap, rep, graph)
-      when Nanoc::Int::Errors::UnmetDependency
-        handle_dependency_error(e, rep, graph)
-        true
+      actual_error =
+        if e.is_a?(Nanoc::Int::Errors::CompilationError)
+          e.unwrap
+        else
+          e
+        end
+
+      if actual_error.is_a?(Nanoc::Int::Errors::UnmetDependency)
+        handle_dependency_error(actual_error, rep, graph)
       else
-        false
+        raise(e)
       end
     end
 
