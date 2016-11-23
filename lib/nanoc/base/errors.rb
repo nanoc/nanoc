@@ -10,6 +10,21 @@ module Nanoc::Int
     class GenericTrivial < Generic
     end
 
+    # TODO: document
+    # TODO: Rename to ItemRepCompilationError
+    class WithItemRepError < Generic
+      attr_reader :item_rep
+
+      def initialize(wrapped, item_rep)
+        @wrapped = wrapped
+        @item_rep = item_rep
+      end
+
+      def unwrap
+        @wrapped
+      end
+    end
+
     # Error that is raised when a site is loaded that uses a data source with
     # an unknown identifier.
     class UnknownDataSource < Generic

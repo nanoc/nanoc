@@ -113,7 +113,7 @@ module Nanoc::CLI
 
       # Sections
       write_error_message(stream, error)
-      write_compilation_stack(stream, error)
+      write_item_rep(stream, error)
       write_stack_trace(stream, error)
 
       # Issue link
@@ -133,7 +133,7 @@ module Nanoc::CLI
 
       # Sections
       write_error_message(stream, error, verbose: true)
-      write_compilation_stack(stream, error, verbose: true)
+      write_item_rep(stream, error, verbose: true)
       write_stack_trace(stream, error, verbose: true)
       write_version_information(stream, verbose: true)
       write_system_information(stream, verbose: true)
@@ -216,6 +216,8 @@ module Nanoc::CLI
     #
     # @return [String] The resolution for the given error
     def resolution_for(error)
+      error = unwrap_error(error)
+
       case error
       when LoadError
         # Get gem name
@@ -257,29 +259,27 @@ module Nanoc::CLI
     def write_error_message(stream, error, verbose: false)
       write_section_header(stream, 'Message', verbose: verbose)
 
+      error = unwrap_error(error)
+
       stream.puts "#{error.class}: #{error.message}"
       resolution = resolution_for(error)
       stream.puts resolution.to_s if resolution
     end
 
-    def write_compilation_stack(stream, _error, verbose: false)
-      write_section_header(stream, 'Compilation stack', verbose: verbose)
+    def write_item_rep(stream, error, verbose: false)
+      return unless error.respond_to?(:item_rep)
 
-      if stack.empty?
-        stream.puts '  (empty)'
-      else
-        stack.reverse_each do |obj|
-          if obj.is_a?(Nanoc::Int::ItemRep)
-            stream.puts "  - [item]   #{obj.item.identifier} (rep #{obj.name})"
-          else # layout
-            stream.puts "  - [layout] #{obj.identifier}"
-          end
-        end
-      end
+      write_section_header(stream, 'Item being compiled', verbose: verbose)
+
+      item_rep = error.item_rep
+      stream.puts "Item identifier: #{item_rep.item.identifier}"
+      stream.puts "Item rep name:   #{item_rep.name.inspect}"
     end
 
     def write_stack_trace(stream, error, verbose: false)
       write_section_header(stream, 'Stack trace', verbose: verbose)
+
+      error = unwrap_error(error)
 
       count = verbose ? -1 : 10
       error.backtrace[0...count].each_with_index do |item, index|
@@ -328,6 +328,14 @@ module Nanoc::CLI
       write_section_header(stream, 'Load paths', verbose: verbose)
       $LOAD_PATH.each_with_index do |i, index|
         stream.puts "  #{index}. #{i}"
+      end
+    end
+
+    def unwrap_error(e)
+      if e.respond_to?(:unwrap)
+        unwrap_error(e.unwrap)
+      else
+        e
       end
     end
   end

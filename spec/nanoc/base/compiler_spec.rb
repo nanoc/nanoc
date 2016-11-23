@@ -93,7 +93,7 @@ describe Nanoc::Int::Compiler do
 
       it 'keeps the compilation stack in a good state' do
         expect(compiler.stack).to be_empty
-        expect { subject }.to raise_error(RuntimeError)
+        expect { subject }.to raise_error(Nanoc::Int::Errors::WithItemRepError)
         expect(compiler.stack).to eql([rep])
       end
     end
@@ -117,7 +117,7 @@ describe Nanoc::Int::Compiler do
 
         it 'keeps the compilation stack in a good state' do
           expect(compiler.stack).to be_empty
-          expect { subject }.to raise_error(RuntimeError)
+          expect { subject }.to raise_error(Nanoc::Int::Errors::WithItemRepError)
           expect(compiler.stack).to eql([rep])
         end
       end

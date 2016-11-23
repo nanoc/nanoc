@@ -208,11 +208,17 @@ module Nanoc::Int
       selector = Nanoc::Int::ItemRepSelector.new(outdated_reps)
       selector.each do |rep|
         @stack = []
-        compile_rep(rep)
+        handle_errors_while(rep) { compile_rep(rep) }
       end
     ensure
       Nanoc::Int::NotificationCenter.remove(:processing_started, self)
       Nanoc::Int::NotificationCenter.remove(:processing_ended,   self)
+    end
+
+    def handle_errors_while(item_rep)
+      yield
+    rescue => e
+      raise Nanoc::Int::Errors::WithItemRepError.new(e, item_rep)
     end
 
     # Compiles the given item representation.
