@@ -70,9 +70,7 @@ module Nanoc
         @dependency_tracker.bounce(layout, raw_content: true)
 
         begin
-          # Notify start
-          Nanoc::Int::NotificationCenter.post(:processing_started, layout)
-          Nanoc::Int::NotificationCenter.post(:filtering_started,  rep, filter_name)
+          Nanoc::Int::NotificationCenter.post(:filtering_started, rep, filter_name)
 
           # Layout
           content = layout.content
@@ -83,9 +81,7 @@ module Nanoc
           # Create "post" snapshot
           snapshot(rep, :post, final: false)
         ensure
-          # Notify end
-          Nanoc::Int::NotificationCenter.post(:filtering_ended,  rep, filter_name)
-          Nanoc::Int::NotificationCenter.post(:processing_ended, layout)
+          Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, filter_name)
         end
       end
 

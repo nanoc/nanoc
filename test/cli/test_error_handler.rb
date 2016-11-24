@@ -46,7 +46,42 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
     refute_match(/See full crash log for details./, stream.string)
   end
 
-  def new_error(amount_factor)
+  def test_write_error_message_wrapped
+    stream = StringIO.new
+    @handler.send(:write_error_message, stream, new_wrapped_error(new_error), verbose: true)
+    refute_match(/CompilationError/, stream.string)
+  end
+
+  def test_write_stack_trace_wrapped
+    stream = StringIO.new
+    @handler.send(:write_stack_trace, stream, new_wrapped_error(new_error), verbose: false)
+    assert_match(/new_error/, stream.string)
+  end
+
+  def test_write_item_rep
+    stream = StringIO.new
+    @handler.send(:write_item_rep, stream, new_wrapped_error(new_error), verbose: false)
+    assert_match(/^Item identifier: \/about\.md$/, stream.string)
+    assert_match(/^Item rep name:   :latex$/, stream.string)
+  end
+
+  def test_resolution_for_wrapped
+    def @handler.using_bundler?
+      true
+    end
+    error = new_wrapped_error(LoadError.new('no such file to load -- kramdown'))
+    assert_match(/^Make sure the gem is added to Gemfile/, @handler.send(:resolution_for, error))
+  end
+
+  def new_wrapped_error(wrapped)
+    item = Nanoc::Int::Item.new('asdf', {}, '/about.md')
+    item_rep = Nanoc::Int::ItemRep.new(item, :latex)
+    raise Nanoc::Int::Errors::CompilationError.new(wrapped, item_rep)
+  rescue => e
+    return e
+  end
+
+  def new_error(amount_factor = 1)
     backtrace_generator = lambda do |af|
       if af.zero?
         raise 'finally!'

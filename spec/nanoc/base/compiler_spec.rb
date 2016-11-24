@@ -82,43 +82,29 @@ describe Nanoc::Int::Compiler do
       [Nanoc::Int::SnapshotDef.new(:last, true)]
     end
 
-    it 'keeps the compilation stack in a good state' do
-      expect(compiler.stack).to be_empty
-      subject
-      expect(compiler.stack).to be_empty
+    it 'compiles individual reps' do
+      expect { subject }.to change { rep.snapshot_contents[:last].string }
+        .from('<%= 1 + 2 %>')
+        .to('3')
     end
 
     context 'exception' do
       let(:item) { Nanoc::Int::Item.new('<%= raise "lol" %>', {}, '/hi.md') }
 
-      it 'keeps the compilation stack in a good state' do
-        expect(compiler.stack).to be_empty
-        expect { subject }.to raise_error(RuntimeError)
-        expect(compiler.stack).to eql([rep])
-      end
-    end
-
-    context 'interrupted compilation' do
-      let(:item) { Nanoc::Int::Item.new('other=<%= @items["/other.*"].compiled_content %>', {}, '/hi.md') }
-
-      before do
-        expect(outdatedness_checker).to receive(:outdated?).with(other_rep).and_return(true)
-        expect(action_provider).to receive(:memory_for).with(other_rep).and_return(memory)
+      it 'wraps exception' do
+        expect { subject }.to raise_error(Nanoc::Int::Errors::CompilationError)
       end
 
-      it 'keeps the compilation stack in a good state' do
-        expect(compiler.stack).to be_empty
-        subject
-        expect(compiler.stack).to be_empty
+      it 'contains the right item rep in the wrapped exception' do
+        expect { subject }.to raise_error do |err|
+          expect(err.item_rep).to eql(rep)
+        end
       end
 
-      context 'exception' do
-        let(:item) { Nanoc::Int::Item.new('other=<%= @items["/other.*"].compiled_content %><% raise "lol" %>', {}, '/hi.md') }
-
-        it 'keeps the compilation stack in a good state' do
-          expect(compiler.stack).to be_empty
-          expect { subject }.to raise_error(RuntimeError)
-          expect(compiler.stack).to eql([rep])
+      it 'contains the right wrapped exception' do
+        expect { subject }.to raise_error do |err|
+          expect(err.unwrap).to be_a(RuntimeError)
+          expect(err.unwrap.message).to eq('lol')
         end
       end
     end
@@ -134,12 +120,10 @@ describe Nanoc::Int::Compiler do
     end
 
     it 'generates notifications in the proper order' do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_started, rep).ordered
       expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
       expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
       expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
       expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_ended, rep).ordered
 
       subject
     end
@@ -162,42 +146,23 @@ describe Nanoc::Int::Compiler do
         expect(rep.snapshot_contents[:last].string).to eql('other=other content')
       end
 
-      it 'keeps the compilation stack in a good state' do
-        expect(compiler.stack).to be_empty
-
-        expect { compiler.send(:compile_rep, rep) }.to raise_error(Nanoc::Int::Errors::UnmetDependency)
-        expect(compiler.stack).to be_empty
-
-        compiler.send(:compile_rep, other_rep)
-        expect(compiler.stack).to be_empty
-
-        compiler.send(:compile_rep, rep)
-        expect(compiler.stack).to be_empty
-      end
-
       it 'generates notifications in the proper order' do
         # rep 1
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_started, rep).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:dependency_created, item, other_item).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_suspended, rep, anything).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_ended, rep).ordered
 
         # rep 2
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_started, other_rep).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_started, other_rep).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_started, other_rep, :erb).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, other_rep, :erb).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_ended, other_rep).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_ended, other_rep).ordered
 
         # rep 1 (again)
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_started, rep).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:processing_ended, rep).ordered
 
         expect { compiler.send(:compile_rep, rep) }.to raise_error(Nanoc::Int::Errors::UnmetDependency)
         compiler.send(:compile_rep, other_rep)

@@ -17,14 +17,29 @@ module Nanoc::Int
         begin
           yield(rep)
           graph.delete_vertex(rep)
-        rescue Nanoc::Int::Errors::UnmetDependency => e
-          handle_dependency_error(e, rep, graph)
+        rescue => e
+          handle_error(e, rep, graph)
         end
       end
 
       # Check whether everything was compiled
       unless graph.vertices.empty?
         raise Nanoc::Int::Errors::RecursiveCompilation.new(graph.vertices)
+      end
+    end
+
+    def handle_error(e, rep, graph)
+      actual_error =
+        if e.is_a?(Nanoc::Int::Errors::CompilationError)
+          e.unwrap
+        else
+          e
+        end
+
+      if actual_error.is_a?(Nanoc::Int::Errors::UnmetDependency)
+        handle_dependency_error(actual_error, rep, graph)
+      else
+        raise(e)
       end
     end
 
