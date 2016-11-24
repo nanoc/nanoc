@@ -46,6 +46,69 @@ describe Nanoc::Int::ItemRepSelector do
   let(:tentatively_yielded) { result[0] }
   let(:successfully_yielded) { result[1] }
 
+  describe 'error' do
+    context 'plain error' do
+      subject { selector.each { |_rep| raise 'heh' } }
+
+      it 'raises' do
+        expect { subject }.to raise_error(RuntimeError, 'heh')
+      end
+    end
+
+    context 'plain dependency error' do
+      subject do
+        idx = 0
+        selector.each do |_rep|
+          idx += 1
+
+          raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[2]) if idx == 1
+        end
+      end
+
+      it 'does not raise' do
+        expect { subject }.not_to raise_error
+      end
+    end
+
+    context 'wrapped error' do
+      subject do
+        selector.each do |rep|
+          begin
+            raise 'heh'
+          rescue => e
+            raise Nanoc::Int::Errors::CompilationError.new(e, rep)
+          end
+        end
+      end
+
+      it 'raises original error' do
+        expect { subject }.to raise_error(Nanoc::Int::Errors::CompilationError) do |err|
+          expect(err.unwrap).to be_a(RuntimeError)
+          expect(err.unwrap.message).to eq('heh')
+        end
+      end
+    end
+
+    context 'wrapped dependency error' do
+      subject do
+        idx = 0
+        selector.each do |rep|
+          idx += 1
+
+          begin
+            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[2]) if idx == 1
+          rescue => e
+            raise Nanoc::Int::Errors::CompilationError.new(e, rep)
+          end
+        end
+      end
+
+      it 'does not raise' do
+        expect { subject }.not_to raise_error
+      end
+    end
+  end
+
   describe 'yield order' do
     context 'linear dependencies' do
       let(:dependencies) do
