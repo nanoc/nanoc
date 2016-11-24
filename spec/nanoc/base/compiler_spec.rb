@@ -66,6 +66,50 @@ describe Nanoc::Int::Compiler do
     allow(action_provider).to receive(:memory_for).with(other_rep).and_return(memory)
   end
 
+  describe '#compile_reps' do
+    subject { compiler.send(:compile_reps) }
+
+    before do
+      allow(action_provider).to receive(:snapshots_defs_for).with(rep).and_return(snapshot_defs_for_rep)
+      allow(action_provider).to receive(:snapshots_defs_for).with(other_rep).and_return(snapshot_defs_for_rep)
+    end
+
+    let(:snapshot_defs_for_rep) do
+      [Nanoc::Int::SnapshotDef.new(:last, true)]
+    end
+
+    let(:snapshot_defs_for_other_rep) do
+      [Nanoc::Int::SnapshotDef.new(:last, true)]
+    end
+
+    it 'compiles individual reps' do
+      expect { subject }.to change { rep.snapshot_contents[:last].string }
+        .from('<%= 1 + 2 %>')
+        .to('3')
+    end
+
+    context 'exception' do
+      let(:item) { Nanoc::Int::Item.new('<%= raise "lol" %>', {}, '/hi.md') }
+
+      it 'wraps exception' do
+        expect { subject }.to raise_error(Nanoc::Int::Errors::CompilationError)
+      end
+
+      it 'contains the right item rep in the wrapped exception' do
+        expect { subject }.to raise_error do |err|
+          expect(err.item_rep).to eql(rep)
+        end
+      end
+
+      it 'contains the right wrapped exception' do
+        expect { subject }.to raise_error do |err|
+          expect(err.unwrap).to be_a(RuntimeError)
+          expect(err.unwrap.message).to eq('lol')
+        end
+      end
+    end
+  end
+
   describe '#compile_rep' do
     subject { compiler.send(:compile_rep, rep) }
 
