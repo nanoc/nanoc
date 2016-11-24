@@ -1,30 +1,33 @@
 module Nanoc::Int
   # @api private
   class DependencyTracker
+    include Nanoc::Int::ContractsSupport
+
+    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+    C_ARGS = C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
+
     class Null
       include Nanoc::Int::ContractsSupport
 
-      contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+      contract C_OBJ, C_ARGS => C::Any
       def enter(_obj, raw_content: false, attributes: false, compiled_content: false, path: false)
       end
 
-      contract C::None => C::Any
+      contract C_OBJ => C::Any
       def exit
       end
 
-      contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+      contract C_OBJ, C_ARGS => C::Any
       def bounce(_obj, raw_content: false, attributes: false, compiled_content: false, path: false)
       end
     end
-
-    include Nanoc::Int::ContractsSupport
 
     def initialize(dependency_store)
       @dependency_store = dependency_store
       @stack = []
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+    contract C_OBJ, C_ARGS => C::Any
     def enter(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
       unless @stack.empty?
         Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj)
@@ -41,12 +44,12 @@ module Nanoc::Int
       @stack.push(obj)
     end
 
-    contract C::None => C::Any
+    contract C_OBJ => C::Any
     def exit
       @stack.pop
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::Layout], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+    contract C_OBJ, C_ARGS => C::Any
     def bounce(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
       enter(obj, raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
       exit
