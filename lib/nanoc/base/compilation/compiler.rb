@@ -233,9 +233,14 @@ module Nanoc::Int
         Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
         res = fiber.resume
 
-        if res.is_a?(Nanoc::Int::Errors::UnmetDependency)
+        case res
+        when Nanoc::Int::Errors::UnmetDependency
           Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res)
           raise(res)
+        when Proc
+          fiber.resume(res.call)
+        else
+          # TODO: raise
         end
       end
 
