@@ -82,7 +82,14 @@ describe Nanoc::Filters::Less, site: true, stdio: true do
       expect(File.read('output/a.css')).to match(/^p\s*\{\s*color:\s*red;?\s*\}/)
     end
 
-    it 'recompiles a.less if b.less has changed'
+    it 'recompiles a.less if b.less has changed' do
+      Nanoc::CLI.run(%w(compile))
+
+      File.write('content/foo/bar/imported_file.less', 'p { color: blue; }')
+
+      Nanoc::CLI.run(%w(compile))
+      expect(File.read('output/a.css')).to match(/^p\s*\{\s*color:\s*blue;?\s*\}/)
+    end
   end
 
   context 'paths relative to current file' do
@@ -101,6 +108,13 @@ describe Nanoc::Filters::Less, site: true, stdio: true do
       expect(File.read('output/foo/a.css')).to match(/^p\s*\{\s*color:\s*red;?\s*\}/)
     end
 
-    it 'recompiles a.less if b.less has changed'
+    it 'recompiles a.less if b.less has changed' do
+      Nanoc::CLI.run(%w(compile))
+
+      File.write('content/foo/bar/imported_file.less', 'p { color: blue; }')
+
+      Nanoc::CLI.run(%w(compile))
+      expect(File.read('output/foo/a.css')).to match(/^p\s*\{\s*color:\s*blue;?\s*\}/)
+    end
   end
 end

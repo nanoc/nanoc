@@ -18,23 +18,42 @@ module Nanoc::Filters
         i[1] =~ /\.(less|css)$/ ? i[1] : i[1] + '.less'
       end
 
+      item_dir_path = Pathname.new(@item[:content_filename]).dirname.realpath
+      cwd = Pathname.pwd # FIXME: ugly (get site dir instead)
+
       # Convert to items
       imported_items = imported_filenames.map do |filename|
-        # Find directory for this item
-        current_dir_pathname = Pathname.new(@item[:content_filename]).dirname.realpath
+        full_paths = []
 
-        # Find absolute pathname for imported item
-        imported_pathname    = Pathname.new(filename)
-        if imported_pathname.relative?
-          imported_pathname = current_dir_pathname + imported_pathname
+        imported_pathname = Pathname.new(filename)
+
+        # Find path relative to item
+        absolute_pathname =
+          if imported_pathname.relative?
+            item_dir_path + imported_pathname
+          else
+            imported_pathname
+          end
+        if absolute_pathname.exist?
+          full_paths << absolute_pathname.realpath
         end
-        next unless imported_pathname.exist?
-        imported_filename = imported_pathname.realpath
+
+        # Find path relative to working directory
+        absolute_pathname =
+          if imported_pathname.relative?
+            cwd + imported_pathname
+          else
+            imported_pathname
+          end
+        if absolute_pathname.exist?
+          full_paths << absolute_pathname.realpath
+        end
 
         # Find matching item
         @items.find do |i|
           next if i[:content_filename].nil?
-          Pathname.new(i[:content_filename]).realpath == imported_filename
+          item_path = Pathname.new(i[:content_filename]).realpath
+          full_paths.any? { |fp| fp == item_path }
         end
       end.compact
 
