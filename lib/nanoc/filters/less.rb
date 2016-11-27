@@ -10,13 +10,7 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params = {})
-      # Find imports (hacky)
-      imports = []
-      imports.concat(content.scan(/^@import\s+(["'])([^\1]+?)\1;/))
-      imports.concat(content.scan(/^@import\s+url\((["']?)([^)]+?)\1\);/))
-      imported_filenames = imports.map do |i|
-        i[1] =~ /\.(less|css)$/ ? i[1] : i[1] + '.less'
-      end
+      imported_filenames = imported_filenames_from(content)
 
       item_dir_path = Pathname.new(@item[:content_filename]).dirname.realpath
       cwd = Pathname.pwd # FIXME: ugly (get site dir instead)
@@ -45,6 +39,16 @@ module Nanoc::Filters
       on_main_fiber do
         parser = ::Less::Parser.new(paths: paths)
         parser.parse(content).to_css(params)
+      end
+    end
+
+    def imported_filenames_from(content)
+      imports = []
+      imports.concat(content.scan(/^@import\s+(["'])([^\1]+?)\1;/))
+      imports.concat(content.scan(/^@import\s+url\((["']?)([^)]+?)\1\);/))
+
+      imported_filenames = imports.map do |i|
+        i[1] =~ /\.(less|css)$/ ? i[1] : i[1] + '.less'
       end
     end
 
