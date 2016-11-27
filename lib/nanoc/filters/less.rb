@@ -23,31 +23,11 @@ module Nanoc::Filters
 
       # Convert to items
       imported_items = imported_filenames.map do |filename|
-        full_paths = []
+        full_paths = Set.new
 
         imported_pathname = Pathname.new(filename)
-
-        # Find path relative to item
-        absolute_pathname =
-          if imported_pathname.relative?
-            item_dir_path + imported_pathname
-          else
-            imported_pathname
-          end
-        if absolute_pathname.exist?
-          full_paths << absolute_pathname.realpath
-        end
-
-        # Find path relative to working directory
-        absolute_pathname =
-          if imported_pathname.relative?
-            cwd + imported_pathname
-          else
-            imported_pathname
-          end
-        if absolute_pathname.exist?
-          full_paths << absolute_pathname.realpath
-        end
+        full_paths << find_file(imported_pathname, item_dir_path)
+        full_paths << find_file(imported_pathname, cwd)
 
         # Find matching item
         @items.find do |i|
@@ -65,6 +45,26 @@ module Nanoc::Filters
       on_main_fiber do
         parser = ::Less::Parser.new(paths: paths)
         parser.parse(content).to_css(params)
+      end
+    end
+
+    # @param [Pathname] pathname Pathname of the file to find. Can be relative or absolute.
+    #
+    # @param [Pathname] root_pathname Directory pathname from which the search will start.
+    #
+    # @return [String, nil] A string containing the full path if a file is found, otherwise nil.
+    def find_file(pathname, root_pathname)
+      absolute_pathname =
+        if pathname.relative?
+          root_pathname + pathname
+        else
+          pathname
+        end
+
+      if absolute_pathname.exist?
+        absolute_pathname.realpath
+      else
+        nil
       end
     end
   end
