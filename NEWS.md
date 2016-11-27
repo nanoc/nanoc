@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.4.2 (2016-11-27)
+
+Fixes:
+
+* Fixed “Maximum call stack size exceeded” issue in the `less` filter (#1001)
+* Fixed issue that could cause the `less` filter to not generate all necessary dependencies (#1003)
+
+Enhancements:
+
+* Improved the way that the crash log displays the item rep that is being compiled (#1000)
+
 ## 4.4.1 (2016-11-21)
 
 Fixes:
