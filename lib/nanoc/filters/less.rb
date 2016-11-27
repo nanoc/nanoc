@@ -28,16 +28,14 @@ module Nanoc::Filters
       imports.concat(content.scan(/^@import\s+(["'])([^\1]+?)\1;/))
       imports.concat(content.scan(/^@import\s+url\((["']?)([^)]+?)\1\);/))
 
-      imported_filenames = imports.map do |i|
-        i[1] =~ /\.(less|css)$/ ? i[1] : i[1] + '.less'
-      end
+      imports.map { |i| i[1] =~ /\.(less|css)$/ ? i[1] : i[1] + '.less' }
     end
 
     def imported_filenames_to_items(imported_filenames)
       item_dir_path = Pathname.new(@item[:content_filename]).dirname.realpath
       cwd = Pathname.pwd # FIXME: ugly (get site dir instead)
 
-      imported_items = imported_filenames.map do |filename|
+      imported_filenames.map do |filename|
         full_paths = Set.new
 
         imported_pathname = Pathname.new(filename)
