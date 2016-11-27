@@ -10,28 +10,9 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params = {})
-      imported_filenames = imported_filenames_from(content)
-
-      item_dir_path = Pathname.new(@item[:content_filename]).dirname.realpath
-      cwd = Pathname.pwd # FIXME: ugly (get site dir instead)
-
-      # Convert to items
-      imported_items = imported_filenames.map do |filename|
-        full_paths = Set.new
-
-        imported_pathname = Pathname.new(filename)
-        full_paths << find_file(imported_pathname, item_dir_path)
-        full_paths << find_file(imported_pathname, cwd)
-
-        # Find matching item
-        @items.find do |i|
-          next if i[:content_filename].nil?
-          item_path = Pathname.new(i[:content_filename]).realpath
-          full_paths.any? { |fp| fp == item_path }
-        end
-      end.compact
-
       # Create dependencies
+      imported_filenames = imported_filenames_from(content)
+      imported_items = imported_filenames_to_items(imported_filenames)
       depend_on(imported_items)
 
       # Add filename to load path
@@ -50,6 +31,26 @@ module Nanoc::Filters
       imported_filenames = imports.map do |i|
         i[1] =~ /\.(less|css)$/ ? i[1] : i[1] + '.less'
       end
+    end
+
+    def imported_filenames_to_items(imported_filenames)
+      item_dir_path = Pathname.new(@item[:content_filename]).dirname.realpath
+      cwd = Pathname.pwd # FIXME: ugly (get site dir instead)
+
+      imported_items = imported_filenames.map do |filename|
+        full_paths = Set.new
+
+        imported_pathname = Pathname.new(filename)
+        full_paths << find_file(imported_pathname, item_dir_path)
+        full_paths << find_file(imported_pathname, cwd)
+
+        # Find matching item
+        @items.find do |i|
+          next if i[:content_filename].nil?
+          item_path = Pathname.new(i[:content_filename]).realpath
+          full_paths.any? { |fp| fp == item_path }
+        end
+      end.compact
     end
 
     # @param [Pathname] pathname Pathname of the file to find. Can be relative or absolute.
