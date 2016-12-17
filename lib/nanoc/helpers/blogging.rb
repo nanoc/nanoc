@@ -73,8 +73,7 @@ module Nanoc::Helpers
       end
 
       def updated
-        # FIXME: if updated_at exists, prefer that
-        relevant_articles.map { |a| attribute_to_time(a[:created_at]) }.max
+        relevant_articles.map { |a| attribute_to_time(a[:updated_at] || a[:created_at]) }.max
       end
 
       def validate_config
