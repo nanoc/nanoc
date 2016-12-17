@@ -4,9 +4,8 @@ module Nanoc::Helpers
     # @return [Array]
     def breadcrumbs_trail
       # e.g. ['', '/foo', '/foo/bar']
-      prefixes =
-        item.identifier.components
-        .inject(['']) { |acc, elem| acc + [acc.last + '/' + elem] }
+      components = item.identifier.components
+      prefixes = components.inject(['']) { |acc, elem| acc + [acc.last + '/' + elem] }
 
       if @item.identifier.legacy?
         prefixes.map { |pr| @items[Nanoc::Identifier.new('/' + pr, type: :legacy)] }
