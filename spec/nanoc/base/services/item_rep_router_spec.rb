@@ -81,6 +81,14 @@ describe(Nanoc::Int::ItemRepRouter) do
           expect(paths_to_reps).to have_key('/foo/index.html')
         end
 
+        context 'path does not start with a slash' do
+          let(:basic_path) { 'foo/index.html' }
+
+          it 'errors' do
+            expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::RouteWithoutSlashError)
+          end
+        end
+
         context 'path is not UTF-8' do
           let(:basic_path) { '/foo/index.html'.encode('ISO-8859-1') }
 
