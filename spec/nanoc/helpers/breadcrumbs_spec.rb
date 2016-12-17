@@ -62,14 +62,71 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true do
     end
 
     context 'non-legacy identifiers' do
-      before do
-        ctx.create_item('root', {}, '/index.md')
+      context 'root' do
+        before do
+          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
 
-        ctx.item = ctx.items['/index.md']
+          ctx.item = ctx.items['/index.md']
+        end
+
+        it 'returns an array with the item' do
+          expect(subject).to eql([ctx.items['/index.md']])
+        end
       end
 
-      it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Helpers::Breadcrumbs::CannotGetBreadcrumbsForNonLegacyItem)
+      context 'root and direct child' do
+        before do
+          ctx.create_item('child', {}, Nanoc::Identifier.new('/foo.md'))
+          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+
+          ctx.item = ctx.items['/foo.md']
+        end
+
+        it 'returns an array with the items' do
+          expect(subject).to eql([ctx.items['/index.md'], ctx.items['/foo.md']])
+        end
+      end
+
+      context 'root, child and grandchild' do
+        before do
+          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/foo/bar.md'))
+          ctx.create_item('child', {}, Nanoc::Identifier.new('/foo.md'))
+          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+
+          ctx.item = ctx.items['/foo/bar.md']
+        end
+
+        it 'returns an array with the items' do
+          expect(subject).to eql([ctx.items['/index.md'], ctx.items['/foo.md'], ctx.items['/foo/bar.md']])
+        end
+      end
+
+      context 'root, missing child and grandchild' do
+        before do
+          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/foo/bar.md'))
+          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+
+          ctx.item = ctx.items['/foo/bar.md']
+        end
+
+        it 'returns an array with the items' do
+          expect(subject).to eql([ctx.items['/index.md'], nil, ctx.items['/foo/bar.md']])
+        end
+      end
+
+      context 'index.md child' do
+        # No special handling of non-root index.* files.
+
+        before do
+          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/foo/index.md'))
+          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+
+          ctx.item = ctx.items['/foo/index.md']
+        end
+
+        it 'returns an array with the items' do
+          expect(subject).to eql([ctx.items['/index.md'], nil, ctx.items['/foo/index.md']])
+        end
       end
     end
   end
