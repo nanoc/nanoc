@@ -1,5 +1,19 @@
 # Nanoc news
 
+## 4.4.3 (2016-12-17)
+
+Fixes:
+
+* Prevented stale data from making it into the compiled content cache and thereby blowing up in memory (#1004, #1013)
+* Fixed “about” and “IRC channel” links in default site
+* Fixed accuracy of `<updated>` in Atom feed (use most recent `updated_at` or `created_at`) (#1007, #1014)
+
+Enhancements:
+
+* Added support for non-legacy identifiers in `#breadcrumbs_trail` (#1010, #1011)
+* Defined checksum for `Nanoc::Int::Context` to make outdatedness checker more precise (#1008, #1012)
+* Made Nanoc raise an error when item reps are routed to a path that does not start with a slash (#1015, #1016)
+
 ## 4.4.2 (2016-11-27)
 
 Fixes:
