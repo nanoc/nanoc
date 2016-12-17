@@ -96,6 +96,8 @@ module Nanoc::Int
           UnwrapUpdateBehavior
         when Nanoc::RuleDSL::RuleContext
           RuleContextUpdateBehavior
+        when Nanoc::Int::Context
+          ContextUpdateBehavior
         else
           RescueUpdateBehavior
         end
@@ -114,6 +116,17 @@ module Nanoc::Int
         yield(obj.layouts)
         digest.update(',config=')
         yield(obj.config)
+      end
+    end
+
+    class ContextUpdateBehavior
+      def self.update(obj, digest)
+        obj.instance_variables.each do |var|
+          digest.update(var.to_s)
+          digest.update('=')
+          yield(obj.instance_variable_get(var))
+          digest.update(',')
+        end
       end
     end
 
