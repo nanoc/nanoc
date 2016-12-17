@@ -12,7 +12,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
 
     params = {
-      compiled_content_cache: Nanoc::Int::CompiledContentCache.new,
+      compiled_content_cache: Nanoc::Int::CompiledContentCache.new(items: site.items),
       checksum_store: Nanoc::Int::ChecksumStore.new(site: site),
       rule_memory_store: Nanoc::Int::RuleMemoryStore.new,
       dependency_store: Nanoc::Int::DependencyStore.new(

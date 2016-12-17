@@ -4,9 +4,10 @@ module Nanoc::Int
   #
   # @api private
   class CompiledContentCache < ::Nanoc::Int::Store
-    def initialize(env_name: nil)
+    def initialize(env_name: nil, items:)
       super(Nanoc::Int::Store.tmp_path_for(env_name: env_name, store_name: 'compiled_content'), 2)
 
+      @items = items
       @cache = {}
     end
 

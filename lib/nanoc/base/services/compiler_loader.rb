@@ -24,8 +24,14 @@ module Nanoc::Int
           reps: item_rep_repo,
         )
 
+      compiled_content_cache =
+        Nanoc::Int::CompiledContentCache.new(
+          env_name: site.config.env_name,
+          items: site.items,
+        )
+
       params = {
-        compiled_content_cache: Nanoc::Int::CompiledContentCache.new(env_name: site.config.env_name),
+        compiled_content_cache: compiled_content_cache,
         checksum_store: checksum_store,
         rule_memory_store: rule_memory_store,
         dependency_store: dependency_store,
