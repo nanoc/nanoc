@@ -72,6 +72,11 @@ module Nanoc::Helpers
         sorted_relevant_articles.first
       end
 
+      def updated
+        # FIXME: if updated_at exists, prefer that
+        relevant_articles.map { |a| attribute_to_time(a[:created_at]) }.max
+      end
+
       def validate_config
         if @config[:base_url].nil?
           raise Nanoc::Int::Errors::GenericTrivial.new('Cannot build Atom feed: site configuration has no base_url')
@@ -109,7 +114,7 @@ module Nanoc::Helpers
           xml.title title
 
           # Add date
-          xml.updated(attribute_to_time(last_article[:created_at]).__nanoc_to_iso8601_time)
+          xml.updated(updated.__nanoc_to_iso8601_time)
 
           # Add links
           xml.link(rel: 'alternate', href: root_url)

@@ -93,6 +93,35 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     end
   end
 
+  def test_atom_feed_updated_is_most_recent
+    if_have 'builder' do
+      # Create items
+      @items = [mock_item, mock_article, mock_article]
+
+      # Create item 1
+      @items[1].stubs(:[]).with(:created_at).returns(Time.parse('2016-12-01 17:20:00 +00:00'))
+      @items[1].expects(:compiled_content).returns('item 1 content')
+
+      # Create item 2
+      @items[2].stubs(:[]).with(:created_at).returns(Time.parse('2016-12-01 18:40:00 +00:00'))
+      @items[2].expects(:compiled_content).returns('item 2 content')
+
+      # Mock site
+      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:title).returns('My Cool Blog')
+      @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
+      @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
+      @item.stubs(:[]).with(:feed_url).returns(nil)
+      @item.stubs(:path).returns('/journal/feed/')
+
+      # Check
+      assert_match(%r{<title>My Cool Blog</title>\n  <updated>2016-12-01T18:40:00Z</updated>}, atom_feed)
+    end
+  end
+
   def test_atom_feed_without_articles
     if_have 'builder' do
       # Mock items
