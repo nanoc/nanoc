@@ -346,6 +346,12 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql(expected_checksum) }
   end
 
+  context 'Nanoc::Int::Context' do
+    let(:obj) { Nanoc::Int::Context.new(foo: 123) }
+
+    it { is_expected.to eql('Nanoc::Int::Context<@foo=Fixnum<123>,>') }
+  end
+
   context 'Sass::Importers::Filesystem' do
     let(:obj) { Sass::Importers::Filesystem.new('/foo') }
 
