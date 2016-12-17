@@ -9,6 +9,12 @@ module Nanoc::Int
       end
     end
 
+    class RouteWithoutSlashError < ::Nanoc::Error
+      def initialize(output_path, rep)
+        super("The item representation #{rep.inspect} is routed to #{output_path}, which does not start with a slash, as required.")
+      end
+    end
+
     def initialize(reps, action_provider, site)
       @reps = reps
       @action_provider = action_provider
@@ -28,6 +34,10 @@ module Nanoc::Int
       basic_path = path
       return if basic_path.nil?
       basic_path = basic_path.encode('UTF-8')
+
+      unless basic_path.start_with?('/')
+        raise RouteWithoutSlashError.new(basic_path, rep)
+      end
 
       # Check for duplicate paths
       if paths_to_reps.key?(basic_path)
