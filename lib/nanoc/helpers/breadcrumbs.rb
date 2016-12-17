@@ -13,19 +13,12 @@ module Nanoc::Helpers
         raise CannotGetBreadcrumbsForNonLegacyItem.new(@item.identifier)
       end
 
-      trail      = []
-      idx_start  = 0
+      # e.g. ['', '/foo', '/foo/bar']
+      prefixes =
+        item.identifier.components
+        .inject(['']) { |acc, elem| acc + [acc.last + '/' + elem] }
 
-      loop do
-        idx = @item.identifier.to_s.index('/', idx_start)
-        break if idx.nil?
-
-        idx_start = idx + 1
-        identifier = @item.identifier.to_s[0..idx]
-        trail << @items[identifier]
-      end
-
-      trail
+      prefixes.map { |pr| @items[Nanoc::Identifier.new('/' + pr, type: :legacy)] }
     end
   end
 end
