@@ -4,9 +4,10 @@ module Nanoc::Int
   #
   # @api private
   class CompiledContentCache < ::Nanoc::Int::Store
-    def initialize(env_name: nil)
+    def initialize(env_name: nil, items:)
       super(Nanoc::Int::Store.tmp_path_for(env_name: env_name, store_name: 'compiled_content'), 2)
 
+      @items = items
       @cache = {}
     end
 
@@ -45,7 +46,15 @@ module Nanoc::Int
     end
 
     def data=(new_data)
-      @cache = new_data
+      @cache = {}
+
+      item_identifiers = Set.new(@items.map(&:identifier))
+
+      new_data.each_pair do |item_identifier, content_per_rep|
+        if item_identifiers.include?(item_identifier)
+          @cache[item_identifier] ||= content_per_rep
+        end
+      end
     end
   end
 end
