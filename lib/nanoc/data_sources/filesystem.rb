@@ -47,12 +47,10 @@ module Nanoc::DataSources
   # @api private
   class Filesystem < Nanoc::DataSource
     # See {Nanoc::DataSource#up}.
-    def up
-    end
+    def up; end
 
     # See {Nanoc::DataSource#down}.
-    def down
-    end
+    def down; end
 
     def content_dir_name
       config.fetch(:content_dir, 'content')

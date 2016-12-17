@@ -10,16 +10,13 @@ module Nanoc::Int
       include Nanoc::Int::ContractsSupport
 
       contract C_OBJ, C_ARGS => C::Any
-      def enter(_obj, raw_content: false, attributes: false, compiled_content: false, path: false)
-      end
+      def enter(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
 
       contract C_OBJ => C::Any
-      def exit
-      end
+      def exit; end
 
       contract C_OBJ, C_ARGS => C::Any
-      def bounce(_obj, raw_content: false, attributes: false, compiled_content: false, path: false)
-      end
+      def bounce(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
     end
 
     def initialize(dependency_store)

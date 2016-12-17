@@ -24,8 +24,7 @@ module Nanoc::CLI::Commands
     #
     # @abstract Subclasses must override {#start} and may override {#stop}.
     class Listener
-      def initialize(*)
-      end
+      def initialize(*); end
 
       # @param [Nanoc::CLI::CommandRunner] command_runner The command runner for this listener
       #
@@ -48,8 +47,7 @@ module Nanoc::CLI::Commands
       # Stops the listener. The default implementation removes self from all notification center observers.
       #
       # @return [void]
-      def stop
-      end
+      def stop; end
 
       # @api private
       def start_safely

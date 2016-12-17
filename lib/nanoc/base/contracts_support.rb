@@ -30,8 +30,7 @@ module Nanoc::Int
       Func        = Ignorer.instance
       RespondTo   = Ignorer.instance
 
-      def contract(*args)
-      end
+      def contract(*args); end
     end
 
     module EnabledContracts

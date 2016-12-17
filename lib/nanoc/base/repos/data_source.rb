@@ -85,8 +85,7 @@ module Nanoc
     # default implementation simply does nothing.
     #
     # @return [void]
-    def up
-    end
+    def up; end
 
     # Brings down the connection to the data. This method should undo the
     # effects of the {#up} method. For example, a database connection
@@ -96,8 +95,7 @@ module Nanoc
     # default implementation simply does nothing.
     #
     # @return [void]
-    def down
-    end
+    def down; end
 
     # Returns the collection of items (represented by {Nanoc::Int::Item}) in
     # this site. The default implementation simply returns an empty array.

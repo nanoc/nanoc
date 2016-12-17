@@ -109,16 +109,14 @@ module Nanoc::Int
     # by the subclass.
     #
     # @return [void]
-    def no_data_found
-    end
+    def no_data_found; end
 
     # Callback method that is called when a version mismatch is detected. By
     # default, this implementation does nothing, but it should probably be
     # overridden by the subclass.
     #
     # @return [void]
-    def version_mismatch_detected
-    end
+    def version_mismatch_detected; end
 
     private
 

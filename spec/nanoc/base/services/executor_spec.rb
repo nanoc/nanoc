@@ -150,8 +150,7 @@ describe Nanoc::Int::Executor do
         filter_class = Class.new(::Nanoc::Filter) do
           type :binary
 
-          def run(_content, _params = {})
-          end
+          def run(_content, _params = {}); end
         end
 
         expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
@@ -186,8 +185,7 @@ describe Nanoc::Int::Executor do
         filter_class = Class.new(::Nanoc::Filter) do
           type :binary
 
-          def run(_filename, _params = {})
-          end
+          def run(_filename, _params = {}); end
         end
 
         expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
