@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: http://validator.w3.org/check
+    uri: https://validator.w3.org/check
     body:
       encoding: UTF-8
       string: "--349832898984244898448024464570528145\r\nContent-Disposition: form-data;
@@ -24,9 +24,9 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 24 Apr 2014 07:25:20 GMT
+      - Sat, 17 Dec 2016 08:33:18 GMT
       Server:
-      - Apache/2.2.16 (Debian)
+      - Apache/2.4.10 (Debian)
       X-W3c-Validator-Recursion:
       - '1'
       X-W3c-Validator-Status:
@@ -35,23 +35,38 @@ http_interactions:
       - '2'
       X-W3c-Validator-Warnings:
       - '4'
-      Content-Type:
-      - application/soap+xml; charset=UTF-8
-      Connection:
-      - close
       Transfer-Encoding:
       - chunked
+      Content-Type:
+      - application/soap+xml; charset=UTF-8
+      Strict-Transport-Security:
+      - max-age=15552015; preload
+      Public-Key-Pins:
+      - pin-sha256="cN0QSpPIkuwpT6iP2YjEo1bEwGpH/yiUn6yhdy+HNto="; pin-sha256="WGJkyYjx1QMdMe0UqlyOKXtydPDVrk7sl2fV+nNm1r4=";
+        pin-sha256="LrKdTxZLRTvyHM4/atX2nquX9BeHRZMCxg3cf4rhc2I="; max-age=864000
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
     body:
       encoding: UTF-8
       string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\">\n<env:Body>\n<m:markupvalidationresponse
         env:encodingStyle=\"http://www.w3.org/2003/05/soap-encoding\" xmlns:m=\"http://www.w3.org/2005/10/markup-validator\">\n
         \   \n    <m:uri>output/blah.html</m:uri>\n    <m:checkedby>http://validator.w3.org/</m:checkedby>\n
         \   <m:doctype></m:doctype>\n    <m:charset>utf-8</m:charset>\n    <m:validity>false</m:validity>\n
-        \   <m:errors>\n        <m:errorcount>2</m:errorcount>\n        <m:errorlist>\n
-        \         \n            <m:error>\n                <m:line>1</m:line>\n                <m:col>1</m:col>\n
-        \               <m:message>no document type declaration; will parse without
-        validation</m:message>\n                <m:messageid>187</m:messageid>\n                <m:explanation>
-        \ <![CDATA[\n                      <p class=\"helpwanted\">\n      <a\n        href=\"feedback.html?uri=;errmsg_id=187#errormsg\"\n\ttitle=\"Suggest
+        \   <m:warnings>\n        <m:warningcount>4</m:warningcount>\n        <m:warninglist>\n
+        \          \n\n\n\n\n  <m:warning><m:messageid>W04</m:messageid><m:message>No
+        Character Encoding Found!\n    \n      Falling back to \n    \n    UTF-8.\n
+        \ </m:message></m:warning>\n\n\n\n  <m:warning><m:messageid>W06</m:messageid><m:message>Unable
+        to Determine Parse Mode!</m:message></m:warning>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
+        \ <m:warning><m:messageid>W27</m:messageid><m:message>No Character encoding
+        declared at document level</m:message></m:warning>\n\n\n\n\n\n\n\n        </m:warninglist>\n
+        \   </m:warnings>\n    <m:errors>\n        <m:errorcount>2</m:errorcount>\n
+        \       <m:errorlist>\n\n            <m:error>\n                <m:line>1</m:line>\n
+        \               <m:col>1</m:col>\n                <m:message>no document type
+        declaration; will parse without validation</m:message>\n                <m:messageid>187</m:messageid>\n
+        \               <m:explanation>  <![CDATA[\n                      <p class=\"helpwanted\">\n
+        \     <a\n        href=\"feedback.html?uri=;errmsg_id=187#errormsg\"\n\ttitle=\"Suggest
         improvements on this error message through our feedback channels\" \n      >&#x2709;</a>\n
         \   </p>\n\n    <div class=\"ve mid-187\">\n    <p>The document type could
         not be determined, because the document had no correct DOCTYPE declaration.
@@ -81,14 +96,7 @@ http_interactions:
         entry</a>.\n    </p>\n  </div>\n\n                  ]]>\n                </m:explanation>\n
         \               <m:source><![CDATA[&#60;h2&#62;Hi!&#60;/h1<strong title=\"Position
         where error was detected.\">&#62;</strong>]]></m:source>\n            </m:error>\n
-        \          \n        </m:errorlist>\n    </m:errors>\n    <m:warnings>\n        <m:warningcount>4</m:warningcount>\n
-        \       <m:warninglist>\n        \n\n\n\n  <m:warning><m:messageid>W04</m:messageid><m:message>No
-        Character Encoding Found!\n    \n      Falling back to \n    \n    UTF-8.\n
-        \ </m:message></m:warning>\n\n\n\n  <m:warning><m:messageid>W06</m:messageid><m:message>Unable
-        to Determine Parse Mode!</m:message></m:warning>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
-        \ <m:warning><m:messageid>W27</m:messageid><m:message>No Character encoding
-        declared at document level</m:message></m:warning>\n\n\n\n\n\n\n\n        \n
-        \       </m:warninglist>\n    </m:warnings>\n</m:markupvalidationresponse>\n</env:Body>\n</env:Envelope>\n"
+        \          \n        </m:errorlist>\n    </m:errors>\n</m:markupvalidationresponse>\n</env:Body>\n</env:Envelope>\n"
     http_version: 
-  recorded_at: Thu, 24 Apr 2014 07:25:21 GMT
-recorded_with: VCR 2.9.0
+  recorded_at: Sat, 17 Dec 2016 08:33:19 GMT
+recorded_with: VCR 3.0.3

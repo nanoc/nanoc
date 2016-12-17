@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: http://validator.w3.org/check
+    uri: https://validator.w3.org/check
     body:
       encoding: UTF-8
       string: "--349832898984244898448024464570528145\r\nContent-Disposition: form-data;
@@ -20,37 +20,105 @@ http_interactions:
       - Ruby
   response:
     status:
-      code: 200
-      message: OK
+      code: 307
+      message: Temporary Redirect
     headers:
       Date:
-      - Thu, 24 Apr 2014 07:25:21 GMT
+      - Sat, 17 Dec 2016 08:36:04 GMT
       Server:
-      - Apache/2.2.16 (Debian)
-      X-W3c-Validator-Recursion:
-      - '1'
-      X-W3c-Validator-Status:
-      - Valid
-      X-W3c-Validator-Errors:
-      - '0'
-      X-W3c-Validator-Warnings:
-      - '1'
-      Content-Type:
-      - application/soap+xml; charset=UTF-8
-      Connection:
-      - close
+      - Apache/2.4.10 (Debian)
+      Location:
+      - https://validator.w3.org/nu/#file
       Transfer-Encoding:
       - chunked
+      Strict-Transport-Security:
+      - max-age=15552015; preload
+      Public-Key-Pins:
+      - pin-sha256="cN0QSpPIkuwpT6iP2YjEo1bEwGpH/yiUn6yhdy+HNto="; pin-sha256="WGJkyYjx1QMdMe0UqlyOKXtydPDVrk7sl2fV+nNm1r4=";
+        pin-sha256="LrKdTxZLRTvyHM4/atX2nquX9BeHRZMCxg3cf4rhc2I="; max-age=864000
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
     body:
       encoding: UTF-8
-      string: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\">\n<env:Body>\n<m:markupvalidationresponse
+      string: "Status: 302 Found\r\nLocation: https://validator.w3.org/nu/?doc=output%2Fblah.html\r\n\r\nContent-Type:
+        application/soap+xml; charset=UTF-8\nX-W3C-Validator-Recursion: 1\nX-W3C-Validator-Status:
+        Valid\nX-W3C-Validator-Errors: 0\nX-W3C-Validator-Warnings: 1\n\n<?xml version=\"1.0\"
+        encoding=\"UTF-8\"?>\n<env:Envelope xmlns:env=\"http://www.w3.org/2003/05/soap-envelope\">\n<env:Body>\n<m:markupvalidationresponse
         env:encodingStyle=\"http://www.w3.org/2003/05/soap-encoding\" xmlns:m=\"http://www.w3.org/2005/10/markup-validator\">\n
         \   \n    <m:uri>output/blah.html</m:uri>\n    <m:checkedby>http://validator.w3.org/</m:checkedby>\n
         \   <m:doctype>HTML5</m:doctype>\n    <m:charset>utf-8</m:charset>\n    <m:validity>true</m:validity>\n
-        \   <m:errors>\n        <m:errorcount>0</m:errorcount>\n        <m:errorlist>\n
-        \         \n        </m:errorlist>\n    </m:errors>\n    <m:warnings>\n        <m:warningcount>1</m:warningcount>\n
-        \       <m:warninglist>\n        \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
-        \       \n        </m:warninglist>\n    </m:warnings>\n</m:markupvalidationresponse>\n</env:Body>\n</env:Envelope>\n"
+        \   <m:warnings>\n        <m:warningcount>1</m:warningcount>\n        <m:warninglist>\n
+        \            <m:warning>\n                <m:message>This interface to HTML5
+        document checking is obsolete. Use an interface to https://validator.w3.org/nu/
+        instead.</m:message>\n                <m:messageid>obsolete-interface</m:messageid>\n
+        \               <m:explanation>  <![CDATA[\n                    <div class=\"ve
+        obsolete-interface\">\n                      <p>\n                        The
+        method you used to check this document relies on an obsolete interface\n                        that
+        will become permanently unavailable in the near future.\n                        The
+        currently-supported method is to instead use the W3C Nu Html Checker at\n
+        \                       <a href=\"https://validator.w3.org/nu/\">https://validator.w3.org/nu/</a>.\n
+        \                       See the documentation on the W3C Nu Html Checker's\n
+        \                       <a href=\"https://github.com/validator/validator/wiki/Service:-Input:-GET\">GET
+        interface</a>,\n                        <a href=\"https://github.com/validator/validator/wiki/Service:-Input:-POST-body\">POST
+        interface</a>,\n                        and\n                        <a href=\"https://github.com/validator/validator/wiki/Service:-Common-parameters\">the
+        parameters</a>\n                        that both interfaces provide, such
+        as the\n                        <a href=\"https://github.com/validator/validator/wiki/Output%3A-JSON\">out=json</a>,\n
+        \                       <a href=\"https://github.com/validator/validator/wiki/Output:-XML\">out=xml</a>,\n
+        \                       and\n                        <a href=\"https://github.com/validator/validator/wiki/Output:-GNU\">out=gnu</a>\n
+        \                       parameters/output-formats.\n                      </p>\n
+        \                     <p>\n                        For comments or questions
+        about this message, send mail to\n                        <a href=\"mailto:www-validator@w3.org\">www-validator@w3.org</a>\n
+        \                       or to\n                        <a href=\"https://twitter.com/w3c\">@w3c</a>
+        on twitter.\n                      </p>\n                    </div>\n                  ]]>\n
+        \               </m:explanation>\n                <m:source></m:source>\n
+        \           </m:warning>\n        </m:warninglist>\n    </m:warnings>\n    <m:errors>\n
+        \       <m:errorcount>0</m:errorcount>\n        <m:errorlist>\n\n        </m:errorlist>\n
+        \   </m:errors>\n</m:markupvalidationresponse>\n</env:Body>\n</env:Envelope>\n"
     http_version: 
-  recorded_at: Thu, 24 Apr 2014 07:25:21 GMT
-recorded_with: VCR 2.9.0
+  recorded_at: Sat, 17 Dec 2016 08:36:05 GMT
+- request:
+    method: post
+    uri: https://validator.w3.org/check
+    body:
+      encoding: UTF-8
+      string: "--349832898984244898448024464570528145\r\nContent-Disposition: form-data;
+        name=\"url\"\r\n\r\nhttps://validator.w3.org/nu/#file\r\n--349832898984244898448024464570528145--\r\n"
+    headers:
+      Content-Type:
+      - multipart/form-data; boundary=349832898984244898448024464570528145
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 302
+      message: Found
+    headers:
+      Date:
+      - Sat, 17 Dec 2016 08:36:05 GMT
+      Server:
+      - Apache/2.4.10 (Debian)
+      Location:
+      - http://validator.w3.org/check?uri=https%3A%2F%2Fvalidator.w3.org%2Fnu%2F%23file
+      Content-Length:
+      - '0'
+      Strict-Transport-Security:
+      - max-age=15552015; preload
+      Public-Key-Pins:
+      - pin-sha256="cN0QSpPIkuwpT6iP2YjEo1bEwGpH/yiUn6yhdy+HNto="; pin-sha256="WGJkyYjx1QMdMe0UqlyOKXtydPDVrk7sl2fV+nNm1r4=";
+        pin-sha256="LrKdTxZLRTvyHM4/atX2nquX9BeHRZMCxg3cf4rhc2I="; max-age=864000
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Sat, 17 Dec 2016 08:36:06 GMT
+recorded_with: VCR 3.0.3
