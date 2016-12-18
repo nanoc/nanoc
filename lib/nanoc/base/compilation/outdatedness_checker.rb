@@ -80,12 +80,12 @@ module Nanoc::Int
     end
 
     class Status
-      def initialize(reasons: [])
+      def initialize(reasons: [], raw_content: false, attributes: false, compiled_content: false, path: false)
         @reasons = reasons
-        @raw_content = false
-        @attributes = false
-        @compiled_content = false
-        @path = false
+        @raw_content = raw_content
+        @attributes = attributes
+        @compiled_content = compiled_content
+        @path = path
       end
 
       def reasons
@@ -108,8 +108,27 @@ module Nanoc::Int
         @path
       end
 
+      def props
+        Set.new.tap do |pr|
+          pr << :raw_content if raw_content?
+          pr << :attributes if attributes?
+          pr << :compiled_content if compiled_content?
+          pr << :path if path?
+        end
+      end
+
+      def useful_to_apply?(rule)
+        (rule.instance.reason.props - props).any?
+      end
+
       def update(reason)
-        self.class.new(reasons: reasons + [reason])
+        self.class.new(
+          reasons: reasons + [reason],
+          raw_content: @raw_content || reason.raw_content?,
+          attributes: @attributes || reason.attributes?,
+          compiled_content: @compiled_content || reason.compiled_content?,
+          path: @path || reason.path?,
+        )
       end
     end
 
@@ -134,7 +153,7 @@ module Nanoc::Int
 
     def apply_rules(rules, obj, status = Status.new)
       rules.inject(status) do |acc, rule|
-        if acc.reasons.any?
+        if !acc.useful_to_apply?(rule)
           acc
         elsif rule.instance.apply(obj, self)
           acc.update(rule.instance.reason)
