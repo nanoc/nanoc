@@ -22,6 +22,17 @@ module Nanoc::Int
         @path             = path
       end
 
+      contract C::None => String
+      def inspect
+        s = "Dependency(#{@from.inspect} -> #{@to.inspect}, "
+        s << (raw_content? ? 'r' : '_')
+        s << (attributes? ? 'a' : '_')
+        s << (compiled_content? ? 'c' : '_')
+        s << (path? ? 'p' : '_')
+        s << ')'
+        s
+      end
+
       contract C::None => C::Bool
       def raw_content?
         @raw_content
@@ -189,10 +200,11 @@ module Nanoc::Int
 
       # Record dependency from all items on new items
       new_objects = (@objects - previous_objects)
+      new_props = { raw_content: true, attributes: true, compiled_content: true, path: true }
       new_objects.each do |new_obj|
         @objects.each do |obj|
           next unless obj.is_a?(Nanoc::Int::Item)
-          @graph.add_edge(new_obj, obj)
+          @graph.add_edge(new_obj, obj, props: new_props)
         end
       end
     end

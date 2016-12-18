@@ -176,9 +176,10 @@ module Nanoc::Int
       return true if dependency.from.nil?
 
       reason = basic_outdatedness_reason_for(dependency.from)
-      valid_reasons = valid_reasons_for_dep_outdatedness(dependency)
+      return false if reason.nil?
 
-      !reason.nil? && (valid_reasons.include?(reason) || valid_reasons.include?(:all))
+      valid_reasons = valid_reasons_for_dep_outdatedness(dependency)
+      valid_reasons.include?(reason) || valid_reasons.include?(:all)
     end
 
     contract Nanoc::Int::DependencyStore::Dependency => Set
