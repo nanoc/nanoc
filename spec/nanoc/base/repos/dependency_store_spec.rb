@@ -36,12 +36,12 @@ describe Nanoc::Int::DependencyStore do
           expect(deps[0].to).to eql(obj_a)
         end
 
-        it 'returns false for all props by default' do
+        it 'returns true for all props by default' do
           deps = store.dependencies_causing_outdatedness_of(obj_a)
-          expect(deps[0].raw_content?).to eq(false)
-          expect(deps[0].attributes?).to eq(false)
-          expect(deps[0].compiled_content?).to eq(false)
-          expect(deps[0].path?).to eq(false)
+          expect(deps[0].raw_content?).to eq(true)
+          expect(deps[0].attributes?).to eq(true)
+          expect(deps[0].compiled_content?).to eq(true)
+          expect(deps[0].path?).to eq(true)
         end
 
         it 'returns nothing for the others' do

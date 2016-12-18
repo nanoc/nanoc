@@ -70,7 +70,7 @@ module Nanoc::Int
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Dependency]
     def dependencies_causing_outdatedness_of(object)
       objects_causing_outdatedness_of(object).map do |other_object|
-        props = @graph.props_for(other_object, object) || {}
+        props = props_for(other_object, object)
 
         Dependency.new(
           other_object,
@@ -156,6 +156,16 @@ module Nanoc::Int
     end
 
     protected
+
+    def props_for(a, b)
+      props = @graph.props_for(a, b) || {}
+
+      if props.values.any? { |v| v }
+        props
+      else
+        { raw_content: true, attributes: true, compiled_content: true, path: true }
+      end
+    end
 
     def merge_props(p1, p2)
       keys = (p1.keys + p2.keys).uniq
