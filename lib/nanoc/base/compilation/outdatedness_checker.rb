@@ -167,14 +167,7 @@ module Nanoc::Int
           if other.nil?
             true
           else
-            reason = basic_outdatedness_reason_for(other)
-            if dep.only_attributes? && reason != Nanoc::Int::OutdatednessReasons::AttributesModified
-              false
-            elsif dep.only_raw_content? && reason != Nanoc::Int::OutdatednessReasons::ContentModified
-              false
-            else
-              !reason.nil?
-            end
+            dependency_causes_outdatedness?(dep, basic_outdatedness_reason_for(other))
           end
 
         other_basic_outdated || outdated_due_to_dependencies?(other, processed.merge([obj]))
@@ -185,6 +178,18 @@ module Nanoc::Int
 
       # Done
       is_outdated
+    end
+
+    c_reason = Nanoc::Int::OutdatednessReasons::Generic
+    contract Nanoc::Int::DependencyStore::Dependency, C::Maybe[c_reason] => C::Bool
+    def dependency_causes_outdatedness?(dependency, reason)
+      if dependency.only_attributes? && reason != Nanoc::Int::OutdatednessReasons::AttributesModified
+        false
+      elsif dependency.only_raw_content? && reason != Nanoc::Int::OutdatednessReasons::ContentModified
+        false
+      else
+        !reason.nil?
+      end
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
