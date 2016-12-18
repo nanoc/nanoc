@@ -283,5 +283,45 @@ describe Nanoc::Int::OutdatednessRules do
         it { is_expected.to be }
       end
     end
+
+    context 'PathsModified' do
+      let(:rule_class) { Nanoc::Int::OutdatednessRules::PathsModified }
+
+      let(:old_mem) do
+        Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+          mem.add_filter(:erb, {})
+          mem.add_snapshot(:donkey, true, '/foo.md')
+        end
+      end
+
+      before do
+        rule_memory_store[item_rep] = old_mem.serialize
+        allow(action_provider).to receive(:memory_for).with(item_rep).and_return(new_mem)
+      end
+
+      context 'paths in memory are the same' do
+        let(:new_mem) do
+          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+            mem.add_snapshot(:donkey, true, '/foo.md')
+            mem.add_filter(:asdf, {})
+          end
+        end
+
+        it { is_expected.not_to be }
+      end
+
+      context 'paths in memory are different' do
+        let(:new_mem) do
+          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+            mem.add_filter(:erb, {})
+            mem.add_snapshot(:donkey, true, '/foo.md')
+            mem.add_filter(:donkey, {})
+            mem.add_snapshot(:giraffe, true, '/bar.md')
+          end
+        end
+
+        it { is_expected.to be }
+      end
+    end
   end
 end

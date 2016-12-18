@@ -94,5 +94,15 @@ module Nanoc::Int
         outdatedness_checker.rule_memory_differs_for(obj)
       end
     end
+
+    class PathsModified < OutdatednessRule
+      def reason
+        Nanoc::Int::OutdatednessReasons::PathsModified
+      end
+
+      def apply(obj, outdatedness_checker)
+        outdatedness_checker.paths_differ_for(obj)
+      end
+    end
   end
 end
