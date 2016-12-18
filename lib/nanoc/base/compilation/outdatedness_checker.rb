@@ -161,16 +161,7 @@ module Nanoc::Int
 
       # Calculate
       is_outdated = dependency_store.dependencies_causing_outdatedness_of(obj).any? do |dep|
-        other = dep.from
-
-        other_basic_outdated =
-          if other.nil?
-            true
-          else
-            dependency_causes_outdatedness?(dep, basic_outdatedness_reason_for(other))
-          end
-
-        other_basic_outdated || outdated_due_to_dependencies?(other, processed.merge([obj]))
+        dependency_causes_outdatedness?(dep) || outdated_due_to_dependencies?(dep.from, processed.merge([obj]))
       end
 
       # Cache
@@ -180,9 +171,11 @@ module Nanoc::Int
       is_outdated
     end
 
-    c_reason = Nanoc::Int::OutdatednessReasons::Generic
-    contract Nanoc::Int::DependencyStore::Dependency, C::Maybe[c_reason] => C::Bool
-    def dependency_causes_outdatedness?(dependency, reason)
+    contract Nanoc::Int::DependencyStore::Dependency => C::Bool
+    def dependency_causes_outdatedness?(dependency)
+      return true if dependency.from.nil?
+
+      reason = basic_outdatedness_reason_for(dependency.from)
       if dependency.only_attributes? && reason != Nanoc::Int::OutdatednessReasons::AttributesModified
         false
       elsif dependency.only_raw_content? && reason != Nanoc::Int::OutdatednessReasons::ContentModified
