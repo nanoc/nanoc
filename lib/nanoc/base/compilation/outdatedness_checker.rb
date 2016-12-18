@@ -176,13 +176,26 @@ module Nanoc::Int
       return true if dependency.from.nil?
 
       reason = basic_outdatedness_reason_for(dependency.from)
-      if dependency.only_attributes? && reason != Nanoc::Int::OutdatednessReasons::AttributesModified
-        false
-      elsif dependency.only_raw_content? && reason != Nanoc::Int::OutdatednessReasons::ContentModified
-        false
-      else
-        !reason.nil?
+
+      valid_reasons = Set.new
+
+      if dependency.attributes?
+        valid_reasons << Nanoc::Int::OutdatednessReasons::AttributesModified
       end
+
+      if dependency.raw_content?
+        valid_reasons << Nanoc::Int::OutdatednessReasons::ContentModified
+      end
+
+      if dependency.compiled_content?
+        valid_reasons << :all
+      end
+
+      if dependency.path?
+        valid_reasons << :all
+      end
+
+      !reason.nil? && (valid_reasons.include?(reason) || valid_reasons.include?(:all))
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool

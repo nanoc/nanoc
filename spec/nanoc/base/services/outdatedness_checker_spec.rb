@@ -175,6 +175,17 @@ describe Nanoc::Int::OutdatednessChecker do
         before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
         it { is_expected.to be }
       end
+
+      context 'rules changed' do
+        let(:new_memory_for_other_item_rep) do
+          Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
+            mem.add_filter(:erb, {})
+            mem.add_filter(:donkey, {})
+          end
+        end
+
+        it { is_expected.not_to be }
+      end
     end
 
     context 'attribute + other dependency' do
