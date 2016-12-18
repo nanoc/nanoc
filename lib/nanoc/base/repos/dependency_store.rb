@@ -5,10 +5,10 @@ module Nanoc::Int
     class Dependency
       include Nanoc::Int::ContractsSupport
 
-      contract C::None => C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+      contract C::None => C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]]
       attr_reader :from
 
-      contract C::None => C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+      contract C::None => C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]]
       attr_reader :to
 
       contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
@@ -20,6 +20,17 @@ module Nanoc::Int
         @attributes       = attributes
         @compiled_content = compiled_content
         @path             = path
+      end
+
+      contract C::None => String
+      def inspect
+        s = "Dependency(#{@from.inspect} -> #{@to.inspect}, "
+        s << (raw_content? ? 'r' : '_')
+        s << (attributes? ? 'a' : '_')
+        s << (compiled_content? ? 'c' : '_')
+        s << (path? ? 'p' : '_')
+        s << ')'
+        s
       end
 
       contract C::None => C::Bool
@@ -179,10 +190,11 @@ module Nanoc::Int
 
       # Record dependency from all items on new items
       new_objects = (@objects - previous_objects)
+      new_props = { raw_content: true, attributes: true, compiled_content: true, path: true }
       new_objects.each do |new_obj|
         @objects.each do |obj|
           next unless obj.is_a?(Nanoc::Int::Item)
-          @graph.add_edge(new_obj, obj)
+          @graph.add_edge(new_obj, obj, props: new_props)
         end
       end
     end

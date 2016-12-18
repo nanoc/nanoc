@@ -160,8 +160,8 @@ module Nanoc::Int
       return false if processed.include?(obj)
 
       # Calculate
-      is_outdated = dependency_store.objects_causing_outdatedness_of(obj).any? do |other|
-        other.nil? || basic_outdated?(other) || outdated_due_to_dependencies?(other, processed.merge([obj]))
+      is_outdated = dependency_store.dependencies_causing_outdatedness_of(obj).any? do |dep|
+        dependency_causes_outdatedness?(dep) || outdated_due_to_dependencies?(dep.from, processed.merge([obj]))
       end
 
       # Cache
@@ -169,6 +169,27 @@ module Nanoc::Int
 
       # Done
       is_outdated
+    end
+
+    contract Nanoc::Int::DependencyStore::Dependency => C::Bool
+    def dependency_causes_outdatedness?(dependency)
+      return true if dependency.from.nil?
+
+      reason = basic_outdatedness_reason_for(dependency.from)
+      return false if reason.nil?
+
+      valid_reasons = valid_reasons_for_dep_outdatedness(dependency)
+      valid_reasons.include?(reason) || valid_reasons.include?(:all)
+    end
+
+    contract Nanoc::Int::DependencyStore::Dependency => Set
+    def valid_reasons_for_dep_outdatedness(dep)
+      Set.new.tap do |s|
+        s << Nanoc::Int::OutdatednessReasons::AttributesModified if dep.attributes?
+        s << Nanoc::Int::OutdatednessReasons::ContentModified if dep.raw_content?
+        s << :all if dep.compiled_content?
+        s << :all if dep.path?
+      end
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
