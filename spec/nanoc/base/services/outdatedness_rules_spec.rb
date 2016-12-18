@@ -2,7 +2,7 @@ describe Nanoc::Int::OutdatednessRules do
   describe '#apply' do
     subject { rule_class.instance.apply(obj, outdatedness_checker) }
 
-    let(:obj) { item }
+    let(:obj) { item_rep }
 
     let(:outdatedness_checker) do
       Nanoc::Int::OutdatednessChecker.new(
@@ -83,6 +83,31 @@ describe Nanoc::Int::OutdatednessRules do
         before { checksum_store.add(config_old) }
 
         it { is_expected.to be }
+      end
+    end
+
+    context 'NotWritten' do
+      let(:rule_class) { Nanoc::Int::OutdatednessRules::NotWritten }
+
+      context 'no path' do
+        before { item_rep.paths = {} }
+
+        it { is_expected.not_to be }
+      end
+
+      context 'path' do
+        let(:path) { 'foo.txt' }
+
+        before { item_rep.raw_paths = { last: path } }
+
+        context 'not written' do
+          it { is_expected.to be }
+        end
+
+        context 'written' do
+          before { File.write(path, 'hello') }
+          it { is_expected.not_to be }
+        end
       end
     end
   end
