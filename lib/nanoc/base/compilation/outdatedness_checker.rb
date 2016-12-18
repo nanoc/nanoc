@@ -80,54 +80,22 @@ module Nanoc::Int
     end
 
     class Status
-      def initialize(reasons: [], raw_content: false, attributes: false, compiled_content: false, path: false)
+      attr_reader :reasons
+      attr_reader :props
+
+      def initialize(reasons: [], props: Props.new)
         @reasons = reasons
-        @raw_content = raw_content
-        @attributes = attributes
-        @compiled_content = compiled_content
-        @path = path
-      end
-
-      def reasons
-        @reasons
-      end
-
-      def raw_content?
-        @raw_content
-      end
-
-      def attributes?
-        @attributes
-      end
-
-      def compiled_content?
-        @compiled_content
-      end
-
-      def path?
-        @path
-      end
-
-      def active_props
-        Set.new.tap do |pr|
-          pr << :raw_content if raw_content?
-          pr << :attributes if attributes?
-          pr << :compiled_content if compiled_content?
-          pr << :path if path?
-        end
+        @props = props
       end
 
       def useful_to_apply?(rule)
-        (rule.instance.reason.active_props - active_props).any?
+        (rule.instance.reason.props.active - @props.active).any?
       end
 
       def update(reason)
         self.class.new(
-          reasons: reasons + [reason],
-          raw_content: @raw_content || reason.raw_content?,
-          attributes: @attributes || reason.attributes?,
-          compiled_content: @compiled_content || reason.compiled_content?,
-          path: @path || reason.path?,
+          reasons: @reasons + [reason],
+          props: @props.merge(reason.props),
         )
       end
     end
@@ -239,7 +207,7 @@ module Nanoc::Int
       return true if dependency.from.nil?
 
       status = basic_outdatedness_status_for(dependency.from)
-      (status.active_props & dependency.active_props).any?
+      (status.props.active & dependency.active_props).any?
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool

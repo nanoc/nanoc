@@ -16,6 +16,7 @@ module Nanoc::Int
         @from             = from
         @to               = to
 
+        # TODO: extract props
         @raw_content      = raw_content
         @attributes       = attributes
         @compiled_content = compiled_content
