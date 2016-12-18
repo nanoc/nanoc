@@ -65,7 +65,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   item \] \(____\) /about.md$}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   item \] \(racp\) /about.md$}m).to_stdout
       end
 
       it 'outputs no dependencies for /other.dat' do
