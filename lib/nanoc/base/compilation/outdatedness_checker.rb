@@ -113,6 +113,40 @@ module Nanoc::Int
       end
     end
 
+    RULES_FOR_ITEM_REP =
+      [
+        Rules::RulesModified,
+        Rules::NotEnoughData,
+        Rules::ContentModified,
+        Rules::AttributesModified,
+        Rules::NotWritten,
+        Rules::CodeSnippetsModified,
+        Rules::ConfigurationModified,
+      ].freeze
+
+    RULES_FOR_LAYOUT =
+      [
+        Rules::RulesModified,
+        Rules::NotEnoughData,
+        Rules::ContentModified,
+        Rules::AttributesModified,
+      ].freeze
+
+    def apply_rules(rules, obj)
+      status =
+        rules.inject(Status.new) do |acc, rule|
+          if acc.reasons.any?
+            acc
+          elsif rule.instance.pass?(obj, self)
+            acc.update(rule.instance.reason)
+          else
+            acc
+          end
+        end
+
+      status.reasons.first
+    end
+
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
     # Calculates the reason why the given object is outdated. This method does
     # not take dependencies into account; use {#outdatedness_reason_for?} if
@@ -126,50 +160,11 @@ module Nanoc::Int
     def basic_outdatedness_reason_for(obj)
       case obj
       when Nanoc::Int::ItemRep
-        rules = [
-          Rules::RulesModified,
-          Rules::NotEnoughData,
-          Rules::ContentModified,
-          Rules::AttributesModified,
-          Rules::NotWritten,
-          Rules::CodeSnippetsModified,
-          Rules::ConfigurationModified,
-        ]
-
-        status =
-          rules.inject(Status.new) do |acc, rule|
-            if acc.reasons.any?
-              acc
-            elsif rule.instance.pass?(obj, self)
-              acc.update(rule.instance.reason)
-            else
-              acc
-            end
-          end
-
-        status.reasons.first
+        apply_rules(RULES_FOR_ITEM_REP, obj)
       when Nanoc::Int::Item
         @reps[obj].lazy.map { |rep| basic_outdatedness_reason_for(rep) }.find { |s| s }
       when Nanoc::Int::Layout
-        rules = [
-          Rules::RulesModified,
-          Rules::NotEnoughData,
-          Rules::ContentModified,
-          Rules::AttributesModified,
-        ]
-
-        status =
-          rules.inject(Status.new) do |acc, rule|
-            if acc.reasons.any?
-              acc
-            elsif rule.instance.pass?(obj, self)
-              acc.update(rule.instance.reason)
-            else
-              acc
-            end
-          end
-
-        status.reasons.first
+        apply_rules(RULES_FOR_LAYOUT, obj)
       else
         raise "do not know how to check outdatedness of #{obj.inspect}"
       end
