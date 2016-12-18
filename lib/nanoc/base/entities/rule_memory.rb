@@ -47,6 +47,13 @@ module Nanoc::Int
       @actions.any? { |a| a.is_a?(Nanoc::Int::ProcessingActions::Layout) }
     end
 
+    contract C::None => Hash
+    def paths
+      snapshot_actions.each_with_object({}) do |action, paths|
+        paths[action.snapshot_name] = action.path
+      end
+    end
+
     # TODO: Add contract
     def serialize
       map(&:serialize)

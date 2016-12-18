@@ -51,12 +51,17 @@ module Nanoc::Int
 
     ContentModified = Generic.new(
       'The content of this item has been modified since the last time the site was compiled.',
-      Props.new(raw_content: true, compiled_content: true, path: true),
+      Props.new(raw_content: true, compiled_content: true),
     )
 
     AttributesModified = Generic.new(
       'The attributes of this item have been modified since the last time the site was compiled.',
-      Props.new(attributes: true, compiled_content: true, path: true),
+      Props.new(attributes: true, compiled_content: true),
+    )
+
+    PathsModified = Generic.new(
+      'One or more output paths of this item have been modified since the last time the site was compiled.',
+      Props.new(path: true),
     )
   end
 end
