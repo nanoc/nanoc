@@ -79,27 +79,6 @@ module Nanoc::Int
       !basic_outdatedness_reason_for(obj).nil?
     end
 
-    class Status
-      attr_reader :reasons
-      attr_reader :props
-
-      def initialize(reasons: [], props: Props.new)
-        @reasons = reasons
-        @props = props
-      end
-
-      def useful_to_apply?(rule)
-        (rule.instance.reason.props.active - @props.active).any?
-      end
-
-      def update(reason)
-        self.class.new(
-          reasons: @reasons + [reason],
-          props: @props.merge(reason.props),
-        )
-      end
-    end
-
     RULES_FOR_ITEM_REP =
       [
         Rules::RulesModified,
@@ -119,7 +98,7 @@ module Nanoc::Int
         Rules::AttributesModified,
       ].freeze
 
-    def apply_rules(rules, obj, status = Status.new)
+    def apply_rules(rules, obj, status = OutdatednessStatus.new)
       rules.inject(status) do |acc, rule|
         if !acc.useful_to_apply?(rule)
           acc
@@ -132,7 +111,7 @@ module Nanoc::Int
     end
 
     def apply_rules_multi(rules, objs)
-      objs.inject(Status.new) { |acc, elem| apply_rules(rules, elem, acc) }
+      objs.inject(OutdatednessStatus.new) { |acc, elem| apply_rules(rules, elem, acc) }
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
