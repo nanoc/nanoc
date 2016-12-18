@@ -47,7 +47,6 @@ module Nanoc::RuleDSL
         raise UnsupportedObjectTypeException.new(obj)
       end
     end
-    memoize :[]
 
     # @param [Nanoc::Int::ItemRep] rep The item representation for which to fetch
     #   the list of snapshots
@@ -87,17 +86,6 @@ module Nanoc::RuleDSL
       end
 
       executor.rule_memory
-    end
-
-    # @param [Nanoc::Int::ItemRep] rep The item representation to get the rule
-    #   memory for
-    #
-    # @return [Hash<Symbol, String>] Pairs of snapshot name and path
-    def paths_for_rep(rep)
-      snapshot_actions = new_rule_memory_for_rep(rep).snapshot_actions
-      snapshot_actions.each_with_object({}) do |action, paths|
-        paths[action.snapshot_name] = action.path
-      end
     end
 
     # @param [Nanoc::Int::Layout] layout

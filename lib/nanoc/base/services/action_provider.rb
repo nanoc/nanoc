@@ -19,8 +19,8 @@ module Nanoc::Int
       raise NotImplementedError
     end
 
-    def paths_for(_rep)
-      raise NotImplementedError
+    def paths_for(rep)
+      memory_for(rep).paths
     end
   end
 end

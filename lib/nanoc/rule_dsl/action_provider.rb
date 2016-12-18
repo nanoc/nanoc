@@ -40,10 +40,6 @@ module Nanoc::RuleDSL
       @rule_memory_calculator.snapshots_defs_for(rep)
     end
 
-    def paths_for(rep)
-      @rule_memory_calculator.paths_for_rep(rep)
-    end
-
     def preprocess(site)
       ctx = new_preprocessor_context(site)
 
