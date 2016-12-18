@@ -150,11 +150,11 @@ describe Nanoc::Int::DependencyTracker do
         subject
         dep = store.dependencies_causing_outdatedness_of(item_a)[0]
 
-        expect(dep.compiled_content?).to eq(true)
+        expect(dep.props.compiled_content?).to eq(true)
 
-        expect(dep.raw_content?).to eq(false)
-        expect(dep.attributes?).to eq(false)
-        expect(dep.path?).to eq(false)
+        expect(dep.props.raw_content?).to eq(false)
+        expect(dep.props.attributes?).to eq(false)
+        expect(dep.props.path?).to eq(false)
       end
 
       example do
@@ -219,11 +219,11 @@ describe Nanoc::Int::DependencyTracker do
         subject
         dep = store.dependencies_causing_outdatedness_of(item_a)[0]
 
-        expect(dep.compiled_content?).to eq(true)
-        expect(dep.attributes?).to eq(true)
+        expect(dep.props.compiled_content?).to eq(true)
+        expect(dep.props.attributes?).to eq(true)
 
-        expect(dep.raw_content?).to eq(false)
-        expect(dep.path?).to eq(false)
+        expect(dep.props.raw_content?).to eq(false)
+        expect(dep.props.path?).to eq(false)
       end
 
       example do

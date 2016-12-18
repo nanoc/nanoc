@@ -90,10 +90,10 @@ module Nanoc::CLI::Commands
             end
 
           props = ''
-          props << (dep.raw_content? ? 'r' : '_')
-          props << (dep.attributes? ? 'a' : '_')
-          props << (dep.compiled_content? ? 'c' : '_')
-          props << (dep.path? ? 'p' : '_')
+          props << (dep.props.raw_content? ? 'r' : '_')
+          props << (dep.props.attributes? ? 'a' : '_')
+          props << (dep.props.compiled_content? ? 'c' : '_')
+          props << (dep.props.path? ? 'p' : '_')
 
           if pred
             puts "  [ #{format '%6s', type} ] (#{props}) #{pred.identifier}"

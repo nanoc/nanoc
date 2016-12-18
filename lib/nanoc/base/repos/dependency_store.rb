@@ -25,30 +25,6 @@ module Nanoc::Int
       def inspect
         "Dependency(#{@from.inspect} -> #{@to.inspect}, #{@props.inspect})"
       end
-
-      contract C::None => C::Bool
-      # TODO: remove
-      def raw_content?
-        props.raw_content?
-      end
-
-      contract C::None => C::Bool
-      # TODO: remove
-      def attributes?
-        props.attributes?
-      end
-
-      contract C::None => C::Bool
-      # TODO: remove
-      def compiled_content?
-        props.compiled_content?
-      end
-
-      contract C::None => C::Bool
-      # TODO: remove
-      def path?
-        props.path?
-      end
     end
 
     include Nanoc::Int::ContractsSupport
@@ -77,7 +53,7 @@ module Nanoc::Int
             attributes: props.fetch(:attributes, false),
             compiled_content: props.fetch(:compiled_content, false),
             path: props.fetch(:path, false),
-          )
+          ),
         )
       end
     end
