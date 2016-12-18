@@ -167,8 +167,12 @@ module Nanoc::Int
           if other.nil?
             true
           else
-            basic_outdatedness_reason = basic_outdatedness_reason_for(other)
-            !basic_outdatedness_reason.nil?
+            reason = basic_outdatedness_reason_for(other)
+            if dep.only_attributes? && reason != Nanoc::Int::OutdatednessReasons::AttributesModified
+              false
+            else
+              !reason.nil?
+            end
           end
 
         other_basic_outdated || outdated_due_to_dependencies?(other, processed.merge([obj]))

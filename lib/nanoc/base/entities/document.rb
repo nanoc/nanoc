@@ -5,7 +5,7 @@ module Nanoc
       include Nanoc::Int::ContractsSupport
 
       # @return [Nanoc::Int::Content]
-      attr_reader :content
+      attr_accessor :content
 
       # @return [Hash]
       def attributes
