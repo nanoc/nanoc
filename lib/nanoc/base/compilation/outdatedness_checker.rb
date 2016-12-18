@@ -132,8 +132,8 @@ module Nanoc::Int
         Rules::AttributesModified,
       ].freeze
 
-    def apply_rules(rules, obj)
-      rules.inject(Status.new) do |acc, rule|
+    def apply_rules(rules, obj, status = Status.new)
+      rules.inject(status) do |acc, rule|
         if acc.reasons.any?
           acc
         elsif rule.instance.pass?(obj, self)
@@ -142,6 +142,10 @@ module Nanoc::Int
           acc
         end
       end
+    end
+
+    def apply_rules_multi(rules, objs)
+      objs.inject(Status.new) { |acc, elem| apply_rules(rules, elem, acc) }
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
@@ -159,7 +163,7 @@ module Nanoc::Int
       when Nanoc::Int::ItemRep
         apply_rules(RULES_FOR_ITEM_REP, obj).reasons.first
       when Nanoc::Int::Item
-        @reps[obj].lazy.map { |rep| basic_outdatedness_reason_for(rep) }.find { |s| s }
+        apply_rules_multi(RULES_FOR_ITEM_REP, @reps[obj]).reasons.first
       when Nanoc::Int::Layout
         apply_rules(RULES_FOR_LAYOUT, obj).reasons.first
       else
