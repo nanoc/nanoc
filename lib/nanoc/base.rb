@@ -3,6 +3,8 @@ module Nanoc::Int
   autoload 'Compiler',             'nanoc/base/compilation/compiler'
   autoload 'OutdatednessChecker',  'nanoc/base/compilation/outdatedness_checker'
   autoload 'OutdatednessReasons',  'nanoc/base/compilation/outdatedness_reasons'
+  autoload 'OutdatednessRule',     'nanoc/base/compilation/outdatedness_rule'
+  autoload 'OutdatednessRules',    'nanoc/base/compilation/outdatedness_rule'
 end
 
 require_relative 'base/core_ext'

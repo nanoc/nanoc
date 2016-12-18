@@ -13,6 +13,7 @@ module Nanoc::Int
     attr_reader :site
 
     Reasons = Nanoc::Int::OutdatednessReasons
+    Rules = Nanoc::Int::OutdatednessRules
 
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::Int::ChecksumStore] checksum_store
@@ -91,41 +92,21 @@ module Nanoc::Int
     def basic_outdatedness_reason_for(obj)
       case obj
       when Nanoc::Int::ItemRep
-        # Outdated if rules outdated
-        return Reasons::RulesModified if
-          rule_memory_differs_for(obj)
-
-        # Outdated if checksums are missing or different
-        return Reasons::NotEnoughData unless checksums_available?(obj.item)
-        return Reasons::ContentModified unless content_checksums_identical?(obj.item)
-        return Reasons::AttributesModified unless attributes_checksums_identical?(obj.item)
-
-        # Outdated if compiled file doesn't exist (yet)
-        return Reasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
-
-        # Outdated if code snippets outdated
-        return Reasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
-          object_modified?(cs)
-        end
-
-        # Outdated if configuration outdated
-        return Reasons::ConfigurationModified if object_modified?(site.config)
-
-        # Not outdated
+        Rules::RulesModified.if_passing(obj, self) { |r| return r }
+        Rules::NotEnoughData.if_passing(obj, self) { |r| return r }
+        Rules::ContentModified.if_passing(obj, self) { |r| return r }
+        Rules::AttributesModified.if_passing(obj, self) { |r| return r }
+        Rules::NotWritten.if_passing(obj, self) { |r| return r }
+        Rules::CodeSnippetsModified.if_passing(obj, self) { |r| return r }
+        Rules::ConfigurationModified.if_passing(obj, self) { |r| return r }
         nil
       when Nanoc::Int::Item
         @reps[obj].lazy.map { |rep| basic_outdatedness_reason_for(rep) }.find { |s| s }
       when Nanoc::Int::Layout
-        # Outdated if rules outdated
-        return Reasons::RulesModified if
-          rule_memory_differs_for(obj)
-
-        # Outdated if checksums are missing or different
-        return Reasons::NotEnoughData unless checksums_available?(obj)
-        return Reasons::ContentModified unless content_checksums_identical?(obj)
-        return Reasons::AttributesModified unless attributes_checksums_identical?(obj)
-
-        # Not outdated
+        Rules::RulesModified.if_passing(obj, self) { |r| return r }
+        Rules::NotEnoughData.if_passing(obj, self) { |r| return r }
+        Rules::ContentModified.if_passing(obj, self) { |r| return r }
+        Rules::AttributesModified.if_passing(obj, self) { |r| return r }
         nil
       else
         raise "do not know how to check outdatedness of #{obj.inspect}"
