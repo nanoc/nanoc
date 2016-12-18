@@ -176,26 +176,19 @@ module Nanoc::Int
       return true if dependency.from.nil?
 
       reason = basic_outdatedness_reason_for(dependency.from)
-
-      valid_reasons = Set.new
-
-      if dependency.attributes?
-        valid_reasons << Nanoc::Int::OutdatednessReasons::AttributesModified
-      end
-
-      if dependency.raw_content?
-        valid_reasons << Nanoc::Int::OutdatednessReasons::ContentModified
-      end
-
-      if dependency.compiled_content?
-        valid_reasons << :all
-      end
-
-      if dependency.path?
-        valid_reasons << :all
-      end
+      valid_reasons = valid_reasons_for_dep_outdatedness(dependency)
 
       !reason.nil? && (valid_reasons.include?(reason) || valid_reasons.include?(:all))
+    end
+
+    contract Nanoc::Int::DependencyStore::Dependency => Set
+    def valid_reasons_for_dep_outdatedness(dep)
+      Set.new.tap do |s|
+        s << Nanoc::Int::OutdatednessReasons::AttributesModified if dep.attributes?
+        s << Nanoc::Int::OutdatednessReasons::ContentModified if dep.raw_content?
+        s << :all if dep.compiled_content?
+        s << :all if dep.path?
+      end
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
