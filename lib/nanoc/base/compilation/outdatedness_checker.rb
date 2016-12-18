@@ -185,8 +185,13 @@ module Nanoc::Int
     contract Nanoc::Int::DependencyStore::Dependency => Set
     def valid_reasons_for_dep_outdatedness(dep)
       Set.new.tap do |s|
-        s << Nanoc::Int::OutdatednessReasons::AttributesModified if dep.attributes?
-        s << Nanoc::Int::OutdatednessReasons::ContentModified if dep.raw_content?
+        if dep.attributes? || dep.raw_content?
+          # FIXME: We can’t go more fine-grained here, because outdatedness reasons are limited
+          # to a single reason; we’d need composite reasons to go finer-grained.
+          s << Nanoc::Int::OutdatednessReasons::AttributesModified
+          s << Nanoc::Int::OutdatednessReasons::ContentModified
+        end
+
         s << :all if dep.compiled_content?
         s << :all if dep.path?
       end
