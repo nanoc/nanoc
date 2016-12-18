@@ -136,7 +136,7 @@ module Nanoc::Int
       rules.inject(status) do |acc, rule|
         if acc.reasons.any?
           acc
-        elsif rule.instance.pass?(obj, self)
+        elsif rule.instance.apply(obj, self)
           acc.update(rule.instance.reason)
         else
           acc

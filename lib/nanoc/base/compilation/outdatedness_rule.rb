@@ -3,8 +3,8 @@ module Nanoc::Int
     include Nanoc::Int::ContractsSupport
     include Singleton
 
-    def pass?(_obj, _outdatedness_checker)
-      raise NotImplementedError.new('Nanoc::Int::OutdatednessRule subclasses must implement ##reason, and #pass?')
+    def apply(_obj, _outdatedness_checker)
+      raise NotImplementedError.new('Nanoc::Int::OutdatednessRule subclasses must implement ##reason, and #apply')
     end
 
     contract C::None => String
@@ -14,7 +14,7 @@ module Nanoc::Int
 
     # TODO: remove
     def reason
-      raise NotImplementedError.new('Nanoc::Int::OutdatednessRule subclasses must implement ##reason, and #pass?')
+      raise NotImplementedError.new('Nanoc::Int::OutdatednessRule subclasses must implement ##reason, and #apply')
     end
   end
 
@@ -26,7 +26,7 @@ module Nanoc::Int
         Nanoc::Int::OutdatednessReasons::CodeSnippetsModified
       end
 
-      def pass?(_obj, outdatedness_checker)
+      def apply(_obj, outdatedness_checker)
         any_snippets_modified?(outdatedness_checker)
       end
 
@@ -47,7 +47,7 @@ module Nanoc::Int
         Nanoc::Int::OutdatednessReasons::ConfigurationModified
       end
 
-      def pass?(_obj, outdatedness_checker)
+      def apply(_obj, outdatedness_checker)
         config_modified?(outdatedness_checker)
       end
 
@@ -64,7 +64,7 @@ module Nanoc::Int
         Nanoc::Int::OutdatednessReasons::NotWritten
       end
 
-      def pass?(obj, _outdatedness_checker)
+      def apply(obj, _outdatedness_checker)
         obj.raw_path && !File.file?(obj.raw_path)
       end
     end
@@ -74,7 +74,7 @@ module Nanoc::Int
         Nanoc::Int::OutdatednessReasons::NotEnoughData
       end
 
-      def pass?(obj, outdatedness_checker)
+      def apply(obj, outdatedness_checker)
         obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
         !outdatedness_checker.checksums_available?(obj)
       end
@@ -85,7 +85,7 @@ module Nanoc::Int
         Nanoc::Int::OutdatednessReasons::ContentModified
       end
 
-      def pass?(obj, outdatedness_checker)
+      def apply(obj, outdatedness_checker)
         obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
         !outdatedness_checker.content_checksums_identical?(obj)
       end
@@ -96,7 +96,7 @@ module Nanoc::Int
         Nanoc::Int::OutdatednessReasons::AttributesModified
       end
 
-      def pass?(obj, outdatedness_checker)
+      def apply(obj, outdatedness_checker)
         obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
         !outdatedness_checker.attributes_checksums_identical?(obj)
       end
@@ -107,7 +107,7 @@ module Nanoc::Int
         Nanoc::Int::OutdatednessReasons::RulesModified
       end
 
-      def pass?(obj, outdatedness_checker)
+      def apply(obj, outdatedness_checker)
         outdatedness_checker.rule_memory_differs_for(obj)
       end
     end
