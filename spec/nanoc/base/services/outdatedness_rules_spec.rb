@@ -254,7 +254,34 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     context 'RulesModified' do
-      # …
+      let(:rule_class) { Nanoc::Int::OutdatednessRules::RulesModified }
+
+      let(:old_mem) do
+        Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+          mem.add_filter(:erb, {})
+        end
+      end
+
+      before do
+        rule_memory_store[item_rep] = old_mem.serialize
+        allow(action_provider).to receive(:memory_for).with(item_rep).and_return(new_mem)
+      end
+
+      context 'memory is the same' do
+        let(:new_mem) { old_mem }
+        it { is_expected.not_to be }
+      end
+
+      context 'memory is different' do
+        let(:new_mem) do
+          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+            mem.add_filter(:erb, {})
+            mem.add_filter(:donkey, {})
+          end
+        end
+
+        it { is_expected.to be }
+      end
     end
   end
 end
