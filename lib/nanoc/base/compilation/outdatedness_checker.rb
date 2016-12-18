@@ -79,6 +79,40 @@ module Nanoc::Int
       !basic_outdatedness_reason_for(obj).nil?
     end
 
+    class Status
+      def initialize(reasons: [])
+        @reasons = reasons
+        @raw_content = false
+        @attributes = false
+        @compiled_content = false
+        @path = false
+      end
+
+      def reasons
+        @reasons
+      end
+
+      def raw_content?
+        @raw_content
+      end
+
+      def attributes?
+        @attributes
+      end
+
+      def compiled_content?
+        @compiled_content
+      end
+
+      def path?
+        @path
+      end
+
+      def update(reason)
+        self.class.new(reasons: reasons + [reason])
+      end
+    end
+
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
     # Calculates the reason why the given object is outdated. This method does
     # not take dependencies into account; use {#outdatedness_reason_for?} if
@@ -92,22 +126,50 @@ module Nanoc::Int
     def basic_outdatedness_reason_for(obj)
       case obj
       when Nanoc::Int::ItemRep
-        Rules::RulesModified.if_passing(obj, self) { |r| return r }
-        Rules::NotEnoughData.if_passing(obj, self) { |r| return r }
-        Rules::ContentModified.if_passing(obj, self) { |r| return r }
-        Rules::AttributesModified.if_passing(obj, self) { |r| return r }
-        Rules::NotWritten.if_passing(obj, self) { |r| return r }
-        Rules::CodeSnippetsModified.if_passing(obj, self) { |r| return r }
-        Rules::ConfigurationModified.if_passing(obj, self) { |r| return r }
-        nil
+        rules = [
+          Rules::RulesModified,
+          Rules::NotEnoughData,
+          Rules::ContentModified,
+          Rules::AttributesModified,
+          Rules::NotWritten,
+          Rules::CodeSnippetsModified,
+          Rules::ConfigurationModified,
+        ]
+
+        status =
+          rules.inject(Status.new) do |acc, rule|
+            if acc.reasons.any?
+              acc
+            elsif rule.instance.pass?(obj, self)
+              acc.update(rule.instance.reason)
+            else
+              acc
+            end
+          end
+
+        status.reasons.first
       when Nanoc::Int::Item
         @reps[obj].lazy.map { |rep| basic_outdatedness_reason_for(rep) }.find { |s| s }
       when Nanoc::Int::Layout
-        Rules::RulesModified.if_passing(obj, self) { |r| return r }
-        Rules::NotEnoughData.if_passing(obj, self) { |r| return r }
-        Rules::ContentModified.if_passing(obj, self) { |r| return r }
-        Rules::AttributesModified.if_passing(obj, self) { |r| return r }
-        nil
+        rules = [
+          Rules::RulesModified,
+          Rules::NotEnoughData,
+          Rules::ContentModified,
+          Rules::AttributesModified,
+        ]
+
+        status =
+          rules.inject(Status.new) do |acc, rule|
+            if acc.reasons.any?
+              acc
+            elsif rule.instance.pass?(obj, self)
+              acc.update(rule.instance.reason)
+            else
+              acc
+            end
+          end
+
+        status.reasons.first
       else
         raise "do not know how to check outdatedness of #{obj.inspect}"
       end
