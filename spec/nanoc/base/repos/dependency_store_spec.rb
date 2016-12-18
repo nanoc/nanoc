@@ -38,10 +38,10 @@ describe Nanoc::Int::DependencyStore do
 
         it 'returns true for all props by default' do
           deps = store.dependencies_causing_outdatedness_of(obj_a)
-          expect(deps[0].raw_content?).to eq(true)
-          expect(deps[0].attributes?).to eq(true)
-          expect(deps[0].compiled_content?).to eq(true)
-          expect(deps[0].path?).to eq(true)
+          expect(deps[0].props.raw_content?).to eq(true)
+          expect(deps[0].props.attributes?).to eq(true)
+          expect(deps[0].props.compiled_content?).to eq(true)
+          expect(deps[0].props.path?).to eq(true)
         end
 
         it 'returns nothing for the others' do
@@ -58,14 +58,14 @@ describe Nanoc::Int::DependencyStore do
 
         it 'returns false for all unspecified props' do
           deps = store.dependencies_causing_outdatedness_of(obj_a)
-          expect(deps[0].raw_content?).to eq(false)
-          expect(deps[0].attributes?).to eq(false)
-          expect(deps[0].path?).to eq(false)
+          expect(deps[0].props.raw_content?).to eq(false)
+          expect(deps[0].props.attributes?).to eq(false)
+          expect(deps[0].props.path?).to eq(false)
         end
 
         it 'returns the specified props' do
           deps = store.dependencies_causing_outdatedness_of(obj_a)
-          expect(deps[0].compiled_content?).to eq(true)
+          expect(deps[0].props.compiled_content?).to eq(true)
         end
       end
 
@@ -78,14 +78,14 @@ describe Nanoc::Int::DependencyStore do
 
         it 'returns false for all unspecified props' do
           deps = store.dependencies_causing_outdatedness_of(obj_a)
-          expect(deps[0].raw_content?).to eq(false)
-          expect(deps[0].path?).to eq(false)
+          expect(deps[0].props.raw_content?).to eq(false)
+          expect(deps[0].props.path?).to eq(false)
         end
 
         it 'returns the specified props' do
           deps = store.dependencies_causing_outdatedness_of(obj_a)
-          expect(deps[0].attributes?).to eq(true)
-          expect(deps[0].compiled_content?).to eq(true)
+          expect(deps[0].props.attributes?).to eq(true)
+          expect(deps[0].props.compiled_content?).to eq(true)
         end
       end
     end
@@ -131,10 +131,10 @@ describe Nanoc::Int::DependencyStore do
       expect(deps[0].from).to eql(obj_b)
       expect(deps[0].to).to eql(obj_a)
 
-      expect(deps[0].raw_content?).to eq(false)
-      expect(deps[0].attributes?).to eq(true)
-      expect(deps[0].compiled_content?).to eq(true)
-      expect(deps[0].path?).to eq(false)
+      expect(deps[0].props.raw_content?).to eq(false)
+      expect(deps[0].props.attributes?).to eq(true)
+      expect(deps[0].props.compiled_content?).to eq(true)
+      expect(deps[0].props.path?).to eq(false)
     end
 
     it 'has the right dependencies for item B' do

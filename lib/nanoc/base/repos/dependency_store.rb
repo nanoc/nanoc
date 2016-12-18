@@ -1,59 +1,6 @@
 module Nanoc::Int
   # @api private
   class DependencyStore < ::Nanoc::Int::Store
-    # A dependency between two items/layouts.
-    class Dependency
-      include Nanoc::Int::ContractsSupport
-
-      contract C::None => C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]]
-      attr_reader :from
-
-      contract C::None => C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]]
-      attr_reader :to
-
-      contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
-      def initialize(from, to, raw_content:, attributes:, compiled_content:, path:)
-        @from             = from
-        @to               = to
-
-        @raw_content      = raw_content
-        @attributes       = attributes
-        @compiled_content = compiled_content
-        @path             = path
-      end
-
-      contract C::None => String
-      def inspect
-        s = "Dependency(#{@from.inspect} -> #{@to.inspect}, "
-        s << (raw_content? ? 'r' : '_')
-        s << (attributes? ? 'a' : '_')
-        s << (compiled_content? ? 'c' : '_')
-        s << (path? ? 'p' : '_')
-        s << ')'
-        s
-      end
-
-      contract C::None => C::Bool
-      def raw_content?
-        @raw_content
-      end
-
-      contract C::None => C::Bool
-      def attributes?
-        @attributes
-      end
-
-      contract C::None => C::Bool
-      def compiled_content?
-        @compiled_content
-      end
-
-      contract C::None => C::Bool
-      def path?
-        @path
-      end
-    end
-
     include Nanoc::Int::ContractsSupport
 
     # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout>]
@@ -67,18 +14,20 @@ module Nanoc::Int
       @graph   = Nanoc::Int::DirectedGraph.new([nil] + @objects)
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Dependency]
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Nanoc::Int::Dependency]
     def dependencies_causing_outdatedness_of(object)
       objects_causing_outdatedness_of(object).map do |other_object|
         props = props_for(other_object, object)
 
-        Dependency.new(
+        Nanoc::Int::Dependency.new(
           other_object,
           object,
-          raw_content: props.fetch(:raw_content, false),
-          attributes: props.fetch(:attributes, false),
-          compiled_content: props.fetch(:compiled_content, false),
-          path: props.fetch(:path, false),
+          Nanoc::Int::Props.new(
+            raw_content: props.fetch(:raw_content, false),
+            attributes: props.fetch(:attributes, false),
+            compiled_content: props.fetch(:compiled_content, false),
+            path: props.fetch(:path, false),
+          ),
         )
       end
     end
@@ -134,12 +83,12 @@ module Nanoc::Int
     #
     # @return [void]
     def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false)
-      existing_props = @graph.props_for(dst, src) || {}
-      new_props = { raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path }
-      props = merge_props(existing_props, new_props)
+      existing_props = Nanoc::Int::Props.new(@graph.props_for(dst, src) || {})
+      new_props = Nanoc::Int::Props.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
+      props = existing_props.merge(new_props)
 
       # Warning! dst and src are *reversed* here!
-      @graph.add_edge(dst, src, props: props) unless src == dst
+      @graph.add_edge(dst, src, props: props.to_h) unless src == dst
     end
 
     # Empties the list of dependencies for the given object. This is necessary
@@ -164,13 +113,6 @@ module Nanoc::Int
         props
       else
         { raw_content: true, attributes: true, compiled_content: true, path: true }
-      end
-    end
-
-    def merge_props(p1, p2)
-      keys = (p1.keys + p2.keys).uniq
-      keys.each_with_object({}) do |key, memo|
-        memo[key] = p1.fetch(key, false) || p2.fetch(key, false)
       end
     end
 

@@ -13,6 +13,7 @@ module Nanoc::Int
     attr_reader :site
 
     Reasons = Nanoc::Int::OutdatednessReasons
+    Rules = Nanoc::Int::OutdatednessRules
 
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::Int::ChecksumStore] checksum_store
@@ -78,6 +79,41 @@ module Nanoc::Int
       !basic_outdatedness_reason_for(obj).nil?
     end
 
+    RULES_FOR_ITEM_REP =
+      [
+        Rules::RulesModified,
+        Rules::NotEnoughData,
+        Rules::ContentModified,
+        Rules::AttributesModified,
+        Rules::NotWritten,
+        Rules::CodeSnippetsModified,
+        Rules::ConfigurationModified,
+      ].freeze
+
+    RULES_FOR_LAYOUT =
+      [
+        Rules::RulesModified,
+        Rules::NotEnoughData,
+        Rules::ContentModified,
+        Rules::AttributesModified,
+      ].freeze
+
+    def apply_rules(rules, obj, status = OutdatednessStatus.new)
+      rules.inject(status) do |acc, rule|
+        if !acc.useful_to_apply?(rule)
+          acc
+        elsif rule.instance.apply(obj, self)
+          acc.update(rule.instance.reason)
+        else
+          acc
+        end
+      end
+    end
+
+    def apply_rules_multi(rules, objs)
+      objs.inject(OutdatednessStatus.new) { |acc, elem| apply_rules(rules, elem, acc) }
+    end
+
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
     # Calculates the reason why the given object is outdated. This method does
     # not take dependencies into account; use {#outdatedness_reason_for?} if
@@ -89,49 +125,23 @@ module Nanoc::Int
     # @return [Reasons::Generic, nil] The reason why the
     #   given object is outdated, or nil if the object is not outdated.
     def basic_outdatedness_reason_for(obj)
+      # FIXME: Stop using this; it is no longer accurate, as there can be >1 reasons
+      basic_outdatedness_status_for(obj).reasons.first
+    end
+
+    def basic_outdatedness_status_for(obj)
       case obj
       when Nanoc::Int::ItemRep
-        # Outdated if rules outdated
-        return Reasons::RulesModified if
-          rule_memory_differs_for(obj)
-
-        # Outdated if checksums are missing or different
-        return Reasons::NotEnoughData unless checksums_available?(obj.item)
-        return Reasons::ContentModified unless content_checksums_identical?(obj.item)
-        return Reasons::AttributesModified unless attributes_checksums_identical?(obj.item)
-
-        # Outdated if compiled file doesn't exist (yet)
-        return Reasons::NotWritten if obj.raw_path && !File.file?(obj.raw_path)
-
-        # Outdated if code snippets outdated
-        return Reasons::CodeSnippetsModified if site.code_snippets.any? do |cs|
-          object_modified?(cs)
-        end
-
-        # Outdated if configuration outdated
-        return Reasons::ConfigurationModified if object_modified?(site.config)
-
-        # Not outdated
-        nil
+        apply_rules(RULES_FOR_ITEM_REP, obj)
       when Nanoc::Int::Item
-        @reps[obj].lazy.map { |rep| basic_outdatedness_reason_for(rep) }.find { |s| s }
+        apply_rules_multi(RULES_FOR_ITEM_REP, @reps[obj])
       when Nanoc::Int::Layout
-        # Outdated if rules outdated
-        return Reasons::RulesModified if
-          rule_memory_differs_for(obj)
-
-        # Outdated if checksums are missing or different
-        return Reasons::NotEnoughData unless checksums_available?(obj)
-        return Reasons::ContentModified unless content_checksums_identical?(obj)
-        return Reasons::AttributesModified unless attributes_checksums_identical?(obj)
-
-        # Not outdated
-        nil
+        apply_rules(RULES_FOR_LAYOUT, obj)
       else
         raise "do not know how to check outdatedness of #{obj.inspect}"
       end
     end
-    memoize :basic_outdatedness_reason_for
+    memoize :basic_outdatedness_status_for
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout], Hamster::Set => C::Bool
     # Checks whether the given object is outdated due to dependencies.
@@ -171,30 +181,12 @@ module Nanoc::Int
       is_outdated
     end
 
-    contract Nanoc::Int::DependencyStore::Dependency => C::Bool
+    contract Nanoc::Int::Dependency => C::Bool
     def dependency_causes_outdatedness?(dependency)
       return true if dependency.from.nil?
 
-      reason = basic_outdatedness_reason_for(dependency.from)
-      return false if reason.nil?
-
-      valid_reasons = valid_reasons_for_dep_outdatedness(dependency)
-      valid_reasons.include?(reason) || valid_reasons.include?(:all)
-    end
-
-    contract Nanoc::Int::DependencyStore::Dependency => Set
-    def valid_reasons_for_dep_outdatedness(dep)
-      Set.new.tap do |s|
-        if dep.attributes? || dep.raw_content?
-          # FIXME: We can’t go more fine-grained here, because outdatedness reasons are limited
-          # to a single reason; we’d need composite reasons to go finer-grained.
-          s << Nanoc::Int::OutdatednessReasons::AttributesModified
-          s << Nanoc::Int::OutdatednessReasons::ContentModified
-        end
-
-        s << :all if dep.compiled_content?
-        s << :all if dep.path?
-      end
+      status = basic_outdatedness_status_for(dependency.from)
+      (status.props.active & dependency.props.active).any?
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool

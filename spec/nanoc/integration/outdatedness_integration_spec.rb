@@ -38,15 +38,14 @@ EOS
       )
     end
 
-    # FIXME: This should become *not* outdated when we have finer-grained dependencies
-    it 'shows file and dependencies as outdated after content modification' do
+    it 'shows file and dependencies as not outdated after content modification' do
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoooOoooOOoooOooo")
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
         output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
       )
     end
 
@@ -112,15 +111,14 @@ EOS
       )
     end
 
-    # FIXME: This should become *not* outdated when we have finer-grained dependencies
-    it 'shows file and dependencies as outdated after title modification' do
+    it 'shows file and dependencies as not outdated after title modification' do
       File.write('content/foo.md', "---\ntitle: bye\n---\n\nfoo")
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
         output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
       )
     end
   end

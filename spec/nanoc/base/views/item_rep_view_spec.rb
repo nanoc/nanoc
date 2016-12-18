@@ -154,11 +154,11 @@ describe Nanoc::ItemRepView do
       subject
       dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-      expect(dep.compiled_content?).to eq(true)
+      expect(dep.props.compiled_content?).to eq(true)
 
-      expect(dep.raw_content?).to eq(false)
-      expect(dep.attributes?).to eq(false)
-      expect(dep.path?).to eq(false)
+      expect(dep.props.raw_content?).to eq(false)
+      expect(dep.props.attributes?).to eq(false)
+      expect(dep.props.path?).to eq(false)
     end
 
     it { should eq('Hallo') }
@@ -189,11 +189,11 @@ describe Nanoc::ItemRepView do
       subject
       dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-      expect(dep.path?).to eq(true)
+      expect(dep.props.path?).to eq(true)
 
-      expect(dep.raw_content?).to eq(false)
-      expect(dep.attributes?).to eq(false)
-      expect(dep.compiled_content?).to eq(false)
+      expect(dep.props.raw_content?).to eq(false)
+      expect(dep.props.attributes?).to eq(false)
+      expect(dep.props.compiled_content?).to eq(false)
     end
 
     it { should eq('/about/') }
@@ -224,11 +224,11 @@ describe Nanoc::ItemRepView do
       subject
       dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-      expect(dep.path?).to eq(true)
+      expect(dep.props.path?).to eq(true)
 
-      expect(dep.raw_content?).to eq(false)
-      expect(dep.attributes?).to eq(false)
-      expect(dep.compiled_content?).to eq(false)
+      expect(dep.props.raw_content?).to eq(false)
+      expect(dep.props.attributes?).to eq(false)
+      expect(dep.props.compiled_content?).to eq(false)
     end
 
     it { should eq('output/about/index.html') }
