@@ -52,6 +52,15 @@ module Nanoc::Int
       def path?
         @path
       end
+
+      def active_props
+        Set.new.tap do |pr|
+          pr << :raw_content if raw_content?
+          pr << :attributes if attributes?
+          pr << :compiled_content if compiled_content?
+          pr << :path if path?
+        end
+      end
     end
 
     include Nanoc::Int::ContractsSupport

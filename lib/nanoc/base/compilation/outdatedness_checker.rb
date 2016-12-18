@@ -108,7 +108,7 @@ module Nanoc::Int
         @path
       end
 
-      def props
+      def active_props
         Set.new.tap do |pr|
           pr << :raw_content if raw_content?
           pr << :attributes if attributes?
@@ -118,7 +118,7 @@ module Nanoc::Int
       end
 
       def useful_to_apply?(rule)
-        (rule.instance.reason.props - props).any?
+        (rule.instance.reason.active_props - active_props).any?
       end
 
       def update(reason)

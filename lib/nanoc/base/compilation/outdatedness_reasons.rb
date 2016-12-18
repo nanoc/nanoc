@@ -35,7 +35,7 @@ module Nanoc::Int
         @path
       end
 
-      def props
+      def active_props
         Set.new.tap do |pr|
           pr << :raw_content if raw_content?
           pr << :attributes if attributes?
