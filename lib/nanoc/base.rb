@@ -4,7 +4,7 @@ module Nanoc::Int
   autoload 'OutdatednessChecker',  'nanoc/base/compilation/outdatedness_checker'
   autoload 'OutdatednessReasons',  'nanoc/base/compilation/outdatedness_reasons'
   autoload 'OutdatednessRule',     'nanoc/base/compilation/outdatedness_rule'
-  autoload 'OutdatednessRules',    'nanoc/base/compilation/outdatedness_rule'
+  autoload 'OutdatednessRules',    'nanoc/base/compilation/outdatedness_rules'
 end
 
 require_relative 'base/core_ext'
