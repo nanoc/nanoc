@@ -11,56 +11,43 @@ module Nanoc::Int
       contract C::None => C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]]
       attr_reader :to
 
-      contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
-      def initialize(from, to, raw_content:, attributes:, compiled_content:, path:)
-        @from             = from
-        @to               = to
+      contract C::None => Nanoc::Int::Props
+      attr_reader :props
 
-        # TODO: extract props
-        @raw_content      = raw_content
-        @attributes       = attributes
-        @compiled_content = compiled_content
-        @path             = path
+      contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], Nanoc::Int::Props => C::Any
+      def initialize(from, to, props)
+        @from  = from
+        @to    = to
+        @props = props
       end
 
       contract C::None => String
       def inspect
-        s = "Dependency(#{@from.inspect} -> #{@to.inspect}, "
-        s << (raw_content? ? 'r' : '_')
-        s << (attributes? ? 'a' : '_')
-        s << (compiled_content? ? 'c' : '_')
-        s << (path? ? 'p' : '_')
-        s << ')'
-        s
+        "Dependency(#{@from.inspect} -> #{@to.inspect}, #{@props.inspect})"
       end
 
       contract C::None => C::Bool
+      # TODO: remove
       def raw_content?
-        @raw_content
+        props.raw_content?
       end
 
       contract C::None => C::Bool
+      # TODO: remove
       def attributes?
-        @attributes
+        props.attributes?
       end
 
       contract C::None => C::Bool
+      # TODO: remove
       def compiled_content?
-        @compiled_content
+        props.compiled_content?
       end
 
       contract C::None => C::Bool
+      # TODO: remove
       def path?
-        @path
-      end
-
-      def active_props
-        Set.new.tap do |pr|
-          pr << :raw_content if raw_content?
-          pr << :attributes if attributes?
-          pr << :compiled_content if compiled_content?
-          pr << :path if path?
-        end
+        props.path?
       end
     end
 
@@ -85,10 +72,12 @@ module Nanoc::Int
         Dependency.new(
           other_object,
           object,
-          raw_content: props.fetch(:raw_content, false),
-          attributes: props.fetch(:attributes, false),
-          compiled_content: props.fetch(:compiled_content, false),
-          path: props.fetch(:path, false),
+          Props.new(
+            raw_content: props.fetch(:raw_content, false),
+            attributes: props.fetch(:attributes, false),
+            compiled_content: props.fetch(:compiled_content, false),
+            path: props.fetch(:path, false),
+          )
         )
       end
     end
@@ -144,12 +133,12 @@ module Nanoc::Int
     #
     # @return [void]
     def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false)
-      existing_props = @graph.props_for(dst, src) || {}
-      new_props = { raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path }
-      props = merge_props(existing_props, new_props)
+      existing_props = Props.new(@graph.props_for(dst, src) || {})
+      new_props = Props.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
+      props = existing_props.merge(new_props)
 
       # Warning! dst and src are *reversed* here!
-      @graph.add_edge(dst, src, props: props) unless src == dst
+      @graph.add_edge(dst, src, props: props.to_h) unless src == dst
     end
 
     # Empties the list of dependencies for the given object. This is necessary
@@ -174,13 +163,6 @@ module Nanoc::Int
         props
       else
         { raw_content: true, attributes: true, compiled_content: true, path: true }
-      end
-    end
-
-    def merge_props(p1, p2)
-      keys = (p1.keys + p2.keys).uniq
-      keys.each_with_object({}) do |key, memo|
-        memo[key] = p1.fetch(key, false) || p2.fetch(key, false)
       end
     end
 

@@ -62,5 +62,15 @@ module Nanoc::Int
         pr << :path if path?
       end
     end
+
+    contract C::None => Hash
+    def to_h
+      {
+        raw_content: raw_content?,
+        attributes: attributes?,
+        compiled_content: compiled_content?,
+        path: path?,
+      }
+    end
   end
 end

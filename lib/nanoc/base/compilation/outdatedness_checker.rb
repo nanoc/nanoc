@@ -207,7 +207,7 @@ module Nanoc::Int
       return true if dependency.from.nil?
 
       status = basic_outdatedness_status_for(dependency.from)
-      (status.props.active & dependency.active_props).any?
+      (status.props.active & dependency.props.active).any?
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
