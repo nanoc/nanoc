@@ -160,8 +160,18 @@ module Nanoc::Int
       return false if processed.include?(obj)
 
       # Calculate
-      is_outdated = dependency_store.objects_causing_outdatedness_of(obj).any? do |other|
-        other.nil? || basic_outdated?(other) || outdated_due_to_dependencies?(other, processed.merge([obj]))
+      is_outdated = dependency_store.dependencies_causing_outdatedness_of(obj).any? do |dep|
+        other = dep.from
+
+        other_basic_outdated =
+          if other.nil?
+            true
+          else
+            basic_outdatedness_reason = basic_outdatedness_reason_for(other)
+            !basic_outdatedness_reason.nil?
+          end
+
+        other_basic_outdated || outdated_due_to_dependencies?(other, processed.merge([obj]))
       end
 
       # Cache

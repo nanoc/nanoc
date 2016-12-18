@@ -5,10 +5,10 @@ module Nanoc::Int
     class Dependency
       include Nanoc::Int::ContractsSupport
 
-      contract C::None => C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+      contract C::None => C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]]
       attr_reader :from
 
-      contract C::None => C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+      contract C::None => C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]]
       attr_reader :to
 
       contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
