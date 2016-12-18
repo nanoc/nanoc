@@ -133,18 +133,15 @@ module Nanoc::Int
       ].freeze
 
     def apply_rules(rules, obj)
-      status =
-        rules.inject(Status.new) do |acc, rule|
-          if acc.reasons.any?
-            acc
-          elsif rule.instance.pass?(obj, self)
-            acc.update(rule.instance.reason)
-          else
-            acc
-          end
+      rules.inject(Status.new) do |acc, rule|
+        if acc.reasons.any?
+          acc
+        elsif rule.instance.pass?(obj, self)
+          acc.update(rule.instance.reason)
+        else
+          acc
         end
-
-      status.reasons.first
+      end
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
@@ -160,11 +157,11 @@ module Nanoc::Int
     def basic_outdatedness_reason_for(obj)
       case obj
       when Nanoc::Int::ItemRep
-        apply_rules(RULES_FOR_ITEM_REP, obj)
+        apply_rules(RULES_FOR_ITEM_REP, obj).reasons.first
       when Nanoc::Int::Item
         @reps[obj].lazy.map { |rep| basic_outdatedness_reason_for(rep) }.find { |s| s }
       when Nanoc::Int::Layout
-        apply_rules(RULES_FOR_LAYOUT, obj)
+        apply_rules(RULES_FOR_LAYOUT, obj).reasons.first
       else
         raise "do not know how to check outdatedness of #{obj.inspect}"
       end
