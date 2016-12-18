@@ -129,7 +129,7 @@ module Nanoc
     # Sets up the filter and runs the filter. This method passes its arguments
     # to {#run} unchanged and returns the return value from {#run}.
     #
-    # @see {#run}
+    # @see #run
     #
     # @api private
     def setup_and_run(*args)

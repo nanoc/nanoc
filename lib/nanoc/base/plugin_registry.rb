@@ -157,7 +157,7 @@ module Nanoc::Int
       res
     end
 
-    # @param [Class] klass
+    # @param [Class] subclass
     #
     # @return [Class]
     #
