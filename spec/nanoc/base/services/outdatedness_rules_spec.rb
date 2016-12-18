@@ -198,7 +198,59 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     context 'AttributesModified' do
-      # …
+      let(:rule_class) { Nanoc::Int::OutdatednessRules::AttributesModified }
+
+      context 'item' do
+        let(:obj) { item }
+
+        before { reps << item_rep }
+
+        context 'no checksum available' do
+          it { is_expected.to be }
+        end
+
+        context 'checksum available and same' do
+          before { checksum_store.add(item) }
+          it { is_expected.not_to be }
+        end
+
+        context 'checksum available, but content different' do
+          let(:old_item) { Nanoc::Int::Item.new('other stuff!!!!', {}, '/foo.md') }
+          before { checksum_store.add(old_item) }
+          it { is_expected.not_to be }
+        end
+
+        context 'checksum available, but attributes different' do
+          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          before { checksum_store.add(old_item) }
+          it { is_expected.to be }
+        end
+      end
+
+      context 'item rep' do
+        let(:obj) { item_rep }
+
+        context 'no checksum available' do
+          it { is_expected.to be }
+        end
+
+        context 'checksum available and same' do
+          before { checksum_store.add(item) }
+          it { is_expected.not_to be }
+        end
+
+        context 'checksum available, but content different' do
+          let(:old_item) { Nanoc::Int::Item.new('other stuff!!!!', {}, '/foo.md') }
+          before { checksum_store.add(old_item) }
+          it { is_expected.not_to be }
+        end
+
+        context 'checksum available, but attributes different' do
+          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          before { checksum_store.add(old_item) }
+          it { is_expected.to be }
+        end
+      end
     end
 
     context 'RulesModified' do
