@@ -1,4 +1,4 @@
-describe 'GH-951', site: true, stdio: true do
+describe 'GH-937', site: true, stdio: true do
   before do
     File.write('content/style.sass', ".test\n  color: red")
 

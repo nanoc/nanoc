@@ -1,4 +1,4 @@
-describe 'GH-951', site: true, stdio: true do
+describe 'GH-954', site: true, stdio: true do
   before do
     File.write('content/foo.md', 'foo <a href="/">root</a>')
     File.write('content/bar.md', 'bar <a href="/">root</a>')

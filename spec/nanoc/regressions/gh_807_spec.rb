@@ -1,4 +1,4 @@
-describe 'GH-897', site: true, stdio: true do
+describe 'GH-807', site: true, stdio: true do
   before do
     File.write('content/item.md', 'Stuff!')
     File.write('Rules', <<EOS)
