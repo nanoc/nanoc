@@ -19,3 +19,5 @@ require_relative 'entities/props'
 require_relative 'entities/rule_memory'
 require_relative 'entities/site'
 require_relative 'entities/snapshot_def'
+
+require_relative 'entities/dependency'

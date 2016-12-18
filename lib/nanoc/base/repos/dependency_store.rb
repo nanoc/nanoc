@@ -1,32 +1,6 @@
 module Nanoc::Int
   # @api private
   class DependencyStore < ::Nanoc::Int::Store
-    # A dependency between two items/layouts.
-    class Dependency
-      include Nanoc::Int::ContractsSupport
-
-      contract C::None => C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]]
-      attr_reader :from
-
-      contract C::None => C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]]
-      attr_reader :to
-
-      contract C::None => Nanoc::Int::Props
-      attr_reader :props
-
-      contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], Nanoc::Int::Props => C::Any
-      def initialize(from, to, props)
-        @from  = from
-        @to    = to
-        @props = props
-      end
-
-      contract C::None => String
-      def inspect
-        "Dependency(#{@from.inspect} -> #{@to.inspect}, #{@props.inspect})"
-      end
-    end
-
     include Nanoc::Int::ContractsSupport
 
     # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout>]
@@ -40,15 +14,15 @@ module Nanoc::Int
       @graph   = Nanoc::Int::DirectedGraph.new([nil] + @objects)
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Dependency]
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Nanoc::Int::Dependency]
     def dependencies_causing_outdatedness_of(object)
       objects_causing_outdatedness_of(object).map do |other_object|
         props = props_for(other_object, object)
 
-        Dependency.new(
+        Nanoc::Int::Dependency.new(
           other_object,
           object,
-          Props.new(
+          Nanoc::Int::Props.new(
             raw_content: props.fetch(:raw_content, false),
             attributes: props.fetch(:attributes, false),
             compiled_content: props.fetch(:compiled_content, false),
@@ -109,8 +83,8 @@ module Nanoc::Int
     #
     # @return [void]
     def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false)
-      existing_props = Props.new(@graph.props_for(dst, src) || {})
-      new_props = Props.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
+      existing_props = Nanoc::Int::Props.new(@graph.props_for(dst, src) || {})
+      new_props = Nanoc::Int::Props.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
       props = existing_props.merge(new_props)
 
       # Warning! dst and src are *reversed* here!

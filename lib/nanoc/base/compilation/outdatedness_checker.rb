@@ -202,7 +202,7 @@ module Nanoc::Int
       is_outdated
     end
 
-    contract Nanoc::Int::DependencyStore::Dependency => C::Bool
+    contract Nanoc::Int::Dependency => C::Bool
     def dependency_causes_outdatedness?(dependency)
       return true if dependency.from.nil?
 
