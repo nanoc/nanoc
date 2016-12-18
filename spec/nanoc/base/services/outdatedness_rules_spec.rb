@@ -31,8 +31,6 @@ describe Nanoc::Int::OutdatednessRules do
     let(:dependency_store_objects) { [item] }
 
     before do
-      checksum_store.add(item)
-
       allow(site).to receive(:code_snippets).and_return(code_snippets)
       allow(site).to receive(:config).and_return(config)
     end
@@ -109,6 +107,50 @@ describe Nanoc::Int::OutdatednessRules do
           it { is_expected.not_to be }
         end
       end
+    end
+
+    context 'NotEnoughData' do
+      let(:rule_class) { Nanoc::Int::OutdatednessRules::NotEnoughData }
+
+      context 'item' do
+        let(:obj) { item }
+
+        before { reps << item_rep }
+
+        context 'no checksum available' do
+          it { is_expected.to be }
+        end
+
+        context 'checksum available' do
+          before { checksum_store.add(item) }
+          it { is_expected.not_to be }
+        end
+      end
+
+      context 'item rep' do
+        let(:obj) { item_rep }
+
+        context 'no checksum available' do
+          it { is_expected.to be }
+        end
+
+        context 'checksum available' do
+          before { checksum_store.add(item) }
+          it { is_expected.not_to be }
+        end
+      end
+    end
+
+    context 'ContentModified' do
+      # …
+    end
+
+    context 'AttributesModified' do
+      # …
+    end
+
+    context 'RulesModified' do
+      # …
     end
   end
 end
