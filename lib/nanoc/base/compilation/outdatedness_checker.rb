@@ -170,6 +170,8 @@ module Nanoc::Int
             reason = basic_outdatedness_reason_for(other)
             if dep.only_attributes? && reason != Nanoc::Int::OutdatednessReasons::AttributesModified
               false
+            elsif dep.only_raw_content? && reason != Nanoc::Int::OutdatednessReasons::ContentModified
+              false
             else
               !reason.nil?
             end

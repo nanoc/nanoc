@@ -139,9 +139,47 @@ describe Nanoc::Int::OutdatednessChecker do
       end
     end
 
-    context 'attribute + other dependency' do
+    context 'only raw content dependency' do
+      before do
+        dependency_store.record_dependency(item, other_item, raw_content: true)
+      end
+
+      context 'attribute changed' do
+        before { other_item.attributes[:title] = 'omg new title' }
+        it { is_expected.not_to be }
+      end
+
+      context 'raw content changed' do
+        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        it { is_expected.to be }
+      end
+    end
+
+    context 'attribute + raw content dependency' do
       before do
         dependency_store.record_dependency(item, other_item, attributes: true, raw_content: true)
+      end
+
+      context 'attribute changed' do
+        before { other_item.attributes[:title] = 'omg new title' }
+        it { is_expected.to be }
+      end
+
+      context 'raw content changed' do
+        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        it { is_expected.to be }
+      end
+
+      context 'attribute + raw content changed' do
+        before { other_item.attributes[:title] = 'omg new title' }
+        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        it { is_expected.to be }
+      end
+    end
+
+    context 'attribute + other dependency' do
+      before do
+        dependency_store.record_dependency(item, other_item, attributes: true, path: true)
       end
 
       context 'attribute changed' do
@@ -157,7 +195,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
     context 'other dependency' do
       before do
-        dependency_store.record_dependency(item, other_item, raw_content: true)
+        dependency_store.record_dependency(item, other_item, path: true)
       end
 
       context 'attribute changed' do

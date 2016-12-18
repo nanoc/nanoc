@@ -46,6 +46,11 @@ module Nanoc::Int
       def only_attributes?
         @attributes && !@raw_content && !@compiled_content && !@path
       end
+
+      contract C::None => C::Bool
+      def only_raw_content?
+        @raw_content && !@attributes && !@compiled_content && !@path
+      end
     end
 
     include Nanoc::Int::ContractsSupport
