@@ -2,7 +2,7 @@ class Nanoc::Checking::Checks::HTMLTest < Nanoc::TestCase
   def test_run_ok
     require 'w3c_validators'
 
-    if ::W3CValidators::VERSION == '1.3'
+    if ::W3CValidators::VERSION =~ /\A1\.3|1\.3\.1\z/
       skip 'broken (see https://github.com/w3c-validators/w3c_validators/issues/25)'
     end
 
