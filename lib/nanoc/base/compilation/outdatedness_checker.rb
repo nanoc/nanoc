@@ -239,25 +239,7 @@ module Nanoc::Int
       return true if dependency.from.nil?
 
       status = basic_outdatedness_status_for(dependency.from)
-      return false if status.reasons.empty?
-
-      # TODO: use props rather than reasons
-      valid_reasons = valid_reasons_for_dep_outdatedness(dependency)
-      if valid_reasons.include?(:all)
-        true
-      else
-        status.reasons.any? { |r| valid_reasons.include?(r) }
-      end
-    end
-
-    contract Nanoc::Int::DependencyStore::Dependency => Set
-    def valid_reasons_for_dep_outdatedness(dep)
-      Set.new.tap do |s|
-        s << Nanoc::Int::OutdatednessReasons::AttributesModified if dep.attributes?
-        s << Nanoc::Int::OutdatednessReasons::ContentModified if dep.raw_content?
-        s << :all if dep.compiled_content?
-        s << :all if dep.path?
-      end
+      (status.active_props & dependency.active_props).any?
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool

@@ -73,17 +73,17 @@ module Nanoc::Int
 
     RulesModified = Generic.new(
       'The rules file has been modified since the last time the site was compiled.',
-      raw_content: true, attributes: true, compiled_content: true, path: true,
+      compiled_content: true, path: true,
     )
 
     ContentModified = Generic.new(
       'The content of this item has been modified since the last time the site was compiled.',
-      raw_content: true, compiled_content: true,
+      raw_content: true, compiled_content: true, path: true,
     )
 
     AttributesModified = Generic.new(
       'The attributes of this item have been modified since the last time the site was compiled.',
-      attributes: true, compiled_content: true,
+      attributes: true, compiled_content: true, path: true,
     )
   end
 end

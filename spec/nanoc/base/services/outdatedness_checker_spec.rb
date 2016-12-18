@@ -45,6 +45,19 @@ describe Nanoc::Int::OutdatednessChecker do
   describe '#basic_outdatedness_reason_for' do
     subject { outdatedness_checker.send(:basic_outdatedness_reason_for, obj) }
 
+    let(:checksum_store) do
+      Nanoc::Int::ChecksumStore.new
+    end
+
+    let(:config) { Nanoc::Int::Configuration.new }
+
+    before do
+      checksum_store.add(item)
+
+      allow(site).to receive(:code_snippets).and_return([])
+      allow(site).to receive(:config).and_return(config)
+    end
+
     context 'with item' do
       let(:obj) { item }
 
