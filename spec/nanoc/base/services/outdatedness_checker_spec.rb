@@ -274,7 +274,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'raw content changed' do
         before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
-        it { is_expected.to be }
+        it { is_expected.not_to be }
       end
     end
 
@@ -285,12 +285,12 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'attribute changed' do
         before { other_item.attributes[:title] = 'omg new title' }
-        it { is_expected.to be }
+        it { is_expected.not_to be }
       end
 
       context 'raw content changed' do
         before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
-        it { is_expected.to be }
+        it { is_expected.not_to be }
       end
     end
   end
