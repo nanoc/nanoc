@@ -4,6 +4,8 @@ module Nanoc::Int
     class CodeSnippetsModified < OutdatednessRule
       extend Nanoc::Int::Memoization
 
+      include Nanoc::Int::ContractsSupport
+
       def reason
         Nanoc::Int::OutdatednessReasons::CodeSnippetsModified
       end
@@ -16,7 +18,9 @@ module Nanoc::Int
 
       def any_snippets_modified?(outdatedness_checker)
         outdatedness_checker.site.code_snippets.any? do |cs|
-          outdatedness_checker.object_modified?(cs)
+          ch_old = outdatedness_checker.checksum_store[cs]
+          ch_new = Nanoc::Int::Checksummer.calc(cs)
+          ch_old != ch_new
         end
       end
       memoize :any_snippets_modified?
@@ -36,7 +40,10 @@ module Nanoc::Int
       private
 
       def config_modified?(outdatedness_checker)
-        outdatedness_checker.object_modified?(outdatedness_checker.site.config)
+        obj = outdatedness_checker.site.config
+        ch_old = outdatedness_checker.checksum_store[obj]
+        ch_new = Nanoc::Int::Checksummer.calc(obj)
+        ch_old != ch_new
       end
       memoize :config_modified?
     end
@@ -52,17 +59,6 @@ module Nanoc::Int
       end
     end
 
-    class NotEnoughData < OutdatednessRule
-      def reason
-        Nanoc::Int::OutdatednessReasons::NotEnoughData
-      end
-
-      def apply(obj, outdatedness_checker)
-        obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
-        !outdatedness_checker.checksums_available?(obj)
-      end
-    end
-
     class ContentModified < OutdatednessRule
       def reason
         Nanoc::Int::OutdatednessReasons::ContentModified
@@ -70,7 +66,10 @@ module Nanoc::Int
 
       def apply(obj, outdatedness_checker)
         obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
-        !outdatedness_checker.content_checksums_identical?(obj)
+
+        ch_old = outdatedness_checker.checksum_store.content_checksum_for(obj)
+        ch_new = Nanoc::Int::Checksummer.calc_for_content_of(obj)
+        ch_old != ch_new
       end
     end
 
@@ -81,7 +80,10 @@ module Nanoc::Int
 
       def apply(obj, outdatedness_checker)
         obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
-        !outdatedness_checker.attributes_checksums_identical?(obj)
+
+        ch_old = outdatedness_checker.checksum_store.attributes_checksum_for(obj)
+        ch_new = Nanoc::Int::Checksummer.calc_for_attributes_of(obj)
+        ch_old != ch_new
       end
     end
 
@@ -91,7 +93,9 @@ module Nanoc::Int
       end
 
       def apply(obj, outdatedness_checker)
-        outdatedness_checker.rule_memory_differs_for(obj)
+        mem_old = outdatedness_checker.rule_memory_store[obj]
+        mem_new = outdatedness_checker.action_provider.memory_for(obj).serialize
+        !mem_old.eql?(mem_new)
       end
     end
 
@@ -101,7 +105,16 @@ module Nanoc::Int
       end
 
       def apply(obj, outdatedness_checker)
-        outdatedness_checker.paths_differ_for(obj)
+        # FIXME: Prefer to not work on serialised version
+
+        mem_old = outdatedness_checker.rule_memory_store[obj]
+        mem_new = outdatedness_checker.action_provider.memory_for(obj).serialize
+        return true if mem_old.nil?
+
+        paths_old = mem_old.select { |pa| pa[0] == :snapshot }
+        paths_new = mem_new.select { |pa| pa[0] == :snapshot }
+
+        paths_old != paths_new
       end
     end
   end

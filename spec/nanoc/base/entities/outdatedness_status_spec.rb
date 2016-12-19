@@ -24,7 +24,7 @@ describe Nanoc::Int::OutdatednessStatus do
       let(:reasons) do
         [
           Nanoc::Int::OutdatednessReasons::CodeSnippetsModified,
-          Nanoc::Int::OutdatednessReasons::NotEnoughData,
+          Nanoc::Int::OutdatednessReasons::ContentModified,
         ]
       end
 

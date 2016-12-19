@@ -34,11 +34,6 @@ module Nanoc::Int
       'This item uses content or attributes that have changed since the last time the site was compiled.',
     )
 
-    NotEnoughData = Generic.new(
-      'Not enough data is present to correctly determine whether the item is outdated.',
-      Props.new(raw_content: true, attributes: true, compiled_content: true, path: true),
-    )
-
     NotWritten = Generic.new(
       'This item representation has not yet been written to the output directory (but it does have a path).',
       Props.new(raw_content: true, attributes: true, compiled_content: true, path: true),

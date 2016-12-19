@@ -109,38 +109,6 @@ describe Nanoc::Int::OutdatednessRules do
       end
     end
 
-    context 'NotEnoughData' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::NotEnoughData }
-
-      context 'item' do
-        let(:obj) { item }
-
-        before { reps << item_rep }
-
-        context 'no checksum available' do
-          it { is_expected.to be }
-        end
-
-        context 'checksum available' do
-          before { checksum_store.add(item) }
-          it { is_expected.not_to be }
-        end
-      end
-
-      context 'item rep' do
-        let(:obj) { item_rep }
-
-        context 'no checksum available' do
-          it { is_expected.to be }
-        end
-
-        context 'checksum available' do
-          before { checksum_store.add(item) }
-          it { is_expected.not_to be }
-        end
-      end
-    end
-
     context 'ContentModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::ContentModified }
 
@@ -287,19 +255,11 @@ describe Nanoc::Int::OutdatednessRules do
     context 'PathsModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::PathsModified }
 
-      let(:old_mem) do
-        Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
-          mem.add_filter(:erb, {})
-          mem.add_snapshot(:donkey, true, '/foo.md')
-        end
-      end
-
       before do
-        rule_memory_store[item_rep] = old_mem.serialize
         allow(action_provider).to receive(:memory_for).with(item_rep).and_return(new_mem)
       end
 
-      context 'paths in memory are the same' do
+      context 'old mem does not exist' do
         let(:new_mem) do
           Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
             mem.add_snapshot(:donkey, true, '/foo.md')
@@ -307,21 +267,167 @@ describe Nanoc::Int::OutdatednessRules do
           end
         end
 
-        it { is_expected.not_to be }
+        it { is_expected.to be }
       end
 
-      context 'paths in memory are different' do
-        let(:new_mem) do
+      context 'old mem exists' do
+        let(:old_mem) do
           Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
             mem.add_filter(:erb, {})
             mem.add_snapshot(:donkey, true, '/foo.md')
-            mem.add_filter(:donkey, {})
-            mem.add_snapshot(:giraffe, true, '/bar.md')
           end
         end
 
-        it { is_expected.to be }
+        before do
+          rule_memory_store[item_rep] = old_mem.serialize
+        end
+
+        context 'paths in memory are the same' do
+          let(:new_mem) do
+            Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+              mem.add_snapshot(:donkey, true, '/foo.md')
+              mem.add_filter(:asdf, {})
+            end
+          end
+
+          it { is_expected.not_to be }
+        end
+
+        context 'paths in memory are different' do
+          let(:new_mem) do
+            Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+              mem.add_filter(:erb, {})
+              mem.add_snapshot(:donkey, true, '/foo.md')
+              mem.add_filter(:donkey, {})
+              mem.add_snapshot(:giraffe, true, '/bar.md')
+            end
+          end
+
+          it { is_expected.to be }
+        end
       end
+    end
+
+    describe '#{Content,Attributes}Modified' do
+      subject do
+        # TODO: remove negation
+        [
+          Nanoc::Int::OutdatednessRules::ContentModified,
+          Nanoc::Int::OutdatednessRules::AttributesModified,
+        ].map { |c| !c.instance.apply(new_obj, outdatedness_checker) }
+      end
+
+      let(:checksum_store) { Nanoc::Int::ChecksumStore.new }
+
+      let(:stored_obj) { raise 'override me' }
+      let(:new_obj)    { raise 'override me' }
+
+      shared_examples 'a document' do
+        let(:stored_obj) { klass.new('a', {}, '/foo.md') }
+        let(:new_obj)    { stored_obj }
+
+        context 'no checksum data' do
+          context 'not stored' do
+            it { is_expected.to eql([false, false]) }
+          end
+
+          context 'stored' do
+            before { checksum_store.add(stored_obj) }
+
+            context 'but content changed afterwards' do
+              let(:new_obj) { klass.new('aaaaaaaa', {}, '/foo.md') }
+              it { is_expected.to eql([false, true]) }
+            end
+
+            context 'but attributes changed afterwards' do
+              let(:new_obj) { klass.new('a', { animal: 'donkey' }, '/foo.md') }
+              it { is_expected.to eql([true, false]) }
+            end
+
+            context 'and unchanged' do
+              it { is_expected.to eql([true, true]) }
+            end
+          end
+        end
+
+        context 'checksum_data' do
+          let(:stored_obj) { klass.new('a', {}, '/foo.md', checksum_data: 'cs-data') }
+          let(:new_obj)    { stored_obj }
+
+          context 'not stored' do
+            it { is_expected.to eql([false, false]) }
+          end
+
+          context 'stored' do
+            before { checksum_store.add(stored_obj) }
+
+            context 'but checksum data afterwards' do
+              let(:new_obj) { klass.new('a', {}, '/foo.md', checksum_data: 'cs-data-new') }
+              it { is_expected.to eql([false, false]) }
+            end
+
+            context 'and unchanged' do
+              it { is_expected.to eql([true, true]) }
+            end
+          end
+        end
+
+        context 'content_checksum_data' do
+          let(:stored_obj) { klass.new('a', {}, '/foo.md', content_checksum_data: 'cs-data') }
+          let(:new_obj)    { stored_obj }
+
+          context 'not stored' do
+            it { is_expected.to eql([false, false]) }
+          end
+
+          context 'stored' do
+            before { checksum_store.add(stored_obj) }
+
+            context 'but checksum data afterwards' do
+              let(:new_obj) { klass.new('a', {}, '/foo.md', content_checksum_data: 'cs-data-new') }
+              it { is_expected.to eql([false, true]) }
+            end
+
+            context 'and unchanged' do
+              it { is_expected.to eql([true, true]) }
+            end
+          end
+        end
+
+        context 'attributes_checksum_data' do
+          let(:stored_obj) { klass.new('a', {}, '/foo.md', attributes_checksum_data: 'cs-data') }
+          let(:new_obj)    { stored_obj }
+
+          context 'not stored' do
+            it { is_expected.to eql([false, false]) }
+          end
+
+          context 'stored' do
+            before { checksum_store.add(stored_obj) }
+
+            context 'but checksum data afterwards' do
+              let(:new_obj) { klass.new('a', {}, '/foo.md', attributes_checksum_data: 'cs-data-new') }
+              it { is_expected.to eql([true, false]) }
+            end
+
+            context 'and unchanged' do
+              it { is_expected.to eql([true, true]) }
+            end
+          end
+        end
+      end
+
+      context 'item' do
+        let(:klass) { Nanoc::Int::Item }
+        it_behaves_like 'a document'
+      end
+
+      context 'layout' do
+        let(:klass) { Nanoc::Int::Layout }
+        it_behaves_like 'a document'
+      end
+
+      # …
     end
   end
 end
