@@ -188,15 +188,5 @@ module Nanoc::Int
       status = basic_outdatedness_status_for(dependency.from)
       (status.props.active & dependency.props.active).any?
     end
-
-    contract C::Any => C::Bool
-    # @param obj
-    #
-    # @return [Boolean] true if the old and new checksums for the given object
-    #   are available and identical, false otherwise
-    def object_modified?(obj)
-      checksum_store[obj] != Nanoc::Int::Checksummer.calc(obj)
-    end
-    memoize :object_modified?
   end
 end
