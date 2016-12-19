@@ -96,8 +96,6 @@ module Nanoc::Int
       @action_provider = action_provider
       @reps = reps
 
-      @basic_outdatedness_reasons = {}
-      @outdatedness_reasons = {}
       @objects_outdated_due_to_dependencies = {}
     end
 
