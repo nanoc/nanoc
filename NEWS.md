@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.4.4 (2016-12-19)
+
+Enhancements:
+
+* Improved speed of incremental compilations (#1017, #1019, #1024)
+
 ## 4.4.3 (2016-12-17)
 
 Fixes:
