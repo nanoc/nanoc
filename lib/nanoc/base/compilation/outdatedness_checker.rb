@@ -158,7 +158,9 @@ module Nanoc::Int
 
       # Calculate
       is_outdated = dependency_store.dependencies_causing_outdatedness_of(obj).any? do |dep|
-        dependency_causes_outdatedness?(dep) || outdated_due_to_dependencies?(dep.from, processed.merge([obj]))
+        dependency_causes_outdatedness?(dep) ||
+          (dep.props.compiled_content? &&
+            outdated_due_to_dependencies?(dep.from, processed.merge([obj])))
       end
 
       # Cache
