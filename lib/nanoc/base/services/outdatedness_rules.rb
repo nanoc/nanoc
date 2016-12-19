@@ -111,7 +111,16 @@ module Nanoc::Int
       end
 
       def apply(obj, outdatedness_checker)
-        outdatedness_checker.paths_differ_for(obj)
+        # FIXME: Prefer to not work on serialised version
+
+        mem_old = outdatedness_checker.rule_memory_store[obj]
+        mem_new = outdatedness_checker.action_provider.memory_for(obj).serialize
+        return true if mem_old.nil?
+
+        paths_old = mem_old.select { |pa| pa[0] == :snapshot }
+        paths_new = mem_new.select { |pa| pa[0] == :snapshot }
+
+        paths_old != paths_new
       end
     end
   end

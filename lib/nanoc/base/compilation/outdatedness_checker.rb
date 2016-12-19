@@ -191,21 +191,6 @@ module Nanoc::Int
       (status.props.active & dependency.props.active).any?
     end
 
-    contract Nanoc::Int::ItemRep => C::Bool
-    def paths_differ_for(obj)
-      # FIXME: Prefer to not work on serialised version
-
-      mem_then = rule_memory_store[obj]
-      mem_now = @action_provider.memory_for(obj).serialize
-      return true if mem_then.nil?
-
-      paths_then = mem_then.select { |pa| pa[0] == :snapshot }
-      paths_now = mem_now.select { |pa| pa[0] == :snapshot }
-
-      paths_then != paths_now
-    end
-    memoize :paths_differ_for
-
     contract C::Any => String
     # @param obj The object to create a checksum for
     #

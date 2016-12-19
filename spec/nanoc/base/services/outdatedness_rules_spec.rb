@@ -299,6 +299,8 @@ describe Nanoc::Int::OutdatednessRules do
         allow(action_provider).to receive(:memory_for).with(item_rep).and_return(new_mem)
       end
 
+      # TODO: add spec for non-existing old mem
+
       context 'paths in memory are the same' do
         let(:new_mem) do
           Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
