@@ -191,22 +191,13 @@ module Nanoc::Int
       (status.props.active & dependency.props.active).any?
     end
 
-    contract C::Any => String
-    # @param obj The object to create a checksum for
-    #
-    # @return [String] The digest
-    def calc_checksum(obj)
-      Nanoc::Int::Checksummer.calc(obj)
-    end
-    memoize :calc_checksum
-
     contract C::Any => C::Bool
     # @param obj
     #
     # @return [Boolean] false if either the new or the old checksum for the
     #   given object is not available, true if both checksums are available
     def checksums_available?(obj)
-      checksum_store[obj] && calc_checksum(obj) ? true : false
+      checksum_store[obj] && Nanoc::Int::Checksummer.calc(obj) ? true : false
     end
     memoize :checksums_available?
 
@@ -216,7 +207,7 @@ module Nanoc::Int
     # @return [Boolean] false if the old and new checksums for the given
     #   object differ, true if they are identical
     def checksums_identical?(obj)
-      checksum_store[obj] == calc_checksum(obj)
+      checksum_store[obj] == Nanoc::Int::Checksummer.calc(obj)
     end
     memoize :checksums_identical?
 
