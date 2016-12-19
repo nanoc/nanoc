@@ -35,8 +35,6 @@ describe Nanoc::Int::OutdatednessRules do
       allow(site).to receive(:config).and_return(config)
     end
 
-
-
     context 'CodeSnippetsModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::CodeSnippetsModified }
 

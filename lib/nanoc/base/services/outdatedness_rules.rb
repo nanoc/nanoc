@@ -72,7 +72,10 @@ module Nanoc::Int
 
       def apply(obj, outdatedness_checker)
         obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
-        !outdatedness_checker.content_checksums_identical?(obj)
+
+        ch_old = outdatedness_checker.checksum_store.content_checksum_for(obj)
+        ch_new = Nanoc::Int::Checksummer.calc_for_content_of(obj)
+        ch_old != ch_new
       end
     end
 
