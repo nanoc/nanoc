@@ -128,12 +128,87 @@ describe Nanoc::Int::OutdatednessChecker do
     before do
       reps << other_item_rep
       rule_memory_store[other_item_rep] = old_memory_for_other_item_rep.serialize
+      checksum_store.add(item)
       checksum_store.add(other_item)
       checksum_store.add(config)
 
       allow(action_provider).to receive(:memory_for).with(other_item_rep).and_return(new_memory_for_other_item_rep)
       allow(site).to receive(:code_snippets).and_return([])
       allow(site).to receive(:config).and_return(config)
+    end
+
+    context 'transitive dependency' do
+      let(:distant_item) { Nanoc::Int::Item.new('distant stuff', {}, '/distant.md') }
+      let(:distant_item_rep) { Nanoc::Int::ItemRep.new(distant_item, :default) }
+
+      before do
+        reps << distant_item_rep
+        checksum_store.add(distant_item)
+        rule_memory_store[distant_item_rep] = old_memory_for_other_item_rep.serialize
+        allow(action_provider).to receive(:memory_for).with(distant_item_rep).and_return(new_memory_for_other_item_rep)
+      end
+
+      context 'on attribute + attribute' do
+        before do
+          dependency_store.record_dependency(item, other_item, attributes: true)
+          dependency_store.record_dependency(other_item, distant_item, attributes: true)
+        end
+
+        context 'distant attribute changed' do
+          before { distant_item.attributes[:title] = 'omg new title' }
+
+          it 'has correct outdatedness of item' do
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).not_to be
+          end
+
+          it 'has correct outdatedness of other item' do
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be
+          end
+        end
+
+        context 'distant raw content changed' do
+          before { distant_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+
+          it 'has correct outdatedness of item' do
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).not_to be
+          end
+
+          it 'has correct outdatedness of other item' do
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).not_to be
+          end
+        end
+      end
+
+      context 'on compiled content + attribute' do
+        before do
+          dependency_store.record_dependency(item, other_item, compiled_content: true)
+          dependency_store.record_dependency(other_item, distant_item, attributes: true)
+        end
+
+        context 'distant attribute changed' do
+          before { distant_item.attributes[:title] = 'omg new title' }
+
+          it 'has correct outdatedness of item' do
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).to be
+          end
+
+          it 'has correct outdatedness of other item' do
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be
+          end
+        end
+
+        context 'distant raw content changed' do
+          before { distant_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+
+          it 'has correct outdatedness of item' do
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).not_to be
+          end
+
+          it 'has correct outdatedness of other item' do
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).not_to be
+          end
+        end
+      end
     end
 
     context 'only attribute dependency' do
