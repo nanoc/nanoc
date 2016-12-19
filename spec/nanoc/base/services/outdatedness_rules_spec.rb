@@ -35,6 +35,8 @@ describe Nanoc::Int::OutdatednessRules do
       allow(site).to receive(:config).and_return(config)
     end
 
+
+
     context 'CodeSnippetsModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::CodeSnippetsModified }
 
@@ -322,6 +324,128 @@ describe Nanoc::Int::OutdatednessRules do
 
         it { is_expected.to be }
       end
+    end
+
+    describe '#{Content,Attributes}Modified' do
+      subject do
+        # TODO: remove negation
+        [
+          Nanoc::Int::OutdatednessRules::ContentModified,
+          Nanoc::Int::OutdatednessRules::AttributesModified,
+        ].map { |c| !c.instance.apply(new_obj, outdatedness_checker) }
+      end
+
+      let(:checksum_store) { Nanoc::Int::ChecksumStore.new }
+
+      let(:stored_obj) { raise 'override me' }
+      let(:new_obj)    { raise 'override me' }
+
+      shared_examples 'a document' do
+        let(:stored_obj) { klass.new('a', {}, '/foo.md') }
+        let(:new_obj)    { stored_obj }
+
+        context 'no checksum data' do
+          context 'not stored' do
+            it { is_expected.to eql([false, false]) }
+          end
+
+          context 'stored' do
+            before { checksum_store.add(stored_obj) }
+
+            context 'but content changed afterwards' do
+              let(:new_obj) { klass.new('aaaaaaaa', {}, '/foo.md') }
+              it { is_expected.to eql([false, true]) }
+            end
+
+            context 'but attributes changed afterwards' do
+              let(:new_obj) { klass.new('a', { animal: 'donkey' }, '/foo.md') }
+              it { is_expected.to eql([true, false]) }
+            end
+
+            context 'and unchanged' do
+              it { is_expected.to eql([true, true]) }
+            end
+          end
+        end
+
+        context 'checksum_data' do
+          let(:stored_obj) { klass.new('a', {}, '/foo.md', checksum_data: 'cs-data') }
+          let(:new_obj)    { stored_obj }
+
+          context 'not stored' do
+            it { is_expected.to eql([false, false]) }
+          end
+
+          context 'stored' do
+            before { checksum_store.add(stored_obj) }
+
+            context 'but checksum data afterwards' do
+              let(:new_obj) { klass.new('a', {}, '/foo.md', checksum_data: 'cs-data-new') }
+              it { is_expected.to eql([false, false]) }
+            end
+
+            context 'and unchanged' do
+              it { is_expected.to eql([true, true]) }
+            end
+          end
+        end
+
+        context 'content_checksum_data' do
+          let(:stored_obj) { klass.new('a', {}, '/foo.md', content_checksum_data: 'cs-data') }
+          let(:new_obj)    { stored_obj }
+
+          context 'not stored' do
+            it { is_expected.to eql([false, false]) }
+          end
+
+          context 'stored' do
+            before { checksum_store.add(stored_obj) }
+
+            context 'but checksum data afterwards' do
+              let(:new_obj) { klass.new('a', {}, '/foo.md', content_checksum_data: 'cs-data-new') }
+              it { is_expected.to eql([false, true]) }
+            end
+
+            context 'and unchanged' do
+              it { is_expected.to eql([true, true]) }
+            end
+          end
+        end
+
+        context 'attributes_checksum_data' do
+          let(:stored_obj) { klass.new('a', {}, '/foo.md', attributes_checksum_data: 'cs-data') }
+          let(:new_obj)    { stored_obj }
+
+          context 'not stored' do
+            it { is_expected.to eql([false, false]) }
+          end
+
+          context 'stored' do
+            before { checksum_store.add(stored_obj) }
+
+            context 'but checksum data afterwards' do
+              let(:new_obj) { klass.new('a', {}, '/foo.md', attributes_checksum_data: 'cs-data-new') }
+              it { is_expected.to eql([true, false]) }
+            end
+
+            context 'and unchanged' do
+              it { is_expected.to eql([true, true]) }
+            end
+          end
+        end
+      end
+
+      context 'item' do
+        let(:klass) { Nanoc::Int::Item }
+        it_behaves_like 'a document'
+      end
+
+      context 'layout' do
+        let(:klass) { Nanoc::Int::Layout }
+        it_behaves_like 'a document'
+      end
+
+      # …
     end
   end
 end
