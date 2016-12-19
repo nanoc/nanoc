@@ -6,6 +6,8 @@ module Nanoc::Int
     class Basic
       extend Nanoc::Int::Memoization
 
+      include Nanoc::Int::ContractsSupport
+
       Rules = Nanoc::Int::OutdatednessRules
 
       RULES_FOR_ITEM_REP =
@@ -26,11 +28,13 @@ module Nanoc::Int
           Rules::AttributesModified,
         ].freeze
 
+      contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Int::ItemRepRepo] => C::Any
       def initialize(outdatedness_checker:, reps:)
         @outdatedness_checker = outdatedness_checker
         @reps = reps
       end
 
+      contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[OutdatednessStatus]
       def outdatedness_status_for(obj)
         case obj
         when Nanoc::Int::ItemRep
@@ -47,6 +51,7 @@ module Nanoc::Int
 
       private
 
+      contract C::ArrayOf[Class], C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout], OutdatednessStatus => C::Maybe[OutdatednessStatus]
       def apply_rules(rules, obj, status = OutdatednessStatus.new)
         rules.inject(status) do |acc, rule|
           if !acc.useful_to_apply?(rule)
@@ -59,6 +64,7 @@ module Nanoc::Int
         end
       end
 
+      contract C::ArrayOf[Class], C::ArrayOf[C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]] => C::Maybe[OutdatednessStatus]
       def apply_rules_multi(rules, objs)
         objs.inject(OutdatednessStatus.new) { |acc, elem| apply_rules(rules, elem, acc) }
       end
@@ -126,37 +132,18 @@ module Nanoc::Int
 
     private
 
+    contract C::None => Basic
     def basic
       @_basic ||= Basic.new(outdatedness_checker: self, reps: @reps)
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
-    # Calculates the reason why the given object is outdated. This method does
-    # not take dependencies into account; use {#outdatedness_reason_for?} if
-    # you want to include dependencies in the outdatedness check.
-    #
-    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
-    #   whose outdatedness reason should be calculated.
-    #
-    # @return [Reasons::Generic, nil] The reason why the
-    #   given object is outdated, or nil if the object is not outdated.
     def basic_outdatedness_reason_for(obj)
       # FIXME: Stop using this; it is no longer accurate, as there can be >1 reasons
       basic.outdatedness_status_for(obj).reasons.first
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout], Hamster::Set => C::Bool
-    # Checks whether the given object is outdated due to dependencies.
-    #
-    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
-    #   whose outdatedness should be checked.
-    #
-    # @param [Set] processed The collection of items that has been visited
-    #   during this outdatedness check. This is used to prevent checks for
-    #   items that (indirectly) depend on their own from looping
-    #   indefinitely. It should not be necessary to pass this a custom value.
-    #
-    # @return [Boolean] true if the object is outdated, false otherwise
     def outdated_due_to_dependencies?(obj, processed = Hamster::Set.new)
       # Convert from rep to item if necessary
       obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
