@@ -192,20 +192,10 @@ module Nanoc::Int
     contract C::Any => C::Bool
     # @param obj
     #
-    # @return [Boolean] false if the old and new checksums for the given
-    #   object differ, true if they are identical
-    def checksums_identical?(obj)
-      checksum_store[obj] == Nanoc::Int::Checksummer.calc(obj)
-    end
-    memoize :checksums_identical?
-
-    contract C::Any => C::Bool
-    # @param obj
-    #
     # @return [Boolean] true if the old and new checksums for the given object
     #   are available and identical, false otherwise
     def object_modified?(obj)
-      !checksums_identical?(obj)
+      checksum_store[obj] != Nanoc::Int::Checksummer.calc(obj)
     end
     memoize :object_modified?
   end
