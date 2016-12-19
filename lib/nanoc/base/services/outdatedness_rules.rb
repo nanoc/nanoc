@@ -4,6 +4,8 @@ module Nanoc::Int
     class CodeSnippetsModified < OutdatednessRule
       extend Nanoc::Int::Memoization
 
+      include Nanoc::Int::ContractsSupport
+
       def reason
         Nanoc::Int::OutdatednessReasons::CodeSnippetsModified
       end
@@ -91,7 +93,9 @@ module Nanoc::Int
       end
 
       def apply(obj, outdatedness_checker)
-        outdatedness_checker.rule_memory_differs_for(obj)
+        mem_old = outdatedness_checker.rule_memory_store[obj]
+        mem_new = outdatedness_checker.action_provider.memory_for(obj).serialize
+        !mem_old.eql?(mem_new)
       end
     end
 

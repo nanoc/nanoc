@@ -10,6 +10,7 @@ module Nanoc::Int
     attr_reader :checksum_store
     attr_reader :dependency_store
     attr_reader :rule_memory_store
+    attr_reader :action_provider
     attr_reader :site
 
     Reasons = Nanoc::Int::OutdatednessReasons
@@ -189,17 +190,6 @@ module Nanoc::Int
       status = basic_outdatedness_status_for(dependency.from)
       (status.props.active & dependency.props.active).any?
     end
-
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
-    # @param [Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The layout or item
-    #   representation to check the rule memory for
-    #
-    # @return [Boolean] true if the rule memory for the given item
-    #   represenation has changed, false otherwise
-    def rule_memory_differs_for(obj)
-      !rule_memory_store[obj].eql?(@action_provider.memory_for(obj).serialize)
-    end
-    memoize :rule_memory_differs_for
 
     contract Nanoc::Int::ItemRep => C::Bool
     def paths_differ_for(obj)
