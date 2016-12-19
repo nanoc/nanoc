@@ -109,38 +109,6 @@ describe Nanoc::Int::OutdatednessRules do
       end
     end
 
-    context 'NotEnoughData' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::NotEnoughData }
-
-      context 'item' do
-        let(:obj) { item }
-
-        before { reps << item_rep }
-
-        context 'no checksum available' do
-          it { is_expected.to be }
-        end
-
-        context 'checksum available' do
-          before { checksum_store.add(item) }
-          it { is_expected.not_to be }
-        end
-      end
-
-      context 'item rep' do
-        let(:obj) { item_rep }
-
-        context 'no checksum available' do
-          it { is_expected.to be }
-        end
-
-        context 'checksum available' do
-          before { checksum_store.add(item) }
-          it { is_expected.not_to be }
-        end
-      end
-    end
-
     context 'ContentModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::ContentModified }
 

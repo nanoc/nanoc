@@ -54,17 +54,6 @@ module Nanoc::Int
       end
     end
 
-    class NotEnoughData < OutdatednessRule
-      def reason
-        Nanoc::Int::OutdatednessReasons::NotEnoughData
-      end
-
-      def apply(obj, outdatedness_checker)
-        obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
-        !outdatedness_checker.checksums_available?(obj)
-      end
-    end
-
     class ContentModified < OutdatednessRule
       def reason
         Nanoc::Int::OutdatednessReasons::ContentModified

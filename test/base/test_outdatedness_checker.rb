@@ -42,7 +42,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
       site.compiler.load_stores
       outdatedness_checker = site.compiler.send :outdatedness_checker
       rep = site.compiler.reps[site.items.find { |i| i.identifier == '/' }][0]
-      assert_equal ::Nanoc::Int::OutdatednessReasons::NotEnoughData, outdatedness_checker.outdatedness_reason_for(rep)
+      assert_equal ::Nanoc::Int::OutdatednessReasons::ContentModified, outdatedness_checker.outdatedness_reason_for(rep)
     end
   end
 

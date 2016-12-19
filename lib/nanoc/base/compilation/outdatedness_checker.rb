@@ -84,7 +84,6 @@ module Nanoc::Int
       [
         Rules::RulesModified,
         Rules::PathsModified,
-        Rules::NotEnoughData,
         Rules::ContentModified,
         Rules::AttributesModified,
         Rules::NotWritten,
@@ -95,7 +94,6 @@ module Nanoc::Int
     RULES_FOR_LAYOUT =
       [
         Rules::RulesModified,
-        Rules::NotEnoughData,
         Rules::ContentModified,
         Rules::AttributesModified,
       ].freeze
