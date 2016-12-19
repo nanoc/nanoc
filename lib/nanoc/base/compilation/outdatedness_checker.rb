@@ -66,20 +66,6 @@ module Nanoc::Int
 
     private
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
-    # Checks whether the given object is outdated and therefore needs to be
-    # recompiled. This method does not take dependencies into account; use
-    # {#outdated?} if you want to include dependencies in the outdatedness
-    # check.
-    #
-    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
-    #   whose outdatedness should be checked.
-    #
-    # @return [Boolean] true if the object is outdated, false otherwise
-    def basic_outdated?(obj)
-      !basic_outdatedness_reason_for(obj).nil?
-    end
-
     RULES_FOR_ITEM_REP =
       [
         Rules::RulesModified,
