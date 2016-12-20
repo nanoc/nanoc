@@ -1,6 +1,5 @@
 # @api private
 module Nanoc::Int
-  autoload 'Compiler', 'nanoc/base/compilation/compiler'
 end
 
 require_relative 'base/core_ext'

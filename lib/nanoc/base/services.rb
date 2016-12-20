@@ -1,5 +1,6 @@
 require_relative 'services/action_provider'
 require_relative 'services/checksummer'
+require_relative 'services/compiler'
 require_relative 'services/compiler_loader'
 require_relative 'services/dependency_tracker'
 require_relative 'services/executor'
