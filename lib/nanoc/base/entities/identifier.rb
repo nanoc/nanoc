@@ -98,15 +98,13 @@ module Nanoc
     end
 
     contract C::None => C::Bool
-    # @return [Boolean] True if this is a full-type identifier (i.e. includes
-    #   the extension), false otherwise
+    # Whether or not this is a full identifier (i.e.includes the extension).
     def full?
       @type == :full
     end
 
     contract C::None => C::Bool
-    # @return [Boolean] True if this is a legacy identifier (i.e. does not
-    #   include the extension), false otherwise
+    # Whether or not this is a legacy identifier (i.e. does not include the extension).
     def legacy?
       @type == :legacy
     end
@@ -133,7 +131,7 @@ module Nanoc
     end
 
     contract C::None => String
-    # @return [String]
+    # The identifier, as string, with the last extension removed
     def without_ext
       unless full?
         raise UnsupportedLegacyOperationError
@@ -149,7 +147,7 @@ module Nanoc
     end
 
     contract C::None => C::Maybe[String]
-    # @return [String, nil] The extension, without a leading dot.
+    # The extension, without a leading dot
     def ext
       unless full?
         raise UnsupportedLegacyOperationError
@@ -160,7 +158,7 @@ module Nanoc
     end
 
     contract C::None => String
-    # @return [String]
+    # The identifier, as string, with all extensions removed
     def without_exts
       extname = exts.join('.')
       if !extname.empty?
@@ -171,7 +169,7 @@ module Nanoc
     end
 
     contract C::None => C::ArrayOf[String]
-    # @return [Array] List of extensions, without a leading dot.
+    # The list of extensions, without a leading dot
     def exts
       unless full?
         raise UnsupportedLegacyOperationError
