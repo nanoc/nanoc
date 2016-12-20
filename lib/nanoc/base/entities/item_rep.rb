@@ -42,7 +42,7 @@ module Nanoc::Int
       @raw_paths  = {}
       @paths      = {}
       @snapshot_defs = []
-      initialize_content
+      @snapshot_contents = { last: @item.content }
 
       # Reset flags
       @compiled = false
@@ -145,12 +145,6 @@ module Nanoc::Int
 
     def inspect
       "<#{self.class} name=\"#{name}\" binary=#{binary?} raw_path=\"#{raw_path}\" item.identifier=\"#{item.identifier}\">"
-    end
-
-    private
-
-    def initialize_content
-      @snapshot_contents = { last: @item.content }
     end
   end
 end
