@@ -18,6 +18,8 @@ module Nanoc::Int
   #
   # @api private
   class Compiler
+    include Nanoc::Int::ContractsSupport
+
     # @api private
     attr_reader :site
 
@@ -205,7 +207,29 @@ module Nanoc::Int
     #
     # @return [void]
     def compile_rep(rep)
+      fiber = fiber_for(rep)
+      while fiber.alive?
+        Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+        res = fiber.resume
+
+        case res
+        when Nanoc::Int::Errors::UnmetDependency
+          Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res)
+          raise(res)
+        when Proc
+          fiber.resume(res.call)
+        else
+          # TODO: raise
+        end
+      end
+
+      Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)
+    end
+
+    contract Nanoc::Int::ItemRep => Fiber
+    def fiber_for(rep)
       @fibers ||= {}
+
       @fibers[rep] ||=
         Fiber.new do
           begin
@@ -228,23 +252,7 @@ module Nanoc::Int
           end
         end
 
-      fiber = @fibers[rep]
-      while fiber.alive?
-        Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
-        res = fiber.resume
-
-        case res
-        when Nanoc::Int::Errors::UnmetDependency
-          Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res)
-          raise(res)
-        when Proc
-          fiber.resume(res.call)
-        else
-          # TODO: raise
-        end
-      end
-
-      Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)
+      @fibers[rep]
     end
 
     # @return [Boolean]
