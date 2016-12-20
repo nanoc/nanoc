@@ -21,4 +21,5 @@ require_relative 'entities/site'
 require_relative 'entities/snapshot_def'
 
 require_relative 'entities/outdatedness_status'
+require_relative 'entities/outdatedness_reasons'
 require_relative 'entities/dependency'
