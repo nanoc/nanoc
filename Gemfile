@@ -21,6 +21,7 @@ group :devel do
   gem 'vcr'
   gem 'webmock'
   gem 'yard'
+  gem 'yard-contracts'
 end
 
 group :plugins do
