@@ -117,7 +117,7 @@ module Nanoc::DataSources
 
         ProtoDocument.new(is_binary: true, filename: content_filename, attributes: meta)
       elsif is_binary && klass == Nanoc::Int::Layout
-        raise "The layout file '#{content_filename}' is a binary file, but layouts can only be textual"
+        raise Errors::BinaryLayout.new(content_filename)
       else
         parse_result = parse(content_filename, meta_filename)
 
@@ -239,11 +239,11 @@ module Nanoc::DataSources
 
         # Check number of files per type
         unless [0, 1].include?(meta_filenames.size)
-          raise "Found #{meta_filenames.size} meta files for #{basename}; expected 0 or 1"
+          raise Errors::MultipleMetaFiles.new(meta_filenames, basename)
         end
         unless config[:identifier_type] == 'full'
           unless [0, 1].include?(content_filenames.size)
-            raise "Found #{content_filenames.size} content files for #{basename}; expected 0 or 1"
+            raise Errors::MultipleContentFiles.new(meta_filenames, basename)
           end
         end
 
@@ -352,7 +352,7 @@ module Nanoc::DataSources
 
       pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
       if pieces.size < 4
-        raise "The file '#{content_filename}' appears to start with a metadata section (three or five dashes at the top) but it does not seem to be in the correct format."
+        raise Errors::InvalidFormat.new(content_filename)
       end
 
       meta = parse_metadata(pieces[2], content_filename)
@@ -366,7 +366,7 @@ module Nanoc::DataSources
       begin
         meta = YAML.load(data) || {}
       rescue => e
-        raise "Could not parse YAML for #{filename}: #{e.message}"
+        raise Errors::UnparseableMetadata.new(filename, e)
       end
 
       verify_meta(meta, filename)
@@ -386,16 +386,10 @@ module Nanoc::DataSources
       end
     end
 
-    class InvalidMetadataError < Nanoc::Error
-      def initialize(filename, klass)
-        super("The file #{filename} has invalid metadata (expected key-value pairs, found #{klass} instead)")
-      end
-    end
-
     def verify_meta(meta, filename)
       return if meta.is_a?(Hash)
 
-      raise InvalidMetadataError.new(filename, meta.class)
+      raise Errors::InvalidMetadata.new(filename, meta.class)
     end
 
     # Reads the content of the file with the given name and returns a string
@@ -407,7 +401,7 @@ module Nanoc::DataSources
       begin
         data = File.read(filename)
       rescue => e
-        raise "Could not read #{filename}: #{e.inspect}"
+        raise Errors::FileUnreadable.new(filename, e)
       end
 
       # Fix
@@ -422,11 +416,11 @@ module Nanoc::DataSources
         begin
           data.encode!('UTF-8')
         rescue
-          raise_encoding_error(filename, original_encoding)
+          raise Errors::InvalidEncoding.new(filename, original_encoding)
         end
 
         unless data.valid_encoding?
-          raise_encoding_error(filename, original_encoding)
+          raise Errors::InvalidEncoding.new(filename, original_encoding)
         end
       end
 
@@ -435,12 +429,8 @@ module Nanoc::DataSources
 
       data
     end
-
-    # Raises an invalid encoding error for the given filename and encoding.
-    def raise_encoding_error(filename, encoding)
-      raise "Could not read #{filename} because the file is not valid #{encoding}."
-    end
   end
 end
 
 require_relative 'filesystem/tools'
+require_relative 'filesystem/errors'

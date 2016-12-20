@@ -135,7 +135,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     File.open('foo/stuff.dat', 'w') { |io| io.write('random binary data') }
 
     # Load
-    assert_raises(RuntimeError) do
+    assert_raises(Nanoc::DataSources::Filesystem::Errors::BinaryLayout) do
       data_source.send(:load_objects, 'foo', Nanoc::Int::Layout)
     end
   end
@@ -642,7 +642,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     end
 
     # Check
-    assert_raises RuntimeError do
+    assert_raises(Nanoc::DataSources::Filesystem::Errors::MultipleContentFiles) do
       data_source.send(:all_split_files_in, '.')
     end
   end
@@ -829,7 +829,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, nil)
 
     # Parse it
-    assert_raises(RuntimeError) do
+    assert_raises(Nanoc::DataSources::Filesystem::Errors::InvalidFormat) do
       data_source.instance_eval { parse('test.html', nil) }
     end
   end
@@ -981,7 +981,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, nil)
 
-    assert_raises(Nanoc::DataSources::Filesystem::InvalidMetadataError) do
+    assert_raises(Nanoc::DataSources::Filesystem::Errors::InvalidMetadata) do
       data_source.instance_eval { parse('test.html', nil) }
     end
   end
@@ -992,7 +992,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, nil)
 
-    assert_raises(Nanoc::DataSources::Filesystem::InvalidMetadataError) do
+    assert_raises(Nanoc::DataSources::Filesystem::Errors::InvalidMetadata) do
       data_source.instance_eval { parse('test.html', 'test.yaml') }
     end
   end
