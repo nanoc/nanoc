@@ -22,8 +22,6 @@ module Nanoc::HashExtensions
   # @see Array#__nanoc_freeze_recursively
   #
   # @return [void]
-  #
-  # @since 3.2.0
   def __nanoc_freeze_recursively
     return if frozen?
     freeze

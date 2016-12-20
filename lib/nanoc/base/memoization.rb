@@ -4,8 +4,6 @@ module Nanoc::Int
   # Adds support for memoizing functions.
   #
   # @api private
-  #
-  # @since 3.2.0
   module Memoization
     class Wrapper
       attr_reader :ref

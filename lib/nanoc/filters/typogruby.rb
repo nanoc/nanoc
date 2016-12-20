@@ -1,6 +1,4 @@
 module Nanoc::Filters
-  # @since 3.2.0
-  #
   # @api private
   class Typogruby < Nanoc::Filter
     requires 'typogruby'

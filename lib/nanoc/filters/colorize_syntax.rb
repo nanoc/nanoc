@@ -250,8 +250,6 @@ module Nanoc::Filters
 
     # Runs the content through [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html).
     #
-    # @since 3.2.0
-    #
     # @param [String] code The code to colorize
     #
     # @param [String] language The language the code is written in

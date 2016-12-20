@@ -24,8 +24,6 @@ module Nanoc::Int
     # Compiles the site.
     #
     # @return [void]
-    #
-    # @since 3.2.0
     def compile
       compiler.run_all
       self

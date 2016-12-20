@@ -9,8 +9,6 @@ module Nanoc::RuleDSL
 
     # @return [Symbol] The name of the snapshot this rule will apply to.
     #   Ignored for compilation rules, but used for routing rules.
-    #
-    # @since 3.2.0
     attr_reader :snapshot_name
 
     attr_reader :pattern

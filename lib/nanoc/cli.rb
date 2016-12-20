@@ -19,8 +19,6 @@ module Nanoc::CLI
   autoload 'ErrorHandler',        'nanoc/cli/error_handler'
 
   # @return [Boolean] true if debug output is enabled, false if not
-  #
-  # @since 3.2.0
   def self.debug?
     @debug || false
   end
@@ -29,8 +27,6 @@ module Nanoc::CLI
   #   false if it should not
   #
   # @return [void]
-  #
-  # @since 3.2.0
   def self.debug=(boolean)
     @debug = boolean
   end

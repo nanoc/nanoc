@@ -1,6 +1,4 @@
 module Nanoc::Filters
-  # @since 3.2.0
-  #
   # @api private
   class Redcarpet < Nanoc::Filter
     requires 'redcarpet'
@@ -22,8 +20,6 @@ module Nanoc::Filters
     # @overload run(content, params={})
     #
     #   For Redcarpet 2.x
-    #
-    #   @since 3.2.4
     #
     #   @param [String] content The content to filter
     #

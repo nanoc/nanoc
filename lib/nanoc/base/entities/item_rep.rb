@@ -101,8 +101,6 @@ module Nanoc::Int
     #
     # @return [Boolean] True if content exists for the snapshot with the
     #   given name, false otherwise
-    #
-    # @since 3.2.0
     def snapshot?(snapshot_name)
       !@snapshot_contents[snapshot_name].nil?
     end
