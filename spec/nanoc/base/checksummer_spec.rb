@@ -349,7 +349,7 @@ describe Nanoc::Int::Checksummer do
   context 'Nanoc::Int::Context' do
     let(:obj) { Nanoc::Int::Context.new(foo: 123) }
 
-    it { is_expected.to eql('Nanoc::Int::Context<@foo=Fixnum<123>,>') }
+    it { is_expected.to match(/\ANanoc::Int::Context<@foo=(Fixnum|Integer)<123>,>\z/) }
   end
 
   context 'Sass::Importers::Filesystem' do
