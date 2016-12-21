@@ -72,8 +72,7 @@ describe Nanoc::Int::ChecksumStore do
       end
 
       it 'has no checksum' do
-        # FIXME: should be nil
-        expect(store[other_code_snippet]).not_to be_nil
+        expect(store[other_code_snippet]).to be_nil
       end
     end
   end
@@ -127,8 +126,7 @@ describe Nanoc::Int::ChecksumStore do
       end
 
       it 'has no checksum' do
-        # FIXME: should be nil
-        expect(store[other_item]).not_to be_nil
+        expect(store[other_item]).to be_nil
       end
     end
   end
