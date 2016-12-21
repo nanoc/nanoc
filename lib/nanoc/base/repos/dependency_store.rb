@@ -11,7 +11,8 @@ module Nanoc::Int
       super(Nanoc::Int::Store.tmp_path_for(env_name: env_name, store_name: 'dependencies'), 4)
 
       @objects = objects
-      @graph   = Nanoc::Int::DirectedGraph.new([nil] + @objects)
+      @new_objects = []
+      @graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Nanoc::Int::Dependency]
@@ -50,7 +51,11 @@ module Nanoc::Int
     # predecessors of
     #   the given object
     def objects_causing_outdatedness_of(object)
-      @graph.direct_predecessors_of(object)
+      if @new_objects.any?
+        [@new_objects.first]
+      else
+        @graph.direct_predecessors_of(object)
+      end
     end
 
     # Returns the direct inverse dependencies for the given object.
@@ -67,7 +72,11 @@ module Nanoc::Int
     # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] The direct successors of
     #   the given object
     def objects_outdated_due_to(object)
-      @graph.direct_successors_of(object).compact
+      if @new_objects.include?(object)
+        @objects
+      else
+        @graph.direct_successors_of(object).compact
+      end
     end
 
     contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
@@ -141,14 +150,7 @@ module Nanoc::Int
       end
 
       # Record dependency from all items on new items
-      new_objects = (@objects - previous_objects)
-      new_props = { raw_content: true, attributes: true, compiled_content: true, path: true }
-      new_objects.each do |new_obj|
-        @objects.each do |obj|
-          next unless obj.is_a?(Nanoc::Int::Item)
-          @graph.add_edge(new_obj, obj, props: new_props)
-        end
-      end
+      @new_objects = @objects - previous_objects
     end
   end
 end

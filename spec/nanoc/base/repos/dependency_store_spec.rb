@@ -121,30 +121,80 @@ describe Nanoc::Int::DependencyStore do
       store.record_dependency(obj_a, obj_b, attributes: true)
 
       store.store
+      store.objects = objects_after
       store.load
     end
 
-    it 'has the right dependencies for item A' do
-      deps = store.dependencies_causing_outdatedness_of(obj_a)
-      expect(deps.size).to eql(1)
+    context 'no new objects' do
+      let(:objects_after) { objects }
 
-      expect(deps[0].from).to eql(obj_b)
-      expect(deps[0].to).to eql(obj_a)
+      it 'has the right dependencies for item A' do
+        deps = store.dependencies_causing_outdatedness_of(obj_a)
+        expect(deps.size).to eql(1)
 
-      expect(deps[0].props.raw_content?).to eq(false)
-      expect(deps[0].props.attributes?).to eq(true)
-      expect(deps[0].props.compiled_content?).to eq(true)
-      expect(deps[0].props.path?).to eq(false)
+        expect(deps[0].from).to eql(obj_b)
+        expect(deps[0].to).to eql(obj_a)
+
+        expect(deps[0].props.raw_content?).to eq(false)
+        expect(deps[0].props.attributes?).to eq(true)
+        expect(deps[0].props.compiled_content?).to eq(true)
+        expect(deps[0].props.path?).to eq(false)
+      end
+
+      it 'has the right dependencies for item B' do
+        deps = store.dependencies_causing_outdatedness_of(obj_b)
+        expect(deps).to be_empty
+      end
+
+      it 'has the right dependencies for item C' do
+        deps = store.dependencies_causing_outdatedness_of(obj_c)
+        expect(deps).to be_empty
+      end
     end
 
-    it 'has the right dependencies for item B' do
-      deps = store.dependencies_causing_outdatedness_of(obj_b)
-      expect(deps).to be_empty
+    context 'one new object' do
+      let(:objects_after) do
+        [obj_a, obj_b, obj_c, obj_d]
+      end
+
+      let(:obj_d) { Nanoc::Int::Item.new('d', {}, '/d.md') }
+
+      it 'marks existing items as outdated' do
+        expect(store.objects_causing_outdatedness_of(obj_a)).to eq([obj_d])
+        expect(store.objects_causing_outdatedness_of(obj_b)).to eq([obj_d])
+        expect(store.objects_causing_outdatedness_of(obj_c)).to eq([obj_d])
+      end
+
+      it 'has the right target dependencies' do
+        expect(store.objects_outdated_due_to(obj_a)).to be_empty
+        expect(store.objects_outdated_due_to(obj_b)).to eq([obj_a])
+        expect(store.objects_outdated_due_to(obj_c)).to be_empty
+        expect(store.objects_outdated_due_to(obj_d)).to eq(objects_after)
+      end
     end
 
-    it 'has the right dependencies for item C' do
-      deps = store.dependencies_causing_outdatedness_of(obj_c)
-      expect(deps).to be_empty
+    context 'two new objects' do
+      let(:objects_after) do
+        [obj_a, obj_b, obj_c, obj_d, obj_e]
+      end
+
+      let(:obj_d) { Nanoc::Int::Item.new('d', {}, '/d.md') }
+      let(:obj_e) { Nanoc::Int::Item.new('e', {}, '/e.md') }
+
+      it 'marks existing items as outdated' do
+        # Only one of obj D or E needed!
+        expect(store.objects_causing_outdatedness_of(obj_a)).to eq([obj_d]).or eq([obj_e])
+        expect(store.objects_causing_outdatedness_of(obj_b)).to eq([obj_d]).or eq([obj_e])
+        expect(store.objects_causing_outdatedness_of(obj_c)).to eq([obj_d]).or eq([obj_e])
+      end
+
+      it 'has the right target dependencies' do
+        expect(store.objects_outdated_due_to(obj_a)).to be_empty
+        expect(store.objects_outdated_due_to(obj_b)).to eq([obj_a])
+        expect(store.objects_outdated_due_to(obj_c)).to be_empty
+        expect(store.objects_outdated_due_to(obj_d)).to eq(objects_after)
+        expect(store.objects_outdated_due_to(obj_e)).to eq(objects_after)
+      end
     end
   end
 end
