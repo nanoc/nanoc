@@ -24,12 +24,9 @@ module Nanoc::Int
     #     end
     #     # => "I am Max Payne and I am hiding in a cheap motel."
     def initialize(hash)
+      metaclass = class << self; self; end
       hash.each_pair do |key, value|
-        # Build instance variable
         instance_variable_set('@' + key.to_s, value)
-
-        # Define method
-        metaclass = (class << self; self; end)
         metaclass.send(:define_method, key) { value }
       end
     end
