@@ -2,7 +2,6 @@ language: ruby
 rvm:
   - 2.2.6
   - 2.3.2
-  - ruby-head
 branches:
   only:
     - "master"
@@ -22,12 +21,19 @@ matrix:
       env: DISABLE_NOKOGIRI=1
     - rvm: jruby-9.1.5.0
       env: DISABLE_NOKOGIRI=0
+    - rvm: ruby-head
+      env: DISABLE_LESS=1
+    - rvm: ruby-head
+      env: DISABLE_LESS=0
   allow_failures:
     - rvm: jruby-9.1.5.0
       env: DISABLE_NOKOGIRI=1
     - rvm: jruby-9.1.5.0
       env: DISABLE_NOKOGIRI=0
     - rvm: ruby-head
+      env: DISABLE_LESS=1
+    - rvm: ruby-head
+      env: DISABLE_LESS=0
 script:
   - bundle exec rake
   - bundle exec appraisal install && FOCUS=rouge bundle exec appraisal rake spec
