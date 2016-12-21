@@ -1,12 +1,8 @@
-describe Nanoc::Filters::Less, site: true, stdio: true do
+describe Nanoc::Filters::Less, site: true, stdio: true, v8: true do
   # These tests are high-level in order to interact well with the compiler. This is important for
   # this :less filter, because of the way it handles fibers.
 
   before do
-    if ENV.key?('DISABLE_LESS')
-      skip 'less specs are disabled (broken on Ruby 2.4)'
-    end
-
     File.open('Rules', 'w') do |io|
       io.write "compile '/**/*.less' do\n"
       io.write "  filter :less\n"

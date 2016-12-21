@@ -1,5 +1,7 @@
 class Nanoc::Filters::UglifyJSTest < Nanoc::TestCase
   def test_filter
+    skip_v8_on_ruby24
+
     if_have 'uglifier' do
       # Create filter
       filter = ::Nanoc::Filters::UglifyJS.new
@@ -12,6 +14,8 @@ class Nanoc::Filters::UglifyJSTest < Nanoc::TestCase
   end
 
   def test_filter_with_options
+    skip_v8_on_ruby24
+
     if_have 'uglifier' do
       filter = ::Nanoc::Filters::UglifyJS.new
       input = "if(donkey) alert('It is a donkey!');"
