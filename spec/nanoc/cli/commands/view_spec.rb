@@ -7,7 +7,7 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
       20.times do |i|
         begin
           Net::HTTP.get('0.0.0.0', '/', 50_385)
-        rescue Errno::ECONNREFUSED
+        rescue Errno::ECONNREFUSED, Errno::ECONNRESET
           sleep(0.1 * 1.2**i)
           retry
         end
