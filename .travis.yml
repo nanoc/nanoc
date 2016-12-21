@@ -1,7 +1,7 @@
 language: ruby
 rvm:
-  - 2.2.6
-  - 2.3.2
+  - ruby-2.2.6
+  - ruby-2.3.2
 branches:
   only:
     - "master"
