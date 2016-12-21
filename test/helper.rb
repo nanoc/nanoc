@@ -28,10 +28,6 @@ module Nanoc::TestHelpers
     ENV.key?('DISABLE_NOKOGIRI')
   end
 
-  def disable_less?
-    ENV.key?('DISABLE_NOKOGIRI')
-  end
-
   def if_have(*libs)
     libs.each do |lib|
       if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' && lib == 'nokogiri' && disable_nokogiri?

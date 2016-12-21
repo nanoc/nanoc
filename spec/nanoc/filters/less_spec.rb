@@ -3,7 +3,7 @@ describe Nanoc::Filters::Less, site: true, stdio: true do
   # this :less filter, because of the way it handles fibers.
 
   before do
-    if disable_less?
+    if ENV.key?('DISABLE_LESS')
       skip 'less specs are disabled (broken on Ruby 2.4)'
     end
 
