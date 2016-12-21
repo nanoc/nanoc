@@ -78,15 +78,11 @@ module Nanoc::Helpers
 
       # Calculate the relative path (method depends on whether destination is
       # a directory or not).
-      relative_path =
-        if src_path.to_s[-1, 1] != '/'
-          dst_path.relative_path_from(src_path.dirname).to_s
-        else
-          dst_path.relative_path_from(src_path).to_s
-        end
+      from = src_path.to_s.end_with?('/') ? src_path : src_path.dirname
+      relative_path = dst_path.relative_path_from(from).to_s
 
       # Add trailing slash if necessary
-      if dst_path.to_s[-1, 1] == '/'
+      if dst_path.to_s.end_with?('/')
         relative_path << '/'
       end
 
