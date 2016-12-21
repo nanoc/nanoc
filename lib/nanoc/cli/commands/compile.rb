@@ -449,7 +449,7 @@ module Nanoc::CLI::Commands
     end
 
     def teardown_listeners
-      @listeners.each(&:stop_safely)
+      @listeners.reverse_each(&:stop_safely)
     end
 
     def reps
