@@ -420,11 +420,11 @@ module Nanoc::CLI::Commands
 
     def default_listener_classes
       [
+        Nanoc::CLI::Commands::Compile::StackProfProfiler,
         Nanoc::CLI::Commands::Compile::DiffGenerator,
         Nanoc::CLI::Commands::Compile::DebugPrinter,
         Nanoc::CLI::Commands::Compile::TimingRecorder,
         Nanoc::CLI::Commands::Compile::FileActionPrinter,
-        Nanoc::CLI::Commands::Compile::StackProfProfiler,
       ]
     end
 
