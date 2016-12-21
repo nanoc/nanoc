@@ -5,7 +5,6 @@ rvm:
 branches:
   only:
     - "master"
-    - "/^release-/"
 env:
   -
     RUBY_GC_MALLOC_LIMIT=4000000
