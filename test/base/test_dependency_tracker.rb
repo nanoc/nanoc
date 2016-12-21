@@ -87,25 +87,6 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     assert_contains_exactly [items[1]], store.objects_causing_outdatedness_of(items[0])
   end
 
-  def test_objects_outdated_due_to
-    # Mock items
-    items = [
-      Nanoc::Int::Item.new('a', {}, '/a.md'),
-      Nanoc::Int::Item.new('b', {}, '/b.md'),
-      Nanoc::Int::Item.new('c', {}, '/c.md'),
-    ]
-
-    # Create
-    store = Nanoc::Int::DependencyStore.new(items)
-
-    # Record some dependencies
-    store.record_dependency(items[0], items[1])
-    store.record_dependency(items[1], items[2])
-
-    # Verify dependencies
-    assert_contains_exactly [items[0]], store.objects_outdated_due_to(items[1])
-  end
-
   def test_store_graph_and_load_graph_simple
     # Mock items
     items = [

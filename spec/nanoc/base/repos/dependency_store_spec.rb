@@ -165,11 +165,8 @@ describe Nanoc::Int::DependencyStore do
         expect(store.objects_causing_outdatedness_of(obj_c)).to eq([obj_d])
       end
 
-      it 'has the right target dependencies' do
-        expect(store.objects_outdated_due_to(obj_a)).to be_empty
-        expect(store.objects_outdated_due_to(obj_b)).to eq([obj_a])
-        expect(store.objects_outdated_due_to(obj_c)).to be_empty
-        expect(store.objects_outdated_due_to(obj_d)).to eq(objects_after)
+      it 'marks new items as outdated' do
+        expect(store.objects_causing_outdatedness_of(obj_d)).to eq([obj_d])
       end
     end
 
@@ -188,12 +185,10 @@ describe Nanoc::Int::DependencyStore do
         expect(store.objects_causing_outdatedness_of(obj_c)).to eq([obj_d]).or eq([obj_e])
       end
 
-      it 'has the right target dependencies' do
-        expect(store.objects_outdated_due_to(obj_a)).to be_empty
-        expect(store.objects_outdated_due_to(obj_b)).to eq([obj_a])
-        expect(store.objects_outdated_due_to(obj_c)).to be_empty
-        expect(store.objects_outdated_due_to(obj_d)).to eq(objects_after)
-        expect(store.objects_outdated_due_to(obj_e)).to eq(objects_after)
+      it 'marks new items as outdated' do
+        # Only one of obj D or E needed!
+        expect(store.objects_causing_outdatedness_of(obj_d)).to eq([obj_d]).or eq([obj_e])
+        expect(store.objects_causing_outdatedness_of(obj_e)).to eq([obj_d]).or eq([obj_e])
       end
     end
   end

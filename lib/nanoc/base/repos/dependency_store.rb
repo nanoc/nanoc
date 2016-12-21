@@ -58,27 +58,6 @@ module Nanoc::Int
       end
     end
 
-    # Returns the direct inverse dependencies for the given object.
-    #
-    # The direct inverse dependencies of the given object include the objects
-    # that will be marked as outdated when the given object is outdated.
-    # Indirect dependencies will not be returned (e.g. if A depends on B which
-    # depends on C, then the direct inverse dependencies of C do not include
-    # A).
-    #
-    # @param [Nanoc::Int::Item, Nanoc::Int::Layout] object The object for which to
-    #   fetch the direct successors
-    #
-    # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] The direct successors of
-    #   the given object
-    def objects_outdated_due_to(object)
-      if @new_objects.include?(object)
-        @objects
-      else
-        @graph.direct_successors_of(object).compact
-      end
-    end
-
     contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
     # Records a dependency from `src` to `dst` in the dependency graph. When
     # `dst` is oudated, `src` will also become outdated.
