@@ -7,10 +7,11 @@ module Nanoc::Int
     include Nanoc::Int::ContractsSupport
 
     # @param [Nanoc::Int::Site] site
-    def initialize(site: nil)
+    def initialize(site: nil, objects:)
       super(Nanoc::Int::Store.tmp_path_for(env_name: (site.config.env_name if site), store_name: 'checksums'), 1)
 
-      @site = site
+      @site = site # TODO: Remove
+      @objects = objects
 
       @checksums = {}
     end

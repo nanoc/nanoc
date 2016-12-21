@@ -35,6 +35,8 @@ describe Nanoc::Int::OutdatednessChecker do
   let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
 
+  let(:objects) { [item] }
+
   before do
     reps << item_rep
     rule_memory_store[item_rep] = old_memory_for_item_rep.serialize
@@ -45,9 +47,7 @@ describe Nanoc::Int::OutdatednessChecker do
   describe '#basic_outdatedness_reason_for' do
     subject { outdatedness_checker.send(:basic_outdatedness_reason_for, obj) }
 
-    let(:checksum_store) do
-      Nanoc::Int::ChecksumStore.new
-    end
+    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
 
     let(:config) { Nanoc::Int::Configuration.new }
 
@@ -106,9 +106,7 @@ describe Nanoc::Int::OutdatednessChecker do
       Nanoc::Int::DependencyStore.new(objects)
     end
 
-    let(:checksum_store) do
-      Nanoc::Int::ChecksumStore.new
-    end
+    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
 
     let(:other_item) { Nanoc::Int::Item.new('other stuff', {}, '/other.md') }
     let(:other_item_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }

@@ -1,7 +1,7 @@
 describe Nanoc::Int::ChecksumStore do
-  let(:store) { described_class.new }
+  let(:store) { described_class.new(objects: objects) }
 
-  let(:items) { [item] }
+  let(:objects) { [item, code_snippet] }
 
   let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
   let(:other_item) { Nanoc::Int::Item.new('asdf', {}, '/sneaky.md') }

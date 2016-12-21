@@ -21,12 +21,13 @@ describe Nanoc::Int::OutdatednessRules do
     let(:site) { double(:site) }
     let(:config) { Nanoc::Int::Configuration.new }
     let(:code_snippets) { [] }
+    let(:objects) { [config] + code_snippets + [item] }
 
     let(:action_provider) { double(:action_provider) }
     let(:reps) { Nanoc::Int::ItemRepRepo.new }
     let(:dependency_store) { Nanoc::Int::DependencyStore.new(dependency_store_objects) }
     let(:rule_memory_store) { Nanoc::Int::RuleMemoryStore.new }
-    let(:checksum_store) { Nanoc::Int::ChecksumStore.new }
+    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
 
     let(:dependency_store_objects) { [item] }
 
@@ -316,8 +317,6 @@ describe Nanoc::Int::OutdatednessRules do
           Nanoc::Int::OutdatednessRules::AttributesModified,
         ].map { |c| !c.instance.apply(new_obj, outdatedness_checker) }
       end
-
-      let(:checksum_store) { Nanoc::Int::ChecksumStore.new }
 
       let(:stored_obj) { raise 'override me' }
       let(:new_obj)    { raise 'override me' }

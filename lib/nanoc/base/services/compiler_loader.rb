@@ -7,8 +7,10 @@ module Nanoc::Int
       dependency_store =
         Nanoc::Int::DependencyStore.new(site.items.to_a + site.layouts.to_a, env_name: site.config.env_name)
 
+      objects = site.items.to_a + site.layouts.to_a + site.code_snippets + [site.config]
+
       checksum_store =
-        Nanoc::Int::ChecksumStore.new(site: site)
+        Nanoc::Int::ChecksumStore.new(site: site, objects: objects)
 
       item_rep_repo = Nanoc::Int::ItemRepRepo.new
 
