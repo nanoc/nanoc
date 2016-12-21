@@ -23,18 +23,6 @@ describe Nanoc::Int::DependencyTracker do
     end
 
     example do
-      expect { subject }.not_to change { store.objects_outdated_due_to(item_a) }
-    end
-
-    example do
-      expect { subject }.not_to change { store.objects_outdated_due_to(item_b) }
-    end
-
-    example do
-      expect { subject }.not_to change { store.objects_outdated_due_to(item_c) }
-    end
-
-    example do
       expect { subject }.not_to change { store.dependencies_causing_outdatedness_of(item_a) }
     end
 
@@ -66,18 +54,6 @@ describe Nanoc::Int::DependencyTracker do
       example do
         expect { subject }.not_to change { store.objects_causing_outdatedness_of(item_c) }
       end
-
-      example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_a) }
-      end
-
-      example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_b) }
-      end
-
-      example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_c) }
-      end
     end
 
     context 'enter + enter' do
@@ -93,25 +69,12 @@ describe Nanoc::Int::DependencyTracker do
           .from([]).to([item_b])
       end
 
-      it 'changes successors of item B' do
-        expect { subject }.to change { store.objects_outdated_due_to(item_b) }
-          .from([]).to([item_a])
-      end
-
       example do
         expect { subject }.not_to change { store.objects_causing_outdatedness_of(item_b) }
       end
 
       example do
         expect { subject }.not_to change { store.objects_causing_outdatedness_of(item_c) }
-      end
-
-      example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_a) }
-      end
-
-      example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_c) }
       end
     end
 
@@ -126,11 +89,6 @@ describe Nanoc::Int::DependencyTracker do
       it 'changes predecessors of item A' do
         expect { subject }.to change { store.objects_causing_outdatedness_of(item_a) }
           .from([]).to([item_b])
-      end
-
-      it 'changes successors of item B' do
-        expect { subject }.to change { store.objects_outdated_due_to(item_b) }
-          .from([]).to([item_a])
       end
 
       it 'changes dependencies causing outdatedness of item A' do
@@ -166,14 +124,6 @@ describe Nanoc::Int::DependencyTracker do
       end
 
       example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_a) }
-      end
-
-      example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_c) }
-      end
-
-      example do
         expect { subject }.not_to change { store.dependencies_causing_outdatedness_of(item_b) }
       end
 
@@ -195,11 +145,6 @@ describe Nanoc::Int::DependencyTracker do
       it 'changes predecessors of item A' do
         expect { subject }.to change { store.objects_causing_outdatedness_of(item_a) }
           .from([]).to([item_b])
-      end
-
-      it 'changes successors of item B' do
-        expect { subject }.to change { store.objects_outdated_due_to(item_b) }
-          .from([]).to([item_a])
       end
 
       it 'changes dependencies causing outdatedness of item A' do
@@ -235,14 +180,6 @@ describe Nanoc::Int::DependencyTracker do
       end
 
       example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_a) }
-      end
-
-      example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_c) }
-      end
-
-      example do
         expect { subject }.not_to change { store.dependencies_causing_outdatedness_of(item_b) }
       end
 
@@ -266,26 +203,12 @@ describe Nanoc::Int::DependencyTracker do
           .from([]).to([item_b, item_c])
       end
 
-      it 'changes successors of item B' do
-        expect { subject }.to change { store.objects_outdated_due_to(item_b) }
-          .from([]).to([item_a])
-      end
-
-      it 'changes successors of item C' do
-        expect { subject }.to change { store.objects_outdated_due_to(item_c) }
-          .from([]).to([item_a])
-      end
-
       example do
         expect { subject }.not_to change { store.objects_causing_outdatedness_of(item_b) }
       end
 
       example do
         expect { subject }.not_to change { store.objects_causing_outdatedness_of(item_c) }
-      end
-
-      example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_a) }
       end
     end
 
@@ -303,26 +226,12 @@ describe Nanoc::Int::DependencyTracker do
           .from([]).to([item_b, item_c])
       end
 
-      it 'changes successors of item B' do
-        expect { subject }.to change { store.objects_outdated_due_to(item_b) }
-          .from([]).to([item_a])
-      end
-
-      it 'changes successors of item C' do
-        expect { subject }.to change { store.objects_outdated_due_to(item_c) }
-          .from([]).to([item_a])
-      end
-
       example do
         expect { subject }.not_to change { store.objects_causing_outdatedness_of(item_b) }
       end
 
       example do
         expect { subject }.not_to change { store.objects_causing_outdatedness_of(item_c) }
-      end
-
-      example do
-        expect { subject }.not_to change { store.objects_outdated_due_to(item_a) }
       end
     end
   end
