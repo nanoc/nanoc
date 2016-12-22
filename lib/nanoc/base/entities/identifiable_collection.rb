@@ -11,8 +11,7 @@ module Nanoc::Int
     def_delegator :@objects, :<<
     def_delegator :@objects, :concat
 
-    # FIXME: use Nanoc::Int::Configuration
-    contract C::Any => C::Any
+    contract C::Or[Hash, C::Named['Nanoc::Int::Configuration']] => C::Any
     def initialize(config)
       @config = config
 

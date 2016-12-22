@@ -49,7 +49,7 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true do
       end
     end
 
-    let(:config) { double(:config) }
+    let(:config) { Nanoc::Int::Configuration.new }
 
     let(:action_provider) { double(:action_provider, rules_collection: rules_collection) }
     let(:compiler) { double(:compiler, action_provider: action_provider, reps: reps) }

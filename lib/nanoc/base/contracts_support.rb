@@ -29,17 +29,40 @@ module Nanoc::Int
       Or          = Ignorer.instance
       Func        = Ignorer.instance
       RespondTo   = Ignorer.instance
+      Named       = Ignorer.instance
 
       def contract(*args); end
     end
 
     module EnabledContracts
+      class Named
+        def initialize(name)
+          @name = name
+        end
+
+        def self.[](*vals)
+          new(*vals)
+        end
+
+        def valid?(val)
+          val.is_a?(Kernel.const_get(@name))
+        end
+
+        def inspect
+          "Named(#{@name})"
+        end
+      end
+
       def contract(*args)
         Contract(*args)
       end
     end
 
-    def self.included(base)
+    def self.setup_once
+      @_contracts_support__setup ||= false
+      return @_contracts_support__should_enable if @_contracts_support__setup
+      @_contracts_support__setup = true
+
       contracts_loadable =
         begin
           require 'contracts'
@@ -48,7 +71,18 @@ module Nanoc::Int
           false
         end
 
-      should_enable = contracts_loadable && !ENV.key?('DISABLE_CONTRACTS')
+      @_contracts_support__should_enable = contracts_loadable && !ENV.key?('DISABLE_CONTRACTS')
+
+      if @_contracts_support__should_enable
+        # FIXME: ugly
+        ::Contracts.const_set('Named', EnabledContracts::Named)
+      end
+
+      @_contracts_support__should_enable
+    end
+
+    def self.included(base)
+      should_enable = setup_once
 
       if should_enable
         unless base.include?(::Contracts::Core)

@@ -29,6 +29,7 @@ module Nanoc::Int
       self
     end
 
+    contract C::None => C::Named['Nanoc::Int::Compiler']
     # Returns the compiler for this site. Will create a new compiler if none
     # exists yet.
     #
