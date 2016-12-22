@@ -8,28 +8,23 @@ module Nanoc::Int
 
     attr_accessor :objects
 
-    # @param [Nanoc::Int::Site] site
+    c_obj = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet]
+
+    contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], objects: C::IterOf[c_obj]] => C::Any
     def initialize(site: nil, objects:)
       super(Nanoc::Int::Store.tmp_path_for(env_name: (site.config.env_name if site), store_name: 'checksums'), 1)
 
-      @site = site # TODO: Remove
       @objects = objects
 
       @checksums = {}
     end
 
-    contract C::Any => C::Maybe[String]
-    # Returns the old checksum for the given object. This makes sense for
-    # items, layouts and code snippets.
-    #
-    # @param [#reference] obj The object for which to fetch the checksum
-    #
-    # @return [String] The checksum for the given object
+    contract c_obj => C::Maybe[String]
     def [](obj)
       @checksums[obj.reference]
     end
 
-    # Calculates and stores the checksum for the given object.
+    contract c_obj => self
     def add(obj)
       if obj.is_a?(Nanoc::Int::Document)
         @checksums[[obj.reference, :content]] = Nanoc::Int::Checksummer.calc_for_content_of(obj)
@@ -37,14 +32,16 @@ module Nanoc::Int
       end
 
       @checksums[obj.reference] = Nanoc::Int::Checksummer.calc(obj)
+
+      self
     end
 
-    contract C::Any => C::Maybe[String]
+    contract c_obj => C::Maybe[String]
     def content_checksum_for(obj)
       @checksums[[obj.reference, :content]]
     end
 
-    contract C::Any => C::Maybe[String]
+    contract c_obj => C::Maybe[String]
     def attributes_checksum_for(obj)
       @checksums[[obj.reference, :attributes]]
     end
