@@ -14,10 +14,10 @@ describe Nanoc::Int::CompiledContentCache do
   end
 
   context 'setting content on known item' do
-    before { cache[item_rep] = 'omg' }
+    before { cache[item_rep] = { last: 'omg' } }
 
     it 'has content' do
-      expect(cache[item_rep]).to eql('omg')
+      expect(cache[item_rep]).to eql({ last: 'omg' })
     end
 
     context 'after storing and loading' do
@@ -27,16 +27,16 @@ describe Nanoc::Int::CompiledContentCache do
       end
 
       it 'has content' do
-        expect(cache[item_rep]).to eql('omg')
+        expect(cache[item_rep]).to eql({ last: 'omg' })
       end
     end
   end
 
   context 'setting content on unknown item' do
-    before { cache[other_item_rep] = 'omg' }
+    before { cache[other_item_rep] = { last: 'omg' } }
 
     it 'has content' do
-      expect(cache[other_item_rep]).to eql('omg')
+      expect(cache[other_item_rep]).to eql({ last: 'omg' })
     end
 
     context 'after storing and loading' do

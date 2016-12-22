@@ -4,6 +4,11 @@ module Nanoc::Int
   #
   # @api private
   class CompiledContentCache < ::Nanoc::Int::Store
+    include Nanoc::Int::ContractsSupport
+
+    c_content = C::Or[String, Nanoc::Int::Content]
+
+    contract C::KeywordArgs[env_name: C::Maybe[String], items: C::IterOf[Nanoc::Int::Item]] => C::Any
     def initialize(env_name: nil, items:)
       super(Nanoc::Int::Store.tmp_path_for(env_name: env_name, store_name: 'compiled_content'), 2)
 
@@ -11,32 +16,25 @@ module Nanoc::Int
       @cache = {}
     end
 
-    # Returns the cached compiled content for the given item
-    # representation. This cached compiled content is a hash where the keys
-    # are the snapshot names and the values the compiled content at the
-    # given snapshot.
+    contract Nanoc::Int::ItemRep => C::Maybe[C::HashOf[Symbol => c_content]]
+    # Returns the cached compiled content for the given item representation.
     #
-    # @param [Nanoc::Int::ItemRep] rep The item rep to fetch the content for
-    #
-    # @return [Hash<Symbol,String>] A hash containing the cached compiled
-    #   content for the given item representation
+    # This cached compiled content is a hash where the keys are the snapshot
+    # names. and the values the compiled content at the given snapshot.
     def [](rep)
       item_cache = @cache[rep.item.identifier] || {}
       item_cache[rep.name]
     end
 
+    contract Nanoc::Int::ItemRep, C::HashOf[Symbol => c_content] => self
     # Sets the compiled content for the given representation.
     #
-    # @param [Nanoc::Int::ItemRep] rep The item representation for which to set
-    #   the compiled content
-    #
-    # @param [Hash<Symbol,String>] content A hash containing the compiled
-    #   content of the given representation
-    #
-    # @return [void]
+    # This cached compiled content is a hash where the keys are the snapshot
+    # names. and the values the compiled content at the given snapshot.
     def []=(rep, content)
       @cache[rep.item.identifier] ||= {}
       @cache[rep.item.identifier][rep.name] = content
+      self
     end
 
     protected

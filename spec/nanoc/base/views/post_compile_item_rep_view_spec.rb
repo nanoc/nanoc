@@ -13,7 +13,8 @@ describe Nanoc::PostCompileItemRepView do
   end
 
   let(:reps) { double(:reps) }
-  let(:items) { double(:items) }
+  let(:items) { Nanoc::Int::IdentifiableCollection.new(config) }
+  let(:config) { Nanoc::Int::Configuration.new }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
   let(:compiler) { double(:compiler, compiled_content_cache: compiled_content_cache) }
 
