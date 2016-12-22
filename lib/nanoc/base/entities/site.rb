@@ -5,11 +5,7 @@ module Nanoc::Int
 
     attr_accessor :compiler
 
-    contract C::KeywordArgs[config: Nanoc::Int::Configuration, code_snippets: C::RespondTo[:each], items: C::RespondTo[:each], layouts: C::RespondTo[:each]] => C::Any
-    # @param [Nanoc::Int::Configuration] config
-    # @param [Enumerable<Nanoc::Int::CodeSnippet>] code_snippets
-    # @param [Enumerable<Nanoc::Int::Item>] items
-    # @param [Enumerable<Nanoc::Int::Layout>] layouts
+    contract C::KeywordArgs[config: Nanoc::Int::Configuration, code_snippets: C::IterOf[Nanoc::Int::CodeSnippet], items: C::IterOf[Nanoc::Int::Item], layouts: C::IterOf[Nanoc::Int::Layout]] => C::Any
     def initialize(config:, code_snippets:, items:, layouts:)
       @config = config
       @code_snippets = code_snippets
@@ -21,19 +17,12 @@ module Nanoc::Int
     end
 
     contract C::None => self
-    # Compiles the site.
-    #
-    # @return [void]
     def compile
       compiler.run_all
       self
     end
 
     contract C::None => C::Named['Nanoc::Int::Compiler']
-    # Returns the compiler for this site. Will create a new compiler if none
-    # exists yet.
-    #
-    # @return [Nanoc::Int::Compiler] The compiler for this site
     def compiler
       @compiler ||= Nanoc::Int::CompilerLoader.new.load(self)
     end
@@ -44,9 +33,6 @@ module Nanoc::Int
     attr_reader :layouts
 
     contract C::None => self
-    # Prevents all further modifications to itself, its items, its layouts etc.
-    #
-    # @return [void]
     def freeze
       config.freeze
       items.freeze
@@ -55,7 +41,7 @@ module Nanoc::Int
       self
     end
 
-    contract C::RespondTo[:each], String => self
+    contract C::IterOf[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], String => self
     def ensure_identifier_uniqueness(objects, type)
       seen = Set.new
       objects.each do |obj|

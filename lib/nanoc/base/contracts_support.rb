@@ -30,18 +30,21 @@ module Nanoc::Int
       Func        = Ignorer.instance
       RespondTo   = Ignorer.instance
       Named       = Ignorer.instance
+      IterOf      = Ignorer.instance
 
       def contract(*args); end
     end
 
     module EnabledContracts
-      class Named
-        def initialize(name)
-          @name = name
-        end
-
+      class AbstractContract
         def self.[](*vals)
           new(*vals)
+        end
+      end
+
+      class Named < AbstractContract
+        def initialize(name)
+          @name = name
         end
 
         def valid?(val)
@@ -49,7 +52,21 @@ module Nanoc::Int
         end
 
         def inspect
-          "Named(#{@name})"
+          "#{self.class}(#{@name})"
+        end
+      end
+
+      class IterOf < AbstractContract
+        def initialize(contract)
+          @contract = contract
+        end
+
+        def valid?(val)
+          val.respond_to?(:each) && val.all? { |v| Contract.valid?(v, @contract) }
+        end
+
+        def inspect
+          "#{self.class}(#{@contract})"
         end
       end
 
@@ -76,6 +93,7 @@ module Nanoc::Int
       if @_contracts_support__should_enable
         # FIXME: ugly
         ::Contracts.const_set('Named', EnabledContracts::Named)
+        ::Contracts.const_set('IterOf', EnabledContracts::IterOf)
       end
 
       @_contracts_support__should_enable
