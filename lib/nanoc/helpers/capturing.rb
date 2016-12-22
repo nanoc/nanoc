@@ -96,7 +96,7 @@ module Nanoc::Helpers
 
       # Depending on how the filter outputs, the result might be a
       # single string or an array of strings (slim outputs the latter).
-      erbout_addition = erbout_addition.join if erbout_addition.is_a? Array
+      erbout_addition = erbout_addition.join('') if erbout_addition.is_a? Array
 
       # Done.
       erbout_addition

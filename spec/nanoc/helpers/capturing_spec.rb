@@ -122,17 +122,60 @@ describe Nanoc::Helpers::Capturing, helper: true do
   end
 
   describe '#capture' do
-    let(:_erbout) { 'existing content' }
+    context 'with string' do
+      let(:_erbout) { 'existing content' }
 
-    subject { helper.capture { _erbout << 'new content' } }
+      subject { helper.capture { _erbout << 'new content' } }
 
-    it 'returns the appended content' do
-      expect(subject).to eql('new content')
+      it 'returns the appended content' do
+        expect(subject).to eql('new content')
+      end
+
+      it 'does not modify _erbout' do
+        expect { subject }.not_to change { _erbout }
+      end
     end
 
-    it 'does not modify _erbout' do
-      subject
-      expect(_erbout).to eql('existing content')
+    context 'with array' do
+      let(:_erbout) { ['existing content'] }
+
+      shared_examples 'returns properly joined output' do
+        subject { helper.capture { _erbout << %w( new _ content ) } }
+
+        it 'returns the appended content, joined' do
+          expect(subject).to eql('new_content')
+        end
+
+        it 'does not modify _erbout' do
+          expect { subject }.not_to change { _erbout.join('') }
+        end
+      end
+
+      context 'default output field separator' do
+        include_examples 'returns properly joined output'
+      end
+
+      context 'output field separator set to ,' do
+        around do |ex|
+          orig_output_field_separator = $OUTPUT_FIELD_SEPARATOR
+          $OUTPUT_FIELD_SEPARATOR = ','
+          ex.run
+          $OUTPUT_FIELD_SEPARATOR = orig_output_field_separator
+        end
+
+        include_examples 'returns properly joined output'
+      end
+
+      context 'output field separator set to nothing' do
+        around do |ex|
+          orig_output_field_separator = $OUTPUT_FIELD_SEPARATOR
+          $OUTPUT_FIELD_SEPARATOR = ''
+          ex.run
+          $OUTPUT_FIELD_SEPARATOR = orig_output_field_separator
+        end
+
+        include_examples 'returns properly joined output'
+      end
     end
   end
 end
