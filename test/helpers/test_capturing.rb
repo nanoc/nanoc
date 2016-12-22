@@ -16,6 +16,11 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     )
   end
 
+  def before
+    super
+    Nanoc::CLI::ErrorHandler.enable
+  end
+
   def test_dependencies
     with_site do |_site|
       # Prepare

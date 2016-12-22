@@ -9,15 +9,17 @@ describe Nanoc::Int::CompiledContentCache do
   let(:other_item) { Nanoc::Int::Item.new('asdf', {}, '/sneaky.md') }
   let(:other_item_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
 
+  let(:content) { Nanoc::Int::Content.create('omg') }
+
   it 'has no content by default' do
     expect(cache[item_rep]).to be_nil
   end
 
   context 'setting content on known item' do
-    before { cache[item_rep] = { last: 'omg' } }
+    before { cache[item_rep] = { last: content } }
 
     it 'has content' do
-      expect(cache[item_rep]).to eql({ last: 'omg' })
+      expect(cache[item_rep][:last].string).to eql('omg')
     end
 
     context 'after storing and loading' do
@@ -27,16 +29,16 @@ describe Nanoc::Int::CompiledContentCache do
       end
 
       it 'has content' do
-        expect(cache[item_rep]).to eql({ last: 'omg' })
+        expect(cache[item_rep][:last].string).to eql('omg')
       end
     end
   end
 
   context 'setting content on unknown item' do
-    before { cache[other_item_rep] = { last: 'omg' } }
+    before { cache[other_item_rep] = { last: content } }
 
     it 'has content' do
-      expect(cache[other_item_rep]).to eql({ last: 'omg' })
+      expect(cache[other_item_rep][:last].string).to eql('omg')
     end
 
     context 'after storing and loading' do

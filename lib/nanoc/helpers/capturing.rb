@@ -27,30 +27,32 @@ module Nanoc::Helpers
         existing_behavior = params.fetch(:existing, :error)
 
         # Capture
-        content = capture(&block)
+        content_string = capture(&block)
 
-        # Prepare for store
+        # Get existing contents and prep for store
         snapshot_contents = @item.reps[:default].unwrap.snapshot_contents
         capture_name = "__capture_#{name}".to_sym
-        case existing_behavior
-        when :overwrite
-          snapshot_contents[capture_name] = ''
-        when :append
-          snapshot_contents[capture_name] ||= ''
-        when :error
-          if snapshot_contents[capture_name] && snapshot_contents[capture_name] != content
-            # FIXME: get proper exception
-            raise "a capture named #{name.inspect} for #{@item.identifier} already exists"
+        old_content_string =
+          case existing_behavior
+          when :overwrite
+            ''
+          when :append
+            c = snapshot_contents[capture_name]
+            c ? c.string : ''
+          when :error
+            if snapshot_contents[capture_name] && snapshot_contents[capture_name].string != content_string
+              # FIXME: get proper exception
+              raise "a capture named #{name.inspect} for #{@item.identifier} already exists"
+            else
+              ''
+            end
           else
-            snapshot_contents[capture_name] = ''
+            raise ArgumentError, 'expected :existing_behavior param to #content_for to be one of ' \
+              ":overwrite, :append, or :error, but #{existing_behavior.inspect} was given"
           end
-        else
-          raise ArgumentError, 'expected :existing_behavior param to #content_for to be one of ' \
-            ":overwrite, :append, or :error, but #{existing_behavior.inspect} was given"
-        end
 
         # Store
-        snapshot_contents[capture_name] << content
+        snapshot_contents[capture_name] = Nanoc::Int::TextualContent.new(old_content_string + content_string)
       else # Get content
         if args.size != 2
           raise ArgumentError, 'expected 2 arguments (the item ' \
@@ -72,7 +74,8 @@ module Nanoc::Helpers
           end
         end
 
-        rep.snapshot_contents["__capture_#{name}".to_sym]
+        content = rep.snapshot_contents["__capture_#{name}".to_sym]
+        content ? content.string : nil
       end
     end
 

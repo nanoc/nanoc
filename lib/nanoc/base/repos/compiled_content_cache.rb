@@ -6,8 +6,6 @@ module Nanoc::Int
   class CompiledContentCache < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
-    c_content = C::Or[String, Nanoc::Int::Content]
-
     contract C::KeywordArgs[env_name: C::Maybe[String], items: C::IterOf[Nanoc::Int::Item]] => C::Any
     def initialize(env_name: nil, items:)
       super(Nanoc::Int::Store.tmp_path_for(env_name: env_name, store_name: 'compiled_content'), 2)
@@ -16,7 +14,7 @@ module Nanoc::Int
       @cache = {}
     end
 
-    contract Nanoc::Int::ItemRep => C::Maybe[C::HashOf[Symbol => c_content]]
+    contract Nanoc::Int::ItemRep => C::Maybe[C::HashOf[Symbol => Nanoc::Int::Content]]
     # Returns the cached compiled content for the given item representation.
     #
     # This cached compiled content is a hash where the keys are the snapshot
@@ -26,7 +24,7 @@ module Nanoc::Int
       item_cache[rep.name]
     end
 
-    contract Nanoc::Int::ItemRep, C::HashOf[Symbol => c_content] => self
+    contract Nanoc::Int::ItemRep, C::HashOf[Symbol => Nanoc::Int::Content] => self
     # Sets the compiled content for the given representation.
     #
     # This cached compiled content is a hash where the keys are the snapshot
