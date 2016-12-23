@@ -3,7 +3,10 @@ module Nanoc::Int
   class ItemRepWriter
     TMP_TEXT_ITEMS_DIR = 'text_items'.freeze
 
-    def write(item_rep, raw_path)
+    def write(item_rep, snapshot_name)
+      raw_path = item_rep.raw_path(snapshot: snapshot_name)
+      return unless raw_path
+
       # Create parent directory
       FileUtils.mkdir_p(File.dirname(raw_path))
 

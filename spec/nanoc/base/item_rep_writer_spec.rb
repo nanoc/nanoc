@@ -7,6 +7,7 @@ describe Nanoc::Int::ItemRepWriter do
     let(:item_rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
         ir.snapshot_contents = snapshot_contents
+        ir.raw_paths = raw_paths
       end
     end
 
@@ -16,7 +17,13 @@ describe Nanoc::Int::ItemRepWriter do
       }
     end
 
-    subject { described_class.new.write(item_rep, raw_path) }
+    let(:snapshot_name) { :donkey }
+
+    let(:raw_paths) do
+      { snapshot_name => raw_path }
+    end
+
+    subject { described_class.new.write(item_rep, snapshot_name) }
 
     before do
       expect(File.directory?('output')).to be_falsy

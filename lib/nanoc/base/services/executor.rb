@@ -91,10 +91,7 @@ module Nanoc
         rep.snapshot_contents[snapshot_name] = rep.snapshot_contents[:last]
 
         if final
-          raw_path = rep.raw_path(snapshot: snapshot_name)
-          if raw_path
-            ItemRepWriter.new.write(rep, raw_path)
-          end
+          ItemRepWriter.new.write(rep, snapshot_name)
         end
       end
 
