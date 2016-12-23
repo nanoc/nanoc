@@ -365,7 +365,7 @@ describe Nanoc::Int::Executor do
       end
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Error)
+        expect { subject }.to raise_error(Nanoc::Int::Errors::UndefinedFilterForLayout)
       end
     end
 

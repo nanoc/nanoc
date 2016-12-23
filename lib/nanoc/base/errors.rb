@@ -207,5 +207,11 @@ module Nanoc::Int
         super("You cannot get the parent or children of an item that has a “full” identifier (#{identifier}). Getting the parent or children of an item is only possible for items that have a legacy identifier.")
       end
     end
+
+    class UndefinedFilterForLayout < Generic
+      def initialize(layout)
+        super("There is no filter defined for the layout #{layout.identifier}")
+      end
+    end
   end
 end

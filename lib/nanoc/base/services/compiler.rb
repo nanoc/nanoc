@@ -153,8 +153,7 @@ module Nanoc::Int
     def filter_name_and_args_for_layout(layout)
       mem = action_provider.memory_for(layout)
       if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::ProcessingActions::Filter)
-        # FIXME: Provide a nicer error message
-        raise Nanoc::Int::Errors::Generic, "No rule memory found for #{layout.identifier}"
+        raise Nanoc::Int::Errors::UndefinedFilterForLayout.new(layout)
       end
       [mem[0].filter_name, mem[0].params]
     end
