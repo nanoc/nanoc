@@ -18,6 +18,68 @@ module Nanoc::Int
   #
   # @api private
   class Compiler
+    # Coordinates the compilation of a single item rep.
+    class Single
+      include Nanoc::Int::ContractsSupport
+
+      def initialize(dependency_store, compiler)
+        @dependency_store = dependency_store
+        @compiler = compiler # TODO: remove me
+      end
+
+      contract Nanoc::Int::ItemRep => C::Any
+      def compile(rep)
+        fiber = fiber_for(rep)
+        while fiber.alive?
+          Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+          res = fiber.resume
+
+          case res
+          when Nanoc::Int::Errors::UnmetDependency
+            Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res)
+            raise(res)
+          when Proc
+            fiber.resume(res.call)
+          else
+            # TODO: raise
+          end
+        end
+
+        Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)
+      end
+
+      private
+
+      contract Nanoc::Int::ItemRep => Fiber
+      def fiber_for(rep)
+        @fibers ||= {}
+
+        @fibers[rep] ||=
+          Fiber.new do
+            begin
+              dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
+              dependency_tracker.enter(rep.item)
+
+              if @compiler.send(:can_reuse_content_for_rep?, rep)
+                Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
+                rep.snapshot_contents = @compiler.compiled_content_cache[rep]
+              else
+                @compiler.send(:recalculate_content_for_rep, rep, dependency_tracker)
+              end
+
+              rep.compiled = true
+              @compiler.compiled_content_cache[rep] = rep.snapshot_contents
+
+              @fibers.delete(rep)
+            ensure
+              dependency_tracker.exit
+            end
+          end
+
+        @fibers[rep]
+      end
+    end
+
     include Nanoc::Int::ContractsSupport
 
     # @api private
@@ -210,52 +272,11 @@ module Nanoc::Int
     #
     # @return [void]
     def compile_rep(rep)
-      fiber = fiber_for(rep)
-      while fiber.alive?
-        Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
-        res = fiber.resume
-
-        case res
-        when Nanoc::Int::Errors::UnmetDependency
-          Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res)
-          raise(res)
-        when Proc
-          fiber.resume(res.call)
-        else
-          # TODO: raise
-        end
-      end
-
-      Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)
+      single.compile(rep)
     end
 
-    contract Nanoc::Int::ItemRep => Fiber
-    def fiber_for(rep)
-      @fibers ||= {}
-
-      @fibers[rep] ||=
-        Fiber.new do
-          begin
-            dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
-            dependency_tracker.enter(rep.item)
-
-            if can_reuse_content_for_rep?(rep)
-              Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
-              rep.snapshot_contents = compiled_content_cache[rep]
-            else
-              recalculate_content_for_rep(rep, dependency_tracker)
-            end
-
-            rep.compiled = true
-            compiled_content_cache[rep] = rep.snapshot_contents
-
-            @fibers.delete(rep)
-          ensure
-            dependency_tracker.exit
-          end
-        end
-
-      @fibers[rep]
+    def single
+      @_single ||= Single.new(@dependency_store, self)
     end
 
     # @return [Boolean]
