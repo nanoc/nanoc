@@ -141,11 +141,8 @@ module Nanoc::Int
     class ItemRepCompiler
       include Nanoc::Int::ContractsSupport
 
-      def initialize(compiled_content_cache:, recalculating_item_rep_compiler:)
-        @caching_item_rep_compiler = CachingItemRepCompiler.new(
-          compiled_content_cache: compiled_content_cache,
-          wrapped: recalculating_item_rep_compiler,
-        )
+      def initialize(wrapped:)
+        @wrapped = wrapped
       end
 
       contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
@@ -177,7 +174,7 @@ module Nanoc::Int
 
         @fibers[rep] ||=
           Fiber.new do
-            @caching_item_rep_compiler.run(rep, is_outdated: is_outdated)
+            @wrapped.run(rep, is_outdated: is_outdated)
             @fibers.delete(rep)
           end
 
@@ -337,8 +334,14 @@ module Nanoc::Int
 
     def item_rep_compiler
       @_item_rep_compiler ||= ItemRepCompiler.new(
+        wrapped: caching_item_rep_compiler,
+      )
+    end
+
+    def caching_item_rep_compiler
+      @_caching_item_rep_compiler ||= CachingItemRepCompiler.new(
         compiled_content_cache: compiled_content_cache,
-        recalculating_item_rep_compiler: recalculating_item_rep_compiler,
+        wrapped: recalculating_item_rep_compiler,
       )
     end
 
