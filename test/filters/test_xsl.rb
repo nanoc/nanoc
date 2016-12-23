@@ -97,7 +97,7 @@ EOS
       reps: :__irrelevat_reps,
       items: :__irrelevat_items,
       dependency_tracker: @dependency_tracker,
-      compiler: :__irrelevat_compiler,
+      compilation_context: :__irrelevat_compiler,
     )
   end
 

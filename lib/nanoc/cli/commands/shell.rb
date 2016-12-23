@@ -34,7 +34,7 @@ module Nanoc::CLI::Commands
         reps: reps_for(site),
         items: site.items,
         dependency_tracker: Nanoc::Int::DependencyTracker::Null.new,
-        compiler: nil,
+        compilation_context: nil,
       )
     end
 

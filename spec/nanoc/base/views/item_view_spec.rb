@@ -3,12 +3,12 @@ describe Nanoc::ItemWithRepsView do
   let(:other_view_class) { Nanoc::LayoutView }
   it_behaves_like 'a document view'
 
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compiler: compiler) }
+  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compilation_context: compilation_context) }
   let(:reps) { [] }
   let(:items) { [] }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new([]) }
-  let(:compiler) { double(:compiler) }
+  let(:compilation_context) { double(:compilation_context) }
 
   let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md') }
 

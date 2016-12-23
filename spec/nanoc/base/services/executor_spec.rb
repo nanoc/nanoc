@@ -1,7 +1,7 @@
 describe Nanoc::Int::Executor do
-  let(:executor) { described_class.new(compiler, dependency_tracker) }
+  let(:executor) { described_class.new(compilation_context, dependency_tracker) }
 
-  let(:compiler) { Nanoc::Int::Compiler.allocate }
+  let(:compilation_context) { Nanoc::Int::Compiler.allocate }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
 
   describe '#filter' do
@@ -14,7 +14,7 @@ describe Nanoc::Int::Executor do
     let(:rep) { Nanoc::Int::ItemRep.new(item, :donkey) }
 
     before do
-      allow(compiler).to receive(:assigns_for) { assigns }
+      allow(compilation_context).to receive(:assigns_for) { assigns }
     end
 
     context 'normal flow with textual rep' do
@@ -265,7 +265,7 @@ describe Nanoc::Int::Executor do
         reps: double(:reps),
         items: double(:items),
         dependency_tracker: dependency_tracker,
-        compiler: double(:compiler),
+        compilation_context: double(:compilation_context),
       )
     end
 
@@ -278,10 +278,10 @@ describe Nanoc::Int::Executor do
     let(:action_provider) { double(:action_provider) }
 
     before do
-      allow(compiler).to receive(:site) { site }
-      allow(compiler).to receive(:action_provider) { action_provider }
-      allow(compiler).to receive(:assigns_for).with(rep, dependency_tracker) { assigns }
-      allow(compiler).to receive(:create_view_context).with(dependency_tracker).and_return(view_context)
+      allow(compilation_context).to receive(:site) { site }
+      allow(compilation_context).to receive(:action_provider) { action_provider }
+      allow(compilation_context).to receive(:assigns_for).with(rep, dependency_tracker) { assigns }
+      allow(compilation_context).to receive(:create_view_context).with(dependency_tracker).and_return(view_context)
       allow(action_provider).to receive(:memory_for).with(layout).and_return(rule_memory)
     end
 
@@ -457,7 +457,7 @@ describe Nanoc::Int::Executor do
     let(:config) { {} }
 
     before do
-      allow(compiler).to receive(:site) { site }
+      allow(compilation_context).to receive(:site) { site }
     end
 
     subject { executor.find_layout(arg) }

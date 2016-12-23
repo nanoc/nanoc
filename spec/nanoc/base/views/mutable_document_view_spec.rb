@@ -6,7 +6,7 @@ shared_examples 'a mutable document view' do
       reps: double(:reps),
       items: double(:items),
       dependency_tracker: dependency_tracker,
-      compiler: double(:compiler),
+      compilation_context: double(:compilation_context),
     )
   end
 

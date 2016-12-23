@@ -40,7 +40,7 @@ module Nanoc::Int
           reps: @reps,
           items: @site.items,
           dependency_tracker: dependency_tracker,
-          compiler: self,
+          compilation_context: self,
         )
       end
 

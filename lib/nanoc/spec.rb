@@ -118,7 +118,7 @@ module Nanoc
           reps: @reps,
           items: @items,
           dependency_tracker: @dependency_tracker,
-          compiler: new_site.compiler,
+          compilation_context: new_site.compiler.compilation_context,
         )
       end
 

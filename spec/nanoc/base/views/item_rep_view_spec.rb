@@ -1,9 +1,9 @@
 describe Nanoc::ItemRepView do
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compiler: compiler) }
+  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compilation_context: compilation_context) }
 
   let(:reps) { double(:reps) }
   let(:items) { double(:items) }
-  let(:compiler) { double(:compiler) }
+  let(:compilation_context) { double(:compilation_context) }
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new([]) }
