@@ -288,17 +288,7 @@ module Nanoc::Int
       raise Nanoc::Int::Errors::CompilationError.new(e, item_rep)
     end
 
-    # Compiles the given item representation.
-    #
-    # This method should not be called directly; please use
-    # {Nanoc::Int::Compiler#run} instead, and pass this item representation's item
-    # as its first argument.
-    #
-    # @param [Nanoc::Int::ItemRep] rep The rep that is to be compiled
-    #
-    # @return [void]
-    def compile_rep(rep, is_outdated: true)
-      # TODO: remove is_outdated arg fallback
+    def compile_rep(rep, is_outdated:)
       single.compile(rep, is_outdated: is_outdated)
     end
 
