@@ -75,7 +75,7 @@ module Nanoc::Int
 
     # Provides functionality for (re)calculating the content of an item rep, without caching or
     # outdatedness checking.
-    class ItemRepRecalculator
+    class RecalculatingItemRepCompiler
       include Nanoc::Int::ContractsSupport
 
       def initialize(action_provider:, dependency_store:, compilation_context:)
@@ -84,8 +84,8 @@ module Nanoc::Int
         @compilation_context = compilation_context
       end
 
-      contract Nanoc::Int::ItemRep => C::Any
-      def run(rep)
+      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+      def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
         dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
         dependency_tracker.enter(rep.item)
 
@@ -109,8 +109,8 @@ module Nanoc::Int
     end
 
     # Provides functionality for (re)calculating the content of an item rep, with caching or
-    # outdatedness checking. Delegates to ItemRepRecalculator if outdated or no cache available.
-    class CachingItemRepRecalculator
+    # outdatedness checking. Delegates to RecalculatingItemRepCompiler if outdated or no cache available.
+    class CachingItemRepCompiler
       include Nanoc::Int::ContractsSupport
 
       def initialize(compiled_content_cache:, wrapped:)
@@ -124,7 +124,7 @@ module Nanoc::Int
           Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
           rep.snapshot_contents = @compiled_content_cache[rep]
         else
-          @wrapped.run(rep)
+          @wrapped.run(rep, is_outdated: is_outdated)
         end
 
         rep.compiled = true
@@ -141,15 +141,15 @@ module Nanoc::Int
     class ItemRepCompiler
       include Nanoc::Int::ContractsSupport
 
-      def initialize(compiled_content_cache:, recalculator:)
-        @caching_recalculator = CachingItemRepRecalculator.new(
+      def initialize(compiled_content_cache:, recalculating_item_rep_compiler:)
+        @caching_item_rep_compiler = CachingItemRepCompiler.new(
           compiled_content_cache: compiled_content_cache,
-          wrapped: recalculator,
+          wrapped: recalculating_item_rep_compiler,
         )
       end
 
       contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
-      def compile(rep, is_outdated:)
+      def run(rep, is_outdated:)
         fiber = fiber_for(rep, is_outdated: is_outdated)
         while fiber.alive?
           Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
@@ -177,7 +177,7 @@ module Nanoc::Int
 
         @fibers[rep] ||=
           Fiber.new do
-            @caching_recalculator.run(rep, is_outdated: is_outdated)
+            @caching_item_rep_compiler.run(rep, is_outdated: is_outdated)
             @fibers.delete(rep)
           end
 
@@ -332,18 +332,18 @@ module Nanoc::Int
     end
 
     def compile_rep(rep, is_outdated:)
-      item_rep_compiler.compile(rep, is_outdated: is_outdated)
+      item_rep_compiler.run(rep, is_outdated: is_outdated)
     end
 
     def item_rep_compiler
       @_item_rep_compiler ||= ItemRepCompiler.new(
         compiled_content_cache: compiled_content_cache,
-        recalculator: item_rep_recalculator,
+        recalculating_item_rep_compiler: recalculating_item_rep_compiler,
       )
     end
 
-    def item_rep_recalculator
-      @_item_rep_recalculator ||= ItemRepRecalculator.new(
+    def recalculating_item_rep_compiler
+      @_recalculating_item_rep_compiler ||= RecalculatingItemRepCompiler.new(
         action_provider: action_provider,
         dependency_store: @dependency_store,
         compilation_context: compilation_context,
