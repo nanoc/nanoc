@@ -85,7 +85,7 @@ module Nanoc::Int
       end
 
       contract Nanoc::Int::ItemRep => C::Any
-      def recalculate_content_for_rep(rep)
+      def run(rep)
         dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
         dependency_tracker.enter(rep.item)
 
@@ -150,7 +150,7 @@ module Nanoc::Int
               Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
               rep.snapshot_contents = @compiled_content_cache[rep]
             else
-              @recalculator.recalculate_content_for_rep(rep)
+              @recalculator.run(rep)
             end
 
             rep.compiled = true
