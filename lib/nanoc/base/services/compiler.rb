@@ -19,9 +19,10 @@ module Nanoc::Int
   # @api private
   class Compiler
     # Provides common functionality for accesing “context” of an item that is being compiled.
+    #
+    # TODO: Rename to CompilationContext
     class ExecutorDelegate
-      def initialize(compiler:, action_provider:, reps:, site:, compiled_content_cache:)
-        @compiler = compiler # TODO: remove
+      def initialize(action_provider:, reps:, site:, compiled_content_cache:)
         @action_provider = action_provider
         @reps = reps
         @site = site
@@ -41,7 +42,7 @@ module Nanoc::Int
           reps: @reps,
           items: @site.items,
           dependency_tracker: dependency_tracker,
-          compiler: @compiler,
+          compiler: self,
         )
       end
 
@@ -326,7 +327,6 @@ module Nanoc::Int
 
     def executor_delegate
       @_executor_delegate ||= ExecutorDelegate.new(
-        compiler: self,
         action_provider: action_provider,
         reps: @reps,
         site: @site,
