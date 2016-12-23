@@ -63,7 +63,7 @@ module Nanoc::Int
               dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
               dependency_tracker.enter(rep.item)
 
-              if can_reuse_content_for_rep?(rep)
+              if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
                 Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
                 rep.snapshot_contents = @compiled_content_cache[rep]
               else
@@ -100,9 +100,9 @@ module Nanoc::Int
         end
       end
 
-      contract Nanoc::Int::ItemRep => C::Bool
-      def can_reuse_content_for_rep?(rep)
-        !@compiler.outdatedness_checker.outdated?(rep) && !@compiled_content_cache[rep].nil?
+      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Bool
+      def can_reuse_content_for_rep?(rep, is_outdated:)
+        !is_outdated && !@compiled_content_cache[rep].nil?
       end
     end
 

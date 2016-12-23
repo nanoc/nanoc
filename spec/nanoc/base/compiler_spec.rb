@@ -111,7 +111,9 @@ describe Nanoc::Int::Compiler do
   end
 
   describe '#compile_rep' do
-    subject { compiler.send(:compile_rep, rep) }
+    subject { compiler.send(:compile_rep, rep, is_outdated: is_outdated) }
+
+    let(:is_outdated) { true }
 
     it 'generates expected output' do
       expect(rep.snapshot_contents[:last].string).to eql(item.content.string)
@@ -132,7 +134,6 @@ describe Nanoc::Int::Compiler do
       let(:item) { Nanoc::Int::Item.new('other=<%= @items["/other.*"].compiled_content %>', {}, '/hi.md') }
 
       before do
-        expect(outdatedness_checker).to receive(:outdated?).with(other_rep).and_return(true)
         expect(action_provider).to receive(:memory_for).with(other_rep).and_return(memory)
       end
 
