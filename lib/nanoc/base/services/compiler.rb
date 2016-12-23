@@ -18,6 +18,29 @@ module Nanoc::Int
   #
   # @api private
   class Compiler
+    class ExecutorDelegate
+      def initialize(compiler:, site:)
+        @compiler = compiler # TODO: remove
+        @site = site
+      end
+
+      def filter_name_and_args_for_layout(layout)
+        @compiler.filter_name_and_args_for_layout(layout)
+      end
+
+      def create_view_context(dependency_tracker)
+        @compiler.create_view_context(dependency_tracker)
+      end
+
+      def assigns_for(rep, dependency_tracker)
+        @compiler.assigns_for(rep, dependency_tracker)
+      end
+
+      def site
+        @site
+      end
+    end
+
     # Coordinates the compilation of a single item rep.
     class Single
       include Nanoc::Int::ContractsSupport
@@ -28,7 +51,7 @@ module Nanoc::Int
         @action_provider = action_provider
         @site = site
         @reps = reps
-        @compiler = compiler # TODO: remove me
+        @executor_delegate = ExecutorDelegate.new(compiler: compiler, site: @site)
       end
 
       contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
@@ -85,12 +108,7 @@ module Nanoc::Int
 
       contract Nanoc::Int::ItemRep, C::Named['Nanoc::Int::DependencyTracker'] => C::Any
       def recalculate_content_for_rep(rep, dependency_tracker)
-        executor = Nanoc::Int::Executor.new(@compiler, dependency_tracker)
-
-        # @compiler.filter_name_and_args_for_layout(layout)
-        # @compiler.create_view_context(@dependency_tracker)
-        # @compiler.assigns_for(rep, @dependency_tracker)
-        # @compiler.site.layouts
+        executor = Nanoc::Int::Executor.new(@executor_delegate, dependency_tracker)
 
         @action_provider.memory_for(rep).each do |action|
           case action
