@@ -108,13 +108,44 @@ module Nanoc::Int
       end
     end
 
+    # Provides functionality for (re)calculating the content of an item rep, with caching or
+    # outdatedness checking. Delegates to ItemRepRecalculator if outdated or no cache available.
+    class CachingItemRepRecalculator
+      include Nanoc::Int::ContractsSupport
+
+      def initialize(compiled_content_cache:, wrapped:)
+        @compiled_content_cache = compiled_content_cache
+        @wrapped = wrapped
+      end
+
+      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+      def run(rep, is_outdated:)
+        if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
+          Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
+          rep.snapshot_contents = @compiled_content_cache[rep]
+        else
+          @wrapped.run(rep)
+        end
+
+        rep.compiled = true
+        @compiled_content_cache[rep] = rep.snapshot_contents
+      end
+
+      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Bool
+      def can_reuse_content_for_rep?(rep, is_outdated:)
+        !is_outdated && !@compiled_content_cache[rep].nil?
+      end
+    end
+
     # Coordinates the compilation of a single item rep.
     class ItemRepCompiler
       include Nanoc::Int::ContractsSupport
 
       def initialize(compiled_content_cache:, recalculator:)
-        @compiled_content_cache = compiled_content_cache
-        @recalculator = recalculator
+        @caching_recalculator = CachingItemRepRecalculator.new(
+          compiled_content_cache: compiled_content_cache,
+          wrapped: recalculator,
+        )
       end
 
       contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
@@ -146,25 +177,11 @@ module Nanoc::Int
 
         @fibers[rep] ||=
           Fiber.new do
-            if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
-              Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
-              rep.snapshot_contents = @compiled_content_cache[rep]
-            else
-              @recalculator.run(rep)
-            end
-
-            rep.compiled = true
-            @compiled_content_cache[rep] = rep.snapshot_contents
-
+            @caching_recalculator.run(rep, is_outdated: is_outdated)
             @fibers.delete(rep)
           end
 
         @fibers[rep]
-      end
-
-      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Bool
-      def can_reuse_content_for_rep?(rep, is_outdated:)
-        !is_outdated && !@compiled_content_cache[rep].nil?
       end
     end
 
