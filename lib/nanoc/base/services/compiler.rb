@@ -25,15 +25,40 @@ module Nanoc::Int
       end
 
       def filter_name_and_args_for_layout(layout)
-        @compiler.filter_name_and_args_for_layout(layout)
+        mem = @compiler.action_provider.memory_for(layout)
+        if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::ProcessingActions::Filter)
+          raise Nanoc::Int::Errors::UndefinedFilterForLayout.new(layout)
+        end
+        [mem[0].filter_name, mem[0].params]
       end
 
       def create_view_context(dependency_tracker)
-        @compiler.create_view_context(dependency_tracker)
+        Nanoc::ViewContext.new(
+          reps: @compiler.reps,
+          items: @site.items,
+          dependency_tracker: dependency_tracker,
+          compiler: @compiler,
+        )
       end
 
       def assigns_for(rep, dependency_tracker)
-        @compiler.assigns_for(rep, dependency_tracker)
+        content_or_filename_assigns =
+          if rep.binary?
+            { filename: rep.snapshot_contents[:last].filename }
+          else
+            { content: rep.snapshot_contents[:last].string }
+          end
+
+        view_context = create_view_context(dependency_tracker)
+
+        content_or_filename_assigns.merge(
+          item: Nanoc::ItemWithRepsView.new(rep.item, view_context),
+          rep: Nanoc::ItemRepView.new(rep, view_context),
+          item_rep: Nanoc::ItemRepView.new(rep, view_context),
+          items: Nanoc::ItemCollectionWithRepsView.new(@site.items, view_context),
+          layouts: Nanoc::LayoutCollectionView.new(@site.layouts, view_context),
+          config: Nanoc::ConfigView.new(@site.config, view_context),
+        )
       end
 
       def site
@@ -223,49 +248,17 @@ module Nanoc::Int
       builder.run
     end
 
-    # @param [Nanoc::Int::ItemRep] rep The item representation for which the
-    #   assigns should be fetched
-    #
-    # @return [Hash] The assigns that should be used in the next filter/layout
-    #   operation
-    #
-    # @api private
     def assigns_for(rep, dependency_tracker)
-      content_or_filename_assigns =
-        if rep.binary?
-          { filename: rep.snapshot_contents[:last].filename }
-        else
-          { content: rep.snapshot_contents[:last].string }
-        end
-
-      view_context = create_view_context(dependency_tracker)
-
-      content_or_filename_assigns.merge(
-        item: Nanoc::ItemWithRepsView.new(rep.item, view_context),
-        rep: Nanoc::ItemRepView.new(rep, view_context),
-        item_rep: Nanoc::ItemRepView.new(rep, view_context),
-        items: Nanoc::ItemCollectionWithRepsView.new(site.items, view_context),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
-        config: Nanoc::ConfigView.new(site.config, view_context),
-      )
+      executor_delegate.assigns_for(rep, dependency_tracker)
     end
 
     def create_view_context(dependency_tracker)
-      Nanoc::ViewContext.new(
-        reps: @reps,
-        items: @site.items,
-        dependency_tracker: dependency_tracker,
-        compiler: self,
-      )
+      executor_delegate.create_view_context(dependency_tracker)
     end
 
     # @api private
     def filter_name_and_args_for_layout(layout)
-      mem = action_provider.memory_for(layout)
-      if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::ProcessingActions::Filter)
-        raise Nanoc::Int::Errors::UndefinedFilterForLayout.new(layout)
-      end
-      [mem[0].filter_name, mem[0].params]
+      executor_delegate.filter_name_and_args_for_layout(layout)
     end
 
     private
@@ -319,8 +312,12 @@ module Nanoc::Int
         dependency_store: @dependency_store,
         compiled_content_cache: compiled_content_cache,
         action_provider: action_provider,
-        executor_delegate: ExecutorDelegate.new(compiler: self, site: @site),
+        executor_delegate: executor_delegate,
       )
+    end
+
+    def executor_delegate
+      @_executor_delegate ||= ExecutorDelegate.new(compiler: self, site: @site)
     end
 
     # Returns all stores that can load/store data that can be used for
