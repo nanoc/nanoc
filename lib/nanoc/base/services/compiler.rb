@@ -24,8 +24,9 @@ module Nanoc::Int
 
       # TODO: The reference to compiler should go away.
 
-      def initialize(dependency_store, compiler)
+      def initialize(dependency_store:, compiled_content_cache:, compiler:)
         @dependency_store = dependency_store
+        @compiled_content_cache = compiled_content_cache
         @compiler = compiler # TODO: remove me
       end
 
@@ -64,13 +65,13 @@ module Nanoc::Int
 
               if @compiler.send(:can_reuse_content_for_rep?, rep)
                 Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
-                rep.snapshot_contents = @compiler.compiled_content_cache[rep]
+                rep.snapshot_contents = @compiled_content_cache[rep]
               else
                 recalculate_content_for_rep(rep, dependency_tracker)
               end
 
               rep.compiled = true
-              @compiler.compiled_content_cache[rep] = rep.snapshot_contents
+              @compiled_content_cache[rep] = rep.snapshot_contents
 
               @fibers.delete(rep)
             ensure
@@ -296,7 +297,11 @@ module Nanoc::Int
     end
 
     def single
-      @_single ||= Single.new(@dependency_store, self)
+      @_single ||= Single.new(
+        dependency_store: @dependency_store,
+        compiled_content_cache: compiled_content_cache,
+        compiler: self,
+      )
     end
 
     # @return [Boolean]
