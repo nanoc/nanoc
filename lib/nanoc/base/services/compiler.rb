@@ -18,14 +18,17 @@ module Nanoc::Int
   #
   # @api private
   class Compiler
+    # Provides common functionality for accesing “context” of an item that is being compiled.
     class ExecutorDelegate
-      def initialize(compiler:, site:)
+      def initialize(compiler:, action_provider:, reps:, site:)
         @compiler = compiler # TODO: remove
+        @action_provider = action_provider
+        @reps = reps
         @site = site
       end
 
       def filter_name_and_args_for_layout(layout)
-        mem = @compiler.action_provider.memory_for(layout)
+        mem = @action_provider.memory_for(layout)
         if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::ProcessingActions::Filter)
           raise Nanoc::Int::Errors::UndefinedFilterForLayout.new(layout)
         end
@@ -34,7 +37,7 @@ module Nanoc::Int
 
       def create_view_context(dependency_tracker)
         Nanoc::ViewContext.new(
-          reps: @compiler.reps,
+          reps: @reps,
           items: @site.items,
           dependency_tracker: dependency_tracker,
           compiler: @compiler,
@@ -317,7 +320,12 @@ module Nanoc::Int
     end
 
     def executor_delegate
-      @_executor_delegate ||= ExecutorDelegate.new(compiler: self, site: @site)
+      @_executor_delegate ||= ExecutorDelegate.new(
+        compiler: self,
+        action_provider: action_provider,
+        reps: @reps,
+        site: @site,
+      )
     end
 
     # Returns all stores that can load/store data that can be used for
