@@ -263,10 +263,6 @@ module Nanoc::Int
       builder.run
     end
 
-    def assigns_for(rep, dependency_tracker)
-      compilation_context.assigns_for(rep, dependency_tracker)
-    end
-
     # @api private
     def filter_name_and_args_for_layout(layout)
       compilation_context.filter_name_and_args_for_layout(layout)
