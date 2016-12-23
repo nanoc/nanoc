@@ -88,9 +88,7 @@ module Nanoc
       def snapshot(rep, snapshot_name, final: true, path: nil) # rubocop:disable Lint/UnusedMethodArgument
         # NOTE: :path is irrelevant
 
-        unless rep.binary?
-          rep.snapshot_contents[snapshot_name] = rep.snapshot_contents[:last]
-        end
+        rep.snapshot_contents[snapshot_name] = rep.snapshot_contents[:last]
 
         if final
           raw_path = rep.raw_path(snapshot: snapshot_name)
