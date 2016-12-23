@@ -259,13 +259,18 @@ module Nanoc::Int
       compilation_context.assigns_for(rep, dependency_tracker)
     end
 
-    def create_view_context(dependency_tracker)
-      compilation_context.create_view_context(dependency_tracker)
-    end
-
     # @api private
     def filter_name_and_args_for_layout(layout)
       compilation_context.filter_name_and_args_for_layout(layout)
+    end
+
+    def compilation_context
+      @_compilation_context ||= CompilationContext.new(
+        action_provider: action_provider,
+        reps: @reps,
+        site: @site,
+        compiled_content_cache: compiled_content_cache,
+      )
     end
 
     private
@@ -320,15 +325,6 @@ module Nanoc::Int
         compiled_content_cache: compiled_content_cache,
         action_provider: action_provider,
         compilation_context: compilation_context,
-      )
-    end
-
-    def compilation_context
-      @_compilation_context ||= CompilationContext.new(
-        action_provider: action_provider,
-        reps: @reps,
-        site: @site,
-        compiled_content_cache: compiled_content_cache,
       )
     end
 

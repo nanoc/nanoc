@@ -20,7 +20,7 @@ module Nanoc::Checking
       output_filenames = Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
 
       # FIXME: ugly
-      view_context = site.compiler.create_view_context(Nanoc::Int::DependencyTracker::Null.new)
+      view_context = site.compiler.compilation_context.create_view_context(Nanoc::Int::DependencyTracker::Null.new)
 
       context = {
         items: Nanoc::ItemCollectionWithRepsView.new(site.items, view_context),
