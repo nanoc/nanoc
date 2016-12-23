@@ -19,9 +19,7 @@ module Nanoc::Int
   # @api private
   class Compiler
     # Provides common functionality for accesing “context” of an item that is being compiled.
-    #
-    # TODO: Rename to CompilationContext
-    class ExecutorDelegate
+    class CompilationContext
       def initialize(action_provider:, reps:, site:, compiled_content_cache:)
         @action_provider = action_provider
         @reps = reps
@@ -79,11 +77,11 @@ module Nanoc::Int
     class Single
       include Nanoc::Int::ContractsSupport
 
-      def initialize(dependency_store:, compiled_content_cache:, action_provider:, executor_delegate:)
+      def initialize(dependency_store:, compiled_content_cache:, action_provider:, compilation_context:)
         @dependency_store = dependency_store
         @compiled_content_cache = compiled_content_cache
         @action_provider = action_provider
-        @executor_delegate = executor_delegate
+        @compilation_context = compilation_context
       end
 
       contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
@@ -140,7 +138,7 @@ module Nanoc::Int
 
       contract Nanoc::Int::ItemRep, C::Named['Nanoc::Int::DependencyTracker'] => C::Any
       def recalculate_content_for_rep(rep, dependency_tracker)
-        executor = Nanoc::Int::Executor.new(@executor_delegate, dependency_tracker)
+        executor = Nanoc::Int::Executor.new(@compilation_context, dependency_tracker)
 
         @action_provider.memory_for(rep).each do |action|
           case action
@@ -258,16 +256,16 @@ module Nanoc::Int
     end
 
     def assigns_for(rep, dependency_tracker)
-      executor_delegate.assigns_for(rep, dependency_tracker)
+      compilation_context.assigns_for(rep, dependency_tracker)
     end
 
     def create_view_context(dependency_tracker)
-      executor_delegate.create_view_context(dependency_tracker)
+      compilation_context.create_view_context(dependency_tracker)
     end
 
     # @api private
     def filter_name_and_args_for_layout(layout)
-      executor_delegate.filter_name_and_args_for_layout(layout)
+      compilation_context.filter_name_and_args_for_layout(layout)
     end
 
     private
@@ -321,12 +319,12 @@ module Nanoc::Int
         dependency_store: @dependency_store,
         compiled_content_cache: compiled_content_cache,
         action_provider: action_provider,
-        executor_delegate: executor_delegate,
+        compilation_context: compilation_context,
       )
     end
 
-    def executor_delegate
-      @_executor_delegate ||= ExecutorDelegate.new(
+    def compilation_context
+      @_compilation_context ||= CompilationContext.new(
         action_provider: action_provider,
         reps: @reps,
         site: @site,
