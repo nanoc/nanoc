@@ -135,7 +135,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
     let(:filter_args) { { color: 'grey' } }
 
     it 'makes a request to the executor' do
-      expect(executor).to receive(:filter).with(rep, filter_name, filter_args)
+      expect(executor).to receive(:filter).with(filter_name, filter_args)
       subject
     end
   end
@@ -147,7 +147,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
     let(:extra_filter_args) { { color: 'grey' } }
 
     it 'makes a request to the executor' do
-      expect(executor).to receive(:layout).with(rep, layout_identifier, extra_filter_args)
+      expect(executor).to receive(:layout).with(layout_identifier, extra_filter_args)
       subject
     end
   end
@@ -159,7 +159,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
     let(:path) { '/foo.html' }
 
     it 'makes a request to the executor' do
-      expect(executor).to receive(:snapshot).with(rep, :for_snippet, path: '/foo.html')
+      expect(executor).to receive(:snapshot).with(:for_snippet, path: '/foo.html')
       subject
     end
   end
@@ -170,7 +170,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
     let(:path) { '/foo.html' }
 
     it 'makes a request to the executor' do
-      expect(executor).to receive(:snapshot).with(rep, :last, path: '/foo.html')
+      expect(executor).to receive(:snapshot).with(:last, path: '/foo.html')
       subject
     end
   end

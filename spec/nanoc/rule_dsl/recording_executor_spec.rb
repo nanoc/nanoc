@@ -7,7 +7,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
 
   describe '#filter' do
     it 'records filter call without arguments' do
-      executor.filter(rep, :erb)
+      executor.filter(:erb)
 
       expect(executor.rule_memory.size).to eql(1)
       expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
@@ -16,7 +16,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
     end
 
     it 'records filter call with arguments' do
-      executor.filter(rep, :erb, x: 123)
+      executor.filter(:erb, x: 123)
 
       expect(executor.rule_memory.size).to eql(1)
       expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
@@ -27,7 +27,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
 
   describe '#layout' do
     it 'records layout call without arguments' do
-      executor.layout(rep, '/default.*')
+      executor.layout('/default.*')
 
       expect(executor.rule_memory.size).to eql(2)
 
@@ -42,7 +42,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
     end
 
     it 'records layout call with arguments' do
-      executor.layout(rep, '/default.*', final: false)
+      executor.layout('/default.*', final: false)
 
       expect(executor.rule_memory.size).to eql(2)
 
@@ -57,7 +57,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
     end
 
     it 'fails when passed a symbol' do
-      expect { executor.layout(rep, :default, final: false) }.to raise_error(ArgumentError)
+      expect { executor.layout(:default, final: false) }.to raise_error(ArgumentError)
     end
   end
 
@@ -68,17 +68,17 @@ describe Nanoc::RuleDSL::RecordingExecutor do
 
     context 'snapshot already exists' do
       before do
-        executor.snapshot(rep, :foo)
+        executor.snapshot(:foo)
       end
 
       it 'raises when creating same snapshot' do
-        expect { executor.snapshot(rep, :foo) }
+        expect { executor.snapshot(:foo) }
           .to raise_error(Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName)
       end
     end
 
     context 'no arguments' do
-      subject { executor.snapshot(rep, :foo) }
+      subject { executor.snapshot(:foo) }
 
       it 'records' do
         subject
@@ -91,7 +91,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
     end
 
     context 'final argument' do
-      subject { executor.snapshot(rep, :foo, final: final, path: path) }
+      subject { executor.snapshot(:foo, final: final, path: path) }
       let(:path) { nil }
 
       context 'final' do
@@ -252,7 +252,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
     end
 
     it 'records snapshot call with final argument' do
-      executor.snapshot(rep, :foo, final: false)
+      executor.snapshot(:foo, final: false)
 
       expect(executor.rule_memory.size).to eql(1)
       expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
@@ -261,13 +261,13 @@ describe Nanoc::RuleDSL::RecordingExecutor do
     end
 
     it 'raises when given unknown arguments' do
-      expect { executor.snapshot(rep, :foo, animal: 'giraffe') }
+      expect { executor.snapshot(:foo, animal: 'giraffe') }
         .to raise_error(ArgumentError)
     end
 
     it 'can create multiple snapshots with different names' do
-      executor.snapshot(rep, :foo)
-      executor.snapshot(rep, :bar)
+      executor.snapshot(:foo)
+      executor.snapshot(:bar)
 
       expect(executor.rule_memory.size).to eql(2)
       expect(executor.rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)

@@ -75,14 +75,14 @@ module Nanoc::RuleDSL
         raise NoRuleMemoryForItemRepException.new(rep)
       end
 
-      executor.snapshot(rep, :raw)
-      executor.snapshot(rep, :pre, final: false)
+      executor.snapshot(:raw)
+      executor.snapshot(:pre, final: false)
       rule.apply_to(rep, executor: executor, site: @site, view_context: view_context)
       if executor.rule_memory.any_layouts?
-        executor.snapshot(rep, :post)
+        executor.snapshot(:post)
       end
       unless executor.rule_memory.snapshot_actions.any? { |sa| sa.snapshot_name == :last }
-        executor.snapshot(rep, :last)
+        executor.snapshot(:last)
       end
 
       executor.rule_memory
