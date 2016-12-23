@@ -289,6 +289,8 @@ describe Nanoc::Int::Executor do
     end
 
     before do
+      rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:pre, true)]
+
       allow(compilation_context).to receive(:site) { site }
       allow(compilation_context).to receive(:assigns_for).with(rep, dependency_tracker) { assigns }
       allow(compilation_context).to receive(:create_view_context).with(dependency_tracker).and_return(view_context)
@@ -429,16 +431,6 @@ describe Nanoc::Int::Executor do
 
     context 'final snapshot' do
       let(:content) { Nanoc::Int::TextualContent.new('Donkey Power') }
-
-      context 'snapshot is :pre' do
-        it 'create a new snapshot def' do
-          executor.snapshot(rep, :pre)
-
-          expect(rep.snapshot_defs.size).to eq(1)
-          expect(rep.snapshot_defs[0].name).to eq(:pre)
-          expect(rep.snapshot_defs[0]).to be_final
-        end
-      end
 
       context 'raw path' do
         before do

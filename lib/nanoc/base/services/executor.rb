@@ -92,10 +92,6 @@ module Nanoc
           rep.snapshot_contents[snapshot_name] = rep.snapshot_contents[:last]
         end
 
-        if snapshot_name == :pre && final
-          rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:pre, true)
-        end
-
         if final
           raw_path = rep.raw_path(snapshot: snapshot_name)
           if raw_path
