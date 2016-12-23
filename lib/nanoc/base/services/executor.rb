@@ -7,8 +7,8 @@ module Nanoc
         end
       end
 
-      def initialize(compiler, dependency_tracker)
-        @compiler = compiler
+      def initialize(compilation_context, dependency_tracker)
+        @compilation_context = compilation_context
         @dependency_tracker = dependency_tracker
       end
 
@@ -44,7 +44,7 @@ module Nanoc
 
       def layout(rep, layout_identifier, extra_filter_args = nil)
         layout = find_layout(layout_identifier)
-        filter_name, filter_args = *@compiler.filter_name_and_args_for_layout(layout)
+        filter_name, filter_args = *@compilation_context.filter_name_and_args_for_layout(layout)
         if filter_name.nil?
           raise Nanoc::Int::Errors::Generic, "Cannot find rule for layout matching #{layout_identifier}"
         end
@@ -62,7 +62,7 @@ module Nanoc
         # Create filter
         klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
-        view_context = @compiler.create_view_context(@dependency_tracker)
+        view_context = @compilation_context.create_view_context(@dependency_tracker)
         layout_view = Nanoc::LayoutView.new(layout, view_context)
         filter = klass.new(assigns_for(rep).merge({ layout: layout_view }))
 
@@ -105,11 +105,11 @@ module Nanoc
       end
 
       def assigns_for(rep)
-        @compiler.assigns_for(rep, @dependency_tracker)
+        @compilation_context.assigns_for(rep, @dependency_tracker)
       end
 
       def layouts
-        @compiler.site.layouts
+        @compilation_context.site.layouts
       end
 
       def find_layout(arg)
@@ -140,7 +140,7 @@ module Nanoc
       end
 
       def use_globs?
-        @compiler.site.config[:string_pattern_type] == 'glob'
+        @compilation_context.site.config[:string_pattern_type] == 'glob'
       end
     end
   end
