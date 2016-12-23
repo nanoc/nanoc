@@ -141,24 +141,24 @@ module Nanoc::Int
 
         @fibers[rep] ||=
           Fiber.new do
-            begin
-              dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
-              dependency_tracker.enter(rep.item)
+            if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
+              Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
+              rep.snapshot_contents = @compiled_content_cache[rep]
+            else
+              begin
+                dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
+                dependency_tracker.enter(rep.item)
 
-              if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
-                Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
-                rep.snapshot_contents = @compiled_content_cache[rep]
-              else
                 @recalculator.recalculate_content_for_rep(rep, dependency_tracker)
+              ensure
+                dependency_tracker.exit
               end
-
-              rep.compiled = true
-              @compiled_content_cache[rep] = rep.snapshot_contents
-
-              @fibers.delete(rep)
-            ensure
-              dependency_tracker.exit
             end
+
+            rep.compiled = true
+            @compiled_content_cache[rep] = rep.snapshot_contents
+
+            @fibers.delete(rep)
           end
 
         @fibers[rep]
