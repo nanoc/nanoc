@@ -124,3 +124,26 @@ RSpec::Matchers.define :be_humanly_sorted do
     x.sort_by { |n| n.dup.unicode_normalize(:nfd).encode('ASCII', fallback: ->(_) { '' }).downcase }
   end
 end
+
+RSpec::Matchers.define :yield_from_fiber do |expected|
+  supports_block_expectations
+
+  include RSpec::Matchers::Composable
+
+  match do |actual|
+    @res = Fiber.new { actual.call }.resume
+    values_match?(expected, @res)
+  end
+
+  description do
+    "yield #{expected.inspect} from fiber"
+  end
+
+  failure_message do |_actual|
+    "expected that proc would yield #{expected.inspect} from fiber, but was #{@res.inspect}"
+  end
+
+  failure_message_when_negated do |_actual|
+    "expected that proc would not yield #{expected.inspect} from fiber, but was #{@res.inspect}"
+  end
+end

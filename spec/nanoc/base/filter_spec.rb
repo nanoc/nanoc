@@ -78,10 +78,7 @@ describe Nanoc::Filter do
       end
 
       example do
-        fiber = Fiber.new { subject }
-
-        # resume 1
-        expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
+        expect { subject }.not_to yield_from_fiber(an_instance_of(Nanoc::Int::Errors::UnmetDependency))
       end
     end
 

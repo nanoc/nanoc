@@ -64,11 +64,6 @@ module Nanoc::Int
     # @return [String] The compiled content at the given snapshot (or the
     #   default snapshot if no snapshot is specified)
     def compiled_content(snapshot: nil)
-      # Make sure we're not binary
-      if binary?
-        raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
-      end
-
       # Get name of last pre-layout snapshot
       snapshot_name = snapshot || (@snapshot_contents[:pre] ? :pre : :last)
       is_moving = [:pre, :post, :last].include?(snapshot_name)
@@ -93,7 +88,13 @@ module Nanoc::Int
         return compiled_content(snapshot: snapshot)
       end
 
-      @snapshot_contents[snapshot_name].string
+      # Verify snapshot is not binary
+      snapshot_content = @snapshot_contents[snapshot_name]
+      if snapshot_content.binary?
+        raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
+      end
+
+      snapshot_content.string
     end
 
     contract Symbol => C::Bool
