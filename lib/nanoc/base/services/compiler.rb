@@ -73,6 +73,35 @@ module Nanoc::Int
       end
     end
 
+    # Provides functionality for (re)calculating the content of an item rep, without caching or
+    # outdatedness checking.
+    class ItemRepRecalculator
+      include Nanoc::Int::ContractsSupport
+
+      def initialize(action_provider:, compilation_context:)
+        @action_provider = action_provider
+        @compilation_context = compilation_context
+      end
+
+      contract Nanoc::Int::ItemRep, C::Named['Nanoc::Int::DependencyTracker'] => C::Any
+      def recalculate_content_for_rep(rep, dependency_tracker)
+        executor = Nanoc::Int::Executor.new(@compilation_context, dependency_tracker)
+
+        @action_provider.memory_for(rep).each do |action|
+          case action
+          when Nanoc::Int::ProcessingActions::Filter
+            executor.filter(rep, action.filter_name, action.params)
+          when Nanoc::Int::ProcessingActions::Layout
+            executor.layout(rep, action.layout_identifier, action.params)
+          when Nanoc::Int::ProcessingActions::Snapshot
+            executor.snapshot(rep, action.snapshot_name, final: action.final?, path: action.path)
+          else
+            raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
+          end
+        end
+      end
+    end
+
     # Coordinates the compilation of a single item rep.
     class ItemRepCompiler
       include Nanoc::Int::ContractsSupport
@@ -80,8 +109,10 @@ module Nanoc::Int
       def initialize(dependency_store:, compiled_content_cache:, action_provider:, compilation_context:)
         @dependency_store = dependency_store
         @compiled_content_cache = compiled_content_cache
-        @action_provider = action_provider
-        @compilation_context = compilation_context
+        @recalculator = ItemRepRecalculator.new(
+          action_provider: action_provider,
+          compilation_context: compilation_context,
+        )
       end
 
       contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
@@ -121,7 +152,7 @@ module Nanoc::Int
                 Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
                 rep.snapshot_contents = @compiled_content_cache[rep]
               else
-                recalculate_content_for_rep(rep, dependency_tracker)
+                @recalculator.recalculate_content_for_rep(rep, dependency_tracker)
               end
 
               rep.compiled = true
@@ -134,24 +165,6 @@ module Nanoc::Int
           end
 
         @fibers[rep]
-      end
-
-      contract Nanoc::Int::ItemRep, C::Named['Nanoc::Int::DependencyTracker'] => C::Any
-      def recalculate_content_for_rep(rep, dependency_tracker)
-        executor = Nanoc::Int::Executor.new(@compilation_context, dependency_tracker)
-
-        @action_provider.memory_for(rep).each do |action|
-          case action
-          when Nanoc::Int::ProcessingActions::Filter
-            executor.filter(rep, action.filter_name, action.params)
-          when Nanoc::Int::ProcessingActions::Layout
-            executor.layout(rep, action.layout_identifier, action.params)
-          when Nanoc::Int::ProcessingActions::Snapshot
-            executor.snapshot(rep, action.snapshot_name, final: action.final?, path: action.path)
-          else
-            raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
-          end
-        end
       end
 
       contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Bool
