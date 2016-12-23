@@ -74,7 +74,7 @@ module Nanoc::Int
     end
 
     # Coordinates the compilation of a single item rep.
-    class Single
+    class ItemRepCompiler
       include Nanoc::Int::ContractsSupport
 
       def initialize(dependency_store:, compiled_content_cache:, action_provider:, compilation_context:)
@@ -316,11 +316,11 @@ module Nanoc::Int
     end
 
     def compile_rep(rep, is_outdated:)
-      single.compile(rep, is_outdated: is_outdated)
+      item_rep_compiler.compile(rep, is_outdated: is_outdated)
     end
 
-    def single
-      @_single ||= Single.new(
+    def item_rep_compiler
+      @_item_rep_compiler ||= ItemRepCompiler.new(
         dependency_store: @dependency_store,
         compiled_content_cache: compiled_content_cache,
         action_provider: action_provider,
