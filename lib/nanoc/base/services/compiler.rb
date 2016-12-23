@@ -22,10 +22,12 @@ module Nanoc::Int
     class Single
       include Nanoc::Int::ContractsSupport
 
-      def initialize(dependency_store:, compiled_content_cache:, action_provider:, compiler:)
+      def initialize(dependency_store:, compiled_content_cache:, action_provider:, site:, reps:, compiler:)
         @dependency_store = dependency_store
         @compiled_content_cache = compiled_content_cache
         @action_provider = action_provider
+        @site = site
+        @reps = reps
         @compiler = compiler # TODO: remove me
       end
 
@@ -84,6 +86,11 @@ module Nanoc::Int
       contract Nanoc::Int::ItemRep, C::Named['Nanoc::Int::DependencyTracker'] => C::Any
       def recalculate_content_for_rep(rep, dependency_tracker)
         executor = Nanoc::Int::Executor.new(@compiler, dependency_tracker)
+
+        # @compiler.filter_name_and_args_for_layout(layout)
+        # @compiler.create_view_context(@dependency_tracker)
+        # @compiler.assigns_for(rep, @dependency_tracker)
+        # @compiler.site.layouts
 
         @action_provider.memory_for(rep).each do |action|
           case action
@@ -296,6 +303,8 @@ module Nanoc::Int
         dependency_store: @dependency_store,
         compiled_content_cache: compiled_content_cache,
         action_provider: action_provider,
+        site: @site,
+        reps: @reps,
         compiler: self,
       )
     end
