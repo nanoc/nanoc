@@ -13,7 +13,7 @@ module Nanoc
         @dependency_tracker = dependency_tracker
       end
 
-      def filter(_rep, filter_name, filter_args = {})
+      def filter(filter_name, filter_args = {})
         filter = filter_for_filtering(@rep, filter_name)
 
         begin
@@ -37,13 +37,13 @@ module Nanoc
           end
 
           # Create snapshot
-          snapshot(@rep, @rep.snapshot_contents[:post] ? :post : :pre, final: false) unless @rep.binary?
+          snapshot(@rep.snapshot_contents[:post] ? :post : :pre, final: false) unless @rep.binary?
         ensure
           Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
       end
 
-      def layout(_rep, layout_identifier, extra_filter_args = nil)
+      def layout(layout_identifier, extra_filter_args = nil)
         layout = find_layout(layout_identifier)
         filter_name, filter_args = *@compilation_context.filter_name_and_args_for_layout(layout)
         if filter_name.nil?
@@ -57,7 +57,7 @@ module Nanoc
 
         # Create "pre" snapshot
         if @rep.snapshot_contents[:post].nil?
-          snapshot(@rep, :pre, final: true)
+          snapshot(:pre, final: true)
         end
 
         # Create filter
@@ -80,13 +80,13 @@ module Nanoc
           @rep.snapshot_contents[:last] = Nanoc::Int::TextualContent.new(res).tap(&:freeze)
 
           # Create "post" snapshot
-          snapshot(@rep, :post, final: false)
+          snapshot(:post, final: false)
         ensure
           Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
       end
 
-      def snapshot(_rep, snapshot_name, final: true, path: nil) # rubocop:disable Lint/UnusedMethodArgument
+      def snapshot(snapshot_name, final: true, path: nil) # rubocop:disable Lint/UnusedMethodArgument
         @rep.snapshot_contents[snapshot_name] = @rep.snapshot_contents[:last]
       end
 

@@ -35,7 +35,7 @@ module Nanoc::RuleDSL
     #
     # @return [void]
     def filter(filter_name, filter_args = {})
-      @_executor.filter(rep.unwrap, filter_name, filter_args)
+      @_executor.filter(filter_name, filter_args)
     end
 
     # Layouts the current representation (calls {Nanoc::Int::ItemRep#layout} with
@@ -48,7 +48,7 @@ module Nanoc::RuleDSL
     #
     # @return [void]
     def layout(layout_identifier, extra_filter_args = nil)
-      @_executor.layout(rep.unwrap, layout_identifier, extra_filter_args)
+      @_executor.layout(layout_identifier, extra_filter_args)
     end
 
     # Creates a snapshot of the current compiled item content. Calls
@@ -62,7 +62,7 @@ module Nanoc::RuleDSL
     #
     # @return [void]
     def snapshot(snapshot_name, path: nil)
-      @_executor.snapshot(rep.unwrap, snapshot_name, path: path)
+      @_executor.snapshot(snapshot_name, path: path)
     end
 
     # Creates a snapshot named :last the current compiled item content, with

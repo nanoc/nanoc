@@ -19,11 +19,11 @@ module Nanoc
         @rule_memory = Nanoc::Int::RuleMemory.new(item_rep)
       end
 
-      def filter(_rep, filter_name, filter_args = {})
+      def filter(filter_name, filter_args = {})
         @rule_memory.add_filter(filter_name, filter_args)
       end
 
-      def layout(_rep, layout_identifier, extra_filter_args = {})
+      def layout(layout_identifier, extra_filter_args = {})
         unless layout_identifier.is_a?(String)
           raise ArgumentError.new('The layout passed to #layout must be a string')
         end
@@ -36,8 +36,8 @@ module Nanoc
       end
 
       Pathlike = C::Maybe[C::Or[String, Nanoc::Identifier]]
-      contract C::Any, Symbol, C::KeywordArgs[path: C::Optional[Pathlike], final: C::Optional[C::Bool]] => nil
-      def snapshot(_rep, snapshot_name, final: true, path: nil)
+      contract Symbol, C::KeywordArgs[path: C::Optional[Pathlike], final: C::Optional[C::Bool]] => nil
+      def snapshot(snapshot_name, final: true, path: nil)
         pathlike = final ? (path || basic_path_from_rules_for(@item_rep, snapshot_name)) : nil
         actual_path = pathlike && pathlike.to_s
         @rule_memory.add_snapshot(snapshot_name, final, actual_path)

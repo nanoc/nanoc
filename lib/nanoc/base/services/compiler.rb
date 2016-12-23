@@ -94,11 +94,11 @@ module Nanoc::Int
         @action_provider.memory_for(rep).each do |action|
           case action
           when Nanoc::Int::ProcessingActions::Filter
-            executor.filter(rep, action.filter_name, action.params)
+            executor.filter(action.filter_name, action.params)
           when Nanoc::Int::ProcessingActions::Layout
-            executor.layout(rep, action.layout_identifier, action.params)
+            executor.layout(action.layout_identifier, action.params)
           when Nanoc::Int::ProcessingActions::Snapshot
-            executor.snapshot(rep, action.snapshot_name, final: action.final?, path: action.path)
+            executor.snapshot(action.snapshot_name, final: action.final?, path: action.path)
           else
             raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
           end

@@ -39,7 +39,7 @@ describe Nanoc::Int::Executor do
       end
 
       example do
-        executor.filter(rep, :erb)
+        executor.filter(:erb)
 
         expect(rep.snapshot_contents[:last].string).to eq('Donkey Power')
         expect(rep.snapshot_contents[:pre].string).to eq('Donkey Power')
@@ -47,7 +47,7 @@ describe Nanoc::Int::Executor do
       end
 
       it 'returns frozen data' do
-        executor.filter(rep, :erb)
+        executor.filter(:erb)
 
         expect(rep.snapshot_contents[:last]).to be_frozen
         expect(rep.snapshot_contents[:pre]).to be_frozen
@@ -77,7 +77,7 @@ describe Nanoc::Int::Executor do
       end
 
       example do
-        executor.filter(rep, :whatever)
+        executor.filter(:whatever)
 
         expect(File.read(rep.snapshot_contents[:last].filename))
           .to match(/\ACompiled data for \/.*\/foo.dat\z/)
@@ -86,7 +86,7 @@ describe Nanoc::Int::Executor do
       end
 
       it 'returns frozen data' do
-        executor.filter(rep, :whatever)
+        executor.filter(:whatever)
 
         expect(rep.snapshot_contents[:last]).to be_frozen
       end
@@ -115,7 +115,7 @@ describe Nanoc::Int::Executor do
       end
 
       example do
-        executor.filter(rep, :whatever)
+        executor.filter(:whatever)
 
         expect(rep.snapshot_contents[:last].string).to match(/\ACompiled data for \/.*\/foo.dat\z/)
         expect(rep.snapshot_contents[:pre].string).to match(/\ACompiled data for \/.*\/foo.dat\z/)
@@ -142,7 +142,7 @@ describe Nanoc::Int::Executor do
       end
 
       example do
-        executor.filter(rep, :whatever)
+        executor.filter(:whatever)
 
         expect(File.read(rep.snapshot_contents[:last].filename))
           .to eq('Binary <%= "Donkey" %> Power')
@@ -153,7 +153,7 @@ describe Nanoc::Int::Executor do
 
     context 'non-existant filter' do
       it 'raises' do
-        expect { executor.filter(rep, :ajlsdfjklaskldfj) }
+        expect { executor.filter(:ajlsdfjklaskldfj) }
           .to raise_error(Nanoc::Int::Errors::UnknownFilter)
       end
     end
@@ -170,7 +170,7 @@ describe Nanoc::Int::Executor do
       end
 
       it 'raises' do
-        expect { executor.filter(rep, :whatever) }
+        expect { executor.filter(:whatever) }
           .to raise_error(Nanoc::Int::Errors::CannotUseBinaryFilter)
       end
     end
@@ -179,7 +179,7 @@ describe Nanoc::Int::Executor do
       let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.md')) }
 
       it 'raises' do
-        expect { executor.filter(rep, :erb) }
+        expect { executor.filter(:erb) }
           .to raise_error(Nanoc::Int::Errors::CannotUseTextualFilter)
       end
     end
@@ -205,7 +205,7 @@ describe Nanoc::Int::Executor do
       end
 
       example do
-        expect { executor.filter(rep, :whatever) }
+        expect { executor.filter(:whatever) }
           .to raise_error(Nanoc::Int::Executor::OutputNotWrittenError)
       end
     end
@@ -235,12 +235,12 @@ describe Nanoc::Int::Executor do
 
       it 'errors when attempting to modify content' do
         expect(Nanoc::Filter).to receive(:named).with(:whatever).and_return(filter_that_modifies_content)
-        expect { executor.filter(rep, :whatever) }.to raise_frozen_error
+        expect { executor.filter(:whatever) }.to raise_frozen_error
       end
 
       it 'receives frozen filter args' do
         expect(Nanoc::Filter).to receive(:named).with(:whatever).and_return(filter_that_modifies_params)
-        expect { executor.filter(rep, :whatever) }.to raise_frozen_error
+        expect { executor.filter(:whatever) }.to raise_frozen_error
       end
     end
   end
@@ -291,7 +291,7 @@ describe Nanoc::Int::Executor do
       allow(action_provider).to receive(:memory_for).with(layout).and_return(rule_memory)
     end
 
-    subject { executor.layout(rep, '/default.*') }
+    subject { executor.layout('/default.*') }
 
     context 'accessing layout attributes' do
       let(:layout_content) { 'head <%= @layout[:bug] %> foot' }
@@ -402,7 +402,7 @@ describe Nanoc::Int::Executor do
       let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.dat')) }
 
       it 'creates snapshots' do
-        executor.snapshot(rep, :something)
+        executor.snapshot(:something)
 
         expect(rep.snapshot_contents[:something]).not_to be_nil
       end
@@ -412,7 +412,7 @@ describe Nanoc::Int::Executor do
       let(:content) { Nanoc::Int::TextualContent.new('Donkey Power') }
 
       it 'creates a snapshot' do
-        executor.snapshot(rep, :something)
+        executor.snapshot(:something)
 
         expect(rep.snapshot_contents[:something].string).to eq('Donkey Power')
       end
@@ -427,7 +427,7 @@ describe Nanoc::Int::Executor do
         end
 
         it 'does not write' do
-          executor.snapshot(rep, :something)
+          executor.snapshot(:something)
 
           expect(File.file?('output/donkey.md')).not_to be
         end
@@ -435,7 +435,7 @@ describe Nanoc::Int::Executor do
 
       context 'no raw path' do
         it 'does not write' do
-          executor.snapshot(rep, :something)
+          executor.snapshot(:something)
 
           expect(File.file?('output/donkey.md')).to eq(false)
         end
