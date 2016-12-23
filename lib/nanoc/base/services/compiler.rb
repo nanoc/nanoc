@@ -22,6 +22,8 @@ module Nanoc::Int
     class Single
       include Nanoc::Int::ContractsSupport
 
+      # TODO: The reference to compiler should go away.
+
       def initialize(dependency_store, compiler)
         @dependency_store = dependency_store
         @compiler = compiler # TODO: remove me
@@ -64,7 +66,7 @@ module Nanoc::Int
                 Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
                 rep.snapshot_contents = @compiler.compiled_content_cache[rep]
               else
-                @compiler.send(:recalculate_content_for_rep, rep, dependency_tracker)
+                recalculate_content_for_rep(rep, dependency_tracker)
               end
 
               rep.compiled = true
@@ -77,6 +79,24 @@ module Nanoc::Int
           end
 
         @fibers[rep]
+      end
+
+      contract Nanoc::Int::ItemRep, C::Named['Nanoc::Int::DependencyTracker'] => C::Any
+      def recalculate_content_for_rep(rep, dependency_tracker)
+        executor = Nanoc::Int::Executor.new(@compiler, dependency_tracker)
+
+        @compiler.action_provider.memory_for(rep).each do |action|
+          case action
+          when Nanoc::Int::ProcessingActions::Filter
+            executor.filter(rep, action.filter_name, action.params)
+          when Nanoc::Int::ProcessingActions::Layout
+            executor.layout(rep, action.layout_identifier, action.params)
+          when Nanoc::Int::ProcessingActions::Snapshot
+            executor.snapshot(rep, action.snapshot_name, final: action.final?, path: action.path)
+          else
+            raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
+          end
+        end
       end
     end
 
@@ -282,24 +302,6 @@ module Nanoc::Int
     # @return [Boolean]
     def can_reuse_content_for_rep?(rep)
       !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
-    end
-
-    # @return [void]
-    def recalculate_content_for_rep(rep, dependency_tracker)
-      executor = Nanoc::Int::Executor.new(self, dependency_tracker)
-
-      action_provider.memory_for(rep).each do |action|
-        case action
-        when Nanoc::Int::ProcessingActions::Filter
-          executor.filter(rep, action.filter_name, action.params)
-        when Nanoc::Int::ProcessingActions::Layout
-          executor.layout(rep, action.layout_identifier, action.params)
-        when Nanoc::Int::ProcessingActions::Snapshot
-          executor.snapshot(rep, action.snapshot_name, final: action.final?, path: action.path)
-        else
-          raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
-        end
-      end
     end
 
     # Returns all stores that can load/store data that can be used for
