@@ -412,10 +412,10 @@ describe Nanoc::Int::Executor do
     context 'binary content' do
       let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.dat')) }
 
-      it 'does not create snapshots' do
+      it 'creates snapshots' do
         executor.snapshot(rep, :something)
 
-        expect(rep.snapshot_contents[:something]).to be_nil
+        expect(rep.snapshot_contents[:something]).not_to be_nil
       end
     end
 
@@ -437,10 +437,10 @@ describe Nanoc::Int::Executor do
           rep.raw_paths = { something: 'output/donkey.md' }
         end
 
-        it 'writes' do
+        it 'does not write' do
           executor.snapshot(rep, :something)
 
-          expect(File.read('output/donkey.md')).to eq('Donkey Power')
+          expect(File.file?('output/donkey.md')).not_to be
         end
       end
 

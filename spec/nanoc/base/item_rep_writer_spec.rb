@@ -7,16 +7,24 @@ describe Nanoc::Int::ItemRepWriter do
     let(:item_rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
         ir.snapshot_contents = snapshot_contents
+        ir.raw_paths = raw_paths
       end
     end
 
     let(:snapshot_contents) do
       {
         last: Nanoc::Int::TextualContent.new('last content'),
+        donkey: Nanoc::Int::TextualContent.new('donkey content'),
       }
     end
 
-    subject { described_class.new.write(item_rep, raw_path) }
+    let(:snapshot_name) { :donkey }
+
+    let(:raw_paths) do
+      { snapshot_name => raw_path }
+    end
+
+    subject { described_class.new.write(item_rep, snapshot_name) }
 
     before do
       expect(File.directory?('output')).to be_falsy
@@ -27,13 +35,17 @@ describe Nanoc::Int::ItemRepWriter do
 
       let(:snapshot_contents) do
         {
-          last: Nanoc::Int::BinaryContent.new(File.expand_path('input.dat')),
+          last: Nanoc::Int::BinaryContent.new(File.expand_path('input-last.dat')),
+          donkey: Nanoc::Int::BinaryContent.new(File.expand_path('input-donkey.dat')),
         }
       end
 
-      it 'copies' do
-        File.write(snapshot_contents[:last].filename, 'binary stuff')
+      before do
+        File.write(snapshot_contents[:last].filename, 'binary last stuff')
+        File.write(snapshot_contents[:donkey].filename, 'binary donkey stuff')
+      end
 
+      it 'copies' do
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
           .with(:will_write_rep, item_rep, 'output/blah.dat')
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
@@ -41,22 +53,20 @@ describe Nanoc::Int::ItemRepWriter do
 
         subject
 
-        expect(File.read('output/blah.dat')).to eql('binary stuff')
+        expect(File.read('output/blah.dat')).to eql('binary donkey stuff')
       end
 
       context 'output file already exists' do
         let(:old_mtime) { Time.at((Time.now - 600).to_i) }
 
         before do
-          File.write(snapshot_contents[:last].filename, 'binary stuff')
-
           FileUtils.mkdir_p('output')
           File.write('output/blah.dat', old_content)
           FileUtils.touch('output/blah.dat', mtime: old_mtime)
         end
 
         context 'file is identical' do
-          let(:old_content) { 'binary stuff' }
+          let(:old_content) { 'binary donkey stuff' }
 
           it 'keeps mtime' do
             subject
@@ -65,7 +75,7 @@ describe Nanoc::Int::ItemRepWriter do
         end
 
         context 'file is not identical' do
-          let(:old_content) { 'other binary stuff' }
+          let(:old_content) { 'other binary donkey stuff' }
 
           it 'updates mtime' do
             subject
@@ -86,7 +96,7 @@ describe Nanoc::Int::ItemRepWriter do
 
         subject
 
-        expect(File.read('output/blah.dat')).to eql('last content')
+        expect(File.read('output/blah.dat')).to eql('donkey content')
       end
 
       context 'output file already exists' do
@@ -99,7 +109,7 @@ describe Nanoc::Int::ItemRepWriter do
         end
 
         context 'file is identical' do
-          let(:old_content) { 'last content' }
+          let(:old_content) { 'donkey content' }
 
           it 'keeps mtime' do
             subject
@@ -108,7 +118,7 @@ describe Nanoc::Int::ItemRepWriter do
         end
 
         context 'file is not identical' do
-          let(:old_content) { 'other last content' }
+          let(:old_content) { 'other donkey content' }
 
           it 'updates mtime' do
             subject

@@ -86,18 +86,7 @@ module Nanoc
       end
 
       def snapshot(rep, snapshot_name, final: true, path: nil) # rubocop:disable Lint/UnusedMethodArgument
-        # NOTE: :path is irrelevant
-
-        unless rep.binary?
-          rep.snapshot_contents[snapshot_name] = rep.snapshot_contents[:last]
-        end
-
-        if final
-          raw_path = rep.raw_path(snapshot: snapshot_name)
-          if raw_path
-            ItemRepWriter.new.write(rep, raw_path)
-          end
-        end
+        rep.snapshot_contents[snapshot_name] = rep.snapshot_contents[:last]
       end
 
       def assigns_for(rep)
