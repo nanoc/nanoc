@@ -210,39 +210,38 @@ describe Nanoc::Int::Executor do
       end
     end
 
-    it 'receives frozen content argument' do
-      filter_class = Class.new(::Nanoc::Filter) do
-        def run(content, _params = {})
-          content.gsub!('foo', 'moo')
-          content
+    context 'content is frozen' do
+      let(:item) do
+        Nanoc::Int::Item.new('foo bar', {}, '/foo.md').tap(&:freeze)
+      end
+
+      let(:filter_that_modifies_content) do
+        Class.new(::Nanoc::Filter) do
+          def run(content, _params = {})
+            content.gsub!('foo', 'moo')
+            content
+          end
         end
       end
 
-      item = Nanoc::Int::Item.new('foo bar', {}, '/foo/')
-      item.freeze
-      expect(item.content).to be_frozen
-      expect(item.content.string).to be_frozen
-      rep = Nanoc::Int::ItemRep.new(item, :default)
-
-      expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
-
-      expect { executor.filter(rep, :whatever) }.to raise_frozen_error
-    end
-
-    it 'receives frozen filter args' do
-      filter_class = Class.new(::Nanoc::Filter) do
-        def run(_content, params = {})
-          params[:foo] = 'bar'
-          'asdf'
+      let(:filter_that_modifies_params) do
+        Class.new(::Nanoc::Filter) do
+          def run(_content, params = {})
+            params[:foo] = 'bar'
+            'asdf'
+          end
         end
       end
 
-      item = Nanoc::Int::Item.new('foo bar', {}, '/foo/')
-      rep = Nanoc::Int::ItemRep.new(item, :default)
+      it 'errors when attempting to modify content' do
+        expect(Nanoc::Filter).to receive(:named).with(:whatever).and_return(filter_that_modifies_content)
+        expect { executor.filter(rep, :whatever) }.to raise_frozen_error
+      end
 
-      expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
-
-      expect { executor.filter(rep, :whatever) }.to raise_frozen_error
+      it 'receives frozen filter args' do
+        expect(Nanoc::Filter).to receive(:named).with(:whatever).and_return(filter_that_modifies_params)
+        expect { executor.filter(rep, :whatever) }.to raise_frozen_error
+      end
     end
   end
 

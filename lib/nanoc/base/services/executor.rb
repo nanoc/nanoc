@@ -13,18 +13,18 @@ module Nanoc
         @dependency_tracker = dependency_tracker
       end
 
-      def filter(rep, filter_name, filter_args = {})
-        filter = filter_for_filtering(rep, filter_name)
+      def filter(_rep, filter_name, filter_args = {})
+        filter = filter_for_filtering(@rep, filter_name)
 
         begin
-          Nanoc::Int::NotificationCenter.post(:filtering_started, rep, filter_name)
+          Nanoc::Int::NotificationCenter.post(:filtering_started, @rep, filter_name)
 
           # Run filter
-          last = rep.snapshot_contents[:last]
-          source = rep.binary? ? last.filename : last.string
+          last = @rep.snapshot_contents[:last]
+          source = @rep.binary? ? last.filename : last.string
           filter_args.freeze
           result = filter.setup_and_run(source, filter_args)
-          rep.snapshot_contents[:last] =
+          @rep.snapshot_contents[:last] =
             if filter.class.to_binary?
               Nanoc::Int::BinaryContent.new(filter.output_filename).tap(&:freeze)
             else
@@ -37,13 +37,13 @@ module Nanoc
           end
 
           # Create snapshot
-          snapshot(rep, rep.snapshot_contents[:post] ? :post : :pre, final: false) unless rep.binary?
+          snapshot(@rep, @rep.snapshot_contents[:post] ? :post : :pre, final: false) unless @rep.binary?
         ensure
-          Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, filter_name)
+          Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
       end
 
-      def layout(rep, layout_identifier, extra_filter_args = nil)
+      def layout(_rep, layout_identifier, extra_filter_args = nil)
         layout = find_layout(layout_identifier)
         filter_name, filter_args = *@compilation_context.filter_name_and_args_for_layout(layout)
         if filter_name.nil?
@@ -53,11 +53,11 @@ module Nanoc
         filter_args.freeze
 
         # Check whether item can be laid out
-        raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(rep) if rep.binary?
+        raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(@rep) if @rep.binary?
 
         # Create "pre" snapshot
-        if rep.snapshot_contents[:post].nil?
-          snapshot(rep, :pre, final: true)
+        if @rep.snapshot_contents[:post].nil?
+          snapshot(@rep, :pre, final: true)
         end
 
         # Create filter
@@ -65,29 +65,29 @@ module Nanoc
         raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
         view_context = @compilation_context.create_view_context(@dependency_tracker)
         layout_view = Nanoc::LayoutView.new(layout, view_context)
-        filter = klass.new(assigns_for(rep).merge({ layout: layout_view }))
+        filter = klass.new(assigns_for(@rep).merge({ layout: layout_view }))
 
         # Visit
         @dependency_tracker.bounce(layout, raw_content: true)
 
         begin
-          Nanoc::Int::NotificationCenter.post(:filtering_started, rep, filter_name)
+          Nanoc::Int::NotificationCenter.post(:filtering_started, @rep, filter_name)
 
           # Layout
           content = layout.content
           arg = content.binary? ? content.filename : content.string
           res = filter.setup_and_run(arg, filter_args)
-          rep.snapshot_contents[:last] = Nanoc::Int::TextualContent.new(res).tap(&:freeze)
+          @rep.snapshot_contents[:last] = Nanoc::Int::TextualContent.new(res).tap(&:freeze)
 
           # Create "post" snapshot
-          snapshot(rep, :post, final: false)
+          snapshot(@rep, :post, final: false)
         ensure
-          Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, filter_name)
+          Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
       end
 
-      def snapshot(rep, snapshot_name, final: true, path: nil) # rubocop:disable Lint/UnusedMethodArgument
-        rep.snapshot_contents[snapshot_name] = rep.snapshot_contents[:last]
+      def snapshot(_rep, snapshot_name, final: true, path: nil) # rubocop:disable Lint/UnusedMethodArgument
+        @rep.snapshot_contents[snapshot_name] = @rep.snapshot_contents[:last]
       end
 
       def assigns_for(rep)
