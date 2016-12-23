@@ -106,13 +106,10 @@ module Nanoc::Int
     class ItemRepCompiler
       include Nanoc::Int::ContractsSupport
 
-      def initialize(dependency_store:, compiled_content_cache:, action_provider:, compilation_context:)
+      def initialize(dependency_store:, compiled_content_cache:, recalculator:)
         @dependency_store = dependency_store
         @compiled_content_cache = compiled_content_cache
-        @recalculator = ItemRepRecalculator.new(
-          action_provider: action_provider,
-          compilation_context: compilation_context,
-        )
+        @recalculator = recalculator
       end
 
       contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
@@ -336,6 +333,12 @@ module Nanoc::Int
       @_item_rep_compiler ||= ItemRepCompiler.new(
         dependency_store: @dependency_store,
         compiled_content_cache: compiled_content_cache,
+        recalculator: item_rep_recalculator,
+      )
+    end
+
+    def item_rep_recalculator
+      @_item_rep_recalculator ||= ItemRepRecalculator.new(
         action_provider: action_provider,
         compilation_context: compilation_context,
       )
