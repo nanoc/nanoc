@@ -137,8 +137,8 @@ module Nanoc::Int
       end
     end
 
-    # Coordinates the compilation of a single item rep.
-    class ItemRepCompiler
+    # Provides functionality for suspending and resuming item rep compilation (using fibers).
+    class ResumableItemRepCompiler
       include Nanoc::Int::ContractsSupport
 
       def initialize(wrapped:)
@@ -333,24 +333,22 @@ module Nanoc::Int
     end
 
     def item_rep_compiler
-      @_item_rep_compiler ||= ItemRepCompiler.new(
-        wrapped: caching_item_rep_compiler,
-      )
-    end
+      @_item_rep_compiler ||= begin
+        recalculating_item_rep_compiler = RecalculatingItemRepCompiler.new(
+          action_provider: action_provider,
+          dependency_store: @dependency_store,
+          compilation_context: compilation_context,
+        )
 
-    def caching_item_rep_compiler
-      @_caching_item_rep_compiler ||= CachingItemRepCompiler.new(
-        compiled_content_cache: compiled_content_cache,
-        wrapped: recalculating_item_rep_compiler,
-      )
-    end
+        caching_item_rep_compiler = CachingItemRepCompiler.new(
+          compiled_content_cache: compiled_content_cache,
+          wrapped: recalculating_item_rep_compiler,
+        )
 
-    def recalculating_item_rep_compiler
-      @_recalculating_item_rep_compiler ||= RecalculatingItemRepCompiler.new(
-        action_provider: action_provider,
-        dependency_store: @dependency_store,
-        compilation_context: compilation_context,
-      )
+        ResumableItemRepCompiler.new(
+          wrapped: caching_item_rep_compiler,
+        )
+      end
     end
 
     # Returns all stores that can load/store data that can be used for
