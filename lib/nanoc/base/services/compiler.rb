@@ -303,11 +303,6 @@ module Nanoc::Int
     end
 
     def compile_reps
-      # Assign snapshots
-      @reps.each do |rep|
-        rep.snapshot_defs = action_provider.snapshots_defs_for(rep)
-      end
-
       # Find item reps to compile
       outdated_reps = Set.new(@reps.select { |r| outdatedness_checker.outdated?(r) })
 
