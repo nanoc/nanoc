@@ -303,14 +303,9 @@ module Nanoc::Int
     end
 
     def compile_reps
-      # Find item reps to compile
-      outdated_reps = Set.new(@reps.select { |r| outdatedness_checker.outdated?(r) })
-
-      # Reset dependencies for outdated items
-      outdated_items = outdated_reps.map(&:item).uniq
+      outdated_items = @reps.select { |r| outdatedness_checker.outdated?(r) }.map(&:item).uniq
       outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
 
-      # Compile reps
       reps_to_recompile = Set.new(outdated_items.flat_map { |i| @reps[i] })
       selector = Nanoc::Int::ItemRepSelector.new(reps_to_recompile)
       selector.each do |rep|
