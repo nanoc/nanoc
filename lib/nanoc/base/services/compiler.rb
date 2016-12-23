@@ -22,11 +22,10 @@ module Nanoc::Int
     class Single
       include Nanoc::Int::ContractsSupport
 
-      # TODO: The reference to compiler should go away.
-
-      def initialize(dependency_store:, compiled_content_cache:, compiler:)
+      def initialize(dependency_store:, compiled_content_cache:, action_provider:, compiler:)
         @dependency_store = dependency_store
         @compiled_content_cache = compiled_content_cache
+        @action_provider = action_provider
         @compiler = compiler # TODO: remove me
       end
 
@@ -86,7 +85,7 @@ module Nanoc::Int
       def recalculate_content_for_rep(rep, dependency_tracker)
         executor = Nanoc::Int::Executor.new(@compiler, dependency_tracker)
 
-        @compiler.action_provider.memory_for(rep).each do |action|
+        @action_provider.memory_for(rep).each do |action|
           case action
           when Nanoc::Int::ProcessingActions::Filter
             executor.filter(rep, action.filter_name, action.params)
@@ -296,6 +295,7 @@ module Nanoc::Int
       @_single ||= Single.new(
         dependency_store: @dependency_store,
         compiled_content_cache: compiled_content_cache,
+        action_provider: action_provider,
         compiler: self,
       )
     end
