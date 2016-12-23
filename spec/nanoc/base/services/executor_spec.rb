@@ -437,10 +437,10 @@ describe Nanoc::Int::Executor do
           rep.raw_paths = { something: 'output/donkey.md' }
         end
 
-        it 'writes' do
+        it 'does not write' do
           executor.snapshot(rep, :something)
 
-          expect(File.read('output/donkey.md')).to eq('Donkey Power')
+          expect(File.file?('output/donkey.md')).not_to be
         end
       end
 

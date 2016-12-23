@@ -182,6 +182,25 @@ module Nanoc::Int
       end
     end
 
+    class WritingItemRepCompiler
+      include Nanoc::Int::ContractsSupport
+
+      def initialize(wrapped:)
+        @wrapped = wrapped
+      end
+
+      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+      def run(rep, is_outdated:)
+        @wrapped.run(rep, is_outdated: is_outdated)
+
+        rep.snapshot_defs.each do |sdef|
+          if sdef.final?
+            ItemRepWriter.new.write(rep, sdef.name)
+          end
+        end
+      end
+    end
+
     include Nanoc::Int::ContractsSupport
 
     # @api private
@@ -336,8 +355,12 @@ module Nanoc::Int
           wrapped: recalculating_item_rep_compiler,
         )
 
-        ResumableItemRepCompiler.new(
+        resumable_item_rep_compiler = ResumableItemRepCompiler.new(
           wrapped: caching_item_rep_compiler,
+        )
+
+        WritingItemRepCompiler.new(
+          wrapped: resumable_item_rep_compiler,
         )
       end
     end
