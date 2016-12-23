@@ -78,14 +78,15 @@ module Nanoc::Int
     class ItemRepRecalculator
       include Nanoc::Int::ContractsSupport
 
-      def initialize(action_provider:, compilation_context:)
+      def initialize(action_provider:, dependency_store:, compilation_context:)
         @action_provider = action_provider
+        @dependency_store = dependency_store
         @compilation_context = compilation_context
       end
 
-      contract Nanoc::Int::ItemRep, C::Named['Nanoc::Int::DependencyStore'] => C::Any
-      def recalculate_content_for_rep(rep, dependency_store)
-        dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+      contract Nanoc::Int::ItemRep => C::Any
+      def recalculate_content_for_rep(rep)
+        dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
         dependency_tracker.enter(rep.item)
 
         executor = Nanoc::Int::Executor.new(@compilation_context, dependency_tracker)
@@ -150,7 +151,7 @@ module Nanoc::Int
               Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
               rep.snapshot_contents = @compiled_content_cache[rep]
             else
-              @recalculator.recalculate_content_for_rep(rep, @dependency_store)
+              @recalculator.recalculate_content_for_rep(rep)
             end
 
             rep.compiled = true
@@ -338,6 +339,7 @@ module Nanoc::Int
     def item_rep_recalculator
       @_item_rep_recalculator ||= ItemRepRecalculator.new(
         action_provider: action_provider,
+        dependency_store: @dependency_store,
         compilation_context: compilation_context,
       )
     end
