@@ -66,7 +66,7 @@ module Nanoc::RuleDSL
     # @return [Nanoc::Int::RuleMemory]
     def new_rule_memory_for_rep(rep)
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
-      view_context = @site.compiler.create_view_context(dependency_tracker)
+      view_context = @site.compiler.compilation_context.create_view_context(dependency_tracker)
 
       executor = Nanoc::RuleDSL::RecordingExecutor.new(rep, @rules_collection, @site)
       rule = @rules_collection.compilation_rule_for(rep)

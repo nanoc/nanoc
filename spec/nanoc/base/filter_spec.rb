@@ -52,7 +52,7 @@ describe Nanoc::Filter do
         reps: reps,
         items: double(:items),
         dependency_tracker: dependency_tracker,
-        compiler: double(:compiler),
+        compilation_context: double(:compilation_context),
       )
     end
 

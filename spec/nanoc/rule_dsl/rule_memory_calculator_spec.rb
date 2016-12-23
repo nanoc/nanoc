@@ -17,11 +17,12 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
       let(:items) { Nanoc::Int::IdentifiableCollection.new(config) }
       let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
       let(:site) { double(:site, items: items, layouts: layouts, config: config, compiler: compiler) }
-      let(:compiler) { double(:compiler) }
+      let(:compiler) { double(:compiler, compilation_context: compilation_context) }
+      let(:compilation_context) { double(:compilation_context) }
       let(:view_context) { double(:view_context) }
 
       before do
-        expect(compiler).to receive(:create_view_context).and_return(view_context)
+        expect(compilation_context).to receive(:create_view_context).and_return(view_context)
       end
 
       context 'no rules exist' do
@@ -132,7 +133,8 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
     let(:items) { Nanoc::Int::IdentifiableCollection.new(config) }
     let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
     let(:site) { double(:site, items: items, layouts: layouts, config: config, compiler: compiler) }
-    let(:compiler) { double(:compiler) }
+    let(:compiler) { double(:compiler, compilation_context: compilation_context) }
+    let(:compilation_context) { double(:compilation_context) }
     let(:view_context) { double(:view_context) }
 
     before do
@@ -144,7 +146,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
       rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
       rules_collection.add_item_compilation_rule(rule)
 
-      expect(compiler).to receive(:create_view_context).and_return(view_context)
+      expect(compilation_context).to receive(:create_view_context).and_return(view_context)
     end
 
     example do

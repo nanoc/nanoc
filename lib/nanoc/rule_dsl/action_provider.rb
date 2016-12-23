@@ -55,7 +55,7 @@ module Nanoc::RuleDSL
           reps: reps,
           items: site.items,
           dependency_tracker: dependency_tracker,
-          compiler: site.compiler,
+          compilation_context: site.compiler.compilation_context,
         )
       ctx = new_postprocessor_context(site, view_context)
 
@@ -72,7 +72,7 @@ module Nanoc::RuleDSL
           reps: nil,
           items: nil,
           dependency_tracker: dependency_tracker,
-          compiler: nil,
+          compilation_context: nil,
         )
 
       Nanoc::Int::Context.new(

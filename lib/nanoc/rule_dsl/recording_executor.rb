@@ -50,7 +50,7 @@ module Nanoc
         return nil if routing_rule.nil?
 
         dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
-        view_context = Nanoc::ViewContext.new(reps: nil, items: nil, dependency_tracker: dependency_tracker, compiler: nil)
+        view_context = Nanoc::ViewContext.new(reps: nil, items: nil, dependency_tracker: dependency_tracker, compilation_context: nil)
         basic_path = routing_rule.apply_to(rep, executor: nil, site: @site, view_context: view_context)
         if basic_path && !basic_path.start_with?('/')
           raise PathWithoutInitialSlashError.new(rep, basic_path)

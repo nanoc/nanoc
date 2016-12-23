@@ -12,7 +12,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       reps: item_rep_repo_for(item),
       items: :__irrelevant__,
       dependency_tracker: :__irrelevant__,
-      compiler: :__irrelevant__,
+      compilation_context: :__irrelevant__,
     )
   end
 

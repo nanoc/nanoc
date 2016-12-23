@@ -5,7 +5,7 @@ module Nanoc
         raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(unwrap)
       end
 
-      snapshot_contents = @context.compiler.compiled_content_cache[unwrap]
+      snapshot_contents = @context.compilation_context.compiled_content_cache[unwrap]
       snapshot_name = snapshot || (snapshot_contents[:pre] ? :pre : :last)
 
       if snapshot_contents[snapshot_name]
