@@ -30,9 +30,9 @@ module Nanoc::Int
         @compiler = compiler # TODO: remove me
       end
 
-      contract Nanoc::Int::ItemRep => C::Any
-      def compile(rep)
-        fiber = fiber_for(rep)
+      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+      def compile(rep, is_outdated:)
+        fiber = fiber_for(rep, is_outdated: is_outdated)
         while fiber.alive?
           Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
           res = fiber.resume
@@ -53,8 +53,8 @@ module Nanoc::Int
 
       private
 
-      contract Nanoc::Int::ItemRep => Fiber
-      def fiber_for(rep)
+      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => Fiber
+      def fiber_for(rep, is_outdated:)
         @fibers ||= {}
 
         @fibers[rep] ||=
@@ -264,7 +264,7 @@ module Nanoc::Int
       end
 
       # Find item reps to compile
-      outdated_reps = @reps.select { |r| outdatedness_checker.outdated?(r) }
+      outdated_reps = Set.new(@reps.select { |r| outdatedness_checker.outdated?(r) })
 
       # Reset dependencies for outdated items
       outdated_items = outdated_reps.map(&:item).uniq
@@ -273,7 +273,7 @@ module Nanoc::Int
       # Compile reps
       selector = Nanoc::Int::ItemRepSelector.new(outdated_reps)
       selector.each do |rep|
-        handle_errors_while(rep) { compile_rep(rep) }
+        handle_errors_while(rep) { compile_rep(rep, is_outdated: outdated_reps.include?(rep)) }
       end
     end
 
@@ -292,8 +292,9 @@ module Nanoc::Int
     # @param [Nanoc::Int::ItemRep] rep The rep that is to be compiled
     #
     # @return [void]
-    def compile_rep(rep)
-      single.compile(rep)
+    def compile_rep(rep, is_outdated: true)
+      # TODO: remove is_outdated arg fallback
+      single.compile(rep, is_outdated: is_outdated)
     end
 
     def single
