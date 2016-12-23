@@ -83,8 +83,11 @@ module Nanoc::Int
         @compilation_context = compilation_context
       end
 
-      contract Nanoc::Int::ItemRep, C::Named['Nanoc::Int::DependencyTracker'] => C::Any
-      def recalculate_content_for_rep(rep, dependency_tracker)
+      contract Nanoc::Int::ItemRep, C::Named['Nanoc::Int::DependencyStore'] => C::Any
+      def recalculate_content_for_rep(rep, dependency_store)
+        dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+        dependency_tracker.enter(rep.item)
+
         executor = Nanoc::Int::Executor.new(@compilation_context, dependency_tracker)
 
         @action_provider.memory_for(rep).each do |action|
@@ -99,6 +102,8 @@ module Nanoc::Int
             raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
           end
         end
+      ensure
+        dependency_tracker.exit
       end
     end
 
@@ -145,14 +150,7 @@ module Nanoc::Int
               Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
               rep.snapshot_contents = @compiled_content_cache[rep]
             else
-              begin
-                dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
-                dependency_tracker.enter(rep.item)
-
-                @recalculator.recalculate_content_for_rep(rep, dependency_tracker)
-              ensure
-                dependency_tracker.exit
-              end
+              @recalculator.recalculate_content_for_rep(rep, @dependency_store)
             end
 
             rep.compiled = true
