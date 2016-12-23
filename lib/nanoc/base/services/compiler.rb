@@ -112,8 +112,7 @@ module Nanoc::Int
     class ItemRepCompiler
       include Nanoc::Int::ContractsSupport
 
-      def initialize(dependency_store:, compiled_content_cache:, recalculator:)
-        @dependency_store = dependency_store
+      def initialize(compiled_content_cache:, recalculator:)
         @compiled_content_cache = compiled_content_cache
         @recalculator = recalculator
       end
@@ -330,7 +329,6 @@ module Nanoc::Int
 
     def item_rep_compiler
       @_item_rep_compiler ||= ItemRepCompiler.new(
-        dependency_store: @dependency_store,
         compiled_content_cache: compiled_content_cache,
         recalculator: item_rep_recalculator,
       )
