@@ -20,11 +20,12 @@ module Nanoc::Int
   class Compiler
     # Provides common functionality for accesing “context” of an item that is being compiled.
     class ExecutorDelegate
-      def initialize(compiler:, action_provider:, reps:, site:)
+      def initialize(compiler:, action_provider:, reps:, site:, compiled_content_cache:)
         @compiler = compiler # TODO: remove
         @action_provider = action_provider
         @reps = reps
         @site = site
+        @compiled_content_cache = compiled_content_cache
       end
 
       def filter_name_and_args_for_layout(layout)
@@ -66,6 +67,10 @@ module Nanoc::Int
 
       def site
         @site
+      end
+
+      def compiled_content_cache
+        @compiled_content_cache
       end
     end
 
@@ -325,6 +330,7 @@ module Nanoc::Int
         action_provider: action_provider,
         reps: @reps,
         site: @site,
+        compiled_content_cache: compiled_content_cache,
       )
     end
 
