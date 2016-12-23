@@ -6,7 +6,7 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
       # Wait for server to start up
       20.times do |i|
         begin
-          Net::HTTP.get('0.0.0.0', '/', 50_385)
+          Net::HTTP.get('127.0.0.1', '/', 50_385)
         rescue Errno::ECONNREFUSED, Errno::ECONNRESET
           sleep(0.1 * 1.2**i)
           retry
@@ -23,14 +23,14 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
       it 'serves /index.html as /' do
         File.write('output/index.html', 'Hello there! Nanoc loves you! <3')
         run_nanoc_cmd(['view', '--port', '50385']) do
-          expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql('Hello there! Nanoc loves you! <3')
+          expect(Net::HTTP.get('127.0.0.1', '/', 50_385)).to eql('Hello there! Nanoc loves you! <3')
         end
       end
 
       it 'does not serve /index.xhtml as /' do
         File.write('output/index.xhtml', 'Hello there! Nanoc loves you! <3')
         run_nanoc_cmd(['view', '--port', '50385']) do
-          expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql("File not found: /\n")
+          expect(Net::HTTP.get('127.0.0.1', '/', 50_385)).to eql("File not found: /\n")
         end
       end
     end
@@ -43,7 +43,7 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
       it 'serves /index.xhtml as /' do
         File.write('output/index.xhtml', 'Hello there! Nanoc loves you! <3')
         run_nanoc_cmd(['view', '--port', '50385']) do
-          expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql('Hello there! Nanoc loves you! <3')
+          expect(Net::HTTP.get('127.0.0.1', '/', 50_385)).to eql('Hello there! Nanoc loves you! <3')
         end
       end
     end
@@ -51,7 +51,7 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
     it 'does not serve other files as /' do
       File.write('output/index.html666', 'Hello there! Nanoc loves you! <3')
       run_nanoc_cmd(['view', '--port', '50385']) do
-        expect(Net::HTTP.get('0.0.0.0', '/', 50_385)).to eql("File not found: /\n")
+        expect(Net::HTTP.get('127.0.0.1', '/', 50_385)).to eql("File not found: /\n")
       end
     end
   end
