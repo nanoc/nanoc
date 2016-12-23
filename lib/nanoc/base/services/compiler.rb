@@ -63,7 +63,7 @@ module Nanoc::Int
               dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
               dependency_tracker.enter(rep.item)
 
-              if @compiler.send(:can_reuse_content_for_rep?, rep)
+              if can_reuse_content_for_rep?(rep)
                 Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
                 rep.snapshot_contents = @compiled_content_cache[rep]
               else
@@ -98,6 +98,11 @@ module Nanoc::Int
             raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
           end
         end
+      end
+
+      contract Nanoc::Int::ItemRep => C::Bool
+      def can_reuse_content_for_rep?(rep)
+        !@compiler.outdatedness_checker.outdated?(rep) && !@compiled_content_cache[rep].nil?
       end
     end
 
@@ -303,11 +308,6 @@ module Nanoc::Int
         compiled_content_cache: compiled_content_cache,
         compiler: self,
       )
-    end
-
-    # @return [Boolean]
-    def can_reuse_content_for_rep?(rep)
-      !outdatedness_checker.outdated?(rep) && compiled_content_cache[rep]
     end
 
     # Returns all stores that can load/store data that can be used for
