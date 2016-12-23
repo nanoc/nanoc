@@ -311,9 +311,10 @@ module Nanoc::Int
       outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
 
       # Compile reps
-      selector = Nanoc::Int::ItemRepSelector.new(outdated_reps)
+      reps_to_recompile = Set.new(outdated_items.flat_map { |i| @reps[i] })
+      selector = Nanoc::Int::ItemRepSelector.new(reps_to_recompile)
       selector.each do |rep|
-        handle_errors_while(rep) { compile_rep(rep, is_outdated: outdated_reps.include?(rep)) }
+        handle_errors_while(rep) { compile_rep(rep, is_outdated: reps_to_recompile.include?(rep)) }
       end
     end
 
