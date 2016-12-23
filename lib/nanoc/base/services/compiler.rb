@@ -263,11 +263,6 @@ module Nanoc::Int
       builder.run
     end
 
-    # @api private
-    def filter_name_and_args_for_layout(layout)
-      compilation_context.filter_name_and_args_for_layout(layout)
-    end
-
     def compilation_context
       @_compilation_context ||= CompilationContext.new(
         action_provider: action_provider,

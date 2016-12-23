@@ -1,7 +1,20 @@
 describe Nanoc::Int::Executor do
   let(:executor) { described_class.new(compilation_context, dependency_tracker) }
 
-  let(:compilation_context) { Nanoc::Int::Compiler.allocate }
+  let(:compilation_context) do
+    Nanoc::Int::Compiler::CompilationContext.new(
+      action_provider: action_provider,
+      reps: reps,
+      site: site,
+      compiled_content_cache: compiled_content_cache,
+    )
+  end
+
+  let(:action_provider) { double(:action_provider) }
+  let(:reps) { double(:reps) }
+  let(:site) { double(:site) }
+  let(:compiled_content_cache) { double(:compiled_content_cache) }
+
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
 
   describe '#filter' do
@@ -275,13 +288,11 @@ describe Nanoc::Int::Executor do
       end
     end
 
-    let(:action_provider) { double(:action_provider) }
-
     before do
       allow(compilation_context).to receive(:site) { site }
-      allow(compilation_context).to receive(:action_provider) { action_provider }
       allow(compilation_context).to receive(:assigns_for).with(rep, dependency_tracker) { assigns }
       allow(compilation_context).to receive(:create_view_context).with(dependency_tracker).and_return(view_context)
+
       allow(action_provider).to receive(:memory_for).with(layout).and_return(rule_memory)
     end
 
