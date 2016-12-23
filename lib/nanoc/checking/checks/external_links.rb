@@ -103,7 +103,7 @@ module ::Nanoc::Checking::Checks
       if last_err
         return Result.new(href, last_err.message)
       else
-        raise 'should not have gotten here'
+        raise Nanoc::Int::Errors::InternalInconsistency, 'last_err cannot be nil'
       end
     end
 

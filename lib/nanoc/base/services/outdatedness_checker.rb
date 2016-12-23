@@ -44,7 +44,7 @@ module Nanoc::Int
         when Nanoc::Int::Layout
           apply_rules(RULES_FOR_LAYOUT, obj)
         else
-          raise "do not know how to check outdatedness of #{obj.inspect}"
+          raise Nanoc::Int::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
         end
       end
       memoize :outdatedness_status_for

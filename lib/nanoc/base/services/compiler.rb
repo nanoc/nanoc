@@ -276,7 +276,7 @@ module Nanoc::Int
         when Nanoc::Int::ProcessingActions::Snapshot
           executor.snapshot(rep, action.snapshot_name, final: action.final?, path: action.path)
         else
-          raise "Internal inconsistency: unknown action #{action.inspect}"
+          raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
         end
       end
     end

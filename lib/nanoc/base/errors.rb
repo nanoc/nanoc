@@ -213,5 +213,8 @@ module Nanoc::Int
         super("There is no filter defined for the layout #{layout.identifier}")
       end
     end
+
+    class InternalInconsistency < Generic
+    end
   end
 end
