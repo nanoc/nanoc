@@ -45,13 +45,11 @@ module Nanoc::Int
     class Single
       include Nanoc::Int::ContractsSupport
 
-      def initialize(dependency_store:, compiled_content_cache:, action_provider:, site:, reps:, compiler:)
+      def initialize(dependency_store:, compiled_content_cache:, action_provider:, executor_delegate:)
         @dependency_store = dependency_store
         @compiled_content_cache = compiled_content_cache
         @action_provider = action_provider
-        @site = site
-        @reps = reps
-        @executor_delegate = ExecutorDelegate.new(compiler: compiler, site: @site)
+        @executor_delegate = executor_delegate
       end
 
       contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
@@ -321,9 +319,7 @@ module Nanoc::Int
         dependency_store: @dependency_store,
         compiled_content_cache: compiled_content_cache,
         action_provider: action_provider,
-        site: @site,
-        reps: @reps,
-        compiler: self,
+        executor_delegate: ExecutorDelegate.new(compiler: self, site: @site),
       )
     end
 
