@@ -68,9 +68,6 @@ module Nanoc::Int
       load_stores
       @site.freeze
 
-      # Determine which reps need to be recompiled
-      forget_dependencies_if_outdated
-
       compile_reps
       store
     ensure
@@ -184,8 +181,14 @@ module Nanoc::Int
         rep.snapshot_defs = action_provider.snapshots_defs_for(rep)
       end
 
-      # Find item reps to compile and compile them
+      # Find item reps to compile
       outdated_reps = @reps.select { |r| outdatedness_checker.outdated?(r) }
+
+      # Reset dependencies for outdated items
+      outdated_items = outdated_reps.map(&:item).uniq
+      outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
+
+      # Compile reps
       selector = Nanoc::Int::ItemRepSelector.new(outdated_reps)
       selector.each do |rep|
         handle_errors_while(rep) { compile_rep(rep) }
@@ -275,17 +278,6 @@ module Nanoc::Int
           executor.snapshot(rep, action.snapshot_name, final: action.final?, path: action.path)
         else
           raise "Internal inconsistency: unknown action #{action.inspect}"
-        end
-      end
-    end
-
-    # Clears the list of dependencies for items that will be recompiled.
-    #
-    # @return [void]
-    def forget_dependencies_if_outdated
-      @site.items.each do |i|
-        if @reps[i].any? { |r| outdatedness_checker.outdated?(r) }
-          @dependency_store.forget_dependencies_for(i)
         end
       end
     end
