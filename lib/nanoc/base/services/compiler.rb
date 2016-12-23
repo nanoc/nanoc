@@ -89,7 +89,7 @@ module Nanoc::Int
         dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
         dependency_tracker.enter(rep.item)
 
-        executor = Nanoc::Int::Executor.new(@compilation_context, dependency_tracker)
+        executor = Nanoc::Int::Executor.new(rep, @compilation_context, dependency_tracker)
 
         @action_provider.memory_for(rep).each do |action|
           case action

@@ -7,7 +7,8 @@ module Nanoc
         end
       end
 
-      def initialize(compilation_context, dependency_tracker)
+      def initialize(rep, compilation_context, dependency_tracker)
+        @rep = rep
         @compilation_context = compilation_context
         @dependency_tracker = dependency_tracker
       end

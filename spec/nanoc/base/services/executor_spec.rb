@@ -1,5 +1,5 @@
 describe Nanoc::Int::Executor do
-  let(:executor) { described_class.new(compilation_context, dependency_tracker) }
+  let(:executor) { described_class.new(rep, compilation_context, dependency_tracker) }
 
   let(:compilation_context) do
     Nanoc::Int::Compiler::CompilationContext.new(
@@ -9,6 +9,10 @@ describe Nanoc::Int::Executor do
       compiled_content_cache: compiled_content_cache,
     )
   end
+
+  let(:item) { Nanoc::Int::Item.new(content, {}, '/index.md') }
+  let(:rep) { Nanoc::Int::ItemRep.new(item, :donkey) }
+  let(:content) { Nanoc::Int::TextualContent.new('Donkey Power').tap(&:freeze) }
 
   let(:action_provider) { double(:action_provider) }
   let(:reps) { double(:reps) }
@@ -21,10 +25,6 @@ describe Nanoc::Int::Executor do
     let(:assigns) { {} }
 
     let(:content) { Nanoc::Int::TextualContent.new('<%= "Donkey" %> Power') }
-
-    let(:item) { Nanoc::Int::Item.new(content, {}, '/') }
-
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :donkey) }
 
     before do
       allow(compilation_context).to receive(:assigns_for) { assigns }
@@ -247,12 +247,6 @@ describe Nanoc::Int::Executor do
   end
 
   describe '#layout' do
-    let(:item) { Nanoc::Int::Item.new(content, {}, '/index.md') }
-
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :donkey) }
-
-    let(:content) { Nanoc::Int::TextualContent.new('Donkey Power').tap(&:freeze) }
-
     let(:site) { double(:site, config: config, layouts: layouts) }
 
     let(:config) do
@@ -405,10 +399,6 @@ describe Nanoc::Int::Executor do
   end
 
   describe '#snapshot' do
-    let(:item) { Nanoc::Int::Item.new(content, {}, '/') }
-
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :donkey) }
-
     context 'binary content' do
       let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.dat')) }
 
