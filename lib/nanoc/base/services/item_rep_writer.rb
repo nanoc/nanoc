@@ -18,7 +18,7 @@ module Nanoc::Int
         :will_write_rep, item_rep, raw_path
       )
 
-      content = item_rep.snapshot_contents[:last]
+      content = item_rep.snapshot_contents[snapshot_name]
       if content.binary?
         temp_path = content.filename
       else
