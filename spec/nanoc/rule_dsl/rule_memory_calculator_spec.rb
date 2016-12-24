@@ -86,6 +86,134 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           expect(subject[7].path).to be_nil
         end
       end
+
+      context 'no routing rule exists' do
+        before do
+          # Add compilation rule
+          compilation_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
+          rules_collection.add_item_compilation_rule(compilation_rule)
+        end
+
+        example do
+          subject
+
+          expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[0].snapshot_name).to eql(:raw)
+          expect(subject[0]).to be_final
+          expect(subject[0].path).to be_nil
+
+          expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[1].snapshot_name).to eql(:pre)
+          expect(subject[1]).not_to be_final
+          expect(subject[1].path).to be_nil
+
+          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[2].snapshot_name).to eql(:last)
+          expect(subject[2]).to be_final
+          expect(subject[2].path).to be_nil
+
+          expect(subject.size).to eql(3)
+        end
+      end
+
+      context 'routing rule exists' do
+        before do
+          # Add compilation rule
+          compilation_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
+          rules_collection.add_item_compilation_rule(compilation_rule)
+
+          # Add routing rule
+          routing_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc { '/foo.md' }, snapshot_name: :last)
+          rules_collection.add_item_routing_rule(routing_rule)
+        end
+
+        example do
+          subject
+
+          expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[0].snapshot_name).to eql(:raw)
+          expect(subject[0]).to be_final
+          expect(subject[0].path).to be_nil
+
+          expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[1].snapshot_name).to eql(:pre)
+          expect(subject[1]).not_to be_final
+          expect(subject[1].path).to be_nil
+
+          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[2].snapshot_name).to eql(:last)
+          expect(subject[2]).to be_final
+          expect(subject[2].path).to eq('/foo.md')
+
+          expect(subject.size).to eql(3)
+        end
+      end
+
+      context 'routing rule exists for non-final snapshot' do
+        before do
+          # Add compilation rule
+          compilation_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
+          rules_collection.add_item_compilation_rule(compilation_rule)
+
+          # Add routing rule
+          routing_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc { '/foo.md' }, snapshot_name: :pre)
+          rules_collection.add_item_routing_rule(routing_rule)
+        end
+
+        example do
+          subject
+
+          expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[0].snapshot_name).to eql(:raw)
+          expect(subject[0]).to be_final
+          expect(subject[0].path).to be_nil
+
+          expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[1].snapshot_name).to eql(:pre)
+          expect(subject[1]).not_to be_final
+          expect(subject[1].path).to be_nil
+
+          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[2].snapshot_name).to eql(:last)
+          expect(subject[2]).to be_final
+          expect(subject[2].path).to be_nil
+
+          expect(subject.size).to eql(3)
+        end
+      end
+
+      context 'routing rule for other rep exists' do
+        before do
+          # Add compilation rule
+          compilation_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
+          rules_collection.add_item_compilation_rule(compilation_rule)
+
+          # Add routing rule
+          routing_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :abc, proc { '/foo.md' }, snapshot_name: :last)
+          rules_collection.add_item_routing_rule(routing_rule)
+        end
+
+        example do
+          subject
+
+          expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[0].snapshot_name).to eql(:raw)
+          expect(subject[0]).to be_final
+          expect(subject[0].path).to be_nil
+
+          expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[1].snapshot_name).to eql(:pre)
+          expect(subject[1]).not_to be_final
+          expect(subject[1].path).to be_nil
+
+          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[2].snapshot_name).to eql(:last)
+          expect(subject[2]).to be_final
+          expect(subject[2].path).to be_nil
+
+          expect(subject.size).to eql(3)
+        end
+      end
     end
 
     context 'with layout' do

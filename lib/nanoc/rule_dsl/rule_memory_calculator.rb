@@ -24,6 +24,12 @@ module Nanoc::RuleDSL
       end
     end
 
+    class PathWithoutInitialSlashError < ::Nanoc::Error
+      def initialize(rep, basic_path)
+        super("The path returned for the #{rep.inspect} item representation, “#{basic_path}”, does not start with a slash. Please ensure that all routing rules return a path that starts with a slash.")
+      end
+    end
+
     # @api private
     attr_accessor :rules_collection
 
@@ -68,7 +74,8 @@ module Nanoc::RuleDSL
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
       view_context = @site.compiler.compilation_context.create_view_context(dependency_tracker)
 
-      executor = Nanoc::RuleDSL::RecordingExecutor.new(rep, @rules_collection, @site)
+      rule_memory = Nanoc::Int::RuleMemory.new(rep)
+      executor = Nanoc::RuleDSL::RecordingExecutor.new(rule_memory)
       rule = @rules_collection.compilation_rule_for(rep)
 
       unless rule
@@ -78,14 +85,14 @@ module Nanoc::RuleDSL
       executor.snapshot(:raw)
       executor.snapshot(:pre, final: false)
       rule.apply_to(rep, executor: executor, site: @site, view_context: view_context)
-      if executor.rule_memory.any_layouts?
+      if rule_memory.any_layouts?
         executor.snapshot(:post)
       end
-      unless executor.rule_memory.snapshot_actions.any? { |sa| sa.snapshot_name == :last }
+      unless rule_memory.snapshot_actions.any? { |sa| sa.snapshot_name == :last }
         executor.snapshot(:last)
       end
 
-      executor.rule_memory
+      assign_paths_to_mem(rule_memory, rep: rep)
     end
 
     # @param [Nanoc::Int::Layout] layout
@@ -101,6 +108,36 @@ module Nanoc::RuleDSL
       Nanoc::Int::RuleMemory.new(layout).tap do |rm|
         rm.add_filter(res[0], res[1])
       end
+    end
+
+    def assign_paths_to_mem(mem, rep:)
+      mem.map do |action|
+        if action.is_a?(Nanoc::Int::ProcessingActions::Snapshot) && action.path.nil? && action.final?
+          path_from_rules = basic_path_from_rules_for(rep, action.snapshot_name)
+          if path_from_rules
+            action.copy(path: path_from_rules.to_s)
+          else
+            action
+          end
+        else
+          action
+        end
+      end
+    end
+
+    # FIXME: ugly
+    def basic_path_from_rules_for(rep, snapshot_name)
+      routing_rules = @rules_collection.routing_rules_for(rep)
+      routing_rule = routing_rules[snapshot_name]
+      return nil if routing_rule.nil?
+
+      dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
+      view_context = Nanoc::ViewContext.new(reps: nil, items: nil, dependency_tracker: dependency_tracker, compilation_context: nil)
+      basic_path = routing_rule.apply_to(rep, executor: nil, site: @site, view_context: view_context)
+      if basic_path && !basic_path.start_with?('/')
+        raise PathWithoutInitialSlashError.new(rep, basic_path)
+      end
+      basic_path
     end
   end
 end

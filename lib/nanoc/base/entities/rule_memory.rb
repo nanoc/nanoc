@@ -3,9 +3,9 @@ module Nanoc::Int
     include Nanoc::Int::ContractsSupport
     include Enumerable
 
-    def initialize(item_rep)
+    def initialize(item_rep, actions: [])
       @item_rep = item_rep
-      @actions = []
+      @actions = actions
     end
 
     contract C::None => Numeric
@@ -56,13 +56,21 @@ module Nanoc::Int
 
     # TODO: Add contract
     def serialize
-      map(&:serialize)
+      to_a.map(&:serialize)
     end
 
     contract C::Func[Nanoc::Int::ProcessingAction => C::Any] => self
     def each
       @actions.each { |a| yield(a) }
       self
+    end
+
+    contract C::Func[Nanoc::Int::ProcessingAction => C::Any] => self
+    def map
+      self.class.new(
+        @item_rep,
+        actions: @actions.map { |a| yield(a) },
+      )
     end
 
     private

@@ -6,6 +6,7 @@ require 'nanoc/cli'
 require 'nanoc/spec'
 
 require 'timecop'
+require 'rspec/its'
 
 Nanoc::CLI.setup
 
