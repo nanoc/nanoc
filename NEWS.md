@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.4.5 (2016-12-24)
+
+Fixes:
+
+* Prevented stale data from making it into the checksum store and thereby blowing up in memory (#1004, #1027)
+* Fixed slow recompile after adding many items to a site (#1028)
+* Fixed wrong capturing helper output when the output field separator (`$,`) is set
+* Fixed issue that could cause items with multiple reps not to be recompiled when needed (#1031, #1032)
+* Fixed error when fetching textual content of item whose `:last` snapshot is binary (#1035, #1036)
+
 ## 4.4.4 (2016-12-19)
 
 Enhancements:
