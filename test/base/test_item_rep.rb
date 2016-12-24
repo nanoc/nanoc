@@ -139,7 +139,10 @@ class Nanoc::Int::ItemRepTest < Nanoc::TestCase
   def test_access_compiled_content_of_binary_item
     content = Nanoc::Int::BinaryContent.new(File.expand_path('content/somefile.dat'))
     item = Nanoc::Int::Item.new(content, {}, '/somefile/')
+
     item_rep = Nanoc::Int::ItemRep.new(item, :foo)
+    item_rep.expects(:compiled?).returns(true)
+
     assert_raises(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem) do
       item_rep.compiled_content
     end
