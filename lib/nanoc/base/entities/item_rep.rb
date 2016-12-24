@@ -66,11 +66,12 @@ module Nanoc::Int
     def compiled_content(snapshot: nil)
       # Get name of last pre-layout snapshot
       snapshot_name = snapshot || (@snapshot_contents[:pre] ? :pre : :last)
-      is_moving = [:pre, :post, :last].include?(snapshot_name)
+      is_movable = [:pre, :post, :last].include?(snapshot_name)
 
       # Check existance of snapshot
       snapshot_def = snapshot_defs.reverse.find { |sd| sd.name == snapshot_name }
-      if !is_moving && (snapshot_def.nil? || !snapshot_def.final?)
+      is_final = snapshot_def && snapshot_def.final?
+      if !is_movable && !is_final
         raise Nanoc::Int::Errors::NoSuchSnapshot.new(self, snapshot_name)
       end
 
@@ -80,7 +81,7 @@ module Nanoc::Int
         when :post, :last
           true
         when :pre
-          snapshot_def.nil? || !snapshot_def.final?
+          !is_final
         end
       is_usable_snapshot = @snapshot_contents[snapshot_name] && (compiled? || !is_still_moving)
       unless is_usable_snapshot
