@@ -85,7 +85,9 @@ module Nanoc::RuleDSL
         executor.snapshot(:last)
       end
 
-      executor.rule_memory
+      mem = executor.rule_memory
+      mem.canonicalize
+      mem
     end
 
     # @param [Nanoc::Int::Layout] layout
