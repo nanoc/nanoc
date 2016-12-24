@@ -12,8 +12,6 @@ module Nanoc::RuleDSL
     def initialize(rep:, site:, executor:, view_context:)
       @_executor = executor
 
-      @_write_snapshot_counter = 0
-
       super({
         item: Nanoc::ItemWithoutRepsView.new(rep.item, view_context),
         rep: Nanoc::ItemRepView.new(rep, view_context),
@@ -67,7 +65,7 @@ module Nanoc::RuleDSL
       @_executor.snapshot(snapshot_name, path: path)
     end
 
-    # Creates an unnamed snapshot of the current compiled item content, with
+    # Creates a snapshot named :last the current compiled item content, with
     # the given path. This is a convenience method for {#snapshot}.
     #
     # @see #snapshot
@@ -76,9 +74,7 @@ module Nanoc::RuleDSL
     #
     # @return [void]
     def write(path)
-      snapshot_name = "_#{@_write_snapshot_counter}".to_sym
-      @_write_snapshot_counter += 1
-      snapshot(snapshot_name, path: path)
+      snapshot(:last, path: path)
     end
   end
 end
