@@ -65,6 +65,21 @@ module Nanoc::Int
       self
     end
 
+    # Attempts to merge anonymous snapshots with named ones around it
+    def canonicalize
+      return if @actions.size < 2
+
+      last_two = @actions.last(2)
+      last_two_mergeable =
+        last_two.all? { |pa| pa.is_a?(Nanoc::Int::ProcessingActions::Snapshot) } &&
+        last_two.last.snapshot_name == :last &&
+        last_two.first.snapshot_name.to_s =~ /\A_\d+\z/
+
+      if last_two_mergeable
+        @actions[-2, 2] = [Nanoc::Int::ProcessingActions::Snapshot.new(:last, true, last_two.first.path)]
+      end
+    end
+
     private
 
     def will_add_snapshot(name)

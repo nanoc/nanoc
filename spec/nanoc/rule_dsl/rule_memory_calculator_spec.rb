@@ -33,7 +33,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
       end
 
       context 'rules exist' do
-        before do
+        example do
           rules_proc = proc do
             filter :erb, speed: :over_9000
             layout '/default.*'
@@ -41,9 +41,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           end
           rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
           rules_collection.add_item_compilation_rule(rule)
-        end
 
-        example do
           subject
 
           expect(subject.size).to eql(8)
@@ -84,6 +82,37 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           expect(subject[7].snapshot_name).to eql(:last)
           expect(subject[7]).to be_final
           expect(subject[7].path).to be_nil
+        end
+
+        context 'anonymous snapshot followed by :last snapshot' do
+          before do
+            rules_proc = proc do
+              write '/hello.txt'
+            end
+            rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
+            rules_collection.add_item_compilation_rule(rule)
+          end
+
+          it 'merges the two snapshots' do
+            subject
+
+            expect(subject.size).to eql(3)
+
+            expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+            expect(subject[0].snapshot_name).to eql(:raw)
+            expect(subject[0]).to be_final
+            expect(subject[0].path).to be_nil
+
+            expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+            expect(subject[1].snapshot_name).to eql(:pre)
+            expect(subject[1]).not_to be_final
+            expect(subject[1].path).to be_nil
+
+            expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+            expect(subject[2].snapshot_name).to eql(:last)
+            expect(subject[2]).to be_final
+            expect(subject[2].path).to eq('/hello.txt')
+          end
         end
       end
     end
