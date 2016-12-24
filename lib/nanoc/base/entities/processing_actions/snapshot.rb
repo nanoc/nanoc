@@ -19,6 +19,12 @@ module Nanoc::Int::ProcessingActions
       [:snapshot, @snapshot_name, @final, @path]
     end
 
+    NONE = Object.new
+
+    def copy(path: NONE)
+      self.class.new(@snapshot_name, @final, path.equal?(NONE) ? @path : path)
+    end
+
     def to_s
       "snapshot #{@snapshot_name.inspect}, final: #{@final.inspect}, path: #{@path.inspect}"
     end

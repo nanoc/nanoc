@@ -13,6 +13,7 @@ group :devel do
   gem 'pry'
   gem 'rake'
   gem 'rdoc', '~> 5.0'
+  gem 'rspec-its', '~> 1.2'
   gem 'rspec-mocks'
   gem 'rspec'
   gem 'rubocop'

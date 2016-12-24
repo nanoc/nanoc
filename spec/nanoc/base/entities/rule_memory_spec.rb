@@ -92,6 +92,34 @@ describe Nanoc::Int::RuleMemory do
     end
   end
 
+  describe '#each' do
+    before do
+      rule_memory.add_filter(:erb, { awesomeness: 'high' })
+      rule_memory.add_snapshot(:bar, true, '/foo.md')
+      rule_memory.add_layout('/default.erb', { somelayoutparam: 'yes' })
+    end
+
+    example do
+      actions = []
+      rule_memory.each { |a| actions << a }
+      expect(actions.size).to eq(3)
+    end
+  end
+
+  describe '#map' do
+    before do
+      rule_memory.add_filter(:erb, { awesomeness: 'high' })
+      rule_memory.add_snapshot(:bar, true, '/foo.md')
+      rule_memory.add_layout('/default.erb', { somelayoutparam: 'yes' })
+    end
+
+    example do
+      res = rule_memory.map { Nanoc::Int::ProcessingActions::Filter.new(:donkey, {}) }
+      expect(res.to_a.size).to eq(3)
+      expect(res.to_a).to all(be_a(Nanoc::Int::ProcessingActions::Filter))
+    end
+  end
+
   describe '#serialize' do
     subject { rule_memory.serialize }
 
