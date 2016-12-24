@@ -31,6 +31,7 @@ module Nanoc::Int
       RespondTo   = Ignorer.instance
       Named       = Ignorer.instance
       IterOf      = Ignorer.instance
+      HashOf      = Ignorer.instance
 
       def contract(*args); end
     end
