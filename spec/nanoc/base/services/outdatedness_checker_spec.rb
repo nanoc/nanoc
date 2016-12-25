@@ -234,7 +234,7 @@ describe Nanoc::Int::OutdatednessChecker do
         let(:new_memory_for_other_item_rep) do
           Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
             mem.add_filter(:erb, {})
-            mem.add_snapshot(:donkey, true, '/giraffe.txt')
+            mem.add_snapshot(:donkey, '/giraffe.txt')
           end
         end
 
@@ -267,7 +267,7 @@ describe Nanoc::Int::OutdatednessChecker do
         let(:new_memory_for_other_item_rep) do
           Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
             mem.add_filter(:erb, {})
-            mem.add_snapshot(:donkey, true, '/giraffe.txt')
+            mem.add_snapshot(:donkey, '/giraffe.txt')
           end
         end
 
@@ -294,7 +294,7 @@ describe Nanoc::Int::OutdatednessChecker do
         let(:new_memory_for_other_item_rep) do
           Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
             mem.add_filter(:erb, {})
-            mem.add_snapshot(:donkey, true, '/giraffe.txt')
+            mem.add_snapshot(:donkey, '/giraffe.txt')
           end
         end
 

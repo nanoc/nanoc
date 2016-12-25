@@ -17,7 +17,7 @@ module Nanoc
         end
 
         unless @rule_memory.any_layouts?
-          @rule_memory.add_snapshot(:pre, true, nil)
+          @rule_memory.add_snapshot(:pre, nil)
         end
 
         @rule_memory.add_layout(layout_identifier, extra_filter_args)
@@ -26,7 +26,7 @@ module Nanoc
       Pathlike = C::Maybe[C::Or[String, Nanoc::Identifier]]
       contract Symbol, C::KeywordArgs[path: C::Optional[Pathlike]] => nil
       def snapshot(snapshot_name, path: nil)
-        @rule_memory.add_snapshot(snapshot_name, true, path && path.to_s)
+        @rule_memory.add_snapshot(snapshot_name, path && path.to_s)
         nil
       end
     end
