@@ -340,7 +340,7 @@ describe Nanoc::Int::Executor do
         end
 
         before do
-          executor.snapshot(:pre, path: nil)
+          executor.snapshot(:pre)
         end
 
         it 'can contain compiled_content reference' do

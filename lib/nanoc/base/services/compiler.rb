@@ -98,7 +98,7 @@ module Nanoc::Int
           when Nanoc::Int::ProcessingActions::Layout
             executor.layout(action.layout_identifier, action.params)
           when Nanoc::Int::ProcessingActions::Snapshot
-            executor.snapshot(action.snapshot_name, path: action.path)
+            executor.snapshot(action.snapshot_name)
           else
             raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
           end
