@@ -263,7 +263,7 @@ describe Nanoc::Int::OutdatednessRules do
       context 'old mem does not exist' do
         let(:new_mem) do
           Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
-            mem.add_snapshot(:donkey, true, '/foo.md')
+            mem.add_snapshot(:donkey, '/foo.md')
             mem.add_filter(:asdf, {})
           end
         end
@@ -275,7 +275,7 @@ describe Nanoc::Int::OutdatednessRules do
         let(:old_mem) do
           Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
             mem.add_filter(:erb, {})
-            mem.add_snapshot(:donkey, true, '/foo.md')
+            mem.add_snapshot(:donkey, '/foo.md')
           end
         end
 
@@ -286,7 +286,7 @@ describe Nanoc::Int::OutdatednessRules do
         context 'paths in memory are the same' do
           let(:new_mem) do
             Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
-              mem.add_snapshot(:donkey, true, '/foo.md')
+              mem.add_snapshot(:donkey, '/foo.md')
               mem.add_filter(:asdf, {})
             end
           end
@@ -298,9 +298,9 @@ describe Nanoc::Int::OutdatednessRules do
           let(:new_mem) do
             Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
               mem.add_filter(:erb, {})
-              mem.add_snapshot(:donkey, true, '/foo.md')
+              mem.add_snapshot(:donkey, '/foo.md')
               mem.add_filter(:donkey, {})
-              mem.add_snapshot(:giraffe, true, '/bar.md')
+              mem.add_snapshot(:giraffe, '/bar.md')
             end
           end
 

@@ -98,7 +98,7 @@ module Nanoc::Int
           when Nanoc::Int::ProcessingActions::Layout
             executor.layout(action.layout_identifier, action.params)
           when Nanoc::Int::ProcessingActions::Snapshot
-            executor.snapshot(action.snapshot_name, final: action.final?, path: action.path)
+            executor.snapshot(action.snapshot_name, path: action.path)
           else
             raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
           end
@@ -194,9 +194,7 @@ module Nanoc::Int
         @wrapped.run(rep, is_outdated: is_outdated)
 
         rep.snapshot_defs.each do |sdef|
-          if sdef.final?
-            ItemRepWriter.new.write(rep, sdef.name)
-          end
+          ItemRepWriter.new.write(rep, sdef.name)
         end
       end
     end

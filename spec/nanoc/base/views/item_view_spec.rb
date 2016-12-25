@@ -198,10 +198,10 @@ describe Nanoc::ItemWithRepsView do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
         ir.compiled = true
         ir.snapshot_defs = [
-          Nanoc::Int::SnapshotDef.new(:last, false),
-          Nanoc::Int::SnapshotDef.new(:pre, true),
-          Nanoc::Int::SnapshotDef.new(:post, false),
-          Nanoc::Int::SnapshotDef.new(:specific, true),
+          Nanoc::Int::SnapshotDef.new(:last),
+          Nanoc::Int::SnapshotDef.new(:pre),
+          Nanoc::Int::SnapshotDef.new(:post),
+          Nanoc::Int::SnapshotDef.new(:specific),
         ]
         ir.snapshot_contents = {
           last: Nanoc::Int::TextualContent.new('Last Hallo'),

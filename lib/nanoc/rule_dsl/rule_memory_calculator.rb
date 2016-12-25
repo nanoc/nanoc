@@ -54,15 +54,9 @@ module Nanoc::RuleDSL
       end
     end
 
-    # @param [Nanoc::Int::ItemRep] rep The item representation for which to fetch
-    #   the list of snapshots
-    #
-    # @return [Array] A list of snapshots, represented as arrays where the
-    #   first element is the snapshot name (a Symbol) and the last element is
-    #   a Boolean indicating whether the snapshot is final or not
     def snapshots_defs_for(rep)
       self[rep].snapshot_actions.map do |a|
-        Nanoc::Int::SnapshotDef.new(a.snapshot_name, a.final?)
+        Nanoc::Int::SnapshotDef.new(a.snapshot_name)
       end
     end
 
@@ -83,7 +77,6 @@ module Nanoc::RuleDSL
       end
 
       executor.snapshot(:raw)
-      executor.snapshot(:pre, final: false)
       rule.apply_to(rep, executor: executor, site: @site, view_context: view_context)
       if rule_memory.any_layouts?
         executor.snapshot(:post)
@@ -112,7 +105,7 @@ module Nanoc::RuleDSL
 
     def assign_paths_to_mem(mem, rep:)
       mem.map do |action|
-        if action.is_a?(Nanoc::Int::ProcessingActions::Snapshot) && action.path.nil? && action.final?
+        if action.is_a?(Nanoc::Int::ProcessingActions::Snapshot) && action.path.nil?
           path_from_rules = basic_path_from_rules_for(rep, action.snapshot_name)
           if path_from_rules
             action.copy(path: path_from_rules.to_s)

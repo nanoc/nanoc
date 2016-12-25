@@ -35,9 +35,6 @@ module Nanoc
           if filter.class.to_binary? && !File.file?(filter.output_filename)
             raise OutputNotWrittenError.new(filter_name, filter.output_filename)
           end
-
-          # Create snapshot
-          snapshot(@rep.snapshot_contents[:post] ? :post : :pre, final: false) unless @rep.binary?
         ensure
           Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
@@ -54,11 +51,6 @@ module Nanoc
 
         # Check whether item can be laid out
         raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(@rep) if @rep.binary?
-
-        # Create "pre" snapshot
-        if @rep.snapshot_contents[:post].nil?
-          snapshot(:pre, final: true)
-        end
 
         # Create filter
         klass = Nanoc::Filter.named(filter_name)
@@ -78,15 +70,12 @@ module Nanoc
           arg = content.binary? ? content.filename : content.string
           res = filter.setup_and_run(arg, filter_args)
           @rep.snapshot_contents[:last] = Nanoc::Int::TextualContent.new(res).tap(&:freeze)
-
-          # Create "post" snapshot
-          snapshot(:post, final: false)
         ensure
           Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
       end
 
-      def snapshot(snapshot_name, final: true, path: nil) # rubocop:disable Lint/UnusedMethodArgument
+      def snapshot(snapshot_name, path: nil) # rubocop:disable Lint/UnusedMethodArgument
         @rep.snapshot_contents[snapshot_name] = @rep.snapshot_contents[:last]
       end
 

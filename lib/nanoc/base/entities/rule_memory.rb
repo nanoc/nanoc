@@ -30,10 +30,10 @@ module Nanoc::Int
       self
     end
 
-    contract Symbol, C::Bool, C::Maybe[String] => self
-    def add_snapshot(snapshot_name, final, path)
-      will_add_snapshot(snapshot_name) if final
-      @actions << Nanoc::Int::ProcessingActions::Snapshot.new(snapshot_name, final, path)
+    contract Symbol, C::Maybe[String] => self
+    def add_snapshot(snapshot_name, path)
+      will_add_snapshot(snapshot_name)
+      @actions << Nanoc::Int::ProcessingActions::Snapshot.new(snapshot_name, path)
       self
     end
 

@@ -46,44 +46,35 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
         example do
           subject
 
-          expect(subject.size).to eql(8)
-
           expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
           expect(subject[0].snapshot_name).to eql(:raw)
-          expect(subject[0]).to be_final
           expect(subject[0].path).to be_nil
 
-          expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[1].snapshot_name).to eql(:pre)
-          expect(subject[1]).not_to be_final
-          expect(subject[1].path).to be_nil
+          expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Filter)
+          expect(subject[1].filter_name).to eql(:erb)
+          expect(subject[1].params).to eql({ speed: :over_9000 })
 
-          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Filter)
-          expect(subject[2].filter_name).to eql(:erb)
-          expect(subject[2].params).to eql({ speed: :over_9000 })
+          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[2].snapshot_name).to eql(:pre)
+          expect(subject[2].path).to be_nil
 
-          expect(subject[3]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[3].snapshot_name).to eql(:pre)
-          expect(subject[3]).to be_final
-          expect(subject[3].path).to be_nil
+          expect(subject[3]).to be_a(Nanoc::Int::ProcessingActions::Layout)
+          expect(subject[3].layout_identifier).to eql('/default.*')
+          expect(subject[3].params).to be_nil
 
-          expect(subject[4]).to be_a(Nanoc::Int::ProcessingActions::Layout)
-          expect(subject[4].layout_identifier).to eql('/default.*')
-          expect(subject[4].params).to be_nil
+          expect(subject[4]).to be_a(Nanoc::Int::ProcessingActions::Filter)
+          expect(subject[4].filter_name).to eql(:typohero)
+          expect(subject[4].params).to eql({})
 
-          expect(subject[5]).to be_a(Nanoc::Int::ProcessingActions::Filter)
-          expect(subject[5].filter_name).to eql(:typohero)
-          expect(subject[5].params).to eql({})
+          expect(subject[5]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[5].snapshot_name).to eql(:post)
+          expect(subject[5].path).to be_nil
 
           expect(subject[6]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[6].snapshot_name).to eql(:post)
-          expect(subject[6]).to be_final
+          expect(subject[6].snapshot_name).to eql(:last)
           expect(subject[6].path).to be_nil
 
-          expect(subject[7]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[7].snapshot_name).to eql(:last)
-          expect(subject[7]).to be_final
-          expect(subject[7].path).to be_nil
+          expect(subject.size).to eql(7)
         end
       end
 
@@ -99,20 +90,13 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
 
           expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
           expect(subject[0].snapshot_name).to eql(:raw)
-          expect(subject[0]).to be_final
           expect(subject[0].path).to be_nil
 
           expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[1].snapshot_name).to eql(:pre)
-          expect(subject[1]).not_to be_final
+          expect(subject[1].snapshot_name).to eql(:last)
           expect(subject[1].path).to be_nil
 
-          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[2].snapshot_name).to eql(:last)
-          expect(subject[2]).to be_final
-          expect(subject[2].path).to be_nil
-
-          expect(subject.size).to eql(3)
+          expect(subject.size).to eql(2)
         end
       end
 
@@ -132,53 +116,13 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
 
           expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
           expect(subject[0].snapshot_name).to eql(:raw)
-          expect(subject[0]).to be_final
           expect(subject[0].path).to be_nil
 
           expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[1].snapshot_name).to eql(:pre)
-          expect(subject[1]).not_to be_final
-          expect(subject[1].path).to be_nil
+          expect(subject[1].snapshot_name).to eql(:last)
+          expect(subject[1].path).to eq('/foo.md')
 
-          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[2].snapshot_name).to eql(:last)
-          expect(subject[2]).to be_final
-          expect(subject[2].path).to eq('/foo.md')
-
-          expect(subject.size).to eql(3)
-        end
-      end
-
-      context 'routing rule exists for non-final snapshot' do
-        before do
-          # Add compilation rule
-          compilation_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
-          rules_collection.add_item_compilation_rule(compilation_rule)
-
-          # Add routing rule
-          routing_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc { '/foo.md' }, snapshot_name: :pre)
-          rules_collection.add_item_routing_rule(routing_rule)
-        end
-
-        example do
-          subject
-
-          expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[0].snapshot_name).to eql(:raw)
-          expect(subject[0]).to be_final
-          expect(subject[0].path).to be_nil
-
-          expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[1].snapshot_name).to eql(:pre)
-          expect(subject[1]).not_to be_final
-          expect(subject[1].path).to be_nil
-
-          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[2].snapshot_name).to eql(:last)
-          expect(subject[2]).to be_final
-          expect(subject[2].path).to be_nil
-
-          expect(subject.size).to eql(3)
+          expect(subject.size).to eql(2)
         end
       end
 
@@ -198,20 +142,13 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
 
           expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
           expect(subject[0].snapshot_name).to eql(:raw)
-          expect(subject[0]).to be_final
           expect(subject[0].path).to be_nil
 
           expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[1].snapshot_name).to eql(:pre)
-          expect(subject[1]).not_to be_final
+          expect(subject[1].snapshot_name).to eql(:last)
           expect(subject[1].path).to be_nil
 
-          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[2].snapshot_name).to eql(:last)
-          expect(subject[2]).to be_final
-          expect(subject[2].path).to be_nil
-
-          expect(subject.size).to eql(3)
+          expect(subject.size).to eql(2)
         end
       end
     end
@@ -278,27 +215,19 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
     end
 
     example do
-      expect(subject.size).to eql(5)
-
       expect(subject[0]).to be_a(Nanoc::Int::SnapshotDef)
       expect(subject[0].name).to eql(:raw)
-      expect(subject[0]).to be_final
 
       expect(subject[1]).to be_a(Nanoc::Int::SnapshotDef)
       expect(subject[1].name).to eql(:pre)
-      expect(subject[1]).not_to be_final
 
       expect(subject[2]).to be_a(Nanoc::Int::SnapshotDef)
-      expect(subject[2].name).to eql(:pre)
-      expect(subject[2]).to be_final
+      expect(subject[2].name).to eql(:post)
 
       expect(subject[3]).to be_a(Nanoc::Int::SnapshotDef)
-      expect(subject[3].name).to eql(:post)
-      expect(subject[3]).to be_final
+      expect(subject[3].name).to eql(:last)
 
-      expect(subject[4]).to be_a(Nanoc::Int::SnapshotDef)
-      expect(subject[4].name).to eql(:last)
-      expect(subject[4]).to be_final
+      expect(subject.size).to eql(4)
     end
   end
 end

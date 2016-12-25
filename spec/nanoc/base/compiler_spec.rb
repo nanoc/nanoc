@@ -52,12 +52,17 @@ describe Nanoc::Int::Compiler do
   let(:memory) do
     [
       Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
+      Nanoc::Int::ProcessingActions::Snapshot.new(:last, nil),
     ]
   end
 
   before do
     reps << rep
     reps << other_rep
+
+    reps.each do |rep|
+      rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last)
+    end
 
     allow(outdatedness_checker).to receive(:outdated?).with(rep).and_return(true)
     allow(outdatedness_checker).to receive(:outdated?).with(other_rep).and_return(true)
@@ -75,11 +80,11 @@ describe Nanoc::Int::Compiler do
     end
 
     let(:snapshot_defs_for_rep) do
-      [Nanoc::Int::SnapshotDef.new(:last, true)]
+      [Nanoc::Int::SnapshotDef.new(:last)]
     end
 
     let(:snapshot_defs_for_other_rep) do
-      [Nanoc::Int::SnapshotDef.new(:last, true)]
+      [Nanoc::Int::SnapshotDef.new(:last)]
     end
 
     it 'compiles individual reps' do
