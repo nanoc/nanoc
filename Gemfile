@@ -56,6 +56,7 @@ group :plugins do
   gem 'rubypants'
   gem 'sass'
   gem 'slim'
+  gem 'therubyracer', github: 'cowboyd/therubyracer'
   gem 'typogruby'
   gem 'uglifier'
   gem 'w3c_validators'
