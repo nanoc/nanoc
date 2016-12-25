@@ -24,9 +24,9 @@ module Nanoc
       end
 
       Pathlike = C::Maybe[C::Or[String, Nanoc::Identifier]]
-      contract Symbol, C::KeywordArgs[path: C::Optional[Pathlike], final: C::Optional[C::Bool]] => nil
-      def snapshot(snapshot_name, final: true, path: nil)
-        @rule_memory.add_snapshot(snapshot_name, final, path && final ? path.to_s : nil)
+      contract Symbol, C::KeywordArgs[path: C::Optional[Pathlike]] => nil
+      def snapshot(snapshot_name, path: nil)
+        @rule_memory.add_snapshot(snapshot_name, true, path && path.to_s)
         nil
       end
     end

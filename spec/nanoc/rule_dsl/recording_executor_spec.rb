@@ -41,7 +41,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
     end
 
     it 'records layout call with arguments' do
-      executor.layout('/default.*', final: false)
+      executor.layout('/default.*', donkey: 123)
 
       expect(rule_memory.size).to eql(2)
 
@@ -52,11 +52,11 @@ describe Nanoc::RuleDSL::RecordingExecutor do
 
       expect(rule_memory[1]).to be_a(Nanoc::Int::ProcessingActions::Layout)
       expect(rule_memory[1].layout_identifier).to eql('/default.*')
-      expect(rule_memory[1].params).to eql({ final: false })
+      expect(rule_memory[1].params).to eql({ donkey: 123 })
     end
 
     it 'fails when passed a symbol' do
-      expect { executor.layout(:default, final: false) }.to raise_error(ArgumentError)
+      expect { executor.layout(:default, donkey: 123) }.to raise_error(ArgumentError)
     end
   end
 
@@ -86,88 +86,47 @@ describe Nanoc::RuleDSL::RecordingExecutor do
     end
 
     context 'final argument' do
-      subject { executor.snapshot(:foo, final: final, path: path) }
+      subject { executor.snapshot(:foo, path: path) }
       let(:path) { nil }
 
-      context 'final' do
-        let(:final) { true }
-
-        context 'routing rule does not exist' do
-          context 'no explicit path given' do
-            it 'records' do
-              subject
-              expect(rule_memory.size).to eql(1)
-              expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-              expect(rule_memory[0].snapshot_name).to eql(:foo)
-              expect(rule_memory[0].path).to be_nil
-              expect(rule_memory[0]).to be_final
-            end
-          end
-
-          context 'explicit path given as string' do
-            let(:path) { '/routed-foo.html' }
-
-            it 'records' do
-              subject
-              expect(rule_memory.size).to eql(1)
-              expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-              expect(rule_memory[0].snapshot_name).to eql(:foo)
-              expect(rule_memory[0].path).to eql('/routed-foo.html')
-              expect(rule_memory[0]).to be_final
-            end
-          end
-
-          context 'explicit path given as identifier' do
-            let(:path) { Nanoc::Identifier.from('/routed-foo.html') }
-
-            it 'records' do
-              subject
-              expect(rule_memory.size).to eql(1)
-              expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-              expect(rule_memory[0].snapshot_name).to eql(:foo)
-              expect(rule_memory[0].path).to eql('/routed-foo.html')
-              expect(rule_memory[0]).to be_final
-            end
-          end
-        end
-      end
-
-      context 'not final' do
-        let(:final) { false }
-
-        it 'records' do
-          subject
-
-          expect(rule_memory.size).to eql(1)
-          expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(rule_memory[0].snapshot_name).to eql(:foo)
-          expect(rule_memory[0].path).to be_nil
-          expect(rule_memory[0]).not_to be_final
-        end
-
-        context 'explicit path given' do
-          let(:path) { '/routed-foo.html' }
-
-          it 'records without path' do
+      context 'routing rule does not exist' do
+        context 'no explicit path given' do
+          it 'records' do
             subject
-
             expect(rule_memory.size).to eql(1)
             expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
             expect(rule_memory[0].snapshot_name).to eql(:foo)
             expect(rule_memory[0].path).to be_nil
-            expect(rule_memory[0]).not_to be_final
+            expect(rule_memory[0]).to be_final
+          end
+        end
+
+        context 'explicit path given as string' do
+          let(:path) { '/routed-foo.html' }
+
+          it 'records' do
+            subject
+            expect(rule_memory.size).to eql(1)
+            expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+            expect(rule_memory[0].snapshot_name).to eql(:foo)
+            expect(rule_memory[0].path).to eql('/routed-foo.html')
+            expect(rule_memory[0]).to be_final
+          end
+        end
+
+        context 'explicit path given as identifier' do
+          let(:path) { Nanoc::Identifier.from('/routed-foo.html') }
+
+          it 'records' do
+            subject
+            expect(rule_memory.size).to eql(1)
+            expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+            expect(rule_memory[0].snapshot_name).to eql(:foo)
+            expect(rule_memory[0].path).to eql('/routed-foo.html')
+            expect(rule_memory[0]).to be_final
           end
         end
       end
-    end
-
-    it 'records snapshot call with final argument' do
-      executor.snapshot(:foo, final: false)
-
-      expect(rule_memory.size).to eql(1)
-      expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-      expect(rule_memory[0].snapshot_name).to eql(:foo)
-      expect(rule_memory[0]).not_to be_final
     end
 
     it 'raises when given unknown arguments' do

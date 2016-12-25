@@ -48,7 +48,6 @@ module Nanoc::Int
       @compiled = false
     end
 
-    # TODO: remove me
     contract C::None => C::Bool
     def binary?
       @snapshot_contents[:last].binary?
