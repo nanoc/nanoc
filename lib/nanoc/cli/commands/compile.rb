@@ -2,17 +2,6 @@ usage 'compile [options]'
 summary 'compile items of this site'
 description <<-EOS
 Compile all items of the current site.
-
-The compile command will show all items of the site as they are processed. The time spent compiling the item will be printed, as well as a status message, which can be one of the following:
-
-CREATED - The compiled item did not yet exist and has been created
-
-UPDATED - The compiled item did already exist and has been modified
-
-IDENTICAL - The item was deemed outdated and has been recompiled, but the compiled version turned out to be identical to the already existing version
-
-SKIP - The item was deemed not outdated and was therefore not recompiled
-
 EOS
 flag nil, :profile, 'profile compilation' if Nanoc::Feature.enabled?(Nanoc::Feature::PROFILER)
 
