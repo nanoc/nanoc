@@ -48,6 +48,7 @@ module Nanoc::Int
       @compiled = false
     end
 
+    # TODO: remove me
     contract C::None => C::Bool
     def binary?
       @snapshot_contents[:last].binary?
@@ -66,24 +67,16 @@ module Nanoc::Int
     def compiled_content(snapshot: nil)
       # Get name of last pre-layout snapshot
       snapshot_name = snapshot || (@snapshot_contents[:pre] ? :pre : :last)
-      is_movable = [:pre, :post, :last].include?(snapshot_name)
 
       # Check existance of snapshot
       snapshot_def = snapshot_defs.reverse.find { |sd| sd.name == snapshot_name }
-      is_final = snapshot_def && snapshot_def.final?
-      if !is_movable && !is_final
+      unless snapshot_def
         raise Nanoc::Int::Errors::NoSuchSnapshot.new(self, snapshot_name)
       end
 
       # Verify snapshot is usable
-      is_still_moving =
-        case snapshot_name
-        when :post, :last
-          true
-        when :pre
-          !is_final
-        end
-      is_usable_snapshot = @snapshot_contents[snapshot_name] && (compiled? || !is_still_moving)
+      stopped_moving = snapshot_name != :last || compiled?
+      is_usable_snapshot = @snapshot_contents[snapshot_name] && stopped_moving
       unless is_usable_snapshot
         Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(self))
         return compiled_content(snapshot: snapshot)
@@ -97,16 +90,6 @@ module Nanoc::Int
 
       snapshot_content.string
     end
-
-    contract Symbol => C::Bool
-    # Checks whether content exists at a given snapshot.
-    #
-    # @return [Boolean] True if content exists for the snapshot with the
-    #   given name, false otherwise
-    def snapshot?(snapshot_name)
-      !@snapshot_contents[snapshot_name].nil?
-    end
-    alias has_snapshot? snapshot?
 
     contract C::KeywordArgs[snapshot: C::Optional[Symbol]] => C::Maybe[String]
     # Returns the item rep’s raw path. It includes the path to the output
@@ -144,7 +127,7 @@ module Nanoc::Int
     end
 
     def inspect
-      "<#{self.class} name=\"#{name}\" binary=#{binary?} raw_path=\"#{raw_path}\" item.identifier=\"#{item.identifier}\">"
+      "<#{self.class} name=\"#{name}\" raw_path=\"#{raw_path}\" item.identifier=\"#{item.identifier}\">"
     end
   end
 end

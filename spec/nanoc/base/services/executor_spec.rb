@@ -42,7 +42,7 @@ describe Nanoc::Int::Executor do
         executor.filter(:erb)
 
         expect(rep.snapshot_contents[:last].string).to eq('Donkey Power')
-        expect(rep.snapshot_contents[:pre].string).to eq('Donkey Power')
+        expect(rep.snapshot_contents[:pre]).to be_nil
         expect(rep.snapshot_contents[:post]).to be_nil
       end
 
@@ -50,7 +50,6 @@ describe Nanoc::Int::Executor do
         executor.filter(:erb)
 
         expect(rep.snapshot_contents[:last]).to be_frozen
-        expect(rep.snapshot_contents[:pre]).to be_frozen
       end
     end
 
@@ -118,7 +117,7 @@ describe Nanoc::Int::Executor do
         executor.filter(:whatever)
 
         expect(rep.snapshot_contents[:last].string).to match(/\ACompiled data for \/.*\/foo.dat\z/)
-        expect(rep.snapshot_contents[:pre].string).to match(/\ACompiled data for \/.*\/foo.dat\z/)
+        expect(rep.snapshot_contents[:pre]).to be_nil
         expect(rep.snapshot_contents[:post]).to be_nil
       end
     end
@@ -319,10 +318,11 @@ describe Nanoc::Int::Executor do
         expect(rep.snapshot_contents[:pre]).to be_frozen
       end
 
-      it 'creates pre snapshot' do
+      it 'does not create pre snapshot' do
+        # a #layout is followed by a #snapshot(:pre, …)
         expect(rep.snapshot_contents[:pre]).to be_nil
         subject
-        expect(rep.snapshot_contents[:pre].string).to eq('Donkey Power')
+        expect(rep.snapshot_contents[:pre]).to be_nil
       end
 
       it 'sends notifications' do
@@ -337,6 +337,10 @@ describe Nanoc::Int::Executor do
 
         let(:assigns) do
           { item_rep: Nanoc::ItemRepView.new(rep, view_context) }
+        end
+
+        before do
+          executor.snapshot(:pre, final: true, path: nil)
         end
 
         it 'can contain compiled_content reference' do

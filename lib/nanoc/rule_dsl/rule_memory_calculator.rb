@@ -83,7 +83,6 @@ module Nanoc::RuleDSL
       end
 
       executor.snapshot(:raw)
-      executor.snapshot(:pre, final: false)
       rule.apply_to(rep, executor: executor, site: @site, view_context: view_context)
       if rule_memory.any_layouts?
         executor.snapshot(:post)
