@@ -66,7 +66,6 @@ describe Nanoc::Int::RuleMemory do
         expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
         expect(rule_memory[0].snapshot_name).to eql(:before_layout)
         expect(rule_memory[0].path).to eql('/foo.md')
-        expect(rule_memory[0]).to be_final
       end
     end
 

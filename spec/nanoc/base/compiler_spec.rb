@@ -52,7 +52,7 @@ describe Nanoc::Int::Compiler do
   let(:memory) do
     [
       Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
-      Nanoc::Int::ProcessingActions::Snapshot.new(:last, true, nil),
+      Nanoc::Int::ProcessingActions::Snapshot.new(:last, nil),
     ]
   end
 

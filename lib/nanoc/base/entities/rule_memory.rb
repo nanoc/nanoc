@@ -33,7 +33,7 @@ module Nanoc::Int
     contract Symbol, C::Maybe[String] => self
     def add_snapshot(snapshot_name, path)
       will_add_snapshot(snapshot_name)
-      @actions << Nanoc::Int::ProcessingActions::Snapshot.new(snapshot_name, true, path)
+      @actions << Nanoc::Int::ProcessingActions::Snapshot.new(snapshot_name, path)
       self
     end
 

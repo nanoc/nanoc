@@ -62,7 +62,7 @@ module Nanoc::RuleDSL
     #   a Boolean indicating whether the snapshot is final or not
     def snapshots_defs_for(rep)
       self[rep].snapshot_actions.map do |a|
-        Nanoc::Int::SnapshotDef.new(a.snapshot_name, a.final?)
+        Nanoc::Int::SnapshotDef.new(a.snapshot_name, true)
       end
     end
 
@@ -111,7 +111,7 @@ module Nanoc::RuleDSL
 
     def assign_paths_to_mem(mem, rep:)
       mem.map do |action|
-        if action.is_a?(Nanoc::Int::ProcessingActions::Snapshot) && action.path.nil? && action.final?
+        if action.is_a?(Nanoc::Int::ProcessingActions::Snapshot) && action.path.nil?
           path_from_rules = basic_path_from_rules_for(rep, action.snapshot_name)
           if path_from_rules
             action.copy(path: path_from_rules.to_s)
