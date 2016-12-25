@@ -141,7 +141,7 @@ module Nanoc
           end
 
           def snapshots_defs_for(_rep)
-            [Nanoc::Int::SnapshotDef.new(:last, false)]
+            [Nanoc::Int::SnapshotDef.new(:last)]
           end
         end.new(self)
       end

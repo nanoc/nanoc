@@ -281,7 +281,7 @@ describe Nanoc::Int::Executor do
     end
 
     before do
-      rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:pre, true)]
+      rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:pre)]
 
       allow(compilation_context).to receive(:site) { site }
       allow(compilation_context).to receive(:assigns_for).with(rep, dependency_tracker) { assigns }

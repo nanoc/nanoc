@@ -62,7 +62,7 @@ module Nanoc::RuleDSL
     #   a Boolean indicating whether the snapshot is final or not
     def snapshots_defs_for(rep)
       self[rep].snapshot_actions.map do |a|
-        Nanoc::Int::SnapshotDef.new(a.snapshot_name, true)
+        Nanoc::Int::SnapshotDef.new(a.snapshot_name)
       end
     end
 

@@ -15,7 +15,7 @@ describe Nanoc::Int::ItemRep do
 
       context 'snapshot def exists' do
         before do
-          rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name, true)]
+          rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name)]
           rep.snapshot_contents = { snapshot_name => content }
         end
 
@@ -40,7 +40,7 @@ describe Nanoc::Int::ItemRep do
 
       context 'snapshot def exists, but not content' do
         before do
-          rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name, true)]
+          rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name)]
           rep.snapshot_contents = {}
         end
 
@@ -60,7 +60,7 @@ describe Nanoc::Int::ItemRep do
       context 'snapshot exists' do
         context 'snapshot is not final' do
           before do
-            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name, false)]
+            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name)]
           end
 
           context 'snapshot content does not exist' do
@@ -121,7 +121,7 @@ describe Nanoc::Int::ItemRep do
 
         context 'snapshot is final' do
           before do
-            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name, true)]
+            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name)]
           end
 
           context 'snapshot content does not exist' do

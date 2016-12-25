@@ -194,9 +194,7 @@ module Nanoc::Int
         @wrapped.run(rep, is_outdated: is_outdated)
 
         rep.snapshot_defs.each do |sdef|
-          if sdef.final?
-            ItemRepWriter.new.write(rep, sdef.name)
-          end
+          ItemRepWriter.new.write(rep, sdef.name)
         end
       end
     end
