@@ -54,12 +54,6 @@ module Nanoc::RuleDSL
       end
     end
 
-    # @param [Nanoc::Int::ItemRep] rep The item representation for which to fetch
-    #   the list of snapshots
-    #
-    # @return [Array] A list of snapshots, represented as arrays where the
-    #   first element is the snapshot name (a Symbol) and the last element is
-    #   a Boolean indicating whether the snapshot is final or not
     def snapshots_defs_for(rep)
       self[rep].snapshot_actions.map do |a|
         Nanoc::Int::SnapshotDef.new(a.snapshot_name)
