@@ -13,6 +13,8 @@ env:
       RUBY_GC_MALLOC_LIMIT_GROWTH_FACTOR=1.1
       RUBY_GC_OLDMALLOC_LIMIT=16000000
       RUBY_GC_OLDMALLOC_LIMIT_MAX=16000000
+      LC_ALL=en_US.UTF_8
+      LANG=en_US.UTF_8
 before_install: gem install bundler
 matrix:
   fast_finish: true
