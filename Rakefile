@@ -3,10 +3,7 @@ require 'rspec/core/rake_task'
 require 'rake/testtask'
 require 'coveralls/rake/task'
 
-RuboCop::RakeTask.new(:rubocop) do |task|
-  task.options  = %w(--display-cop-names --format simple)
-  task.patterns = ['bin/nanoc', 'lib/**/*.rb', 'spec/**/*.rb', 'test/**/*.rb']
-end
+RuboCop::RakeTask.new(:rubocop)
 
 Coveralls::RakeTask.new
 
@@ -22,9 +19,7 @@ namespace :test do
   end
 end
 
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.verbose = false
-end
+RSpec::Core::RakeTask.new(:spec)
 
 desc 'Run all tests and specs'
 task test: [:spec, :'test:all', :'coveralls:push']

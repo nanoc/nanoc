@@ -2,6 +2,7 @@
 
 AllCops:
   TargetRubyVersion: 2.1
+  DisplayCopNames: true
 
 # We use filenames such as “create-site.rb” that translate to method names.
 FileName:
