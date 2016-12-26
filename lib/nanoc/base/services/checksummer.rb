@@ -104,7 +104,13 @@ module Nanoc::Int
       end
     end
 
-    class RuleContextUpdateBehavior
+    class UpdateBehavior
+      def self.update(_obj, _digest)
+        raise NotImpementedError
+      end
+    end
+
+    class RuleContextUpdateBehavior < UpdateBehavior
       def self.update(obj, digest)
         digest.update('item=')
         yield(obj.item)
@@ -119,7 +125,7 @@ module Nanoc::Int
       end
     end
 
-    class ContextUpdateBehavior
+    class ContextUpdateBehavior < UpdateBehavior
       def self.update(obj, digest)
         obj.instance_variables.each do |var|
           digest.update(var.to_s)
@@ -127,12 +133,6 @@ module Nanoc::Int
           yield(obj.instance_variable_get(var))
           digest.update(',')
         end
-      end
-    end
-
-    class UpdateBehavior
-      def self.update(_obj, _digest)
-        raise NotImpementedError
       end
     end
 
@@ -167,8 +167,7 @@ module Nanoc::Int
     end
 
     class NoUpdateBehavior < UpdateBehavior
-      def self.update(_obj, _digest)
-      end
+      def self.update(_obj, _digest); end
     end
 
     class UnwrapUpdateBehavior < UpdateBehavior
