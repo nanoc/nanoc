@@ -66,21 +66,11 @@ module Nanoc::Int
     #
     # @return [void]
     def load
-      # Check file existance
-      unless File.file?(filename)
-        no_data_found
-        return
-      end
+      return unless File.file?(filename)
 
       begin
         pstore.transaction do
-          # Check version
-          if pstore[:version] != version
-            version_mismatch_detected
-            return
-          end
-
-          # Load
+          return if pstore[:version] != version
           self.data = pstore[:data]
         end
       rescue
@@ -101,22 +91,6 @@ module Nanoc::Int
         pstore[:version] = version
       end
     end
-
-    # @group Callback methods
-
-    # Callback method that is called when no data file was found. By default,
-    # this implementation does nothing, but it should probably be overridden
-    # by the subclass.
-    #
-    # @return [void]
-    def no_data_found; end
-
-    # Callback method that is called when a version mismatch is detected. By
-    # default, this implementation does nothing, but it should probably be
-    # overridden by the subclass.
-    #
-    # @return [void]
-    def version_mismatch_detected; end
 
     private
 
