@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::RDocTest < Nanoc::TestCase
   def test_filter
     # Get filter

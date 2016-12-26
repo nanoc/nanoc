@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::AsciiDocTest < Nanoc::TestCase
   def test_filter
     skip_unless_have_command 'asciidoc'

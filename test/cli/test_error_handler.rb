@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
   def setup
     super

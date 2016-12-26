@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::SiteTest < Nanoc::TestCase
   def test_initialize_with_dir_without_config_yaml
     assert_raises(Nanoc::Int::ConfigLoader::NoConfigFileFoundError) do

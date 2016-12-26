@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::StoreTest < Nanoc::TestCase
   class TestStore < Nanoc::Int::Store
     def data

@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::ItemTest < Nanoc::TestCase
   def test_initialize_with_attributes_with_string_keys
     item = Nanoc::Int::Item.new('foo', { 'abc' => 'xyz' }, '/foo/')

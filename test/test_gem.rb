@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::GemTest < Nanoc::TestCase
   def setup
     super

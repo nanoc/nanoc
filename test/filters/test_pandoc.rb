@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::PandocTest < Nanoc::TestCase
   def test_filter
     if_have 'pandoc-ruby' do

@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::CLITest < Nanoc::TestCase
   COMMAND_CODE = <<EOS.freeze
 usage       '_test [options]'

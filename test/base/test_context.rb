@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::ContextTest < Nanoc::TestCase
   def test_context_with_instance_variable
     # Create context

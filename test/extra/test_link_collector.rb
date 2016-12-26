@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
   def test_all
     # Create dummy data

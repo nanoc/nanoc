@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Checking::DSLTest < Nanoc::TestCase
   def test_from_file
     with_site do |_site|

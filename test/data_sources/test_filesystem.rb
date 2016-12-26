@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
   def new_data_source(params = nil)
     # Mock site

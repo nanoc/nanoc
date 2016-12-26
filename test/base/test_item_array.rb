@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
   def setup
     super

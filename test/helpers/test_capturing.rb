@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
   include Nanoc::Helpers::Capturing
 

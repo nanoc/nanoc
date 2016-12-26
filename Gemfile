@@ -8,6 +8,7 @@ group :devel do
   gem 'fuubar'
   gem 'guard-rake'
   gem 'json', '~> 2.0'
+  gem 'm', '~> 1.5'
   gem 'minitest', '~> 5.0'
   gem 'mocha'
   gem 'pry'

@@ -1,3 +1,5 @@
+require 'helper'
+
 describe 'Array#__nanoc_symbolize_keys_recursively' do
   it 'should convert keys to symbols' do
     array_old = [:abc, 'xyz', { 'foo' => 'bar', :baz => :qux }]

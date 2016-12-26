@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::CompilerTest < Nanoc::TestCase
   def new_compiler(site = nil)
     site ||= Nanoc::Int::Site.new(

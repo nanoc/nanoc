@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
   def test_direct_predecessors
     graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])

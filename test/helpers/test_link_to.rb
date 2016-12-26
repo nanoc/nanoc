@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
   include Nanoc::Helpers::LinkTo
 

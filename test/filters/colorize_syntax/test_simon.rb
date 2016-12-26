@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::ColorizeSyntax::SimonTest < Nanoc::TestCase
   def test_simon_highlight
     if_have 'nokogiri' do

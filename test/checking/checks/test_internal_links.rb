@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Checking::Checks::InternalLinksTest < Nanoc::TestCase
   def test_run
     with_site do |site|

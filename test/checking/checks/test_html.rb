@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Checking::Checks::HTMLTest < Nanoc::TestCase
   def test_run_ok
     require 'w3c_validators'

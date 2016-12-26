@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::RedClothTest < Nanoc::TestCase
   def test_filter
     if_have 'redcloth' do

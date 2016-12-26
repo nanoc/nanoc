@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::CodeSnippetTest < Nanoc::TestCase
   def test_load
     # Initialize

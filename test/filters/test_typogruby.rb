@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::TypogrubyTest < Nanoc::TestCase
   def test_filter
     if_have 'typogruby' do

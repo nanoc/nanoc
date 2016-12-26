@@ -1,3 +1,5 @@
+require 'helper'
+
 require 'tempfile'
 
 class Nanoc::Filters::XSLTest < Nanoc::TestCase

@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::RuleDSL::RulesCollectionTest < Nanoc::TestCase
   def test_compilation_rule_for
     # Mock rules

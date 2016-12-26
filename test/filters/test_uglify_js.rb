@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::UglifyJSTest < Nanoc::TestCase
   def test_filter
     skip_v8_on_ruby24

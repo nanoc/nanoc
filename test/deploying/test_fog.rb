@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Deploying::Deployers::FogTest < Nanoc::TestCase
   def test_read_etags_with_local_provider
     if_have 'fog' do

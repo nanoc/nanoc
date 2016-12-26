@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::ERBTest < Nanoc::TestCase
   def test_filter_with_instance_variable
     # Create filter

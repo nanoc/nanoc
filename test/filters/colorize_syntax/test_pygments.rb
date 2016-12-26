@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::ColorizeSyntax::PygmentsTest < Nanoc::TestCase
   def test_pygmentsrb
     skip 'pygments.rb does not support Windows' if on_windows?

@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::HamlTest < Nanoc::TestCase
   def test_filter
     if_have 'haml' do

@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::ErubisTest < Nanoc::TestCase
   def test_filter_with_instance_variable
     if_have 'erubis' do

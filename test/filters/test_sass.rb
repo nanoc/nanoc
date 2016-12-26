@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::SassTest < Nanoc::TestCase
   def setup
     super

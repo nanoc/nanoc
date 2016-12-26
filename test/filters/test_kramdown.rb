@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::KramdownTest < Nanoc::TestCase
   def test_filter
     if_have 'kramdown' do

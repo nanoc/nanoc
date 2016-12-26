@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Checking::Checks::MixedContentTest < Nanoc::TestCase
   def create_output_file(name, lines)
     FileUtils.mkdir_p('output')

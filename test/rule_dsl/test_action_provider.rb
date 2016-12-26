@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
   def new_action_provider(site)
     rules_collection = Nanoc::RuleDSL::RulesCollection.new

@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::MemoizationTest < Nanoc::TestCase
   class Sample1
     extend Nanoc::Int::Memoization

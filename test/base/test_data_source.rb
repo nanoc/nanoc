@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::DataSourceTest < Nanoc::TestCase
   def test_loading
     # Create data source

@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Checking::RunnerTest < Nanoc::TestCase
   def test_run_specific
     with_site do |site|

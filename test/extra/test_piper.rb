@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Extra::PiperTest < Nanoc::TestCase
   def test_basic
     stdout = StringIO.new

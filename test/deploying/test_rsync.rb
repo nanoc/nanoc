@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Deploying::Deployers::RsyncTest < Nanoc::TestCase
   def test_run_without_dst
     # Create deployer

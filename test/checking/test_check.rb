@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Checking::CheckTest < Nanoc::TestCase
   def test_output_filenames
     with_site do |site|

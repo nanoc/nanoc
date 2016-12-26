@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::RainpressTest < Nanoc::TestCase
   def test_filter
     if_have 'rainpress' do

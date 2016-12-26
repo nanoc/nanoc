@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   def test_compile
     # TODO: implement

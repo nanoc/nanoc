@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
   def test_find
     if_have 'redcarpet' do

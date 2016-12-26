@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::ColorizeSyntax::PygmentizeTest < Nanoc::TestCase
   def test_pygmentize
     if_have 'nokogiri' do

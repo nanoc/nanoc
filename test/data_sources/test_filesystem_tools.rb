@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
   def setup
     super

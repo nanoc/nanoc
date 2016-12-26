@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::ExtraCoreExtTimeTest < Nanoc::TestCase
   def test___nanoc_to_iso8601_date_utc
     assert_equal('2008-05-19', Time.utc(2008, 5, 19, 14, 20, 0, 0).__nanoc_to_iso8601_date)

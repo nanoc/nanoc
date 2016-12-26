@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
   def test_dummy
     if_have 'nokogiri' do

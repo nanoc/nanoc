@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::NotificationCenterTest < Nanoc::TestCase
   def test_post
     # Set up notification

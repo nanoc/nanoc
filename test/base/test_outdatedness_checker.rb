@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
   def test_not_outdated
     # Compile once

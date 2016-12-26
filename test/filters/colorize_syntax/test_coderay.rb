@@ -1,3 +1,5 @@
+require 'helper'
+
 class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
   CODERAY_PRE  = '<div class="CodeRay"><div class="code">'.freeze
   CODERAY_POST = '</div></div>'.freeze
