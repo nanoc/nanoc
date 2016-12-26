@@ -13,10 +13,10 @@ group :devel do
   gem 'pry'
   gem 'rake'
   gem 'rdoc', '~> 5.0'
+  gem 'rspec'
   gem 'rspec-its', '~> 1.2'
   gem 'rspec-mocks'
-  gem 'rspec'
-  gem 'rubocop'
+  gem 'rubocop', github: 'bbatsov/rubocop'
   gem 'simplecov', require: false
   gem 'timecop'
   gem 'vcr'

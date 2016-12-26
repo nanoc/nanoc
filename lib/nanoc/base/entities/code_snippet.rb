@@ -32,9 +32,7 @@ module Nanoc::Int
     #
     # @return [void]
     def load
-      # rubocop:disable Lint/Eval
       eval(@data, TOPLEVEL_BINDING, @filename)
-      # rubocop:enable Lint/Eval
       nil
     end
 
