@@ -12,7 +12,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
   def test_filter
     if_have 'sass' do
       # Get filter
-      filter = create_filter({ foo: 'bar' })
+      filter = create_filter(foo: 'bar')
 
       # Run filter
       result = filter.setup_and_run(".foo #bar\n  color: #f00")
@@ -23,7 +23,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
   def test_filter_with_params
     if_have 'sass' do
       # Create filter
-      filter = create_filter({ foo: 'bar' })
+      filter = create_filter(foo: 'bar')
 
       # Check with compact
       result = filter.setup_and_run(".foo #bar\n  color: #f00", style: 'compact')

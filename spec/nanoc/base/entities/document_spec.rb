@@ -38,7 +38,7 @@ shared_examples 'a document' do
     describe 'attributes arg' do
       context 'hash' do
         it 'symbolizes attributes' do
-          expect(subject.attributes).to eq({ title: 'Home' })
+          expect(subject.attributes).to eq(title: 'Home')
         end
       end
 
@@ -60,7 +60,7 @@ shared_examples 'a document' do
         end
 
         it 'symbolizes attributes' do
-          expect(subject.attributes).to eq({ title: 'Home' })
+          expect(subject.attributes).to eq(title: 'Home')
         end
 
         it 'only calls the proc once' do
@@ -122,7 +122,7 @@ shared_examples 'a document' do
     end
 
     it 'refuses to change attributes' do
-      expect { document.instance_variable_set(:@attributes, { a: 'Hi' }) }.to raise_frozen_error
+      expect { document.instance_variable_set(:@attributes, a: 'Hi') }.to raise_frozen_error
       expect { document.attributes[:title] = 'Bye' }.to raise_frozen_error
       expect { document.attributes[:foo][:bar] = 'fdsa' }.to raise_frozen_error
     end
@@ -145,11 +145,11 @@ shared_examples 'a document' do
       let(:attributes_arg) { proc { { foo: { bar: 'asdf' } } } }
 
       it 'gives access to the attributes' do
-        expect(document.attributes).to eql({ foo: { bar: 'asdf' } })
+        expect(document.attributes).to eql(foo: { bar: 'asdf' })
       end
 
       it 'refuses to change attributes' do
-        expect { document.instance_variable_set(:@attributes, { a: 'Hi' }) }.to raise_frozen_error
+        expect { document.instance_variable_set(:@attributes, a: 'Hi') }.to raise_frozen_error
         expect { document.attributes[:title] = 'Bye' }.to raise_frozen_error
         expect { document.attributes[:foo][:bar] = 'fdsa' }.to raise_frozen_error
       end

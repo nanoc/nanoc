@@ -290,7 +290,7 @@ EOS
   end
 
   def test_create_pattern_with_string_with_glob_string_pattern_type
-    compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, { string_pattern_type: 'glob' })
+    compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, string_pattern_type: 'glob')
 
     pattern = compiler_dsl.create_pattern('/foo/*')
     assert pattern.match?('/foo/aaaa')
@@ -299,14 +299,14 @@ EOS
   end
 
   def test_create_pattern_with_regex
-    compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, { string_pattern_type: 'glob' })
+    compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, string_pattern_type: 'glob')
 
     pattern = compiler_dsl.create_pattern(%r{\A/foo/a*/})
     assert pattern.match?('/foo/aaaa/')
   end
 
   def test_create_pattern_with_string_with_unknown_string_pattern_type
-    compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, { string_pattern_type: 'donkey' })
+    compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, string_pattern_type: 'donkey')
 
     err = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
       compiler_dsl.create_pattern('/foo/*')
@@ -437,7 +437,7 @@ EOS
 
   def test_config
     $venetian = 'unsnares'
-    compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, { venetian: 'snares' })
+    compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, venetian: 'snares')
     compiler_dsl.instance_eval { $venetian = @config[:venetian] }
     assert_equal 'snares', $venetian
   end

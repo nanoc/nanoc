@@ -24,7 +24,7 @@ class Nanoc::Deploying::Deployers::RsyncTest < Nanoc::TestCase
     # Create deployer
     rsync = Nanoc::Deploying::Deployers::Rsync.new(
       'output/',
-      { dst: 'asdf/' },
+      dst: 'asdf/',
     )
 
     # Mock run_shell_cmd
@@ -45,7 +45,7 @@ class Nanoc::Deploying::Deployers::RsyncTest < Nanoc::TestCase
     # Create deployer
     rsync = Nanoc::Deploying::Deployers::Rsync.new(
       'output',
-      { dst: 'asdf' },
+      dst: 'asdf',
     )
 
     # Mock run_shell_cmd

@@ -33,13 +33,13 @@ after
 
       context 'with pygments wrapper' do
         let(:wrap) { true }
-        let(:params) { super().merge({ wrap: wrap }) }
+        let(:params) { super().merge(wrap: wrap) }
 
         it { is_expected.to eql output }
 
         context 'with css_class' do
           let(:css_class) { 'nanoc' }
-          let(:params) { super().merge({ css_class: css_class }) }
+          let(:params) { super().merge(css_class: css_class) }
 
           it { is_expected.to eql output }
         end
@@ -47,7 +47,7 @@ after
 
       context 'with line number' do
         let(:line_numbers) { true }
-        let(:params) { super().merge({ line_numbers: line_numbers }) }
+        let(:params) { super().merge(line_numbers: line_numbers) }
         let(:output) do
           <<-EOS
 before
@@ -73,19 +73,19 @@ after
 
       context 'with legacy' do
         let(:legacy) { true }
-        let(:params) { super().merge({ legacy: legacy }) }
+        let(:params) { super().merge(legacy: legacy) }
 
         it { is_expected.to eql output }
 
         context 'with pygments wrapper' do
           let(:wrap) { true }
-          let(:params) { super().merge({ wrap: wrap }) }
+          let(:params) { super().merge(wrap: wrap) }
 
           it { is_expected.to eql output }
 
           context 'with css_class' do
             let(:css_class) { 'nanoc' }
-            let(:params) { super().merge({ css_class: css_class }) }
+            let(:params) { super().merge(css_class: css_class) }
 
             it { is_expected.to eql output }
           end
@@ -93,7 +93,7 @@ after
 
         context 'with line number' do
           let(:line_numbers) { true }
-          let(:params) { super().merge({ line_numbers: line_numbers }) }
+          let(:params) { super().merge(line_numbers: line_numbers) }
           let(:output) do
             <<-EOS
 before
@@ -113,7 +113,7 @@ after
       end
 
       context 'with formater' do
-        let(:params) { super().merge({ formatter: formatter }) }
+        let(:params) { super().merge(formatter: formatter) }
 
         context 'with inline' do
           let(:formatter) { Rouge::Formatters::HTMLInline.new(theme) }

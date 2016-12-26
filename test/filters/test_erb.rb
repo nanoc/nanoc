@@ -1,7 +1,7 @@
 class Nanoc::Filters::ERBTest < Nanoc::TestCase
   def test_filter_with_instance_variable
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({ location: 'a cheap motel' })
+    filter = ::Nanoc::Filters::ERB.new(location: 'a cheap motel')
 
     # Run filter
     result = filter.setup_and_run('<%= "I was hiding in #{@location}." %>')
@@ -10,7 +10,7 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
 
   def test_filter_with_instance_method
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({ location: 'a cheap motel' })
+    filter = ::Nanoc::Filters::ERB.new(location: 'a cheap motel')
 
     # Run filter
     result = filter.setup_and_run('<%= "I was hiding in #{location}." %>')
@@ -45,7 +45,7 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
 
   def test_filter_with_yield
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({ content: 'a cheap motel' })
+    filter = ::Nanoc::Filters::ERB.new(content: 'a cheap motel')
 
     # Run filter
     result = filter.setup_and_run('<%= "I was hiding in #{yield}." %>')
@@ -54,7 +54,7 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
 
   def test_filter_with_yield_without_content
     # Create filter
-    filter = ::Nanoc::Filters::ERB.new({ location: 'a cheap motel' })
+    filter = ::Nanoc::Filters::ERB.new(location: 'a cheap motel')
 
     # Run filter
     assert_raises LocalJumpError do
@@ -83,7 +83,7 @@ class Nanoc::Filters::ERBTest < Nanoc::TestCase
 
   def test_trim_mode
     # Set up
-    filter = ::Nanoc::Filters::ERB.new({ location: 'a cheap motel' })
+    filter = ::Nanoc::Filters::ERB.new(location: 'a cheap motel')
     $trim_mode_works = false
 
     # Without

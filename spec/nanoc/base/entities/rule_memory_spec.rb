@@ -83,9 +83,9 @@ describe Nanoc::Int::RuleMemory do
 
   describe '#each' do
     before do
-      rule_memory.add_filter(:erb, { awesomeness: 'high' })
+      rule_memory.add_filter(:erb, awesomeness: 'high')
       rule_memory.add_snapshot(:bar, '/foo.md')
-      rule_memory.add_layout('/default.erb', { somelayoutparam: 'yes' })
+      rule_memory.add_layout('/default.erb', somelayoutparam: 'yes')
     end
 
     example do
@@ -97,9 +97,9 @@ describe Nanoc::Int::RuleMemory do
 
   describe '#map' do
     before do
-      rule_memory.add_filter(:erb, { awesomeness: 'high' })
+      rule_memory.add_filter(:erb, awesomeness: 'high')
       rule_memory.add_snapshot(:bar, '/foo.md')
-      rule_memory.add_layout('/default.erb', { somelayoutparam: 'yes' })
+      rule_memory.add_layout('/default.erb', somelayoutparam: 'yes')
     end
 
     example do
@@ -113,9 +113,9 @@ describe Nanoc::Int::RuleMemory do
     subject { rule_memory.serialize }
 
     before do
-      rule_memory.add_filter(:erb, { awesomeness: 'high' })
+      rule_memory.add_filter(:erb, awesomeness: 'high')
       rule_memory.add_snapshot(:bar, '/foo.md')
-      rule_memory.add_layout('/default.erb', { somelayoutparam: 'yes' })
+      rule_memory.add_layout('/default.erb', somelayoutparam: 'yes')
     end
 
     example do

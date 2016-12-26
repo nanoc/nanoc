@@ -77,7 +77,7 @@ class Nanoc::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
     with_site do |site|
       # Create check
       check = Nanoc::Checking::Checks::ExternalLinks.create(site)
-      site.config.update({ checks: { external_links: { exclude: ['^http://excluded.com$'] } } })
+      site.config.update(checks: { external_links: { exclude: ['^http://excluded.com$'] } })
 
       # Test
       assert check.send(:excluded?, 'http://excluded.com')
@@ -90,7 +90,7 @@ class Nanoc::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
     with_site do |site|
       # Create check
       check = Nanoc::Checking::Checks::ExternalLinks.create(site)
-      site.config.update({ checks: { external_links: { exclude_files: ['blog/page'] } } })
+      site.config.update(checks: { external_links: { exclude_files: ['blog/page'] } })
 
       # Test
       assert check.send(:excluded_file?, 'output/blog/page1/index.html')

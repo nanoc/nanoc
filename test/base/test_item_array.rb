@@ -25,7 +25,7 @@ class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
   end
 
   def test_brackets_with_glob
-    @items = Nanoc::Int::IdentifiableCollection.new({ string_pattern_type: 'glob' })
+    @items = Nanoc::Int::IdentifiableCollection.new(string_pattern_type: 'glob')
     @items << @one
     @items << @two
 

@@ -1,7 +1,7 @@
 class Nanoc::Int::ContextTest < Nanoc::TestCase
   def test_context_with_instance_variable
     # Create context
-    context = Nanoc::Int::Context.new({ foo: 'bar', baz: 'quux' })
+    context = Nanoc::Int::Context.new(foo: 'bar', baz: 'quux')
 
     # Ensure correct evaluation
     assert_equal('bar', eval('@foo', context.get_binding))
@@ -9,7 +9,7 @@ class Nanoc::Int::ContextTest < Nanoc::TestCase
 
   def test_context_with_instance_method
     # Create context
-    context = Nanoc::Int::Context.new({ foo: 'bar', baz: 'quux' })
+    context = Nanoc::Int::Context.new(foo: 'bar', baz: 'quux')
 
     # Ensure correct evaluation
     assert_equal('bar', eval('foo', context.get_binding))

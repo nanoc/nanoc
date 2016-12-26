@@ -238,10 +238,8 @@ describe Nanoc::RuleDSL::RulesCollection do
 
     it 'returns the first matching rule for every snapshot' do
       expect(subject).to eq(
-        {
-          a: rules[0],
-          b: rules[1],
-        },
+        a: rules[0],
+        b: rules[1],
       )
     end
   end

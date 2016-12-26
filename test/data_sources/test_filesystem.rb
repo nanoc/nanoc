@@ -69,7 +69,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_load_objects_with_same_extensions
     # Create data source
-    data_source = new_data_source({ identifier_type: 'full' })
+    data_source = new_data_source(identifier_type: 'full')
 
     # Create a fake class
     klass = Class.new do
@@ -142,7 +142,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_identifier_for_filename_with_full_style_identifier
     # Create data source
-    data_source = new_data_source({ identifier_type: 'full' })
+    data_source = new_data_source(identifier_type: 'full')
 
     # Get input and expected output
     expected = {
@@ -463,7 +463,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
   end
 
   def test_load_objects_correct_identifier_with_separate_yaml_file
-    data_source = new_data_source({ identifier_type: 'full' })
+    data_source = new_data_source(identifier_type: 'full')
 
     FileUtils.mkdir_p('foo')
     File.write('foo/donkey.jpeg', 'data')
@@ -541,7 +541,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_all_split_files_in_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, { allow_periods_in_identifiers: true })
+    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, allow_periods_in_identifiers: true)
 
     # Write sample files
     FileUtils.mkdir_p('foo')
@@ -649,7 +649,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_basename_of_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, { allow_periods_in_identifiers: true })
+    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, allow_periods_in_identifiers: true)
 
     # Get input and expected output
     expected = {
@@ -709,7 +709,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_ext_of_allowing_periods_in_identifiers
     # Create data source
-    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, { allow_periods_in_identifiers: true })
+    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, allow_periods_in_identifiers: true)
 
     # Get input and expected output
     expected = {

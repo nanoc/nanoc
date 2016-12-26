@@ -20,7 +20,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
       expect(rule_memory.size).to eql(1)
       expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
       expect(rule_memory[0].filter_name).to eql(:erb)
-      expect(rule_memory[0].params).to eql({ x: 123 })
+      expect(rule_memory[0].params).to eql(x: 123)
     end
   end
 
@@ -50,7 +50,7 @@ describe Nanoc::RuleDSL::RecordingExecutor do
 
       expect(rule_memory[1]).to be_a(Nanoc::Int::ProcessingActions::Layout)
       expect(rule_memory[1].layout_identifier).to eql('/default.*')
-      expect(rule_memory[1].params).to eql({ donkey: 123 })
+      expect(rule_memory[1].params).to eql(donkey: 123)
     end
 
     it 'fails when passed a symbol' do

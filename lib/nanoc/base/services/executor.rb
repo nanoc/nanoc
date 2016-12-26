@@ -57,7 +57,7 @@ module Nanoc
         raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
         view_context = @compilation_context.create_view_context(@dependency_tracker)
         layout_view = Nanoc::LayoutView.new(layout, view_context)
-        filter = klass.new(assigns_for(@rep).merge({ layout: layout_view }))
+        filter = klass.new(assigns_for(@rep).merge(layout: layout_view))
 
         # Visit
         @dependency_tracker.bounce(layout, raw_content: true)

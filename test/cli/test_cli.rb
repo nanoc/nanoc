@@ -176,17 +176,17 @@ EOS
     with_env_vars(new_env_diff) do
       refute Nanoc::CLI.enable_utf8?(io)
 
-      with_env_vars({ 'LC_ALL'   => 'en_US.UTF-8' }) { assert Nanoc::CLI.enable_utf8?(io) }
-      with_env_vars({ 'LC_CTYPE' => 'en_US.UTF-8' }) { assert Nanoc::CLI.enable_utf8?(io) }
-      with_env_vars({ 'LANG'     => 'en_US.UTF-8' }) { assert Nanoc::CLI.enable_utf8?(io) }
+      with_env_vars('LC_ALL'   => 'en_US.UTF-8') { assert Nanoc::CLI.enable_utf8?(io) }
+      with_env_vars('LC_CTYPE' => 'en_US.UTF-8') { assert Nanoc::CLI.enable_utf8?(io) }
+      with_env_vars('LANG'     => 'en_US.UTF-8') { assert Nanoc::CLI.enable_utf8?(io) }
 
-      with_env_vars({ 'LC_ALL'   => 'en_US.utf-8' }) { assert Nanoc::CLI.enable_utf8?(io) }
-      with_env_vars({ 'LC_CTYPE' => 'en_US.utf-8' }) { assert Nanoc::CLI.enable_utf8?(io) }
-      with_env_vars({ 'LANG'     => 'en_US.utf-8' }) { assert Nanoc::CLI.enable_utf8?(io) }
+      with_env_vars('LC_ALL'   => 'en_US.utf-8') { assert Nanoc::CLI.enable_utf8?(io) }
+      with_env_vars('LC_CTYPE' => 'en_US.utf-8') { assert Nanoc::CLI.enable_utf8?(io) }
+      with_env_vars('LANG'     => 'en_US.utf-8') { assert Nanoc::CLI.enable_utf8?(io) }
 
-      with_env_vars({ 'LC_ALL'   => 'en_US.utf8'  }) { assert Nanoc::CLI.enable_utf8?(io) }
-      with_env_vars({ 'LC_CTYPE' => 'en_US.utf8'  }) { assert Nanoc::CLI.enable_utf8?(io) }
-      with_env_vars({ 'LANG'     => 'en_US.utf8'  }) { assert Nanoc::CLI.enable_utf8?(io) }
+      with_env_vars('LC_ALL'   => 'en_US.utf8') { assert Nanoc::CLI.enable_utf8?(io) }
+      with_env_vars('LC_CTYPE' => 'en_US.utf8') { assert Nanoc::CLI.enable_utf8?(io) }
+      with_env_vars('LANG'     => 'en_US.utf8') { assert Nanoc::CLI.enable_utf8?(io) }
     end
   end
 end

@@ -206,7 +206,7 @@ describe Nanoc::Int::SiteLoader do
         expect(subject.items.size).to eq(1)
         expect(subject.items['/generated.txt'].content).to be_a(Nanoc::Int::TextualContent)
         expect(subject.items['/generated.txt'].content.string).to eq('Generated content!')
-        expect(subject.items['/generated.txt'].attributes).to eq({ generated: true })
+        expect(subject.items['/generated.txt'].attributes).to eq(generated: true)
         expect(subject.items['/generated.txt'].identifier.to_s).to eq('/generated.txt')
       end
     end

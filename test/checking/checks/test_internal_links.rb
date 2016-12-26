@@ -69,7 +69,7 @@ class Nanoc::Checking::Checks::InternalLinksTest < Nanoc::TestCase
     with_site do |site|
       # Create check
       check = Nanoc::Checking::Checks::InternalLinks.create(site)
-      site.config.update({ checks: { internal_links: { exclude: ['^/excluded\d+'] } } })
+      site.config.update(checks: { internal_links: { exclude: ['^/excluded\d+'] } })
 
       # Test
       assert check.send(:valid?, '/excluded1', 'output/origin')
@@ -82,7 +82,7 @@ class Nanoc::Checking::Checks::InternalLinksTest < Nanoc::TestCase
     with_site do |site|
       # Create check
       check = Nanoc::Checking::Checks::InternalLinks.create(site)
-      site.config.update({ checks: { internal_links: { exclude_targets: ['^/excluded\d+'] } } })
+      site.config.update(checks: { internal_links: { exclude_targets: ['^/excluded\d+'] } })
 
       # Test
       assert check.send(:valid?, '/excluded1', 'output/origin')
@@ -95,7 +95,7 @@ class Nanoc::Checking::Checks::InternalLinksTest < Nanoc::TestCase
     with_site do |site|
       # Create check
       check = Nanoc::Checking::Checks::InternalLinks.create(site)
-      site.config.update({ checks: { internal_links: { exclude_origins: ['^/excluded'] } } })
+      site.config.update(checks: { internal_links: { exclude_origins: ['^/excluded'] } })
 
       # Test
       assert check.send(:valid?, '/foo', 'output/excluded')

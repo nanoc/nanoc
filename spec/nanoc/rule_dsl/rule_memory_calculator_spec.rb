@@ -52,7 +52,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
 
           expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Filter)
           expect(subject[1].filter_name).to eql(:erb)
-          expect(subject[1].params).to eql({ speed: :over_9000 })
+          expect(subject[1].params).to eql(speed: :over_9000)
 
           expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
           expect(subject[2].snapshot_name).to eql(:pre)
@@ -173,7 +173,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           expect(subject.size).to eql(1)
           expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
           expect(subject[0].filter_name).to eql(:erb)
-          expect(subject[0].params).to eql({ x: 123 })
+          expect(subject[0].params).to eql(x: 123)
         end
       end
     end
