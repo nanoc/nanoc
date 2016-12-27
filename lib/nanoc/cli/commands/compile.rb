@@ -317,16 +317,16 @@ module Nanoc::CLI::Commands
 
       # @see Listener#start
       def start
-        Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
+        Nanoc::Int::NotificationCenter.on(:compilation_started, self) do |rep|
           @start_times[rep] = Time.now
           @acc_durations[rep] ||= 0.0
         end
 
-        Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep|
+        Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) do |rep|
           @acc_durations[rep] += Time.now - @start_times[rep]
         end
 
-        Nanoc::Int::NotificationCenter.on(:rep_written) do |rep, path, is_created, is_modified|
+        Nanoc::Int::NotificationCenter.on(:rep_written, self) do |rep, path, is_created, is_modified|
           @acc_durations[rep] += Time.now - @start_times[rep]
           duration = @acc_durations[rep]
 
@@ -347,6 +347,11 @@ module Nanoc::CLI::Commands
       # @see Listener#stop
       def stop
         super
+
+        Nanoc::Int::NotificationCenter.remove(:compilation_started, self)
+        Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+        Nanoc::Int::NotificationCenter.remove(:rep_written, self)
+
         @reps.select { |r| !r.compiled? }.each do |rep|
           rep.raw_paths.each do |_snapshot_name, raw_path|
             log(:low, :skip, raw_path, nil)

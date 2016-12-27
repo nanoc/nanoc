@@ -29,6 +29,16 @@ describe Nanoc::CLI::Commands::Compile::FileActionPrinter, stdio: true do
       .to output(/create.*\[1\.00s\]/).to_stdout
   end
 
+  it 'stops listening after #stop' do
+    listener.start
+    listener.stop
+
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+
+    expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, '/foo.html', true, true) }
+      .not_to output(/create/).to_stdout
+  end
+
   it 'records from compilation_started over compilation_suspended to rep_written' do
     listener.start
 
