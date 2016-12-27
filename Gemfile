@@ -13,6 +13,7 @@ group :devel do
   gem 'mocha'
   gem 'pry'
   gem 'rake'
+  gem 'rainbow', '>= 2.1.0', '< 2.2.0'
   gem 'rdoc', '~> 5.0'
   gem 'rspec'
   gem 'rspec-its', '~> 1.2'
