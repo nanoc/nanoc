@@ -75,7 +75,7 @@ module Nanoc::Int
 
     # Provides functionality for (re)calculating the content of an item rep, without caching or
     # outdatedness checking.
-    class RecalculatingItemRepCompiler
+    class RecalculatePhase
       include Nanoc::Int::ContractsSupport
 
       def initialize(action_provider:, dependency_store:, compilation_context:)
@@ -109,8 +109,8 @@ module Nanoc::Int
     end
 
     # Provides functionality for (re)calculating the content of an item rep, with caching or
-    # outdatedness checking. Delegates to RecalculatingItemRepCompiler if outdated or no cache available.
-    class CachingItemRepCompiler
+    # outdatedness checking. Delegates to RecalculatePhase if outdated or no cache available.
+    class CachePhase
       include Nanoc::Int::ContractsSupport
 
       def initialize(compiled_content_cache:, wrapped:)
@@ -138,7 +138,7 @@ module Nanoc::Int
     end
 
     # Provides functionality for suspending and resuming item rep compilation (using fibers).
-    class ResumableItemRepCompiler
+    class ResumePhase
       include Nanoc::Int::ContractsSupport
 
       def initialize(wrapped:)
@@ -182,7 +182,7 @@ module Nanoc::Int
       end
     end
 
-    class WritingItemRepCompiler
+    class WritePhase
       include Nanoc::Int::ContractsSupport
 
       def initialize(wrapped:)
@@ -342,23 +342,23 @@ module Nanoc::Int
 
     def item_rep_compiler
       @_item_rep_compiler ||= begin
-        recalculating_item_rep_compiler = RecalculatingItemRepCompiler.new(
+        recalculate_phase = RecalculatePhase.new(
           action_provider: action_provider,
           dependency_store: @dependency_store,
           compilation_context: compilation_context,
         )
 
-        caching_item_rep_compiler = CachingItemRepCompiler.new(
+        cache_phase = CachePhase.new(
           compiled_content_cache: compiled_content_cache,
-          wrapped: recalculating_item_rep_compiler,
+          wrapped: recalculate_phase,
         )
 
-        resumable_item_rep_compiler = ResumableItemRepCompiler.new(
-          wrapped: caching_item_rep_compiler,
+        resume_phase = ResumePhase.new(
+          wrapped: cache_phase,
         )
 
-        WritingItemRepCompiler.new(
-          wrapped: resumable_item_rep_compiler,
+        WritePhase.new(
+          wrapped: resume_phase,
         )
       end
     end
