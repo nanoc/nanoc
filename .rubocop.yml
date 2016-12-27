@@ -27,6 +27,12 @@ Style/TrailingCommaInArguments:
 Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
 
+# `rescue nil` is useful in specs where the exception is not important, but
+# the size effects are.
+Style/RescueModifier:
+  Exclude:
+    - 'spec/**/*.rb'
+
 Style/IndentArray:
   EnforcedStyle: consistent
 

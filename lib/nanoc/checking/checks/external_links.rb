@@ -43,7 +43,8 @@ module ::Nanoc::Checking::Checks
     end
 
     def select_invalid(hrefs)
-      Parallel.map(hrefs, in_threads: 10) { |href| validate(href) }.compact
+      col = Nanoc::Extra::ParallelCollection.new(hrefs, parallelism: 10)
+      col.map { |href| validate(href) }.compact
     end
 
     def validate(href)
