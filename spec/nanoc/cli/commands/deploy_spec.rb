@@ -11,9 +11,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
 
     shared_examples 'no effective deploy' do
       it 'does not write any files' do
-        # rubocop:disable Style/RescueModifier
         expect { run rescue nil }.not_to change { Dir['remote/*'] }
-        # rubocop:enable Style/RescueModifier
         expect(Dir['remote/*']).to be_empty
       end
     end

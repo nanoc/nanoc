@@ -126,6 +126,29 @@ RSpec::Matchers.define :be_humanly_sorted do
   end
 end
 
+RSpec::Matchers.define :finish_in_under do |expected|
+  supports_block_expectations
+
+  match do |actual|
+    before = Time.now
+    actual.call
+    after = Time.now
+    @actual_duration = after - before
+    @actual_duration < expected
+  end
+
+  chain :seconds do
+  end
+
+  failure_message do |_actual|
+    "expected that proc would finish in under #{expected}s, but took #{format '%0.1fs', @actual_duration}"
+  end
+
+  failure_message_when_negated do |_actual|
+    "expected that proc would not finish in under #{expected}s, but took #{format '%0.1fs', @actual_duration}"
+  end
+end
+
 RSpec::Matchers.define :yield_from_fiber do |expected|
   supports_block_expectations
 

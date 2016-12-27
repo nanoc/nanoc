@@ -18,3 +18,4 @@ module Nanoc::Extra
 end
 
 require 'nanoc/extra/core_ext'
+require 'nanoc/extra/parallel_collection'
