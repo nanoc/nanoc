@@ -15,7 +15,7 @@ env:
       RUBY_GC_OLDMALLOC_LIMIT_MAX=16000000
       LC_ALL=en_US.UTF_8
       LANG=en_US.UTF_8
-before_install: gem install bundler
+before_install: gem update bundler
 matrix:
   fast_finish: true
   include:
