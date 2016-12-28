@@ -14,7 +14,6 @@ end
 
 RSpec::Core::RakeTask.new(:spec)
 
-desc 'Run all tests and specs'
-task test: [:spec, :test_all, :'coveralls:push']
+task test: [:spec, :test_all, :rubocop, :'coveralls:push']
 
-task default: [:test, :rubocop]
+task default: :test
