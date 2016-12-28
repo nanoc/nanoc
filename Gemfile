@@ -12,7 +12,7 @@ group :devel do
   gem 'minitest', '~> 5.0'
   gem 'mocha'
   gem 'pry'
-  gem 'rainbow', '>= 2.1.0', '< 2.2.0'
+  gem 'rainbow', '~> 2.1'
   gem 'rake'
   gem 'rdoc', '~> 5.0'
   gem 'rspec'
