@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.4.6 (2016-12-28)
+
+Fixes:
+
+* Fixed issue where `#compiled_content` would not return the correct content (#1040, #1041)
+
 ## 4.4.5 (2016-12-24)
 
 Fixes:
