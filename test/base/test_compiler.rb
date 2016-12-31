@@ -24,6 +24,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       ),
       action_provider: action_provider,
       reps: reps,
+      outdatedness_store: Nanoc::Int::OutdatednessStore.new(site: site, reps: reps),
     }
 
     params[:outdatedness_checker] =

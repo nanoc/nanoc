@@ -199,6 +199,21 @@ module Nanoc::Int
       end
     end
 
+    class MarkDonePhase
+      include Nanoc::Int::ContractsSupport
+
+      def initialize(wrapped:, outdatedness_store:)
+        @wrapped = wrapped
+        @outdatedness_store = outdatedness_store
+      end
+
+      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+      def run(rep, is_outdated:)
+        @wrapped.run(rep, is_outdated: is_outdated)
+        @outdatedness_store.remove(rep)
+      end
+    end
+
     include Nanoc::Int::ContractsSupport
 
     # @api private
@@ -225,7 +240,10 @@ module Nanoc::Int
     # @api private
     attr_reader :reps
 
-    def initialize(site, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:)
+    # @api private
+    attr_reader :outdatedness_store
+
+    def initialize(site, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:, outdatedness_store:)
       @site = site
 
       @compiled_content_cache = compiled_content_cache
@@ -235,6 +253,7 @@ module Nanoc::Int
       @outdatedness_checker   = outdatedness_checker
       @reps                   = reps
       @action_provider        = action_provider
+      @outdatedness_store     = outdatedness_store
     end
 
     def run_all
@@ -248,7 +267,6 @@ module Nanoc::Int
     def run
       load_stores
       @site.freeze
-
       compile_reps
       store
     ensure
@@ -320,14 +338,25 @@ module Nanoc::Int
     end
 
     def compile_reps
-      outdated_items = @reps.select { |r| outdatedness_checker.outdated?(r) }.map(&:item).uniq
+      outdated_reps = @reps.select do |r|
+        @outdatedness_store.include?(r) || outdatedness_checker.outdated?(r)
+      end
+
+      outdated_items = outdated_reps.map(&:item).uniq
       outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
 
       reps_to_recompile = Set.new(outdated_items.flat_map { |i| @reps[i] })
+      reps_to_recompile.each { |r| @outdatedness_store.add(r) }
+
+      # FIXME: stores outdatedness twice
+      store
+
       selector = Nanoc::Int::ItemRepSelector.new(reps_to_recompile)
       selector.each do |rep|
         handle_errors_while(rep) { compile_rep(rep, is_outdated: reps_to_recompile.include?(rep)) }
       end
+    ensure
+      @outdatedness_store.store
     end
 
     def handle_errors_while(item_rep)
@@ -357,9 +386,16 @@ module Nanoc::Int
           wrapped: cache_phase,
         )
 
-        WritePhase.new(
+        write_phase = WritePhase.new(
           wrapped: resume_phase,
         )
+
+        mark_done_phase = MarkDonePhase.new(
+          wrapped: write_phase,
+          outdatedness_store: @outdatedness_store,
+        )
+
+        mark_done_phase
       end
     end
 
@@ -371,6 +407,7 @@ module Nanoc::Int
         compiled_content_cache,
         @dependency_store,
         rule_memory_store,
+        @outdatedness_store,
       ]
     end
   end

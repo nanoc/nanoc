@@ -1,0 +1,42 @@
+module Nanoc::Int
+  # @api private
+  class OutdatednessStore < ::Nanoc::Int::Store
+    include Nanoc::Int::ContractsSupport
+
+    contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], reps: Nanoc::Int::ItemRepRepo] => C::Any
+    def initialize(site: nil, reps:)
+      super(Nanoc::Int::Store.tmp_path_for(env_name: (site.config.env_name if site), store_name: 'outdatedness'), 1)
+
+      @refs = Set.new
+      @reps = reps
+    end
+
+    contract Nanoc::Int::ItemRep => C::Bool
+    def include?(obj)
+      @refs.include?(obj.reference)
+    end
+
+    contract Nanoc::Int::ItemRep => self
+    def add(obj)
+      @refs << obj.reference
+      self
+    end
+
+    contract Nanoc::Int::ItemRep => self
+    def remove(obj)
+      @refs.delete(obj.reference)
+      self
+    end
+
+    protected
+
+    def data
+      @refs
+    end
+
+    def data=(new_data)
+      acceptable_refs = Set.new(@reps.map(&:reference))
+      @refs = Set.new(new_data.select { |r| acceptable_refs.include?(r) })
+    end
+  end
+end

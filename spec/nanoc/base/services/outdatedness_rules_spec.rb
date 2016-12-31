@@ -18,10 +18,18 @@ describe Nanoc::Int::OutdatednessRules do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
     let(:item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
 
-    let(:site) { double(:site) }
     let(:config) { Nanoc::Int::Configuration.new }
     let(:code_snippets) { [] }
     let(:objects) { [config] + code_snippets + [item] }
+
+    let(:site) do
+      Nanoc::Int::Site.new(
+        config: config,
+        items: [],
+        layouts: [],
+        code_snippets: code_snippets,
+      )
+    end
 
     let(:action_provider) { double(:action_provider) }
     let(:reps) { Nanoc::Int::ItemRepRepo.new }

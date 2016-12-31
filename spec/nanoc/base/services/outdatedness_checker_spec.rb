@@ -10,9 +10,22 @@ describe Nanoc::Int::OutdatednessChecker do
     )
   end
 
-  let(:site) { double(:site) }
   let(:checksum_store) { double(:checksum_store) }
-  let(:dependency_store) { double(:dependency_store) }
+
+  let(:dependency_store) do
+    Nanoc::Int::DependencyStore.new(objects)
+  end
+
+  let(:objects) { [item] }
+
+  let(:site) do
+    Nanoc::Int::Site.new(
+      config: config,
+      items: [],
+      layouts: [],
+      code_snippets: [],
+    )
+  end
 
   let(:rule_memory_store) do
     Nanoc::Int::RuleMemoryStore.new
@@ -101,10 +114,6 @@ describe Nanoc::Int::OutdatednessChecker do
 
   describe '#outdated_due_to_dependencies?' do
     subject { outdatedness_checker.send(:outdated_due_to_dependencies?, item) }
-
-    let(:dependency_store) do
-      Nanoc::Int::DependencyStore.new(objects)
-    end
 
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
 

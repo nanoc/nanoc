@@ -9,16 +9,18 @@ describe Nanoc::Int::Compiler do
       dependency_store: dependency_store,
       outdatedness_checker: outdatedness_checker,
       reps: reps,
+      outdatedness_store: outdatedness_store,
     )
   end
 
-  let(:checksum_store)         { :__irrelevant_checksum_store }
-  let(:rule_memory_store)      { :__irrelevant_rule_memory_store }
+  let(:checksum_store)    { Nanoc::Int::ChecksumStore.new(objects: items) }
+  let(:rule_memory_store) { Nanoc::Int::RuleMemoryStore.new }
 
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items.to_a) }
   let(:reps) { Nanoc::Int::ItemRepRepo.new }
 
   let(:outdatedness_checker) { double(:outdatedness_checker) }
+  let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site, reps: reps) }
   let(:action_provider) { double(:action_provider) }
 
   let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new(items: items) }
@@ -50,10 +52,13 @@ describe Nanoc::Int::Compiler do
   end
 
   let(:memory) do
-    [
-      Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
-      Nanoc::Int::ProcessingActions::Snapshot.new(:last, nil),
-    ]
+    actions =
+      [
+        Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
+        Nanoc::Int::ProcessingActions::Snapshot.new(:last, nil),
+      ]
+
+    Nanoc::Int::RuleMemory.new(nil, actions: actions)
   end
 
   before do
@@ -93,6 +98,21 @@ describe Nanoc::Int::Compiler do
         .to('3')
     end
 
+    it 'removes the item rep from the outdatedness store' do
+      expect(compiler.outdatedness_store.include?(rep)).not_to be
+      expect { subject }.not_to change { compiler.outdatedness_store.include?(rep) }
+    end
+
+    context 'rep in outdatedness store' do
+      before do
+        compiler.outdatedness_store.add(rep)
+      end
+
+      it 'removes the item rep from the outdatedness store' do
+        expect { subject }.to change { compiler.outdatedness_store.include?(rep) }.from(true).to(false)
+      end
+    end
+
     context 'exception' do
       let(:item) { Nanoc::Int::Item.new('<%= raise "lol" %>', {}, '/hi.md') }
 
@@ -110,6 +130,21 @@ describe Nanoc::Int::Compiler do
         expect { subject }.to raise_error do |err|
           expect(err.unwrap).to be_a(RuntimeError)
           expect(err.unwrap.message).to eq('lol')
+        end
+      end
+
+      it 'adds the item rep to the outdatedness store' do
+        expect { subject rescue nil }.to change { compiler.outdatedness_store.include?(rep) }.from(false).to(true)
+      end
+
+      context 'rep in outdatedness store' do
+        before do
+          compiler.outdatedness_store.add(rep)
+        end
+
+        it 'keeps the item rep in the outdatedness store' do
+          expect(compiler.outdatedness_store.include?(rep)).to be
+          expect { subject rescue nil }.not_to change { compiler.outdatedness_store.include?(rep) }
         end
       end
     end
