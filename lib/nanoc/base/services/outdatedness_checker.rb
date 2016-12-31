@@ -82,12 +82,8 @@ module Nanoc::Int
 
     Reasons = Nanoc::Int::OutdatednessReasons
 
-    # @param [Nanoc::Int::Site] site
-    # @param [Nanoc::Int::ChecksumStore] checksum_store
-    # @param [Nanoc::Int::DependencyStore] dependency_store
-    # @param [Nanoc::Int::RuleMemoryStore] rule_memory_store
-    # @param [Nanoc::Int::ActionProvider] action_provider
-    # @param [Nanoc::Int::ItemRepRepo] reps
+    # FIXME: Replace C::Any with proper types
+    contract C::KeywordArgs[site: Nanoc::Int::Site, checksum_store: Nanoc::Int::ChecksumStore, dependency_store: Nanoc::Int::DependencyStore, rule_memory_store: Nanoc::Int::RuleMemoryStore, action_provider: C::Any, reps: Nanoc::Int::ItemRepRepo] => C::Any
     def initialize(site:, checksum_store:, dependency_store:, rule_memory_store:, action_provider:, reps:)
       @site = site
       @checksum_store = checksum_store
