@@ -28,6 +28,11 @@ module Nanoc::Int
       self
     end
 
+    contract C::None => C::ArrayOf[Nanoc::Int::ItemRep]
+    def to_a
+      @outdated_reps.to_a
+    end
+
     protected
 
     def data

@@ -306,14 +306,10 @@ module Nanoc::Int
       preprocess_stage.run
       build_reps
       prune_stage.run
-      run
-      @action_provider.postprocess(@site, @reps)
-    end
-
-    def run
       load_stores
       compile_reps
       store
+      @action_provider.postprocess(@site, @reps)
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
         Nanoc::Filter::TMP_BINARY_ITEMS_DIR,
@@ -379,7 +375,7 @@ module Nanoc::Int
       )
     end
 
-    def compile_reps
+    def determine_outdatedness
       outdated_reps = @reps.select do |r|
         @outdatedness_store.include?(r) || outdatedness_checker.outdated?(r)
       end
@@ -392,10 +388,14 @@ module Nanoc::Int
 
       # FIXME: stores outdatedness twice
       store
+    end
 
-      selector = Nanoc::Int::ItemRepSelector.new(reps_to_recompile)
+    def compile_reps
+      determine_outdatedness
+
+      selector = Nanoc::Int::ItemRepSelector.new(@outdatedness_store.to_a)
       selector.each do |rep|
-        handle_errors_while(rep) { compile_rep(rep, is_outdated: reps_to_recompile.include?(rep)) }
+        handle_errors_while(rep) { compile_rep(rep, is_outdated: @outdatedness_store.include?(rep)) }
       end
     ensure
       @outdatedness_store.store

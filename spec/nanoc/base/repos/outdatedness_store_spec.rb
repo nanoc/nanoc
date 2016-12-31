@@ -53,6 +53,19 @@ describe Nanoc::Int::OutdatednessStore do
     end
   end
 
+  describe '#to_a' do
+    subject { store.to_a }
+
+    context 'nothing added' do
+      it { is_expected.to be_empty }
+    end
+
+    context 'one rep added' do
+      before { store.add(rep) }
+      it { is_expected.to eql([rep]) }
+    end
+  end
+
   describe 'reloading' do
     subject do
       store.store
