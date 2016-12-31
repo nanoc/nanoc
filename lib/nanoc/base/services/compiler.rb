@@ -217,6 +217,24 @@ module Nanoc::Int
       end
     end
 
+    module Stages
+      class Preprocess
+        def initialize(action_provider:, site:, dependency_store:, checksum_store:)
+          @action_provider = action_provider
+          @site = site
+          @dependency_store = dependency_store
+          @checksum_store = checksum_store
+        end
+
+        def run
+          @action_provider.preprocess(@site)
+
+          @dependency_store.objects = @site.items.to_a + @site.layouts.to_a
+          @checksum_store.objects = @site.items.to_a + @site.layouts.to_a + @site.code_snippets + [@site.config]
+        end
+      end
+    end
+
     include Nanoc::Int::ContractsSupport
 
     # @api private
@@ -260,7 +278,7 @@ module Nanoc::Int
     end
 
     def run_all
-      @action_provider.preprocess(@site)
+      preprocess_stage.run
       build_reps
       prune
       run
@@ -282,11 +300,6 @@ module Nanoc::Int
     end
 
     def load_stores
-      # FIXME: icky hack to update the dependency/checksum store’s list of objects
-      # (does not include preprocessed objects otherwise)
-      dependency_store.objects = site.items.to_a + site.layouts.to_a
-      checksum_store.objects = site.items.to_a + site.layouts.to_a + site.code_snippets + [site.config]
-
       stores.each(&:load)
     end
 
@@ -325,6 +338,15 @@ module Nanoc::Int
     end
 
     private
+
+    def preprocess_stage
+      @_preprocess_stage ||= Stages::Preprocess.new(
+        action_provider: action_provider,
+        site: site,
+        dependency_store: dependency_store,
+        checksum_store: checksum_store,
+      )
+    end
 
     def prune
       if site.config[:prune][:auto_prune]
