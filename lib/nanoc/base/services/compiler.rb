@@ -308,8 +308,10 @@ module Nanoc::Int
       prune_stage.run
       load_stores
       determine_outdatedness
-      compile_reps
+      forget_dependencies_if_needed
       store
+      compile_reps
+      store # FIXME: remove me
       @action_provider.postprocess(@site, @reps)
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
@@ -377,18 +379,18 @@ module Nanoc::Int
     end
 
     def determine_outdatedness
-      outdated_reps = @reps.select do |r|
+      outdated_reps_tmp = @reps.select do |r|
         @outdatedness_store.include?(r) || outdatedness_checker.outdated?(r)
       end
 
-      outdated_items = outdated_reps.map(&:item).uniq
-      outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
+      @outdated_items = outdated_reps_tmp.map(&:item).uniq
+      @outdated_reps = Set.new(@outdated_items.flat_map { |i| @reps[i] })
 
-      reps_to_recompile = Set.new(outdated_items.flat_map { |i| @reps[i] })
-      reps_to_recompile.each { |r| @outdatedness_store.add(r) }
+      @outdated_reps.each { |r| @outdatedness_store.add(r) }
+    end
 
-      # FIXME: stores outdatedness twice
-      store
+    def forget_dependencies_if_needed
+      @outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
     end
 
     def compile_reps
