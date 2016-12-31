@@ -258,6 +258,27 @@ module Nanoc::Int
           prune_config[:exclude] || {}
         end
       end
+
+      class DetermineOutdatedness
+        attr_reader :outdated_items
+
+        def initialize(reps:, outdatedness_checker:, outdatedness_store:)
+          @reps = reps
+          @outdatedness_checker = outdatedness_checker
+          @outdatedness_store = outdatedness_store
+        end
+
+        def run
+          outdated_reps_tmp = @reps.select do |r|
+            @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r)
+          end
+
+          @outdated_items = outdated_reps_tmp.map(&:item).uniq
+          outdated_reps = Set.new(@outdated_items.flat_map { |i| @reps[i] })
+
+          outdated_reps.each { |r| @outdatedness_store.add(r) }
+        end
+      end
     end
 
     include Nanoc::Int::ContractsSupport
@@ -378,19 +399,20 @@ module Nanoc::Int
       )
     end
 
+    def determine_outdatedness_stage
+      @_determine_outdatedness_stage ||= Stages::DetermineOutdatedness.new(
+        reps: reps,
+        outdatedness_checker: outdatedness_checker,
+        outdatedness_store: outdatedness_store,
+      )
+    end
+
     def determine_outdatedness
-      outdated_reps_tmp = @reps.select do |r|
-        @outdatedness_store.include?(r) || outdatedness_checker.outdated?(r)
-      end
-
-      @outdated_items = outdated_reps_tmp.map(&:item).uniq
-      @outdated_reps = Set.new(@outdated_items.flat_map { |i| @reps[i] })
-
-      @outdated_reps.each { |r| @outdatedness_store.add(r) }
+      determine_outdatedness_stage.run
     end
 
     def forget_dependencies_if_needed
-      @outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
+      determine_outdatedness_stage.outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
     end
 
     def compile_reps
