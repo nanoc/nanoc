@@ -243,7 +243,7 @@ module Nanoc::Int
     # @api private
     attr_reader :outdatedness_store
 
-    def initialize(site, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:)
+    def initialize(site, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:, outdatedness_store:)
       @site = site
 
       @compiled_content_cache = compiled_content_cache
@@ -253,9 +253,7 @@ module Nanoc::Int
       @outdatedness_checker   = outdatedness_checker
       @reps                   = reps
       @action_provider        = action_provider
-
-      # TODO: move to compiler loader
-      @outdatedness_store     = Nanoc::Int::OutdatednessStore.new(site: site)
+      @outdatedness_store     = outdatedness_store
     end
 
     def run_all
@@ -350,6 +348,7 @@ module Nanoc::Int
       reps_to_recompile = Set.new(outdated_items.flat_map { |i| @reps[i] })
       reps_to_recompile.each { |r| @outdatedness_store.add(r) }
 
+      # FIXME: stores outdatedness twice
       store
 
       selector = Nanoc::Int::ItemRepSelector.new(reps_to_recompile)

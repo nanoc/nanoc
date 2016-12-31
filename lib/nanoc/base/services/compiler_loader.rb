@@ -16,6 +16,8 @@ module Nanoc::Int
 
       action_provider ||= Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
 
+      outdatedness_store = Nanoc::Int::OutdatednessStore.new(site: site)
+
       outdatedness_checker =
         Nanoc::Int::OutdatednessChecker.new(
           site: site,
@@ -40,6 +42,7 @@ module Nanoc::Int
         outdatedness_checker: outdatedness_checker,
         reps: item_rep_repo,
         action_provider: action_provider,
+        outdatedness_store: outdatedness_store,
       }
 
       Nanoc::Int::Compiler.new(site, params)

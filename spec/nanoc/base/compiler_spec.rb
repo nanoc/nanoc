@@ -9,6 +9,7 @@ describe Nanoc::Int::Compiler do
       dependency_store: dependency_store,
       outdatedness_checker: outdatedness_checker,
       reps: reps,
+      outdatedness_store: outdatedness_store,
     )
   end
 
@@ -19,6 +20,7 @@ describe Nanoc::Int::Compiler do
   let(:reps) { Nanoc::Int::ItemRepRepo.new }
 
   let(:outdatedness_checker) { double(:outdatedness_checker) }
+  let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site) }
   let(:action_provider) { double(:action_provider) }
 
   let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new(items: items) }
