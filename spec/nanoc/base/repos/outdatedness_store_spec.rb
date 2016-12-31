@@ -80,8 +80,7 @@ describe Nanoc::Int::OutdatednessStore do
       end
 
       context 'rep not part of new reps' do
-        # FIXME: this should not be -- do not store expired info
-        it { is_expected.to be }
+        it { is_expected.not_to be }
       end
     end
   end

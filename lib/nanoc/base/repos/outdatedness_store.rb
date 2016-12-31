@@ -35,8 +35,8 @@ module Nanoc::Int
     end
 
     def data=(new_data)
-      # FIXME: remove strings for which no object exists
-      @refs = new_data
+      acceptable_refs = Set.new(@reps.map(&:reference))
+      @refs = Set.new(new_data.select { |r| acceptable_refs.include?(r) })
     end
   end
 end
