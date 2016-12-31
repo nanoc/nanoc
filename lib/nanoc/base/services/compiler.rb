@@ -231,6 +231,8 @@ module Nanoc::Int
 
           @dependency_store.objects = @site.items.to_a + @site.layouts.to_a
           @checksum_store.objects = @site.items.to_a + @site.layouts.to_a + @site.code_snippets + [@site.config]
+
+          @site.freeze
         end
       end
 
@@ -310,7 +312,6 @@ module Nanoc::Int
 
     def run
       load_stores
-      @site.freeze
       compile_reps
       store
     ensure
