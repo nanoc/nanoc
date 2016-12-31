@@ -73,144 +73,147 @@ module Nanoc::Int
       end
     end
 
-    # Provides functionality for (re)calculating the content of an item rep, without caching or
-    # outdatedness checking.
-    class RecalculatePhase
-      include Nanoc::Int::ContractsSupport
+    # All phases for the compilation of a single item rep. Phases will be repeated for every rep.
+    module Phases
+      # Provides functionality for (re)calculating the content of an item rep, without caching or
+      # outdatedness checking.
+      class Recalculate
+        include Nanoc::Int::ContractsSupport
 
-      def initialize(action_provider:, dependency_store:, compilation_context:)
-        @action_provider = action_provider
-        @dependency_store = dependency_store
-        @compilation_context = compilation_context
-      end
+        def initialize(action_provider:, dependency_store:, compilation_context:)
+          @action_provider = action_provider
+          @dependency_store = dependency_store
+          @compilation_context = compilation_context
+        end
 
-      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
-      def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
-        dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
-        dependency_tracker.enter(rep.item)
+        contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+        def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
+          dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
+          dependency_tracker.enter(rep.item)
 
-        executor = Nanoc::Int::Executor.new(rep, @compilation_context, dependency_tracker)
+          executor = Nanoc::Int::Executor.new(rep, @compilation_context, dependency_tracker)
 
-        @action_provider.memory_for(rep).each do |action|
-          case action
-          when Nanoc::Int::ProcessingActions::Filter
-            executor.filter(action.filter_name, action.params)
-          when Nanoc::Int::ProcessingActions::Layout
-            executor.layout(action.layout_identifier, action.params)
-          when Nanoc::Int::ProcessingActions::Snapshot
-            executor.snapshot(action.snapshot_name)
-          else
-            raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
+          @action_provider.memory_for(rep).each do |action|
+            case action
+            when Nanoc::Int::ProcessingActions::Filter
+              executor.filter(action.filter_name, action.params)
+            when Nanoc::Int::ProcessingActions::Layout
+              executor.layout(action.layout_identifier, action.params)
+            when Nanoc::Int::ProcessingActions::Snapshot
+              executor.snapshot(action.snapshot_name)
+            else
+              raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
+            end
           end
+        ensure
+          dependency_tracker.exit
         end
-      ensure
-        dependency_tracker.exit
-      end
-    end
-
-    # Provides functionality for (re)calculating the content of an item rep, with caching or
-    # outdatedness checking. Delegates to RecalculatePhase if outdated or no cache available.
-    class CachePhase
-      include Nanoc::Int::ContractsSupport
-
-      def initialize(compiled_content_cache:, wrapped:)
-        @compiled_content_cache = compiled_content_cache
-        @wrapped = wrapped
       end
 
-      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
-      def run(rep, is_outdated:)
-        if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
-          Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
-          rep.snapshot_contents = @compiled_content_cache[rep]
-        else
-          @wrapped.run(rep, is_outdated: is_outdated)
+      # Provides functionality for (re)calculating the content of an item rep, with caching or
+      # outdatedness checking. Delegates to s::Recalculate if outdated or no cache available.
+      class Cache
+        include Nanoc::Int::ContractsSupport
+
+        def initialize(compiled_content_cache:, wrapped:)
+          @compiled_content_cache = compiled_content_cache
+          @wrapped = wrapped
         end
 
-        rep.compiled = true
-        @compiled_content_cache[rep] = rep.snapshot_contents
-      end
-
-      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Bool
-      def can_reuse_content_for_rep?(rep, is_outdated:)
-        !is_outdated && !@compiled_content_cache[rep].nil?
-      end
-    end
-
-    # Provides functionality for suspending and resuming item rep compilation (using fibers).
-    class ResumePhase
-      include Nanoc::Int::ContractsSupport
-
-      def initialize(wrapped:)
-        @wrapped = wrapped
-      end
-
-      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
-      def run(rep, is_outdated:)
-        fiber = fiber_for(rep, is_outdated: is_outdated)
-        while fiber.alive?
-          Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
-          res = fiber.resume
-
-          case res
-          when Nanoc::Int::Errors::UnmetDependency
-            Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res)
-            raise(res)
-          when Proc
-            fiber.resume(res.call)
+        contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+        def run(rep, is_outdated:)
+          if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
+            Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
+            rep.snapshot_contents = @compiled_content_cache[rep]
           else
-            # TODO: raise
-          end
-        end
-
-        Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)
-      end
-
-      private
-
-      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => Fiber
-      def fiber_for(rep, is_outdated:)
-        @fibers ||= {}
-
-        @fibers[rep] ||=
-          Fiber.new do
             @wrapped.run(rep, is_outdated: is_outdated)
-            @fibers.delete(rep)
           end
 
-        @fibers[rep]
-      end
-    end
+          rep.compiled = true
+          @compiled_content_cache[rep] = rep.snapshot_contents
+        end
 
-    class WritePhase
-      include Nanoc::Int::ContractsSupport
-
-      def initialize(wrapped:)
-        @wrapped = wrapped
-      end
-
-      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
-      def run(rep, is_outdated:)
-        @wrapped.run(rep, is_outdated: is_outdated)
-
-        rep.snapshot_defs.each do |sdef|
-          ItemRepWriter.new.write(rep, sdef.name)
+        contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Bool
+        def can_reuse_content_for_rep?(rep, is_outdated:)
+          !is_outdated && !@compiled_content_cache[rep].nil?
         end
       end
-    end
 
-    class MarkDonePhase
-      include Nanoc::Int::ContractsSupport
+      # Provides functionality for suspending and resuming item rep compilation (using fibers).
+      class Resume
+        include Nanoc::Int::ContractsSupport
 
-      def initialize(wrapped:, outdatedness_store:)
-        @wrapped = wrapped
-        @outdatedness_store = outdatedness_store
+        def initialize(wrapped:)
+          @wrapped = wrapped
+        end
+
+        contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+        def run(rep, is_outdated:)
+          fiber = fiber_for(rep, is_outdated: is_outdated)
+          while fiber.alive?
+            Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+            res = fiber.resume
+
+            case res
+            when Nanoc::Int::Errors::UnmetDependency
+              Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res)
+              raise(res)
+            when Proc
+              fiber.resume(res.call)
+            else
+              # TODO: raise
+            end
+          end
+
+          Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)
+        end
+
+        private
+
+        contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => Fiber
+        def fiber_for(rep, is_outdated:)
+          @fibers ||= {}
+
+          @fibers[rep] ||=
+            Fiber.new do
+              @wrapped.run(rep, is_outdated: is_outdated)
+              @fibers.delete(rep)
+            end
+
+          @fibers[rep]
+        end
       end
 
-      contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
-      def run(rep, is_outdated:)
-        @wrapped.run(rep, is_outdated: is_outdated)
-        @outdatedness_store.remove(rep)
+      class Write
+        include Nanoc::Int::ContractsSupport
+
+        def initialize(wrapped:)
+          @wrapped = wrapped
+        end
+
+        contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+        def run(rep, is_outdated:)
+          @wrapped.run(rep, is_outdated: is_outdated)
+
+          rep.snapshot_defs.each do |sdef|
+            ItemRepWriter.new.write(rep, sdef.name)
+          end
+        end
+      end
+
+      class MarkDone
+        include Nanoc::Int::ContractsSupport
+
+        def initialize(wrapped:, outdatedness_store:)
+          @wrapped = wrapped
+          @outdatedness_store = outdatedness_store
+        end
+
+        contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+        def run(rep, is_outdated:)
+          @wrapped.run(rep, is_outdated: is_outdated)
+          @outdatedness_store.remove(rep)
+        end
       end
     end
 
@@ -371,26 +374,26 @@ module Nanoc::Int
 
     def item_rep_compiler
       @_item_rep_compiler ||= begin
-        recalculate_phase = RecalculatePhase.new(
+        recalculate_phase = Phases::Recalculate.new(
           action_provider: action_provider,
           dependency_store: @dependency_store,
           compilation_context: compilation_context,
         )
 
-        cache_phase = CachePhase.new(
+        cache_phase = Phases::Cache.new(
           compiled_content_cache: compiled_content_cache,
           wrapped: recalculate_phase,
         )
 
-        resume_phase = ResumePhase.new(
+        resume_phase = Phases::Resume.new(
           wrapped: cache_phase,
         )
 
-        write_phase = WritePhase.new(
+        write_phase = Phases::Write.new(
           wrapped: resume_phase,
         )
 
-        mark_done_phase = MarkDonePhase.new(
+        mark_done_phase = Phases::MarkDone.new(
           wrapped: write_phase,
           outdatedness_store: @outdatedness_store,
         )
