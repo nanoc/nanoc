@@ -67,15 +67,15 @@ describe Nanoc::Int::OutdatednessRules do
     context 'ConfigurationModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::ConfigurationModified }
 
-      context 'only non-outdated snippets' do
-        let(:config) { Nanoc::Int::CodeSnippet.new('asdf', 'lib/foo.md') }
+      context 'non-outdated' do
+        let(:config) { Nanoc::Int::Configuration.new }
 
         before { checksum_store.add(config) }
 
         it { is_expected.not_to be }
       end
 
-      context 'only non-outdated snippets' do
+      context 'outdated' do
         let(:config) { Nanoc::Int::Configuration.new }
         let(:config_old) { Nanoc::Int::Configuration.new(hash: { foo: 125 }) }
 
