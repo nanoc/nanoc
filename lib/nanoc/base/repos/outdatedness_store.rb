@@ -7,36 +7,38 @@ module Nanoc::Int
     def initialize(site: nil, reps:)
       super(Nanoc::Int::Store.tmp_path_for(env_name: (site.config.env_name if site), store_name: 'outdatedness'), 1)
 
-      @refs = Set.new
-      @reps = reps
+      @outdated_reps = Set.new
+      @all_reps = reps
     end
 
     contract Nanoc::Int::ItemRep => C::Bool
     def include?(obj)
-      @refs.include?(obj.reference)
+      @outdated_reps.include?(obj)
     end
 
     contract Nanoc::Int::ItemRep => self
     def add(obj)
-      @refs << obj.reference
+      @outdated_reps << obj
       self
     end
 
     contract Nanoc::Int::ItemRep => self
     def remove(obj)
-      @refs.delete(obj.reference)
+      @outdated_reps.delete(obj)
       self
     end
 
     protected
 
     def data
-      @refs
+      @outdated_reps.map(&:reference)
     end
 
     def data=(new_data)
-      acceptable_refs = Set.new(@reps.map(&:reference))
-      @refs = Set.new(new_data.select { |r| acceptable_refs.include?(r) })
+      outdated_refs = Set.new(new_data)
+      all_reps = Set.new(@all_reps)
+
+      @outdated_reps = Set.new(all_reps.select { |rep| outdated_refs.include?(rep.reference) })
     end
   end
 end
