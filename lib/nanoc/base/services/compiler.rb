@@ -233,6 +233,29 @@ module Nanoc::Int
           @checksum_store.objects = @site.items.to_a + @site.layouts.to_a + @site.code_snippets + [@site.config]
         end
       end
+
+      class Prune
+        def initialize(config:, reps:)
+          @config = config
+          @reps = reps
+        end
+
+        def run
+          if @config[:prune][:auto_prune]
+            Nanoc::Pruner.new(@config, @reps, exclude: prune_config_exclude).run
+          end
+        end
+
+        private
+
+        def prune_config
+          @config[:prune] || {}
+        end
+
+        def prune_config_exclude
+          prune_config[:exclude] || {}
+        end
+      end
     end
 
     include Nanoc::Int::ContractsSupport
@@ -280,7 +303,7 @@ module Nanoc::Int
     def run_all
       preprocess_stage.run
       build_reps
-      prune
+      prune_stage.run
       run
       @action_provider.postprocess(@site, @reps)
     end
@@ -348,18 +371,11 @@ module Nanoc::Int
       )
     end
 
-    def prune
-      if site.config[:prune][:auto_prune]
-        Nanoc::Pruner.new(site.config, reps, exclude: prune_config_exclude).run
-      end
-    end
-
-    def prune_config
-      site.config[:prune] || {}
-    end
-
-    def prune_config_exclude
-      prune_config[:exclude] || {}
+    def prune_stage
+      @_prune_stage ||= Stages::Prune.new(
+        config: site.config,
+        reps: reps,
+      )
     end
 
     def compile_reps
