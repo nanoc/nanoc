@@ -3,11 +3,12 @@ module Nanoc::Int
   class OutdatednessStore < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
-    contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site]] => C::Any
-    def initialize(site: nil)
+    contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], reps: Nanoc::Int::ItemRepRepo] => C::Any
+    def initialize(site: nil, reps:)
       super(Nanoc::Int::Store.tmp_path_for(env_name: (site.config.env_name if site), store_name: 'outdatedness'), 1)
 
       @refs = Set.new
+      @reps = reps
     end
 
     contract Nanoc::Int::ItemRep => C::Bool
