@@ -77,7 +77,10 @@ describe Nanoc::Int::Compiler do
   end
 
   describe '#compile_reps' do
-    subject { compiler.send(:compile_reps) }
+    subject do
+      compiler.send(:determine_outdatedness)
+      compiler.send(:compile_reps)
+    end
 
     before do
       allow(action_provider).to receive(:snapshots_defs_for).with(rep).and_return(snapshot_defs_for_rep)

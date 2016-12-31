@@ -307,6 +307,7 @@ module Nanoc::Int
       build_reps
       prune_stage.run
       load_stores
+      determine_outdatedness
       compile_reps
       store
       @action_provider.postprocess(@site, @reps)
@@ -391,8 +392,6 @@ module Nanoc::Int
     end
 
     def compile_reps
-      determine_outdatedness
-
       selector = Nanoc::Int::ItemRepSelector.new(@outdatedness_store.to_a)
       selector.each do |rep|
         handle_errors_while(rep) { compile_rep(rep, is_outdated: @outdatedness_store.include?(rep)) }
