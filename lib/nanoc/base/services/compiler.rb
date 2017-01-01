@@ -260,8 +260,6 @@ module Nanoc::Int
       end
 
       class DetermineOutdatedness
-        attr_reader :outdated_items
-
         def initialize(reps:, outdatedness_checker:, outdatedness_store:)
           @reps = reps
           @outdatedness_checker = outdatedness_checker
@@ -273,10 +271,12 @@ module Nanoc::Int
             @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r)
           end
 
-          @outdated_items = outdated_reps_tmp.map(&:item).uniq
-          outdated_reps = Set.new(@outdated_items.flat_map { |i| @reps[i] })
+          outdated_items = outdated_reps_tmp.map(&:item).uniq
+          outdated_reps = Set.new(outdated_items.flat_map { |i| @reps[i] })
 
           outdated_reps.each { |r| @outdatedness_store.add(r) }
+
+          yield(outdated_items)
         end
       end
 
@@ -449,8 +449,9 @@ module Nanoc::Int
     end
 
     def determine_outdatedness
-      determine_outdatedness_stage.run
-      @outdated_items = determine_outdatedness_stage.outdated_items
+      determine_outdatedness_stage.run do |outdated_items|
+        @outdated_items = outdated_items
+      end
     end
 
     def forget_dependencies_if_needed
