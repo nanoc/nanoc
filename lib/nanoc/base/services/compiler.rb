@@ -361,7 +361,7 @@ module Nanoc::Int
       forget_dependencies_if_needed
       store
       compile_reps
-      store # FIXME: remove me
+      store_output_state
       @action_provider.postprocess(@site, @reps)
     ensure
       Nanoc::Int::TempFilenameFactory.instance.cleanup(
@@ -376,9 +376,7 @@ module Nanoc::Int
       stores.each(&:load)
     end
 
-    # Store the modified helper data used for compiling the site.
-    #
-    # @return [void]
+    # TODO: rename to store_preprocessed_state
     def store
       # Calculate rule memory
       (@reps.to_a + @site.layouts.to_a).each do |obj|
@@ -391,7 +389,13 @@ module Nanoc::Int
       objects_to_checksum.each { |obj| checksum_store.add(obj) }
 
       # Store
-      stores.each(&:store)
+      checksum_store.store
+      rule_memory_store.store
+    end
+
+    def store_output_state
+      compiled_content_cache.store
+      @dependency_store.store
     end
 
     def build_reps
