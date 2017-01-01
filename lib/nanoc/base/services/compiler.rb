@@ -279,6 +279,35 @@ module Nanoc::Int
           outdated_reps.each { |r| @outdatedness_store.add(r) }
         end
       end
+
+      class CompileReps
+        def initialize(outdatedness_store:, dependency_store:, item_rep_compiler:)
+          @outdatedness_store = outdatedness_store
+          @dependency_store = dependency_store
+          @item_rep_compiler = item_rep_compiler
+        end
+
+        def run
+          selector = Nanoc::Int::ItemRepSelector.new(@outdatedness_store.to_a)
+          selector.each do |rep|
+            handle_errors_while(rep) { compile_rep(rep, is_outdated: @outdatedness_store.include?(rep)) }
+          end
+        ensure
+          @outdatedness_store.store
+        end
+
+        private
+
+        def handle_errors_while(item_rep)
+          yield
+        rescue => e
+          raise Nanoc::Int::Errors::CompilationError.new(e, item_rep)
+        end
+
+        def compile_rep(rep, is_outdated:)
+          @item_rep_compiler.run(rep, is_outdated: is_outdated)
+        end
+      end
     end
 
     include Nanoc::Int::ContractsSupport
@@ -407,33 +436,28 @@ module Nanoc::Int
       )
     end
 
+    def compile_reps_stage
+      @_compile_reps_stage ||= Stages::CompileReps.new(
+        outdatedness_store: @outdatedness_store,
+        dependency_store: @dependency_store,
+        item_rep_compiler: item_rep_compiler,
+      )
+    end
+
     def determine_outdatedness
       determine_outdatedness_stage.run
+      @outdated_items = determine_outdatedness_stage.outdated_items
     end
 
     def forget_dependencies_if_needed
-      determine_outdatedness_stage.outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
+      @outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
     end
 
     def compile_reps
-      selector = Nanoc::Int::ItemRepSelector.new(@outdatedness_store.to_a)
-      selector.each do |rep|
-        handle_errors_while(rep) { compile_rep(rep, is_outdated: @outdatedness_store.include?(rep)) }
-      end
-    ensure
-      @outdatedness_store.store
+      compile_reps_stage.run
     end
 
-    def handle_errors_while(item_rep)
-      yield
-    rescue => e
-      raise Nanoc::Int::Errors::CompilationError.new(e, item_rep)
-    end
-
-    def compile_rep(rep, is_outdated:)
-      item_rep_compiler.run(rep, is_outdated: is_outdated)
-    end
-
+    # TODO: Move into Stages::CompileReps
     def item_rep_compiler
       @_item_rep_compiler ||= begin
         recalculate_phase = Phases::Recalculate.new(

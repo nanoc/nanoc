@@ -154,7 +154,9 @@ describe Nanoc::Int::Compiler do
   end
 
   describe '#compile_rep' do
-    subject { compiler.send(:compile_rep, rep, is_outdated: is_outdated) }
+    let(:stage) { compiler.send(:compile_reps_stage) }
+
+    subject { stage.send(:compile_rep, rep, is_outdated: is_outdated) }
 
     let(:is_outdated) { true }
 
@@ -183,10 +185,10 @@ describe Nanoc::Int::Compiler do
       it 'generates expected output' do
         expect(rep.snapshot_contents[:last].string).to eql(item.content.string)
 
-        expect { compiler.send(:compile_rep, rep, is_outdated: true) }
+        expect { stage.send(:compile_rep, rep, is_outdated: true) }
           .to raise_error(Nanoc::Int::Errors::UnmetDependency)
-        compiler.send(:compile_rep, other_rep, is_outdated: true)
-        compiler.send(:compile_rep, rep, is_outdated: true)
+        stage.send(:compile_rep, other_rep, is_outdated: true)
+        stage.send(:compile_rep, rep, is_outdated: true)
 
         expect(rep.snapshot_contents[:last].string).to eql('other=other content')
       end
@@ -209,10 +211,10 @@ describe Nanoc::Int::Compiler do
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
 
-        expect { compiler.send(:compile_rep, rep, is_outdated: true) }
+        expect { stage.send(:compile_rep, rep, is_outdated: true) }
           .to raise_error(Nanoc::Int::Errors::UnmetDependency)
-        compiler.send(:compile_rep, other_rep, is_outdated: true)
-        compiler.send(:compile_rep, rep, is_outdated: true)
+        stage.send(:compile_rep, other_rep, is_outdated: true)
+        stage.send(:compile_rep, rep, is_outdated: true)
       end
     end
   end
