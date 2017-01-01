@@ -281,10 +281,12 @@ module Nanoc::Int
       end
 
       class CompileReps
-        def initialize(outdatedness_store:, dependency_store:, item_rep_compiler:)
+        def initialize(outdatedness_store:, dependency_store:, action_provider:, compilation_context:, compiled_content_cache:)
           @outdatedness_store = outdatedness_store
           @dependency_store = dependency_store
-          @item_rep_compiler = item_rep_compiler
+          @action_provider = action_provider
+          @compilation_context = compilation_context
+          @compiled_content_cache = compiled_content_cache
         end
 
         def run
@@ -305,7 +307,37 @@ module Nanoc::Int
         end
 
         def compile_rep(rep, is_outdated:)
-          @item_rep_compiler.run(rep, is_outdated: is_outdated)
+          item_rep_compiler.run(rep, is_outdated: is_outdated)
+        end
+
+        def item_rep_compiler
+          @_item_rep_compiler ||= begin
+            recalculate_phase = Phases::Recalculate.new(
+              action_provider: @action_provider,
+              dependency_store: @dependency_store,
+              compilation_context: @compilation_context,
+            )
+
+            cache_phase = Phases::Cache.new(
+              compiled_content_cache: @compiled_content_cache,
+              wrapped: recalculate_phase,
+            )
+
+            resume_phase = Phases::Resume.new(
+              wrapped: cache_phase,
+            )
+
+            write_phase = Phases::Write.new(
+              wrapped: resume_phase,
+            )
+
+            mark_done_phase = Phases::MarkDone.new(
+              wrapped: write_phase,
+              outdatedness_store: @outdatedness_store,
+            )
+
+            mark_done_phase
+          end
         end
       end
     end
@@ -444,7 +476,9 @@ module Nanoc::Int
       @_compile_reps_stage ||= Stages::CompileReps.new(
         outdatedness_store: @outdatedness_store,
         dependency_store: @dependency_store,
-        item_rep_compiler: item_rep_compiler,
+        action_provider: action_provider,
+        compilation_context: compilation_context,
+        compiled_content_cache: compiled_content_cache,
       )
     end
 
@@ -460,37 +494,6 @@ module Nanoc::Int
 
     def compile_reps
       compile_reps_stage.run
-    end
-
-    # TODO: Move into Stages::CompileReps
-    def item_rep_compiler
-      @_item_rep_compiler ||= begin
-        recalculate_phase = Phases::Recalculate.new(
-          action_provider: action_provider,
-          dependency_store: @dependency_store,
-          compilation_context: compilation_context,
-        )
-
-        cache_phase = Phases::Cache.new(
-          compiled_content_cache: compiled_content_cache,
-          wrapped: recalculate_phase,
-        )
-
-        resume_phase = Phases::Resume.new(
-          wrapped: cache_phase,
-        )
-
-        write_phase = Phases::Write.new(
-          wrapped: resume_phase,
-        )
-
-        mark_done_phase = Phases::MarkDone.new(
-          wrapped: write_phase,
-          outdatedness_store: @outdatedness_store,
-        )
-
-        mark_done_phase
-      end
     end
 
     # Returns all stores that can load/store data that can be used for
