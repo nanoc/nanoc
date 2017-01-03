@@ -7,7 +7,7 @@ module Nanoc
     gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : 'without RubyGems'
     engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : 'ruby'
     res = ''
-    res << "Nanoc #{Nanoc::VERSION} © 2007-2016 Denis Defreyne.\n"
+    res << "Nanoc #{Nanoc::VERSION} © 2007-2017 Denis Defreyne.\n"
     res << "Running #{engine} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} #{gem_info}.\n"
     res
   end
