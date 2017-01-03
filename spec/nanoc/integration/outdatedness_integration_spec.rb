@@ -1,8 +1,13 @@
 describe 'Outdatedness integration', site: true, stdio: true do
   context 'only attribute dependency' do
+    let(:time) { Time.now }
+
     before do
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoo")
       File.write('content/bar.md', '<%= @items["/foo.*"][:title] %>')
+
+      FileUtils.touch('content/foo.md', mtime: time)
+      FileUtils.touch('content/bar.md', mtime: time)
 
       File.write('Rules', <<EOS)
 compile '/foo.*' do
@@ -29,6 +34,7 @@ EOS
 
     it 'shows file as outdated after modification' do
       File.write('content/bar.md', 'JUST BAR!')
+      FileUtils.touch('content/bar.md', mtime: time)
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
         output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout,
@@ -40,6 +46,7 @@ EOS
 
     it 'shows file and dependencies as not outdated after content modification' do
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoooOoooOOoooOooo")
+      FileUtils.touch('content/foo.md', mtime: time)
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
         output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
@@ -51,6 +58,7 @@ EOS
 
     it 'shows file and dependencies as outdated after title modification' do
       File.write('content/foo.md', "---\ntitle: bye\n---\n\nfoo")
+      FileUtils.touch('content/foo.md', mtime: time)
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
         output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
