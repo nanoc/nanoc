@@ -48,7 +48,19 @@ describe Nanoc::DataSources::Filesystem do
           expect(subject[0].identifier).to eq(Nanoc::Identifier.new('/bar/'))
           expect(subject[0].checksum_data).to be_nil
           expect(subject[0].content_checksum_data).to eq('test 1')
-          expect(subject[0].attributes_checksum_data).to eq("num: 1\n")
+        end
+
+        it 'has the right attributes checksum data' do
+          cs = YAML.load(subject[0].attributes_checksum_data)
+
+          expect(cs[:attributes]).to eq("num: 1\n")
+          expect(cs[:extra_attributes]).to eq(
+            filename: 'foo/bar.html',
+            content_filename: 'foo/bar.html',
+            meta_filename: nil,
+            extension: 'html',
+            mtime: now,
+          )
         end
       end
     end
