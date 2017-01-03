@@ -171,16 +171,18 @@ module Nanoc::DataSources
       res
     end
 
-    def attributes_for(proto_doc, content_filename, meta_filename)
-      extra_attributes = {
+    def extra_attributes_for(content_filename, meta_filename)
+      {
         filename: content_filename,
         content_filename: content_filename,
         meta_filename: meta_filename,
         extension: content_filename ? ext_of(content_filename)[1..-1] : nil,
         mtime: mtime_of(content_filename, meta_filename),
       }
+    end
 
-      extra_attributes.merge(proto_doc.attributes)
+    def attributes_for(proto_doc, content_filename, meta_filename)
+      extra_attributes_for(content_filename, meta_filename).merge(proto_doc.attributes)
     end
 
     def identifier_for(content_filename, meta_filename, dir_name)
