@@ -93,12 +93,12 @@ module Nanoc::Checking
     end
 
     def all_check_classes
-      Nanoc::Checking::Check.all.map(&:last).uniq
+      Nanoc::Checking::Check.all
     end
 
     def check_classes_named(n)
       n.map do |a|
-        klass = Nanoc::Checking::Check.named(a)
+        klass = Nanoc::Checking::Check.named(a.to_sym)
         raise Nanoc::Int::Errors::GenericTrivial, "Unknown check: #{a}" if klass.nil?
         klass
       end

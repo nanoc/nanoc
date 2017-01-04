@@ -27,7 +27,7 @@ module Nanoc
     #   online data sources could contain authentication details.
     attr_reader :config
 
-    extend Nanoc::Int::PluginRegistry::PluginMethods
+    extend DDPlugin::Plugin
 
     def initialize(site_config, items_root, layouts_root, config)
       @site_config  = site_config
