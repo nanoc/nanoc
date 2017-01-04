@@ -10,14 +10,17 @@ end
 module Nanoc::CLI
   module Commands
   end
+end
 
-  autoload 'ANSIStringColorizer', 'nanoc/cli/ansi_string_colorizer'
-  autoload 'Logger',              'nanoc/cli/logger'
-  autoload 'CommandRunner',       'nanoc/cli/command_runner'
-  autoload 'CleaningStream',      'nanoc/cli/cleaning_stream'
-  autoload 'StreamCleaners',      'nanoc/cli/stream_cleaners'
-  autoload 'ErrorHandler',        'nanoc/cli/error_handler'
+require_relative 'cli/ansi_string_colorizer'
+require_relative 'cli/logger'
+require_relative 'cli/command_runner'
+require_relative 'cli/cleaning_stream'
+require_relative 'cli/stream_cleaners'
+require_relative 'cli/error_handler'
 
+# @api private
+module Nanoc::CLI
   # @return [Boolean] true if debug output is enabled, false if not
   def self.debug?
     @debug || false

@@ -3,10 +3,6 @@ require 'nanoc/deploying'
 
 # @api private
 module Nanoc::Extra
-  autoload 'LinkCollector',       'nanoc/extra/link_collector.rb'
-  autoload 'Piper',               'nanoc/extra/piper'
-  autoload 'JRubyNokogiriWarner', 'nanoc/extra/jruby_nokogiri_warner'
-
   # @deprecated
   Checking = Nanoc::Checking
 
@@ -17,5 +13,8 @@ module Nanoc::Extra
   Pruner = Nanoc::Pruner
 end
 
-require 'nanoc/extra/core_ext'
-require 'nanoc/extra/parallel_collection'
+require_relative 'extra/link_collector.rb'
+require_relative 'extra/piper'
+require_relative 'extra/jruby_nokogiri_warner'
+require_relative 'extra/core_ext'
+require_relative 'extra/parallel_collection'
