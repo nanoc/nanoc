@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('cri', '~> 2.3')
   s.add_runtime_dependency('hamster', '~> 3.0')
   s.add_runtime_dependency('ref', '~> 2.0')
+  s.add_runtime_dependency('ddplugin', '~> 1.0')
 
   s.add_development_dependency('bundler', '>= 1.7.10', '< 2.0')
   s.add_development_dependency('appraisal', '~> 2.1')

@@ -23,6 +23,7 @@ end
 # Load external dependencies
 require 'hamster'
 require 'ref'
+require 'ddplugin'
 
 # Load general requirements
 require 'digest'
