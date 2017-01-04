@@ -1,7 +1,7 @@
 describe Nanoc::Filter do
   describe '.define' do
     context 'simple filter' do
-      let(:filter_name) { 'b5355bbb4d772b9853d21be57da614dba521dbbb' }
+      let(:filter_name) { :b5355bbb4d772b9853d21be57da614dba521dbbb }
       let(:filter_class) { Nanoc::Filter.named(filter_name) }
 
       before do
@@ -20,7 +20,7 @@ describe Nanoc::Filter do
     end
 
     context 'filter that accesses assigns' do
-      let(:filter_name) { 'd7ed105d460e99a3d38f46af023d9490c140fdd9' }
+      let(:filter_name) { :d7ed105d460e99a3d38f46af023d9490c140fdd9 }
       let(:filter_class) { Nanoc::Filter.named(filter_name) }
       let(:filter) { filter_class.new(assigns) }
       let(:assigns) { { animal: 'Giraffe' } }

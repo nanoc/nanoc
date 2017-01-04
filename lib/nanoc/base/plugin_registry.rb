@@ -6,10 +6,14 @@ module Nanoc::Int
   class PluginRegistry
     extend Nanoc::Int::Memoization
 
+    include Nanoc::Int::ContractsSupport
+
     # A module that contains class methods for plugins. It provides functions
     # for setting identifiers, registering plugins and finding plugins. Plugin
     # classes should extend this module.
     module PluginMethods
+      include Nanoc::Int::ContractsSupport
+
       # @overload identifiers(*identifiers)
       #
       #   Sets the identifiers for this plugin.
@@ -51,32 +55,21 @@ module Nanoc::Int
         end
       end
 
-      # Registers the given class as a plugin with the given identifier.
-      #
-      # @param [Class, String] class_or_name The class to register, or a
-      #   string containing the class name to register.
-      #
-      # @param [Array<Symbol>] identifiers A list of identifiers to assign to
-      #   this plugin.
-      #
-      # @return [void]
-      def register(class_or_name, *identifiers)
+      # Registers the given class as a plugin with the given identifier(s).
+      contract Class, C::Args[Symbol] => C::Any
+      def register(klass, *identifiers)
         registry = Nanoc::Int::PluginRegistry.instance
         root = registry.root_class_of(self)
-        registry.register(root, class_or_name, *identifiers)
+        registry.register(root, klass, *identifiers)
       end
 
-      # @return [Hash<Symbol, Class>] All plugins of this type, with keys
-      #   being the identifiers and values the plugin classes
+      contract C::None => C::HashOf[Symbol, Class]
       def all
         Nanoc::Int::PluginRegistry.instance.find_all(self)
       end
 
       # Returns the plugin with the given name (identifier)
-      #
-      # @param [String] name The name of the plugin class to find
-      #
-      # @return [Class] The plugin class with the given name
+      contract C::Or[String, Symbol] => C::Maybe[Class]
       def named(name)
         Nanoc::Int::PluginRegistry.instance.find(self, name)
       end
@@ -112,44 +105,32 @@ module Nanoc::Int
     #   For example: `:haml`, :`erb`.
     #
     # @return [void]
-    def register(superclass, class_or_name, *identifiers)
+    contract Class, Class, C::Args[Symbol] => C::Any
+    def register(superclass, klass, *identifiers)
       @identifiers_to_classes[superclass] ||= {}
       @classes_to_identifiers[superclass] ||= {}
 
       identifiers.each do |identifier|
-        @identifiers_to_classes[superclass][identifier.to_sym] = class_or_name
-        (@classes_to_identifiers[superclass][name_for_class(class_or_name)] ||= []) << identifier.to_sym
+        @identifiers_to_classes[superclass][identifier.to_sym] = klass
+        (@classes_to_identifiers[superclass][name_for_class(klass)] ||= []) << identifier.to_sym
       end
     end
 
-    # @param [Class] superclass The superclass of the plugin. For example:
-    #   {Nanoc::Filter}.
-    #
-    # @param [Class] klass The class to get the identifiers for.
-    #
-    # @return [Array<Symbol>] An array of identifiers for the given class
+    contract Class, Class => C::IterOf[Symbol]
     def identifiers_of(superclass, klass)
       (@classes_to_identifiers[superclass] || {})[name_for_class(klass)] || []
     end
 
     # Finds the plugin that is a subclass of the given class and has the given
     # name.
-    #
-    # @param [Class] klass The class of the plugin to return
-    #
-    # @param [Symbol] name The name of the plugin to return
-    #
-    # @return [Class, nil] The plugin with the given name
+    contract Class, C::Or[String, Symbol] => C::Maybe[Class]
     def find(klass, name)
       @identifiers_to_classes[klass] ||= {}
       resolve(@identifiers_to_classes[klass][name.to_sym], klass)
     end
 
     # Returns all plugins of the given class.
-    #
-    # @param [Class] klass The class of the plugin to return
-    #
-    # @return [Enumerable<Class>] A collection of class plugins
+    contract Class => C::HashOf[Symbol, Class]
     def find_all(klass)
       @identifiers_to_classes[klass] ||= {}
       res = {}
@@ -157,11 +138,7 @@ module Nanoc::Int
       res
     end
 
-    # @param [Class] subclass
-    #
-    # @return [Class]
-    #
-    # @api private
+    contract Class => Class
     def root_class_of(subclass)
       root_class = subclass
       root_class = root_class.superclass while root_class.superclass.respond_to?(:register)
