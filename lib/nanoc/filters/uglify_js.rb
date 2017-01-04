@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class UglifyJS < Nanoc::Filter
+    identifier :uglify_js
+
     requires 'uglifier'
 
     # Runs the content through [UglifyJS](https://github.com/mishoo/UglifyJS2/).

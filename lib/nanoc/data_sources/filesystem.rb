@@ -46,6 +46,8 @@ module Nanoc::DataSources
   #
   # @api private
   class Filesystem < Nanoc::DataSource
+    identifiers :filesystem, :filesystem_unified
+
     # See {Nanoc::DataSource#up}.
     def up; end
 

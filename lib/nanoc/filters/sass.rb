@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class Sass < Nanoc::Filter
+    identifier :sass
+
     requires 'sass', 'nanoc/filters/sass/sass_filesystem_importer'
 
     # Runs the content through [Sass](http://sass-lang.com/).

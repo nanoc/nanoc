@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class Kramdown < Nanoc::Filter
+    identifier :kramdown
+
     requires 'kramdown'
 
     # Runs the content through [Kramdown](http://kramdown.gettalong.org/).

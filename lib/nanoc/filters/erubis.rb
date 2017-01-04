@@ -1,14 +1,9 @@
 module Nanoc::Filters
   # @api private
   class Erubis < Nanoc::Filter
-    requires 'erubis'
+    identifier :erubis
 
-    # The same as `::Erubis::Eruby` but adds `_erbout` as an alias for the
-    # `_buf` variable, making it compatible with Nanoc’s helpers that rely
-    # on `_erbout`, such as {Nanoc::Helpers::Capturing}.
-    class ErubisWithErbout < ::Erubis::Eruby
-      include ::Erubis::ErboutEnhancer
-    end
+    requires 'erubis'
 
     # Runs the content through [Erubis](http://www.kuwata-lab.com/erubis/).
     # This method takes no options.
@@ -25,7 +20,13 @@ module Nanoc::Filters
       assigns_binding = context.get_binding(&proc)
 
       # Get result
-      ErubisWithErbout.new(content, filename: filename).result(assigns_binding)
+      erubis_with_erbout.new(content, filename: filename).result(assigns_binding)
+    end
+
+    private
+
+    def erubis_with_erbout
+      @_erubis_with_erbout ||= Class.new(::Erubis::Eruby) { include ::Erubis::ErboutEnhancer }
     end
   end
 end

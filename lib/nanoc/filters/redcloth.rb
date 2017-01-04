@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class RedCloth < Nanoc::Filter
+    identifier :redcloth
+
     requires 'redcloth'
 
     # Runs the content through [RedCloth](http://redcloth.org/). This method

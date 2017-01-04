@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class Pandoc < Nanoc::Filter
+    identifier :pandoc
+
     requires 'pandoc-ruby'
 
     # Runs the content through [Pandoc](http://johnmacfarlane.net/pandoc/)

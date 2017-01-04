@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class RDiscount < Nanoc::Filter
+    identifier :rdiscount
+
     requires 'rdiscount'
 
     # Runs the content through [RDiscount](http://github.com/rtomayko/rdiscount).
