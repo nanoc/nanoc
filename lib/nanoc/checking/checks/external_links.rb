@@ -12,8 +12,6 @@ module ::Nanoc::Checking::Checks
     identifiers :external_links, :elinks
 
     def run
-      require 'parallel'
-
       # Find all broken external hrefs
       # TODO: de-duplicate this (duplicated in internal links check)
       filenames = output_filenames.select { |f| File.extname(f) == '.html' && !excluded_file?(f) }
