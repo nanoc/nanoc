@@ -1,3 +1,5 @@
+require 'net/http'
+
 describe Nanoc::CLI::Commands::View, site: true, stdio: true do
   describe '#run' do
     def run_nanoc_cmd(cmd)
