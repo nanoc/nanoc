@@ -13,7 +13,7 @@ describe Nanoc::Extra::ParallelCollection do
     let!(:out) { [] }
 
     it 'is fast' do
-      expect { subject }.to finish_in_under(0.2).seconds
+      expect { subject }.to finish_in_under(0.25).seconds
     end
 
     it 'is correct' do
@@ -66,7 +66,7 @@ describe Nanoc::Extra::ParallelCollection do
     end
 
     it 'is fast' do
-      expect { subject }.to finish_in_under(0.2).seconds
+      expect { subject }.to finish_in_under(0.25).seconds
     end
 
     it 'does not leave threads lingering' do
