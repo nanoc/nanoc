@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.4.7 (2017-01-05)
+
+Fixes:
+
+* Fixed issue that caused an item not to be considered outdated when only the mtime has changed (#1046)
+* Removed stray `require 'parallel'` which could break the `external_links` check (#1051) [Cédric Boutillier]
+
+Enhancements:
+
+* Made Nanoc not recompile compiled items after an exception occurs (#1044)
+
 ## 4.4.6 (2016-12-28)
 
 Fixes:
