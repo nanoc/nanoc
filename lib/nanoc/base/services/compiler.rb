@@ -296,6 +296,7 @@ module Nanoc::Int
           end
         ensure
           @outdatedness_store.store
+          @compiled_content_cache.store
         end
 
         private
@@ -426,7 +427,6 @@ module Nanoc::Int
     end
 
     def store_output_state
-      compiled_content_cache.store
       @dependency_store.store
     end
 
