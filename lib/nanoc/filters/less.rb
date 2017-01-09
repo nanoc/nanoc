@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class Less < Nanoc::Filter
+    identifier :less
+
     requires 'less'
 
     # Runs the content through [LESS](http://lesscss.org/).

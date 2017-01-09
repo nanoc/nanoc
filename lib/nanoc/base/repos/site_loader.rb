@@ -61,7 +61,7 @@ module Nanoc::Int
     def create_data_sources(config)
       config[:data_sources].map do |data_source_hash|
         # Get data source class
-        data_source_class = Nanoc::DataSource.named(data_source_hash[:type])
+        data_source_class = Nanoc::DataSource.named(data_source_hash[:type].to_sym)
         if data_source_class.nil?
           raise Nanoc::Int::Errors::UnknownDataSource.new(data_source_hash[:type])
         end

@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class AsciiDoc < Nanoc::Filter
+    identifier :asciidoc
+
     # Runs the content through [AsciiDoc](http://www.methods.co.nz/asciidoc/).
     # This method takes no options.
     #

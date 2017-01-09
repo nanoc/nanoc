@@ -1,11 +1,9 @@
-module Nanoc
-  # @api private
-  module Checking
-    autoload 'Check',  'nanoc/checking/check'
-    autoload 'DSL',    'nanoc/checking/dsl'
-    autoload 'Runner', 'nanoc/checking/runner.rb'
-    autoload 'Issue',  'nanoc/checking/issue'
-  end
+# @api private
+module Nanoc::Checking
 end
 
-require 'nanoc/checking/checks'
+require_relative 'checking/check'
+require_relative 'checking/checks'
+require_relative 'checking/dsl'
+require_relative 'checking/runner.rb'
+require_relative 'checking/issue'

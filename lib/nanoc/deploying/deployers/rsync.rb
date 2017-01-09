@@ -19,6 +19,8 @@ module Nanoc::Deploying::Deployers
   #
   # @api private
   class Rsync < ::Nanoc::Deploying::Deployer
+    identifier :rsync
+
     # Default rsync options
     DEFAULT_OPTIONS = [
       '--group',

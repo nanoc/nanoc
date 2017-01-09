@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class CoffeeScript < Nanoc::Filter
+    identifier :coffeescript
+
     requires 'coffee-script'
 
     # Runs the content through [CoffeeScript](http://coffeescript.org/).

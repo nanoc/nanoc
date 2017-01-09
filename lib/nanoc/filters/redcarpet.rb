@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class Redcarpet < Nanoc::Filter
+    identifier :redcarpet
+
     requires 'redcarpet'
 
     # Runs the content through [Redcarpet](https://github.com/vmg/redcarpet).

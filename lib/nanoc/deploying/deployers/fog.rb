@@ -21,6 +21,8 @@ module Nanoc::Deploying::Deployers
   #
   # @api private
   class Fog < ::Nanoc::Deploying::Deployer
+    identifier :fog
+
     class FogWrapper
       def initialize(directory, is_dry_run)
         @directory = directory

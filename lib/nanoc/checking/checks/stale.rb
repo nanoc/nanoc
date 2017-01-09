@@ -1,6 +1,8 @@
 module Nanoc::Checking::Checks
   # @api private
   class Stale < ::Nanoc::Checking::Check
+    identifier :stale
+
     def run
       require 'set'
 

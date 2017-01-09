@@ -5,6 +5,8 @@ module Nanoc::Checking::Checks
   #
   # @api private
   class InternalLinks < ::Nanoc::Checking::Check
+    identifiers :internal_links, :ilinks
+
     # Starts the validator. The results will be printed to stdout.
     #
     # Internal links that match a regexp pattern in `@config[:checks][:internal_links][:exclude]` will

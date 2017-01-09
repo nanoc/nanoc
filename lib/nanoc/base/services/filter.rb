@@ -35,7 +35,7 @@ module Nanoc
     # @api private
     attr_reader :assigns
 
-    extend Nanoc::Int::PluginRegistry::PluginMethods
+    extend DDPlugin::Plugin
 
     class << self
       def define(ident, &block)

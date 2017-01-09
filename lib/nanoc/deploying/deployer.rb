@@ -6,7 +6,7 @@ module Nanoc::Deploying
   #
   # @api private
   class Deployer
-    extend Nanoc::Int::PluginRegistry::PluginMethods
+    extend DDPlugin::Plugin
 
     # @return [String] The path to the directory that contains the files to
     #   upload. It should not have a trailing slash.

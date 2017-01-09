@@ -8,7 +8,7 @@ module Nanoc::Checking
 
   # @api private
   class Check < Nanoc::Int::Context
-    extend Nanoc::Int::PluginRegistry::PluginMethods
+    extend DDPlugin::Plugin
 
     attr_reader :issues
 

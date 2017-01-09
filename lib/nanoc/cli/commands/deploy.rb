@@ -27,8 +27,8 @@ module Nanoc::CLI::Commands
     private
 
     def list_deployers
-      deployers      = Nanoc::Int::PluginRegistry.instance.find_all(Nanoc::Deploying::Deployer)
-      deployer_names = deployers.keys.sort_by(&:to_s)
+      deployers      = Nanoc::Deploying::Deployer.all
+      deployer_names = deployers.map(&:identifier).sort
       puts 'Available deployers:'
       deployer_names.each do |name|
         puts "  #{name}"
@@ -105,14 +105,14 @@ module Nanoc::CLI::Commands
     end
 
     def deployer_class_for_config(config)
-      names = Nanoc::Deploying::Deployer.all.keys
       name = config.fetch(:kind) do
         $stderr.puts 'Warning: The specified deploy target does not have a kind attribute. Assuming rsync.'
         'rsync'
       end
 
-      deployer_class = Nanoc::Deploying::Deployer.named(name)
+      deployer_class = Nanoc::Deploying::Deployer.named(name.to_sym)
       if deployer_class.nil?
+        names = Nanoc::Deploying::Deployer.all.map(&:identifier)
         raise Nanoc::Int::Errors::GenericTrivial, "The specified deploy target has an unrecognised kind “#{name}” (expected one of #{names.join(', ')})."
       end
       deployer_class

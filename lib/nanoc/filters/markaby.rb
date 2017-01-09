@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class Markaby < Nanoc::Filter
+    identifier :markaby
+
     requires 'markaby'
 
     # Runs the content through [Markaby](http://markaby.github.io/).

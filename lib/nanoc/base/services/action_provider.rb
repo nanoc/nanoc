@@ -1,7 +1,7 @@
 module Nanoc::Int
   # @private
   class ActionProvider
-    extend Nanoc::Int::PluginRegistry::PluginMethods
+    extend DDPlugin::Plugin
 
     def self.for(_site)
       raise NotImplementedError

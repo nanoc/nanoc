@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class Typogruby < Nanoc::Filter
+    identifier :typogruby
+
     requires 'typogruby'
 
     # Runs the content through [Typogruby](http://avdgaag.github.com/typogruby/).

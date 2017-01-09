@@ -15,24 +15,24 @@ module Nanoc::CLI::Commands
       end
 
       # Get list of plugins (before and after)
-      plugins_before = Nanoc::Int::PluginRegistry.instance.all
+      plugins_before = PLUGIN_CLASSES.keys.each_with_object({}) { |c, acc| acc[c] = c.all }
       site.code_snippets if site
-      plugins_after = Nanoc::Int::PluginRegistry.instance.all
+      plugins_after = PLUGIN_CLASSES.keys.each_with_object({}) { |c, acc| acc[c] = c.all }
 
       # Divide list of plugins into builtin and custom
       plugins_builtin = plugins_before
-      plugins_custom  = plugins_after - plugins_before
+      plugins_custom  = plugins_after.each_with_object({}) do |(superclass, klasses), acc|
+        acc[superclass] = klasses - plugins_before[superclass]
+      end
 
       # Find max identifiers length
-      plugin_with_longest_identifiers = plugins_after.reduce do |longest, current|
-        longest[:identifiers].join(', ').size > current[:identifiers].join(', ').size ? longest : current
-      end
-      max_identifiers_length = plugin_with_longest_identifiers[:identifiers].join(', ').size
+      all_identifiers = plugins_after.values.flatten.map(&:identifiers)
+      max_identifiers_length = all_identifiers.map(&:to_s).map(&:size).max
 
       PLUGIN_CLASS_ORDER.each do |superclass|
         plugins_with_this_superclass = {
-          builtin: plugins_builtin.select { |p| p[:superclass] == superclass },
-          custom: plugins_custom.select { |p| p[:superclass] == superclass },
+          builtin: plugins_builtin.fetch(superclass, []),
+          custom: plugins_custom.fetch(superclass, []),
         }
 
         # Print kind
@@ -53,12 +53,12 @@ module Nanoc::CLI::Commands
           end
 
           # Print plugins
-          relevant_plugins.sort_by { |k| k[:identifiers].join(', ') }.each do |plugin|
+          relevant_plugins.sort_by { |k| k.identifiers.join(', ') }.each do |plugin|
             # Display
             puts format(
               "    %-#{max_identifiers_length}s (%s)",
-              plugin[:identifiers].join(', '),
-              plugin[:class].to_s.sub(/^::/, ''),
+              plugin.identifiers.join(', '),
+              plugin.to_s.sub(/^::/, ''),
             )
           end
         end

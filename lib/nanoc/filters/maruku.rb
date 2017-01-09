@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class Maruku < Nanoc::Filter
+    identifier :maruku
+
     requires 'maruku'
 
     # Runs the content through [Maruku](https://github.com/bhollis/maruku/).

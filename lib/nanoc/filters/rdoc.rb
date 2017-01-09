@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class RDoc < Nanoc::Filter
+    identifier :rdoc
+
     requires 'rdoc'
 
     # Runs the content through [RDoc::Markup](http://docs.seattlerb.org/rdoc/RDoc/Markup.html).

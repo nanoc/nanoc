@@ -1,6 +1,8 @@
 module Nanoc::Filters
   # @api private
   class Mustache < Nanoc::Filter
+    identifier :mustache
+
     requires 'mustache'
 
     # Runs the content through

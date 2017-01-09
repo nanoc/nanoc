@@ -4,6 +4,8 @@ module Nanoc::Checking::Checks
   #
   # @api private
   class MixedContent < ::Nanoc::Checking::Check
+    identifier :mixed_content
+
     PROTOCOL_PATTERN = /^(\w+):\/\//
 
     def run
