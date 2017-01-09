@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.5.0 (2017-01-09)
+
+Features:
+
+* Added Git deployer (#997)
+
 ## 4.4.7 (2017-01-05)
 
 Fixes:
