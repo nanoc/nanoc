@@ -329,7 +329,7 @@ module Nanoc::DataSources
     #
     # @return [Regex]
     def extension_regex
-      if @config && @config[:allow_periods_in_identifiers]
+      if @config && (@config[:allow_periods_in_identifiers] || @config[:identifier_type] == 'full')
         /(\.[^\/\.]+$)/
       else
         /(\.[^\/]+$)/
