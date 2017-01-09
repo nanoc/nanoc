@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.5.1 (2017-01-09)
+
+Fixes:
+
+* Fixed crash when Nokogiri is not installed (#1053)
+
 ## 4.5.0 (2017-01-09)
 
 Features:
