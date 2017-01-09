@@ -39,6 +39,7 @@ require 'tempfile'
 require 'thread'
 require 'time'
 require 'yaml'
+require 'uri'
 require 'English'
 
 # Load Nanoc
