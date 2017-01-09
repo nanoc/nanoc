@@ -52,6 +52,12 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
 
       shared_examples 'successful push' do
         context 'no dry run' do
+          it 'outputs status' do
+            expect { subject }
+              .to output(/Deploying via Git to branch “#{branch}” on remote “#{remote}”…/)
+              .to_stdout
+          end
+
           it 'makes a change in the local repo' do
             expect { subject }
               .to change { Dir.chdir(output_dir) { rev_list } }

@@ -51,7 +51,7 @@ module Nanoc::Deploying::Deployers
       branch = config.fetch(:branch, 'master')
       forced = config.fetch(:forced, false)
 
-      puts "Deploying via git to remote='#{remote}' and branch='#{branch}'"
+      puts "Deploying via Git to branch “#{branch}” on remote “#{remote}”…"
 
       Dir.chdir(source_path) do
         unless File.exist?('.git')
