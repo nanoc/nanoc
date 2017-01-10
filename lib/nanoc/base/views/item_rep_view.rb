@@ -46,6 +46,11 @@ module Nanoc
       @context.snapshot_repo.compiled_content(rep: unwrap, snapshot: snapshot)
     end
 
+    def snapshot?(name)
+      @context.dependency_tracker.bounce(unwrap.item, compiled_content: true)
+      @item_rep.snapshot?(name)
+    end
+
     # Returns the item rep’s path, as used when being linked to. It starts
     # with a slash and it is relative to the output directory. It does not
     # include the path to the output directory. It will not include the

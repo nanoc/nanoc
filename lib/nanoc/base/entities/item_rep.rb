@@ -44,6 +44,11 @@ module Nanoc::Int
       @compiled = false
     end
 
+    contract Symbol => C::Bool
+    def snapshot?(name)
+      snapshot_defs.any? { |sd| sd.name == name }
+    end
+
     contract C::KeywordArgs[snapshot: C::Optional[Symbol]] => C::Maybe[String]
     # Returns the item rep’s raw path. It includes the path to the output
     # directory and the full filename.
