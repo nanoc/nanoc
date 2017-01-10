@@ -12,6 +12,17 @@ shared_examples 'a mutable document view' do
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
 
+  describe '#raw_content=' do
+    let(:item) { entity_class.new('content', {}, '/asdf/') }
+
+    it 'sets raw content' do
+      expect { view.raw_content = 'donkey' }
+        .to change { item.content.string }
+        .from('content')
+        .to('donkey')
+    end
+  end
+
   describe '#[]=' do
     # FIXME: rename :item to :document
     let(:item) { entity_class.new('content', {}, '/asdf/') }

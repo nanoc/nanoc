@@ -13,6 +13,10 @@ module Nanoc
       end
     end
 
+    def raw_content=(arg)
+      unwrap.content = Nanoc::Int::Content.create(arg)
+    end
+
     # Sets the value for the given attribute.
     #
     # @param [Symbol] key
