@@ -125,7 +125,7 @@ module Nanoc::Int
       # @param [Nanoc::Int::ItemRep] rep The item representation that was attempted
       #   to be laid out
       def initialize(rep)
-        super("The “{rep.item.identifier}” item (rep “#{rep.name}”) cannot be laid out because it is a binary item. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.")
+        super("The “#{rep.item.identifier}” item (rep “#{rep.name}”) cannot be laid out because it is a binary item. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.")
       end
     end
 
