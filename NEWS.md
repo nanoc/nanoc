@@ -1,5 +1,13 @@
 # Nanoc news
 
+## 4.5.2 (2017-01-11)
+
+Fixes:
+
+* Fixed handling of periods in full identifiers (#1022, #1059)
+* Fixed “cannot layout binary items” error message (#1058)
+* Fixed escaping of URLs in sitemaps (#1052, #1054)
+
 ## 4.5.1 (2017-01-09)
 
 Fixes:
