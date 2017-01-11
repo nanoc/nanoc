@@ -383,7 +383,10 @@ describe Nanoc::Int::Executor do
       let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.md')) }
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::CannotLayoutBinaryItem)
+        expect { subject }.to raise_error(
+          Nanoc::Int::Errors::CannotLayoutBinaryItem,
+          'The “/index.md” item (rep “donkey”) cannot be laid out because it is a binary item. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.',
+        )
       end
     end
 
