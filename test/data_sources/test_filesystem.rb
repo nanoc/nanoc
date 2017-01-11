@@ -649,6 +649,32 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     end
   end
 
+  def test_basename_of_with_full_style_identifiers
+    # Create data source
+    config = { identifier_type: 'full' }
+    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, config)
+
+    # Get input and expected output
+    expected = {
+      '/'                 => '/',
+      '/foo'              => '/foo',
+      '/foo.html'         => '/foo',
+      '/foo.xyz.html'     => '/foo.xyz',
+      '/foo/bar'          => '/foo/bar',
+      '/foo/bar.html'     => '/foo/bar',
+      '/foo/bar.xyz.html' => '/foo/bar.xyz',
+    }
+
+    # Check
+    expected.each_pair do |input, expected_output|
+      actual_output = data_source.send(:basename_of, input)
+      assert_equal(
+        expected_output, actual_output,
+        "basename_of(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
+      )
+    end
+  end
+
   def test_basename_of_allowing_periods_in_identifiers
     # Create data source
     data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, allow_periods_in_identifiers: true)
