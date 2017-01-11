@@ -186,6 +186,33 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     end
   end
 
+  def test_url_escape
+    if_have 'builder', 'nokogiri' do
+      # Create items
+      @items = Nanoc::Int::IdentifiableCollection.new({})
+      item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 1', {}, '/george/'), @view_context)
+      @items << item
+      create_item_rep(item.unwrap, :default, '/cool projects/проверка')
+
+      # Create sitemap item
+      @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), @view_context)
+
+      # Create site
+      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+
+      # Build sitemap
+      res = xml_sitemap(items: @items)
+
+      # Check
+      doc = Nokogiri::XML(res)
+      urlsets = doc.css('> urlset')
+      assert_equal 1, urlsets.size
+      urls = urlsets.css('> url')
+      assert_equal 1, urls.size
+      assert_equal 'http://example.com/cool%20projects/%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0', urls[0].css('> loc').inner_text
+    end
+  end
+
   protected
 
   def create_item_rep(item, name, path)
