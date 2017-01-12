@@ -7,6 +7,7 @@ shared_examples 'a document view' do
       items: double(:items),
       dependency_tracker: dependency_tracker,
       compilation_context: double(:compilation_context),
+      snapshot_repo: double(:snapshot_repo),
     )
   end
 

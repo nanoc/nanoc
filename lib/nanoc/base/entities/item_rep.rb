@@ -3,9 +3,6 @@ module Nanoc::Int
   class ItemRep
     include Nanoc::Int::ContractsSupport
 
-    # @return [Hash<Symbol,Nanoc::Int::Content>]
-    attr_accessor :snapshot_contents
-
     # @return [Boolean]
     attr_accessor :compiled
     alias compiled? compiled
@@ -42,52 +39,9 @@ module Nanoc::Int
       @raw_paths  = {}
       @paths      = {}
       @snapshot_defs = []
-      @snapshot_contents = { last: @item.content }
 
       # Reset flags
       @compiled = false
-    end
-
-    contract C::None => C::Bool
-    def binary?
-      @snapshot_contents[:last].binary?
-    end
-
-    contract C::KeywordArgs[snapshot: C::Optional[C::Maybe[Symbol]]] => String
-    # Returns the compiled content from a given snapshot.
-    #
-    # @param [Symbol] snapshot The name of the snapshot from which to
-    #   fetch the compiled content. By default, the returned compiled content
-    #   will be the content compiled right before the first layout call (if
-    #   any).
-    #
-    # @return [String] The compiled content at the given snapshot (or the
-    #   default snapshot if no snapshot is specified)
-    def compiled_content(snapshot: nil)
-      # Get name of last pre-layout snapshot
-      snapshot_name = snapshot || (@snapshot_contents[:pre] ? :pre : :last)
-
-      # Check existance of snapshot
-      snapshot_def = snapshot_defs.reverse.find { |sd| sd.name == snapshot_name }
-      unless snapshot_def
-        raise Nanoc::Int::Errors::NoSuchSnapshot.new(self, snapshot_name)
-      end
-
-      # Verify snapshot is usable
-      stopped_moving = snapshot_name != :last || compiled?
-      is_usable_snapshot = @snapshot_contents[snapshot_name] && stopped_moving
-      unless is_usable_snapshot
-        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(self))
-        return compiled_content(snapshot: snapshot)
-      end
-
-      # Verify snapshot is not binary
-      snapshot_content = @snapshot_contents[snapshot_name]
-      if snapshot_content.binary?
-        raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(self)
-      end
-
-      snapshot_content.string
     end
 
     contract C::KeywordArgs[snapshot: C::Optional[Symbol]] => C::Maybe[String]

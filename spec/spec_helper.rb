@@ -173,3 +173,46 @@ RSpec::Matchers.define :yield_from_fiber do |expected|
     "expected that proc would not yield #{expected.inspect} from fiber, but was #{@res.inspect}"
   end
 end
+
+RSpec::Matchers.define :be_some_textual_content do |expected|
+  include RSpec::Matchers::Composable
+
+  match do |actual|
+    actual.is_a?(Nanoc::Int::TextualContent) && values_match?(expected, actual.string)
+  end
+
+  description do
+    "textual content matching #{expected.inspect}"
+  end
+
+  failure_message do |actual|
+    "expected #{actual.inspect} to be textual content matching #{expected.inspect}"
+  end
+
+  failure_message_when_negated do |actual|
+    "expected #{actual.inspect} not to be textual content matching #{expected.inspect}"
+  end
+end
+
+RSpec::Matchers.define :be_some_binary_content do |expected|
+  include RSpec::Matchers::Composable
+
+  match do |actual|
+    actual.is_a?(Nanoc::Int::BinaryContent) && values_match?(expected, File.read(actual.filename))
+  end
+
+  description do
+    "binary content matching #{expected.inspect}"
+  end
+
+  failure_message do |actual|
+    "expected #{actual.inspect} to be binary content matching #{expected.inspect}"
+  end
+
+  failure_message_when_negated do |actual|
+    "expected #{actual.inspect} not to be binary content matching #{expected.inspect}"
+  end
+end
+
+RSpec::Matchers.alias_matcher :some_textual_content, :be_some_textual_content
+RSpec::Matchers.alias_matcher :some_binary_content, :be_some_binary_content

@@ -6,7 +6,6 @@ describe Nanoc::Int::ItemRepWriter do
 
     let(:item_rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
-        ir.snapshot_contents = snapshot_contents
         ir.raw_paths = raw_paths
       end
     end
@@ -24,10 +23,16 @@ describe Nanoc::Int::ItemRepWriter do
       { snapshot_name => raw_path }
     end
 
-    subject { described_class.new.write(item_rep, snapshot_name) }
+    let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
+
+    subject { described_class.new.write(item_rep, snapshot_repo, snapshot_name) }
 
     before do
       expect(File.directory?('output')).to be_falsy
+
+      snapshot_contents.each_pair do |key, value|
+        snapshot_repo.set(item_rep, key, value)
+      end
     end
 
     context 'binary item rep' do
@@ -49,7 +54,7 @@ describe Nanoc::Int::ItemRepWriter do
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
           .with(:will_write_rep, item_rep, 'output/blah.dat')
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:rep_written, item_rep, 'output/blah.dat', true, true)
+          .with(:rep_written, item_rep, true, 'output/blah.dat', true, true)
 
         subject
 
@@ -92,7 +97,7 @@ describe Nanoc::Int::ItemRepWriter do
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
           .with(:will_write_rep, item_rep, 'output/blah.dat')
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:rep_written, item_rep, 'output/blah.dat', true, true)
+          .with(:rep_written, item_rep, false, 'output/blah.dat', true, true)
 
         subject
 

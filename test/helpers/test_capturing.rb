@@ -15,7 +15,12 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       items: :__irrelevant__,
       dependency_tracker: :__irrelevant__,
       compilation_context: :__irrelevant__,
+      snapshot_repo: snapshot_repo,
     )
+  end
+
+  def snapshot_repo
+    @_snapshot_repo ||= Nanoc::Int::SnapshotRepo.new
   end
 
   def before
@@ -74,7 +79,9 @@ foot
 EOS
 
     item = Nanoc::Int::Item.new('content', {}, '/')
+    view_context = view_context_for(item)
     @item = Nanoc::ItemWithRepsView.new(item, view_context_for(item))
+    @config = Nanoc::ConfigView.new(Nanoc::Int::Configuration.new, view_context)
 
     result = ::ERB.new(content).result(binding)
 
@@ -155,7 +162,7 @@ EOS
 
       # Compile once
       File.open('content/includer.erb', 'w') do |io|
-        io.write 'Old-<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>'
+        io.write 'Old-<%= content_for(@items["/includee/"], :blah) %>'
       end
       Nanoc::CLI.run(%w(compile))
       assert_equal '{}', File.read('output/includee/index.html')
@@ -163,7 +170,7 @@ EOS
 
       # Compile again
       File.open('content/includer.erb', 'w') do |io|
-        io.write 'New-<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>'
+        io.write 'New-<%= content_for(@items["/includee/"], :blah) %>'
       end
       Nanoc::CLI.run(%w(compile))
       assert_equal '{}', File.read('output/includee/index.html')

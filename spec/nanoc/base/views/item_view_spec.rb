@@ -3,12 +3,22 @@ describe Nanoc::ItemWithRepsView do
   let(:other_view_class) { Nanoc::LayoutView }
   it_behaves_like 'a document view'
 
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compilation_context: compilation_context) }
+  let(:view_context) do
+    Nanoc::ViewContext.new(
+      reps: reps,
+      items: items,
+      dependency_tracker: dependency_tracker,
+      compilation_context: compilation_context,
+      snapshot_repo: snapshot_repo,
+    )
+  end
+
   let(:reps) { [] }
   let(:items) { [] }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new([]) }
   let(:compilation_context) { double(:compilation_context) }
+  let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
   let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md') }
 
@@ -203,13 +213,14 @@ describe Nanoc::ItemWithRepsView do
           Nanoc::Int::SnapshotDef.new(:post),
           Nanoc::Int::SnapshotDef.new(:specific),
         ]
-        ir.snapshot_contents = {
-          last: Nanoc::Int::TextualContent.new('Last Hallo'),
-          pre: Nanoc::Int::TextualContent.new('Pre Hallo'),
-          post: Nanoc::Int::TextualContent.new('Post Hallo'),
-          specific: Nanoc::Int::TextualContent.new('Specific Hallo'),
-        }
       end
+    end
+
+    before do
+      snapshot_repo.set(rep, :last, Nanoc::Int::TextualContent.new('Last Hallo'))
+      snapshot_repo.set(rep, :pre, Nanoc::Int::TextualContent.new('Pre Hallo'))
+      snapshot_repo.set(rep, :post, Nanoc::Int::TextualContent.new('Post Hallo'))
+      snapshot_repo.set(rep, :specific, Nanoc::Int::TextualContent.new('Specific Hallo'))
     end
 
     context 'requesting implicit default rep' do

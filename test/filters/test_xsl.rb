@@ -100,6 +100,7 @@ EOS
       items: :__irrelevat_items,
       dependency_tracker: @dependency_tracker,
       compilation_context: :__irrelevat_compiler,
+      snapshot_repo: :__irrelevant_snapshot_repo,
     )
   end
 

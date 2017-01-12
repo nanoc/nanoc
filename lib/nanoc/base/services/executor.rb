@@ -20,16 +20,19 @@ module Nanoc
           Nanoc::Int::NotificationCenter.post(:filtering_started, @rep, filter_name)
 
           # Run filter
-          last = @rep.snapshot_contents[:last]
-          source = @rep.binary? ? last.filename : last.string
+          last = @compilation_context.snapshot_repo.get(@rep, :last)
+          source = last.binary? ? last.filename : last.string
           filter_args.freeze
           result = filter.setup_and_run(source, filter_args)
-          @rep.snapshot_contents[:last] =
+          last =
             if filter.class.to_binary?
               Nanoc::Int::BinaryContent.new(filter.output_filename).tap(&:freeze)
             else
               Nanoc::Int::TextualContent.new(result).tap(&:freeze)
             end
+
+          # Store
+          @compilation_context.snapshot_repo.set(@rep, :last, last)
 
           # Check whether file was written
           if filter.class.to_binary? && !File.file?(filter.output_filename)
@@ -50,7 +53,8 @@ module Nanoc
         filter_args.freeze
 
         # Check whether item can be laid out
-        raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(@rep) if @rep.binary?
+        last = @compilation_context.snapshot_repo.get(@rep, :last)
+        raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(@rep) if last.binary?
 
         # Create filter
         klass = Nanoc::Filter.named(filter_name)
@@ -69,14 +73,18 @@ module Nanoc
           content = layout.content
           arg = content.binary? ? content.filename : content.string
           res = filter.setup_and_run(arg, filter_args)
-          @rep.snapshot_contents[:last] = Nanoc::Int::TextualContent.new(res).tap(&:freeze)
+
+          # Store
+          last = Nanoc::Int::TextualContent.new(res).tap(&:freeze)
+          @compilation_context.snapshot_repo.set(@rep, :last, last)
         ensure
           Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
       end
 
       def snapshot(snapshot_name)
-        @rep.snapshot_contents[snapshot_name] = @rep.snapshot_contents[:last]
+        last = @compilation_context.snapshot_repo.get(@rep, :last)
+        @compilation_context.snapshot_repo.set(@rep, snapshot_name, last)
       end
 
       def assigns_for(rep)
@@ -105,9 +113,10 @@ module Nanoc
         klass = Nanoc::Filter.named(filter_name)
         raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
 
-        if klass.from_binary? && !rep.binary?
+        last = @compilation_context.snapshot_repo.get(@rep, :last)
+        if klass.from_binary? && !last.binary?
           raise Nanoc::Int::Errors::CannotUseBinaryFilter.new(rep, klass)
-        elsif !klass.from_binary? && rep.binary?
+        elsif !klass.from_binary? && last.binary?
           raise Nanoc::Int::Errors::CannotUseTextualFilter.new(rep, klass)
         end
 

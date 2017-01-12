@@ -66,8 +66,8 @@ module Nanoc::CLI::Commands
         Nanoc::Int::NotificationCenter.on(:will_write_rep, self) do |rep, path|
           old_contents[rep] = File.file?(path) ? File.read(path) : nil
         end
-        Nanoc::Int::NotificationCenter.on(:rep_written, self) do |rep, path, _is_created, _is_modified|
-          unless rep.binary?
+        Nanoc::Int::NotificationCenter.on(:rep_written, self) do |rep, binary, path, _is_created, _is_modified|
+          unless binary
             new_contents = File.file?(path) ? File.read(path) : nil
             if old_contents[rep] && new_contents
               generate_diff_for(path, old_contents[rep], new_contents)
@@ -326,7 +326,7 @@ module Nanoc::CLI::Commands
           @acc_durations[rep] += Time.now - @start_times[rep]
         end
 
-        Nanoc::Int::NotificationCenter.on(:rep_written, self) do |rep, path, is_created, is_modified|
+        Nanoc::Int::NotificationCenter.on(:rep_written, self) do |rep, _binary, path, is_created, is_modified|
           @acc_durations[rep] += Time.now - @start_times[rep]
           duration = @acc_durations[rep]
 

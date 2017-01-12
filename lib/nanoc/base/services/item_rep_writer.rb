@@ -3,7 +3,7 @@ module Nanoc::Int
   class ItemRepWriter
     TMP_TEXT_ITEMS_DIR = 'text_items'.freeze
 
-    def write(item_rep, snapshot_name)
+    def write(item_rep, snapshot_repo, snapshot_name)
       raw_path = item_rep.raw_path(snapshot: snapshot_name)
       return unless raw_path
 
@@ -18,7 +18,7 @@ module Nanoc::Int
         :will_write_rep, item_rep, raw_path
       )
 
-      content = item_rep.snapshot_contents[snapshot_name]
+      content = snapshot_repo.get(item_rep, snapshot_name)
       if content.binary?
         temp_path = content.filename
       else
@@ -36,7 +36,7 @@ module Nanoc::Int
 
       # Notify
       Nanoc::Int::NotificationCenter.post(
-        :rep_written, item_rep, raw_path, is_created, is_modified
+        :rep_written, item_rep, content.binary?, raw_path, is_created, is_modified
       )
     end
 
