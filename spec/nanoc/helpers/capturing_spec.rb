@@ -13,7 +13,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
         it 'stores snapshot content' do
           subject
-          expect(ctx.item.reps[:default].unwrap.snapshot_contents[:__capture_foo].string).to eql('foo')
+          expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foo')
         end
       end
 
@@ -36,7 +36,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
           it 'overwrites' do
             helper.content_for(:foo, params) { _erbout << 'foo' }
             helper.content_for(:foo, params) { _erbout << 'bar' }
-            expect(ctx.item.reps[:default].unwrap.snapshot_contents[:__capture_foo].string).to eql('bar')
+            expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('bar')
           end
         end
 
@@ -46,7 +46,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
           it 'appends' do
             helper.content_for(:foo, params) { _erbout << 'foo' }
             helper.content_for(:foo, params) { _erbout << 'bar' }
-            expect(ctx.item.reps[:default].unwrap.snapshot_contents[:__capture_foo].string).to eql('foobar')
+            expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foobar')
           end
         end
 
@@ -108,8 +108,11 @@ describe Nanoc::Helpers::Capturing, helper: true do
         context 'other item is compiled' do
           before do
             item.reps[:default].unwrap.compiled = true
-            item.reps[:default].unwrap.snapshot_contents[:__capture_foo] =
-              Nanoc::Int::TextualContent.new('other captured foo')
+            ctx.snapshot_repo.set(
+              item.reps[:default].unwrap,
+              :__capture_foo,
+              Nanoc::Int::TextualContent.new('other captured foo'),
+            )
           end
 
           it 'returns the captured content' do

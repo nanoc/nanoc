@@ -111,6 +111,10 @@ module Nanoc
         @rule_memory[obj] = memory
       end
 
+      def snapshot_repo
+        view_context.snapshot_repo
+      end
+
       private
 
       def view_context
@@ -118,7 +122,8 @@ module Nanoc
           reps: @reps,
           items: @items,
           dependency_tracker: @dependency_tracker,
-          compilation_context: new_site.compiler.compilation_context,
+          compilation_context: site.compiler.compilation_context,
+          snapshot_repo: site.compiler.compilation_context.snapshot_repo,
         )
       end
 
@@ -150,26 +155,20 @@ module Nanoc
         Nanoc::Int::CompilerLoader.new.load(site, action_provider: new_action_provider)
       end
 
-      def new_site
-        site = Nanoc::Int::Site.new(
-          config: @config,
-          code_snippets: [],
-          items: @items,
-          layouts: @layouts,
-        )
-        site.compiler = new_compiler_for(site)
-        site
+      def site
+        @_site ||= begin
+          site = Nanoc::Int::Site.new(
+            config: @config,
+            code_snippets: [],
+            items: @items,
+            layouts: @layouts,
+          )
+          site.compiler = new_compiler_for(site)
+          site
+        end
       end
 
       def assigns
-        site = Nanoc::Int::Site.new(
-          config: @config,
-          code_snippets: [],
-          items: @items,
-          layouts: @layouts,
-        )
-        site.compiler = new_compiler_for(site)
-
         {
           config: Nanoc::MutableConfigView.new(@config, view_context),
           item_rep: @item_rep ? Nanoc::ItemRepView.new(@item_rep, view_context) : nil,

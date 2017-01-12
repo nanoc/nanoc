@@ -43,7 +43,7 @@ module Nanoc
     # @return [String] The content at the given snapshot.
     def compiled_content(snapshot: nil)
       @context.dependency_tracker.bounce(unwrap.item, compiled_content: true)
-      @item_rep.compiled_content(snapshot: snapshot)
+      @context.snapshot_repo.compiled_content(rep: unwrap, snapshot: snapshot)
     end
 
     # Returns the item rep’s path, as used when being linked to. It starts
@@ -75,7 +75,7 @@ module Nanoc
 
     # @api private
     def binary?
-      @item_rep.binary?
+      @context.snapshot_repo.get(unwrap, :last).binary?
     end
 
     def inspect

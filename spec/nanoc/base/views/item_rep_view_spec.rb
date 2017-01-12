@@ -1,9 +1,18 @@
 describe Nanoc::ItemRepView do
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compilation_context: compilation_context) }
+  let(:view_context) do
+    Nanoc::ViewContext.new(
+      reps: reps,
+      items: items,
+      dependency_tracker: dependency_tracker,
+      compilation_context: compilation_context,
+      snapshot_repo: snapshot_repo,
+    )
+  end
 
   let(:reps) { double(:reps) }
   let(:items) { double(:items) }
   let(:compilation_context) { double(:compilation_context) }
+  let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new([]) }
@@ -139,9 +148,6 @@ describe Nanoc::ItemRepView do
         ir.snapshot_defs = [
           Nanoc::Int::SnapshotDef.new(:last),
         ]
-        ir.snapshot_contents = {
-          last: Nanoc::Int::TextualContent.new('Hallo'),
-        }
       end
     end
 
@@ -149,8 +155,15 @@ describe Nanoc::ItemRepView do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
     end
 
+    before do
+      snapshot_repo.set(rep, :last, Nanoc::Int::TextualContent.new('Hallo'))
+    end
+
     it 'creates a dependency' do
-      expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      expect { subject }
+        .to change { dependency_store.objects_causing_outdatedness_of(base_item) }
+        .from([])
+        .to([item])
     end
 
     it 'creates a dependency with the right props' do

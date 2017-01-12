@@ -9,6 +9,7 @@ describe Nanoc::PostCompileItemRepView do
       items: items,
       dependency_tracker: dependency_tracker,
       compilation_context: compilation_context,
+      snapshot_repo: snapshot_repo,
     )
   end
 
@@ -17,6 +18,7 @@ describe Nanoc::PostCompileItemRepView do
   let(:config) { Nanoc::Int::Configuration.new }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
   let(:compilation_context) { double(:compilation_context, compiled_content_cache: compiled_content_cache) }
+  let(:snapshot_repo) { double(:snapshot_repo) }
 
   let(:snapshot_contents) do
     {
@@ -36,9 +38,12 @@ describe Nanoc::PostCompileItemRepView do
     subject { view.compiled_content }
 
     context 'binary' do
-      let(:item) do
-        content = Nanoc::Int::Content.create('/foo.dat', binary: true)
-        Nanoc::Int::Item.new(content, {}, '/foo.dat')
+      let(:snapshot_contents) do
+        {
+          last: Nanoc::Int::TextualContent.new('content-last'),
+          pre: Nanoc::Int::BinaryContent.new('/content/pre'),
+          donkey: Nanoc::Int::TextualContent.new('content-donkey'),
+        }
       end
 
       it 'raises error' do

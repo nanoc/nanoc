@@ -25,7 +25,7 @@ describe Nanoc::CLI::Commands::Compile::FileActionPrinter, stdio: true do
     Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
 
-    expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, '/foo.html', true, true) }
+    expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, false, '/foo.html', true, true) }
       .to output(/create.*\[1\.00s\]/).to_stdout
   end
 
@@ -35,7 +35,7 @@ describe Nanoc::CLI::Commands::Compile::FileActionPrinter, stdio: true do
 
     Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
 
-    expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, '/foo.html', true, true) }
+    expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, false, '/foo.html', true, true) }
       .not_to output(/create/).to_stdout
   end
 
@@ -50,7 +50,7 @@ describe Nanoc::CLI::Commands::Compile::FileActionPrinter, stdio: true do
     Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
 
-    expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, '/foo.html', true, true) }
+    expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, false, '/foo.html', true, true) }
       .to output(/create.*\[4\.00s\]/).to_stdout
   end
 

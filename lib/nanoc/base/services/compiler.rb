@@ -20,11 +20,16 @@ module Nanoc::Int
   class Compiler
     # Provides common functionality for accesing “context” of an item that is being compiled.
     class CompilationContext
-      def initialize(action_provider:, reps:, site:, compiled_content_cache:)
+      attr_reader :site
+      attr_reader :compiled_content_cache
+      attr_reader :snapshot_repo
+
+      def initialize(action_provider:, reps:, site:, compiled_content_cache:, snapshot_repo:)
         @action_provider = action_provider
         @reps = reps
         @site = site
         @compiled_content_cache = compiled_content_cache
+        @snapshot_repo = snapshot_repo
       end
 
       def filter_name_and_args_for_layout(layout)
@@ -41,15 +46,17 @@ module Nanoc::Int
           items: @site.items,
           dependency_tracker: dependency_tracker,
           compilation_context: self,
+          snapshot_repo: @snapshot_repo,
         )
       end
 
       def assigns_for(rep, dependency_tracker)
+        last_content = @snapshot_repo.get(rep, :last)
         content_or_filename_assigns =
-          if rep.binary?
-            { filename: rep.snapshot_contents[:last].filename }
+          if last_content.binary?
+            { filename: last_content.filename }
           else
-            { content: rep.snapshot_contents[:last].string }
+            { content: last_content.string }
           end
 
         view_context = create_view_context(dependency_tracker)
@@ -62,14 +69,6 @@ module Nanoc::Int
           layouts: Nanoc::LayoutCollectionView.new(@site.layouts, view_context),
           config: Nanoc::ConfigView.new(@site.config, view_context),
         )
-      end
-
-      def site
-        @site
-      end
-
-      def compiled_content_cache
-        @compiled_content_cache
       end
     end
 
@@ -93,6 +92,8 @@ module Nanoc::Int
 
           executor = Nanoc::Int::Executor.new(rep, @compilation_context, dependency_tracker)
 
+          @compilation_context.snapshot_repo.set(rep, :last, rep.item.content)
+
           @action_provider.memory_for(rep).each do |action|
             case action
             when Nanoc::Int::ProcessingActions::Filter
@@ -115,8 +116,9 @@ module Nanoc::Int
       class Cache
         include Nanoc::Int::ContractsSupport
 
-        def initialize(compiled_content_cache:, wrapped:)
+        def initialize(compiled_content_cache:, snapshot_repo:, wrapped:)
           @compiled_content_cache = compiled_content_cache
+          @snapshot_repo = snapshot_repo
           @wrapped = wrapped
         end
 
@@ -124,13 +126,14 @@ module Nanoc::Int
         def run(rep, is_outdated:)
           if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
             Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
-            rep.snapshot_contents = @compiled_content_cache[rep]
+
+            @snapshot_repo.set_all(rep, @compiled_content_cache[rep])
           else
             @wrapped.run(rep, is_outdated: is_outdated)
           end
 
           rep.compiled = true
-          @compiled_content_cache[rep] = rep.snapshot_contents
+          @compiled_content_cache[rep] = @snapshot_repo.get_all(rep)
         end
 
         contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Bool
@@ -187,7 +190,8 @@ module Nanoc::Int
       class Write
         include Nanoc::Int::ContractsSupport
 
-        def initialize(wrapped:)
+        def initialize(snapshot_repo:, wrapped:)
+          @snapshot_repo = snapshot_repo
           @wrapped = wrapped
         end
 
@@ -196,7 +200,7 @@ module Nanoc::Int
           @wrapped.run(rep, is_outdated: is_outdated)
 
           rep.snapshot_defs.each do |sdef|
-            ItemRepWriter.new.write(rep, sdef.name)
+            ItemRepWriter.new.write(rep, @snapshot_repo, sdef.name)
           end
         end
       end
@@ -321,6 +325,7 @@ module Nanoc::Int
 
             cache_phase = Phases::Cache.new(
               compiled_content_cache: @compiled_content_cache,
+              snapshot_repo: @compilation_context.snapshot_repo,
               wrapped: recalculate_phase,
             )
 
@@ -329,6 +334,7 @@ module Nanoc::Int
             )
 
             write_phase = Phases::Write.new(
+              snapshot_repo: @compilation_context.snapshot_repo,
               wrapped: resume_phase,
             )
 
@@ -372,6 +378,9 @@ module Nanoc::Int
     # @api private
     attr_reader :outdatedness_store
 
+    # @api private
+    attr_reader :snapshot_repo
+
     def initialize(site, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:, outdatedness_store:)
       @site = site
 
@@ -383,6 +392,9 @@ module Nanoc::Int
       @reps                   = reps
       @action_provider        = action_provider
       @outdatedness_store     = outdatedness_store
+
+      # TODO: inject
+      @snapshot_repo = Nanoc::Int::SnapshotRepo.new
     end
 
     def run_all
@@ -443,6 +455,7 @@ module Nanoc::Int
         reps: @reps,
         site: @site,
         compiled_content_cache: compiled_content_cache,
+        snapshot_repo: snapshot_repo,
       )
     end
 

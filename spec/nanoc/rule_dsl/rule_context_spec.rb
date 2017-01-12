@@ -14,8 +14,9 @@ describe(Nanoc::RuleDSL::RuleContext) do
   let(:executor) { double(:executor) }
   let(:reps) { double(:reps) }
   let(:compilation_context) { double(:compilation_context) }
-  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compilation_context: compilation_context) }
+  let(:view_context) { Nanoc::ViewContext.new(reps: reps, items: items, dependency_tracker: dependency_tracker, compilation_context: compilation_context, snapshot_repo: snapshot_repo) }
   let(:dependency_tracker) { double(:dependency_tracker) }
+  let(:snapshot_repo) { double(:snapshot_repo) }
 
   describe '#initialize' do
     it 'wraps objects in view classes' do

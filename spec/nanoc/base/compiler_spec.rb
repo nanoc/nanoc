@@ -96,9 +96,9 @@ describe Nanoc::Int::Compiler do
     end
 
     it 'compiles individual reps' do
-      expect { subject }.to change { rep.snapshot_contents[:last].string }
-        .from('<%= 1 + 2 %>')
-        .to('3')
+      expect { subject }.to change { compiler.snapshot_repo.get(rep, :last) }
+        .from(nil)
+        .to(some_textual_content('3'))
     end
 
     it 'removes the item rep from the outdatedness store' do
@@ -161,9 +161,10 @@ describe Nanoc::Int::Compiler do
     let(:is_outdated) { true }
 
     it 'generates expected output' do
-      expect(rep.snapshot_contents[:last].string).to eql(item.content.string)
-      subject
-      expect(rep.snapshot_contents[:last].string).to eql('3')
+      expect { subject }
+        .to change { compiler.snapshot_repo.get(rep, :last) }
+        .from(nil)
+        .to(some_textual_content('3'))
     end
 
     it 'generates notifications in the proper order' do
@@ -183,14 +184,14 @@ describe Nanoc::Int::Compiler do
       end
 
       it 'generates expected output' do
-        expect(rep.snapshot_contents[:last].string).to eql(item.content.string)
+        expect(compiler.snapshot_repo.get(rep, :last)).to be_nil
 
         expect { stage.send(:compile_rep, rep, is_outdated: true) }
           .to raise_error(Nanoc::Int::Errors::UnmetDependency)
         stage.send(:compile_rep, other_rep, is_outdated: true)
         stage.send(:compile_rep, rep, is_outdated: true)
 
-        expect(rep.snapshot_contents[:last].string).to eql('other=other content')
+        expect(compiler.snapshot_repo.get(rep, :last).string).to eql('other=other content')
       end
 
       it 'generates notifications in the proper order' do

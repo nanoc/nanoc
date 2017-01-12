@@ -35,6 +35,7 @@ module Nanoc::CLI::Commands
         items: site.items,
         dependency_tracker: Nanoc::Int::DependencyTracker::Null.new,
         compilation_context: nil,
+        snapshot_repo: nil,
       )
     end
 

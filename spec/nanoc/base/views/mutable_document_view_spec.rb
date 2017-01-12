@@ -7,10 +7,12 @@ shared_examples 'a mutable document view' do
       items: double(:items),
       dependency_tracker: dependency_tracker,
       compilation_context: double(:compilation_context),
+      snapshot_repo: snapshot_repo,
     )
   end
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
+  let(:snapshot_repo) { double(:snapshot_repo) }
 
   describe '#[]=' do
     let(:document) { entity_class.new('content', {}, '/asdf/') }
