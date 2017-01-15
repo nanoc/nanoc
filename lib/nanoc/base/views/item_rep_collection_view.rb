@@ -57,7 +57,7 @@ module Nanoc
       when Symbol
         res = @item_reps.find { |ir| ir.name == rep_name }
         res && view_class.new(res, @context)
-      when Fixnum
+      when Integer
         raise ArgumentError, "expected ItemRepCollectionView#[] to be called with a symbol (you likely want `.reps[:default]` rather than `.reps[#{rep_name}]`)"
       else
         raise ArgumentError, 'expected ItemRepCollectionView#[] to be called with a symbol'
