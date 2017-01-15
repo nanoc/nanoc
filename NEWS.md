@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.5.3 (2017-01-15)
+
+Fixes:
+
+* Fixed “Fixnum is deprecated” message (#1061, #1062)
+* Fixed `:pre` snapshot not being created for items that are not laid out (#1064, #1065)
+
 ## 4.5.2 (2017-01-11)
 
 Fixes:
