@@ -7,7 +7,7 @@ module Nanoc::Extra
 
     include Nanoc::Int::ContractsSupport
 
-    contract C::RespondTo[:each], C::KeywordArgs[parallelism: Fixnum] => C::Any
+    contract C::RespondTo[:each], C::KeywordArgs[parallelism: Integer] => C::Any
     def initialize(enum, parallelism: 2)
       @enum = enum
       @parallelism = parallelism
