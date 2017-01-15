@@ -84,6 +84,9 @@ module Nanoc::RuleDSL
       unless rule_memory.snapshot_actions.any? { |sa| sa.snapshot_name == :last }
         executor.snapshot(:last)
       end
+      unless rule_memory.snapshot_actions.any? { |sa| sa.snapshot_name == :pre }
+        executor.snapshot(:pre)
+      end
 
       assign_paths_to_mem(rule_memory, rep: rep)
     end

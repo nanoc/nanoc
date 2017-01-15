@@ -96,7 +96,11 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           expect(subject[1].snapshot_name).to eql(:last)
           expect(subject[1].path).to be_nil
 
-          expect(subject.size).to eql(2)
+          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[2].snapshot_name).to eql(:pre)
+          expect(subject[2].path).to be_nil
+
+          expect(subject.size).to eql(3)
         end
       end
 
@@ -122,7 +126,11 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           expect(subject[1].snapshot_name).to eql(:last)
           expect(subject[1].path).to eq('/foo.md')
 
-          expect(subject.size).to eql(2)
+          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[2].snapshot_name).to eql(:pre)
+          expect(subject[2].path).to be_nil
+
+          expect(subject.size).to eql(3)
         end
       end
 
@@ -148,7 +156,11 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           expect(subject[1].snapshot_name).to eql(:last)
           expect(subject[1].path).to be_nil
 
-          expect(subject.size).to eql(2)
+          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[2].snapshot_name).to eql(:pre)
+          expect(subject[2].path).to be_nil
+
+          expect(subject.size).to eql(3)
         end
       end
     end
