@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.5.4 (2017-01-16)
+
+Fixes:
+
+* Fixed issue with site not being recompiled fully when switching between environments (#1067, #1069)
+
 ## 4.5.3 (2017-01-15)
 
 Fixes:
