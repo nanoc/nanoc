@@ -7,7 +7,7 @@ module Nanoc::Int
     attr_accessor :objects
 
     # @param [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] objects
-    def initialize(objects, env_name: nil) # rubocop:disable Lint/UnusedMethodArgument
+    def initialize(objects)
       super('tmp/dependencies', 4)
 
       @objects = objects

@@ -17,14 +17,14 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
     params = {
       compiled_content_cache: Nanoc::Int::CompiledContentCache.new(items: site.items),
-      checksum_store: Nanoc::Int::ChecksumStore.new(site: site, objects: objects),
+      checksum_store: Nanoc::Int::ChecksumStore.new(objects: objects),
       rule_memory_store: Nanoc::Int::RuleMemoryStore.new,
       dependency_store: Nanoc::Int::DependencyStore.new(
         site.items.to_a + site.layouts.to_a,
       ),
       action_provider: action_provider,
       reps: reps,
-      outdatedness_store: Nanoc::Int::OutdatednessStore.new(site: site, reps: reps),
+      outdatedness_store: Nanoc::Int::OutdatednessStore.new(reps: reps),
     }
 
     params[:outdatedness_checker] =

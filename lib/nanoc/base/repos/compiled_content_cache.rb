@@ -6,8 +6,8 @@ module Nanoc::Int
   class CompiledContentCache < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
-    contract C::KeywordArgs[env_name: C::Maybe[String], items: C::IterOf[Nanoc::Int::Item]] => C::Any
-    def initialize(env_name: nil, items:) # rubocop:disable Lint/UnusedMethodArgument
+    contract C::KeywordArgs[items: C::IterOf[Nanoc::Int::Item]] => C::Any
+    def initialize(items:)
       super('tmp/compiled_content', 2)
 
       @items = items

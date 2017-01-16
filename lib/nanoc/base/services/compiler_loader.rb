@@ -2,22 +2,22 @@ module Nanoc::Int
   # @api private
   class CompilerLoader
     def load(site, action_provider: nil)
-      rule_memory_store = Nanoc::Int::RuleMemoryStore.new(env_name: site.config.env_name)
+      rule_memory_store = Nanoc::Int::RuleMemoryStore.new
 
       dependency_store =
-        Nanoc::Int::DependencyStore.new(site.items.to_a + site.layouts.to_a, env_name: site.config.env_name)
+        Nanoc::Int::DependencyStore.new(site.items.to_a + site.layouts.to_a)
 
       objects = site.items.to_a + site.layouts.to_a + site.code_snippets + [site.config]
 
       checksum_store =
-        Nanoc::Int::ChecksumStore.new(site: site, objects: objects)
+        Nanoc::Int::ChecksumStore.new(objects: objects)
 
       item_rep_repo = Nanoc::Int::ItemRepRepo.new
 
       action_provider ||= Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
 
       outdatedness_store =
-        Nanoc::Int::OutdatednessStore.new(site: site, reps: item_rep_repo)
+        Nanoc::Int::OutdatednessStore.new(reps: item_rep_repo)
 
       outdatedness_checker =
         Nanoc::Int::OutdatednessChecker.new(
@@ -30,10 +30,7 @@ module Nanoc::Int
         )
 
       compiled_content_cache =
-        Nanoc::Int::CompiledContentCache.new(
-          env_name: site.config.env_name,
-          items: site.items,
-        )
+        Nanoc::Int::CompiledContentCache.new(items: site.items)
 
       params = {
         compiled_content_cache: compiled_content_cache,

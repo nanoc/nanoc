@@ -4,7 +4,7 @@ module Nanoc::Int
   #
   # @api private
   class RuleMemoryStore < ::Nanoc::Int::Store
-    def initialize(env_name: nil) # rubocop:disable Lint/UnusedMethodArgument
+    def initialize
       super('tmp/rule_memory', 1)
 
       @rule_memories = {}
