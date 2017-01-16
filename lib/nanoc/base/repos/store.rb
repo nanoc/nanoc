@@ -36,13 +36,6 @@ module Nanoc::Int
       @version  = version
     end
 
-    # Logic for building tmp path from active environment and store name
-    # @api private
-    contract C::KeywordArgs[env_name: C::Maybe[String], store_name: String] => String
-    def self.tmp_path_for(env_name:, store_name:)
-      File.join('tmp', env_name.to_s, store_name)
-    end
-
     # @group Loading and storing data
 
     # @return The data that should be written to the disk
