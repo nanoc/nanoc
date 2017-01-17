@@ -40,8 +40,9 @@ module Nanoc::Int
     # @api private
     contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], store_name: String] => String
     def self.tmp_path_for(store_name:, site:)
-      env_name = site ? site.config.env_name : nil
-      dir = env_name ? Digest::SHA1.hexdigest(env_name)[0..20] : ''
+      # FIXME: disallow site from being nil
+      output_dir = site ? site.config.output_dir : ''
+      dir = Digest::SHA1.hexdigest(output_dir)[0..12]
       File.join('tmp', dir, store_name)
     end
 

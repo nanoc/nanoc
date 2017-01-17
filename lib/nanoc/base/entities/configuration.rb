@@ -58,7 +58,7 @@ module Nanoc::Int
         DEFAULT_DATA_SOURCE_CONFIG.merge(ds)
       end
 
-      self.class.new(hash: new_wrapped)
+      self.class.new(hash: new_wrapped, env_name: @env_name)
     end
 
     def with_environment
@@ -133,6 +133,11 @@ module Nanoc::Int
       super
       @wrapped.__nanoc_freeze_recursively
       self
+    end
+
+    contract C::None => String
+    def output_dir
+      self[:output_dir]
     end
 
     # Returns an object that can be used for uniquely identifying objects.

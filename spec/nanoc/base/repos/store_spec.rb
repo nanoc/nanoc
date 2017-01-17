@@ -7,18 +7,46 @@ describe Nanoc::Int::Store do
         Nanoc::Int::Site.new(config: config, code_snippets: code_snippets, items: items, layouts: layouts)
       end
 
-      let(:config) { Nanoc::Int::Configuration.new(hash: { 'foo' => 'bar' }) }
       let(:code_snippets) { [] }
       let(:items) { [] }
       let(:layouts) { [] }
 
       context 'no env specified' do
-        it { is_expected.to eql('tmp/giraffes') }
+        let(:config) { Nanoc::Int::Configuration.new(hash: config_hash).with_defaults.with_environment }
+
+        context 'output dir at root is specified' do
+          let(:config_hash) { { output_dir: 'output-default' } }
+          it { is_expected.to eql('tmp/b592240c777c6/giraffes') }
+        end
+
+        context 'output dir in default env is specified' do
+          let(:config_hash) { { environments: { default: { output_dir: 'output-default' } } } }
+          it { is_expected.to eql('tmp/b592240c777c6/giraffes') }
+        end
+
+        context 'output dir in other env is specified' do
+          let(:config_hash) { { environments: { production: { output_dir: 'output-production' } } } }
+          it { is_expected.to eql('tmp/1029d67644815/giraffes') }
+        end
       end
 
       context 'env specified' do
-        let(:config) { Nanoc::Int::Configuration.new(env_name: 'staging', hash: { 'foo' => 'bar' }) }
-        it { is_expected.to eql('tmp/d9390b2c40115621a7949/giraffes') }
+        let(:config) { Nanoc::Int::Configuration.new(env_name: 'staging', hash: config_hash).with_defaults.with_environment }
+
+        context 'output dir at root is specified' do
+          let(:config_hash) { { output_dir: 'output-default' } }
+          it { is_expected.to eql('tmp/b592240c777c6/giraffes') }
+        end
+
+        context 'output dir in given env is specified' do
+          let(:config_hash) { { environments: { staging: { output_dir: 'output-staging' } } } }
+          it { is_expected.to eql('tmp/9d274da4d73ba/giraffes') }
+        end
+
+        context 'output dir in other env is specified' do
+          let(:config_hash) { { environments: { production: { output_dir: 'output-production' } } } }
+          it { is_expected.to eql('tmp/1029d67644815/giraffes') }
+        end
       end
     end
   end
