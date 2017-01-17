@@ -41,7 +41,8 @@ module Nanoc::Int
     contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], store_name: String] => String
     def self.tmp_path_for(store_name:, site:)
       env_name = site ? site.config.env_name : nil
-      File.join('tmp', env_name.to_s, store_name)
+      dir = env_name ? Digest::SHA1.hexdigest(env_name)[0..20] : ''
+      File.join('tmp', dir, store_name)
     end
 
     # @group Loading and storing data

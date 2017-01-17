@@ -18,7 +18,7 @@ describe Nanoc::Int::Store do
 
       context 'env specified' do
         let(:config) { Nanoc::Int::Configuration.new(env_name: 'staging', hash: { 'foo' => 'bar' }) }
-        it { is_expected.to eql('tmp/staging/giraffes') }
+        it { is_expected.to eql('tmp/d9390b2c40115621a7949/giraffes') }
       end
     end
   end
