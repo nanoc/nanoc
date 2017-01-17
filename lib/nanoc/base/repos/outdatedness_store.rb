@@ -4,8 +4,8 @@ module Nanoc::Int
     include Nanoc::Int::ContractsSupport
 
     contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], reps: Nanoc::Int::ItemRepRepo] => C::Any
-    def initialize(site: nil, reps:) # rubocop:disable Lint/UnusedMethodArgument
-      super('tmp/outdatedness', 1)
+    def initialize(site: nil, reps:)
+      super(Nanoc::Int::Store.tmp_path_for(env_name: (site.config.env_name if site), store_name: 'outdatedness'), 1)
 
       @outdated_reps = Set.new
       @all_reps = reps
