@@ -6,9 +6,9 @@ module Nanoc::Int
   class CompiledContentCache < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
-    contract C::KeywordArgs[env_name: C::Maybe[String], items: C::IterOf[Nanoc::Int::Item]] => C::Any
-    def initialize(env_name: nil, items:)
-      super(Nanoc::Int::Store.tmp_path_for(env_name: env_name, store_name: 'compiled_content'), 2)
+    contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], items: C::IterOf[Nanoc::Int::Item]] => C::Any
+    def initialize(site: nil, items:)
+      super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'compiled_content'), 2)
 
       @items = items
       @cache = {}
