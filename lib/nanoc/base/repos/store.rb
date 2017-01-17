@@ -36,18 +36,12 @@ module Nanoc::Int
       @version  = version
     end
 
-    NONE = Object.new
-
     # Logic for building tmp path from active environment and store name
     # @api private
-    contract C::KeywordArgs[site: C::Optional[C::Maybe[Nanoc::Int::Site]], store_name: String] => String
-    def self.tmp_path_for(store_name:, site: NONE)
-      if !site.equal?(NONE)
-        env_name = site ? site.config.env_name : nil
-        File.join('tmp', env_name.to_s, store_name)
-      else
-        raise ArgumentError, 'None of env_name, site specified'
-      end
+    contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], store_name: String] => String
+    def self.tmp_path_for(store_name:, site:)
+      env_name = site ? site.config.env_name : nil
+      File.join('tmp', env_name.to_s, store_name)
     end
 
     # @group Loading and storing data
