@@ -69,6 +69,68 @@ describe Nanoc::Helpers::Capturing, helper: true do
       end
     end
 
+    describe 'with name + string' do
+      context 'only name given' do
+        subject { helper.content_for(:foo, 'foo') }
+
+        it 'stores snapshot content' do
+          subject
+          expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foo')
+        end
+      end
+
+      context 'name and params given' do
+        subject { helper.content_for(:foo, params, 'foo') }
+        let(:params) { raise 'overwrite me' }
+
+        context 'no existing behavior specified' do
+          let(:params) { {} }
+
+          it 'errors after two times' do
+            helper.content_for(:foo, params, 'foo')
+            expect { helper.content_for(:foo, params, 'bar') }.to raise_error(RuntimeError)
+          end
+        end
+
+        context 'existing behavior is :overwrite' do
+          let(:params) { { existing: :overwrite } }
+
+          it 'overwrites' do
+            helper.content_for(:foo, params, 'foo')
+            helper.content_for(:foo, params, 'bar')
+            expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('bar')
+          end
+        end
+
+        context 'existing behavior is :append' do
+          let(:params) { { existing: :append } }
+
+          it 'appends' do
+            helper.content_for(:foo, params, 'foo')
+            helper.content_for(:foo, params, 'bar')
+            expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foobar')
+          end
+        end
+
+        context 'existing behavior is :error' do
+          let(:params) { { existing: :error } }
+
+          it 'errors after two times' do
+            helper.content_for(:foo, params, 'foo')
+            expect { helper.content_for(:foo, params, 'bar') }.to raise_error(RuntimeError)
+          end
+        end
+
+        context 'existing behavior is :something else' do
+          let(:params) { { existing: :donkey } }
+
+          it 'errors' do
+            expect { subject }.to raise_error(ArgumentError)
+          end
+        end
+      end
+    end
+
     describe 'with item + name' do
       subject { helper.content_for(item, :foo) }
 

@@ -76,8 +76,23 @@ module Nanoc::Helpers
       end
     end
 
-    # @overload content_for(name, params = {}, &block)
+    # @overload content_for(name, &block)
     #   @param [Symbol, String] name
+    #   @return [void]
+    #
+    # @overload content_for(name, params, &block)
+    #   @param [Symbol, String] name
+    #   @option params [Symbol] existing
+    #   @return [void]
+    #
+    # @overload content_for(name, content)
+    #   @param [Symbol, String] name
+    #   @param [String] content
+    #   @return [void]
+    #
+    # @overload content_for(name, params, content)
+    #   @param [Symbol, String] name
+    #   @param [String] content
     #   @option params [Symbol] existing
     #   @return [void]
     #
@@ -99,6 +114,22 @@ module Nanoc::Helpers
           end
 
         SetContent.new(name, params, @item).run(&block)
+      elsif args.size > 1 && args.first.is_a?(Symbol) # Set content
+        name = args[0]
+        content = args.last
+        params =
+          case args.size
+          when 2
+            {}
+          when 3
+            args[1]
+          else
+            raise ArgumentError, 'expected 2 or 3 arguments (the name ' \
+              "of the capture, optionally params, and the content) but got #{args.size} instead"
+          end
+
+        _erbout = ''
+        SetContent.new(name, params, @item).run { _erbout << content }
       else # Get content
         if args.size != 2
           raise ArgumentError, 'expected 2 arguments (the item ' \
