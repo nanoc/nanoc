@@ -1,6 +1,7 @@
 module Nanoc::Helpers
   # @see http://nanoc.ws/doc/reference/helpers/#capturing
   module Capturing
+    # @api private
     class SetContent
       include Nanoc::Helpers::Capturing
 
@@ -46,7 +47,33 @@ module Nanoc::Helpers
       end
     end
 
+    # @api private
     class GetContent
+      def initialize(requested_item, name, item, config)
+        @requested_item = requested_item
+        @name = name
+        @item = item
+        @config = config
+      end
+
+      def run
+        rep = @requested_item.reps[:default].unwrap
+
+        # Create dependency
+        if @item.nil? || @requested_item != @item.unwrap
+          dependency_tracker = @config._context.dependency_tracker
+          dependency_tracker.bounce(@requested_item.unwrap, compiled_content: true)
+
+          unless rep.compiled?
+            Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep))
+            return content_for(*args, &block)
+          end
+        end
+
+        snapshot_repo = @config._context.snapshot_repo
+        content = snapshot_repo.get(rep, "__capture_#{@name}".to_sym)
+        content ? content.string : nil
+      end
     end
 
     # @overload content_for(name, params = {}, &block)
@@ -59,17 +86,17 @@ module Nanoc::Helpers
     #   @return [String]
     def content_for(*args, &block)
       if block_given? # Set content
-        # Get args
-        case args.size
-        when 1
-          params = {}
-        when 2
-          params = args[1]
-        else
-          raise ArgumentError, 'expected 1 or 2 argument (the name ' \
-            "of the capture, and optionally params) but got #{args.size} instead"
-        end
         name = args[0]
+        params =
+          case args.size
+          when 1
+            {}
+          when 2
+            args[1]
+          else
+            raise ArgumentError, 'expected 1 or 2 argument (the name ' \
+              "of the capture, and optionally params) but got #{args.size} instead"
+          end
 
         SetContent.new(name, params, @item).run(&block)
       else # Get content
@@ -77,25 +104,10 @@ module Nanoc::Helpers
           raise ArgumentError, 'expected 2 arguments (the item ' \
             "and the name of the capture) but got #{args.size} instead"
         end
-        item = args[0]
+        requested_item = args[0]
         name = args[1]
 
-        rep = item.reps[:default].unwrap
-
-        # Create dependency
-        if @item.nil? || item != @item.unwrap
-          dependency_tracker = @config._context.dependency_tracker
-          dependency_tracker.bounce(item.unwrap, compiled_content: true)
-
-          unless rep.compiled?
-            Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep))
-            return content_for(*args, &block)
-          end
-        end
-
-        snapshot_repo = @config._context.snapshot_repo
-        content = snapshot_repo.get(rep, "__capture_#{name}".to_sym)
-        content ? content.string : nil
+        GetContent.new(requested_item, name, @item, @config).run
       end
     end
 
