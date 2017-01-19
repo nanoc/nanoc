@@ -42,8 +42,12 @@ module Nanoc::Int
     def self.tmp_path_for(store_name:, site:)
       # FIXME: disallow site from being nil
       output_dir = site ? site.config.output_dir : ''
+      File.join(tmp_path_prefix(output_dir), store_name)
+    end
+
+    def self.tmp_path_prefix(output_dir)
       dir = Digest::SHA1.hexdigest(output_dir)[0..12]
-      File.join('tmp', dir, store_name)
+      File.join('tmp', dir)
     end
 
     # @group Loading and storing data

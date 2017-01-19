@@ -48,6 +48,42 @@ describe Nanoc::Int::Configuration do
     end
   end
 
+  describe '#output_dirs' do
+    subject { config.with_defaults.output_dirs }
+
+    let(:hash) do
+      {
+        output_dir: 'output_toplevel',
+        environments: {
+          default: {
+            output_dir: 'output_default',
+          },
+          production: {
+            output_dir: 'output_prod',
+          },
+          staging: {
+            output_dir: 'output_staging',
+          },
+          other: {},
+        },
+      }
+    end
+
+    it 'contains both top-level and default output dir' do
+      expect(subject).to include('output_toplevel')
+      expect(subject).to include('output_default')
+    end
+
+    it 'does not contain nil' do
+      expect(subject).not_to include(nil)
+    end
+
+    it 'contains all other output dirs' do
+      expect(subject).to include('output_staging')
+      expect(subject).to include('output_prod')
+    end
+  end
+
   context 'with environments defined' do
     let(:hash) { { foo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } } }
     let(:config) { described_class.new(hash: hash, env_name: env_name).with_environment }

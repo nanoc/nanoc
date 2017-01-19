@@ -140,6 +140,13 @@ module Nanoc::Int
       self[:output_dir]
     end
 
+    contract C::None => C::IterOf[String]
+    def output_dirs
+      envs = @wrapped.fetch(ENVIRONMENTS_CONFIG_KEY, {})
+      res = [output_dir] + envs.values.map { |v| v[:output_dir] }
+      res.uniq.compact
+    end
+
     # Returns an object that can be used for uniquely identifying objects.
     #
     # @return [Object] An unique reference to this object
