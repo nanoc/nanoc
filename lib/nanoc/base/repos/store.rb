@@ -36,6 +36,20 @@ module Nanoc::Int
       @version  = version
     end
 
+    # Logic for building tmp path from active environment and store name
+    # @api private
+    contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], store_name: String] => String
+    def self.tmp_path_for(store_name:, site:)
+      # FIXME: disallow site from being nil
+      output_dir = site ? site.config.output_dir : ''
+      File.join(tmp_path_prefix(output_dir), store_name)
+    end
+
+    def self.tmp_path_prefix(output_dir)
+      dir = Digest::SHA1.hexdigest(output_dir)[0..12]
+      File.join('tmp', 'nanoc', dir)
+    end
+
     # @group Loading and storing data
 
     # @return The data that should be written to the disk

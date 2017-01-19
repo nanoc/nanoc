@@ -10,9 +10,9 @@ module Nanoc::Int
 
     c_obj = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet]
 
-    contract C::KeywordArgs[objects: C::IterOf[c_obj]] => C::Any
-    def initialize(objects:)
-      super('tmp/checksums', 1)
+    contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], objects: C::IterOf[c_obj]] => C::Any
+    def initialize(site: nil, objects:)
+      super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'checksums'), 1)
 
       @objects = objects
 

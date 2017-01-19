@@ -58,7 +58,7 @@ module Nanoc::Int
         DEFAULT_DATA_SOURCE_CONFIG.merge(ds)
       end
 
-      self.class.new(hash: new_wrapped)
+      self.class.new(hash: new_wrapped, env_name: @env_name)
     end
 
     def with_environment
@@ -133,6 +133,18 @@ module Nanoc::Int
       super
       @wrapped.__nanoc_freeze_recursively
       self
+    end
+
+    contract C::None => String
+    def output_dir
+      self[:output_dir]
+    end
+
+    contract C::None => C::IterOf[String]
+    def output_dirs
+      envs = @wrapped.fetch(ENVIRONMENTS_CONFIG_KEY, {})
+      res = [output_dir] + envs.values.map { |v| v[:output_dir] }
+      res.uniq.compact
     end
 
     # Returns an object that can be used for uniquely identifying objects.

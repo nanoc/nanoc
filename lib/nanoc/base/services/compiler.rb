@@ -347,6 +347,32 @@ module Nanoc::Int
           end
         end
       end
+
+      class Cleanup
+        def initialize(config)
+          @config = config
+        end
+
+        def run
+          cleanup_temps(Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
+          cleanup_temps(Nanoc::Int::ItemRepWriter::TMP_TEXT_ITEMS_DIR)
+          cleanup_unused_stores
+        end
+
+        private
+
+        def cleanup_temps(dir)
+          Nanoc::Int::TempFilenameFactory.instance.cleanup(dir)
+        end
+
+        def cleanup_unused_stores
+          used_paths = @config.output_dirs.map { |d| Nanoc::Int::Store.tmp_path_prefix(d) }
+          all_paths = Dir.glob('tmp/nanoc/*')
+          (all_paths - used_paths).each do |obsolete_path|
+            FileUtils.rm_rf(obsolete_path)
+          end
+        end
+      end
     end
 
     include Nanoc::Int::ContractsSupport
@@ -409,12 +435,7 @@ module Nanoc::Int
       store_output_state
       @action_provider.postprocess(@site, @reps)
     ensure
-      Nanoc::Int::TempFilenameFactory.instance.cleanup(
-        Nanoc::Filter::TMP_BINARY_ITEMS_DIR,
-      )
-      Nanoc::Int::TempFilenameFactory.instance.cleanup(
-        Nanoc::Int::ItemRepWriter::TMP_TEXT_ITEMS_DIR,
-      )
+      cleanup_stage.run
     end
 
     def load_stores
@@ -493,6 +514,10 @@ module Nanoc::Int
         compilation_context: compilation_context,
         compiled_content_cache: compiled_content_cache,
       )
+    end
+
+    def cleanup_stage
+      @_cleanup_stage ||= Stages::Cleanup.new(site.config)
     end
 
     def determine_outdatedness

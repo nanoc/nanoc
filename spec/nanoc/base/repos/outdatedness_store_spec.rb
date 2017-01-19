@@ -1,5 +1,5 @@
 describe Nanoc::Int::OutdatednessStore do
-  subject(:store) { described_class.new(reps: reps) }
+  subject(:store) { described_class.new(site: site, reps: reps) }
 
   let(:site) { double(:site) }
   let(:reps) { Nanoc::Int::ItemRepRepo.new }
