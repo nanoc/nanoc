@@ -1,6 +1,54 @@
 module Nanoc::Helpers
   # @see http://nanoc.ws/doc/reference/helpers/#capturing
   module Capturing
+    class SetContent
+      include Nanoc::Helpers::Capturing
+
+      def initialize(name, params, item)
+        @name = name
+        @params = params
+        @item = item
+      end
+
+      def run(&block)
+        existing_behavior = @params.fetch(:existing, :error)
+
+        # Capture
+        content_string = capture(&block)
+
+        # Get existing contents and prep for store
+        snapshot_repo = @item._context.snapshot_repo
+        rep = @item.reps[:default].unwrap
+        capture_name = "__capture_#{@name}".to_sym
+        old_content_string =
+          case existing_behavior
+          when :overwrite
+            ''
+          when :append
+            c = snapshot_repo.get(rep, capture_name)
+            c ? c.string : ''
+          when :error
+            contents = snapshot_repo.get(rep, capture_name)
+            if contents && contents.string != content_string
+              # FIXME: get proper exception
+              raise "a capture named #{@name.inspect} for #{@item.identifier} already exists"
+            else
+              ''
+            end
+          else
+            raise ArgumentError, 'expected :existing_behavior param to #content_for to be one of ' \
+              ":overwrite, :append, or :error, but #{existing_behavior.inspect} was given"
+          end
+
+        # Store
+        new_content = Nanoc::Int::TextualContent.new(old_content_string + content_string)
+        snapshot_repo.set(rep, capture_name, new_content)
+      end
+    end
+
+    class GetContent
+    end
+
     # @overload content_for(name, params = {}, &block)
     #   @param [Symbol, String] name
     #   @option params [Symbol] existing
@@ -14,48 +62,16 @@ module Nanoc::Helpers
         # Get args
         case args.size
         when 1
-          name = args[0]
           params = {}
         when 2
-          name = args[0]
           params = args[1]
         else
           raise ArgumentError, 'expected 1 or 2 argument (the name ' \
             "of the capture, and optionally params) but got #{args.size} instead"
         end
         name = args[0]
-        existing_behavior = params.fetch(:existing, :error)
 
-        # Capture
-        content_string = capture(&block)
-
-        # Get existing contents and prep for store
-        snapshot_repo = @item._context.snapshot_repo
-        rep = @item.reps[:default].unwrap
-        capture_name = "__capture_#{name}".to_sym
-        old_content_string =
-          case existing_behavior
-          when :overwrite
-            ''
-          when :append
-            c = snapshot_repo.get(rep, capture_name)
-            c ? c.string : ''
-          when :error
-            contents = snapshot_repo.get(rep, capture_name)
-            if contents && contents.string != content_string
-              # FIXME: get proper exception
-              raise "a capture named #{name.inspect} for #{@item.identifier} already exists"
-            else
-              ''
-            end
-          else
-            raise ArgumentError, 'expected :existing_behavior param to #content_for to be one of ' \
-              ":overwrite, :append, or :error, but #{existing_behavior.inspect} was given"
-          end
-
-        # Store
-        new_content = Nanoc::Int::TextualContent.new(old_content_string + content_string)
-        snapshot_repo.set(rep, capture_name, new_content)
+        SetContent.new(name, params, @item).run(&block)
       else # Get content
         if args.size != 2
           raise ArgumentError, 'expected 2 arguments (the item ' \
