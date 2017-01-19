@@ -128,7 +128,7 @@ module Nanoc::Helpers
               "of the capture, optionally params, and the content) but got #{args.size} instead"
           end
 
-        _erbout = ''
+        _erbout = '' # rubocop:disable Lint/UnderscorePrefixedVariableName
         SetContent.new(name, params, @item).run { _erbout << content }
       else # Get content
         if args.size != 2
