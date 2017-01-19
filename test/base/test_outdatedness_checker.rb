@@ -34,7 +34,7 @@ class Nanoc::Int::OutdatednessCheckerTest < Nanoc::TestCase
 
     # Delete checksums
     with_site(name: 'foo') do |_site|
-      Dir['tmp/*/checksums'].each { |fn| FileUtils.rm(fn) }
+      Dir['tmp/nanoc/*/checksums'].each { |fn| FileUtils.rm(fn) }
     end
 
     # Check

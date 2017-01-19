@@ -47,7 +47,7 @@ module Nanoc::Int
 
     def self.tmp_path_prefix(output_dir)
       dir = Digest::SHA1.hexdigest(output_dir)[0..12]
-      File.join('tmp', dir)
+      File.join('tmp', 'nanoc', dir)
     end
 
     # @group Loading and storing data
