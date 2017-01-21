@@ -114,7 +114,7 @@ module Nanoc::Helpers
           end
 
         SetContent.new(name, params, @item).run(&block)
-      elsif args.size > 1 && args.first.is_a?(Symbol) # Set content
+      elsif args.size > 1 && (args.first.is_a?(Symbol) || args.first.is_a?(String)) # Set content
         name = args[0]
         content = args.last
         params =

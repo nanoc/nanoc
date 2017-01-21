@@ -5,7 +5,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
       ctx.create_rep(ctx.item, '/about.html')
     end
 
-    describe 'with name + block' do
+    describe 'setting content' do
       let(:_erbout) { 'existing content' }
 
       let(:params) { raise 'overwrite me' }
@@ -14,7 +14,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
       let(:contents_enumerator) { contents.to_enum }
 
-      shared_examples 'fetching with name + block' do
+      shared_examples 'setting content' do
         context 'only name given' do
           subject { subject_proc_without_params.call }
 
@@ -76,7 +76,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
         end
       end
 
-      context 'symbol name' do
+      context 'symbol name + block' do
         let(:subject_proc_without_params) do
           -> { helper.content_for(:foo) { _erbout << contents_enumerator.next } }
         end
@@ -85,10 +85,10 @@ describe Nanoc::Helpers::Capturing, helper: true do
           -> { helper.content_for(:foo, params) { _erbout << contents_enumerator.next } }
         end
 
-        include_examples 'fetching with name + block'
+        include_examples 'setting content'
       end
 
-      context 'string name' do
+      context 'string name + block' do
         let(:subject_proc_without_params) do
           -> { helper.content_for('foo') { _erbout << contents_enumerator.next } }
         end
@@ -97,69 +97,31 @@ describe Nanoc::Helpers::Capturing, helper: true do
           -> { helper.content_for('foo', params) { _erbout << contents_enumerator.next } }
         end
 
-        include_examples 'fetching with name + block'
-      end
-    end
-
-    describe 'with name + string' do
-      context 'only name given' do
-        subject { helper.content_for(:foo, 'foo') }
-
-        it 'stores snapshot content' do
-          subject
-          expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foo')
-        end
+        include_examples 'setting content'
       end
 
-      context 'name and params given' do
-        subject { helper.content_for(:foo, params, 'foo') }
-        let(:params) { raise 'overwrite me' }
-
-        context 'no existing behavior specified' do
-          let(:params) { {} }
-
-          it 'errors after two times' do
-            helper.content_for(:foo, params, 'foo')
-            expect { helper.content_for(:foo, params, 'bar') }.to raise_error(RuntimeError)
-          end
+      context 'symbol name + string' do
+        let(:subject_proc_without_params) do
+          -> { helper.content_for(:foo, contents_enumerator.next) }
         end
 
-        context 'existing behavior is :overwrite' do
-          let(:params) { { existing: :overwrite } }
-
-          it 'overwrites' do
-            helper.content_for(:foo, params, 'foo')
-            helper.content_for(:foo, params, 'bar')
-            expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('bar')
-          end
+        let(:subject_proc_with_params) do
+          -> { helper.content_for(:foo, params, contents_enumerator.next) }
         end
 
-        context 'existing behavior is :append' do
-          let(:params) { { existing: :append } }
+        include_examples 'setting content'
+      end
 
-          it 'appends' do
-            helper.content_for(:foo, params, 'foo')
-            helper.content_for(:foo, params, 'bar')
-            expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foobar')
-          end
+      context 'string name + string' do
+        let(:subject_proc_without_params) do
+          -> { helper.content_for('foo', contents_enumerator.next) }
         end
 
-        context 'existing behavior is :error' do
-          let(:params) { { existing: :error } }
-
-          it 'errors after two times' do
-            helper.content_for(:foo, params, 'foo')
-            expect { helper.content_for(:foo, params, 'bar') }.to raise_error(RuntimeError)
-          end
+        let(:subject_proc_with_params) do
+          -> { helper.content_for('foo', params, contents_enumerator.next) }
         end
 
-        context 'existing behavior is :something else' do
-          let(:params) { { existing: :donkey } }
-
-          it 'errors' do
-            expect { subject }.to raise_error(ArgumentError)
-          end
-        end
+        include_examples 'setting content'
       end
     end
 
