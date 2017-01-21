@@ -8,8 +8,22 @@ describe Nanoc::Helpers::Capturing, helper: true do
     describe 'with name + block' do
       let(:_erbout) { 'existing content' }
 
+      let(:params) { raise 'overwrite me' }
+
+      let(:contents) { %w( foo bar ) }
+
+      let(:contents_enumerator) { contents.to_enum }
+
+      let(:subject_proc_without_params) do
+        -> { helper.content_for(:foo) { _erbout << contents_enumerator.next } }
+      end
+
+      let(:subject_proc_with_params) do
+        -> { helper.content_for(:foo, params) { _erbout << contents_enumerator.next } }
+      end
+
       context 'only name given' do
-        subject { helper.content_for(:foo) { _erbout << 'foo' } }
+        subject { subject_proc_without_params.call }
 
         it 'stores snapshot content' do
           subject
@@ -18,15 +32,15 @@ describe Nanoc::Helpers::Capturing, helper: true do
       end
 
       context 'name and params given' do
-        subject { helper.content_for(:foo, params) { _erbout << 'foo' } }
+        subject { subject_proc_with_params.call }
         let(:params) { raise 'overwrite me' }
 
         context 'no existing behavior specified' do
           let(:params) { {} }
 
           it 'errors after two times' do
-            helper.content_for(:foo, params) { _erbout << 'foo' }
-            expect { helper.content_for(:foo, params) { _erbout << 'bar' } }.to raise_error(RuntimeError)
+            subject_proc_with_params.call
+            expect { subject_proc_with_params.call }.to raise_error(RuntimeError)
           end
         end
 
@@ -34,8 +48,8 @@ describe Nanoc::Helpers::Capturing, helper: true do
           let(:params) { { existing: :overwrite } }
 
           it 'overwrites' do
-            helper.content_for(:foo, params) { _erbout << 'foo' }
-            helper.content_for(:foo, params) { _erbout << 'bar' }
+            subject_proc_with_params.call
+            subject_proc_with_params.call
             expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('bar')
           end
         end
@@ -44,8 +58,8 @@ describe Nanoc::Helpers::Capturing, helper: true do
           let(:params) { { existing: :append } }
 
           it 'appends' do
-            helper.content_for(:foo, params) { _erbout << 'foo' }
-            helper.content_for(:foo, params) { _erbout << 'bar' }
+            subject_proc_with_params.call
+            subject_proc_with_params.call
             expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foobar')
           end
         end
@@ -54,8 +68,8 @@ describe Nanoc::Helpers::Capturing, helper: true do
           let(:params) { { existing: :error } }
 
           it 'errors after two times' do
-            helper.content_for(:foo, params) { _erbout << 'foo' }
-            expect { helper.content_for(:foo, params) { _erbout << 'bar' } }.to raise_error(RuntimeError)
+            subject_proc_with_params.call
+            expect { subject_proc_with_params.call }.to raise_error(RuntimeError)
           end
         end
 
