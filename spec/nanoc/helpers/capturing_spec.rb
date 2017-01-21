@@ -14,72 +14,90 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
       let(:contents_enumerator) { contents.to_enum }
 
-      let(:subject_proc_without_params) do
-        -> { helper.content_for(:foo) { _erbout << contents_enumerator.next } }
+      shared_examples 'fetching with name + block' do
+        context 'only name given' do
+          subject { subject_proc_without_params.call }
+
+          it 'stores snapshot content' do
+            subject
+            expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foo')
+          end
+        end
+
+        context 'name and params given' do
+          subject { subject_proc_with_params.call }
+          let(:params) { raise 'overwrite me' }
+
+          context 'no existing behavior specified' do
+            let(:params) { {} }
+
+            it 'errors after two times' do
+              subject_proc_with_params.call
+              expect { subject_proc_with_params.call }.to raise_error(RuntimeError)
+            end
+          end
+
+          context 'existing behavior is :overwrite' do
+            let(:params) { { existing: :overwrite } }
+
+            it 'overwrites' do
+              subject_proc_with_params.call
+              subject_proc_with_params.call
+              expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('bar')
+            end
+          end
+
+          context 'existing behavior is :append' do
+            let(:params) { { existing: :append } }
+
+            it 'appends' do
+              subject_proc_with_params.call
+              subject_proc_with_params.call
+              expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foobar')
+            end
+          end
+
+          context 'existing behavior is :error' do
+            let(:params) { { existing: :error } }
+
+            it 'errors after two times' do
+              subject_proc_with_params.call
+              expect { subject_proc_with_params.call }.to raise_error(RuntimeError)
+            end
+          end
+
+          context 'existing behavior is :something else' do
+            let(:params) { { existing: :donkey } }
+
+            it 'errors' do
+              expect { subject }.to raise_error(ArgumentError)
+            end
+          end
+        end
       end
 
-      let(:subject_proc_with_params) do
-        -> { helper.content_for(:foo, params) { _erbout << contents_enumerator.next } }
+      context 'symbol name' do
+        let(:subject_proc_without_params) do
+          -> { helper.content_for(:foo) { _erbout << contents_enumerator.next } }
+        end
+
+        let(:subject_proc_with_params) do
+          -> { helper.content_for(:foo, params) { _erbout << contents_enumerator.next } }
+        end
+
+        include_examples 'fetching with name + block'
       end
 
-      context 'only name given' do
-        subject { subject_proc_without_params.call }
-
-        it 'stores snapshot content' do
-          subject
-          expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foo')
-        end
-      end
-
-      context 'name and params given' do
-        subject { subject_proc_with_params.call }
-        let(:params) { raise 'overwrite me' }
-
-        context 'no existing behavior specified' do
-          let(:params) { {} }
-
-          it 'errors after two times' do
-            subject_proc_with_params.call
-            expect { subject_proc_with_params.call }.to raise_error(RuntimeError)
-          end
+      context 'string name' do
+        let(:subject_proc_without_params) do
+          -> { helper.content_for('foo') { _erbout << contents_enumerator.next } }
         end
 
-        context 'existing behavior is :overwrite' do
-          let(:params) { { existing: :overwrite } }
-
-          it 'overwrites' do
-            subject_proc_with_params.call
-            subject_proc_with_params.call
-            expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('bar')
-          end
+        let(:subject_proc_with_params) do
+          -> { helper.content_for('foo', params) { _erbout << contents_enumerator.next } }
         end
 
-        context 'existing behavior is :append' do
-          let(:params) { { existing: :append } }
-
-          it 'appends' do
-            subject_proc_with_params.call
-            subject_proc_with_params.call
-            expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foobar')
-          end
-        end
-
-        context 'existing behavior is :error' do
-          let(:params) { { existing: :error } }
-
-          it 'errors after two times' do
-            subject_proc_with_params.call
-            expect { subject_proc_with_params.call }.to raise_error(RuntimeError)
-          end
-        end
-
-        context 'existing behavior is :something else' do
-          let(:params) { { existing: :donkey } }
-
-          it 'errors' do
-            expect { subject }.to raise_error(ArgumentError)
-          end
-        end
+        include_examples 'fetching with name + block'
       end
     end
 
