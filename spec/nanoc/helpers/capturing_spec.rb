@@ -10,9 +10,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
       let(:params) { raise 'overwrite me' }
 
-      let(:contents) { %w( foo bar ) }
-
-      let(:contents_enumerator) { contents.to_enum }
+      let(:contents_enumerator) { %w(foo bar).to_enum }
 
       shared_examples 'setting content' do
         context 'only name given' do
