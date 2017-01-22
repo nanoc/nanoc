@@ -89,4 +89,4 @@ module Nanoc
   end
 end
 
-Nanoc::Feature.define('profiler', version: '4.5')
+Nanoc::Feature.define('profiler', version: '4.6')
