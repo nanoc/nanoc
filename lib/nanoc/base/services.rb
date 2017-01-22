@@ -15,4 +15,6 @@ require_relative 'services/temp_filename_factory'
 require_relative 'services/outdatedness_rule'
 require_relative 'services/outdatedness_rules'
 
+require_relative 'services/compiler/phases'
+
 require_relative 'services/outdatedness_checker'
