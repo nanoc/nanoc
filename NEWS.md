@@ -1,5 +1,17 @@
 # Nanoc news
 
+## 4.6.0 (2017-01-22)
+
+Features:
+
+* Made `#content_for` accept a string as well as a block, to allow setting captured content outside of ERB (#1066, #1073)
+* Added `#raw_content=` to items and layouts during preprocessing (#1057)
+* Added `#snapshot?` to item rep views (#1056)
+
+Enhancements:
+
+* Prevented useless recompilations when switching Nanoc environments (#1070, #1071)
+
 ## 4.5.4 (2017-01-16)
 
 Fixes:
