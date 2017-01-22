@@ -128,7 +128,7 @@ module Nanoc::Int
       determine_outdatedness
       forget_dependencies_if_needed
       store
-      compile_reps
+      compile_reps_stage.run
       store_output_state
       @action_provider.postprocess(@site, @reps)
     ensure
@@ -225,10 +225,6 @@ module Nanoc::Int
 
     def forget_dependencies_if_needed
       @outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
-    end
-
-    def compile_reps
-      compile_reps_stage.run
     end
 
     # Returns all stores that can load/store data that can be used for
