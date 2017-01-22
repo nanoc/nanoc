@@ -1,6 +1,6 @@
 # Nanoc news
 
-## 4.6.0 (2017-01-22)
+## 4.6 (2017-01-22)
 
 Features:
 
@@ -39,7 +39,7 @@ Fixes:
 
 * Fixed crash when Nokogiri is not installed (#1053)
 
-## 4.5.0 (2017-01-09)
+## 4.5 (2017-01-09)
 
 Features:
 
@@ -113,7 +113,7 @@ Enhancements:
 
 * Made `view` command use index filenames specified in the `index_filenames` site configuration attribute (#998)
 
-## 4.4.0 (2016-11-19)
+## 4.4 (2016-11-19)
 
 Features:
 
