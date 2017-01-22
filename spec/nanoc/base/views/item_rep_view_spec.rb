@@ -137,6 +137,73 @@ describe Nanoc::ItemRepView do
     it { should == described_class.hash ^ Nanoc::Identifier.new('/foo/').hash ^ :jacques.hash }
   end
 
+  describe '#snapshot?' do
+    subject { view.snapshot?(snapshot_name) }
+
+    let(:view) { described_class.new(rep, view_context) }
+
+    let(:rep) do
+      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+        ir.compiled = true
+        ir.snapshot_defs = [
+          Nanoc::Int::SnapshotDef.new(:last),
+        ]
+      end
+    end
+
+    let(:item) do
+      Nanoc::Int::Item.new('content', {}, '/asdf.md')
+    end
+
+    let(:snapshot_name) { raise 'override me' }
+
+    before do
+      snapshot_repo.set(rep, :last, Nanoc::Int::TextualContent.new('Hallo'))
+    end
+
+    context 'snapshot exists' do
+      let(:snapshot_name) { :last }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      end
+
+      it 'creates a dependency with the right props' do
+        subject
+        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+        expect(dep.props.compiled_content?).to eq(true)
+
+        expect(dep.props.raw_content?).to eq(false)
+        expect(dep.props.attributes?).to eq(false)
+        expect(dep.props.path?).to eq(false)
+      end
+
+      it { is_expected.to be }
+    end
+
+    context 'snapshot does not exist' do
+      let(:snapshot_name) { :donkey }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      end
+
+      it 'creates a dependency with the right props' do
+        subject
+        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+        expect(dep.props.compiled_content?).to eq(true)
+
+        expect(dep.props.raw_content?).to eq(false)
+        expect(dep.props.attributes?).to eq(false)
+        expect(dep.props.path?).to eq(false)
+      end
+
+      it { is_expected.not_to be }
+    end
+  end
+
   describe '#compiled_content' do
     subject { view.compiled_content }
 
