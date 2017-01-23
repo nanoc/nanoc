@@ -211,10 +211,26 @@ module Nanoc::CLI::Commands
 
       protected
 
+      def profiling_table
+        headers = ['', 'count', 'min', 'avg', 'max', 'tot']
+
+        rows = durations_per_filter.to_a.sort_by { |r| r[1] }.map do |row|
+          filter_name, samples = *row
+          count = samples.size
+          min   = samples.min
+          tot   = samples.reduce(0, &:+)
+          avg   = tot / count
+          max   = samples.max
+
+          [filter_name.to_s, count.to_s] + [min, avg, max, tot].map { |r| "#{format('%4.2f', r)}s" }
+        end
+
+        [headers] + rows
+      end
+
       def print_profiling_feedback
         # Get max filter length
-        max_filter_name_length = durations_per_filter.keys.map { |k| k.to_s.size }.max
-        return if max_filter_name_length.nil?
+        return if durations_per_filter.empty?
 
         # Print warning if necessary
         if @reps.any? { |r| !r.compiled? }
@@ -223,37 +239,24 @@ module Nanoc::CLI::Commands
                        'some items were not compiled.'
         end
 
-        # Print header
         puts
-        puts ' ' * max_filter_name_length + ' | count    min    avg    max     tot'
-        puts '-' * max_filter_name_length + '-+-----------------------------------'
-
-        durations_per_filter.to_a.sort_by { |r| r[1] }.each do |row|
-          print_row(row, max_filter_name_length)
-        end
+        print_table profiling_table
       end
 
-      def print_row(row, length)
-        # Extract data
-        filter_name, samples = *row
+      def print_table(table)
+        lengths = table.transpose.map { |r| r.map(&:size).max }
 
-        # Calculate stats
-        count = samples.size
-        min   = samples.min
-        tot   = samples.reduce(0) { |acc, elem| acc + elem }
-        avg   = tot / count
-        max   = samples.max
+        print_row(table[0], lengths)
 
-        # Format stats
-        count = format('%4d',   count)
-        min   = format('%4.2f', min)
-        avg   = format('%4.2f', avg)
-        max   = format('%4.2f', max)
-        tot   = format('%5.2f', tot)
+        puts "#{'-' * lengths[0]}-+-#{lengths[1..-1].map { |length| '-' * length }.join('---')}"
 
-        # Output stats
-        key = format("%#{length}s", filter_name)
-        puts "#{key} |  #{count}  #{min}s  #{avg}s  #{max}s  #{tot}s"
+        table[1..-1].each { |row| print_row(row, lengths) }
+      end
+
+      def print_row(row, lengths)
+        values = row.zip(lengths).map { |text, length| text.rjust length }
+
+        puts values[0] + ' | ' + values[1..-1].join('   ')
       end
 
       def durations_per_filter

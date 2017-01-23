@@ -27,7 +27,7 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
     expect { listener.stop }
-      .to output(/^erb \|     1  1\.00s  1\.00s  1\.00s   1\.00s$/).to_stdout
+      .to output(/^erb \|     1   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
   end
 
   it 'records multiple from filtering_started to filtering_ended' do
@@ -43,7 +43,7 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
     expect { listener.stop }
-      .to output(/^erb \|     2  1\.00s  1\.50s  2\.00s   3\.00s$/).to_stdout
+      .to output(/^erb \|     2   1\.00s   1\.50s   2\.00s   3\.00s$/).to_stdout
   end
 
   it 'records single from filtering_started over compilation_{suspended,started} to filtering_ended' do
@@ -61,6 +61,6 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
 
     # FIXME: wrong count (should be 1, not 2)
     expect { listener.stop }
-      .to output(/^erb \|     2  1\.00s  2\.50s  4\.00s   5\.00s$/).to_stdout
+      .to output(/^erb \|     2   1\.00s   2\.50s   4\.00s   5\.00s$/).to_stdout
   end
 end
