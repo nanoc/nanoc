@@ -26,6 +26,52 @@ describe Nanoc::Int::Compiler::Stages::Cleanup do
         .from(true).to(false)
     end
 
+    shared_examples 'an old store' do
+      it 'removes the old store' do
+        FileUtils.mkdir_p('tmp')
+        File.write('tmp/' + store_name, 'stuff')
+
+        expect { subject }
+          .to change { File.file?('tmp/' + store_name) }
+          .from(true).to(false)
+      end
+    end
+
+    context 'tmp/checksums' do
+      let(:store_name) { 'checksums' }
+      it_behaves_like 'an old store'
+    end
+
+    context 'tmp/compiled_content' do
+      let(:store_name) { 'compiled_content' }
+      it_behaves_like 'an old store'
+    end
+
+    context 'tmp/dependencies' do
+      let(:store_name) { 'dependencies' }
+      it_behaves_like 'an old store'
+    end
+
+    context 'tmp/outdatedness' do
+      let(:store_name) { 'outdatedness' }
+      it_behaves_like 'an old store'
+    end
+
+    context 'tmp/rule_memory' do
+      let(:store_name) { 'rule_memory' }
+      it_behaves_like 'an old store'
+    end
+
+    context 'tmp/somethingelse' do
+      it 'does not removes the store' do
+        FileUtils.mkdir_p('tmp')
+        File.write('tmp/somethingelse', 'stuff')
+
+        expect { subject }
+          .not_to change { File.file?('tmp/somethingelse') }
+      end
+    end
+
     it 'removes stores for unused output paths' do
       FileUtils.mkdir_p('tmp/nanoc/2f0692fb1a1d')
       FileUtils.mkdir_p('tmp/nanoc/1a2195bfef6c')

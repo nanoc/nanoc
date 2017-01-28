@@ -8,6 +8,7 @@ module Nanoc::Int::Compiler::Stages
       cleanup_temps(Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
       cleanup_temps(Nanoc::Int::ItemRepWriter::TMP_TEXT_ITEMS_DIR)
       cleanup_unused_stores
+      cleanup_old_stores
     end
 
     private
@@ -21,6 +22,15 @@ module Nanoc::Int::Compiler::Stages
       all_paths = Dir.glob('tmp/nanoc/*')
       (all_paths - used_paths).each do |obsolete_path|
         FileUtils.rm_rf(obsolete_path)
+      end
+    end
+
+    def cleanup_old_stores
+      %w(checksums compiled_content dependencies outdatedness rule_memory).each do |fn|
+        full_fn = File.join('tmp', fn)
+        if File.file?(full_fn)
+          FileUtils.rm_f(full_fn)
+        end
       end
     end
   end
