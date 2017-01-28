@@ -1,5 +1,6 @@
 require 'set'
 require 'fileutils'
+require 'zlib'
 
 module Nanoc::Int
   module DDDB
@@ -69,21 +70,28 @@ module Nanoc::Int
       end
 
       def add(data)
-        offset = @size
+        offset_header = @size
+        offset_body = @size + 4
 
-        @io.seek(@size)
-        write_int(data.size)
-        @io.write(data)
+        # write data
+        @io.seek(offset_body)
+        compressed_data = Zlib::Deflate.deflate(data)
+        @io.write(compressed_data)
+        size_body = compressed_data.size
 
-        @size += 4 + data.size
+        # write size
+        @io.seek(offset_header)
+        write_int(size_body)
 
-        offset
+        @size += size_body + 4
+
+        offset_header
       end
 
       def read_data(offset)
         @io.seek(offset)
         size = read_int
-        @io.read(size)
+        Zlib::Inflate.inflate(@io.read(size))
       end
 
       private

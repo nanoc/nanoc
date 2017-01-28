@@ -10,7 +10,11 @@ module Nanoc::Int
     def initialize(site: nil, items:)
       @items = items
 
-      filename = Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'cococa')
+      filename = Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'compiled_content')
+      if File.file?(filename)
+        # old
+        FileUtils.rm_f(filename)
+      end
       FileUtils.mkdir_p(File.dirname(filename))
       @db = Nanoc::Int::DDDB.new(filename)
       @db.open

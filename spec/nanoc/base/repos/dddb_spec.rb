@@ -92,9 +92,9 @@ describe Nanoc::Int::DDDB do
       expect(db['b']).to eq('value for b')
 
       expect { db.compact }
-        .to change { File.read('donkey.db') }
-        .from("\u0000\u0000\u0000\vvalue for a\u0000\u0000\u0000\vvalue for b")
-        .to("\u0000\u0000\u0000\vvalue for b")
+        .to change { File.read('donkey.db', encoding: 'ASCII-8BIT') }
+        .from("\u0000\u0000\u0000\u0013" + Zlib::Deflate.deflate('value for a') + "\u0000\u0000\u0000\u0013" + Zlib::Deflate.deflate('value for b'))
+        .to("\u0000\u0000\u0000\u0013" + Zlib::Deflate.deflate('value for b'))
 
       expect(db['a']).to be_nil
       expect(db['b']).to eq('value for b')
