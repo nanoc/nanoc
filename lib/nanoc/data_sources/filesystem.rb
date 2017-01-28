@@ -164,7 +164,7 @@ module Nanoc::DataSources
             content,
             attributes,
             identifier,
-            content_checksum_data: proto_doc.content_checksum_data,
+            content_checksum_data: content_checksum_data_for(proto_doc),
             attributes_checksum_data: attributes_checksum_data_for(proto_doc, content_filename, meta_filename),
           )
         end
@@ -173,10 +173,18 @@ module Nanoc::DataSources
       res
     end
 
+    def content_checksum_data_for(proto_doc)
+      Digest::SHA1.digest(
+        proto_doc.content_checksum_data || '',
+      )
+    end
+
     def attributes_checksum_data_for(proto_doc, content_filename, meta_filename)
-      YAML.dump(
-        attributes: proto_doc.attributes_checksum_data,
-        extra_attributes: extra_attributes_for(content_filename, meta_filename),
+      Digest::SHA1.digest(
+        YAML.dump(
+          attributes: proto_doc.attributes_checksum_data,
+          extra_attributes: extra_attributes_for(content_filename, meta_filename),
+        ),
       )
     end
 
