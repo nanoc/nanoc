@@ -24,10 +24,8 @@ module Nanoc::Int
     #     end
     #     # => "I am Max Payne and I am hiding in a cheap motel."
     def initialize(hash)
-      metaclass = class << self; self; end
       hash.each_pair do |key, value|
         instance_variable_set('@' + key.to_s, value)
-        metaclass.send(:define_method, key) { value }
       end
     end
 
@@ -39,6 +37,20 @@ module Nanoc::Int
       binding
     end
     # rubocop:enable Style/AccessorMethodName
+
+    def method_missing(method, *args, &blk)
+      ivar_name = '@' + method.to_s
+      if instance_variable_defined?(ivar_name)
+        instance_variable_get(ivar_name)
+      else
+        super
+      end
+    end
+
+    def respond_to_missing?(method, include_all)
+      ivar_name = '@' + method.to_s
+      instance_variable_defined?(ivar_name) || super
+    end
 
     def include(mod)
       metaclass = class << self; self; end
