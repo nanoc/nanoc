@@ -14,7 +14,7 @@ module Nanoc::Int
 
       prioritised = Set.new
       loop do
-        rep = next(graph, prioritised)
+        rep = find(graph, prioritised)
         break if NONE.equal?(rep)
 
         begin
@@ -31,9 +31,20 @@ module Nanoc::Int
       end
     end
 
-    def next(graph, _prioritised)
+    def find(graph, prioritised)
       if graph.roots.empty?
         NONE
+      elsif prioritised.any?
+        until prioritised.empty?
+          rep = prioritised.each { |e| break e }
+          if graph.roots.include?(rep)
+            return rep
+          else
+            prioritised.delete(rep)
+          end
+        end
+
+        find(graph, prioritised)
       else
         graph.roots.each { |e| break e }
       end

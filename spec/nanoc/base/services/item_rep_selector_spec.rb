@@ -165,5 +165,20 @@ describe Nanoc::Int::ItemRepSelector do
         expect(tentatively_yielded).to eq [:a, :b, :a, :c, :a, :d, :a, :e, :a]
       end
     end
+
+    context 'unrelated roots' do
+      let(:dependencies) do
+        {
+          a: [:d],
+          b: [:e],
+          c: [],
+        }
+      end
+
+      it 'picks prioritised roots' do
+        expect(successfully_yielded).to eq [:d, :e, :c, :a, :b]
+        expect(tentatively_yielded).to eq [:a, :d, :b, :e, :c, :a, :b]
+      end
+    end
   end
 end
