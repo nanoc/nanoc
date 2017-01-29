@@ -36,19 +36,23 @@ module Nanoc::Int
       if graph.roots.empty?
         NONE
       elsif prio_dependent.any?
-        until prio_dependent.empty?
-          rep = prio_dependent.each { |e| break e }
-          if graph.roots.include?(rep)
-            return rep
-          else
-            prio_dependent.delete(rep)
-          end
-        end
-
-        find(graph, prio_dependent, prio_in_progress)
+        find_prio(graph, prio_dependent, prio_dependent, prio_in_progress)
       else
         graph.roots.each { |e| break e }
       end
+    end
+
+    def find_prio(graph, prio, prio_dependent, prio_in_progress)
+      until prio.empty?
+        rep = prio.each { |e| break e }
+        if graph.roots.include?(rep)
+          return rep
+        else
+          prio.delete(rep)
+        end
+      end
+
+      find(graph, prio_dependent, prio_in_progress)
     end
 
     def handle_error(e, rep, graph, prio_dependent, prio_in_progress)
