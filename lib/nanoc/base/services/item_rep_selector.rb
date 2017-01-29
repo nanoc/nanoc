@@ -19,10 +19,12 @@ module Nanoc::Int
         break if NONE.equal?(rep)
 
         begin
+          prio_in_progress << rep
           yield(rep)
+          prio_in_progress.delete(rep)
           graph.delete_vertex(rep)
         rescue => e
-          handle_error(e, rep, graph, prio_dependent, prio_in_progress)
+          handle_error(e, rep, graph, prio_dependent)
         end
       end
 
@@ -37,6 +39,8 @@ module Nanoc::Int
         NONE
       elsif prio_dependent.any?
         find_prio(graph, prio_dependent, prio_dependent, prio_in_progress)
+      elsif prio_in_progress.any?
+        find_prio(graph, prio_in_progress, prio_dependent, prio_in_progress)
       else
         graph.roots.each { |e| break e }
       end
@@ -55,7 +59,7 @@ module Nanoc::Int
       find(graph, prio_dependent, prio_in_progress)
     end
 
-    def handle_error(e, rep, graph, prio_dependent, prio_in_progress)
+    def handle_error(e, rep, graph, prio_dependent)
       actual_error =
         if e.is_a?(Nanoc::Int::Errors::CompilationError)
           e.unwrap
@@ -64,13 +68,13 @@ module Nanoc::Int
         end
 
       if actual_error.is_a?(Nanoc::Int::Errors::UnmetDependency)
-        handle_dependency_error(actual_error, rep, graph, prio_dependent, prio_in_progress)
+        handle_dependency_error(actual_error, rep, graph, prio_dependent)
       else
         raise(e)
       end
     end
 
-    def handle_dependency_error(e, rep, graph, prio_dependent, _prio_in_progress)
+    def handle_dependency_error(e, rep, graph, prio_dependent)
       other_rep = e.rep
       prio_dependent << other_rep
       graph.add_edge(other_rep, rep)
