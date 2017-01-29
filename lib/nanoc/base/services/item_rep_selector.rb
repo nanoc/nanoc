@@ -7,13 +7,15 @@ module Nanoc::Int
       @reps = reps
     end
 
+    NONE = Object.new
+
     def each
       graph = Nanoc::Int::DirectedGraph.new(@reps)
 
       prioritised = Set.new
       loop do
-        break if graph.roots.empty?
-        rep = graph.roots.each { |e| break e }
+        rep = next(graph, prioritised)
+        break if NONE.equal?(rep)
 
         begin
           yield(rep)
@@ -26,6 +28,14 @@ module Nanoc::Int
       # Check whether everything was compiled
       unless graph.vertices.empty?
         raise Nanoc::Int::Errors::RecursiveCompilation.new(graph.vertices)
+      end
+    end
+
+    def next(graph, _prioritised)
+      if graph.roots.empty?
+        NONE
+      else
+        graph.roots.each { |e| break e }
       end
     end
 
