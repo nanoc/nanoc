@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.6.1 (2017-01-29)
+
+Fixes:
+
+* Fixed table formatting in `compile --verbose` (#1074) [Hugo Peixoto]
+
+Enhancements:
+
+* Reduced memory usage (#1075, #1076, #1077, #1078)
+
 ## 4.6 (2017-01-22)
 
 Features:
