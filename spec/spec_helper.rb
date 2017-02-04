@@ -67,7 +67,7 @@ RSpec.configure do |c|
     File.write('Rules', 'passthrough "/**/*"')
   end
 
-  c.include(Nanoc::Spec::HelperHelper, helper: true)
+  c.include(Nanoc::Spec::HelperHelper, helper: true) # rubocop:disable Style/MixinGrouping
 
   # Set focus if any
   if ENV.fetch('FOCUS', false)
