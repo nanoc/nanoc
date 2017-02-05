@@ -11,8 +11,7 @@ describe Nanoc::Int::OutdatednessStore do
     Nanoc::Int::Site.new(
       config: config,
       code_snippets: code_snippets,
-      items: items,
-      layouts: layouts,
+      data_source: Nanoc::InMemDataSource.new(items, layouts),
     )
   end
 

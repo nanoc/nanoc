@@ -160,8 +160,7 @@ module Nanoc
           site = Nanoc::Int::Site.new(
             config: @config,
             code_snippets: [],
-            items: @items,
-            layouts: @layouts,
+            data_source: Nanoc::InMemDataSource.new(@items, @layouts),
           )
           site.compiler = new_compiler_for(site)
           site

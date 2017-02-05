@@ -310,7 +310,11 @@ describe Nanoc::Int::Checksummer do
     let(:item) { Nanoc::Int::Item.new('stuff', {}, '/stuff.md') }
 
     let(:site) do
-      Nanoc::Int::Site.new(config: config, code_snippets: code_snippets, items: items, layouts: layouts)
+      Nanoc::Int::Site.new(
+        config: config,
+        code_snippets: code_snippets,
+        data_source: Nanoc::InMemDataSource.new(items, layouts),
+      )
     end
 
     let(:config) { Nanoc::Int::Configuration.new(hash: { 'foo' => 'bar' }) }
