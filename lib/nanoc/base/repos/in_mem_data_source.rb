@@ -1,4 +1,4 @@
-module Nanoc
+module Nanoc::Int
   class InMemDataSource < Nanoc::DataSource
     attr_reader :items
     attr_reader :layouts

@@ -26,11 +26,11 @@ module Nanoc::Int
       data_sources_to_aggregate =
         with_data_sources(config) do |data_sources|
           data_sources.map do |ds|
-            Nanoc::PrefixedDataSource.new(ds, ds.items_root, ds.layouts_root)
+            Nanoc::Int::PrefixedDataSource.new(ds, ds.items_root, ds.layouts_root)
           end
         end
 
-      data_source = Nanoc::AggregateDataSource.new(data_sources_to_aggregate, config)
+      data_source = Nanoc::Int::AggregateDataSource.new(data_sources_to_aggregate, config)
 
       Nanoc::Int::Site.new(
         config: config,

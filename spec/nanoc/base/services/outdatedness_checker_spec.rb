@@ -22,7 +22,7 @@ describe Nanoc::Int::OutdatednessChecker do
     Nanoc::Int::Site.new(
       config: config,
       code_snippets: [],
-      data_source: Nanoc::InMemDataSource.new([], []),
+      data_source: Nanoc::Int::InMemDataSource.new([], []),
     )
   end
 

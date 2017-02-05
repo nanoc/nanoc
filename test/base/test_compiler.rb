@@ -5,7 +5,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     site ||= Nanoc::Int::Site.new(
       config: nil,
       code_snippets: [],
-      data_source: Nanoc::InMemDataSource.new([], []),
+      data_source: Nanoc::Int::InMemDataSource.new([], []),
     )
 
     reps = Nanoc::Int::ItemRepRepo.new
