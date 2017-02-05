@@ -19,29 +19,32 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_xml_sitemap
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = Nanoc::Int::IdentifiableCollection.new({})
+      items = []
 
       # Create item 1
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), @view_context)
-      @items << item
+      items << item
       create_item_rep(item.unwrap, :one_a, '/item-one/a/')
       create_item_rep(item.unwrap, :one_b, '/item-one/b/')
 
       # Create item 2
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 2', { is_hidden: true }, '/item-two/'), @view_context)
-      @items << item
+      items << item
 
       # Create item 3
       attrs = { mtime: Time.parse('2004-07-12 00:00:00 +02:00'), changefreq: 'daily', priority: 0.5 }
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 3', attrs, '/item-three/'), @view_context)
-      @items << item
+      items << item
       create_item_rep(item.unwrap, :three_a, '/item-three/a/')
       create_item_rep(item.unwrap, :three_b, '/item-three/b/')
 
       # Create item 4
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 4', {}, '/item-four/'), @view_context)
-      @items << item
+      items << item
       create_item_rep(item.unwrap, :four_a, nil)
+
+      # Create items
+      @items = Nanoc::Int::IdentifiableCollection.new({}, items)
 
       # Create sitemap item
       @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), @view_context)
@@ -80,13 +83,14 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_sitemap_with_items_as_param
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = Nanoc::Int::IdentifiableCollection.new({})
-      @items << nil
+      items = []
+      items << nil
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), @view_context)
-      @items << item
+      items << item
       create_item_rep(item.unwrap, :one_a, '/item-one/a/')
       create_item_rep(item.unwrap, :one_b, '/item-one/b/')
-      @items << nil
+      items << nil
+      @items = Nanoc::Int::IdentifiableCollection.new({})
 
       # Create sitemap item
       @item = Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/')
@@ -117,9 +121,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_filter
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = Nanoc::Int::IdentifiableCollection.new({})
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one/'), @view_context)
-      @items << item
+      @items = Nanoc::Int::IdentifiableCollection.new({}, [item])
       create_item_rep(item.unwrap, :one_a, '/item-one/a/')
       create_item_rep(item.unwrap, :one_b, '/item-one/b/')
 
@@ -148,19 +151,20 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_sorted
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = Nanoc::Int::IdentifiableCollection.new({})
+      items = []
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 1', {}, '/george/'), @view_context)
-      @items << item
+      items << item
       create_item_rep(item.unwrap, :a_alice,   '/george/alice/')
       create_item_rep(item.unwrap, :b_zoey,    '/george/zoey/')
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 1', {}, '/walton/'), @view_context)
-      @items << item
+      items << item
       create_item_rep(item.unwrap, :a_eve,     '/walton/eve/')
       create_item_rep(item.unwrap, :b_bob,     '/walton/bob/')
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 1', {}, '/lucas/'), @view_context)
-      @items << item
+      items << item
       create_item_rep(item.unwrap, :a_trudy,   '/lucas/trudy/')
       create_item_rep(item.unwrap, :b_mallory, '/lucas/mallory/')
+      @items = Nanoc::Int::IdentifiableCollection.new({}, items)
 
       # Create sitemap item
       @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), @view_context)
@@ -189,9 +193,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_url_escape
     if_have 'builder', 'nokogiri' do
       # Create items
-      @items = Nanoc::Int::IdentifiableCollection.new({})
       item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('some content 1', {}, '/george/'), @view_context)
-      @items << item
+      @items = Nanoc::Int::IdentifiableCollection.new({}, [item])
       create_item_rep(item.unwrap, :default, '/cool projects/проверка')
 
       # Create sitemap item

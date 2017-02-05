@@ -10,10 +10,13 @@ shared_examples 'an identifiable collection' do
 
   describe '#frozen?' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar'))
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
+          double(:identifiable, identifier: Nanoc::Identifier.new('/bar')),
+        ],
+      )
     end
 
     subject { view.frozen? }
@@ -34,11 +37,14 @@ shared_examples 'an identifiable collection' do
 
   describe '#unwrap' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz'))
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
+          double(:identifiable, identifier: Nanoc::Identifier.new('/bar')),
+          double(:identifiable, identifier: Nanoc::Identifier.new('/baz')),
+        ],
+      )
     end
 
     subject { view.unwrap }
@@ -48,11 +54,14 @@ shared_examples 'an identifiable collection' do
 
   describe '#each' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz'))
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
+          double(:identifiable, identifier: Nanoc::Identifier.new('/bar')),
+          double(:identifiable, identifier: Nanoc::Identifier.new('/baz')),
+        ],
+      )
     end
 
     it 'returns self' do
@@ -66,11 +75,14 @@ shared_examples 'an identifiable collection' do
 
   describe '#size' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/foo'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/bar'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/baz'))
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
+          double(:identifiable, identifier: Nanoc::Identifier.new('/bar')),
+          double(:identifiable, identifier: Nanoc::Identifier.new('/baz')),
+        ],
+      )
     end
 
     subject { view.size }
@@ -88,10 +100,13 @@ shared_examples 'an identifiable collection' do
     end
 
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << page_object
-        arr << home_object
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          page_object,
+          home_object,
+        ],
+      )
     end
 
     subject { view[arg] }
@@ -154,11 +169,14 @@ shared_examples 'an identifiable collection' do
 
   describe '#find_all' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |arr|
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.css'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/about.md'))
-        arr << double(:identifiable, identifier: Nanoc::Identifier.new('/style.css'))
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          double(:identifiable, identifier: Nanoc::Identifier.new('/about.css')),
+          double(:identifiable, identifier: Nanoc::Identifier.new('/about.md')),
+          double(:identifiable, identifier: Nanoc::Identifier.new('/style.css')),
+        ],
+      )
     end
 
     subject { view.find_all(arg) }

@@ -20,17 +20,23 @@ describe Nanoc::Int::Site do
     end
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |coll|
-        coll << Nanoc::Int::Item.new('foo', {}, '/foo.md')
-        coll << Nanoc::Int::Item.new('bar', {}, '/bar.md')
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          Nanoc::Int::Item.new('foo', {}, '/foo.md'),
+          Nanoc::Int::Item.new('bar', {}, '/bar.md'),
+        ],
+      )
     end
 
     let(:layouts) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |coll|
-        coll << Nanoc::Int::Layout.new('foo', {}, '/foo.md')
-        coll << Nanoc::Int::Layout.new('bar', {}, '/bar.md')
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          Nanoc::Int::Layout.new('foo', {}, '/foo.md'),
+          Nanoc::Int::Layout.new('bar', {}, '/bar.md'),
+        ],
+      )
     end
 
     before do

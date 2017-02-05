@@ -7,9 +7,7 @@ class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
     @one = Nanoc::Int::Item.new('Item One', {}, '/one/')
     @two = Nanoc::Int::Item.new('Item Two', {}, '/two/')
 
-    @items = Nanoc::Int::IdentifiableCollection.new({})
-    @items << @one
-    @items << @two
+    @items = Nanoc::Int::IdentifiableCollection.new({}, [@one, @two])
   end
 
   def test_change_item_identifier
@@ -27,9 +25,7 @@ class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
   end
 
   def test_brackets_with_glob
-    @items = Nanoc::Int::IdentifiableCollection.new(string_pattern_type: 'glob')
-    @items << @one
-    @items << @two
+    @items = Nanoc::Int::IdentifiableCollection.new({ string_pattern_type: 'glob' }, [@one, @two])
 
     assert_equal @one, @items['/on*/']
     assert_equal @two, @items['/*wo/']
@@ -57,7 +53,7 @@ class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
 
   def test_regex
     foo = Nanoc::Int::Item.new('Item Foo', {}, '/foo/')
-    @items << foo
+    @items = Nanoc::Int::IdentifiableCollection.new({}, [@one, @two, foo])
 
     assert_equal @one, @items[/n/]
     assert_equal @two, @items[%r{o/}] # not foo
@@ -67,7 +63,7 @@ class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
     assert_nil @items['/foo/']
 
     foo = Nanoc::Int::Item.new('Item Foo', {}, '/foo/')
-    @items << foo
+    @items = Nanoc::Int::IdentifiableCollection.new({}, [@one, @two, foo])
 
     assert_equal foo, @items['/foo/']
   end

@@ -11,11 +11,14 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:command) { double(:command) }
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |ic|
-        ic << item_about
-        ic << item_dog
-        ic << item_other
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          item_about,
+          item_dog,
+          item_other,
+        ],
+      )
     end
 
     let(:item_about) { Nanoc::Int::Item.new('About Me', {}, '/about.md') }
@@ -33,8 +36,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     end
 
     let(:layouts) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |ic|
-      end
+      Nanoc::Int::IdentifiableCollection.new(config)
     end
 
     it 'prints a legend' do

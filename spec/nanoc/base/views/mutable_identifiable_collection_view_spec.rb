@@ -9,9 +9,10 @@ shared_examples 'a mutable identifiable collection' do
 
   describe '#delete_if' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |coll|
-        coll << double(:identifiable, identifier: Nanoc::Identifier.new('/asdf/'))
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [double(:identifiable, identifier: Nanoc::Identifier.new('/asdf/'))],
+      )
     end
 
     it 'deletes matching' do

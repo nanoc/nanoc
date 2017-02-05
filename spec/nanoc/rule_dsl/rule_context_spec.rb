@@ -56,10 +56,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
       let(:child_identifier) { Nanoc::Identifier.new('/foo/bar/', type: :legacy) }
       let(:child) { Nanoc::Int::Item.new('child', {}, child_identifier) }
 
-      before do
-        items << item
-        items << parent
-        items << child
+      let(:items) do
+        Nanoc::Int::IdentifiableCollection.new(config, [item, parent, child])
       end
 
       it 'has a parent' do
@@ -97,10 +95,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
     let(:child_identifier) { Nanoc::Identifier.new('/foo/bar/', type: :legacy) }
     let(:child) { Nanoc::Int::Item.new('child', {}, child_identifier) }
 
-    before do
-      items << item
-      items << parent
-      items << child
+    let(:items) do
+      Nanoc::Int::IdentifiableCollection.new(config, [item, parent, child])
     end
 
     it 'is a view without reps access' do

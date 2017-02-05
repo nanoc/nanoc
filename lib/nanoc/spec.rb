@@ -31,7 +31,7 @@ module Nanoc
       # @return [Nanoc::ItemWithRepsView] A view for the newly created item
       def create_item(content, attributes, identifier)
         item = Nanoc::Int::Item.new(content, attributes, identifier)
-        @items << item
+        @items = @items.add(item)
         Nanoc::ItemWithRepsView.new(item, view_context)
       end
 
@@ -46,7 +46,7 @@ module Nanoc
       # @return [Nanoc::ItemWithRepsView] A view for the newly created layout
       def create_layout(content, attributes, identifier)
         layout = Nanoc::Int::Layout.new(content, attributes, identifier)
-        @layouts << layout
+        @layouts = @layouts.add(layout)
         Nanoc::LayoutView.new(layout, view_context)
       end
 

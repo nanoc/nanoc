@@ -8,7 +8,6 @@ module Nanoc::Int
 
     def_delegator :@objects, :each
     def_delegator :@objects, :size
-    def_delegator :@objects, :<<
 
     contract C::Or[Hash, C::Named['Nanoc::Int::Configuration']], C::IterOf[C::RespondTo[:identifier]] => C::Any
     def initialize(config, objects = [])
@@ -51,6 +50,12 @@ module Nanoc::Int
     def empty?
       @objects.empty?
     end
+
+    def add(obj)
+      self.class.new(@config, @objects + [obj])
+    end
+
+    # Mutators
 
     contract C::Func[C::RespondTo[:identifier] => C::Bool] => self
     def delete_if(&block)
