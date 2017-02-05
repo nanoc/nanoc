@@ -18,6 +18,10 @@ module Nanoc::Int
       @objects = []
     end
 
+    def self.from(enum, config)
+      new(config).tap { |ic| ic.concat(enum) }
+    end
+
     contract C::None => self
     def freeze
       @objects.freeze

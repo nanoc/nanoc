@@ -8,10 +8,13 @@ module Nanoc::Int::Compiler::Stages
     end
 
     def run
-      @action_provider.preprocess(@site)
+      if @action_provider.need_preprocessing?
+        @site.data_source = Nanoc::Int::InMemDataSource.new(@site.items, @site.layouts)
+        @action_provider.preprocess(@site)
 
-      @dependency_store.objects = @site.items.to_a + @site.layouts.to_a
-      @checksum_store.objects = @site.items.to_a + @site.layouts.to_a + @site.code_snippets + [@site.config]
+        @dependency_store.objects = @site.items.to_a + @site.layouts.to_a
+        @checksum_store.objects = @site.items.to_a + @site.layouts.to_a + @site.code_snippets + [@site.config]
+      end
 
       @site.freeze
     end

@@ -25,9 +25,8 @@ describe Nanoc::Int::OutdatednessRules do
     let(:site) do
       Nanoc::Int::Site.new(
         config: config,
-        items: [],
-        layouts: [],
         code_snippets: code_snippets,
+        data_source: Nanoc::Int::InMemDataSource.new([], []),
       )
     end
 

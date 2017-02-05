@@ -4,8 +4,7 @@ describe Nanoc::Int::Site do
       described_class.new(
         config: config,
         code_snippets: code_snippets,
-        items: items,
-        layouts: layouts,
+        data_source: Nanoc::Int::InMemDataSource.new(items, layouts),
       )
     end
 

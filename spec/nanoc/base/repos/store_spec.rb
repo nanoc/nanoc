@@ -4,7 +4,11 @@ describe Nanoc::Int::Store do
       subject { described_class.tmp_path_for(site: site, store_name: 'giraffes') }
 
       let(:site) do
-        Nanoc::Int::Site.new(config: config, code_snippets: code_snippets, items: items, layouts: layouts)
+        Nanoc::Int::Site.new(
+          config: config,
+          code_snippets: code_snippets,
+          data_source: Nanoc::Int::InMemDataSource.new(items, layouts),
+        )
       end
 
       let(:code_snippets) { [] }

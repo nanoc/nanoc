@@ -37,8 +37,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     Nanoc::Int::Site.new(
       config: config,
       code_snippets: code_snippets,
-      items: items,
-      layouts: layouts,
+      data_source: Nanoc::Int::InMemDataSource.new(items, layouts),
     )
   end
 

@@ -3,17 +3,19 @@ module Nanoc::Int
   class Site
     include Nanoc::Int::ContractsSupport
 
+    attr_reader :code_snippets
+    attr_reader :config
+    attr_accessor :data_source
     attr_accessor :compiler
 
-    contract C::KeywordArgs[config: Nanoc::Int::Configuration, code_snippets: C::IterOf[Nanoc::Int::CodeSnippet], items: C::IterOf[Nanoc::Int::Item], layouts: C::IterOf[Nanoc::Int::Layout]] => C::Any
-    def initialize(config:, code_snippets:, items:, layouts:)
+    contract C::KeywordArgs[config: Nanoc::Int::Configuration, code_snippets: C::IterOf[Nanoc::Int::CodeSnippet], data_source: C::Maybe[C::Named['Nanoc::DataSource']]] => C::Any
+    def initialize(config:, code_snippets:, data_source:)
       @config = config
       @code_snippets = code_snippets
-      @items = items
-      @layouts = layouts
+      @data_source = data_source
 
-      ensure_identifier_uniqueness(@items, 'item')
-      ensure_identifier_uniqueness(@layouts, 'layout')
+      ensure_identifier_uniqueness(@data_source.items, 'item')
+      ensure_identifier_uniqueness(@data_source.layouts, 'layout')
     end
 
     contract C::None => self
@@ -27,10 +29,13 @@ module Nanoc::Int
       @compiler ||= Nanoc::Int::CompilerLoader.new.load(self)
     end
 
-    attr_reader :code_snippets
-    attr_reader :config
-    attr_reader :items
-    attr_reader :layouts
+    def items
+      @data_source.items
+    end
+
+    def layouts
+      @data_source.layouts
+    end
 
     contract C::None => self
     def freeze

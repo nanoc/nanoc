@@ -203,4 +203,24 @@ shared_examples 'a document' do
       end
     end
   end
+
+  describe '#with_identifier_prefix' do
+    let(:document) { described_class.new('kontent', { at: 'ribut' }, '/donkey.md') }
+
+    subject { document.with_identifier_prefix('/animals') }
+
+    it 'does not mutate the original' do
+      document.freeze
+      subject
+    end
+
+    it 'returns a new document with a prefixed identifier' do
+      expect(subject.identifier).to eq('/animals/donkey.md')
+    end
+
+    it 'does not change other data' do
+      expect(subject.content).to be_some_textual_content('kontent')
+      expect(subject.attributes).to eq(at: 'ribut')
+    end
+  end
 end

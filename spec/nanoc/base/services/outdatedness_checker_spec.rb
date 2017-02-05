@@ -21,9 +21,8 @@ describe Nanoc::Int::OutdatednessChecker do
   let(:site) do
     Nanoc::Int::Site.new(
       config: config,
-      items: [],
-      layouts: [],
       code_snippets: [],
+      data_source: Nanoc::Int::InMemDataSource.new([], []),
     )
   end
 
