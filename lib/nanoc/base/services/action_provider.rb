@@ -22,5 +22,17 @@ module Nanoc::Int
     def paths_for(rep)
       memory_for(rep).paths
     end
+
+    def need_preprocessing?
+      raise NotImplementedError
+    end
+
+    def preprocess(_site)
+      raise NotImplementedError
+    end
+
+    def postprocess(_site, _reps)
+      raise NotImplementedError
+    end
   end
 end
