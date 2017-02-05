@@ -23,23 +23,22 @@ module Nanoc::Int
       code_snippets = code_snippets_from_config(config)
       code_snippets.each(&:load)
 
-      items = Nanoc::Int::IdentifiableCollection.new(config)
-      layouts = Nanoc::Int::IdentifiableCollection.new(config)
-
-      with_data_sources(config) do |data_sources|
-        data_sources.each do |ds|
-          items_in_ds = ds.items.map { |d| d.with_identifier_prefix(ds.items_root) }
-          layouts_in_ds = ds.layouts.map { |d| d.with_identifier_prefix(ds.layouts_root) }
-
-          items.concat(items_in_ds)
-          layouts.concat(layouts_in_ds)
+      data_sources_to_aggregate =
+        with_data_sources(config) do |data_sources|
+          data_sources.map do |ds|
+            Nanoc::InMemDataSource.new(
+              ds.items.map { |d| d.with_identifier_prefix(ds.items_root) },
+              ds.layouts.map { |d| d.with_identifier_prefix(ds.layouts_root) },
+            )
+          end
         end
-      end
+
+      data_source = Nanoc::AggregateDataSource.new(data_sources_to_aggregate, config)
 
       Nanoc::Int::Site.new(
         config: config,
         code_snippets: code_snippets,
-        data_source: Nanoc::InMemDataSource.new(items, layouts),
+        data_source: data_source,
       )
     end
 

@@ -8,6 +8,7 @@ module Nanoc::Int::Compiler::Stages
     end
 
     def run
+      @site.data_source = Nanoc::InMemDataSource.new(@site.items, @site.layouts)
       @action_provider.preprocess(@site)
 
       @dependency_store.objects = @site.items.to_a + @site.layouts.to_a
