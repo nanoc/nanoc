@@ -55,14 +55,6 @@ module Nanoc::Int
       self.class.new(@config, @objects + [obj])
     end
 
-    # Mutators
-
-    contract C::Func[C::RespondTo[:identifier] => C::Bool] => self
-    def delete_if(&block)
-      @objects.delete_if(&block)
-      self
-    end
-
     protected
 
     def object_with_identifier(identifier)
