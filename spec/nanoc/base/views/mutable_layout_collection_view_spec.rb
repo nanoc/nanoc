@@ -13,9 +13,7 @@ describe Nanoc::MutableLayoutCollectionView do
     end
 
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |coll|
-        coll << layout
-      end
+      Nanoc::Int::IdentifiableCollection.new(config, [layout])
     end
 
     let(:view) { described_class.new(wrapped, nil) }
@@ -23,8 +21,15 @@ describe Nanoc::MutableLayoutCollectionView do
     it 'creates an object' do
       view.create('new content', { title: 'New Page' }, '/new/')
 
-      expect(wrapped.size).to eq(2)
-      expect(wrapped['/new/'].content.string).to eq('new content')
+      expect(view.unwrap.size).to eq(2)
+      expect(view.unwrap['/new/'].content.string).to eq('new content')
+    end
+
+    it 'does not update wrapped' do
+      view.create('new content', { title: 'New Page' }, '/new/')
+
+      expect(wrapped.size).to eq(1)
+      expect(wrapped['/new']).to be_nil
     end
 
     it 'returns self' do

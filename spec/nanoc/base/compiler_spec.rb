@@ -44,10 +44,7 @@ describe Nanoc::Int::Compiler do
   let(:code_snippets) { [] }
 
   let(:items) do
-    Nanoc::Int::IdentifiableCollection.new(config).tap do |col|
-      col << item
-      col << other_item
-    end
+    Nanoc::Int::IdentifiableCollection.new(config, [item, other_item])
   end
 
   let(:memory) do

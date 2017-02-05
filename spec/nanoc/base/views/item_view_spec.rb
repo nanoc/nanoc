@@ -34,10 +34,13 @@ describe Nanoc::ItemWithRepsView do
     let(:view) { described_class.new(item, view_context) }
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new({}).tap do |arr|
-        arr << item
-        arr << parent_item if parent_item
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        {},
+        [
+          item,
+          parent_item,
+        ].compact,
+      )
     end
 
     subject { view.parent }
@@ -130,10 +133,13 @@ describe Nanoc::ItemWithRepsView do
     let(:view) { described_class.new(item, view_context) }
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new({}).tap do |arr|
-        arr << item
-        children.each { |child| arr << child }
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        {},
+        [
+          item,
+          *children,
+        ],
+      )
     end
 
     subject { view.children }

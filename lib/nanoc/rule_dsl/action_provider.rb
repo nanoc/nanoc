@@ -50,6 +50,9 @@ module Nanoc::RuleDSL
       @rules_collection.preprocessors.each_value do |preprocessor|
         ctx.instance_eval(&preprocessor)
       end
+
+      site.data_source =
+        Nanoc::Int::InMemDataSource.new(ctx.items.unwrap, ctx.layouts.unwrap)
     end
 
     def postprocess(site, reps)

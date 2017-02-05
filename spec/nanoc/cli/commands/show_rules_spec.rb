@@ -24,11 +24,14 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true do
     end
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |ic|
-        ic << Nanoc::Int::Item.new('About Me', {}, '/about.md')
-        ic << Nanoc::Int::Item.new('About My Dog', {}, '/dog.md')
-        ic << Nanoc::Int::Item.new('Raw Data', {}, '/other.dat')
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          Nanoc::Int::Item.new('About Me', {}, '/about.md'),
+          Nanoc::Int::Item.new('About My Dog', {}, '/dog.md'),
+          Nanoc::Int::Item.new('Raw Data', {}, '/other.dat'),
+        ],
+      )
     end
 
     let(:reps) do
@@ -42,11 +45,14 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true do
     end
 
     let(:layouts) do
-      Nanoc::Int::IdentifiableCollection.new(config).tap do |ic|
-        ic << Nanoc::Int::Layout.new('Default', {}, '/default.erb')
-        ic << Nanoc::Int::Layout.new('Article', {}, '/article.haml')
-        ic << Nanoc::Int::Layout.new('Other', {}, '/other.xyzzy')
-      end
+      Nanoc::Int::IdentifiableCollection.new(
+        config,
+        [
+          Nanoc::Int::Layout.new('Default', {}, '/default.erb'),
+          Nanoc::Int::Layout.new('Article', {}, '/article.haml'),
+          Nanoc::Int::Layout.new('Other', {}, '/other.xyzzy'),
+        ],
+      )
     end
 
     let(:config) { Nanoc::Int::Configuration.new }
