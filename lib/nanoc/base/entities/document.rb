@@ -64,6 +64,13 @@ module Nanoc
         self
       end
 
+      contract String => self
+      def with_identifier_prefix(prefix)
+        other = dup
+        other.identifier = @identifier.prefix(prefix)
+        other
+      end
+
       contract C::None => String
       # @abstract
       #

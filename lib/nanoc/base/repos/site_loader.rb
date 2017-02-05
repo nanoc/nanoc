@@ -28,11 +28,8 @@ module Nanoc::Int
 
       with_data_sources(config) do |data_sources|
         data_sources.each do |ds|
-          items_in_ds = ds.items
-          layouts_in_ds = ds.layouts
-
-          items_in_ds.each { |i| i.identifier = i.identifier.prefix(ds.items_root) }
-          layouts_in_ds.each { |l| l.identifier = l.identifier.prefix(ds.layouts_root) }
+          items_in_ds = ds.items.map { |d| d.with_identifier_prefix(ds.items_root) }
+          layouts_in_ds = ds.layouts.map { |d| d.with_identifier_prefix(ds.layouts_root) }
 
           items.concat(items_in_ds)
           layouts.concat(layouts_in_ds)
