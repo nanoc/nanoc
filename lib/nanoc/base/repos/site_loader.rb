@@ -26,10 +26,7 @@ module Nanoc::Int
       data_sources_to_aggregate =
         with_data_sources(config) do |data_sources|
           data_sources.map do |ds|
-            Nanoc::InMemDataSource.new(
-              ds.items.map { |d| d.with_identifier_prefix(ds.items_root) },
-              ds.layouts.map { |d| d.with_identifier_prefix(ds.layouts_root) },
-            )
+            Nanoc::PrefixedDataSource.new(ds, ds.items_root, ds.layouts_root)
           end
         end
 
