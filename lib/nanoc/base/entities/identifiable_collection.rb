@@ -9,17 +9,15 @@ module Nanoc::Int
     def_delegator :@objects, :each
     def_delegator :@objects, :size
     def_delegator :@objects, :<<
-    def_delegator :@objects, :concat
 
-    contract C::Or[Hash, C::Named['Nanoc::Int::Configuration']] => C::Any
-    def initialize(config)
+    contract C::Or[Hash, C::Named['Nanoc::Int::Configuration']], C::IterOf[C::RespondTo[:identifier]] => C::Any
+    def initialize(config, objects = [])
       @config = config
-
-      @objects = []
+      @objects = objects
     end
 
     def self.from(enum, config)
-      new(config).tap { |ic| ic.concat(enum) }
+      new(config, enum)
     end
 
     contract C::None => self

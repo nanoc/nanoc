@@ -71,11 +71,4 @@ class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
 
     assert_equal foo, @items['/foo/']
   end
-
-  def test_concat
-    new_item = Nanoc::Int::Item.new('New item', {}, '/new/')
-    @items.concat([new_item])
-
-    assert_equal new_item, @items['/new/']
-  end
 end
