@@ -29,8 +29,8 @@ module Nanoc::Int
       @contents[rep] = contents_per_snapshot
     end
 
-    contract C::KeywordArgs[rep: Nanoc::Int::ItemRep, snapshot: C::Optional[C::Maybe[Symbol]]] => String
-    def compiled_content(rep:, snapshot: nil)
+    contract C::KeywordArgs[rep: Nanoc::Int::ItemRep, snapshot: C::Optional[C::Maybe[Symbol]]] => Nanoc::Int::Content
+    def raw_compiled_content(rep:, snapshot: nil)
       # Get name of last pre-layout snapshot
       snapshot_name = snapshot || (get(rep, :pre) ? :pre : :last)
 
@@ -45,11 +45,16 @@ module Nanoc::Int
       is_usable_snapshot = get(rep, snapshot_name) && stopped_moving
       unless is_usable_snapshot
         Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep))
-        return compiled_content(rep: rep, snapshot: snapshot)
+        return raw_compiled_content(rep: rep, snapshot: snapshot)
       end
 
-      # Verify snapshot is not binary
-      snapshot_content = get(rep, snapshot_name)
+      get(rep, snapshot_name)
+    end
+
+    contract C::KeywordArgs[rep: Nanoc::Int::ItemRep, snapshot: C::Optional[C::Maybe[Symbol]]] => String
+    def compiled_content(rep:, snapshot: nil)
+      snapshot_content = raw_compiled_content(rep: rep, snapshot: snapshot)
+
       if snapshot_content.binary?
         raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(rep)
       end
