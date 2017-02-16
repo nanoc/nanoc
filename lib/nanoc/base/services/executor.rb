@@ -57,8 +57,7 @@ module Nanoc
         raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(@rep) if last.binary?
 
         # Create filter
-        klass = Nanoc::Filter.named(filter_name)
-        raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
+        klass = Nanoc::Filter.named!(filter_name)
         view_context = @compilation_context.create_view_context(@dependency_tracker)
         layout_view = Nanoc::LayoutView.new(layout, view_context)
         filter = klass.new(assigns_for(@rep).merge(layout: layout_view))
@@ -110,8 +109,7 @@ module Nanoc
       end
 
       def filter_for_filtering(rep, filter_name)
-        klass = Nanoc::Filter.named(filter_name)
-        raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
+        klass = Nanoc::Filter.named!(filter_name)
 
         last = @compilation_context.snapshot_repo.get(@rep, :last)
         if klass.from_binary? && !last.binary?

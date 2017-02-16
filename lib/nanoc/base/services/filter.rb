@@ -45,6 +45,12 @@ module Nanoc
         end
       end
 
+      def named!(name)
+        klass = named(name)
+        raise Nanoc::Int::Errors::UnknownFilter.new(name) if klass.nil?
+        klass
+      end
+
       # Sets the new type for the filter. The type can be `:binary` (default)
       # or `:text`. The given argument can either be a symbol indicating both
       # “from” and “to” types, or a hash where the only key is the “from” type

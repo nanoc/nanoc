@@ -13,8 +13,7 @@ module Nanoc::Helpers
       data = capture(&block)
 
       # Find filter
-      klass = Nanoc::Filter.named(filter_name)
-      raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if klass.nil?
+      klass = Nanoc::Filter.named!(filter_name)
 
       # Create filter
       assigns = {

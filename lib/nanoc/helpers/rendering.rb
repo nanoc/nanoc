@@ -41,8 +41,7 @@ module Nanoc::Helpers
       raise Nanoc::Int::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class
-      filter_class = Nanoc::Filter.named(filter_name)
-      raise Nanoc::Int::Errors::UnknownFilter.new(filter_name) if filter_class.nil?
+      filter_class = Nanoc::Filter.named!(filter_name)
 
       # Create filter
       filter = filter_class.new(assigns)
