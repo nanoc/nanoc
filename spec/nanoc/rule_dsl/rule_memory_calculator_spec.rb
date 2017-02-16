@@ -215,10 +215,19 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
     let(:view_context) { double(:view_context) }
 
     before do
+      Class.new(Nanoc::Filter) do
+        identifier :rule_memory_calculator_spec_snapshot_def_test
+        type text: :binary
+
+        def run(content, params = {})
+          # …
+        end
+      end
+
       rules_proc = proc do
         filter :erb, speed: :over_9000
         layout '/default.*'
-        filter :typohero
+        filter :rule_memory_calculator_spec_snapshot_def_test
       end
       rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
       rules_collection.add_item_compilation_rule(rule)
@@ -226,20 +235,23 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
       expect(compilation_context).to receive(:create_view_context).and_return(view_context)
     end
 
-    example do
-      expect(subject[0]).to be_a(Nanoc::Int::SnapshotDef)
-      expect(subject[0].name).to eql(:raw)
-
-      expect(subject[1]).to be_a(Nanoc::Int::SnapshotDef)
-      expect(subject[1].name).to eql(:pre)
-
-      expect(subject[2]).to be_a(Nanoc::Int::SnapshotDef)
-      expect(subject[2].name).to eql(:post)
-
-      expect(subject[3]).to be_a(Nanoc::Int::SnapshotDef)
-      expect(subject[3].name).to eql(:last)
-
+    it 'creates snapshot defs' do
       expect(subject.size).to eql(4)
+      expect(subject).to all(be_a(Nanoc::Int::SnapshotDef))
+    end
+
+    it 'has the right names' do
+      expect(subject[0].name).to eql(:raw)
+      expect(subject[1].name).to eql(:pre)
+      expect(subject[2].name).to eql(:post)
+      expect(subject[3].name).to eql(:last)
+    end
+
+    it 'has the right binary-ness' do
+      expect(subject[0]).not_to be_binary
+      expect(subject[1]).not_to be_binary
+      expect(subject[2]).to be_binary
+      expect(subject[3]).to be_binary
     end
   end
 end

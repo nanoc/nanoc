@@ -214,10 +214,10 @@ describe Nanoc::ItemWithRepsView do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
         ir.compiled = true
         ir.snapshot_defs = [
-          Nanoc::Int::SnapshotDef.new(:last),
-          Nanoc::Int::SnapshotDef.new(:pre),
-          Nanoc::Int::SnapshotDef.new(:post),
-          Nanoc::Int::SnapshotDef.new(:specific),
+          Nanoc::Int::SnapshotDef.new(:last, binary: false),
+          Nanoc::Int::SnapshotDef.new(:pre, binary: false),
+          Nanoc::Int::SnapshotDef.new(:post, binary: false),
+          Nanoc::Int::SnapshotDef.new(:specific, binary: false),
         ]
       end
     end

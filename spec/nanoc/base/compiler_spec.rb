@@ -62,7 +62,7 @@ describe Nanoc::Int::Compiler do
     reps << other_rep
 
     reps.each do |rep|
-      rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last)
+      rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last, binary: false)
     end
 
     allow(outdatedness_checker).to receive(:outdated?).with(rep).and_return(true)

@@ -80,7 +80,9 @@ module Nanoc
 
     # @api private
     def binary?
-      @context.snapshot_repo.raw_compiled_content(rep: unwrap, snapshot: :last).binary?
+      snapshot_def = unwrap.snapshot_defs.find { |sd| sd.name == :last }
+      raise Nanoc::Int::Errors::NoSuchSnapshot.new(unwrap, :last) if snapshot_def.nil?
+      snapshot_def.binary?
     end
 
     def inspect
