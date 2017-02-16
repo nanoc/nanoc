@@ -4,10 +4,18 @@ module Nanoc
       include Nanoc::Int::ContractsSupport
 
       attr_reader :name
+      attr_reader :binary
 
-      contract Symbol => C::Any
-      def initialize(name)
+      contract Symbol, C::KeywordArgs[binary: C::Optional[C::Bool]] => C::Any
+      def initialize(name, binary: false)
+        # TODO: make binary required
+
         @name = name
+        @binary = binary
+      end
+
+      def binary?
+        @binary
       end
     end
   end
