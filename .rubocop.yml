@@ -8,6 +8,7 @@ AllCops:
 FileName:
   Exclude:
     - 'lib/nanoc/cli/commands/*.rb'
+    - 'Appraisals'
 
 # A common pattern in tests is to define anonymous classes in which methods are defined, which trips
 # up Rubocop’s nested method definition cop.
