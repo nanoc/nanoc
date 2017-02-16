@@ -45,6 +45,10 @@ Lint/DuplicateMethods:
 Lint/UnifiedInteger:
   Enabled: false
 
+# Disabled until Nanoc requires Ruby 2.3+.
+Style/IndentHeredoc:
+  Enabled: false
+
 
 
 # ----- TO ENABLE LATER -----
