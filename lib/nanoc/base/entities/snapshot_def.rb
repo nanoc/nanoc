@@ -7,9 +7,7 @@ module Nanoc
       attr_reader :binary
 
       contract Symbol, C::KeywordArgs[binary: C::Optional[C::Bool]] => C::Any
-      def initialize(name, binary: false)
-        # TODO: make binary required
-
+      def initialize(name, binary:)
         @name = name
         @binary = binary
       end

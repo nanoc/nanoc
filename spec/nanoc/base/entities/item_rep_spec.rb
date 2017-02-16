@@ -8,7 +8,7 @@ describe Nanoc::Int::ItemRep do
     let(:snapshot_name) { raise 'override me' }
 
     before do
-      rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:donkey)]
+      rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:donkey, binary: false)]
     end
 
     context 'snapshot does not exist' do

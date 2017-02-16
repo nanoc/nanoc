@@ -103,7 +103,7 @@ describe Nanoc::Int::SnapshotRepo do
 
       context 'snapshot def exists' do
         before do
-          rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name)]
+          rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name, binary: false)]
           repo.set_all(rep, snapshot_name => content)
         end
 
@@ -128,7 +128,7 @@ describe Nanoc::Int::SnapshotRepo do
 
       context 'snapshot def exists, but not content' do
         before do
-          rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name)]
+          rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name, binary: false)]
           repo.set_all(rep, {})
         end
 
@@ -148,7 +148,7 @@ describe Nanoc::Int::SnapshotRepo do
       context 'snapshot exists' do
         context 'snapshot is not final' do
           before do
-            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name)]
+            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name, binary: false)]
           end
 
           context 'snapshot content does not exist' do
@@ -209,7 +209,7 @@ describe Nanoc::Int::SnapshotRepo do
 
         context 'snapshot is final' do
           before do
-            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name)]
+            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(snapshot_name, binary: false)]
           end
 
           context 'snapshot content does not exist' do

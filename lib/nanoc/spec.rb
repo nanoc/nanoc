@@ -146,7 +146,7 @@ module Nanoc
           end
 
           def snapshots_defs_for(_rep)
-            [Nanoc::Int::SnapshotDef.new(:last)]
+            [Nanoc::Int::SnapshotDef.new(:last, binary: false)]
           end
         end.new(self)
       end

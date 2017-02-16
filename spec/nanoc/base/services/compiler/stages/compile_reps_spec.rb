@@ -67,7 +67,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     reps << other_rep
 
     reps.each do |rep|
-      rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last)
+      rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last, binary: false)
     end
 
     allow(action_provider).to receive(:memory_for).with(rep).and_return(memory)
@@ -83,11 +83,11 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     end
 
     let(:snapshot_defs_for_rep) do
-      [Nanoc::Int::SnapshotDef.new(:last)]
+      [Nanoc::Int::SnapshotDef.new(:last, binary: false)]
     end
 
     let(:snapshot_defs_for_other_rep) do
-      [Nanoc::Int::SnapshotDef.new(:last)]
+      [Nanoc::Int::SnapshotDef.new(:last, binary: false)]
     end
 
     context 'rep not in outdatedness store' do

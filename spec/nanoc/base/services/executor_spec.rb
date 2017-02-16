@@ -414,7 +414,7 @@ describe Nanoc::Int::Executor do
     end
 
     before do
-      rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:pre)]
+      rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:pre, binary: false)]
 
       snapshot_repo.set(rep, :last, content)
 
