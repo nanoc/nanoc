@@ -317,6 +317,40 @@ describe Nanoc::ItemRepView do
     it { should eq('output/about/index.html') }
   end
 
+  describe '#binary?' do
+    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:view) { described_class.new(item_rep, view_context) }
+
+    subject { view.binary? }
+
+    context 'no :last snapshot' do
+      before do
+        item_rep.snapshot_defs = []
+      end
+
+      it 'raises' do
+        expect { subject }.to raise_error(Nanoc::Int::Errors::NoSuchSnapshot)
+      end
+    end
+
+    context ':last snapshot is textual' do
+      before do
+        item_rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:last, binary: false)]
+      end
+
+      it { is_expected.not_to be }
+    end
+
+    context ':last snapshot is binary' do
+      before do
+        item_rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:last, binary: true)]
+      end
+
+      it { is_expected.to be }
+    end
+  end
+
   describe '#item' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
