@@ -100,7 +100,7 @@ module Nanoc::RuleDSL
         executor.snapshot(:pre)
       end
 
-      copy_paths_from_routing_rules(rule_memory, rep: rep)
+      copy_paths_from_routing_rules(rule_memory.compact_snapshots, rep: rep)
     end
 
     # @param [Nanoc::Int::Layout] layout
@@ -130,13 +130,12 @@ module Nanoc::RuleDSL
 
     def copy_path_from_routing_rule(action, rep:)
       paths_from_rules =
-        action.snapshot_names.lazy.map do |snapshot_name|
+        action.snapshot_names.map do |snapshot_name|
           basic_path_from_rules_for(rep, snapshot_name)
-        end
+        end.compact
 
-      path_from_rules = paths_from_rules.find(&:itself)
-      if path_from_rules
-        action.update(paths: [path_from_rules.to_s])
+      if paths_from_rules.any?
+        action.update(paths: paths_from_rules.map(&:to_s))
       else
         action
       end
