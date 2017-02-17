@@ -11,9 +11,7 @@ module Nanoc::Int::Compiler::Phases
     def run(rep, is_outdated:)
       @wrapped.run(rep, is_outdated: is_outdated)
 
-      rep.snapshot_defs.each do |sdef|
-        Nanoc::Int::ItemRepWriter.new.write(rep, @snapshot_repo, sdef.name)
-      end
+      Nanoc::Int::ItemRepWriter.new.write_all(rep, @snapshot_repo)
     end
   end
 end

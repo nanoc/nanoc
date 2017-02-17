@@ -8,11 +8,11 @@ describe Nanoc::Pruner do
   let(:reps) do
     Nanoc::Int::ItemRepRepo.new.tap do |reps|
       reps << Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
-        rep.raw_paths = { last: 'output/asdf.html' }
+        rep.raw_paths = { last: ['output/asdf.html'] }
       end
 
       reps << Nanoc::Int::ItemRep.new(item, :text).tap do |rep|
-        rep.raw_paths = { last: 'output/asdf.txt' }
+        rep.raw_paths = { last: ['output/asdf.txt'] }
       end
     end
   end

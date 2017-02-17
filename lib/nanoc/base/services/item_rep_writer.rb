@@ -3,9 +3,25 @@ module Nanoc::Int
   class ItemRepWriter
     TMP_TEXT_ITEMS_DIR = 'text_items'.freeze
 
-    def write(item_rep, snapshot_repo, snapshot_name)
-      raw_path = item_rep.raw_path(snapshot: snapshot_name)
-      return unless raw_path
+    def write_all(item_rep, snapshot_repo)
+      written_paths = Set.new
+
+      item_rep.snapshot_defs.map(&:name).each do |snapshot_name|
+        write(item_rep, snapshot_repo, snapshot_name, written_paths)
+      end
+    end
+
+    def write(item_rep, snapshot_repo, snapshot_name, written_paths)
+      item_rep.raw_paths.fetch(snapshot_name, []).each do |raw_path|
+        write_single(item_rep, snapshot_repo, snapshot_name, raw_path, written_paths)
+      end
+    end
+
+    def write_single(item_rep, snapshot_repo, snapshot_name, raw_path, written_paths)
+      # Don’t write twice
+      # TODO: test written_paths behavior
+      return if written_paths.include?(raw_path)
+      written_paths << raw_path
 
       # Create parent directory
       FileUtils.mkdir_p(File.dirname(raw_path))

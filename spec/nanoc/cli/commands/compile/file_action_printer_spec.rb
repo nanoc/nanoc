@@ -14,7 +14,7 @@ describe Nanoc::CLI::Commands::Compile::FileActionPrinter, stdio: true do
 
   let(:rep) do
     Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
-      rep.raw_paths = { default: '/hi.html' }
+      rep.raw_paths = { default: ['/hi.html'] }
     end
   end
 

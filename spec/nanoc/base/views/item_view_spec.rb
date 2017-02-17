@@ -292,8 +292,8 @@ describe Nanoc::ItemWithRepsView do
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
         ir.paths = {
-          last: '/about/',
-          specific: '/about.txt',
+          last: ['/about/'],
+          specific: ['/about.txt'],
         }
       end
     end

@@ -115,8 +115,10 @@ module Nanoc::CLI::Commands
           puts '  (not written)'
         end
         length = rep.raw_paths.keys.map { |s| s.to_s.length }.max
-        rep.raw_paths.each do |snapshot_name, raw_path|
-          puts format("  [ %-#{length}s ] %s", snapshot_name, raw_path)
+        rep.raw_paths.each do |snapshot_name, raw_paths|
+          raw_paths.each do |raw_path|
+            puts format("  [ %-#{length}s ] %s", snapshot_name, raw_path)
+          end
         end
       end
     end

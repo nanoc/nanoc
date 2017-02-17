@@ -26,7 +26,8 @@ module Nanoc::Checking::Checks
             .flat_map(&:reps)
             .map(&:unwrap)
             .flat_map(&:raw_paths)
-            .flat_map(&:values),
+            .flat_map(&:values)
+            .flatten,
         )
     end
 

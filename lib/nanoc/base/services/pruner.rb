@@ -28,7 +28,7 @@ module Nanoc
     def run
       return unless File.directory?(@config[:output_dir])
 
-      compiled_files = @reps.flat_map { |r| r.raw_paths.values }.compact
+      compiled_files = @reps.flat_map { |r| r.raw_paths.values.flatten }.compact
       present_files, present_dirs = files_and_dirs_in(@config[:output_dir] + '/')
 
       remove_stray_files(present_files, compiled_files)

@@ -3,6 +3,8 @@ module Nanoc::Int
   #
   # @api private
   class ItemRepRouter
+    include Nanoc::Int::ContractsSupport
+
     class IdenticalRoutesError < ::Nanoc::Error
       def initialize(output_path, rep_a, rep_b)
         super("The item representations #{rep_a.inspect} and #{rep_b.inspect} are both routed to #{output_path}.")
@@ -22,34 +24,56 @@ module Nanoc::Int
     end
 
     def run
-      paths_to_reps = {}
+      assigned_paths = {}
       @reps.each do |rep|
-        @action_provider.paths_for(rep).each do |snapshot_name, path|
-          route_rep(rep, path, snapshot_name, paths_to_reps)
+        # Sigh. We route reps twice, because the first time, the paths might not have converged
+        # yet. This isn’t ideal, but it’s the only way to work around the divergence issues that
+        # I can think of. For details, see
+        # https://github.com/nanoc/nanoc/pull/1085#issuecomment-280628426.
+
+        @action_provider.paths_for(rep).each do |(snapshot_names, paths)|
+          route_rep(rep, paths, snapshot_names, {})
+        end
+
+        @action_provider.paths_for(rep).each do |(snapshot_names, paths)|
+          route_rep(rep, paths, snapshot_names, assigned_paths)
+        end
+
+        # TODO: verify that paths converge
+      end
+    end
+
+    contract Nanoc::Int::ItemRep, C::IterOf[String], C::IterOf[Symbol], C::HashOf[String => Nanoc::Int::ItemRep] => C::Any
+    def route_rep(rep, paths, snapshot_names, assigned_paths)
+      # Encode
+      paths = paths.map { |path| path.encode('UTF-8') }
+
+      # Validate format
+      paths.each do |path|
+        unless path.start_with?('/')
+          raise RouteWithoutSlashError.new(path, rep)
         end
       end
-    end
 
-    def route_rep(rep, path, snapshot_name, paths_to_reps)
-      basic_path = path
-      return if basic_path.nil?
-      basic_path = basic_path.encode('UTF-8')
-
-      unless basic_path.start_with?('/')
-        raise RouteWithoutSlashError.new(basic_path, rep)
+      # Validate uniqueness
+      paths.each do |path|
+        if assigned_paths.include?(path)
+          # TODO: Include snapshot names in error message
+          raise IdenticalRoutesError.new(path, assigned_paths[path], rep)
+        end
+      end
+      paths.each do |path|
+        assigned_paths[path] = rep
       end
 
-      # Check for duplicate paths
-      if paths_to_reps.key?(basic_path)
-        raise IdenticalRoutesError.new(basic_path, paths_to_reps[basic_path], rep)
-      else
-        paths_to_reps[basic_path] = rep
+      # Assign
+      snapshot_names.each do |snapshot_name|
+        rep.raw_paths[snapshot_name] = paths.map { |path| @site.config[:output_dir] + path }
+        rep.paths[snapshot_name] = paths.map { |path| strip_index_filename(path) }
       end
-
-      rep.raw_paths[snapshot_name] = @site.config[:output_dir] + basic_path
-      rep.paths[snapshot_name] = strip_index_filename(basic_path)
     end
 
+    contract String => String
     def strip_index_filename(basic_path)
       @site.config[:index_filenames].each do |index_filename|
         slashed_index_filename = '/' + index_filename

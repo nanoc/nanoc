@@ -19,14 +19,17 @@ module Nanoc::Int::Compiler::Phases
 
       @compilation_context.snapshot_repo.set(rep, :last, rep.item.content)
 
-      @action_provider.memory_for(rep).each do |action|
+      actions = @action_provider.memory_for(rep)
+      actions.each do |action|
         case action
         when Nanoc::Int::ProcessingActions::Filter
           executor.filter(action.filter_name, action.params)
         when Nanoc::Int::ProcessingActions::Layout
           executor.layout(action.layout_identifier, action.params)
         when Nanoc::Int::ProcessingActions::Snapshot
-          executor.snapshot(action.snapshot_name)
+          action.snapshot_names.each do |snapshot_name|
+            executor.snapshot(snapshot_name)
+          end
         else
           raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
         end

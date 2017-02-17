@@ -166,7 +166,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     # Create data
     item = Nanoc::Int::Item.new('content', {}, '/')
     rep = Nanoc::Int::ItemRep.new(item, :default)
-    rep.raw_paths[:last] = 'output/foo.txt'
+    rep.raw_paths[:last] = ['output/foo.txt']
     rep.compiled = true
 
     # Listen
@@ -188,7 +188,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     # Create data
     item = Nanoc::Int::Item.new('content', {}, '/')
     rep = Nanoc::Int::ItemRep.new(item, :default)
-    rep.raw_paths[:last] = 'output/foo.txt'
+    rep.raw_paths[:last] = ['output/foo.txt']
 
     # Listen
     listener = new_file_action_printer([rep])

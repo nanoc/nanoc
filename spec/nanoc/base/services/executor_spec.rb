@@ -616,7 +616,7 @@ describe Nanoc::Int::Executor do
 
       context 'raw path' do
         before do
-          rep.raw_paths = { something: 'output/donkey.md' }
+          rep.raw_paths = { something: ['output/donkey.md'] }
         end
 
         it 'does not write' do

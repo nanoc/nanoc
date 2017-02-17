@@ -75,11 +75,11 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       site.compile
 
       assert File.file?('output/moo-raw.txt')
-      # assert File.file?('output/moo-pre.txt')
+      assert File.file?('output/moo-pre.txt')
       assert File.file?('output/moo-post.txt')
       assert File.file?('output/moo-last.txt')
       assert_equal '<%= 1 %> <%%= 2 %> <%%%= 3 %>', File.read('output/moo-raw.txt')
-      # assert_equal '1 2 <%= 3 %>',                  File.read('output/moo-pre.txt')
+      assert_equal '1 2 <%= 3 %>',                  File.read('output/moo-pre.txt')
       assert_equal 'head 1 2 3 foot',               File.read('output/moo-post.txt')
       assert_equal 'head 1 2 3 foot',               File.read('output/moo-last.txt')
     end

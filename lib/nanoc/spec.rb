@@ -58,7 +58,7 @@ module Nanoc
       # @param [Symbol] rep The rep name to create
       def create_rep(item, path, rep = :default)
         rep = Nanoc::Int::ItemRep.new(item.unwrap, rep)
-        rep.paths[:last] = path
+        rep.paths[:last] = [path]
         @reps << rep
         Nanoc::ItemRepView.new(rep, view_context)
       end

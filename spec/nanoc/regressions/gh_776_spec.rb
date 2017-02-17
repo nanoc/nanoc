@@ -3,13 +3,9 @@ describe 'GH-776', site: true do
     File.write('content/donkey.md', 'Donkey!')
 
     File.write('Rules', <<EOS)
-  route '/donkey.*', snapshot: :secret do
-    '/donkey-secret.html'
-  end
-
   compile '/donkey.*' do
     filter :erb
-    snapshot :secret
+    snapshot :secret, path: '/donkey-secret.html'
     write '/donkey.html'
   end
 

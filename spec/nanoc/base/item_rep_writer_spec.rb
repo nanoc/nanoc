@@ -20,12 +20,14 @@ describe Nanoc::Int::ItemRepWriter do
     let(:snapshot_name) { :donkey }
 
     let(:raw_paths) do
-      { snapshot_name => raw_path }
+      { snapshot_name => [raw_path] }
     end
 
     let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
-    subject { described_class.new.write(item_rep, snapshot_repo, snapshot_name) }
+    let(:written_paths) { [] }
+
+    subject { described_class.new.write(item_rep, snapshot_repo, snapshot_name, written_paths) }
 
     before do
       expect(File.directory?('output')).to be_falsy

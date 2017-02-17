@@ -33,7 +33,7 @@ module Nanoc::Int
     contract Symbol, C::Maybe[String] => self
     def add_snapshot(snapshot_name, path)
       will_add_snapshot(snapshot_name)
-      @actions << Nanoc::Int::ProcessingActions::Snapshot.new(snapshot_name, path)
+      @actions << Nanoc::Int::ProcessingActions::Snapshot.new([snapshot_name], path ? [path] : [])
       self
     end
 
@@ -47,11 +47,9 @@ module Nanoc::Int
       @actions.any? { |a| a.is_a?(Nanoc::Int::ProcessingActions::Layout) }
     end
 
-    contract C::None => Hash
+    contract C::None => Array
     def paths
-      snapshot_actions.each_with_object({}) do |action, paths|
-        paths[action.snapshot_name] = action.path
-      end
+      snapshot_actions.map { |a| [a.snapshot_names, a.paths] }
     end
 
     # TODO: Add contract
@@ -71,6 +69,18 @@ module Nanoc::Int
         @item_rep,
         actions: @actions.map { |a| yield(a) },
       )
+    end
+
+    def compact_snapshots
+      actions = []
+      @actions.each do |action|
+        if [actions.last, action].all? { |a| a.is_a?(Nanoc::Int::ProcessingActions::Snapshot) }
+          actions[-1] = actions.last.update(snapshot_names: action.snapshot_names, paths: action.paths)
+        else
+          actions << action
+        end
+      end
+      self.class.new(@item_rep, actions: actions)
     end
 
     private
