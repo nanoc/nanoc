@@ -51,7 +51,7 @@ describe Nanoc::Int::Compiler do
     actions =
       [
         Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
-        Nanoc::Int::ProcessingActions::Snapshot.new([:last], nil),
+        Nanoc::Int::ProcessingActions::Snapshot.new([:last], []),
       ]
 
     Nanoc::Int::RuleMemory.new(nil, actions: actions)

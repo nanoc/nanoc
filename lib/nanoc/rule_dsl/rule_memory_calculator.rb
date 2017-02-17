@@ -120,7 +120,7 @@ module Nanoc::RuleDSL
 
     def copy_paths_from_routing_rules(mem, rep:)
       mem.map do |action|
-        if action.is_a?(Nanoc::Int::ProcessingActions::Snapshot) && action.path.nil?
+        if action.is_a?(Nanoc::Int::ProcessingActions::Snapshot) && action.paths.empty?
           copy_path_from_routing_rule(action, rep: rep)
         else
           action
@@ -136,7 +136,7 @@ module Nanoc::RuleDSL
 
       path_from_rules = paths_from_rules.find(&:itself)
       if path_from_rules
-        action.copy(path: path_from_rules.to_s)
+        action.add_path(path_from_rules.to_s)
       else
         action
       end
