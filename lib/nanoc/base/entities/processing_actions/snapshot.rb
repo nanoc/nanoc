@@ -19,8 +19,6 @@ module Nanoc::Int::ProcessingActions
       [:snapshot, @snapshot_names, true, @paths]
     end
 
-    NONE = Object.new
-
     contract C::KeywordArgs[snapshot_names: C::Optional[C::IterOf[Symbol]], paths: C::Optional[C::IterOf[String]]] => self
     def update(snapshot_names: [], paths: [])
       self.class.new(@snapshot_names + snapshot_names, @paths + paths)
