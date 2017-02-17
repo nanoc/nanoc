@@ -16,9 +16,23 @@ describe Nanoc::Int::ProcessingActions::Snapshot do
     it { is_expected.to eql('<Nanoc::Int::ProcessingActions::Snapshot [:before_layout], true, ["/foo.md"]>') }
   end
 
-  describe '#add_path' do
-    subject { action.add_path('/donkey.md') }
-    its(:snapshot_names) { is_expected.to eql([:before_layout]) }
-    its(:paths) { is_expected.to eql(['/foo.md', '/donkey.md']) }
+  describe '#update' do
+    context 'with nothing' do
+      subject { action.update }
+      its(:snapshot_names) { is_expected.to eql([:before_layout]) }
+      its(:paths) { is_expected.to eql(['/foo.md']) }
+    end
+
+    context 'with snapshot name' do
+      subject { action.update(snapshot_names: [:zebra]) }
+      its(:snapshot_names) { is_expected.to eql([:before_layout, :zebra]) }
+      its(:paths) { is_expected.to eql(['/foo.md']) }
+    end
+
+    context 'with paths' do
+      subject { action.update(paths: ['/donkey.md', '/giraffe.md']) }
+      its(:snapshot_names) { is_expected.to eql([:before_layout]) }
+      its(:paths) { is_expected.to eql(['/foo.md', '/donkey.md', '/giraffe.md']) }
+    end
   end
 end

@@ -136,7 +136,7 @@ module Nanoc::RuleDSL
 
       path_from_rules = paths_from_rules.find(&:itself)
       if path_from_rules
-        action.add_path(path_from_rules.to_s)
+        action.update(paths: [path_from_rules.to_s])
       else
         action
       end

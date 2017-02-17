@@ -21,9 +21,9 @@ module Nanoc::Int::ProcessingActions
 
     NONE = Object.new
 
-    contract String => self
-    def add_path(path)
-      self.class.new(@snapshot_names, @paths + [path])
+    contract C::KeywordArgs[snapshot_names: C::Optional[C::IterOf[Symbol]], paths: C::Optional[C::IterOf[String]]] => self
+    def update(snapshot_names: [], paths: [])
+      self.class.new(@snapshot_names + snapshot_names, @paths + paths)
     end
 
     contract C::None => String
