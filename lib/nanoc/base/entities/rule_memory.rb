@@ -49,13 +49,7 @@ module Nanoc::Int
 
     contract C::None => Array
     def paths
-      snapshot_actions.each_with_object([]) do |action, pairs|
-        action.snapshot_names.each do |snapshot_name|
-          action.paths.each do |path|
-            pairs << [snapshot_name, path]
-          end
-        end
-      end
+      snapshot_actions.map { |a| [a.snapshot_names, a.paths] }
     end
 
     # TODO: Add contract

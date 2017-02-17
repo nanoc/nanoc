@@ -19,11 +19,15 @@ describe(Nanoc::Int::ItemRepRouter) do
     end
 
     let(:paths_0) do
-      { last: '/foo/index.html' }
+      [
+        [[:last], ['/foo/index.html']],
+      ]
     end
 
     let(:paths_1) do
-      { last: '/bar.html' }
+      [
+        [[:last], ['/bar.html']],
+      ]
     end
 
     example do
@@ -41,21 +45,20 @@ describe(Nanoc::Int::ItemRepRouter) do
   end
 
   describe '#route_rep' do
-    subject { item_rep_router.route_rep(rep, path, snapshot_name, paths_to_reps) }
+    subject { item_rep_router.route_rep(rep, paths, snapshot_names, paths_to_reps) }
 
-    let(:path) { basic_path }
-    let(:snapshot_name) { :foo }
+    let(:snapshot_names) { [:foo] }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
     let(:item) { Nanoc::Int::Item.new('content', {}, '/foo.md') }
     let(:paths_to_reps) { {} }
 
     context 'basic path is nil' do
-      let(:basic_path) { nil }
+      let(:paths) { [] }
       it { is_expected.to be_nil }
     end
 
     context 'basic path is not nil' do
-      let(:basic_path) { '/foo/index.html' }
+      let(:paths) { ['/foo/index.html'] }
 
       context 'other snapshot with this path already exists' do
         let(:paths_to_reps) { { '/foo/index.html' => double(:other_rep) } }
@@ -82,7 +85,7 @@ describe(Nanoc::Int::ItemRepRouter) do
         end
 
         context 'path does not start with a slash' do
-          let(:basic_path) { 'foo/index.html' }
+          let(:paths) { ['foo/index.html'] }
 
           it 'errors' do
             expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::RouteWithoutSlashError)
@@ -90,7 +93,7 @@ describe(Nanoc::Int::ItemRepRouter) do
         end
 
         context 'path is not UTF-8' do
-          let(:basic_path) { '/foo/index.html'.encode('ISO-8859-1') }
+          let(:paths) { ['/foo/index.html'.encode('ISO-8859-1')] }
 
           it 'sets the path as UTF-8' do
             subject
