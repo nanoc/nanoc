@@ -98,7 +98,7 @@ module Nanoc::RuleDSL
         executor.snapshot(:pre)
       end
 
-      assign_paths_to_mem(rule_memory, rep: rep)
+      copy_paths_from_routing_rules(rule_memory, rep: rep)
     end
 
     # @param [Nanoc::Int::Layout] layout
@@ -116,18 +116,22 @@ module Nanoc::RuleDSL
       end
     end
 
-    def assign_paths_to_mem(mem, rep:)
+    def copy_paths_from_routing_rules(mem, rep:)
       mem.map do |action|
         if action.is_a?(Nanoc::Int::ProcessingActions::Snapshot) && action.path.nil?
-          path_from_rules = basic_path_from_rules_for(rep, action.snapshot_name)
-          if path_from_rules
-            action.copy(path: path_from_rules.to_s)
-          else
-            action
-          end
+          copy_path_from_routing_rule(action, rep: rep)
         else
           action
         end
+      end
+    end
+
+    def copy_path_from_routing_rule(action, rep:)
+      path_from_rules = basic_path_from_rules_for(rep, action.snapshot_name)
+      if path_from_rules
+        action.copy(path: path_from_rules.to_s)
+      else
+        action
       end
     end
 
