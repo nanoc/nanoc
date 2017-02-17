@@ -104,7 +104,7 @@ describe Nanoc::Int::OutdatednessRules do
       context 'path' do
         let(:path) { 'foo.txt' }
 
-        before { item_rep.raw_paths = { last: path } }
+        before { item_rep.raw_paths = { last: [path] } }
 
         context 'not written' do
           it { is_expected.to be }

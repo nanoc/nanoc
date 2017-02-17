@@ -20,7 +20,7 @@ describe Nanoc::Int::ItemRepWriter do
     let(:snapshot_name) { :donkey }
 
     let(:raw_paths) do
-      { snapshot_name => raw_path }
+      { snapshot_name => [raw_path] }
     end
 
     let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }

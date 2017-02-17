@@ -3,6 +3,8 @@ module Nanoc::Int
   #
   # @api private
   class ItemRepRouter
+    include Nanoc::Int::ContractsSupport
+
     class IdenticalRoutesError < ::Nanoc::Error
       def initialize(output_path, rep_a, rep_b)
         super("The item representations #{rep_a.inspect} and #{rep_b.inspect} are both routed to #{output_path}.")
@@ -30,6 +32,7 @@ module Nanoc::Int
       end
     end
 
+    contract Nanoc::Int::ItemRep, C::IterOf[String], C::IterOf[Symbol], C::HashOf[String => Nanoc::Int::ItemRep] => C::Any
     def route_rep(rep, paths, snapshot_names, assigned_paths)
       # Encode
       paths = paths.map { |path| path.encode('UTF-8') }
@@ -58,10 +61,11 @@ module Nanoc::Int
       return if path.nil?
       basic_path = path
 
-      rep.raw_paths[snapshot_name] = @site.config[:output_dir] + basic_path
-      rep.paths[snapshot_name] = strip_index_filename(basic_path)
+      rep.raw_paths[snapshot_name] = [@site.config[:output_dir] + basic_path]
+      rep.paths[snapshot_name] = [strip_index_filename(basic_path)]
     end
 
+    contract String => String
     def strip_index_filename(basic_path)
       @site.config[:index_filenames].each do |index_filename|
         slashed_index_filename = '/' + index_filename

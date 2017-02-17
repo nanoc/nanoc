@@ -36,11 +36,11 @@ describe(Nanoc::Int::ItemRepRouter) do
 
       subject
 
-      expect(reps[0].raw_paths).to eql(last: 'output/foo/index.html')
-      expect(reps[0].paths).to eql(last: '/foo/')
+      expect(reps[0].raw_paths).to eql(last: ['output/foo/index.html'])
+      expect(reps[0].paths).to eql(last: ['/foo/'])
 
-      expect(reps[1].raw_paths).to eql(last: 'output/bar.html')
-      expect(reps[1].paths).to eql(last: '/bar.html')
+      expect(reps[1].raw_paths).to eql(last: ['output/bar.html'])
+      expect(reps[1].paths).to eql(last: ['/bar.html'])
     end
   end
 
@@ -61,7 +61,7 @@ describe(Nanoc::Int::ItemRepRouter) do
       let(:paths) { ['/foo/index.html'] }
 
       context 'other snapshot with this path already exists' do
-        let(:paths_to_reps) { { '/foo/index.html' => double(:other_rep) } }
+        let(:paths_to_reps) { { '/foo/index.html' => Nanoc::Int::ItemRep.new(item, :other) } }
 
         it 'errors' do
           expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::IdenticalRoutesError)
@@ -71,12 +71,12 @@ describe(Nanoc::Int::ItemRepRouter) do
       context 'path is unique' do
         it 'sets the raw path' do
           subject
-          expect(rep.raw_paths).to eql(foo: 'output/foo/index.html')
+          expect(rep.raw_paths).to eql(foo: ['output/foo/index.html'])
         end
 
         it 'sets the path' do
           subject
-          expect(rep.paths).to eql(foo: '/foo/')
+          expect(rep.paths).to eql(foo: ['/foo/'])
         end
 
         it 'adds to paths_to_reps' do
@@ -97,14 +97,14 @@ describe(Nanoc::Int::ItemRepRouter) do
 
           it 'sets the path as UTF-8' do
             subject
-            expect(rep.paths).to eql(foo: '/foo/')
-            expect(rep.paths[:foo].encoding.to_s).to eql('UTF-8')
+            expect(rep.paths).to eql(foo: ['/foo/'])
+            expect(rep.paths[:foo].first.encoding.to_s).to eql('UTF-8')
           end
 
           it 'sets the raw path as UTF-8' do
             subject
-            expect(rep.raw_paths).to eql(foo: 'output/foo/index.html')
-            expect(rep.raw_paths[:foo].encoding.to_s).to eql('UTF-8')
+            expect(rep.raw_paths).to eql(foo: ['output/foo/index.html'])
+            expect(rep.raw_paths[:foo].first.encoding.to_s).to eql('UTF-8')
           end
         end
       end

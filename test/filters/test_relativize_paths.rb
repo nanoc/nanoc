@@ -15,7 +15,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -41,7 +41,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -67,7 +67,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -93,7 +93,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -131,7 +131,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -157,7 +157,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -183,7 +183,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -209,7 +209,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/woof/meow/'
+      @item_rep.paths[:last] = ['/woof/meow/']
     end
 
     # Set content
@@ -235,7 +235,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/woof/meow/'
+      @item_rep.paths[:last] = ['/woof/meow/']
     end
 
     # Set content
@@ -261,7 +261,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/woof/meow/'
+      @item_rep.paths[:last] = ['/woof/meow/']
     end
 
     # Set content
@@ -287,7 +287,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/woof/meow/'
+      @item_rep.paths[:last] = ['/woof/meow/']
     end
 
     # Set content
@@ -313,7 +313,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/woof/meow/'
+      @item_rep.paths[:last] = ['/woof/meow/']
     end
 
     # Set content
@@ -339,7 +339,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/woof/meow/'
+      @item_rep.paths[:last] = ['/woof/meow/']
     end
 
     raw_content    = %(<object data="/example"><param name="movie" content="/example"></object>)
@@ -363,7 +363,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -399,7 +399,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -425,7 +425,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -451,7 +451,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -477,7 +477,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content
@@ -506,7 +506,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/woof/meow/'
+      @item_rep.paths[:last] = ['/woof/meow/']
     end
 
     # Set content
@@ -532,7 +532,7 @@ EOS
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/woof/meow/'
+      @item_rep.paths[:last] = ['/woof/meow/']
     end
 
     # Set content
@@ -559,7 +559,7 @@ EOS
           ),
           :blah,
         )
-        @item_rep.paths[:last] = '/foo/bar/baz/'
+        @item_rep.paths[:last] = ['/foo/bar/baz/']
       end
 
       # Set content
@@ -592,7 +592,7 @@ XML
           ),
           :blah,
         )
-        @item_rep.paths[:last] = '/foo/bar/baz/'
+        @item_rep.paths[:last] = ['/foo/bar/baz/']
       end
 
       # Set content
@@ -624,7 +624,7 @@ XML
           ),
           :blah,
         )
-        @item_rep.paths[:last] = '/foo/bar/baz/'
+        @item_rep.paths[:last] = ['/foo/bar/baz/']
       end
 
       # Set content
@@ -661,7 +661,7 @@ XML
           ),
           :blah,
         )
-        @item_rep.paths[:last] = '/foo/bar/baz/'
+        @item_rep.paths[:last] = ['/foo/bar/baz/']
       end
 
       # Set content
@@ -703,7 +703,7 @@ XML
           ),
           :blah,
         )
-        @item_rep.paths[:last] = '/foo/bar/baz/'
+        @item_rep.paths[:last] = ['/foo/bar/baz/']
       end
 
       # Set content
@@ -738,7 +738,7 @@ XML
           ),
           :blah,
         )
-        @item_rep.paths[:last] = '/foo/baz/'
+        @item_rep.paths[:last] = ['/foo/baz/']
       end
 
       # Set content
@@ -772,7 +772,7 @@ XML
           ),
           :blah,
         )
-        @item_rep.paths[:last] = '/foo/baz/'
+        @item_rep.paths[:last] = ['/foo/baz/']
       end
 
       # Set content
@@ -803,7 +803,7 @@ XML
         ),
         :blah,
       )
-      @item_rep.paths[:last] = '/foo/bar/baz/'
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
     end
 
     # Set content

@@ -7,11 +7,11 @@ module Nanoc::Int
     attr_accessor :compiled
     alias compiled? compiled
 
-    contract C::None => C::HashOf[Symbol => String]
-    attr_accessor :raw_paths
+    contract C::None => C::HashOf[Symbol => C::IterOf[String]]
+    attr_reader :raw_paths
 
-    contract C::None => C::HashOf[Symbol => String]
-    attr_accessor :paths
+    contract C::None => C::HashOf[Symbol => C::IterOf[String]]
+    attr_reader :paths
 
     contract C::None => Nanoc::Int::Item
     attr_reader :item
@@ -42,6 +42,18 @@ module Nanoc::Int
       @modified = false
     end
 
+    contract C::HashOf[Symbol => C::IterOf[String]] => self
+    def raw_paths=(val)
+      @raw_paths = val
+      self
+    end
+
+    contract C::HashOf[Symbol => C::IterOf[String]] => self
+    def paths=(val)
+      @paths = val
+      self
+    end
+
     contract Symbol => C::Bool
     def snapshot?(name)
       snapshot_defs.any? { |sd| sd.name == name }
@@ -51,7 +63,7 @@ module Nanoc::Int
     # Returns the item rep’s raw path. It includes the path to the output
     # directory and the full filename.
     def raw_path(snapshot: :last)
-      @raw_paths[snapshot]
+      @raw_paths.fetch(snapshot, []).first
     end
 
     contract C::KeywordArgs[snapshot: C::Optional[Symbol]] => C::Maybe[String]
@@ -60,7 +72,7 @@ module Nanoc::Int
     # include the path to the output directory. It will not include the
     # filename if the filename is an index filename.
     def path(snapshot: :last)
-      @paths[snapshot]
+      @paths.fetch(snapshot, []).first
     end
 
     # Returns an object that can be used for uniquely identifying objects.

@@ -255,7 +255,7 @@ describe Nanoc::ItemRepView do
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
         ir.paths = {
-          last: '/about/',
+          last: ['/about/'],
         }
       end
     end
@@ -290,7 +290,7 @@ describe Nanoc::ItemRepView do
     let(:rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
         ir.raw_paths = {
-          last: 'output/about/index.html',
+          last: ['output/about/index.html'],
         }
       end
     end

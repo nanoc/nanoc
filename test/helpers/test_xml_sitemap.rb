@@ -220,8 +220,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
   def create_item_rep(item, name, path)
     rep = Nanoc::Int::ItemRep.new(item, name)
-    rep.paths     = { last: path }
-    rep.raw_paths = { last: path }
+    rep.paths     = { last: (path ? [path] : []) }
+    rep.raw_paths = { last: (path ? [path] : []) }
     @reps << rep
     rep
   end
