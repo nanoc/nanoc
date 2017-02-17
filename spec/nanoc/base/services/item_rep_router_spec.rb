@@ -42,6 +42,21 @@ describe(Nanoc::Int::ItemRepRouter) do
       expect(reps[1].raw_paths).to eql(last: ['output/bar.html'])
       expect(reps[1].paths).to eql(last: ['/bar.html'])
     end
+
+    it 'picks the paths last returned' do
+      expect(action_provider).to receive(:paths_for).with(reps[0]).and_return([[[:last], []]]).ordered
+      expect(action_provider).to receive(:paths_for).with(reps[0]).and_return(paths_0).ordered
+      expect(action_provider).to receive(:paths_for).with(reps[1]).and_return([[[:last], []]]).ordered
+      expect(action_provider).to receive(:paths_for).with(reps[1]).and_return(paths_1).ordered
+
+      subject
+
+      expect(reps[0].raw_paths).to eql(last: ['output/foo/index.html'])
+      expect(reps[0].paths).to eql(last: ['/foo/'])
+
+      expect(reps[1].raw_paths).to eql(last: ['output/bar.html'])
+      expect(reps[1].paths).to eql(last: ['/bar.html'])
+    end
   end
 
   describe '#route_rep' do
@@ -73,42 +88,64 @@ describe(Nanoc::Int::ItemRepRouter) do
       end
 
       context 'path is unique' do
-        it 'sets the raw path' do
-          subject
-          expect(rep.raw_paths).to eql(foo: ['output/foo/index.html'])
-        end
-
-        it 'sets the path' do
-          subject
-          expect(rep.paths).to eql(foo: ['/foo/'])
-        end
-
-        it 'adds to paths_to_reps' do
-          subject
-          expect(paths_to_reps).to have_key('/foo/index.html')
-        end
-
-        context 'path does not start with a slash' do
-          let(:paths) { ['foo/index.html'] }
-
-          it 'errors' do
-            expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::RouteWithoutSlashError)
-          end
-        end
-
-        context 'path is not UTF-8' do
-          let(:paths) { ['/foo/index.html'.encode('ISO-8859-1')] }
-
-          it 'sets the path as UTF-8' do
-            subject
-            expect(rep.paths).to eql(foo: ['/foo/'])
-            expect(rep.paths[:foo].first.encoding.to_s).to eql('UTF-8')
-          end
-
-          it 'sets the raw path as UTF-8' do
+        context 'single path' do
+          it 'sets the raw path' do
             subject
             expect(rep.raw_paths).to eql(foo: ['output/foo/index.html'])
-            expect(rep.raw_paths[:foo].first.encoding.to_s).to eql('UTF-8')
+          end
+
+          it 'sets the path' do
+            subject
+            expect(rep.paths).to eql(foo: ['/foo/'])
+          end
+
+          it 'adds to paths_to_reps' do
+            subject
+            expect(paths_to_reps).to have_key('/foo/index.html')
+          end
+
+          context 'path does not start with a slash' do
+            let(:paths) { ['foo/index.html'] }
+
+            it 'errors' do
+              expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::RouteWithoutSlashError)
+            end
+          end
+
+          context 'path is not UTF-8' do
+            let(:paths) { ['/foo/index.html'.encode('ISO-8859-1')] }
+
+            it 'sets the path as UTF-8' do
+              subject
+              expect(rep.paths).to eql(foo: ['/foo/'])
+              expect(rep.paths[:foo].first.encoding.to_s).to eql('UTF-8')
+            end
+
+            it 'sets the raw path as UTF-8' do
+              subject
+              expect(rep.raw_paths).to eql(foo: ['output/foo/index.html'])
+              expect(rep.raw_paths[:foo].first.encoding.to_s).to eql('UTF-8')
+            end
+          end
+        end
+
+        context 'multiple paths' do
+          let(:paths) { ['/foo/index.html', '/bar/index.html'] }
+
+          it 'sets the raw paths' do
+            subject
+            expect(rep.raw_paths).to eql(foo: ['output/foo/index.html', 'output/bar/index.html'])
+          end
+
+          it 'sets the paths' do
+            subject
+            expect(rep.paths).to eql(foo: ['/foo/', '/bar/'])
+          end
+
+          it 'adds to paths_to_reps' do
+            subject
+            expect(paths_to_reps).to have_key('/foo/index.html')
+            expect(paths_to_reps).to have_key('/bar/index.html')
           end
         end
       end
