@@ -3,33 +3,30 @@ module Nanoc::Int
   class ItemRep
     include Nanoc::Int::ContractsSupport
 
-    # @return [Boolean]
+    contract C::None => C::Bool
     attr_accessor :compiled
     alias compiled? compiled
 
-    # @return [Hash<Symbol,String>]
+    contract C::None => C::HashOf[Symbol => String]
     attr_accessor :raw_paths
 
-    # @return [Hash<Symbol,String>]
+    contract C::None => C::HashOf[Symbol => String]
     attr_accessor :paths
 
-    # @return [Nanoc::Int::Item]
+    contract C::None => Nanoc::Int::Item
     attr_reader :item
 
-    # @return [Symbol]
+    contract C::None => Symbol
     attr_reader :name
 
-    # @return [Enumerable<Nanoc::Int:SnapshotDef]
+    contract C::None => C::IterOf[C::Named['Nanoc::Int::SnapshotDef']]
     attr_accessor :snapshot_defs
 
-    # @return [Boolean]
+    contract C::None => C::Bool
     attr_accessor :modified
     alias modified? modified
 
     contract Nanoc::Int::Item, Symbol => C::Any
-    # @param [Nanoc::Int::Item] item
-    #
-    # @param [Symbol] name
     def initialize(item, name)
       # Set primary attributes
       @item   = item
@@ -42,6 +39,7 @@ module Nanoc::Int
 
       # Reset flags
       @compiled = false
+      @modified = false
     end
 
     contract Symbol => C::Bool
@@ -52,11 +50,6 @@ module Nanoc::Int
     contract C::KeywordArgs[snapshot: C::Optional[Symbol]] => C::Maybe[String]
     # Returns the item rep’s raw path. It includes the path to the output
     # directory and the full filename.
-    #
-    # @param [Symbol] snapshot The snapshot for which the path should be
-    #   returned
-    #
-    # @return [String] The item rep’s path
     def raw_path(snapshot: :last)
       @raw_paths[snapshot]
     end
@@ -66,20 +59,11 @@ module Nanoc::Int
     # with a slash and it is relative to the output directory. It does not
     # include the path to the output directory. It will not include the
     # filename if the filename is an index filename.
-    #
-    # @param [Symbol] snapshot The snapshot for which the path should be
-    #   returned
-    #
-    # @return [String] The item rep’s path
     def path(snapshot: :last)
       @paths[snapshot]
     end
 
     # Returns an object that can be used for uniquely identifying objects.
-    #
-    # @api private
-    #
-    # @return [Object] An unique reference to this object
     def reference
       [:item_rep, item.identifier, name]
     end
