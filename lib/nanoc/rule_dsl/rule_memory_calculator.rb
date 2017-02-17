@@ -61,7 +61,9 @@ module Nanoc::RuleDSL
       self[rep].each do |action|
         case action
         when Nanoc::Int::ProcessingActions::Snapshot
-          snapshot_defs << Nanoc::Int::SnapshotDef.new(action.snapshot_name, binary: is_binary)
+          action.snapshot_names.each do |snapshot_name|
+            snapshot_defs << Nanoc::Int::SnapshotDef.new(snapshot_name, binary: is_binary)
+          end
         when Nanoc::Int::ProcessingActions::Filter
           is_binary = Nanoc::Filter.named!(action.filter_name).to_binary?
         end
@@ -91,10 +93,10 @@ module Nanoc::RuleDSL
       if rule_memory.any_layouts?
         executor.snapshot(:post)
       end
-      unless rule_memory.snapshot_actions.any? { |sa| sa.snapshot_name == :last }
+      unless rule_memory.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:last) }
         executor.snapshot(:last)
       end
-      unless rule_memory.snapshot_actions.any? { |sa| sa.snapshot_name == :pre }
+      unless rule_memory.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:pre) }
         executor.snapshot(:pre)
       end
 
@@ -127,7 +129,12 @@ module Nanoc::RuleDSL
     end
 
     def copy_path_from_routing_rule(action, rep:)
-      path_from_rules = basic_path_from_rules_for(rep, action.snapshot_name)
+      paths_from_rules =
+        action.snapshot_names.lazy.map do |snapshot_name|
+          basic_path_from_rules_for(rep, snapshot_name)
+        end
+
+      path_from_rules = paths_from_rules.find(&:itself)
       if path_from_rules
         action.copy(path: path_from_rules.to_s)
       else

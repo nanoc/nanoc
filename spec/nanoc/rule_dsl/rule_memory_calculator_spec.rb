@@ -47,7 +47,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           subject
 
           expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[0].snapshot_name).to eql(:raw)
+          expect(subject[0].snapshot_names).to eql([:raw])
           expect(subject[0].path).to be_nil
 
           expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Filter)
@@ -55,7 +55,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           expect(subject[1].params).to eql(speed: :over_9000)
 
           expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[2].snapshot_name).to eql(:pre)
+          expect(subject[2].snapshot_names).to eql([:pre])
           expect(subject[2].path).to be_nil
 
           expect(subject[3]).to be_a(Nanoc::Int::ProcessingActions::Layout)
@@ -67,11 +67,11 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           expect(subject[4].params).to eql({})
 
           expect(subject[5]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[5].snapshot_name).to eql(:post)
+          expect(subject[5].snapshot_names).to eql([:post])
           expect(subject[5].path).to be_nil
 
           expect(subject[6]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[6].snapshot_name).to eql(:last)
+          expect(subject[6].snapshot_names).to eql([:last])
           expect(subject[6].path).to be_nil
 
           expect(subject.size).to eql(7)
@@ -89,15 +89,15 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           subject
 
           expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[0].snapshot_name).to eql(:raw)
+          expect(subject[0].snapshot_names).to eql([:raw])
           expect(subject[0].path).to be_nil
 
           expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[1].snapshot_name).to eql(:last)
+          expect(subject[1].snapshot_names).to eql([:last])
           expect(subject[1].path).to be_nil
 
           expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[2].snapshot_name).to eql(:pre)
+          expect(subject[2].snapshot_names).to eql([:pre])
           expect(subject[2].path).to be_nil
 
           expect(subject.size).to eql(3)
@@ -119,15 +119,15 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           subject
 
           expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[0].snapshot_name).to eql(:raw)
+          expect(subject[0].snapshot_names).to eql([:raw])
           expect(subject[0].path).to be_nil
 
           expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[1].snapshot_name).to eql(:last)
+          expect(subject[1].snapshot_names).to eql([:last])
           expect(subject[1].path).to eq('/foo.md')
 
           expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[2].snapshot_name).to eql(:pre)
+          expect(subject[2].snapshot_names).to eql([:pre])
           expect(subject[2].path).to be_nil
 
           expect(subject.size).to eql(3)
@@ -149,15 +149,15 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
           subject
 
           expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[0].snapshot_name).to eql(:raw)
+          expect(subject[0].snapshot_names).to eql([:raw])
           expect(subject[0].path).to be_nil
 
           expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[1].snapshot_name).to eql(:last)
+          expect(subject[1].snapshot_names).to eql([:last])
           expect(subject[1].path).to be_nil
 
           expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-          expect(subject[2].snapshot_name).to eql(:pre)
+          expect(subject[2].snapshot_names).to eql([:pre])
           expect(subject[2].path).to be_nil
 
           expect(subject.size).to eql(3)

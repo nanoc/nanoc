@@ -3,26 +3,32 @@ module Nanoc::Int::ProcessingActions
     # snapshot :before_layout
     # snapshot :before_layout, path: '/about.md'
 
-    attr_reader :snapshot_name
+    include Nanoc::Int::ContractsSupport
+
+    attr_reader :snapshot_names
     attr_reader :path
 
-    def initialize(snapshot_name, path)
-      @snapshot_name = snapshot_name
+    contract C::IterOf[Symbol], C::Maybe[String] => C::Any
+    def initialize(snapshot_names, path)
+      @snapshot_names = snapshot_names
       @path = path
     end
 
+    contract C::None => Array
     def serialize
-      [:snapshot, @snapshot_name, true, @path]
+      [:snapshot, @snapshot_names, true, @path]
     end
 
     NONE = Object.new
 
+    contract C::KeywordArgs[path: C::Optional[C::Any]] => self
     def copy(path: NONE)
-      self.class.new(@snapshot_name, path.equal?(NONE) ? @path : path)
+      self.class.new(@snapshot_names, path.equal?(NONE) ? @path : path)
     end
 
+    contract C::None => String
     def to_s
-      "snapshot #{@snapshot_name.inspect}, path: #{@path.inspect}"
+      "snapshot #{@snapshot_names.inspect}, path: #{@path.inspect}"
     end
   end
 end

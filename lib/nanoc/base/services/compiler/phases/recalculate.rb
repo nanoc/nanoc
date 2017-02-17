@@ -26,7 +26,9 @@ module Nanoc::Int::Compiler::Phases
         when Nanoc::Int::ProcessingActions::Layout
           executor.layout(action.layout_identifier, action.params)
         when Nanoc::Int::ProcessingActions::Snapshot
-          executor.snapshot(action.snapshot_name)
+          action.snapshot_names.each do |snapshot_name|
+            executor.snapshot(snapshot_name)
+          end
         else
           raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
         end

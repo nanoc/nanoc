@@ -64,7 +64,7 @@ describe Nanoc::Int::RuleMemory do
 
         expect(rule_memory.size).to eql(1)
         expect(rule_memory[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-        expect(rule_memory[0].snapshot_name).to eql(:before_layout)
+        expect(rule_memory[0].snapshot_names).to eql([:before_layout])
         expect(rule_memory[0].path).to eql('/foo.md')
       end
     end
@@ -122,7 +122,7 @@ describe Nanoc::Int::RuleMemory do
       expect(subject).to eql(
         [
           [:filter, :erb, 'PeWUm2PtXYtqeHJdTqnY7kkwAow='],
-          [:snapshot, :bar, true, '/foo.md'],
+          [:snapshot, [:bar], true, '/foo.md'],
           [:layout, '/default.erb', '97LAe1pYTLKczxBsu+x4MmvqdkU='],
         ],
       )

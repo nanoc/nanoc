@@ -56,7 +56,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     actions =
       [
         Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
-        Nanoc::Int::ProcessingActions::Snapshot.new(:last, nil),
+        Nanoc::Int::ProcessingActions::Snapshot.new([:last], nil),
       ]
 
     Nanoc::Int::RuleMemory.new(nil, actions: actions)

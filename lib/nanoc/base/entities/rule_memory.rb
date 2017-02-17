@@ -33,7 +33,7 @@ module Nanoc::Int
     contract Symbol, C::Maybe[String] => self
     def add_snapshot(snapshot_name, path)
       will_add_snapshot(snapshot_name)
-      @actions << Nanoc::Int::ProcessingActions::Snapshot.new(snapshot_name, path)
+      @actions << Nanoc::Int::ProcessingActions::Snapshot.new([snapshot_name], path)
       self
     end
 
@@ -50,7 +50,9 @@ module Nanoc::Int
     contract C::None => Hash
     def paths
       snapshot_actions.each_with_object({}) do |action, paths|
-        paths[action.snapshot_name] = action.path
+        action.snapshot_names.each do |snapshot_name|
+          paths[snapshot_name] = action.path
+        end
       end
     end
 
