@@ -20,7 +20,7 @@ module Nanoc::Int
     end
 
     def paths_for(rep)
-      memory_for(rep).paths
+      memory_for(rep).compact_snapshots.paths
     end
 
     def need_preprocessing?

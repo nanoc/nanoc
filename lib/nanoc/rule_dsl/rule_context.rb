@@ -74,7 +74,10 @@ module Nanoc::RuleDSL
     #
     # @return [void]
     def write(path)
-      snapshot(:last, path: path)
+      @_write_snapshot_counter ||= 0
+      snapshot_name = "_#{@_write_snapshot_counter}".to_sym
+      @_write_snapshot_counter += 1
+      snapshot(snapshot_name, path: path)
     end
   end
 end

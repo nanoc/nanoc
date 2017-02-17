@@ -162,13 +162,26 @@ describe(Nanoc::RuleDSL::RuleContext) do
   end
 
   describe '#write' do
-    subject { rule_context.write(path) }
+    context 'calling once' do
+      subject { rule_context.write('/foo.html') }
 
-    let(:path) { '/foo.html' }
+      it 'makes a request to the executor' do
+        expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
+        subject
+      end
+    end
 
-    it 'makes a request to the executor' do
-      expect(executor).to receive(:snapshot).with(:last, path: '/foo.html')
-      subject
+    context 'calling twice' do
+      subject do
+        rule_context.write('/foo.html')
+        rule_context.write('/bar.html')
+      end
+
+      it 'makes two requests to the executor with unique snapshot names' do
+        expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
+        expect(executor).to receive(:snapshot).with(:_1, path: '/bar.html')
+        subject
+      end
     end
   end
 end

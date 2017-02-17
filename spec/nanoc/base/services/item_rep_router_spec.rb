@@ -31,8 +31,8 @@ describe(Nanoc::Int::ItemRepRouter) do
     end
 
     example do
-      expect(action_provider).to receive(:paths_for).with(reps[0]).and_return(paths_0)
-      expect(action_provider).to receive(:paths_for).with(reps[1]).and_return(paths_1)
+      allow(action_provider).to receive(:paths_for).with(reps[0]).and_return(paths_0)
+      allow(action_provider).to receive(:paths_for).with(reps[1]).and_return(paths_1)
 
       subject
 

@@ -26,9 +26,20 @@ module Nanoc::Int
     def run
       assigned_paths = {}
       @reps.each do |rep|
+        # Sigh. We route reps twice, because the first time, the paths might not have converged
+        # yet. This isn’t ideal, but it’s the only way to work around the divergence issues that
+        # I can think of. For details, see
+        # https://github.com/nanoc/nanoc/pull/1085#issuecomment-280628426.
+
+        @action_provider.paths_for(rep).each do |(snapshot_names, paths)|
+          route_rep(rep, paths, snapshot_names, {})
+        end
+
         @action_provider.paths_for(rep).each do |(snapshot_names, paths)|
           route_rep(rep, paths, snapshot_names, assigned_paths)
         end
+
+        # TODO: verify that paths converge
       end
     end
 
