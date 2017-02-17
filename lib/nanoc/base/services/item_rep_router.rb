@@ -55,14 +55,11 @@ module Nanoc::Int
         assigned_paths[path] = rep
       end
 
-      # TODO: allow multiple
-      path = paths.first
-      snapshot_name = snapshot_names.first
-      return if path.nil?
-      basic_path = path
-
-      rep.raw_paths[snapshot_name] = [@site.config[:output_dir] + basic_path]
-      rep.paths[snapshot_name] = [strip_index_filename(basic_path)]
+      # Assign
+      snapshot_names.each do |snapshot_name|
+        rep.raw_paths[snapshot_name] = paths.map { |path| @site.config[:output_dir] + path }
+        rep.paths[snapshot_name] = paths.map { |path| strip_index_filename(path) }
+      end
     end
 
     contract String => String

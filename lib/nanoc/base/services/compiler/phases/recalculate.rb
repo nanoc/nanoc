@@ -19,7 +19,8 @@ module Nanoc::Int::Compiler::Phases
 
       @compilation_context.snapshot_repo.set(rep, :last, rep.item.content)
 
-      @action_provider.memory_for(rep).each do |action|
+      actions = @action_provider.memory_for(rep).compact_snapshots
+      actions.each do |action|
         case action
         when Nanoc::Int::ProcessingActions::Filter
           executor.filter(action.filter_name, action.params)

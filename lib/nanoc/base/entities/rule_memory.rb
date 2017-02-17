@@ -71,6 +71,18 @@ module Nanoc::Int
       )
     end
 
+    def compact_snapshots
+      actions = []
+      @actions.each do |action|
+        if [actions.last, action].all? { |a| a.is_a?(Nanoc::Int::ProcessingActions::Snapshot) }
+          actions[-1] = actions.last.update(snapshot_names: action.snapshot_names, paths: action.paths)
+        else
+          actions << action
+        end
+      end
+      self.class.new(@item_rep, actions: actions)
+    end
+
     private
 
     def will_add_snapshot(name)

@@ -54,7 +54,11 @@ describe(Nanoc::Int::ItemRepRouter) do
 
     context 'basic path is nil' do
       let(:paths) { [] }
-      it { is_expected.to be_nil }
+
+      it 'assigns no paths' do
+        subject
+        expect(rep.raw_paths[:foo]).to be_empty
+      end
     end
 
     context 'basic path is not nil' do
