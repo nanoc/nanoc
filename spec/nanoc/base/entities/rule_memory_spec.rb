@@ -128,4 +128,40 @@ describe Nanoc::Int::RuleMemory do
       )
     end
   end
+
+  describe '#compact_snapshots' do
+    subject { rule_memory.compact_snapshots }
+
+    before do
+      rule_memory.add_snapshot(:a1, nil)
+      rule_memory.add_snapshot(:a2, '/a2.md')
+      rule_memory.add_snapshot(:a3, nil)
+      rule_memory.add_filter(:erb, awesomeness: 'high')
+      rule_memory.add_snapshot(:b1, '/b1.md')
+      rule_memory.add_snapshot(:b2, nil)
+      rule_memory.add_snapshot(:b3, '/b3.md')
+      rule_memory.add_filter(:erb, awesomeness: 'high')
+      rule_memory.add_snapshot(:c, nil)
+    end
+
+    example do
+      expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+      expect(subject[0].snapshot_names).to eql([:a1, :a2, :a3])
+      expect(subject[0].paths).to eql(['/a2.md'])
+
+      expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Filter)
+
+      expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+      expect(subject[2].snapshot_names).to eql([:b1, :b2, :b3])
+      expect(subject[2].paths).to eql(['/b1.md', '/b3.md'])
+
+      expect(subject[3]).to be_a(Nanoc::Int::ProcessingActions::Filter)
+
+      expect(subject[4]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+      expect(subject[4].snapshot_names).to eql([:c])
+      expect(subject[4].paths).to be_empty
+
+      expect(subject.size).to eql(5)
+    end
+  end
 end
