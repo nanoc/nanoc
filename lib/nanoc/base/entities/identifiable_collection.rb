@@ -55,6 +55,10 @@ module Nanoc::Int
       self.class.new(@config, @objects + [obj])
     end
 
+    def reject(&block)
+      self.class.new(@config, @objects.reject(&block))
+    end
+
     protected
 
     def object_with_identifier(identifier)
