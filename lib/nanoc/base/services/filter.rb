@@ -201,17 +201,17 @@ module Nanoc
     #
     # @return [void]
     def depend_on(items)
-      orig_items = items
+      context = @assigns[:item]._context
+
       items = items.map { |i| i.is_a?(Nanoc::ItemWithRepsView) ? i.unwrap : i }
 
       # Notify
-      dependency_tracker = @assigns[:item]._context.dependency_tracker
+      dependency_tracker = context.dependency_tracker
       items.each { |item| dependency_tracker.bounce(item, compiled_content: true) }
 
       # Raise unmet dependency error if necessary
-      items.each do |item|
-        rep = orig_items.sample._context.reps[item].find { |r| !r.compiled? }
-        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep)) if rep
+      items.flat_map { |i| context.reps[i] }.reject(&:compiled?).each do |rep|
+        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep))
       end
     end
   end
