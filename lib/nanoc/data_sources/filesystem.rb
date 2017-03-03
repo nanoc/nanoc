@@ -254,7 +254,7 @@ module Nanoc::DataSources
       by_basename.each_pair do |basename, filenames|
         # Divide
         meta_filenames    = filenames.select { |fn| ext_of(fn) == '.yaml' }
-        content_filenames = filenames.select { |fn| ext_of(fn) != '.yaml' }
+        content_filenames = filenames.reject { |fn| ext_of(fn) == '.yaml' }
 
         # Check number of files per type
         unless [0, 1].include?(meta_filenames.size)

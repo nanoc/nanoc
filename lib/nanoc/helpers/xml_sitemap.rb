@@ -27,7 +27,7 @@ module Nanoc::Helpers
         # Add item
         items.sort_by(&:identifier).each do |item|
           reps = item.reps.reject { |r| r.raw_path.nil? }
-          reps.reject! { |r| !select_proc[r] } if select_proc
+          reps.select! { |r| select_proc[r] } if select_proc
           reps.sort_by { |r| r.name.to_s }.each do |rep|
             xml.url do
               xml.loc URI.escape(@config[:base_url] + rep.path)

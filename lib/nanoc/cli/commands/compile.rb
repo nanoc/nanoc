@@ -355,7 +355,7 @@ module Nanoc::CLI::Commands
         Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
         Nanoc::Int::NotificationCenter.remove(:rep_written, self)
 
-        @reps.select { |r| !r.compiled? }.each do |rep|
+        @reps.reject(&:compiled?).each do |rep|
           raw_paths = rep.raw_paths.values.flatten
           raw_paths.each do |raw_path|
             log(:low, :skip, raw_path, nil)
