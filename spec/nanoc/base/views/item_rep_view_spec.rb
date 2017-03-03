@@ -308,11 +308,11 @@ describe Nanoc::ItemRepView do
         subject
         dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-        expect(dep.props.path?).to eq(true)
+        expect(dep.props.compiled_content?).to eq(true)
 
         expect(dep.props.raw_content?).to eq(false)
         expect(dep.props.attributes?).to eq(false)
-        expect(dep.props.compiled_content?).to eq(false)
+        expect(dep.props.path?).to eq(false)
       end
 
       it { should be_a(Nanoc::Int::Errors::UnmetDependency) }
@@ -329,11 +329,11 @@ describe Nanoc::ItemRepView do
         subject
         dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-        expect(dep.props.path?).to eq(true)
+        expect(dep.props.compiled_content?).to eq(true)
 
         expect(dep.props.raw_content?).to eq(false)
         expect(dep.props.attributes?).to eq(false)
-        expect(dep.props.compiled_content?).to eq(false)
+        expect(dep.props.path?).to eq(false)
       end
 
       it { should eq('output/about/index.html') }
