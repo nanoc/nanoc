@@ -75,7 +75,14 @@ module Nanoc
     # @api private
     def raw_path(snapshot: :last)
       @context.dependency_tracker.bounce(unwrap.item, path: true)
-      @item_rep.raw_path(snapshot: snapshot)
+
+      res = @item_rep.raw_path(snapshot: snapshot)
+
+      unless @item_rep.compiled?
+        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(@item_rep))
+      end
+
+      res
     end
 
     # @api private

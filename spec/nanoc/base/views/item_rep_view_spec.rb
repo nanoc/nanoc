@@ -283,7 +283,7 @@ describe Nanoc::ItemRepView do
   end
 
   describe '#raw_path' do
-    subject { view.raw_path }
+    subject { Fiber.new { view.raw_path }.resume }
 
     let(:view) { described_class.new(rep, view_context) }
 
@@ -299,22 +299,45 @@ describe Nanoc::ItemRepView do
       Nanoc::Int::Item.new('content', {}, '/asdf.md')
     end
 
-    it 'creates a dependency' do
-      expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+    context 'rep is not compiled' do
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      end
+
+      it 'creates a dependency with the right props' do
+        subject
+        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+        expect(dep.props.path?).to eq(true)
+
+        expect(dep.props.raw_content?).to eq(false)
+        expect(dep.props.attributes?).to eq(false)
+        expect(dep.props.compiled_content?).to eq(false)
+      end
+
+      it { should be_a(Nanoc::Int::Errors::UnmetDependency) }
     end
 
-    it 'creates a dependency with the right props' do
-      subject
-      dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+    context 'rep is compiled' do
+      before { rep.compiled = true }
 
-      expect(dep.props.path?).to eq(true)
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      end
 
-      expect(dep.props.raw_content?).to eq(false)
-      expect(dep.props.attributes?).to eq(false)
-      expect(dep.props.compiled_content?).to eq(false)
+      it 'creates a dependency with the right props' do
+        subject
+        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+        expect(dep.props.path?).to eq(true)
+
+        expect(dep.props.raw_content?).to eq(false)
+        expect(dep.props.attributes?).to eq(false)
+        expect(dep.props.compiled_content?).to eq(false)
+      end
+
+      it { should eq('output/about/index.html') }
     end
-
-    it { should eq('output/about/index.html') }
   end
 
   describe '#binary?' do
