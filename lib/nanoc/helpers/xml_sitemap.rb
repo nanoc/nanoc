@@ -26,7 +26,7 @@ module Nanoc::Helpers
       xml.urlset(xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9') do
         # Add item
         items.sort_by(&:identifier).each do |item|
-          reps = item.reps.reject { |r| r.raw_path.nil? }
+          reps = item.reps.select(&:path)
           reps.select! { |r| select_proc[r] } if select_proc
           reps.sort_by { |r| r.name.to_s }.each do |rep|
             xml.url do
