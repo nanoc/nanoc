@@ -96,5 +96,32 @@ describe Nanoc::Filter do
         expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
       end
     end
+
+    context 'multiple reps exist' do
+      let(:other_rep) { Nanoc::Int::ItemRep.new(item, :default) }
+
+      before do
+        reps << other_rep
+        rep.compiled = false
+        other_rep.compiled = false
+      end
+
+      it 'yields an unmet dependency error twice' do
+        fiber = Fiber.new { subject }
+
+        # resume 1
+        res = fiber.resume
+        expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
+        expect(res.rep).to eql(rep)
+
+        # resume 2
+        res = fiber.resume
+        expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
+        expect(res.rep).to eql(other_rep)
+
+        # resume 3
+        expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
+      end
+    end
   end
 end
