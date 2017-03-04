@@ -8,7 +8,7 @@ module ::Nanoc::Checking::Checks
     end
 
     def validator_class
-      ::W3CValidators::MarkupValidator
+      ::W3CValidators::NuValidator
     end
   end
 end

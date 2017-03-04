@@ -3,6 +3,7 @@ module ::Nanoc::Checking::Checks
   class W3CValidator < ::Nanoc::Checking::Check
     def run
       require 'w3c_validators'
+      require 'resolv-replace'
 
       Dir[@config[:output_dir] + '/**/*.' + extension].each do |filename|
         results = validator_class.new.validate_file(filename)
