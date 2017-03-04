@@ -179,6 +179,7 @@ module Nanoc::CLI
       'builder'        => 'builder',
       'coderay'        => 'coderay',
       'cri'            => 'cri',
+      'erubi'          => 'erubi',
       'erubis'         => 'erubis',
       'escape'         => 'escape',
       'fog'            => 'fog',
