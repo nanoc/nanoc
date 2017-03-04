@@ -1,5 +1,17 @@
 # Nanoc news
 
+## 4.6.2 (2017-03-04)
+
+Fixes:
+
+* Fixed crash in `#binary?` (#1082, #1083, #1084)
+* Fixed issue which would cause the file referenced by `#raw_path` not to exist (#1097, #1099)
+
+Enhancements:
+
+* Allowed calling `#write` multiple times in the same rule (#1037, #1085)
+* Changed the `html` check to use validator.nu (#1104)
+
 ## 4.6.1 (2017-01-29)
 
 Fixes:
