@@ -69,12 +69,12 @@ describe Nanoc::Int::Compiler::Phases::Cache do
     context 'not outdated' do
       let(:is_outdated) { false }
 
-      context 'cached compiled content available' do
+      context 'textual cached compiled content available' do
         before do
           compiled_content_cache[rep] = { last: Nanoc::Int::TextualContent.new('cached') }
         end
 
-        it 'reuses content from cache' do
+        it 'writes content to cache' do
           expect { subject }
             .to change { snapshot_repo.get(rep, :last) }
             .from(nil)
@@ -95,6 +95,41 @@ describe Nanoc::Int::Compiler::Phases::Cache do
 
         it 'sends notification' do
           expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
+          subject
+        end
+      end
+
+      context 'binary cached compiled content available' do
+        let(:binary_content) { 'b1n4ry' }
+        let(:binary_filename) { Tempfile.open('test') { |fn| fn << binary_content }.path }
+
+        before do
+          compiled_content_cache[rep] = { last: Nanoc::Int::BinaryContent.new(binary_filename) }
+        end
+
+        it 'writes content to cache' do
+          expect { subject }
+            .to change { snapshot_repo.get(rep, :last) }
+            .from(nil)
+            .to(some_textual_content('wrapped content'))
+        end
+
+        it 'marks rep as compiled' do
+          expect { subject }
+            .to change { rep.compiled? }
+            .from(false)
+            .to(true)
+        end
+
+        it 'changes compiled content cache' do
+          expect { subject }
+            .to change { compiled_content_cache[rep] }
+            .from(last: some_binary_content(binary_content))
+            .to(last: some_textual_content('wrapped content'))
+        end
+
+        it 'does not send notification' do
+          expect(Nanoc::Int::NotificationCenter).not_to receive(:post).with(:cached_content_used, rep)
           subject
         end
       end

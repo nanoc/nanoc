@@ -26,7 +26,12 @@ module Nanoc::Int::Compiler::Phases
 
     contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Bool
     def can_reuse_content_for_rep?(rep, is_outdated:)
-      !is_outdated && !@compiled_content_cache[rep].nil?
+      if is_outdated
+        false
+      else
+        cache = @compiled_content_cache[rep]
+        cache ? cache.none? { |_snapshot_name, content| content.binary? } : false
+      end
     end
   end
 end
