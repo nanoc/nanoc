@@ -8,13 +8,17 @@ module Nanoc::Int
     end
 
     def items
-      objs = @data_sources.flat_map(&:items)
-      @_items ||= Nanoc::Int::IdentifiableCollection.from(objs, @config)
+      @_items ||= begin
+        objs = @data_sources.flat_map(&:items)
+        Nanoc::Int::IdentifiableCollection.from(objs, @config)
+      end
     end
 
     def layouts
-      objs = @data_sources.flat_map(&:layouts)
-      @_layouts ||= Nanoc::Int::IdentifiableCollection.from(objs, @config)
+      @_layouts ||= begin
+        objs = @data_sources.flat_map(&:layouts)
+        Nanoc::Int::IdentifiableCollection.from(objs, @config)
+      end
     end
   end
 end
