@@ -1,5 +1,13 @@
 # Nanoc news
 
+## 4.6.3 (2017-03-05)
+
+Fixes:
+
+* Fixed `Errno::ENOENT` crash (#1094, #1109)
+* Fixed undefined method `#reverse_each` crash (#1107, #1108)
+* Fixed compilation speed issue introduced in 4.6.2 (#1106)
+
 ## 4.6.2 (2017-03-04)
 
 Fixes:
