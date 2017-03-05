@@ -174,6 +174,32 @@ RSpec::Matchers.define :yield_from_fiber do |expected|
   end
 end
 
+RSpec::Matchers.define :raise_wrapped_error do |expected|
+  supports_block_expectations
+
+  include RSpec::Matchers::Composable
+
+  match do |actual|
+    begin
+      actual.call
+    rescue Nanoc::Int::Errors::CompilationError => e
+      values_match?(expected, e.unwrap)
+    end
+  end
+
+  description do
+    "raise wrapped error #{expected.inspect}"
+  end
+
+  failure_message do |_actual|
+    "expected that proc would raise wrapped error #{expected.inspect}"
+  end
+
+  failure_message_when_negated do |_actual|
+    "expected that proc would not raise wrapped error #{expected.inspect}"
+  end
+end
+
 RSpec::Matchers.define :be_some_textual_content do |expected|
   include RSpec::Matchers::Composable
 
