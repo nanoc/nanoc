@@ -12,7 +12,7 @@ module Nanoc::Int
     contract C::Or[Hash, C::Named['Nanoc::Int::Configuration']], C::IterOf[C::RespondTo[:identifier]] => C::Any
     def initialize(config, objects = [])
       @config = config
-      @objects = objects
+      @objects = Hamster::Vector.new(objects)
     end
 
     def self.from(enum, config)
@@ -43,7 +43,7 @@ module Nanoc::Int
 
     contract C::None => C::ArrayOf[C::RespondTo[:identifier]]
     def to_a
-      @objects
+      @objects.to_a
     end
 
     contract C::None => C::Bool
@@ -52,7 +52,7 @@ module Nanoc::Int
     end
 
     def add(obj)
-      self.class.new(@config, @objects + [obj])
+      self.class.new(@config, @objects.add(obj))
     end
 
     def reject(&block)
