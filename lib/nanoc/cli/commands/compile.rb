@@ -447,6 +447,7 @@ module Nanoc::CLI::Commands
     end
 
     def teardown_listeners
+      return unless @listeners
       @listeners.reverse_each(&:stop_safely)
     end
 
