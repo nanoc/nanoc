@@ -68,7 +68,7 @@ module Nanoc::Int
 
     # Error that is raised during site compilation when an item (directly or
     # indirectly) includes its own item content, leading to endless recursion.
-    class RecursiveCompilation < Generic
+    class DependencyCycle < Generic
       # @param [Array<Nanoc::Int::ItemRep>] reps A list of item representations
       #   that mutually depend on each other
       def initialize(reps)
