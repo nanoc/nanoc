@@ -1,8 +1,9 @@
 describe Nanoc::Helpers::Capturing, helper: true do
   describe '#content_for' do
     before do
-      ctx.item = ctx.create_item('some content', {}, '/about.md')
-      ctx.create_rep(ctx.item, '/about.html')
+      ctx.create_item('some content', {}, '/about.md')
+      ctx.create_rep(ctx.items['/about.md'], '/about.html')
+      ctx.item = ctx.items['/about.md']
     end
 
     describe 'setting content' do
@@ -148,8 +149,8 @@ describe Nanoc::Helpers::Capturing, helper: true do
         let(:item) { ctx.items['/other.md'] }
 
         before do
-          item = ctx.create_item('other content', {}, '/other.md')
-          ctx.create_rep(item, '/other.html')
+          ctx.create_item('other content', {}, '/other.md')
+          ctx.create_rep(ctx.items['/other.md'], '/other.html')
         end
 
         context 'other item is not yet compiled' do

@@ -1,8 +1,11 @@
 describe Nanoc::Helpers::Filtering, helper: true do
   describe '#filter' do
     before do
-      ctx.item = ctx.create_item('some content', { title: 'Hello!' }, '/about.md')
-      ctx.item_rep = ctx.create_rep(ctx.item, '/about.html')
+      ctx.create_item('some content', { title: 'Hello!' }, '/about.md')
+      ctx.create_rep(ctx.items['/about.md'], '/about.html')
+
+      ctx.item = ctx.items['/about.md']
+      ctx.item_rep = ctx.item.reps[:default]
     end
 
     let(:content) do
