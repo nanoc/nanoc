@@ -6,15 +6,11 @@ describe Nanoc::Helpers::Rendering, helper: true do
       [Nanoc::Int::ProcessingActions::Filter.new(:erb, {})]
     end
 
-    let(:layout_view) do
-      ctx.create_layout(layout_content, {}, layout_identifier)
-    end
-
-    let(:layout) do
-      layout_view.unwrap
-    end
+    let(:layout_view) { ctx.layouts[layout_identifier] }
+    let(:layout) { layout_view.unwrap }
 
     before do
+      ctx.create_layout(layout_content, {}, layout_identifier)
       ctx.update_rule_memory(layout, rule_memory_for_layout)
     end
 

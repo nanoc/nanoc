@@ -24,6 +24,11 @@ describe Nanoc::Spec::HelperContext do
         .from(0).to(1)
     end
 
+    it 'creates item without reps' do
+      subject
+      expect(ctx.items['/foo.md'].reps.size).to eq(0)
+    end
+
     it 'returns self' do
       expect(subject).to eq(ctx)
     end

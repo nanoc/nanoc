@@ -33,14 +33,22 @@ describe Nanoc::Helpers::LinkTo, helper: true do
     end
 
     context 'with rep' do
-      let(:item) { ctx.create_item('content', {}, '/target/') }
-      let(:target) { ctx.create_rep(item, '/target.html') }
+      before do
+        ctx.create_item('content', {}, '/target/')
+        ctx.create_rep(ctx.items['/target/'], '/target.html')
+      end
+
+      let(:target) { ctx.items['/target/'].reps[:default] }
 
       it { is_expected.to eql('<a href="/target.html">Text</a>') }
     end
 
     context 'with item' do
-      let(:target) { ctx.create_item('content', {}, '/target/') }
+      before do
+        ctx.create_item('content', {}, '/target/')
+      end
+
+      let(:target) { ctx.items['/target/'] }
 
       before do
         ctx.create_rep(target, '/target.html')
@@ -66,8 +74,12 @@ describe Nanoc::Helpers::LinkTo, helper: true do
     end
 
     context 'with nil path' do
-      let(:item) { ctx.create_item('content', {}, '/target/') }
-      let(:target) { ctx.create_rep(item, nil) }
+      before do
+        ctx.create_item('content', {}, '/target/')
+        ctx.create_rep(ctx.items['/target/'], nil)
+      end
+
+      let(:target) { ctx.items['/target/'].reps[:default] }
 
       it 'raises' do
         expect { subject }.to raise_error(RuntimeError)
@@ -87,8 +99,11 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
       context 'current' do
         before do
-          ctx.item = ctx.create_item('content', {}, '/target.md')
-          ctx.item_rep = ctx.create_rep(ctx.item, '/target.html')
+          ctx.create_item('content', {}, '/target.md')
+          ctx.create_rep(ctx.items['/target.md'], '/target.html')
+
+          ctx.item = ctx.items['/target.md']
+          ctx.item_rep = ctx.item.reps[:default]
         end
 
         it { is_expected.to eql('<span class="active">Text</span>') }
@@ -100,8 +115,11 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
       context 'item rep present, but not current' do
         before do
-          ctx.item = ctx.create_item('content', {}, '/other.md')
-          ctx.item_rep = ctx.create_rep(ctx.item, '/other.html')
+          ctx.create_item('content', {}, '/other.md')
+          ctx.create_rep(ctx.items['/other.md'], '/other.html')
+
+          ctx.item = ctx.items['/other.md']
+          ctx.item_rep = ctx.item.reps[:default]
         end
 
         it { is_expected.to eql('<a href="/target.html">Text</a>') }
@@ -110,12 +128,18 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
     context 'with rep' do
       before do
-        ctx.item = ctx.create_item('content', {}, '/target.md')
-        ctx.item_rep = ctx.create_rep(ctx.item, '/target.html')
+        ctx.create_item('content', {}, '/target.md')
+        ctx.create_rep(ctx.items['/target.md'], '/target.html')
+
+        ctx.create_item('content', {}, '/other.md')
+        ctx.create_rep(ctx.items['/other.md'], '/other.html')
+
+        ctx.item = ctx.items['/target.md']
+        ctx.item_rep = ctx.item.reps[:default]
       end
 
-      let(:some_item) { ctx.create_item('content', {}, '/other.md') }
-      let(:some_item_rep) { ctx.create_rep(some_item, '/other.html') }
+      let(:some_item) { ctx.items['/other.md'] }
+      let(:some_item_rep) { some_item.reps[:default] }
 
       context 'current' do
         let(:target) { ctx.item_rep }
@@ -141,12 +165,18 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
     context 'with item' do
       before do
-        ctx.item = ctx.create_item('content', {}, '/target.md')
-        ctx.item_rep = ctx.create_rep(ctx.item, '/target.html')
+        ctx.create_item('content', {}, '/target.md')
+        ctx.create_rep(ctx.items['/target.md'], '/target.html')
+
+        ctx.create_item('content', {}, '/other.md')
+        ctx.create_rep(ctx.items['/other.md'], '/other.html')
+
+        ctx.item = ctx.items['/target.md']
+        ctx.item_rep = ctx.item.reps[:default]
       end
 
-      let!(:some_item) { ctx.create_item('content', {}, '/other.md') }
-      let!(:some_item_rep) { ctx.create_rep(some_item, '/other.html') }
+      let(:some_item) { ctx.items['/other.md'] }
+      let(:some_item_rep) { some_item.reps[:default] }
 
       context 'current' do
         let(:target) { ctx.item }
@@ -175,8 +205,11 @@ describe Nanoc::Helpers::LinkTo, helper: true do
     subject { helper.relative_path_to(target) }
 
     before do
-      ctx.item = ctx.create_item('content', {}, '/foo/self.md')
-      ctx.item_rep = ctx.create_rep(ctx.item, self_path)
+      ctx.create_item('content', {}, '/foo/self.md')
+      ctx.create_rep(ctx.items['/foo/self.md'], self_path)
+
+      ctx.item = ctx.items['/foo/self.md']
+      ctx.item_rep = ctx.item.reps[:default]
     end
 
     context 'current item rep has non-nil path' do
@@ -214,7 +247,12 @@ describe Nanoc::Helpers::LinkTo, helper: true do
       end
 
       context 'to rep' do
-        let(:target) { ctx.create_rep(ctx.item, '/bar/target.html') }
+        before do
+          ctx.create_rep(ctx.item, '/bar/target.html', :special)
+        end
+
+        let(:target) { ctx.item.reps[:special] }
+
         it { is_expected.to eql('../bar/target.html') }
 
         context 'to self' do
@@ -232,10 +270,11 @@ describe Nanoc::Helpers::LinkTo, helper: true do
       end
 
       context 'to item' do
-        let(:target) { ctx.create_item('content', {}, '/bar/target.md') }
+        let(:target) { ctx.items['/bar/target.md'] }
 
         before do
-          ctx.create_rep(target, '/bar/target.html')
+          ctx.create_item('content', {}, '/bar/target.md')
+          ctx.create_rep(ctx.items['/bar/target.md'], '/bar/target.html')
         end
 
         it { is_expected.to eql('../bar/target.html') }
@@ -255,7 +294,11 @@ describe Nanoc::Helpers::LinkTo, helper: true do
       end
 
       context 'to nil path' do
-        let(:target) { ctx.create_rep(ctx.item, nil) }
+        let(:target) { ctx.item.reps[:special] }
+
+        before do
+          ctx.create_rep(ctx.item, nil, :special)
+        end
 
         it 'raises' do
           expect { subject }.to raise_error(RuntimeError)

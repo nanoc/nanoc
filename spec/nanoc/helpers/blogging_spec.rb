@@ -43,8 +43,8 @@ describe Nanoc::Helpers::Blogging, helper: true do
     let(:item_attributes) { {} }
 
     before do
-      item = ctx.create_item('Stuff', item_attributes, '/stuff/')
-      ctx.create_rep(item, '/rep/path/stuff.html')
+      ctx.create_item('Stuff', item_attributes, '/stuff/')
+      ctx.create_rep(ctx.items['/stuff/'], '/rep/path/stuff.html')
 
       ctx.config[:base_url] = base_url
     end
@@ -96,9 +96,10 @@ describe Nanoc::Helpers::Blogging, helper: true do
     let(:item_attributes) { {} }
 
     before do
-      ctx.item = ctx.create_item('Feed', item_attributes, '/feed/')
-      ctx.create_rep(ctx.item, '/feed.xml')
+      ctx.create_item('Feed', item_attributes, '/feed/')
+      ctx.create_rep(ctx.items['/feed/'], '/feed.xml')
 
+      ctx.item = ctx.items['/feed/']
       ctx.config[:base_url] = base_url
     end
 
@@ -170,8 +171,8 @@ describe Nanoc::Helpers::Blogging, helper: true do
     let(:base_url) { 'http://url.base' }
 
     before do
-      item = ctx.create_item('Stuff', item_attributes, '/stuff/')
-      ctx.create_rep(item, item_rep_path)
+      ctx.create_item('Stuff', item_attributes, '/stuff/')
+      ctx.create_rep(ctx.items['/stuff/'], item_rep_path)
 
       ctx.config[:base_url] = base_url
     end
