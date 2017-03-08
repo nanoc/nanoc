@@ -50,10 +50,10 @@ Lint/UnifiedInteger:
 Style/IndentHeredoc:
   Enabled: false
 
-# This breaks RSpec on occasion, e.g. `expect { subject }.not_to change { foo }`
+# This breaks RSpec on occasion, e.g. `expect { subject }.not_to change { foo }`,
+# and generally does not provide useful warnings
 Lint/AmbiguousBlockAssociation:
-  Exclude:
-    - 'spec/**/*.rb'
+  Enabled: false
 
 # ----- TO ENABLE LATER -----
 
