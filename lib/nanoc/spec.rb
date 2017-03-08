@@ -32,7 +32,7 @@ module Nanoc
       def create_item(content, attributes, identifier)
         item = Nanoc::Int::Item.new(content, attributes, identifier)
         @items = @items.add(item)
-        Nanoc::ItemWithRepsView.new(item, view_context)
+        self
       end
 
       # Creates a new layout and adds it to the site’s collection of layouts.
@@ -47,7 +47,7 @@ module Nanoc
       def create_layout(content, attributes, identifier)
         layout = Nanoc::Int::Layout.new(content, attributes, identifier)
         @layouts = @layouts.add(layout)
-        Nanoc::LayoutView.new(layout, view_context)
+        self
       end
 
       # Creates a new representation for the given item.
@@ -60,7 +60,7 @@ module Nanoc
         rep = Nanoc::Int::ItemRep.new(item.unwrap, rep)
         rep.paths[:last] = [path]
         @reps << rep
-        Nanoc::ItemRepView.new(rep, view_context)
+        self
       end
 
       # @return [Object] An object that includes the helper functions
