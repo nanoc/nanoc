@@ -162,12 +162,14 @@ module Nanoc::CLI::Commands
 
       # @see Listener#start
       def start
+        @telemetry = Nanoc::Telemetry.new
+
         Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, filter_name|
           @times_per_rep[rep] ||= {}
           @times_per_rep[rep][filter_name] ||= {}
 
           @times_per_rep[rep][filter_name][:last_start] = Time.now
-          @times_per_rep[rep][filter_name][:accum] ||= []
+          @times_per_rep[rep][filter_name][:accum] = []
           @times_per_rep[rep][filter_name][:suspended] = false
         end
 
@@ -176,6 +178,7 @@ module Nanoc::CLI::Commands
           last_start = @times_per_rep[rep][filter_name][:last_start]
 
           times[:accum] << (Time.now - last_start)
+          @telemetry.summary(:filter_total).observe(times[:accum].reduce(:+), filter_name: filter_name)
           @times_per_rep[rep][filter_name].delete(:last_start)
         end
 
@@ -214,25 +217,26 @@ module Nanoc::CLI::Commands
       def profiling_table
         headers = ['', 'count', 'min', 'avg', 'max', 'tot']
 
-        rows = durations_per_filter.to_a.sort_by { |r| r[1] }.map do |row|
-          filter_name, samples = *row
-          count = samples.size
-          min   = samples.min
-          tot   = samples.reduce(0, &:+)
-          avg   = tot / count
-          max   = samples.max
+        metric_set = @telemetry.summary(:filter_total)
+        rows = metric_set.labels.map do |label|
+          metric = metric_set.get(label)
+          filter_name = label[:filter_name].to_s
 
-          [filter_name.to_s, count.to_s] + [min, avg, max, tot].map { |r| "#{format('%4.2f', r)}s" }
+          count = metric.count
+          min   = metric.min
+          avg   = metric.avg
+          tot   = metric.sum
+          max   = metric.max
+
+          [filter_name, count.to_s] + [min, avg, max, tot].map { |r| "#{format('%4.2f', r)}s" }
         end
 
         [headers] + rows
       end
 
       def print_profiling_feedback
-        # Get max filter length
-        return if durations_per_filter.empty?
+        return if @telemetry.summary(:filter_total).labels.empty?
 
-        # Print warning if necessary
         if @reps.any? { |r| !r.compiled? }
           $stderr.puts
           $stderr.puts 'Warning: profiling information may not be accurate because ' \
@@ -257,21 +261,6 @@ module Nanoc::CLI::Commands
         values = row.zip(lengths).map { |text, length| text.rjust length }
 
         puts values[0] + ' | ' + values[1..-1].join('   ')
-      end
-
-      def durations_per_filter
-        @_durations_per_filter ||= begin
-          result = {}
-
-          @times_per_rep.each do |_rep, times_per_filter|
-            times_per_filter.each do |filter_name, data|
-              result[filter_name] ||= []
-              result[filter_name].concat(data[:accum])
-            end
-          end
-
-          result
-        end
       end
     end
 

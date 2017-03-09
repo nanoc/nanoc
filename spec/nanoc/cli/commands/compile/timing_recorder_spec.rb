@@ -59,8 +59,7 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 7))
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
-    # FIXME: wrong count (should be 1, not 2)
     expect { listener.stop }
-      .to output(/^erb \|     2   1\.00s   2\.50s   4\.00s   5\.00s$/).to_stdout
+      .to output(/^erb \|     1   5\.00s   5\.00s   5\.00s   5\.00s$/).to_stdout
   end
 end
