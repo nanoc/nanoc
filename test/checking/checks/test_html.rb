@@ -4,10 +4,6 @@ class Nanoc::Checking::Checks::HTMLTest < Nanoc::TestCase
   def test_run_ok
     require 'w3c_validators'
 
-    if ::W3CValidators::VERSION =~ /\A1\.3|1\.3\.1\z/
-      skip 'broken (see https://github.com/w3c-validators/w3c_validators/issues/25)'
-    end
-
     VCR.use_cassette('html_run_ok') do
       with_site do |site|
         # Create files
