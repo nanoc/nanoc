@@ -151,12 +151,6 @@ module Nanoc::CLI::Commands
 
       # @param [Enumerable<Nanoc::Int::ItemRep>] reps
       def initialize(reps:)
-        # rep ->
-        #   filter_name ->
-        #     accum -> 0.0
-        #     last_start -> nil
-        @times_per_rep = {}
-
         @reps = reps
       end
 
@@ -164,45 +158,29 @@ module Nanoc::CLI::Commands
       def start
         @telemetry = Nanoc::Telemetry.new
 
-        Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, filter_name|
-          @times_per_rep[rep] ||= {}
-          @times_per_rep[rep][filter_name] ||= {}
+        stopwatches = {}
 
-          @times_per_rep[rep][filter_name][:last_start] = Time.now
-          @times_per_rep[rep][filter_name][:accum] = []
-          @times_per_rep[rep][filter_name][:suspended] = false
+        Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, _filter_name|
+          stopwatch = stopwatches.fetch(rep) { stopwatches[rep] = Nanoc::Telemetry::Stopwatch.new }
+          stopwatch.start
         end
 
         Nanoc::Int::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
-          times = @times_per_rep[rep][filter_name]
-          last_start = @times_per_rep[rep][filter_name][:last_start]
+          stopwatch = stopwatches.fetch(rep)
+          stopwatch.stop
+          stopwatches.delete(rep)
 
-          times[:accum] << (Time.now - last_start)
-          @telemetry.summary(:filter_total).observe(times[:accum].reduce(:+), filter_name: filter_name)
-          @times_per_rep[rep][filter_name].delete(:last_start)
+          @telemetry.summary(:filter_total).observe(stopwatch.duration, filter_name: filter_name)
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, _exception|
-          @times_per_rep.fetch(rep, {}).each do |_filter_name, times|
-            if times[:last_start]
-              times[:accum] << (Time.now - times[:last_start])
-              times.delete(:last_start)
-              times[:suspended] = true
-
-              break
-            end
-          end
+          stopwatch = stopwatches[rep]
+          stopwatch.stop if stopwatch && stopwatch.running?
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
-          @times_per_rep.fetch(rep, {}).each do |filter_name, times|
-            if times[:suspended]
-              @times_per_rep[rep][filter_name][:last_start] = Time.now
-              times[:suspended] = false
-
-              break
-            end
-          end
+          stopwatch = stopwatches[rep]
+          stopwatch.start if stopwatch
         end
       end
 
