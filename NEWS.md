@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.6.4 (2017-03-10)
+
+Fixes:
+
+* Fixed issue where `compile --verbose` would show misleading timing information (#1113)
+
 ## 4.6.3 (2017-03-05)
 
 Fixes:
