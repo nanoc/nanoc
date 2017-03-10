@@ -46,6 +46,38 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
       .to output(/^erb │     2   1\.00s   1\.50s   2\.00s   3\.00s$/).to_stdout
   end
 
+  it 'records inner filters in nested filtering_started/filtering_ended' do
+    listener.start
+
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :outer)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :inner)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :inner)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer)
+
+    expect { listener.stop }
+      .to output(/^inner │     1   2\.00s   2\.00s   2\.00s   2\.00s$/).to_stdout
+  end
+
+  it 'records outer filters in nested filtering_started/filtering_ended' do
+    listener.start
+
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :outer)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :inner)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :inner)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer)
+
+    expect { listener.stop }
+      .to output(/^outer │     1   6\.00s   6\.00s   6\.00s   6\.00s$/).to_stdout
+  end
+
   it 'records single from filtering_started over compilation_{suspended,started} to filtering_ended' do
     listener.start
 

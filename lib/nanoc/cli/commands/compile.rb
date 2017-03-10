@@ -161,25 +161,25 @@ module Nanoc::CLI::Commands
         stopwatches = {}
 
         Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, _filter_name|
-          stopwatch = stopwatches.fetch(rep) { stopwatches[rep] = Nanoc::Telemetry::Stopwatch.new }
-          stopwatch.start
+          stopwatch_stack = stopwatches.fetch(rep) { stopwatches[rep] = [] }
+          stopwatch_stack << Nanoc::Telemetry::Stopwatch.new
+          stopwatch_stack.last.start
         end
 
         Nanoc::Int::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
-          stopwatch = stopwatches.fetch(rep)
+          stopwatch = stopwatches.fetch(rep).pop
           stopwatch.stop
-          stopwatches.delete(rep)
 
           @telemetry.summary(:filter_total).observe(stopwatch.duration, filter_name: filter_name)
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, _exception|
-          stopwatch = stopwatches[rep]
+          stopwatch = stopwatches.fetch(rep).last
           stopwatch.stop if stopwatch && stopwatch.running?
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
-          stopwatch = stopwatches[rep]
+          stopwatch = stopwatches.fetch(rep, []).last
           stopwatch.start if stopwatch
         end
       end
