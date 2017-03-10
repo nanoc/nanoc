@@ -1,44 +1,6 @@
 require 'helper'
 
 class Nanoc::Int::CompilerTest < Nanoc::TestCase
-  def new_compiler(site = nil)
-    site ||= Nanoc::Int::Site.new(
-      config: nil,
-      code_snippets: [],
-      data_source: Nanoc::Int::InMemDataSource.new([], []),
-    )
-
-    reps = Nanoc::Int::ItemRepRepo.new
-
-    action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
-
-    objects = site.items.to_a + site.layouts.to_a
-
-    params = {
-      compiled_content_cache: Nanoc::Int::CompiledContentCache.new(items: site.items),
-      checksum_store: Nanoc::Int::ChecksumStore.new(site: site, objects: objects),
-      rule_memory_store: Nanoc::Int::RuleMemoryStore.new,
-      dependency_store: Nanoc::Int::DependencyStore.new(
-        site.items.to_a + site.layouts.to_a,
-      ),
-      action_provider: action_provider,
-      reps: reps,
-      outdatedness_store: Nanoc::Int::OutdatednessStore.new(site: site, reps: reps),
-    }
-
-    params[:outdatedness_checker] =
-      Nanoc::Int::OutdatednessChecker.new(
-        site: site,
-        checksum_store: params[:checksum_store],
-        dependency_store: params[:dependency_store],
-        rule_memory_store: params[:rule_memory_store],
-        action_provider: action_provider,
-        reps: reps,
-      )
-
-    Nanoc::Int::Compiler.new(site, params)
-  end
-
   def test_compile_rep_should_write_proper_snapshots_real
     with_site do |site|
       File.write('content/moo.txt', '<%= 1 %> <%%= 2 %> <%%%= 3 %>')
