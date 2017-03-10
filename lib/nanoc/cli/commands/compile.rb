@@ -230,7 +230,7 @@ module Nanoc::CLI::Commands
 
         print_row(table[0], lengths)
 
-        puts "#{'-' * lengths[0]}-+-#{lengths[1..-1].map { |length| '-' * length }.join('---')}"
+        puts "#{'─' * lengths[0]}─┼─#{lengths[1..-1].map { |length| '─' * length }.join('───')}"
 
         table[1..-1].each { |row| print_row(row, lengths) }
       end
@@ -238,7 +238,7 @@ module Nanoc::CLI::Commands
       def print_row(row, lengths)
         values = row.zip(lengths).map { |text, length| text.rjust length }
 
-        puts values[0] + ' | ' + values[1..-1].join('   ')
+        puts values[0] + ' │ ' + values[1..-1].join('   ')
       end
     end
 
