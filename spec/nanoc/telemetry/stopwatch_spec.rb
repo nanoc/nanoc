@@ -1,6 +1,8 @@
 describe Nanoc::Telemetry::Stopwatch do
   subject(:stopwatch) { described_class.new }
 
+  after { Timecop.return }
+
   it 'is zero by default' do
     expect(stopwatch.duration).to eq(0.0)
   end
