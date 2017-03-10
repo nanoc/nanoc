@@ -1,6 +1,9 @@
 require 'simplecov'
 SimpleCov.start
 
+require 'codecov'
+SimpleCov.formatter = SimpleCov::Formatter::Codecov
+
 require 'nanoc'
 require 'nanoc/cli'
 require 'nanoc/spec'
