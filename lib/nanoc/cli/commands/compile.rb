@@ -151,55 +151,36 @@ module Nanoc::CLI::Commands
 
       # @param [Enumerable<Nanoc::Int::ItemRep>] reps
       def initialize(reps:)
-        # rep ->
-        #   filter_name ->
-        #     accum -> 0.0
-        #     last_start -> nil
-        @times_per_rep = {}
-
         @reps = reps
       end
 
       # @see Listener#start
       def start
-        Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, filter_name|
-          @times_per_rep[rep] ||= {}
-          @times_per_rep[rep][filter_name] ||= {}
+        @telemetry = Nanoc::Telemetry.new
 
-          @times_per_rep[rep][filter_name][:last_start] = Time.now
-          @times_per_rep[rep][filter_name][:accum] ||= []
-          @times_per_rep[rep][filter_name][:suspended] = false
+        stopwatches = {}
+
+        Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, _filter_name|
+          stopwatch = stopwatches.fetch(rep) { stopwatches[rep] = Nanoc::Telemetry::Stopwatch.new }
+          stopwatch.start
         end
 
         Nanoc::Int::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
-          times = @times_per_rep[rep][filter_name]
-          last_start = @times_per_rep[rep][filter_name][:last_start]
+          stopwatch = stopwatches.fetch(rep)
+          stopwatch.stop
+          stopwatches.delete(rep)
 
-          times[:accum] << (Time.now - last_start)
-          @times_per_rep[rep][filter_name].delete(:last_start)
+          @telemetry.summary(:filter_total).observe(stopwatch.duration, filter_name: filter_name)
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, _exception|
-          @times_per_rep.fetch(rep, {}).each do |_filter_name, times|
-            if times[:last_start]
-              times[:accum] << (Time.now - times[:last_start])
-              times.delete(:last_start)
-              times[:suspended] = true
-
-              break
-            end
-          end
+          stopwatch = stopwatches[rep]
+          stopwatch.stop if stopwatch && stopwatch.running?
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
-          @times_per_rep.fetch(rep, {}).each do |filter_name, times|
-            if times[:suspended]
-              @times_per_rep[rep][filter_name][:last_start] = Time.now
-              times[:suspended] = false
-
-              break
-            end
-          end
+          stopwatch = stopwatches[rep]
+          stopwatch.start if stopwatch
         end
       end
 
@@ -214,25 +195,26 @@ module Nanoc::CLI::Commands
       def profiling_table
         headers = ['', 'count', 'min', 'avg', 'max', 'tot']
 
-        rows = durations_per_filter.to_a.sort_by { |r| r[1] }.map do |row|
-          filter_name, samples = *row
-          count = samples.size
-          min   = samples.min
-          tot   = samples.reduce(0, &:+)
-          avg   = tot / count
-          max   = samples.max
+        metric_set = @telemetry.summary(:filter_total)
+        rows = metric_set.labels.map do |label|
+          metric = metric_set.get(label)
+          filter_name = label[:filter_name].to_s
 
-          [filter_name.to_s, count.to_s] + [min, avg, max, tot].map { |r| "#{format('%4.2f', r)}s" }
+          count = metric.count
+          min   = metric.min
+          avg   = metric.avg
+          tot   = metric.sum
+          max   = metric.max
+
+          [filter_name, count.to_s] + [min, avg, max, tot].map { |r| "#{format('%4.2f', r)}s" }
         end
 
         [headers] + rows
       end
 
       def print_profiling_feedback
-        # Get max filter length
-        return if durations_per_filter.empty?
+        return if @telemetry.summary(:filter_total).labels.empty?
 
-        # Print warning if necessary
         if @reps.any? { |r| !r.compiled? }
           $stderr.puts
           $stderr.puts 'Warning: profiling information may not be accurate because ' \
@@ -257,21 +239,6 @@ module Nanoc::CLI::Commands
         values = row.zip(lengths).map { |text, length| text.rjust length }
 
         puts values[0] + ' | ' + values[1..-1].join('   ')
-      end
-
-      def durations_per_filter
-        @_durations_per_filter ||= begin
-          result = {}
-
-          @times_per_rep.each do |_rep, times_per_filter|
-            times_per_filter.each do |filter_name, data|
-              result[filter_name] ||= []
-              result[filter_name].concat(data[:accum])
-            end
-          end
-
-          result
-        end
       end
     end
 
