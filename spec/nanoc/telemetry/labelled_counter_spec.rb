@@ -3,8 +3,8 @@ describe Nanoc::Telemetry::LabelledCounter do
 
   describe 'new counter' do
     it 'starts at 0' do
-      expect(subject.value(filter: :erb)).to eq(0)
-      expect(subject.value(filter: :haml)).to eq(0)
+      expect(subject.value(:erb)).to eq(0)
+      expect(subject.value(:haml)).to eq(0)
     end
 
     it 'has no values' do
@@ -13,43 +13,43 @@ describe Nanoc::Telemetry::LabelledCounter do
   end
 
   describe '#increment' do
-    subject { counter.increment(filter: :erb) }
+    subject { counter.increment(:erb) }
 
     it 'increments the matching value' do
       expect { subject }
-        .to change { counter.value(filter: :erb) }
+        .to change { counter.value(:erb) }
         .from(0)
         .to(1)
     end
 
     it 'does not increment any other value' do
-      expect(counter.value(filter: :haml)).to eq(0)
+      expect(counter.value(:haml)).to eq(0)
       expect { subject }
-        .not_to change { counter.value(filter: :haml) }
+        .not_to change { counter.value(:haml) }
     end
 
     it 'correctly changes #values' do
       expect { subject }
         .to change { counter.values }
         .from({})
-        .to({ filter: :erb } => 1)
+        .to(erb: 1)
     end
   end
 
   describe '#get' do
-    subject { counter.get(filter: :erb) }
+    subject { counter.get(:erb) }
 
     context 'not incremented' do
       its(:value) { is_expected.to eq(0) }
     end
 
     context 'incremented' do
-      before { counter.increment(filter: :erb) }
+      before { counter.increment(:erb) }
       its(:value) { is_expected.to eq(1) }
     end
 
     context 'other incremented' do
-      before { counter.increment(filter: :haml) }
+      before { counter.increment(:haml) }
       its(:value) { is_expected.to eq(0) }
     end
   end
