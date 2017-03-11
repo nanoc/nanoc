@@ -20,6 +20,10 @@ module Nanoc::Telemetry
       get(labels).quantile(fraction)
     end
 
+    def map
+      @summaries.map { |(labels, summary)| yield(labels, summary) }
+    end
+
     # TODO: add quantiles(fraction)
     # TODO: add min(labels)
     # TODO: add mins

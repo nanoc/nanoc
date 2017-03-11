@@ -193,16 +193,14 @@ module Nanoc::CLI::Commands
       def profiling_table
         headers = ['', 'count', 'min', 'avg', 'max', 'tot']
 
-        metric_set = @telemetry.summary(:filter_total)
-        rows = metric_set.labels.map do |label|
-          metric = metric_set.get(label)
-          filter_name = label[:filter_name].to_s
+        rows = @telemetry.summary(:filter_total).map do |labels, summary|
+          filter_name = labels[:filter_name].to_s
 
-          count = metric.count
-          min   = metric.min
-          avg   = metric.avg
-          tot   = metric.sum
-          max   = metric.max
+          count = summary.count
+          min   = summary.min
+          avg   = summary.avg
+          tot   = summary.sum
+          max   = summary.max
 
           [filter_name, count.to_s] + [min, avg, max, tot].map { |r| "#{format('%4.2f', r)}s" }
         end

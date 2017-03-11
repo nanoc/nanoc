@@ -37,6 +37,19 @@ describe Nanoc::Telemetry::LabelledSummary do
     end
   end
 
+  describe '#map' do
+    before do
+      subject.observe(2.1, filter: :erb)
+      subject.observe(4.1, filter: :erb)
+      subject.observe(5.3, filter: :haml)
+    end
+
+    it 'yields labels and summary' do
+      res = subject.map { |labels, summary| [labels[:filter], summary.avg.round(3)] }
+      expect(res).to eql([[:erb, 3.1], [:haml, 5.3]])
+    end
+  end
+
   describe '#quantile' do
     before do
       subject.observe(2.1, filter: :erb)
