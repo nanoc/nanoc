@@ -12,8 +12,8 @@ module Nanoc::Telemetry
       @summaries.fetch(label) { @summaries[label] = Summary.new }
     end
 
-    def labels
-      @summaries.keys
+    def empty?
+      @summaries.empty?
     end
 
     def quantile(fraction, label)

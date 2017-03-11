@@ -12,7 +12,7 @@ module Nanoc::Telemetry
       @counters.fetch(label) { @counters[label] = Counter.new }
     end
 
-    # TODO: add #labels
+    # TODO: add #empty?
 
     def value(label)
       get(label).value

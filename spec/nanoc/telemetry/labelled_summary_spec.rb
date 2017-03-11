@@ -1,11 +1,11 @@
 describe Nanoc::Telemetry::LabelledSummary do
   subject(:summary) { described_class.new }
 
-  describe '#labels' do
-    subject { summary.labels }
+  describe '#empty?' do
+    subject { summary.empty? }
 
     context 'empty summary' do
-      it { is_expected.to eq([]) }
+      it { is_expected.to be }
     end
 
     context 'some observations' do
@@ -15,7 +15,7 @@ describe Nanoc::Telemetry::LabelledSummary do
         summary.observe(3.0, :haml)
       end
 
-      it { is_expected.to eq([:erb, :haml]) }
+      it { is_expected.not_to be }
     end
   end
 

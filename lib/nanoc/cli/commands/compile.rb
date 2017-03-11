@@ -207,7 +207,7 @@ module Nanoc::CLI::Commands
       end
 
       def print_profiling_feedback
-        return if @telemetry.summary(:filter_total).labels.empty?
+        return if @telemetry.summary(:filter_total).empty?
 
         if @reps.any? { |r| !r.compiled? }
           $stderr.puts
