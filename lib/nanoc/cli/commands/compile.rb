@@ -174,13 +174,11 @@ module Nanoc::CLI::Commands
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, _exception|
-          stopwatch = stopwatches.fetch(rep).last
-          stopwatch.stop if stopwatch && stopwatch.running?
+          stopwatches.fetch(rep).each(&:stop)
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
-          stopwatch = stopwatches.fetch(rep, []).last
-          stopwatch.start if stopwatch
+          stopwatches.fetch(rep, []).each(&:start)
         end
       end
 
