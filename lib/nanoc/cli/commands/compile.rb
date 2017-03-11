@@ -170,7 +170,7 @@ module Nanoc::CLI::Commands
           stopwatch = stopwatches.fetch(rep).pop
           stopwatch.stop
 
-          @telemetry.summary(:filter_total).observe(stopwatch.duration, filter_name: filter_name)
+          @telemetry.summary(:filter_total).observe(stopwatch.duration, filter_name.to_s)
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, _exception|
@@ -193,9 +193,7 @@ module Nanoc::CLI::Commands
       def profiling_table
         headers = ['', 'count', 'min', 'avg', 'max', 'tot']
 
-        rows = @telemetry.summary(:filter_total).map do |labels, summary|
-          filter_name = labels[:filter_name].to_s
-
+        rows = @telemetry.summary(:filter_total).map do |filter_name, summary|
           count = summary.count
           min   = summary.min
           avg   = summary.avg

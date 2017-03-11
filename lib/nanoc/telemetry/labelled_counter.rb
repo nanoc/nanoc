@@ -4,23 +4,23 @@ module Nanoc::Telemetry
       @counters = {}
     end
 
-    def increment(labels)
-      get(labels).increment
+    def increment(label)
+      get(label).increment
     end
 
-    def get(labels)
-      @counters.fetch(labels) { @counters[labels] = Counter.new }
+    def get(label)
+      @counters.fetch(label) { @counters[label] = Counter.new }
     end
 
     # TODO: add #labels
 
-    def value(labels)
-      get(labels).value
+    def value(label)
+      get(label).value
     end
 
     def values
-      @counters.each_with_object({}) do |(labels, counter), res|
-        res[labels] = counter.value
+      @counters.each_with_object({}) do |(label, counter), res|
+        res[label] = counter.value
       end
     end
   end

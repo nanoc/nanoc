@@ -4,32 +4,32 @@ module Nanoc::Telemetry
       @summaries = {}
     end
 
-    def observe(value, labels)
-      get(labels).observe(value)
+    def observe(value, label)
+      get(label).observe(value)
     end
 
-    def get(labels)
-      @summaries.fetch(labels) { @summaries[labels] = Summary.new }
+    def get(label)
+      @summaries.fetch(label) { @summaries[label] = Summary.new }
     end
 
     def labels
       @summaries.keys
     end
 
-    def quantile(fraction, labels)
-      get(labels).quantile(fraction)
+    def quantile(fraction, label)
+      get(label).quantile(fraction)
     end
 
     def map
-      @summaries.map { |(labels, summary)| yield(labels, summary) }
+      @summaries.map { |(label, summary)| yield(label, summary) }
     end
 
     # TODO: add quantiles(fraction)
-    # TODO: add min(labels)
+    # TODO: add min(label)
     # TODO: add mins
-    # TODO: add max(labels)
+    # TODO: add max(label)
     # TODO: add maxs
-    # TODO: add sum(labels)
+    # TODO: add sum(label)
     # TODO: add sums
   end
 end
