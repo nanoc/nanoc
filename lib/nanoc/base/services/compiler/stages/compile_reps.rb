@@ -27,7 +27,7 @@ module Nanoc::Int::Compiler::Stages
     end
 
     def compile_rep(rep, is_outdated:)
-      item_rep_compiler.run(rep, is_outdated: is_outdated)
+      item_rep_compiler.call(rep, is_outdated: is_outdated)
     end
 
     def item_rep_compiler

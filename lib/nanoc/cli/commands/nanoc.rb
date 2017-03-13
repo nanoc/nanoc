@@ -24,8 +24,9 @@ opt :C, :'no-color', 'disable color' do
   $stderr.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
 end
 
-opt :V, :verbose, 'make output more detailed' do
+opt :V, :verbose, 'make output more detailed', multiple: true do |val|
   Nanoc::CLI::Logger.instance.level = :low
+  Nanoc::CLI.verbosity = val.size
 end
 
 opt :v, :version, 'show version information and quit' do

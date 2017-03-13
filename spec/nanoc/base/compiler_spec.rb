@@ -70,6 +70,8 @@ describe Nanoc::Int::Compiler do
 
     allow(action_provider).to receive(:memory_for).with(rep).and_return(memory)
     allow(action_provider).to receive(:memory_for).with(other_rep).and_return(memory)
+
+    allow(Nanoc::Int::NotificationCenter).to receive(:post)
   end
 
   describe '#compile_rep' do

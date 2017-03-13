@@ -34,6 +34,14 @@ module Nanoc::CLI
     @debug = boolean
   end
 
+  def self.verbosity
+    @verbosity || 0
+  end
+
+  def self.verbosity=(val)
+    @verbosity = val
+  end
+
   # Invokes the Nanoc command-line tool with the given arguments.
   #
   # @param [Array<String>] args An array of command-line arguments

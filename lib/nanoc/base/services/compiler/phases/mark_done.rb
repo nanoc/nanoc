@@ -1,15 +1,18 @@
 module Nanoc::Int::Compiler::Phases
-  class MarkDone
+  class MarkDone < Abstract
     include Nanoc::Int::ContractsSupport
 
+    NAME = 'mark_done'.freeze
+
     def initialize(wrapped:, outdatedness_store:)
-      @wrapped = wrapped
+      super(wrapped: wrapped, name: NAME)
+
       @outdatedness_store = outdatedness_store
     end
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
-    def run(rep, is_outdated:)
-      @wrapped.run(rep, is_outdated: is_outdated)
+    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
+    def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
+      yield
       @outdatedness_store.remove(rep)
     end
   end

@@ -158,27 +158,58 @@ module Nanoc::CLI::Commands
       def start
         @telemetry = Nanoc::Telemetry.new
 
-        stopwatches = {}
+        filter_stopwatches = {}
 
         Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, _filter_name|
-          stopwatch_stack = stopwatches.fetch(rep) { stopwatches[rep] = [] }
+          stopwatch_stack = filter_stopwatches.fetch(rep) { filter_stopwatches[rep] = [] }
           stopwatch_stack << Nanoc::Telemetry::Stopwatch.new
           stopwatch_stack.last.start
         end
 
         Nanoc::Int::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
-          stopwatch = stopwatches.fetch(rep).pop
+          stopwatch = filter_stopwatches.fetch(rep).pop
           stopwatch.stop
 
-          @telemetry.summary(:filter_total).observe(stopwatch.duration, filter_name.to_s)
+          @telemetry.summary(:filters).observe(stopwatch.duration, filter_name.to_s)
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, _exception|
-          stopwatches.fetch(rep).each(&:stop)
+          filter_stopwatches.fetch(rep).each(&:stop)
         end
 
         Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
-          stopwatches.fetch(rep, []).each(&:start)
+          filter_stopwatches.fetch(rep, []).each(&:start)
+        end
+
+        phase_stopwatches = {}
+
+        Nanoc::Int::NotificationCenter.on(:phase_started) do |phase_name, rep|
+          stopwatches = phase_stopwatches.fetch(rep) { phase_stopwatches[rep] = {} }
+          stopwatches[phase_name] = Nanoc::Telemetry::Stopwatch.new.tap(&:start)
+        end
+
+        Nanoc::Int::NotificationCenter.on(:phase_ended) do |phase_name, rep|
+          stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
+          stopwatch.stop
+
+          @telemetry.summary(:phases).observe(stopwatch.duration, phase_name)
+        end
+
+        Nanoc::Int::NotificationCenter.on(:phase_yielded) do |phase_name, rep|
+          stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
+          stopwatch.stop
+        end
+
+        Nanoc::Int::NotificationCenter.on(:phase_resumed) do |phase_name, rep|
+          stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
+          stopwatch.start if stopwatch.stopped?
+        end
+
+        Nanoc::Int::NotificationCenter.on(:phase_aborted) do |phase_name, rep|
+          stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
+          stopwatch.stop if stopwatch.running?
+
+          @telemetry.summary(:phases).observe(stopwatch.duration, phase_name)
         end
       end
 
@@ -190,10 +221,10 @@ module Nanoc::CLI::Commands
 
       protected
 
-      def profiling_table
-        headers = ['', 'count', 'min', 'avg', 'max', 'tot']
+      def table_for_summary(name)
+        headers = [name.to_s, 'count', 'min', 'avg', 'max', 'tot']
 
-        rows = @telemetry.summary(:filter_total).map do |filter_name, summary|
+        rows = @telemetry.summary(name).map do |filter_name, summary|
           count = summary.count
           min   = summary.min
           avg   = summary.avg
@@ -207,16 +238,15 @@ module Nanoc::CLI::Commands
       end
 
       def print_profiling_feedback
-        return if @telemetry.summary(:filter_total).empty?
+        print_table_for_summary(:filters)
+        print_table_for_summary(:phases) if Nanoc::CLI.verbosity >= 2
+      end
 
-        if @reps.any? { |r| !r.compiled? }
-          $stderr.puts
-          $stderr.puts 'Warning: profiling information may not be accurate because ' \
-                       'some items were not compiled.'
-        end
+      def print_table_for_summary(name)
+        return if @telemetry.summary(name).empty?
 
         puts
-        print_table profiling_table
+        print_table(table_for_summary(name))
       end
 
       def print_table(table)
