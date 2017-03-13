@@ -158,6 +158,18 @@ module Nanoc::CLI::Commands
       def start
         @telemetry = Nanoc::Telemetry.new
 
+        stage_stopwatch = Nanoc::Telemetry::Stopwatch.new
+
+        Nanoc::Int::NotificationCenter.on(:stage_started) do |_stage_name|
+          stage_stopwatch.start
+        end
+
+        Nanoc::Int::NotificationCenter.on(:stage_ended) do |stage_name|
+          stage_stopwatch.stop
+          @telemetry.summary(:stages).observe(stage_stopwatch.duration, stage_name.to_s)
+          stage_stopwatch = Nanoc::Telemetry::Stopwatch.new
+        end
+
         filter_stopwatches = {}
 
         Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, _filter_name|
@@ -237,9 +249,20 @@ module Nanoc::CLI::Commands
         [headers] + rows
       end
 
+      def table_for_summary_durations(name)
+        headers = [name.to_s, 'tot']
+
+        rows = @telemetry.summary(:stages).map do |stage_name, summary|
+          [stage_name, "#{format('%4.2f', summary.sum)}s"]
+        end
+
+        [headers] + rows
+      end
+
       def print_profiling_feedback
         print_table_for_summary(:filters)
         print_table_for_summary(:phases) if Nanoc::CLI.verbosity >= 2
+        print_table_for_summary_duration(:stages) if Nanoc::CLI.verbosity >= 2
       end
 
       def print_table_for_summary(name)
@@ -247,6 +270,13 @@ module Nanoc::CLI::Commands
 
         puts
         print_table(table_for_summary(name))
+      end
+
+      def print_table_for_summary_duration(name)
+        return if @telemetry.summary(name).empty?
+
+        puts
+        print_table(table_for_summary_durations(name))
       end
 
       def print_table(table)

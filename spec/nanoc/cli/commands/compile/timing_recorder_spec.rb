@@ -178,4 +178,16 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     expect { listener.stop }
       .to output(/^\s*donkey │     2   1\.00s   2\.00s   3\.00s   4\.00s$/).to_stdout
   end
+
+  it 'records stage duration' do
+    listener.start
+
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    Nanoc::Int::NotificationCenter.post(:stage_started, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    Nanoc::Int::NotificationCenter.post(:stage_ended, 'donkey', rep)
+
+    expect { listener.stop }
+      .to output(/^\s*donkey │ 1\.00s$/).to_stdout
+  end
 end

@@ -121,18 +121,18 @@ module Nanoc::Int
     end
 
     def run_all
-      preprocess_stage.run
-      build_reps
-      prune_stage.run
-      load_stores
-      determine_outdatedness
-      forget_dependencies_if_needed
-      store
-      compile_reps_stage.run
-      store_output_state
-      @action_provider.postprocess(@site, @reps)
+      time_stage(:preprocess) { preprocess_stage.run }
+      time_stage(:build_reps) { build_reps }
+      time_stage(:prune) { prune_stage.run }
+      time_stage(:load_stores) { load_stores }
+      time_stage(:determine_outdatedness) { determine_outdatedness }
+      time_stage(:forget_dependencies_if_needed) { forget_dependencies_if_needed }
+      time_stage(:store) { store }
+      time_stage(:compile_reps) { compile_reps_stage.run }
+      time_stage(:store_output_state) { store_output_state }
+      time_stage(:postprocess) { @action_provider.postprocess(@site, @reps) }
     ensure
-      cleanup_stage.run
+      time_stage(:cleanup) { cleanup_stage.run }
     end
 
     def load_stores
@@ -178,6 +178,13 @@ module Nanoc::Int
     end
 
     private
+
+    def time_stage(name)
+      Nanoc::Int::NotificationCenter.post(:stage_started, name)
+      yield
+    ensure
+      Nanoc::Int::NotificationCenter.post(:stage_ended, name)
+    end
 
     def preprocess_stage
       @_preprocess_stage ||= Stages::Preprocess.new(
