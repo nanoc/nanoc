@@ -1,16 +1,20 @@
 module Nanoc::Int::Compiler::Phases
   # Provides functionality for (re)calculating the content of an item rep, without caching or
   # outdatedness checking.
-  class Recalculate
+  class Recalculate < Abstract
     include Nanoc::Int::ContractsSupport
 
+    NAME = 'recalculate'.freeze
+
     def initialize(action_provider:, dependency_store:, compilation_context:)
+      super(wrapped: nil, name: NAME)
+
       @action_provider = action_provider
       @dependency_store = dependency_store
       @compilation_context = compilation_context
     end
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
     def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
       dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
       dependency_tracker.enter(rep.item)

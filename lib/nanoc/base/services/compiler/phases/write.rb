@@ -1,15 +1,18 @@
 module Nanoc::Int::Compiler::Phases
-  class Write
+  class Write < Abstract
     include Nanoc::Int::ContractsSupport
 
+    NAME = 'write'.freeze
+
     def initialize(snapshot_repo:, wrapped:)
+      super(wrapped: wrapped, name: NAME)
+
       @snapshot_repo = snapshot_repo
-      @wrapped = wrapped
     end
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
-    def run(rep, is_outdated:)
-      @wrapped.run(rep, is_outdated: is_outdated)
+    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
+    def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
+      yield
 
       Nanoc::Int::ItemRepWriter.new.write_all(rep, @snapshot_repo)
     end

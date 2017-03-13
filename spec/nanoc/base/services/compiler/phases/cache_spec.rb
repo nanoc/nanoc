@@ -14,7 +14,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
   let(:wrapped_class) do
-    Class.new do
+    Class.new(Nanoc::Int::Compiler::Phases::Abstract) do
       def initialize(snapshot_repo)
         @snapshot_repo = snapshot_repo
       end
@@ -31,9 +31,16 @@ describe Nanoc::Int::Compiler::Phases::Cache do
   let(:rep) { Nanoc::Int::ItemRep.new(item, :latex) }
 
   describe '#run' do
-    subject { phase.run(rep, is_outdated: is_outdated) }
+    subject { phase.call(rep, is_outdated: is_outdated) }
 
     let(:is_outdated) { raise 'override me' }
+
+    before do
+      allow(Nanoc::Int::NotificationCenter).to receive(:post).with(:phase_started, anything, anything)
+      allow(Nanoc::Int::NotificationCenter).to receive(:post).with(:phase_yielded, anything, anything)
+      allow(Nanoc::Int::NotificationCenter).to receive(:post).with(:phase_resumed, anything, anything)
+      allow(Nanoc::Int::NotificationCenter).to receive(:post).with(:phase_ended, anything, anything)
+    end
 
     shared_examples 'calls wrapped' do
       it 'delegates to wrapped' do
@@ -48,8 +55,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
           .to(true)
       end
 
-      it 'sends no notifications' do
-        expect(Nanoc::Int::NotificationCenter).not_to receive(:post)
+      it 'sends no other notifications' do
         subject
       end
 
@@ -75,6 +81,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
         end
 
         it 'writes content to cache' do
+          expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
             .to change { snapshot_repo.get(rep, :last) }
             .from(nil)
@@ -82,6 +89,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
         end
 
         it 'marks rep as compiled' do
+          expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
             .to change { rep.compiled? }
             .from(false)
@@ -89,13 +97,9 @@ describe Nanoc::Int::Compiler::Phases::Cache do
         end
 
         it 'does not change compiled content cache' do
+          expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
             .not_to change { compiled_content_cache[rep] }
-        end
-
-        it 'sends notification' do
-          expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
-          subject
         end
       end
 

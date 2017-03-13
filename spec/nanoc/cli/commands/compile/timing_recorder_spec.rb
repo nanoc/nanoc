@@ -4,6 +4,8 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
   before { Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0)) }
   after { Timecop.return }
 
+  before { Nanoc::CLI.verbosity = 2 }
+
   let(:reps) do
     Nanoc::Int::ItemRepRepo.new.tap do |reps|
       reps << rep
@@ -27,7 +29,7 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
     expect { listener.stop }
-      .to output(/^erb │     1   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
+      .to output(/^\s*erb │     1   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
   end
 
   it 'records multiple from filtering_started to filtering_ended' do
@@ -43,7 +45,7 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
     expect { listener.stop }
-      .to output(/^erb │     2   1\.00s   1\.50s   2\.00s   3\.00s$/).to_stdout
+      .to output(/^\s*erb │     2   1\.00s   1\.50s   2\.00s   3\.00s$/).to_stdout
   end
 
   it 'records inner filters in nested filtering_started/filtering_ended' do
@@ -59,7 +61,7 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer)
 
     expect { listener.stop }
-      .to output(/^inner │     1   2\.00s   2\.00s   2\.00s   2\.00s$/).to_stdout
+      .to output(/^\s*inner │     1   2\.00s   2\.00s   2\.00s   2\.00s$/).to_stdout
   end
 
   it 'records outer filters in nested filtering_started/filtering_ended' do
@@ -75,7 +77,7 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer)
 
     expect { listener.stop }
-      .to output(/^outer │     1   6\.00s   6\.00s   6\.00s   6\.00s$/).to_stdout
+      .to output(/^\s*outer │     1   6\.00s   6\.00s   6\.00s   6\.00s$/).to_stdout
   end
 
   it 'pauses outer stopwatch when suspended' do
@@ -95,7 +97,7 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer)
 
     expect { listener.stop }
-      .to output(/^outer │     1   7\.00s   7\.00s   7\.00s   7\.00s$/).to_stdout
+      .to output(/^\s*outer │     1   7\.00s   7\.00s   7\.00s   7\.00s$/).to_stdout
   end
 
   it 'records single from filtering_started over compilation_{suspended,started} to filtering_ended' do
@@ -112,6 +114,68 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
     expect { listener.stop }
-      .to output(/^erb │     1   5\.00s   5\.00s   5\.00s   5\.00s$/).to_stdout
+      .to output(/^\s*erb │     1   5\.00s   5\.00s   5\.00s   5\.00s$/).to_stdout
+  end
+
+  it 'records single phase start+stop' do
+    listener.start
+
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
+
+    expect { listener.stop }
+      .to output(/^\s*donkey │     1   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
+  end
+
+  it 'records multiple phase start+stop' do
+    listener.start
+
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 0))
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 2))
+    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
+
+    expect { listener.stop }
+      .to output(/^\s*donkey │     2   1\.00s   1\.50s   2\.00s   3\.00s$/).to_stdout
+  end
+
+  it 'records single phase start+yield+resume+stop' do
+    listener.start
+
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    Nanoc::Int::NotificationCenter.post(:phase_yielded, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 0))
+    Nanoc::Int::NotificationCenter.post(:phase_resumed, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 2))
+    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
+
+    expect { listener.stop }
+      .to output(/^\s*donkey │     1   3\.00s   3\.00s   3\.00s   3\.00s$/).to_stdout
+  end
+
+  it 'records single phase start+yield+abort+start+stop' do
+    listener.start
+
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    Nanoc::Int::NotificationCenter.post(:phase_yielded, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 0))
+    Nanoc::Int::NotificationCenter.post(:phase_aborted, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 12, 7, 2))
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 12, 7, 5))
+    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
+
+    expect { listener.stop }
+      .to output(/^\s*donkey │     2   1\.00s   2\.00s   3\.00s   4\.00s$/).to_stdout
   end
 end

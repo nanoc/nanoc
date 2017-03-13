@@ -1,15 +1,17 @@
 module Nanoc::Int::Compiler::Phases
   # Provides functionality for suspending and resuming item rep compilation (using fibers).
-  class Resume
+  class Resume < Abstract
     include Nanoc::Int::ContractsSupport
 
+    NAME = 'resume'.freeze
+
     def initialize(wrapped:)
-      @wrapped = wrapped
+      super(wrapped: wrapped, name: NAME)
     end
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Any
+    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
     def run(rep, is_outdated:)
-      fiber = fiber_for(rep, is_outdated: is_outdated)
+      fiber = fiber_for(rep, is_outdated: is_outdated) { yield }
       while fiber.alive?
         Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
         res = fiber.resume
@@ -30,13 +32,13 @@ module Nanoc::Int::Compiler::Phases
 
     private
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => Fiber
-    def fiber_for(rep, is_outdated:)
+    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => Fiber
+    def fiber_for(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
       @fibers ||= {}
 
       @fibers[rep] ||=
         Fiber.new do
-          @wrapped.run(rep, is_outdated: is_outdated)
+          yield
           @fibers.delete(rep)
         end
 
