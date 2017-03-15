@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.7 (2017-03-15)
+
+Features:
+
+* Added `:erubi` filter (#1103)
+* Added `write ext: 'something'` shortcut (#1079)
+
 ## 4.6.4 (2017-03-10)
 
 Fixes:
