@@ -73,11 +73,25 @@ module Nanoc::RuleDSL
     # @param [String] path
     #
     # @return [void]
-    def write(path)
+    def write(arg)
       @_write_snapshot_counter ||= 0
       snapshot_name = "_#{@_write_snapshot_counter}".to_sym
       @_write_snapshot_counter += 1
-      snapshot(snapshot_name, path: path)
+
+      case arg
+      when String, Nanoc::Identifier
+        snapshot(snapshot_name, path: arg)
+      when Hash
+        if arg.key?(:ext)
+          ext = arg[:ext].sub(/\A\./, '')
+          path = @item.identifier.without_exts + '.' + ext
+          snapshot(snapshot_name, path: path)
+        else
+          raise ArgumentError, 'Cannot call #write this way (need path or :ext)'
+        end
+      else
+        raise ArgumentError, 'Cannot call #write this way (need path or :ext)'
+      end
     end
   end
 end
