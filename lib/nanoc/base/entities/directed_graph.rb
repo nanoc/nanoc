@@ -158,6 +158,22 @@ module Nanoc::Int
 
     # @group Querying the graph
 
+    def any_cycle
+      path = [@vertices.keys.first]
+
+      loop do
+        nexts = direct_successors_of(path.last)
+        cycle_start_index = path.find_index { |node| nexts.include?(node) }
+        if cycle_start_index
+          break path[cycle_start_index..-1]
+        elsif nexts.empty?
+          break nil
+        else
+          path << nexts.sample
+        end
+      end
+    end
+
     # Returns the direct predecessors of the given vertex, i.e. the vertices
     # x where there is an edge from x to the given vertex y.
     #
