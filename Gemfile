@@ -35,6 +35,7 @@ group :plugins do
   gem 'coderay'
   gem 'coffee-script'
   gem 'compass'
+  gem 'erubi'
   gem 'erubis'
   gem 'fog'
   gem 'haml'
