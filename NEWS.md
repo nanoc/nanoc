@@ -4,7 +4,7 @@
 
 Features:
 
-* Added `:erubi` filter (#1103)
+* Added `:erubi` filter (#1103) [Jan M. Faber]
 * Added `write ext: 'something'` shortcut (#1079)
 
 ## 4.6.4 (2017-03-10)
