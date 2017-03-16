@@ -4,10 +4,8 @@ module Nanoc::Int::Compiler::Phases
   class Recalculate < Abstract
     include Nanoc::Int::ContractsSupport
 
-    NAME = 'recalculate'.freeze
-
     def initialize(action_provider:, dependency_store:, compilation_context:)
-      super(wrapped: nil, name: NAME)
+      super(wrapped: nil)
 
       @action_provider = action_provider
       @dependency_store = dependency_store

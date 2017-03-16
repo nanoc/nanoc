@@ -2,10 +2,8 @@ module Nanoc::Int::Compiler::Phases
   class MarkDone < Abstract
     include Nanoc::Int::ContractsSupport
 
-    NAME = 'mark_done'.freeze
-
     def initialize(wrapped:, outdatedness_store:)
-      super(wrapped: wrapped, name: NAME)
+      super(wrapped: wrapped)
 
       @outdatedness_store = outdatedness_store
     end

@@ -2,8 +2,7 @@ module Nanoc::Int::Compiler::Phases
   class Abstract
     include Nanoc::Int::ContractsSupport
 
-    def initialize(wrapped:, name:)
-      @name = name
+    def initialize(wrapped:)
       @wrapped = wrapped
     end
 
@@ -28,7 +27,8 @@ module Nanoc::Int::Compiler::Phases
     private
 
     def notify(sym, rep)
-      Nanoc::Int::NotificationCenter.post(sym, @name, rep)
+      name = self.class.to_s.sub(/^.*::/, '')
+      Nanoc::Int::NotificationCenter.post(sym, name, rep)
     end
   end
 end

@@ -4,10 +4,8 @@ module Nanoc::Int::Compiler::Phases
   class Cache < Abstract
     include Nanoc::Int::ContractsSupport
 
-    NAME = 'cache'.freeze
-
     def initialize(wrapped:, compiled_content_cache:, snapshot_repo:)
-      super(wrapped: wrapped, name: NAME)
+      super(wrapped: wrapped)
 
       @compiled_content_cache = compiled_content_cache
       @snapshot_repo = snapshot_repo
