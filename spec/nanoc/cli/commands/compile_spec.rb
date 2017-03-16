@@ -1,4 +1,4 @@
-describe Nanoc::CLI::Commands::Compile::Listener do
+describe Nanoc::CLI::Commands::CompileListeners::Abstract do
   let(:klass) do
     Class.new(described_class) do
       attr_reader :started

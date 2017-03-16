@@ -1,4 +1,4 @@
-describe Nanoc::CLI::Commands::Compile::FileActionPrinter, stdio: true do
+describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true do
   let(:listener) { described_class.new(reps: reps) }
 
   before { Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0)) }

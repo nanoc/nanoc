@@ -129,7 +129,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_setup_and_teardown_listeners
     with_site do
-      test_listener_class = Class.new(::Nanoc::CLI::Commands::Compile::Listener) do
+      test_listener_class = Class.new(::Nanoc::CLI::Commands::CompileListeners::Abstract) do
         def start
           @started = true
         end
@@ -211,7 +211,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     rescue SystemExit
     end
 
-    listener = Nanoc::CLI::Commands::Compile::FileActionPrinter.new(reps: reps)
+    listener = Nanoc::CLI::Commands::CompileListeners::FileActionPrinter.new(reps: reps)
 
     def listener.log(level, action, path, duration)
       @events ||= []
