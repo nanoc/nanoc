@@ -16,11 +16,11 @@ module Nanoc::CLI::Commands::CompileListeners
 
       stage_stopwatch = Nanoc::Telemetry::Stopwatch.new
 
-      Nanoc::Int::NotificationCenter.on(:stage_started) do |_stage_name|
+      on(:stage_started) do |_stage_name|
         stage_stopwatch.start
       end
 
-      Nanoc::Int::NotificationCenter.on(:stage_ended) do |stage_name|
+      on(:stage_ended) do |stage_name|
         stage_stopwatch.stop
         @telemetry.summary(:stages).observe(stage_stopwatch.duration, stage_name.to_s)
         stage_stopwatch = Nanoc::Telemetry::Stopwatch.new
@@ -28,13 +28,13 @@ module Nanoc::CLI::Commands::CompileListeners
 
       outdatedness_rule_stopwatches = {}
 
-      Nanoc::Int::NotificationCenter.on(:outdatedness_rule_started) do |klass, obj|
+      on(:outdatedness_rule_started) do |klass, obj|
         stopwatches = outdatedness_rule_stopwatches.fetch(klass) { outdatedness_rule_stopwatches[klass] = {} }
         stopwatch = stopwatches.fetch(obj) { stopwatches[obj] = Nanoc::Telemetry::Stopwatch.new }
         stopwatch.start
       end
 
-      Nanoc::Int::NotificationCenter.on(:outdatedness_rule_ended) do |klass, obj|
+      on(:outdatedness_rule_ended) do |klass, obj|
         stopwatches = outdatedness_rule_stopwatches.fetch(klass)
         stopwatch = stopwatches.fetch(obj)
         stopwatch.stop
@@ -44,52 +44,52 @@ module Nanoc::CLI::Commands::CompileListeners
 
       filter_stopwatches = {}
 
-      Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, _filter_name|
+      on(:filtering_started) do |rep, _filter_name|
         stopwatch_stack = filter_stopwatches.fetch(rep) { filter_stopwatches[rep] = [] }
         stopwatch_stack << Nanoc::Telemetry::Stopwatch.new
         stopwatch_stack.last.start
       end
 
-      Nanoc::Int::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
+      on(:filtering_ended) do |rep, filter_name|
         stopwatch = filter_stopwatches.fetch(rep).pop
         stopwatch.stop
 
         @telemetry.summary(:filters).observe(stopwatch.duration, filter_name.to_s)
       end
 
-      Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, _exception|
+      on(:compilation_suspended) do |rep, _exception|
         filter_stopwatches.fetch(rep).each(&:stop)
       end
 
-      Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
+      on(:compilation_started) do |rep|
         filter_stopwatches.fetch(rep, []).each(&:start)
       end
 
       phase_stopwatches = {}
 
-      Nanoc::Int::NotificationCenter.on(:phase_started) do |phase_name, rep|
+      on(:phase_started) do |phase_name, rep|
         stopwatches = phase_stopwatches.fetch(rep) { phase_stopwatches[rep] = {} }
         stopwatches[phase_name] = Nanoc::Telemetry::Stopwatch.new.tap(&:start)
       end
 
-      Nanoc::Int::NotificationCenter.on(:phase_ended) do |phase_name, rep|
+      on(:phase_ended) do |phase_name, rep|
         stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
         stopwatch.stop
 
         @telemetry.summary(:phases).observe(stopwatch.duration, phase_name)
       end
 
-      Nanoc::Int::NotificationCenter.on(:phase_yielded) do |phase_name, rep|
+      on(:phase_yielded) do |phase_name, rep|
         stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
         stopwatch.stop
       end
 
-      Nanoc::Int::NotificationCenter.on(:phase_resumed) do |phase_name, rep|
+      on(:phase_resumed) do |phase_name, rep|
         stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
         stopwatch.start if stopwatch.stopped?
       end
 
-      Nanoc::Int::NotificationCenter.on(:phase_aborted) do |phase_name, rep|
+      on(:phase_aborted) do |phase_name, rep|
         stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
         stopwatch.stop if stopwatch.running?
 

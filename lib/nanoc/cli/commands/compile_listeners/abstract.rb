@@ -21,5 +21,10 @@ module Nanoc::CLI::Commands::CompileListeners
       stop if @_started
       @_started = false
     end
+
+    def on(sym)
+      # TODO: clean up on stop
+      Nanoc::Int::NotificationCenter.on(sym, self) { |*args| yield(*args) }
+    end
   end
 end
