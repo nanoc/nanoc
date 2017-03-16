@@ -2,10 +2,8 @@ module Nanoc::Int::Compiler::Phases
   class Write < Abstract
     include Nanoc::Int::ContractsSupport
 
-    NAME = 'write'.freeze
-
     def initialize(snapshot_repo:, wrapped:)
-      super(wrapped: wrapped, name: NAME)
+      super(wrapped: wrapped)
 
       @snapshot_repo = snapshot_repo
     end

@@ -3,10 +3,8 @@ module Nanoc::Int::Compiler::Phases
   class Resume < Abstract
     include Nanoc::Int::ContractsSupport
 
-    NAME = 'resume'.freeze
-
     def initialize(wrapped:)
-      super(wrapped: wrapped, name: NAME)
+      super(wrapped: wrapped)
     end
 
     contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
