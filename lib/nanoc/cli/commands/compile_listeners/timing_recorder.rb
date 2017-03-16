@@ -1,5 +1,7 @@
 module Nanoc::CLI::Commands::CompileListeners
   class TimingRecorder < Abstract
+    attr_reader :telemetry
+
     # @see Listener#enable_for?
     def self.enable_for?(command_runner)
       command_runner.options.fetch(:verbose, false)
@@ -8,12 +10,11 @@ module Nanoc::CLI::Commands::CompileListeners
     # @param [Enumerable<Nanoc::Int::ItemRep>] reps
     def initialize(reps:)
       @reps = reps
+      @telemetry = Nanoc::Telemetry.new
     end
 
     # @see Listener#start
     def start
-      @telemetry = Nanoc::Telemetry.new
-
       stage_stopwatch = Nanoc::Telemetry::Stopwatch.new
 
       on(:stage_started) do |_stage_name|
