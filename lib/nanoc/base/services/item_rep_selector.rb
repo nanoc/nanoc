@@ -30,7 +30,7 @@ module Nanoc::Int
 
       # Check whether everything was compiled
       unless graph.vertices.empty?
-        raise Nanoc::Int::Errors::RecursiveCompilation.new(graph.vertices)
+        raise Nanoc::Int::Errors::DependencyCycle.new(graph)
       end
     end
 

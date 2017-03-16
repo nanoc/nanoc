@@ -114,7 +114,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      assert_raises Nanoc::Int::Errors::RecursiveCompilation do
+      assert_raises Nanoc::Int::Errors::DependencyCycle do
         site.compile
       end
     end
