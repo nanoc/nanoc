@@ -170,6 +170,22 @@ module Nanoc::CLI::Commands
           stage_stopwatch = Nanoc::Telemetry::Stopwatch.new
         end
 
+        outdatedness_rule_stopwatches = {}
+
+        Nanoc::Int::NotificationCenter.on(:outdatedness_rule_started) do |klass, obj|
+          stopwatches = outdatedness_rule_stopwatches.fetch(klass) { outdatedness_rule_stopwatches[klass] = {} }
+          stopwatch = stopwatches.fetch(obj) { stopwatches[obj] = Nanoc::Telemetry::Stopwatch.new }
+          stopwatch.start
+        end
+
+        Nanoc::Int::NotificationCenter.on(:outdatedness_rule_ended) do |klass, obj|
+          stopwatches = outdatedness_rule_stopwatches.fetch(klass)
+          stopwatch = stopwatches.fetch(obj)
+          stopwatch.stop
+
+          @telemetry.summary(:outdatedness_rules).observe(stopwatch.duration, klass.to_s.sub(/.*::/, ''))
+        end
+
         filter_stopwatches = {}
 
         Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, _filter_name|
@@ -263,6 +279,7 @@ module Nanoc::CLI::Commands
         print_table_for_summary(:filters)
         print_table_for_summary(:phases) if Nanoc::CLI.verbosity >= 2
         print_table_for_summary_duration(:stages) if Nanoc::CLI.verbosity >= 2
+        print_table_for_summary(:outdatedness_rules) if Nanoc::CLI.verbosity >= 2
       end
 
       def print_table_for_summary(name)
