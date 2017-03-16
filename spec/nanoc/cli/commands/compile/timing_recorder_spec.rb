@@ -20,6 +20,12 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
     end
   end
 
+  let(:other_rep) do
+    Nanoc::Int::ItemRep.new(item, :other).tap do |rep|
+      rep.raw_paths = { default: ['/bye.html'] }
+    end
+  end
+
   it 'records single from filtering_started to filtering_ended' do
     listener.start
 
@@ -189,5 +195,33 @@ describe Nanoc::CLI::Commands::Compile::TimingRecorder, stdio: true do
 
     expect { listener.stop }
       .to output(/^\s*donkey │ 1\.00s$/).to_stdout
+  end
+
+  it 'records single outdatedness rule duration' do
+    listener.start
+
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_started, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ended, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
+
+    expect { listener.stop }
+      .to output(/^\s*CodeSnippetsModified │     1   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
+  end
+
+  it 'records multiple outdatedness rule duration' do
+    listener.start
+
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_started, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ended, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 6, 0))
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_started, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, other_rep)
+    Timecop.freeze(Time.local(2008, 9, 1, 10, 6, 2))
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ended, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, other_rep)
+
+    expect { listener.stop }
+      .to output(/^\s*CodeSnippetsModified │     2   1\.00s   1\.50s   2\.00s   3\.00s$/).to_stdout
   end
 end
