@@ -74,17 +74,29 @@ module Nanoc::Int
     end
 
     class AttributesModified < OutdatednessRule
+      extend Nanoc::Int::Memoization
+
+      include Nanoc::Int::ContractsSupport
+
       def reason
         Nanoc::Int::OutdatednessReasons::AttributesModified
       end
 
+      contract C::Or[Nanoc::Int::ItemRep, Nanoc::Int::Item, Nanoc::Int::Layout], C::Named['Nanoc::Int::OutdatednessChecker'] => C::Bool
       def apply(obj, outdatedness_checker)
-        obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
-
-        ch_old = outdatedness_checker.checksum_store.attributes_checksum_for(obj)
-        ch_new = Nanoc::Int::Checksummer.calc_for_attributes_of(obj)
-        ch_old != ch_new
+        case obj
+        when Nanoc::Int::ItemRep
+          apply(obj.item, outdatedness_checker)
+        when Nanoc::Int::Item, Nanoc::Int::Layout
+          ch_old = outdatedness_checker.checksum_store.attributes_checksum_for(obj)
+          ch_new = Nanoc::Int::Checksummer.calc_for_attributes_of(obj)
+          res = ch_old != ch_new
+          res
+        else
+          raise ArgumentError
+        end
       end
+      memoize :apply
     end
 
     class RulesModified < OutdatednessRule
