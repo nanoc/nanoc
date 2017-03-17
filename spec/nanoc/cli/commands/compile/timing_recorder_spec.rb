@@ -40,7 +40,7 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
     expect { listener.stop }
-      .to output(/^\s*erb │     2   1\.00s   1\.50s   2\.00s   3\.00s$/).to_stdout
+      .to output(/^\s*erb │     2   1\.00s   1\.50s   1\.90s   1\.95s   2\.00s   3\.00s$/).to_stdout
   end
 
   it 'records single from filtering_started to filtering_ended' do
@@ -228,7 +228,7 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ended, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
 
     expect { listener.stop }
-      .to output(/^\s*CodeSnippetsModified │     1   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
+      .to output(/^\s*CodeSnippetsModified │     1   1\.00s   1\.00s   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
   end
 
   it 'records single outdatedness rule duration' do
