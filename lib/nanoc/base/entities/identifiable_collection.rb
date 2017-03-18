@@ -4,6 +4,7 @@ module Nanoc::Int
     include Nanoc::Int::ContractsSupport
     include Enumerable
 
+    extend Nanoc::Int::Memoization
     extend Forwardable
 
     def_delegator :@objects, :each
@@ -29,15 +30,10 @@ module Nanoc::Int
 
     contract C::Any => C::Maybe[C::RespondTo[:identifier]]
     def [](arg)
-      case arg
-      when Nanoc::Identifier
-        object_with_identifier(arg)
-      when String
-        object_with_identifier(arg) || object_matching_glob(arg)
-      when Regexp
-        @objects.find { |i| i.identifier.to_s =~ arg }
+      if frozen?
+        get_memoized(arg)
       else
-        raise ArgumentError, "don’t know how to fetch objects by #{arg.inspect}"
+        get_unmemoized(arg)
       end
     end
 
@@ -60,6 +56,26 @@ module Nanoc::Int
     end
 
     protected
+
+    contract C::Any => C::Maybe[C::RespondTo[:identifier]]
+    def get_unmemoized(arg)
+      case arg
+      when Nanoc::Identifier
+        object_with_identifier(arg)
+      when String
+        object_with_identifier(arg) || object_matching_glob(arg)
+      when Regexp
+        @objects.find { |i| i.identifier.to_s =~ arg }
+      else
+        raise ArgumentError, "don’t know how to fetch objects by #{arg.inspect}"
+      end
+    end
+
+    contract C::Any => C::Maybe[C::RespondTo[:identifier]]
+    def get_memoized(arg)
+      get_unmemoized(arg)
+    end
+    memoize :get_memoized
 
     def object_with_identifier(identifier)
       if frozen?

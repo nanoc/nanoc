@@ -69,20 +69,20 @@ module Nanoc::Int
       original_method_name = '__nonmemoized_' + method_name.to_s
       alias_method original_method_name, method_name
 
+      instance_cache = Hash.new { |hash, key| hash[key] = {} }
+
       define_method(method_name) do |*args|
-        @__memoization_cache ||= {}
-        @__memoization_cache[method_name] ||= {}
-        method_cache = @__memoization_cache[method_name]
+        instance_method_cache = instance_cache[self]
 
         value = NONE
-        if method_cache.key?(args)
-          object = method_cache[args].ref.object
+        if instance_method_cache.key?(args)
+          object = instance_method_cache[args].ref.object
           value = object ? object.value : NONE
         end
 
         if value.equal?(NONE)
           send(original_method_name, *args).tap do |r|
-            method_cache[args] = Wrapper.new(Ref::SoftReference.new(Value.new(r)))
+            instance_method_cache[args] = Wrapper.new(Ref::SoftReference.new(Value.new(r)))
           end
         else
           value
