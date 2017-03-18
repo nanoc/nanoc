@@ -50,6 +50,12 @@ class Nanoc::Int::MemoizationTest < Nanoc::TestCase
     end
   end
 
+  def test_frozen
+    sample = Sample1.new(10)
+    sample.freeze
+    sample.run(5)
+  end
+
   def test_weak_inspect
     upcaser = Upcaser.new
     10_000.times do |i|
