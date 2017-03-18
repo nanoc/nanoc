@@ -53,4 +53,40 @@ describe Nanoc::Telemetry::LabelledCounter do
       its(:value) { is_expected.to eq(0) }
     end
   end
+
+  describe '#empty?' do
+    subject { counter.empty? }
+
+    context 'not incremented' do
+      it { is_expected.to be }
+    end
+
+    context 'incremented' do
+      before { counter.increment(:erb) }
+      it { is_expected.not_to be }
+    end
+  end
+
+  describe '#map' do
+    subject { counter.map { |label, counter| [label, counter.value] } }
+
+    context 'not incremented' do
+      it { is_expected.to be_empty }
+    end
+
+    context 'incremented once' do
+      before { counter.increment(:erb) }
+      it { is_expected.to eq [[:erb, 1]] }
+    end
+
+    context 'both incremental multiple times' do
+      before do
+        counter.increment(:erb)
+        counter.increment(:erb)
+        counter.increment(:haml)
+      end
+
+      it { is_expected.to eq [[:erb, 2], [:haml, 1]] }
+    end
+  end
 end
