@@ -5,23 +5,6 @@ module Nanoc::Int
   #
   # @api private
   module Memoization
-    class Wrapper
-      attr_reader :ref
-
-      def initialize(ref)
-        @ref = ref
-      end
-
-      def inspect
-        obj = @ref.object
-        if obj
-          obj.inspect
-        else
-          '<garbage collected>'
-        end
-      end
-    end
-
     class Value
       attr_reader :value
 
@@ -76,13 +59,13 @@ module Nanoc::Int
 
         value = NONE
         if instance_method_cache.key?(args)
-          object = instance_method_cache[args].ref.object
+          object = instance_method_cache[args].object
           value = object ? object.value : NONE
         end
 
         if value.equal?(NONE)
           send(original_method_name, *args).tap do |r|
-            instance_method_cache[args] = Wrapper.new(Ref::SoftReference.new(Value.new(r)))
+            instance_method_cache[args] = Ref::SoftReference.new(Value.new(r))
           end
         else
           value
