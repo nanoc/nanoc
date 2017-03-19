@@ -37,6 +37,42 @@ describe Nanoc::Filter do
     end
   end
 
+  describe '.always_outdated? + .always_outdated' do
+    context 'not always outdated' do
+      let(:filter_class) do
+        Class.new(Nanoc::Filter) do
+          identifier :bea22a356b6b031cea1e615087179803818c6a53
+
+          def run(content, _params)
+            content.upcase
+          end
+        end
+      end
+
+      it 'is not always outdated' do
+        expect(filter_class).not_to be_always_outdated
+      end
+    end
+
+    context 'always outdated' do
+      let(:filter_class) do
+        Class.new(Nanoc::Filter) do
+          identifier :d7413fa71223e5e69b03a0abfa25806e07e14f3a
+
+          always_outdated
+
+          def run(content, _params)
+            content.upcase
+          end
+        end
+      end
+
+      it 'is always outdated' do
+        expect(filter_class).to be_always_outdated
+      end
+    end
+  end
+
   describe '#depend_on' do
     subject { filter.depend_on(item_views) }
 

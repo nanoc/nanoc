@@ -19,6 +19,7 @@ module Nanoc::Int
           Rules::NotWritten,
           Rules::CodeSnippetsModified,
           Rules::ConfigurationModified,
+          Rules::UsesAlwaysOutdatedFilter,
         ].freeze
 
       RULES_FOR_LAYOUT =
@@ -26,6 +27,7 @@ module Nanoc::Int
           Rules::RulesModified,
           Rules::ContentModified,
           Rules::AttributesModified,
+          Rules::UsesAlwaysOutdatedFilter,
         ].freeze
 
       contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Int::ItemRepRepo] => C::Any

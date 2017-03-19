@@ -435,5 +435,46 @@ describe Nanoc::Int::OutdatednessRules do
 
       # …
     end
+
+    describe 'UsesAlwaysOutdatedFilter' do
+      let(:rule_class) { Nanoc::Int::OutdatednessRules::UsesAlwaysOutdatedFilter }
+
+      before do
+        allow(action_provider).to receive(:memory_for).with(item_rep).and_return(mem)
+      end
+
+      context 'unknown filter' do
+        let(:mem) do
+          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+            mem.add_snapshot(:donkey, '/foo.md')
+            mem.add_filter(:asdf, {})
+          end
+        end
+
+        it { is_expected.not_to be }
+      end
+
+      context 'known filter, not always outdated' do
+        let(:mem) do
+          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+            mem.add_snapshot(:donkey, '/foo.md')
+            mem.add_filter(:erb, {})
+          end
+        end
+
+        it { is_expected.not_to be }
+      end
+
+      context 'known filter, always outdated' do
+        let(:mem) do
+          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+            mem.add_snapshot(:donkey, '/foo.md')
+            mem.add_filter(:xsl, {})
+          end
+        end
+
+        it { is_expected.to be }
+      end
+    end
   end
 end

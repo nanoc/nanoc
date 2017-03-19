@@ -117,5 +117,21 @@ module Nanoc::Int
         paths_old != paths_new
       end
     end
+
+    class UsesAlwaysOutdatedFilter < OutdatednessRule
+      def reason
+        Nanoc::Int::OutdatednessReasons::UsesAlwaysOutdatedFilter
+      end
+
+      def apply(obj, outdatedness_checker)
+        mem = outdatedness_checker.action_provider.memory_for(obj)
+
+        mem
+          .select { |a| a.is_a?(Nanoc::Int::ProcessingActions::Filter) }
+          .map { |a| Nanoc::Filter.named(a.filter_name) }
+          .compact
+          .any?(&:always_outdated?)
+      end
+    end
   end
 end
