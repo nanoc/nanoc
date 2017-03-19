@@ -89,7 +89,7 @@ describe Nanoc::Int::Props do
       let(:props) { described_class.new }
       let(:other_props) { props_all }
 
-      it { is_expected.to eql(Set.new([:raw_content, :attributes, :compiled_content, :path])) }
+      it { is_expected.to eql(Set.new(%i(raw_content attributes compiled_content path))) }
     end
 
     context 'some + nothing' do
@@ -103,35 +103,35 @@ describe Nanoc::Int::Props do
       let(:props) { described_class.new(compiled_content: true) }
       let(:other_props) { described_class.new(raw_content: true) }
 
-      it { is_expected.to eql(Set.new([:raw_content, :compiled_content])) }
+      it { is_expected.to eql(Set.new(%i(raw_content compiled_content))) }
     end
 
     context 'some + all' do
       let(:props) { described_class.new(compiled_content: true) }
       let(:other_props) { props_all }
 
-      it { is_expected.to eql(Set.new([:raw_content, :attributes, :compiled_content, :path])) }
+      it { is_expected.to eql(Set.new(%i(raw_content attributes compiled_content path))) }
     end
 
     context 'all + nothing' do
       let(:props) { props_all }
       let(:other_props) { described_class.new }
 
-      it { is_expected.to eql(Set.new([:raw_content, :attributes, :compiled_content, :path])) }
+      it { is_expected.to eql(Set.new(%i(raw_content attributes compiled_content path))) }
     end
 
     context 'some + all' do
       let(:props) { props_all }
       let(:other_props) { described_class.new(compiled_content: true) }
 
-      it { is_expected.to eql(Set.new([:raw_content, :attributes, :compiled_content, :path])) }
+      it { is_expected.to eql(Set.new(%i(raw_content attributes compiled_content path))) }
     end
 
     context 'all + all' do
       let(:props) { props_all }
       let(:other_props) { props_all }
 
-      it { is_expected.to eql(Set.new([:raw_content, :attributes, :compiled_content, :path])) }
+      it { is_expected.to eql(Set.new(%i(raw_content attributes compiled_content path))) }
     end
   end
 
@@ -165,12 +165,12 @@ describe Nanoc::Int::Props do
 
     context 'attributes and compiled_content active' do
       let(:props) { described_class.new(attributes: true, compiled_content: true) }
-      it { is_expected.to eql(Set.new([:attributes, :compiled_content])) }
+      it { is_expected.to eql(Set.new(%i(attributes compiled_content))) }
     end
 
     context 'all active' do
       let(:props) { described_class.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
-      it { is_expected.to eql(Set.new([:raw_content, :attributes, :compiled_content, :path])) }
+      it { is_expected.to eql(Set.new(%i(raw_content attributes compiled_content path))) }
     end
   end
 

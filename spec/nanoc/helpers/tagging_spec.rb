@@ -72,7 +72,7 @@ describe Nanoc::Helpers::Tagging, helper: true do
     before do
       ctx.create_item('item 1', { tags: [:foo] }, '/item1.md')
       ctx.create_item('item 2', { tags: [:bar] }, '/item2.md')
-      ctx.create_item('item 3', { tags: [:foo, :bar] }, '/item3.md')
+      ctx.create_item('item 3', { tags: %i(foo bar) }, '/item3.md')
       ctx.create_item('item 4', { tags: nil }, '/item4.md')
       ctx.create_item('item 5', {}, '/item5.md')
     end

@@ -146,13 +146,13 @@ describe Nanoc::Int::RuleMemory do
 
     example do
       expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-      expect(subject[0].snapshot_names).to eql([:a1, :a2, :a3])
+      expect(subject[0].snapshot_names).to eql(%i(a1 a2 a3))
       expect(subject[0].paths).to eql(['/a2.md'])
 
       expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Filter)
 
       expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
-      expect(subject[2].snapshot_names).to eql([:b1, :b2, :b3])
+      expect(subject[2].snapshot_names).to eql(%i(b1 b2 b3))
       expect(subject[2].paths).to eql(['/b1.md', '/b3.md'])
 
       expect(subject[3]).to be_a(Nanoc::Int::ProcessingActions::Filter)
