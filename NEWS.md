@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.7.1 (2017-03-19)
+
+Fixes:
+
+* Fixed issue with `:xsl` filter not recompiling when it should (#924, #1127)
+
+Enhancements:
+
+* Made `compile --verbose` print percentiles rather than averages (#1122)
+* Improved dependency cycle error messages (#1123)
+
 ## 4.7 (2017-03-15)
 
 Features:
