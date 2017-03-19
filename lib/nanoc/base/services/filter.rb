@@ -93,6 +93,21 @@ module Nanoc
         (@to || :text) == :binary
       end
 
+      # @return [Boolean]
+      #
+      # @api private
+      def always_outdated?
+        @always_outdated || false
+      end
+
+      # Marks this filter as always causing the item rep to be outdated. This is useful for filters
+      # that cannot do dependency tracking properly.
+      #
+      # @return [void]
+      def always_outdated
+        @always_outdated = true
+      end
+
       # @overload requires(*requires)
       #   Sets the required libraries for this filter.
       #   @param [Array<String>] requires A list of library names that are required

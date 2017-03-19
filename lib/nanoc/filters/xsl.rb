@@ -5,6 +5,8 @@ module Nanoc::Filters
 
     requires 'nokogiri'
 
+    always_outdated
+
     # Runs the item content through an [XSLT](http://www.w3.org/TR/xslt)
     # stylesheet using  [Nokogiri](http://nokogiri.org/).
     #
