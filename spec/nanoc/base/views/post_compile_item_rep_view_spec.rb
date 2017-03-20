@@ -34,6 +34,64 @@ describe Nanoc::PostCompileItemRepView do
     end
   end
 
+  describe '#raw_path' do
+    context 'no args' do
+      subject { view.raw_path }
+
+      it 'does not raise' do
+        subject
+      end
+
+      context 'no path specified' do
+        it { is_expected.to be_nil }
+      end
+
+      context 'path for default snapshot specified' do
+        before do
+          item_rep.raw_paths = { last: ['output/about/index.html'] }
+        end
+
+        it { is_expected.to eql('output/about/index.html') }
+      end
+
+      context 'path specified, but not for default snapshot' do
+        before do
+          item_rep.raw_paths = { pre: ['output/about/index.html'] }
+        end
+
+        it { is_expected.to be_nil }
+      end
+    end
+
+    context 'snapshot arg' do
+      subject { view.raw_path(snapshot: :special) }
+
+      it 'does not raise' do
+        subject
+      end
+
+      context 'no path specified' do
+        it { is_expected.to be_nil }
+      end
+
+      context 'path for default snapshot specified' do
+        before do
+          item_rep.raw_paths = { special: ['output/about/index.html'] }
+        end
+
+        it { is_expected.to eql('output/about/index.html') }
+      end
+
+      context 'path specified, but not for default snapshot' do
+        before do
+          item_rep.raw_paths = { pre: ['output/about/index.html'] }
+        end
+
+        it { is_expected.to be_nil }
+      end
+    end
+  end
+
   describe '#compiled_content' do
     subject { view.compiled_content }
 

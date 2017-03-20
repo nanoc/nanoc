@@ -16,5 +16,9 @@ module Nanoc
 
       content.string
     end
+
+    def raw_path(snapshot: :last)
+      @item_rep.raw_path(snapshot: snapshot)
+    end
   end
 end
