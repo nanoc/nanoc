@@ -260,4 +260,26 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').sum).to eq(4.00)
     expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').count).to eq(2.00)
   end
+
+  it 'records memoization usage' do
+    Nanoc::Int::NotificationCenter.post(:memoization_hit, 'Foo#bar', rep)
+    Nanoc::Int::NotificationCenter.post(:memoization_miss, 'Foo#bar', rep)
+    Nanoc::Int::NotificationCenter.post(:memoization_miss, 'Foo#bar', rep)
+    Nanoc::Int::NotificationCenter.post(:memoization_miss, 'Foo#bar', rep)
+    Nanoc::Int::NotificationCenter.post(:memoization_miss, 'Foo#bar', rep)
+
+    expect(listener.telemetry.counter(:memoization).get(['Foo#bar', :hit]).value).to eq(1)
+    expect(listener.telemetry.counter(:memoization).get(['Foo#bar', :miss]).value).to eq(4)
+  end
+
+  it 'prints memoization table' do
+    Nanoc::Int::NotificationCenter.post(:memoization_hit, 'Foo#bar', rep)
+    Nanoc::Int::NotificationCenter.post(:memoization_miss, 'Foo#bar', rep)
+    Nanoc::Int::NotificationCenter.post(:memoization_miss, 'Foo#bar', rep)
+    Nanoc::Int::NotificationCenter.post(:memoization_miss, 'Foo#bar', rep)
+    Nanoc::Int::NotificationCenter.post(:memoization_miss, 'Foo#bar', rep)
+
+    expect { listener.stop }
+      .to output(/^\s*Foo#bar │   1      4   20\.0%$/).to_stdout
+  end
 end

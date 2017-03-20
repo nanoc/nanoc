@@ -12,7 +12,9 @@ module Nanoc::Telemetry
       @counters.fetch(label) { @counters[label] = Counter.new }
     end
 
-    # TODO: add #empty?
+    def empty?
+      @counters.empty?
+    end
 
     def value(label)
       get(label).value
@@ -22,6 +24,10 @@ module Nanoc::Telemetry
       @counters.each_with_object({}) do |(label, counter), res|
         res[label] = counter.value
       end
+    end
+
+    def map
+      @counters.map { |(label, counter)| yield(label, counter) }
     end
   end
 end

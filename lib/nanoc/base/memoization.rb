@@ -63,11 +63,14 @@ module Nanoc::Int
           value = object ? object.value : NONE
         end
 
+        counter_label = is_a?(Class) ? "#{self}.#{method_name}" : "#{self.class}##{method_name}"
         if value.equal?(NONE)
+          Nanoc::Int::NotificationCenter.post(:memoization_miss, counter_label)
           send(original_method_name, *args).tap do |r|
             instance_method_cache[args] = Ref::SoftReference.new(Value.new(r))
           end
         else
+          Nanoc::Int::NotificationCenter.post(:memoization_hit, counter_label)
           value
         end
       end
