@@ -23,7 +23,7 @@ module Nanoc::Checking
       view_context = site.compiler.compilation_context.create_view_context(Nanoc::Int::DependencyTracker::Null.new)
 
       context = {
-        items: Nanoc::ItemCollectionWithRepsView.new(site.items, view_context),
+        items: Nanoc::PostCompileItemCollectionView.new(site.items, view_context),
         layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
         config: Nanoc::ConfigView.new(site.config, view_context),
         output_filenames: output_filenames,
