@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.7.2 (2017-03-21)
+
+Fixes:
+
+* Fixed crash when calling `#raw_path` in the Checks file (#1130, #1131)
+
 ## 4.7.1 (2017-03-19)
 
 Fixes:
