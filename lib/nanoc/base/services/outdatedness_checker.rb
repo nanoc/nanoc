@@ -176,7 +176,21 @@ module Nanoc::Int
       return true if dependency.from.nil?
 
       status = basic.outdatedness_status_for(dependency.from)
-      (status.props.active & dependency.props.active).any?
+
+      active = status.props.active & dependency.props.active
+      if attributes_unaffected?(status, dependency)
+        active.delete(:attributes)
+      end
+
+      active.any?
+    end
+
+    def attributes_unaffected?(status, dependency)
+      attr_reason = status.reasons.find do |r|
+        r.is_a?(Nanoc::Int::OutdatednessReasons::AttributesModified)
+      end
+
+      attr_reason && dependency.props.attributes.is_a?(Enumerable) && (dependency.props.attributes & attr_reason.attributes).empty?
     end
   end
 end
