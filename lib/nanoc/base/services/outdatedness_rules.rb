@@ -11,7 +11,9 @@ module Nanoc::Int
       end
 
       def apply(_obj, outdatedness_checker)
-        any_snippets_modified?(outdatedness_checker)
+        if any_snippets_modified?(outdatedness_checker)
+          Nanoc::Int::OutdatednessReasons::CodeSnippetsModified
+        end
       end
 
       private
@@ -34,7 +36,9 @@ module Nanoc::Int
       end
 
       def apply(_obj, outdatedness_checker)
-        config_modified?(outdatedness_checker)
+        if config_modified?(outdatedness_checker)
+          Nanoc::Int::OutdatednessReasons::ConfigurationModified
+        end
       end
 
       private
@@ -55,7 +59,9 @@ module Nanoc::Int
 
       def apply(obj, _outdatedness_checker)
         # FIXME: check all paths (for all snapshots)
-        obj.raw_path && !File.file?(obj.raw_path)
+        if obj.raw_path && !File.file?(obj.raw_path)
+          Nanoc::Int::OutdatednessReasons::NotWritten
+        end
       end
     end
 
@@ -69,7 +75,9 @@ module Nanoc::Int
 
         ch_old = outdatedness_checker.checksum_store.content_checksum_for(obj)
         ch_new = Nanoc::Int::Checksummer.calc_for_content_of(obj)
-        ch_old != ch_new
+        if ch_old != ch_new
+          Nanoc::Int::OutdatednessReasons::ContentModified
+        end
       end
     end
 
@@ -82,7 +90,7 @@ module Nanoc::Int
         Nanoc::Int::OutdatednessReasons::AttributesModified
       end
 
-      contract C::Or[Nanoc::Int::ItemRep, Nanoc::Int::Item, Nanoc::Int::Layout], C::Named['Nanoc::Int::OutdatednessChecker'] => C::Bool
+      contract C::Or[Nanoc::Int::ItemRep, Nanoc::Int::Item, Nanoc::Int::Layout], C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Int::OutdatednessReasons::Generic]
       def apply(obj, outdatedness_checker)
         case obj
         when Nanoc::Int::ItemRep
@@ -90,8 +98,9 @@ module Nanoc::Int
         when Nanoc::Int::Item, Nanoc::Int::Layout
           ch_old = outdatedness_checker.checksum_store.attributes_checksum_for(obj)
           ch_new = Nanoc::Int::Checksummer.calc_for_attributes_of(obj)
-          res = ch_old != ch_new
-          res
+          if ch_old != ch_new
+            Nanoc::Int::OutdatednessReasons::AttributesModified
+          end
         else
           raise ArgumentError
         end
@@ -107,7 +116,9 @@ module Nanoc::Int
       def apply(obj, outdatedness_checker)
         mem_old = outdatedness_checker.rule_memory_store[obj]
         mem_new = outdatedness_checker.action_provider.memory_for(obj).serialize
-        !mem_old.eql?(mem_new)
+        unless mem_old.eql?(mem_new)
+          Nanoc::Int::OutdatednessReasons::RulesModified
+        end
       end
     end
 
@@ -126,7 +137,9 @@ module Nanoc::Int
         paths_old = mem_old.select { |pa| pa[0] == :snapshot }
         paths_new = mem_new.select { |pa| pa[0] == :snapshot }
 
-        paths_old != paths_new
+        if paths_old != paths_new
+          Nanoc::Int::OutdatednessReasons::PathsModified
+        end
       end
     end
 
@@ -137,7 +150,12 @@ module Nanoc::Int
 
       def apply(obj, outdatedness_checker)
         mem = outdatedness_checker.action_provider.memory_for(obj)
+        if any_always_outdated?(mem)
+          Nanoc::Int::OutdatednessReasons::UsesAlwaysOutdatedFilter
+        end
+      end
 
+      def any_always_outdated?(mem)
         mem
           .select { |a| a.is_a?(Nanoc::Int::ProcessingActions::Filter) }
           .map { |a| Nanoc::Filter.named(a.filter_name) }

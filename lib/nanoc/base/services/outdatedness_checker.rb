@@ -58,10 +58,13 @@ module Nanoc::Int
         rules.inject(status) do |acc, rule|
           if !acc.useful_to_apply?(rule)
             acc
-          elsif rule.instance.call(obj, @outdatedness_checker)
-            acc.update(rule.instance.reason)
           else
-            acc
+            reason = rule.instance.call(obj, @outdatedness_checker)
+            if reason
+              acc.update(reason)
+            else
+              acc
+            end
           end
         end
       end
