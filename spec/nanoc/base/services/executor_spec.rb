@@ -434,7 +434,7 @@ describe Nanoc::Int::Executor do
         allow(dependency_tracker).to receive(:enter)
           .with(layout, raw_content: true, attributes: false, compiled_content: false, path: false)
         allow(dependency_tracker).to receive(:enter)
-          .with(layout, raw_content: false, attributes: true, compiled_content: false, path: false)
+          .with(layout, raw_content: false, attributes: [:bug], compiled_content: false, path: false)
         allow(dependency_tracker).to receive(:exit)
         subject
         expect(snapshot_repo.get(rep, :last).string).to eq('head Gum Emperor foot')

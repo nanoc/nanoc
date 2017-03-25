@@ -58,6 +58,16 @@ describe Nanoc::Int::Props do
       let(:props) { described_class.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
       it { is_expected.to be }
     end
+
+    context 'attributes is empty list' do
+      let(:props) { described_class.new(attributes: []) }
+      it { is_expected.not_to be }
+    end
+
+    context 'attributes is non-empty list' do
+      let(:props) { described_class.new(attributes: [:donkey]) }
+      it { is_expected.to be }
+    end
   end
 
   describe '#compiled_content?' do
@@ -132,6 +142,92 @@ describe Nanoc::Int::Props do
       let(:other_props) { props_all }
 
       it { is_expected.to eql(Set.new(%i(raw_content attributes compiled_content path))) }
+    end
+  end
+
+  describe '#merge_attributes' do
+    let(:props_attrs_true) do
+      described_class.new(attributes: true)
+    end
+
+    let(:props_attrs_false) do
+      described_class.new(attributes: false)
+    end
+
+    let(:props_attrs_list_a) do
+      described_class.new(attributes: %i(donkey giraffe))
+    end
+
+    let(:props_attrs_list_b) do
+      described_class.new(attributes: %i(giraffe zebra))
+    end
+
+    subject { props.merge(other_props).attributes }
+
+    context 'false + false' do
+      let(:props) { props_attrs_false }
+      let(:other_props) { props_attrs_false }
+
+      it { is_expected.to be(false) }
+    end
+
+    context 'false + true' do
+      let(:props) { props_attrs_false }
+      let(:other_props) { props_attrs_true }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'false + list' do
+      let(:props) { props_attrs_false }
+      let(:other_props) { props_attrs_list_a }
+
+      it { is_expected.to be_a(Set) }
+      it { is_expected.to match_array(%i(donkey giraffe)) }
+    end
+
+    context 'true + false' do
+      let(:props) { props_attrs_true }
+      let(:other_props) { props_attrs_false }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'true + true' do
+      let(:props) { props_attrs_true }
+      let(:other_props) { props_attrs_true }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'true + list' do
+      let(:props) { props_attrs_true }
+      let(:other_props) { props_attrs_list_a }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'list + false' do
+      let(:props) { props_attrs_list_a }
+      let(:other_props) { props_attrs_false }
+
+      it { is_expected.to be_a(Set) }
+      it { is_expected.to match_array(%i(donkey giraffe)) }
+    end
+
+    context 'list + true' do
+      let(:props) { props_attrs_list_a }
+      let(:other_props) { props_attrs_true }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'list + list' do
+      let(:props) { props_attrs_list_a }
+      let(:other_props) { props_attrs_list_b }
+
+      it { is_expected.to be_a(Set) }
+      it { is_expected.to match_array(%i(donkey giraffe zebra)) }
     end
   end
 

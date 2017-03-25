@@ -4,7 +4,8 @@ module Nanoc::Int
     include Nanoc::Int::ContractsSupport
 
     C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
-    C_ARGS = C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
+    C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
+    C_ARGS = C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
 
     class Null
       include Nanoc::Int::ContractsSupport
