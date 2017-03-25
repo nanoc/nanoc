@@ -192,4 +192,76 @@ describe Nanoc::Int::DependencyStore do
       end
     end
   end
+
+  describe '#record_dependency' do
+    context 'no props' do
+      subject { store.record_dependency(obj_a, obj_b) }
+
+      it 'records a dependency' do
+        expect { subject }
+          .to change { store.objects_causing_outdatedness_of(obj_a) }
+          .from([])
+          .to([obj_b])
+      end
+    end
+
+    context 'compiled content prop' do
+      subject { store.record_dependency(obj_a, obj_b, compiled_content: true) }
+
+      it 'records a dependency' do
+        expect { subject }
+          .to change { store.objects_causing_outdatedness_of(obj_a) }
+          .from([])
+          .to([obj_b])
+      end
+
+      it 'records a dependency with the right props' do
+        subject
+        deps = store.dependencies_causing_outdatedness_of(obj_a)
+
+        expect(deps.first.props.attributes?).not_to be
+        expect(deps.first.props.compiled_content?).to be
+      end
+    end
+
+    context 'attribute prop (true)' do
+      subject { store.record_dependency(obj_a, obj_b, attributes: true) }
+
+      it 'records a dependency' do
+        expect { subject }
+          .to change { store.objects_causing_outdatedness_of(obj_a) }
+          .from([])
+          .to([obj_b])
+      end
+
+      it 'records a dependency with the right props' do
+        subject
+        deps = store.dependencies_causing_outdatedness_of(obj_a)
+
+        expect(deps.first.props.attributes?).to be
+        expect(deps.first.props.attributes).to be
+        expect(deps.first.props.compiled_content?).not_to be
+      end
+    end
+
+    context 'attribute prop (true)' do
+      subject { store.record_dependency(obj_a, obj_b, attributes: [:giraffe]) }
+
+      it 'records a dependency' do
+        expect { subject }
+          .to change { store.objects_causing_outdatedness_of(obj_a) }
+          .from([])
+          .to([obj_b])
+      end
+
+      it 'records a dependency with the right props' do
+        subject
+        deps = store.dependencies_causing_outdatedness_of(obj_a)
+
+        expect(deps.first.props.attributes?).to be
+        expect(deps.first.props.attributes).to match_array([:giraffe])
+        expect(deps.first.props.compiled_content?).not_to be
+      end
+    end
+  end
 end

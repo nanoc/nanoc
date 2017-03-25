@@ -100,7 +100,7 @@ module Nanoc::Int
     def to_h
       {
         raw_content: raw_content?,
-        attributes: attributes?,
+        attributes: attributes,
         compiled_content: compiled_content?,
         path: path?,
       }
