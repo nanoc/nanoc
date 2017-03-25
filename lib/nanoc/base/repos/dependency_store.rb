@@ -58,7 +58,9 @@ module Nanoc::Int
       end
     end
 
-    contract C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::Maybe[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+    C_DOC = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+    C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
+    contract C::Maybe[C_DOC], C::Maybe[C_DOC], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
     # Records a dependency from `src` to `dst` in the dependency graph. When
     # `dst` is oudated, `src` will also become outdated.
     #
@@ -75,7 +77,6 @@ module Nanoc::Int
       new_props = Nanoc::Int::Props.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
       props = existing_props.merge(new_props)
 
-      # Warning! dst and src are *reversed* here!
       @graph.add_edge(dst, src, props: props.to_h) unless src == dst
     end
 

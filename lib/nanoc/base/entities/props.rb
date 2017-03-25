@@ -3,12 +3,22 @@ module Nanoc::Int
   class Props
     include Nanoc::Int::ContractsSupport
 
-    contract C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C::Bool], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+    attr_reader :attributes
+
+    C_ATTRS = C::Or[C::IterOf[Symbol], C::Bool]
+    contract C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C_ATTRS], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
     def initialize(raw_content: false, attributes: false, compiled_content: false, path: false)
       @raw_content = raw_content
-      @attributes = attributes
       @compiled_content = compiled_content
       @path = path
+
+      @attributes =
+        case attributes
+        when Enumerable
+          Set.new(attributes)
+        else
+          attributes
+        end
     end
 
     contract C::None => String
@@ -30,7 +40,12 @@ module Nanoc::Int
 
     contract C::None => C::Bool
     def attributes?
-      @attributes
+      case @attributes
+      when Enumerable
+        @attributes.any?
+      else
+        @attributes
+      end
     end
 
     contract C::None => C::Bool
@@ -47,10 +62,28 @@ module Nanoc::Int
     def merge(other)
       Props.new(
         raw_content: raw_content? || other.raw_content?,
-        attributes: attributes? || other.attributes?,
+        attributes: merge_attributes(other),
         compiled_content: compiled_content? || other.compiled_content?,
         path: path? || other.path?,
       )
+    end
+
+    def merge_attributes(other)
+      case attributes
+      when true
+        true
+      when false
+        other.attributes
+      else
+        case other.attributes
+        when true
+          true
+        when false
+          attributes
+        else
+          attributes + other.attributes
+        end
+      end
     end
 
     contract C::None => Set
@@ -67,7 +100,7 @@ module Nanoc::Int
     def to_h
       {
         raw_content: raw_content?,
-        attributes: attributes?,
+        attributes: attributes,
         compiled_content: compiled_content?,
         path: path?,
       }
