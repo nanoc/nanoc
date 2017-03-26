@@ -58,8 +58,7 @@ module Nanoc::Int
       end
 
       def apply(obj, _outdatedness_checker)
-        # FIXME: check all paths (for all snapshots)
-        if obj.raw_path && !File.file?(obj.raw_path)
+        if obj.raw_paths.values.flatten.compact.any? { |fn| !File.file?(fn) }
           Nanoc::Int::OutdatednessReasons::NotWritten
         end
       end

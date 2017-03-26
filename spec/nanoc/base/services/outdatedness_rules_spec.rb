@@ -101,10 +101,25 @@ describe Nanoc::Int::OutdatednessRules do
         it { is_expected.not_to be }
       end
 
-      context 'path' do
+      context 'path for last snapshot' do
         let(:path) { 'foo.txt' }
 
         before { item_rep.raw_paths = { last: [path] } }
+
+        context 'not written' do
+          it { is_expected.to be }
+        end
+
+        context 'written' do
+          before { File.write(path, 'hello') }
+          it { is_expected.not_to be }
+        end
+      end
+
+      context 'path for other snapshot' do
+        let(:path) { 'foo.txt' }
+
+        before { item_rep.raw_paths = { donkey: [path] } }
 
         context 'not written' do
           it { is_expected.to be }
