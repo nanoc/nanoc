@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.7.3 (2017-03-26)
+
+Fixes:
+
+* Fixed an issue which could cause a missing file for a snapshot that is not `:last` not to be regenerated when compiling (#1134, #1135)
+
 ## 4.7.2 (2017-03-21)
 
 Fixes:
