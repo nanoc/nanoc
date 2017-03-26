@@ -333,11 +333,10 @@ describe Nanoc::Int::OutdatednessRules do
 
     describe '#{Content,Attributes}Modified' do
       subject do
-        # TODO: remove negation
         [
           Nanoc::Int::OutdatednessRules::ContentModified,
           Nanoc::Int::OutdatednessRules::AttributesModified,
-        ].map { |c| !c.instance.apply(new_obj, outdatedness_checker) }
+        ].map { |c| !!c.instance.apply(new_obj, outdatedness_checker) } # rubocop:disable Style/DoubleNegation
       end
 
       let(:stored_obj) { raise 'override me' }
@@ -349,7 +348,7 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'no checksum data' do
           context 'not stored' do
-            it { is_expected.to eql([false, false]) }
+            it { is_expected.to eql([true, true]) }
           end
 
           context 'stored' do
@@ -357,16 +356,16 @@ describe Nanoc::Int::OutdatednessRules do
 
             context 'but content changed afterwards' do
               let(:new_obj) { klass.new('aaaaaaaa', {}, '/foo.md') }
-              it { is_expected.to eql([false, true]) }
+              it { is_expected.to eql([true, false]) }
             end
 
             context 'but attributes changed afterwards' do
               let(:new_obj) { klass.new('a', { animal: 'donkey' }, '/foo.md') }
-              it { is_expected.to eql([true, false]) }
+              it { is_expected.to eql([false, true]) }
             end
 
             context 'and unchanged' do
-              it { is_expected.to eql([true, true]) }
+              it { is_expected.to eql([false, false]) }
             end
           end
         end
@@ -376,7 +375,7 @@ describe Nanoc::Int::OutdatednessRules do
           let(:new_obj)    { stored_obj }
 
           context 'not stored' do
-            it { is_expected.to eql([false, false]) }
+            it { is_expected.to eql([true, true]) }
           end
 
           context 'stored' do
@@ -384,11 +383,11 @@ describe Nanoc::Int::OutdatednessRules do
 
             context 'but checksum data afterwards' do
               let(:new_obj) { klass.new('a', {}, '/foo.md', checksum_data: 'cs-data-new') }
-              it { is_expected.to eql([false, false]) }
+              it { is_expected.to eql([true, true]) }
             end
 
             context 'and unchanged' do
-              it { is_expected.to eql([true, true]) }
+              it { is_expected.to eql([false, false]) }
             end
           end
         end
@@ -398,7 +397,7 @@ describe Nanoc::Int::OutdatednessRules do
           let(:new_obj)    { stored_obj }
 
           context 'not stored' do
-            it { is_expected.to eql([false, false]) }
+            it { is_expected.to eql([true, true]) }
           end
 
           context 'stored' do
@@ -406,11 +405,11 @@ describe Nanoc::Int::OutdatednessRules do
 
             context 'but checksum data afterwards' do
               let(:new_obj) { klass.new('a', {}, '/foo.md', content_checksum_data: 'cs-data-new') }
-              it { is_expected.to eql([false, true]) }
+              it { is_expected.to eql([true, false]) }
             end
 
             context 'and unchanged' do
-              it { is_expected.to eql([true, true]) }
+              it { is_expected.to eql([false, false]) }
             end
           end
         end
@@ -420,7 +419,7 @@ describe Nanoc::Int::OutdatednessRules do
           let(:new_obj)    { stored_obj }
 
           context 'not stored' do
-            it { is_expected.to eql([false, false]) }
+            it { is_expected.to eql([true, true]) }
           end
 
           context 'stored' do
@@ -428,11 +427,11 @@ describe Nanoc::Int::OutdatednessRules do
 
             context 'but checksum data afterwards' do
               let(:new_obj) { klass.new('a', {}, '/foo.md', attributes_checksum_data: 'cs-data-new') }
-              it { is_expected.to eql([true, false]) }
+              it { is_expected.to eql([false, true]) }
             end
 
             context 'and unchanged' do
-              it { is_expected.to eql([true, true]) }
+              it { is_expected.to eql([false, false]) }
             end
           end
         end
