@@ -217,7 +217,7 @@ describe Nanoc::Int::OutdatednessChecker do
       end
     end
 
-    context 'only attribute dependency' do
+    context 'only generic attribute dependency' do
       before do
         dependency_store.record_dependency(item, other_item, attributes: true)
       end
@@ -236,6 +236,50 @@ describe Nanoc::Int::OutdatednessChecker do
         before { other_item.attributes[:title] = 'omg new title' }
         before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
         it { is_expected.to be }
+      end
+
+      context 'path changed' do
+        let(:new_memory_for_other_item_rep) do
+          Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
+            mem.add_filter(:erb, {})
+            mem.add_snapshot(:donkey, '/giraffe.txt')
+          end
+        end
+
+        it { is_expected.not_to be }
+      end
+    end
+
+    context 'only specific attribute dependency' do
+      before do
+        dependency_store.record_dependency(item, other_item, attributes: [:title])
+      end
+
+      context 'attribute changed' do
+        before { other_item.attributes[:title] = 'omg new title' }
+        it { is_expected.to be }
+      end
+
+      context 'other attribute changed' do
+        before { other_item.attributes[:subtitle] = 'tagline here' }
+        it { is_expected.not_to be }
+      end
+
+      context 'raw content changed' do
+        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        it { is_expected.not_to be }
+      end
+
+      context 'attribute + raw content changed' do
+        before { other_item.attributes[:title] = 'omg new title' }
+        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        it { is_expected.to be }
+      end
+
+      context 'other attribute + raw content changed' do
+        before { other_item.attributes[:subtitle] = 'tagline here' }
+        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        it { is_expected.not_to be }
       end
 
       context 'path changed' do
