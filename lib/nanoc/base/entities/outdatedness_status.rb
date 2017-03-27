@@ -10,7 +10,7 @@ module Nanoc::Int
     end
 
     def useful_to_apply?(rule)
-      (rule.instance.reason.props.active - @props.active).any?
+      (rule.affected_props - @props.active).any?
     end
 
     def update(reason)

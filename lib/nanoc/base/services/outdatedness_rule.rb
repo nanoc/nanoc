@@ -12,7 +12,7 @@ module Nanoc::Int
     end
 
     def apply(_obj, _outdatedness_checker)
-      raise NotImplementedError.new('Nanoc::Int::OutdatednessRule subclasses must implement ##reason, and #apply')
+      raise NotImplementedError.new('Nanoc::Int::OutdatednessRule subclasses must implement #apply')
     end
 
     contract C::None => String
@@ -20,9 +20,12 @@ module Nanoc::Int
       "#{self.class.name}(#{reason})"
     end
 
-    # TODO: remove
-    def reason
-      raise NotImplementedError.new('Nanoc::Int::OutdatednessRule subclasses must implement ##reason, and #apply')
+    def self.affects_props(*names)
+      @affected_props = Set.new(names)
+    end
+
+    def self.affected_props
+      @affected_props
     end
   end
 end
