@@ -49,10 +49,18 @@ module Nanoc::Int
       Props.new(raw_content: true, compiled_content: true),
     )
 
-    AttributesModified = Generic.new(
-      'The attributes of this item have been modified since the last time the site was compiled.',
-      Props.new(attributes: true, compiled_content: true),
-    )
+    class AttributesModified < Generic
+      attr_reader :attributes
+
+      def initialize(attributes)
+        super(
+          'The attributes of this item have been modified since the last time the site was compiled.',
+          Props.new(attributes: true, compiled_content: true),
+        )
+
+        @attributes = attributes
+      end
+    end
 
     PathsModified = Generic.new(
       'One or more output paths of this item have been modified since the last time the site was compiled.',

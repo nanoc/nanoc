@@ -213,8 +213,58 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'checksum available, but attributes different' do
           let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+
           before { checksum_store.add(old_item) }
+
           it { is_expected.to be }
+
+          it 'has the one changed attribute' do
+            expect(subject.attributes).to contain_exactly(:greeting)
+          end
+        end
+
+        context 'attribute kept identical' do
+          let(:item)     { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+
+          before { checksum_store.add(old_item) }
+
+          it 'has the one changed attribute' do
+            expect(subject).to be_nil
+          end
+        end
+
+        context 'attribute changed' do
+          let(:item)     { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'ho' }, '/foo.md') }
+
+          before { checksum_store.add(old_item) }
+
+          it 'has the one changed attribute' do
+            expect(subject.attributes).to contain_exactly(:greeting)
+          end
+        end
+
+        context 'attribute deleted' do
+          let(:item)     { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:old_item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
+
+          before { checksum_store.add(old_item) }
+
+          it 'has the one changed attribute' do
+            expect(subject.attributes).to contain_exactly(:greeting)
+          end
+        end
+
+        context 'attribute added' do
+          let(:item)     { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
+          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+
+          before { checksum_store.add(old_item) }
+
+          it 'has the one changed attribute' do
+            expect(subject.attributes).to contain_exactly(:greeting)
+          end
         end
       end
 
@@ -238,8 +288,14 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'checksum available, but attributes different' do
           let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+
           before { checksum_store.add(old_item) }
+
           it { is_expected.to be }
+
+          it 'has the one changed attribute' do
+            expect(subject.attributes).to contain_exactly(:greeting)
+          end
         end
       end
     end
@@ -382,8 +438,10 @@ describe Nanoc::Int::OutdatednessRules do
             before { checksum_store.add(stored_obj) }
 
             context 'but checksum data afterwards' do
+              # NOTE: ignored for attributes!
+
               let(:new_obj) { klass.new('a', {}, '/foo.md', checksum_data: 'cs-data-new') }
-              it { is_expected.to eql([true, true]) }
+              it { is_expected.to eql([true, false]) }
             end
 
             context 'and unchanged' do
@@ -415,6 +473,8 @@ describe Nanoc::Int::OutdatednessRules do
         end
 
         context 'attributes_checksum_data' do
+          # NOTE: attributes_checksum_data is ignored!
+
           let(:stored_obj) { klass.new('a', {}, '/foo.md', attributes_checksum_data: 'cs-data') }
           let(:new_obj)    { stored_obj }
 
@@ -427,7 +487,7 @@ describe Nanoc::Int::OutdatednessRules do
 
             context 'but checksum data afterwards' do
               let(:new_obj) { klass.new('a', {}, '/foo.md', attributes_checksum_data: 'cs-data-new') }
-              it { is_expected.to eql([false, true]) }
+              it { is_expected.to eql([false, false]) }
             end
 
             context 'and unchanged' do

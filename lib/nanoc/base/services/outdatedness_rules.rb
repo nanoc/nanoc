@@ -85,10 +85,18 @@ module Nanoc::Int
         when Nanoc::Int::ItemRep
           apply(obj.item, outdatedness_checker)
         when Nanoc::Int::Item, Nanoc::Int::Layout
-          ch_old = outdatedness_checker.checksum_store.attributes_checksum_for(obj)
-          ch_new = Nanoc::Int::Checksummer.calc_for_attributes_of(obj)
-          if ch_old != ch_new
-            Nanoc::Int::OutdatednessReasons::AttributesModified
+          old_checksums = outdatedness_checker.checksum_store.attributes_checksum_for(obj)
+          unless old_checksums
+            return Nanoc::Int::OutdatednessReasons::AttributesModified.new(true)
+          end
+
+          new_checksums = Nanoc::Int::Checksummer.calc_for_each_attribute_of(obj)
+
+          attributes = Set.new(old_checksums.keys) + Set.new(new_checksums.keys)
+          changed_attributes = attributes.reject { |a| old_checksums[a] == new_checksums[a] }
+
+          if changed_attributes.any?
+            Nanoc::Int::OutdatednessReasons::AttributesModified.new(changed_attributes)
           end
         else
           raise ArgumentError

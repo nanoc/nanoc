@@ -23,6 +23,26 @@ end
 describe Nanoc::Int::Checksummer do
   subject { described_class.calc(obj, Nanoc::Int::Checksummer::VerboseDigest) }
 
+  describe '.calc_for_each_attribute_of' do
+    let(:obj) { Nanoc::Int::Item.new('asdf', { 'foo' => 'bar' }, '/foo.md') }
+
+    context 'compact' do
+      subject do
+        described_class.calc_for_each_attribute_of(obj)
+      end
+
+      it { is_expected.to have_key(:foo) }
+    end
+
+    context 'verbose' do
+      subject do
+        described_class.calc_for_each_attribute_of(obj, Nanoc::Int::Checksummer::VerboseDigest)
+      end
+
+      it { is_expected.to eq(foo: 'String<bar>') }
+    end
+  end
+
   context 'String' do
     let(:obj) { 'hello' }
     it { is_expected.to eql('String<hello>') }

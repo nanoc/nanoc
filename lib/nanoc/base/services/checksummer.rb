@@ -48,8 +48,10 @@ module Nanoc::Int
         obj.content_checksum_data || obj.checksum_data || Nanoc::Int::Checksummer.calc(obj.content)
       end
 
-      def calc_for_attributes_of(obj)
-        obj.attributes_checksum_data || obj.checksum_data || Nanoc::Int::Checksummer.calc(obj.attributes)
+      def calc_for_each_attribute_of(obj, digest_class = CompactDigest)
+        obj.attributes.each_with_object({}) do |(key, value), memo|
+          memo[key] = Nanoc::Int::Checksummer.calc(value, digest_class)
+        end
       end
 
       private

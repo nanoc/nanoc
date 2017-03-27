@@ -3,8 +3,11 @@ describe Nanoc::Int::ChecksumStore do
 
   let(:objects) { [item, code_snippet] }
 
-  let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
-  let(:other_item) { Nanoc::Int::Item.new('asdf', {}, '/sneaky.md') }
+  let(:item) { Nanoc::Int::Item.new('asdf', item_attributes, '/foo.md') }
+  let(:other_item) { Nanoc::Int::Item.new('asdf', other_item_attributes, '/sneaky.md') }
+
+  let(:item_attributes) { {} }
+  let(:other_item_attributes) { {} }
 
   let(:code_snippet) { Nanoc::Int::CodeSnippet.new('def hi ; end', 'lib/foo.rb') }
   let(:other_code_snippet) { Nanoc::Int::CodeSnippet.new('def ho ; end', 'lib/bar.rb') }
@@ -90,6 +93,15 @@ describe Nanoc::Int::ChecksumStore do
 
     it 'has attributes checksum' do
       expect(store.attributes_checksum_for(item)).not_to be_nil
+      expect(store.attributes_checksum_for(item)).to eq({})
+    end
+
+    context 'item has attributes' do
+      let(:item_attributes) { { animal: 'donkey' } }
+
+      it 'has attribute checksum for specified attribute' do
+        expect(store.attributes_checksum_for(item)).to have_key(:animal)
+      end
     end
 
     context 'after storing and loading' do
@@ -117,6 +129,14 @@ describe Nanoc::Int::ChecksumStore do
 
     it 'has attributes checksum' do
       expect(store.attributes_checksum_for(other_item)).not_to be_nil
+    end
+
+    context 'item has attributes' do
+      let(:other_item_attributes) { { location: 'Bernauer Str.' } }
+
+      it 'has attribute checksum for specified attribute' do
+        expect(store.attributes_checksum_for(other_item)).to have_key(:location)
+      end
     end
 
     context 'after storing and loading' do
