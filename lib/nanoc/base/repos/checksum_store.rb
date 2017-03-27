@@ -28,7 +28,7 @@ module Nanoc::Int
     def add(obj)
       if obj.is_a?(Nanoc::Int::Document)
         @checksums[[obj.reference, :content]] = Nanoc::Int::Checksummer.calc_for_content_of(obj)
-        @checksums[[obj.reference, :attributes]] = Nanoc::Int::Checksummer.calc_for_attributes_of(obj)
+        @checksums[[obj.reference, :each_attribute]] = Nanoc::Int::Checksummer.calc_for_each_attribute_of(obj)
       end
 
       @checksums[obj.reference] = Nanoc::Int::Checksummer.calc(obj)
@@ -41,9 +41,9 @@ module Nanoc::Int
       @checksums[[obj.reference, :content]]
     end
 
-    contract c_obj => C::Maybe[String]
+    contract c_obj => C::Maybe[C::HashOf[Symbol, String]]
     def attributes_checksum_for(obj)
-      @checksums[[obj.reference, :attributes]]
+      @checksums[[obj.reference, :each_attribute]]
     end
 
     protected
