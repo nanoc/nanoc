@@ -6,9 +6,7 @@ module Nanoc::Int
 
       include Nanoc::Int::ContractsSupport
 
-      def reason
-        Nanoc::Int::OutdatednessReasons::CodeSnippetsModified
-      end
+      affects_props :raw_content, :attributes, :compiled_content, :path
 
       def apply(_obj, outdatedness_checker)
         if any_snippets_modified?(outdatedness_checker)
@@ -31,9 +29,7 @@ module Nanoc::Int
     class ConfigurationModified < OutdatednessRule
       extend Nanoc::Int::Memoization
 
-      def reason
-        Nanoc::Int::OutdatednessReasons::ConfigurationModified
-      end
+      affects_props :raw_content, :attributes, :compiled_content, :path
 
       def apply(_obj, outdatedness_checker)
         if config_modified?(outdatedness_checker)
@@ -53,9 +49,7 @@ module Nanoc::Int
     end
 
     class NotWritten < OutdatednessRule
-      def reason
-        Nanoc::Int::OutdatednessReasons::NotWritten
-      end
+      affects_props :raw_content, :attributes, :compiled_content, :path
 
       def apply(obj, _outdatedness_checker)
         if obj.raw_paths.values.flatten.compact.any? { |fn| !File.file?(fn) }
@@ -65,9 +59,7 @@ module Nanoc::Int
     end
 
     class ContentModified < OutdatednessRule
-      def reason
-        Nanoc::Int::OutdatednessReasons::ContentModified
-      end
+      affects_props :raw_content, :compiled_content
 
       def apply(obj, outdatedness_checker)
         obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
@@ -85,9 +77,7 @@ module Nanoc::Int
 
       include Nanoc::Int::ContractsSupport
 
-      def reason
-        Nanoc::Int::OutdatednessReasons::AttributesModified
-      end
+      affects_props :attributes, :compiled_content
 
       contract C::Or[Nanoc::Int::ItemRep, Nanoc::Int::Item, Nanoc::Int::Layout], C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Int::OutdatednessReasons::Generic]
       def apply(obj, outdatedness_checker)
@@ -108,9 +98,7 @@ module Nanoc::Int
     end
 
     class RulesModified < OutdatednessRule
-      def reason
-        Nanoc::Int::OutdatednessReasons::RulesModified
-      end
+      affects_props :compiled_content, :path
 
       def apply(obj, outdatedness_checker)
         mem_old = outdatedness_checker.rule_memory_store[obj]
@@ -122,9 +110,7 @@ module Nanoc::Int
     end
 
     class PathsModified < OutdatednessRule
-      def reason
-        Nanoc::Int::OutdatednessReasons::PathsModified
-      end
+      affects_props :path
 
       def apply(obj, outdatedness_checker)
         # FIXME: Prefer to not work on serialised version
@@ -143,9 +129,7 @@ module Nanoc::Int
     end
 
     class UsesAlwaysOutdatedFilter < OutdatednessRule
-      def reason
-        Nanoc::Int::OutdatednessReasons::UsesAlwaysOutdatedFilter
-      end
+      affects_props :raw_content, :attributes, :path
 
       def apply(obj, outdatedness_checker)
         mem = outdatedness_checker.action_provider.memory_for(obj)
