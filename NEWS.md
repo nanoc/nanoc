@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.7.4 (2017-03-29)
+
+Enhancements:
+
+* Made attribute dependencies cause outdatedness less often (#1136, #1137, #1138)
+* Improved speed of Rules file handling (#1140)
+
 ## 4.7.3 (2017-03-26)
 
 Fixes:
