@@ -93,9 +93,6 @@ module Nanoc::Int
     attr_reader :dependency_store
 
     # @api private
-    attr_reader :outdatedness_checker
-
-    # @api private
     attr_reader :reps
 
     # @api private
@@ -104,20 +101,30 @@ module Nanoc::Int
     # @api private
     attr_reader :snapshot_repo
 
-    def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:, outdatedness_store:)
+    def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, reps:, outdatedness_store:)
       @site = site
 
       @compiled_content_cache = compiled_content_cache
       @checksum_store         = checksum_store
       @action_sequence_store  = action_sequence_store
       @dependency_store       = dependency_store
-      @outdatedness_checker   = outdatedness_checker
       @reps                   = reps
       @action_provider        = action_provider
       @outdatedness_store     = outdatedness_store
 
       # TODO: inject
       @snapshot_repo = Nanoc::Int::SnapshotRepo.new
+    end
+
+    def create_outdatedness_checker
+      Nanoc::Int::OutdatednessChecker.new(
+        site: @site,
+        checksum_store: @checksum_store,
+        dependency_store: @dependency_store,
+        action_sequence_store: @action_sequence_store,
+        action_provider: @action_provider,
+        reps: reps,
+      )
     end
 
     def run_all
@@ -205,7 +212,7 @@ module Nanoc::Int
     def determine_outdatedness_stage
       @_determine_outdatedness_stage ||= Stages::DetermineOutdatedness.new(
         reps: reps,
-        outdatedness_checker: outdatedness_checker,
+        outdatedness_checker: create_outdatedness_checker,
         outdatedness_store: outdatedness_store,
       )
     end

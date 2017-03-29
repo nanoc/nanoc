@@ -7,7 +7,6 @@ describe Nanoc::Int::Compiler do
       action_sequence_store: action_sequence_store,
       action_provider: action_provider,
       dependency_store: dependency_store,
-      outdatedness_checker: outdatedness_checker,
       reps: reps,
       outdatedness_store: outdatedness_store,
     )
@@ -19,7 +18,6 @@ describe Nanoc::Int::Compiler do
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items.to_a) }
   let(:reps) { Nanoc::Int::ItemRepRepo.new }
 
-  let(:outdatedness_checker) { double(:outdatedness_checker) }
   let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site, reps: reps) }
   let(:action_provider) { double(:action_provider) }
 
@@ -64,9 +62,6 @@ describe Nanoc::Int::Compiler do
     reps.each do |rep|
       rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last, binary: false)
     end
-
-    allow(outdatedness_checker).to receive(:outdated?).with(rep).and_return(true)
-    allow(outdatedness_checker).to receive(:outdated?).with(other_rep).and_return(true)
 
     # FIXME: eww
     action_sequences = { rep => memory, other_rep => memory }

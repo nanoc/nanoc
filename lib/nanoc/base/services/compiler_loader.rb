@@ -19,16 +19,6 @@ module Nanoc::Int
       outdatedness_store =
         Nanoc::Int::OutdatednessStore.new(site: site, reps: item_rep_repo)
 
-      outdatedness_checker =
-        Nanoc::Int::OutdatednessChecker.new(
-          site: site,
-          checksum_store: checksum_store,
-          dependency_store: dependency_store,
-          action_sequence_store: action_sequence_store,
-          action_provider: action_provider,
-          reps: item_rep_repo,
-        )
-
       compiled_content_cache =
         Nanoc::Int::CompiledContentCache.new(
           site: site,
@@ -40,7 +30,6 @@ module Nanoc::Int
         checksum_store: checksum_store,
         action_sequence_store: action_sequence_store,
         dependency_store: dependency_store,
-        outdatedness_checker: outdatedness_checker,
         reps: item_rep_repo,
         action_provider: action_provider,
         outdatedness_store: outdatedness_store,

@@ -144,7 +144,8 @@ module Nanoc::CLI::Commands
     end
 
     def print_outdatedness_reasons_for(obj, compiler)
-      reasons = compiler.outdatedness_checker.outdatedness_reasons_for(obj)
+      outdatedness_checker = compiler.create_outdatedness_checker
+      reasons = outdatedness_checker.outdatedness_reasons_for(obj)
       if reasons.any?
         puts '  is outdated:'
         reasons.each do |reason|
