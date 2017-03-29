@@ -83,6 +83,24 @@ module Nanoc::Int
       self.class.new(@item_rep, actions: actions)
     end
 
+    def snapshots_defs
+      is_binary = @item_rep.item.content.binary?
+      snapshot_defs = []
+
+      each do |action|
+        case action
+        when Nanoc::Int::ProcessingActions::Snapshot
+          action.snapshot_names.each do |snapshot_name|
+            snapshot_defs << Nanoc::Int::SnapshotDef.new(snapshot_name, binary: is_binary)
+          end
+        when Nanoc::Int::ProcessingActions::Filter
+          is_binary = Nanoc::Filter.named!(action.filter_name).to_binary?
+        end
+      end
+
+      snapshot_defs
+    end
+
     private
 
     def will_add_snapshot(name)

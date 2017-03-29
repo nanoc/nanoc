@@ -15,11 +15,13 @@ module Nanoc::Int
       raise NotImplementedError
     end
 
-    def snapshots_defs_for(_rep)
-      raise NotImplementedError
+    def snapshots_defs_for(rep)
+      # TODO: move to RuleMemory
+      memory_for(rep).snapshots_defs
     end
 
     def paths_for(rep)
+      # TODO: move to RuleMemory
       memory_for(rep).paths
     end
 
