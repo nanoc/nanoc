@@ -134,33 +134,12 @@ module Nanoc::Int
       time_stage(:load_stores) { load_stores_stage.run }
       @outdated_items = time_stage(:determine_outdatedness) { determine_outdatedness_stage.run }
       time_stage(:forget_outdated_dependencies) { forget_outdated_dependencies_stage.run }
-      time_stage(:store) { store }
+      time_stage(:store_pre_compilation_state) { store_pre_compilation_state_stage.run }
       time_stage(:compile_reps) { compile_reps_stage.run }
-      time_stage(:store_output_state) { store_output_state }
+      time_stage(:store_post_compilation_state) { store_post_compilation_state_stage.run }
       time_stage(:postprocess) { @action_provider.postprocess(@site, @reps) }
     ensure
       time_stage(:cleanup) { cleanup_stage.run }
-    end
-
-    # TODO: rename to store_preprocessed_state
-    def store
-      # Calculate action sequence
-      (@reps.to_a + @site.layouts.to_a).each do |obj|
-        action_sequence_store[obj] = @action_sequences[obj].serialize
-      end
-
-      # Calculate checksums
-      objects_to_checksum =
-        site.items.to_a + site.layouts.to_a + site.code_snippets + [site.config]
-      objects_to_checksum.each { |obj| checksum_store.add(obj) }
-
-      # Store
-      checksum_store.store
-      action_sequence_store.store
-    end
-
-    def store_output_state
-      @dependency_store.store
     end
 
     def build_reps
@@ -237,6 +216,19 @@ module Nanoc::Int
       )
     end
 
+    def store_pre_compilation_state_stage
+      @_store_pre_compilation_state_stage ||= Stages::StorePreCompilationState.new(
+        reps: @reps,
+        layouts: site.layouts,
+        items: site.items,
+        code_snippets: site.code_snippets,
+        config: site.config,
+        checksum_store: checksum_store,
+        action_sequence_store: action_sequence_store,
+        action_sequences: @action_sequences,
+      )
+    end
+
     def compile_reps_stage
       @_compile_reps_stage ||= Stages::CompileReps.new(
         outdatedness_store: @outdatedness_store,
@@ -244,6 +236,12 @@ module Nanoc::Int
         action_sequences: @action_sequences,
         compilation_context: compilation_context,
         compiled_content_cache: compiled_content_cache,
+      )
+    end
+
+    def store_post_compilation_state_stage
+      @_store_post_compilation_state_stage ||= Stages::StorePostCompilationState.new(
+        dependency_store: dependency_store,
       )
     end
 
