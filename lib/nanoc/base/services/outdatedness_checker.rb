@@ -109,46 +109,34 @@ module Nanoc::Int
     memoize :action_sequence_for
 
     contract C_OBJ, C::Maybe[C::HashOf[C_OBJ => Nanoc::Int::ActionSequence]] => C::Bool
-    # Checks whether the given object is outdated and therefore needs to be
-    # recompiled.
-    #
-    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
-    #   whose outdatedness should be checked.
-    #
-    # @return [Boolean] true if the object is outdated, false otherwise
     def outdated?(obj, _action_sequences = nil)
       # TODO: use action_sequences
-      !outdatedness_reason_for(obj).nil?
+      outdatedness_reasons_for(obj).any?
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
-    # Calculates the reason why the given object is outdated.
-    #
-    # @param [Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The object
-    #   whose outdatedness reason should be calculated.
-    #
-    # @return [Reasons::Generic, nil] The reason why the
-    #   given object is outdated, or nil if the object is not outdated.
     def outdatedness_reason_for(obj)
-      reason = basic_outdatedness_reason_for(obj)
-      if reason.nil? && outdated_due_to_dependencies?(obj)
-        reason = Reasons::DependenciesOutdated
-      end
-      reason
+      # TODO: stop using this
+      outdatedness_reasons_for(obj).first
     end
-    memoize :outdatedness_reason_for
+
+    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::IterOf[Reasons::Generic]
+    def outdatedness_reasons_for(obj)
+      reasons = basic.outdatedness_status_for(obj).reasons
+      if reasons.any?
+        reasons
+      elsif outdated_due_to_dependencies?(obj)
+        [Reasons::DependenciesOutdated]
+      else
+        []
+      end
+    end
 
     private
 
     contract C::None => Basic
     def basic
       @_basic ||= Basic.new(outdatedness_checker: self, reps: @reps)
-    end
-
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
-    def basic_outdatedness_reason_for(obj)
-      # FIXME: Stop using this; it is no longer accurate, as there can be >1 reasons
-      basic.outdatedness_status_for(obj).reasons.first
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout], Hamster::Set => C::Bool

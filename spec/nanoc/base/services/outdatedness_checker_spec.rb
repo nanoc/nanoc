@@ -56,8 +56,8 @@ describe Nanoc::Int::OutdatednessChecker do
     allow(action_provider).to receive(:action_sequence_for).with(item_rep).and_return(new_action_sequence_for_item_rep)
   end
 
-  describe '#basic_outdatedness_reason_for' do
-    subject { outdatedness_checker.send(:basic_outdatedness_reason_for, obj) }
+  describe 'basic outdatedness reasons' do
+    subject { outdatedness_checker.send(:basic).outdatedness_status_for(obj).reasons.first }
 
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
 
