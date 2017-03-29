@@ -133,7 +133,7 @@ module Nanoc::Int
       time_stage(:prune) { prune_stage.run }
       time_stage(:load_stores) { load_stores_stage.run }
       @outdated_items = time_stage(:determine_outdatedness) { determine_outdatedness_stage.run }
-      time_stage(:forget_dependencies_if_needed) { forget_dependencies_if_needed }
+      time_stage(:forget_outdated_dependencies) { forget_outdated_dependencies_stage.run }
       time_stage(:store) { store }
       time_stage(:compile_reps) { compile_reps_stage.run }
       time_stage(:store_output_state) { store_output_state }
@@ -251,8 +251,11 @@ module Nanoc::Int
       @_cleanup_stage ||= Stages::Cleanup.new(site.config)
     end
 
-    def forget_dependencies_if_needed
-      @outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
+    def forget_outdated_dependencies_stage
+      @_forget_outdated_dependencies_stage ||= Stages::ForgetOutdatedDependencies.new(
+        outdated_items: @outdated_items,
+        dependency_store: @dependency_store,
+      )
     end
   end
 end
