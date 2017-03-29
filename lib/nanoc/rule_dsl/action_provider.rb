@@ -8,21 +8,21 @@ module Nanoc::RuleDSL
     def self.for(site)
       rules_collection = Nanoc::RuleDSL::RulesCollection.new
 
-      rule_memory_calculator =
-        Nanoc::RuleDSL::RuleMemoryCalculator.new(
+      action_sequence_calculator =
+        Nanoc::RuleDSL::ActionSequenceCalculator.new(
           rules_collection: rules_collection, site: site,
         )
 
-      action_provider = new(rules_collection, rule_memory_calculator)
+      action_provider = new(rules_collection, action_sequence_calculator)
 
       Nanoc::RuleDSL::RulesLoader.new(site.config, rules_collection).load
 
       action_provider
     end
 
-    def initialize(rules_collection, rule_memory_calculator)
+    def initialize(rules_collection, action_sequence_calculator)
       @rules_collection = rules_collection
-      @rule_memory_calculator = rule_memory_calculator
+      @action_sequence_calculator = action_sequence_calculator
     end
 
     def rep_names_for(item)
@@ -32,8 +32,8 @@ module Nanoc::RuleDSL
       matching_rules.map(&:rep_name).uniq
     end
 
-    def memory_for(rep)
-      @rule_memory_calculator[rep]
+    def action_sequence_for(rep)
+      @action_sequence_calculator[rep]
     end
 
     def need_preprocessing?

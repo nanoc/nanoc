@@ -407,8 +407,8 @@ describe Nanoc::Int::Executor do
       )
     end
 
-    let(:rule_memory) do
-      Nanoc::Int::RuleMemory.new(rep).tap do |mem|
+    let(:action_sequence) do
+      Nanoc::Int::ActionSequence.new(rep).tap do |mem|
         mem.add_filter(:erb, {})
       end
     end
@@ -422,7 +422,7 @@ describe Nanoc::Int::Executor do
       allow(compilation_context).to receive(:assigns_for).with(rep, dependency_tracker) { assigns }
       allow(compilation_context).to receive(:create_view_context).with(dependency_tracker).and_return(view_context)
 
-      allow(action_provider).to receive(:memory_for).with(layout).and_return(rule_memory)
+      allow(action_provider).to receive(:action_sequence_for).with(layout).and_return(action_sequence)
     end
 
     subject { executor.layout('/default.*') }
@@ -532,8 +532,8 @@ describe Nanoc::Int::Executor do
     end
 
     context 'no filter specified' do
-      let(:rule_memory) do
-        Nanoc::Int::RuleMemory.new(rep)
+      let(:action_sequence) do
+        Nanoc::Int::ActionSequence.new(rep)
       end
 
       it 'raises' do

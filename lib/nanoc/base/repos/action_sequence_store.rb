@@ -1,43 +1,43 @@
 module Nanoc::Int
-  # Stores rule memories for objects that can be run through a rule (item
+  # Stores action sequences for objects that can be run through a rule (item
   # representations and layouts).
   #
   # @api private
-  class RuleMemoryStore < ::Nanoc::Int::Store
+  class ActionSequenceStore < ::Nanoc::Int::Store
     def initialize(site: nil)
       super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'rule_memory'), 1)
 
-      @rule_memories = {}
+      @action_sequences = {}
     end
 
     # @param [Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The item representation or
-    #   the layout to get the rule memory for
+    #   the layout to get the action sequence for
     #
-    # @return [Array] The rule memory for the given object
+    # @return [Array] The action sequence for the given object
     def [](obj)
-      @rule_memories[obj.reference]
+      @action_sequences[obj.reference]
     end
 
     # @param [Nanoc::Int::ItemRep, Nanoc::Int::Layout] obj The item representation or
-    #   the layout to set the rule memory for
+    #   the layout to set the action sequence for
     #
-    # @param [Array] rule_memory The new rule memory to be stored
+    # @param [Array] action_sequence The new action sequence to be stored
     #
     # @return [void]
-    def []=(obj, rule_memory)
-      @rule_memories[obj.reference] = rule_memory
+    def []=(obj, action_sequence)
+      @action_sequences[obj.reference] = action_sequence
     end
 
     protected
 
     # @see Nanoc::Int::Store#data
     def data
-      @rule_memories
+      @action_sequences
     end
 
     # @see Nanoc::Int::Store#data=
     def data=(new_data)
-      @rule_memories = new_data
+      @action_sequences = new_data
     end
   end
 end

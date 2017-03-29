@@ -1,5 +1,5 @@
-describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
-  subject(:rule_memory_calculator) do
+describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
+  subject(:action_sequence_calculator) do
     described_class.new(site: site, rules_collection: rules_collection)
   end
 
@@ -7,7 +7,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
   let(:site) { double(:site) }
 
   describe '#[]' do
-    subject { rule_memory_calculator[obj] }
+    subject { action_sequence_calculator[obj] }
 
     context 'with item rep' do
       let(:obj) { Nanoc::Int::ItemRep.new(item, :csv) }
@@ -27,7 +27,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
 
       context 'no rules exist' do
         it 'raises error' do
-          error = Nanoc::RuleDSL::RuleMemoryCalculator::NoRuleMemoryForItemRepException
+          error = Nanoc::RuleDSL::ActionSequenceCalculator::NoActionSequenceForItemRepException
           expect { subject }.to raise_error(error)
         end
       end
@@ -142,7 +142,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
 
       context 'no rules exist' do
         it 'raises error' do
-          error = Nanoc::RuleDSL::RuleMemoryCalculator::NoRuleMemoryForLayoutException
+          error = Nanoc::RuleDSL::ActionSequenceCalculator::NoActionSequenceForLayoutException
           expect { subject }.to raise_error(error)
         end
       end
@@ -166,7 +166,7 @@ describe(Nanoc::RuleDSL::RuleMemoryCalculator) do
       let(:obj) { :donkey }
 
       it 'errors' do
-        error = Nanoc::RuleDSL::RuleMemoryCalculator::UnsupportedObjectTypeException
+        error = Nanoc::RuleDSL::ActionSequenceCalculator::UnsupportedObjectTypeException
         expect { subject }.to raise_error(error)
       end
     end

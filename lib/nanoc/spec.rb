@@ -12,7 +12,7 @@ module Nanoc
         @mod = mod
 
         @erbout = ''
-        @rule_memory = {}
+        @action_sequence = {}
         @config = Nanoc::Int::Configuration.new.with_defaults
         @reps = Nanoc::Int::ItemRepRepo.new
         @items = Nanoc::Int::IdentifiableCollection.new(@config)
@@ -103,12 +103,12 @@ module Nanoc
         assigns[:layouts]
       end
 
-      def rule_memory_for(obj)
-        @rule_memory.fetch(obj, [])
+      def action_sequence_for(obj)
+        @action_sequence.fetch(obj, [])
       end
 
-      def update_rule_memory(obj, memory)
-        @rule_memory[obj] = memory
+      def update_action_sequence(obj, memory)
+        @action_sequence[obj] = memory
       end
 
       def snapshot_repo
@@ -141,8 +141,8 @@ module Nanoc
             [:default]
           end
 
-          def memory_for(obj)
-            @context.rule_memory_for(obj)
+          def action_sequence_for(obj)
+            @context.action_sequence_for(obj)
           end
 
           def snapshots_defs_for(_rep)

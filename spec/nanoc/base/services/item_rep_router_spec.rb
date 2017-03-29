@@ -25,32 +25,32 @@ describe(Nanoc::Int::ItemRepRouter) do
           Nanoc::Int::ProcessingActions::Snapshot.new([], []),
         ]
 
-      Nanoc::Int::RuleMemory.new(nil, actions: actions)
+      Nanoc::Int::ActionSequence.new(nil, actions: actions)
     end
 
-    let(:memory_for_default) do
+    let(:action_sequence_for_default) do
       actions =
         [
           Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
           Nanoc::Int::ProcessingActions::Snapshot.new([:last], ['/foo/index.html']),
         ]
 
-      Nanoc::Int::RuleMemory.new(nil, actions: actions)
+      Nanoc::Int::ActionSequence.new(nil, actions: actions)
     end
 
-    let(:memory_for_csv) do
+    let(:action_sequence_for_csv) do
       actions =
         [
           Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
           Nanoc::Int::ProcessingActions::Snapshot.new([:last], ['/foo.csv']),
         ]
 
-      Nanoc::Int::RuleMemory.new(nil, actions: actions)
+      Nanoc::Int::ActionSequence.new(nil, actions: actions)
     end
 
     example do
-      allow(action_provider).to receive(:memory_for).with(reps[0]).and_return(memory_for_default)
-      allow(action_provider).to receive(:memory_for).with(reps[1]).and_return(memory_for_csv)
+      allow(action_provider).to receive(:action_sequence_for).with(reps[0]).and_return(action_sequence_for_default)
+      allow(action_provider).to receive(:action_sequence_for).with(reps[1]).and_return(action_sequence_for_csv)
 
       subject
 
@@ -62,10 +62,10 @@ describe(Nanoc::Int::ItemRepRouter) do
     end
 
     it 'picks the paths last returned' do
-      allow(action_provider).to receive(:memory_for).with(reps[0])
-        .and_return(memory_without_paths, memory_for_default)
-      allow(action_provider).to receive(:memory_for).with(reps[1])
-        .and_return(memory_without_paths, memory_for_csv)
+      allow(action_provider).to receive(:action_sequence_for).with(reps[0])
+        .and_return(memory_without_paths, action_sequence_for_default)
+      allow(action_provider).to receive(:action_sequence_for).with(reps[1])
+        .and_return(memory_without_paths, action_sequence_for_csv)
 
       subject
 

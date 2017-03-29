@@ -57,8 +57,8 @@ describe Nanoc::Int::Compiler::Stages::Cleanup do
       it_behaves_like 'an old store'
     end
 
-    context 'tmp/rule_memory' do
-      let(:store_name) { 'rule_memory' }
+    context 'tmp/action_sequence' do
+      let(:store_name) { 'action_sequence' }
       it_behaves_like 'an old store'
     end
 

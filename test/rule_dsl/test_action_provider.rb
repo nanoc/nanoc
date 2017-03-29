@@ -4,13 +4,13 @@ class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
   def new_action_provider(site)
     rules_collection = Nanoc::RuleDSL::RulesCollection.new
 
-    rule_memory_calculator =
-      Nanoc::RuleDSL::RuleMemoryCalculator.new(
+    action_sequence_calculator =
+      Nanoc::RuleDSL::ActionSequenceCalculator.new(
         rules_collection: rules_collection, site: site,
       )
 
     action_provider = Nanoc::RuleDSL::ActionProvider.new(
-      rules_collection, rule_memory_calculator
+      rules_collection, action_sequence_calculator
     )
 
     Nanoc::RuleDSL::RulesLoader.new(site.config, rules_collection).load
