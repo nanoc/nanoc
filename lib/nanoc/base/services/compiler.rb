@@ -164,7 +164,7 @@ module Nanoc::Int
       builder = Nanoc::Int::ItemRepBuilder.new(
         site, action_provider, @reps
       )
-      builder.run
+      @memories = builder.run
     end
 
     def compilation_context
