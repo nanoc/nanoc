@@ -1,22 +1,4 @@
 module Nanoc::Int
-  # Responsible for compiling a site’s item representations.
-  #
-  # The compilation process makes use of notifications (see
-  # {Nanoc::Int::NotificationCenter}) to track dependencies between items,
-  # layouts, etc. The following notifications are used:
-  #
-  # * `compilation_started` — indicates that the compiler has started
-  #   compiling this item representation. Has one argument: the item
-  #   representation itself. Only one item can be compiled at a given moment;
-  #   therefore, it is not possible to get two consecutive
-  #   `compilation_started` notifications without also getting a
-  #   `compilation_ended` notification in between them.
-  #
-  # * `compilation_ended` — indicates that the compiler has finished compiling
-  #   this item representation (either successfully or with failure). Has one
-  #   argument: the item representation itself.
-  #
-  # @api private
   class Compiler
     # Provides common functionality for accesing “context” of an item that is being compiled.
     class CompilationContext
