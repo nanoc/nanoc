@@ -128,18 +128,18 @@ module Nanoc::Int
     end
 
     def run_all
-      time_stage(:preprocess) { preprocess_stage.run }
-      @action_sequences = time_stage(:build_reps) { build_reps_stage.run }
-      time_stage(:prune) { prune_stage.run }
-      time_stage(:load_stores) { load_stores_stage.run }
-      @outdated_items = time_stage(:determine_outdatedness) { determine_outdatedness_stage.run }
-      time_stage(:forget_outdated_dependencies) { forget_outdated_dependencies_stage.run }
-      time_stage(:store_pre_compilation_state) { store_pre_compilation_state_stage.run }
-      time_stage(:compile_reps) { compile_reps_stage.run }
-      time_stage(:store_post_compilation_state) { store_post_compilation_state_stage.run }
-      time_stage(:postprocess) { postprocess_stage.run }
+      run_stage(preprocess_stage)
+      @action_sequences = run_stage(build_reps_stage)
+      run_stage(prune_stage)
+      run_stage(load_stores_stage)
+      @outdated_items = run_stage(determine_outdatedness_stage)
+      run_stage(forget_outdated_dependencies_stage)
+      run_stage(store_pre_compilation_state_stage)
+      run_stage(compile_reps_stage)
+      run_stage(store_post_compilation_state_stage)
+      run_stage(postprocess_stage)
     ensure
-      time_stage(:cleanup) { cleanup_stage.run }
+      run_stage(cleanup_stage)
     end
 
     def compilation_context
@@ -164,9 +164,10 @@ module Nanoc::Int
 
     private
 
-    def time_stage(name)
+    def run_stage(stage)
+      name = stage.class.to_s
       Nanoc::Int::NotificationCenter.post(:stage_started, name)
-      yield
+      stage.run
     ensure
       Nanoc::Int::NotificationCenter.post(:stage_ended, name)
     end
