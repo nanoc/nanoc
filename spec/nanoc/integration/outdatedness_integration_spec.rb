@@ -40,7 +40,7 @@ EOS
         output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
       )
     end
 
@@ -49,7 +49,7 @@ EOS
       FileUtils.touch('content/foo.md', mtime: time)
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
         output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
@@ -61,10 +61,10 @@ EOS
       FileUtils.touch('content/foo.md', mtime: time)
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
       )
     end
   end
@@ -104,7 +104,7 @@ EOS
         output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
       )
     end
 
@@ -112,10 +112,10 @@ EOS
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoooOoooOOoooOooo")
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
       )
     end
 
@@ -123,7 +123,7 @@ EOS
       File.write('content/foo.md', "---\ntitle: bye\n---\n\nfoo")
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
         output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
@@ -166,7 +166,7 @@ EOS
         output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
       )
     end
 
@@ -174,10 +174,10 @@ EOS
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoooOoooOOoooOooo")
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
       )
     end
 
@@ -185,10 +185,10 @@ EOS
       File.write('content/foo.md', "---\ntitle: bye\n---\n\nfoo")
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
       )
     end
 
@@ -206,7 +206,7 @@ end
 EOS
 
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated: /).to_stdout,
+        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
       )
       expect { Nanoc::CLI.run(%w(show-data --no-color)) }.to(
         output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,

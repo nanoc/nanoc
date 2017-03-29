@@ -129,12 +129,7 @@ module Nanoc::CLI::Commands
       sorted_reps_with_prev(items) do |rep, prev|
         puts if prev
         puts "item #{rep.item.identifier}, rep #{rep.name}:"
-        outdatedness_reason = compiler.outdatedness_checker.outdatedness_reason_for(rep)
-        if outdatedness_reason
-          puts "  is outdated: #{outdatedness_reason.message}"
-        else
-          puts '  is not outdated'
-        end
+        print_outdatedness_reasons_for(rep, compiler)
       end
     end
 
@@ -144,13 +139,19 @@ module Nanoc::CLI::Commands
       sorted_with_prev(layouts) do |layout, prev|
         puts if prev
         puts "layout #{layout.identifier}:"
-        outdatedness_reason = compiler.outdatedness_checker.outdatedness_reason_for(layout)
-        if outdatedness_reason
-          puts "  is outdated: #{outdatedness_reason.message}"
-        else
-          puts '  is not outdated'
+        print_outdatedness_reasons_for(layout, compiler)
+      end
+    end
+
+    def print_outdatedness_reasons_for(obj, compiler)
+      reasons = compiler.outdatedness_checker.outdatedness_reasons_for(obj)
+      if reasons.any?
+        puts '  is outdated:'
+        reasons.each do |reason|
+          puts "    - #{reason.message}"
         end
-        puts
+      else
+        puts '  is not outdated'
       end
     end
   end
