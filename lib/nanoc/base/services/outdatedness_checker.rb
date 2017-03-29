@@ -114,12 +114,6 @@ module Nanoc::Int
       outdatedness_reasons_for(obj).any?
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[Reasons::Generic]
-    def outdatedness_reason_for(obj)
-      # TODO: stop using this
-      outdatedness_reasons_for(obj).first
-    end
-
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::IterOf[Reasons::Generic]
     def outdatedness_reasons_for(obj)
       reasons = basic.outdatedness_status_for(obj).reasons
