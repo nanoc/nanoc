@@ -19,7 +19,7 @@ module Nanoc::Int
       Nanoc::Int::ItemRepRouter.new(@reps, @action_provider, @site).run
 
       @reps.each do |rep|
-        rep.snapshot_defs = @action_provider.snapshots_defs_for(rep)
+        rep.snapshot_defs = @action_provider.memory_for(rep).snapshots_defs
       end
     end
   end
