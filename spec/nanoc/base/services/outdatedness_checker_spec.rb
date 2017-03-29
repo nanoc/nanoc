@@ -5,7 +5,7 @@ describe Nanoc::Int::OutdatednessChecker do
       checksum_store: checksum_store,
       dependency_store: dependency_store,
       action_sequence_store: action_sequence_store,
-      action_provider: action_provider,
+      action_sequences: action_sequences,
       reps: reps,
     )
   end
@@ -38,7 +38,9 @@ describe Nanoc::Int::OutdatednessChecker do
 
   let(:new_action_sequence_for_item_rep) { old_action_sequence_for_item_rep }
 
-  let(:action_provider) { double(:action_provider) }
+  let(:action_sequences) do
+    { item_rep => new_action_sequence_for_item_rep }
+  end
 
   let(:reps) do
     Nanoc::Int::ItemRepRepo.new
@@ -52,8 +54,6 @@ describe Nanoc::Int::OutdatednessChecker do
   before do
     reps << item_rep
     action_sequence_store[item_rep] = old_action_sequence_for_item_rep.serialize
-
-    allow(action_provider).to receive(:action_sequence_for).with(item_rep).and_return(new_action_sequence_for_item_rep)
   end
 
   describe 'basic outdatedness reasons' do
@@ -131,6 +131,13 @@ describe Nanoc::Int::OutdatednessChecker do
 
     let(:new_action_sequence_for_other_item_rep) { old_action_sequence_for_other_item_rep }
 
+    let(:action_sequences) do
+      {
+        item_rep => new_action_sequence_for_item_rep,
+        other_item_rep => new_action_sequence_for_other_item_rep,
+      }
+    end
+
     before do
       reps << other_item_rep
       action_sequence_store[other_item_rep] = old_action_sequence_for_other_item_rep.serialize
@@ -138,7 +145,6 @@ describe Nanoc::Int::OutdatednessChecker do
       checksum_store.add(other_item)
       checksum_store.add(config)
 
-      allow(action_provider).to receive(:action_sequence_for).with(other_item_rep).and_return(new_action_sequence_for_other_item_rep)
       allow(site).to receive(:code_snippets).and_return([])
       allow(site).to receive(:config).and_return(config)
     end
@@ -147,11 +153,18 @@ describe Nanoc::Int::OutdatednessChecker do
       let(:distant_item) { Nanoc::Int::Item.new('distant stuff', {}, '/distant.md') }
       let(:distant_item_rep) { Nanoc::Int::ItemRep.new(distant_item, :default) }
 
+      let(:action_sequences) do
+        {
+          item_rep => new_action_sequence_for_item_rep,
+          other_item_rep => new_action_sequence_for_other_item_rep,
+          distant_item_rep => new_action_sequence_for_other_item_rep,
+        }
+      end
+
       before do
         reps << distant_item_rep
         checksum_store.add(distant_item)
         action_sequence_store[distant_item_rep] = old_action_sequence_for_other_item_rep.serialize
-        allow(action_provider).to receive(:action_sequence_for).with(distant_item_rep).and_return(new_action_sequence_for_other_item_rep)
       end
 
       context 'on attribute + attribute' do

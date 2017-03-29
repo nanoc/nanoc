@@ -8,12 +8,10 @@ module Nanoc::Int::Compiler::Stages
       @outdatedness_store = outdatedness_store
     end
 
-    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]
-
-    contract C::HashOf[C_OBJ => Nanoc::Int::ActionSequence], C::Func[C::IterOf[Nanoc::Int::Item] => C::Any] => C::Any
-    def run(action_sequences)
+    contract C::Func[C::IterOf[Nanoc::Int::Item] => C::Any] => C::Any
+    def run
       outdated_reps_tmp = @reps.select do |r|
-        @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r, action_sequences)
+        @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r)
       end
 
       outdated_items = outdated_reps_tmp.map(&:item).uniq
