@@ -11,9 +11,9 @@ module Nanoc::Int::Compiler::Stages
     C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]
 
     contract C::HashOf[C_OBJ => Nanoc::Int::RuleMemory], C::Func[C::IterOf[Nanoc::Int::Item] => C::Any] => C::Any
-    def run(_memories)
+    def run(memories)
       outdated_reps_tmp = @reps.select do |r|
-        @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r)
+        @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r, memories)
       end
 
       outdated_items = outdated_reps_tmp.map(&:item).uniq
