@@ -18,44 +18,62 @@ describe(Nanoc::Int::ItemRepRouter) do
       ]
     end
 
-    let(:paths_0) do
-      [
-        [[:last], ['/foo/index.html']],
-      ]
+    let(:memory_without_paths) do
+      actions =
+        [
+          Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
+          Nanoc::Int::ProcessingActions::Snapshot.new([], []),
+        ]
+
+      Nanoc::Int::RuleMemory.new(nil, actions: actions)
     end
 
-    let(:paths_1) do
-      [
-        [[:last], ['/bar.html']],
-      ]
+    let(:memory_for_default) do
+      actions =
+        [
+          Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
+          Nanoc::Int::ProcessingActions::Snapshot.new([:last], ['/foo/index.html']),
+        ]
+
+      Nanoc::Int::RuleMemory.new(nil, actions: actions)
+    end
+
+    let(:memory_for_csv) do
+      actions =
+        [
+          Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
+          Nanoc::Int::ProcessingActions::Snapshot.new([:last], ['/foo.csv']),
+        ]
+
+      Nanoc::Int::RuleMemory.new(nil, actions: actions)
     end
 
     example do
-      allow(action_provider).to receive(:paths_for).with(reps[0]).and_return(paths_0)
-      allow(action_provider).to receive(:paths_for).with(reps[1]).and_return(paths_1)
+      allow(action_provider).to receive(:memory_for).with(reps[0]).and_return(memory_for_default)
+      allow(action_provider).to receive(:memory_for).with(reps[1]).and_return(memory_for_csv)
 
       subject
 
       expect(reps[0].raw_paths).to eql(last: ['output/foo/index.html'])
       expect(reps[0].paths).to eql(last: ['/foo/'])
 
-      expect(reps[1].raw_paths).to eql(last: ['output/bar.html'])
-      expect(reps[1].paths).to eql(last: ['/bar.html'])
+      expect(reps[1].raw_paths).to eql(last: ['output/foo.csv'])
+      expect(reps[1].paths).to eql(last: ['/foo.csv'])
     end
 
     it 'picks the paths last returned' do
-      expect(action_provider).to receive(:paths_for).with(reps[0]).and_return([[[:last], []]]).ordered
-      expect(action_provider).to receive(:paths_for).with(reps[0]).and_return(paths_0).ordered
-      expect(action_provider).to receive(:paths_for).with(reps[1]).and_return([[[:last], []]]).ordered
-      expect(action_provider).to receive(:paths_for).with(reps[1]).and_return(paths_1).ordered
+      allow(action_provider).to receive(:memory_for).with(reps[0])
+        .and_return(memory_without_paths, memory_for_default)
+      allow(action_provider).to receive(:memory_for).with(reps[1])
+        .and_return(memory_without_paths, memory_for_csv)
 
       subject
 
       expect(reps[0].raw_paths).to eql(last: ['output/foo/index.html'])
       expect(reps[0].paths).to eql(last: ['/foo/'])
 
-      expect(reps[1].raw_paths).to eql(last: ['output/bar.html'])
-      expect(reps[1].paths).to eql(last: ['/bar.html'])
+      expect(reps[1].raw_paths).to eql(last: ['output/foo.csv'])
+      expect(reps[1].paths).to eql(last: ['/foo.csv'])
     end
   end
 

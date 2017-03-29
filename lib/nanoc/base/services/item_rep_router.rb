@@ -31,11 +31,11 @@ module Nanoc::Int
         # I can think of. For details, see
         # https://github.com/nanoc/nanoc/pull/1085#issuecomment-280628426.
 
-        @action_provider.paths_for(rep).each do |(snapshot_names, paths)|
+        @action_provider.memory_for(rep).paths.each do |(snapshot_names, paths)|
           route_rep(rep, paths, snapshot_names, {})
         end
 
-        @action_provider.paths_for(rep).each do |(snapshot_names, paths)|
+        @action_provider.memory_for(rep).paths.each do |(snapshot_names, paths)|
           route_rep(rep, paths, snapshot_names, assigned_paths)
         end
 

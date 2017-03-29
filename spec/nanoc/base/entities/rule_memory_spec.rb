@@ -164,4 +164,115 @@ describe Nanoc::Int::RuleMemory do
       expect(subject.size).to eql(5)
     end
   end
+
+  describe '#snapshots_defs' do
+    subject { rule_memory.snapshots_defs }
+
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
+    let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+
+    Class.new(Nanoc::Filter) do
+      identifier :RuleMemSpec_filter_b2b
+      type :binary => :binary # rubocop:disable Style/HashSyntax
+
+      def run(content, params = {}); end
+    end
+
+    Class.new(Nanoc::Filter) do
+      identifier :RuleMemSpec_filter_b2t
+      type :binary => :text # rubocop:disable Style/HashSyntax
+
+      def run(content, params = {}); end
+    end
+
+    Class.new(Nanoc::Filter) do
+      identifier :RuleMemSpec_filter_t2t
+      type :text => :text # rubocop:disable Style/HashSyntax
+
+      def run(content, params = {}); end
+    end
+
+    Class.new(Nanoc::Filter) do
+      identifier :RuleMemSpec_filter_t2b
+      type :text => :binary # rubocop:disable Style/HashSyntax
+
+      def run(content, params = {}); end
+    end
+
+    it 'has no snapshot defs by default' do
+      expect(subject).to be_empty
+    end
+
+    context 'textual item' do
+      let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
+
+      it 'generates initial textual snapshot def' do
+        rule_memory.add_snapshot(:giraffe, nil)
+
+        expect(subject.size).to eq(1)
+        expect(subject[0].name).to eq(:giraffe)
+        expect(subject[0]).not_to be_binary
+      end
+
+      it 'generated follow-up textual snapshot def if previous filter is textual' do
+        rule_memory.add_snapshot(:giraffe, nil)
+        rule_memory.add_filter(:RuleMemSpec_filter_t2t, arguments: 'irrelevant')
+        rule_memory.add_snapshot(:zebra, nil)
+
+        expect(subject.size).to eq(2)
+        expect(subject[0].name).to eq(:giraffe)
+        expect(subject[0]).not_to be_binary
+        expect(subject[1].name).to eq(:zebra)
+        expect(subject[1]).not_to be_binary
+      end
+
+      it 'generated follow-up binary snapshot def if previous filter is text-to-bianry' do
+        rule_memory.add_snapshot(:giraffe, nil)
+        rule_memory.add_filter(:RuleMemSpec_filter_t2b, arguments: 'irrelevant')
+        rule_memory.add_snapshot(:zebra, nil)
+
+        expect(subject.size).to eq(2)
+        expect(subject[0].name).to eq(:giraffe)
+        expect(subject[0]).not_to be_binary
+        expect(subject[1].name).to eq(:zebra)
+        expect(subject[1]).to be_binary
+      end
+    end
+
+    context 'binary item' do
+      let(:item) { Nanoc::Int::Item.new(Nanoc::Int::BinaryContent.new('/asdf.dat'), {}, '/foo.md') }
+
+      it 'generates initial binary snapshot def' do
+        rule_memory.add_snapshot(:giraffe, nil)
+
+        expect(subject.size).to eq(1)
+        expect(subject[0].name).to eq(:giraffe)
+        expect(subject[0]).to be_binary
+      end
+
+      it 'generated follow-up binary snapshot def if previous filter is binary' do
+        rule_memory.add_snapshot(:giraffe, nil)
+        rule_memory.add_filter(:RuleMemSpec_filter_b2b, arguments: 'irrelevant')
+        rule_memory.add_snapshot(:zebra, nil)
+
+        expect(subject.size).to eq(2)
+        expect(subject[0].name).to eq(:giraffe)
+        expect(subject[0]).to be_binary
+        expect(subject[1].name).to eq(:zebra)
+        expect(subject[1]).to be_binary
+      end
+
+      it 'generated follow-up textual snapshot def if previous filter is binary-to-text' do
+        rule_memory.add_snapshot(:giraffe, nil)
+        rule_memory.add_filter(:RuleMemSpec_filter_b2t, arguments: 'irrelevant')
+        rule_memory.add_snapshot(:zebra, nil)
+
+        expect(subject.size).to eq(2)
+        expect(subject[0].name).to eq(:giraffe)
+        expect(subject[0]).to be_binary
+        expect(subject[1].name).to eq(:zebra)
+        expect(subject[1]).not_to be_binary
+      end
+    end
+  end
 end

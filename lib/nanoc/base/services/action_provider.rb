@@ -15,14 +15,6 @@ module Nanoc::Int
       raise NotImplementedError
     end
 
-    def snapshots_defs_for(_rep)
-      raise NotImplementedError
-    end
-
-    def paths_for(rep)
-      memory_for(rep).paths
-    end
-
     def need_preprocessing?
       raise NotImplementedError
     end

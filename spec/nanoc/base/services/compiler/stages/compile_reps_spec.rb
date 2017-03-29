@@ -77,11 +77,6 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   describe '#compile_reps' do
     subject { stage.run }
 
-    before do
-      allow(action_provider).to receive(:snapshots_defs_for).with(rep).and_return(snapshot_defs_for_rep)
-      allow(action_provider).to receive(:snapshots_defs_for).with(other_rep).and_return(snapshot_defs_for_rep)
-    end
-
     let(:snapshot_defs_for_rep) do
       [Nanoc::Int::SnapshotDef.new(:last, binary: false)]
     end

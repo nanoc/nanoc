@@ -54,24 +54,6 @@ module Nanoc::RuleDSL
       end
     end
 
-    def snapshots_defs_for(rep)
-      is_binary = rep.item.content.binary?
-      snapshot_defs = []
-
-      self[rep].each do |action|
-        case action
-        when Nanoc::Int::ProcessingActions::Snapshot
-          action.snapshot_names.each do |snapshot_name|
-            snapshot_defs << Nanoc::Int::SnapshotDef.new(snapshot_name, binary: is_binary)
-          end
-        when Nanoc::Int::ProcessingActions::Filter
-          is_binary = Nanoc::Filter.named!(action.filter_name).to_binary?
-        end
-      end
-
-      snapshot_defs
-    end
-
     # @param [Nanoc::Int::ItemRep] rep The item representation to get the rule
     #   memory for
     #

@@ -36,10 +36,6 @@ module Nanoc::RuleDSL
       @rule_memory_calculator[rep]
     end
 
-    def snapshots_defs_for(rep)
-      @rule_memory_calculator.snapshots_defs_for(rep)
-    end
-
     def need_preprocessing?
       @rules_collection.preprocessors.any?
     end
