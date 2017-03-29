@@ -132,8 +132,8 @@ module Nanoc::Int
       @action_sequences = run_stage(build_reps_stage)
       run_stage(prune_stage)
       run_stage(load_stores_stage)
-      @outdated_items = run_stage(determine_outdatedness_stage)
-      run_stage(forget_outdated_dependencies_stage)
+      outdated_items = run_stage(determine_outdatedness_stage)
+      run_stage(forget_outdated_dependencies_stage, outdated_items)
       run_stage(store_pre_compilation_state_stage)
       run_stage(compile_reps_stage)
       run_stage(store_post_compilation_state_stage)
@@ -164,10 +164,10 @@ module Nanoc::Int
 
     private
 
-    def run_stage(stage)
+    def run_stage(stage, *args)
       name = stage.class.to_s
       Nanoc::Int::NotificationCenter.post(:stage_started, name)
-      stage.run
+      stage.run(*args)
     ensure
       Nanoc::Int::NotificationCenter.post(:stage_ended, name)
     end
@@ -257,7 +257,6 @@ module Nanoc::Int
 
     def forget_outdated_dependencies_stage
       @_forget_outdated_dependencies_stage ||= Stages::ForgetOutdatedDependencies.new(
-        outdated_items: @outdated_items,
         dependency_store: @dependency_store,
       )
     end
