@@ -11,7 +11,7 @@ module Nanoc::Int
       raise NotImplementedError
     end
 
-    def memory_for(_rep)
+    def action_sequence_for(_rep)
       raise NotImplementedError
     end
 

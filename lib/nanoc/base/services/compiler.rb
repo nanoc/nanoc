@@ -33,7 +33,7 @@ module Nanoc::Int
       end
 
       def filter_name_and_args_for_layout(layout)
-        mem = @action_provider.memory_for(layout)
+        mem = @action_provider.action_sequence_for(layout)
         if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::ProcessingActions::Filter)
           raise Nanoc::Int::Errors::UndefinedFilterForLayout.new(layout)
         end
@@ -84,7 +84,7 @@ module Nanoc::Int
     attr_reader :checksum_store
 
     # @api private
-    attr_reader :rule_memory_store
+    attr_reader :action_sequence_store
 
     # @api private
     attr_reader :action_provider
@@ -104,12 +104,12 @@ module Nanoc::Int
     # @api private
     attr_reader :snapshot_repo
 
-    def initialize(site, compiled_content_cache:, checksum_store:, rule_memory_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:, outdatedness_store:)
+    def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, outdatedness_checker:, reps:, outdatedness_store:)
       @site = site
 
       @compiled_content_cache = compiled_content_cache
       @checksum_store         = checksum_store
-      @rule_memory_store      = rule_memory_store
+      @action_sequence_store  = action_sequence_store
       @dependency_store       = dependency_store
       @outdatedness_checker   = outdatedness_checker
       @reps                   = reps
@@ -141,9 +141,9 @@ module Nanoc::Int
 
     # TODO: rename to store_preprocessed_state
     def store
-      # Calculate rule memory
+      # Calculate action sequence
       (@reps.to_a + @site.layouts.to_a).each do |obj|
-        rule_memory_store[obj] = action_provider.memory_for(obj).serialize
+        action_sequence_store[obj] = action_provider.action_sequence_for(obj).serialize
       end
 
       # Calculate checksums
@@ -153,7 +153,7 @@ module Nanoc::Int
 
       # Store
       checksum_store.store
-      rule_memory_store.store
+      action_sequence_store.store
     end
 
     def store_output_state
@@ -164,7 +164,7 @@ module Nanoc::Int
       builder = Nanoc::Int::ItemRepBuilder.new(
         site, action_provider, @reps
       )
-      @memories = builder.run
+      @action_sequences = builder.run
     end
 
     def compilation_context
@@ -214,7 +214,7 @@ module Nanoc::Int
       @_compile_reps_stage ||= Stages::CompileReps.new(
         outdatedness_store: @outdatedness_store,
         dependency_store: @dependency_store,
-        memories: @memories,
+        action_sequences: @action_sequences,
         compilation_context: compilation_context,
         compiled_content_cache: compiled_content_cache,
       )
@@ -225,7 +225,7 @@ module Nanoc::Int
     end
 
     def determine_outdatedness
-      determine_outdatedness_stage.run(@memories) do |outdated_items|
+      determine_outdatedness_stage.run(@action_sequences) do |outdated_items|
         @outdated_items = outdated_items
       end
     end
@@ -241,7 +241,7 @@ module Nanoc::Int
         checksum_store,
         compiled_content_cache,
         @dependency_store,
-        rule_memory_store,
+        action_sequence_store,
         @outdatedness_store,
       ]
     end

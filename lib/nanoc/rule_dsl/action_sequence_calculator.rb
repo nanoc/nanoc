@@ -1,24 +1,24 @@
 module Nanoc::RuleDSL
-  # Calculates rule memories for objects that can be run through a rule (item
+  # Calculates action sequences for objects that can be run through a rule (item
   # representations and layouts).
   #
   # @api private
-  class RuleMemoryCalculator
+  class ActionSequenceCalculator
     extend Nanoc::Int::Memoization
 
     class UnsupportedObjectTypeException < ::Nanoc::Error
       def initialize(obj)
-        super("Do not know how to calculate the rule memory for #{obj.inspect}")
+        super("Do not know how to calculate the action sequence for #{obj.inspect}")
       end
     end
 
-    class NoRuleMemoryForLayoutException < ::Nanoc::Error
+    class NoActionSequenceForLayoutException < ::Nanoc::Error
       def initialize(layout)
         super("There is no layout rule specified for #{layout.inspect}")
       end
     end
 
-    class NoRuleMemoryForItemRepException < ::Nanoc::Error
+    class NoActionSequenceForItemRepException < ::Nanoc::Error
       def initialize(item)
         super("There is no compilation rule specified for #{item.inspect}")
       end
@@ -42,13 +42,13 @@ module Nanoc::RuleDSL
 
     # @param [#reference] obj
     #
-    # @return [Nanoc::Int::RuleMemory]
+    # @return [Nanoc::Int::ActionSequence]
     def [](obj)
       case obj
       when Nanoc::Int::ItemRep
-        new_rule_memory_for_rep(obj)
+        new_action_sequence_for_rep(obj)
       when Nanoc::Int::Layout
-        new_rule_memory_for_layout(obj)
+        new_action_sequence_for_layout(obj)
       else
         raise UnsupportedObjectTypeException.new(obj)
       end
@@ -57,45 +57,45 @@ module Nanoc::RuleDSL
     # @param [Nanoc::Int::ItemRep] rep The item representation to get the rule
     #   memory for
     #
-    # @return [Nanoc::Int::RuleMemory]
-    def new_rule_memory_for_rep(rep)
+    # @return [Nanoc::Int::ActionSequence]
+    def new_action_sequence_for_rep(rep)
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
       view_context = @site.compiler.compilation_context.create_view_context(dependency_tracker)
 
-      rule_memory = Nanoc::Int::RuleMemory.new(rep)
-      executor = Nanoc::RuleDSL::RecordingExecutor.new(rule_memory)
+      action_sequence = Nanoc::Int::ActionSequence.new(rep)
+      executor = Nanoc::RuleDSL::RecordingExecutor.new(action_sequence)
       rule = @rules_collection.compilation_rule_for(rep)
 
       unless rule
-        raise NoRuleMemoryForItemRepException.new(rep)
+        raise NoActionSequenceForItemRepException.new(rep)
       end
 
       executor.snapshot(:raw)
       rule.apply_to(rep, executor: executor, site: @site, view_context: view_context)
-      if rule_memory.any_layouts?
+      if action_sequence.any_layouts?
         executor.snapshot(:post)
       end
-      unless rule_memory.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:last) }
+      unless action_sequence.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:last) }
         executor.snapshot(:last)
       end
-      unless rule_memory.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:pre) }
+      unless action_sequence.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:pre) }
         executor.snapshot(:pre)
       end
 
-      copy_paths_from_routing_rules(rule_memory.compact_snapshots, rep: rep)
+      copy_paths_from_routing_rules(action_sequence.compact_snapshots, rep: rep)
     end
 
     # @param [Nanoc::Int::Layout] layout
     #
-    # @return [Nanoc::Int::RuleMemory]
-    def new_rule_memory_for_layout(layout)
+    # @return [Nanoc::Int::ActionSequence]
+    def new_action_sequence_for_layout(layout)
       res = @rules_collection.filter_for_layout(layout)
 
       unless res
-        raise NoRuleMemoryForLayoutException.new(layout)
+        raise NoActionSequenceForLayoutException.new(layout)
       end
 
-      Nanoc::Int::RuleMemory.new(layout).tap do |rm|
+      Nanoc::Int::ActionSequence.new(layout).tap do |rm|
         rm.add_filter(res[0], res[1])
       end
     end

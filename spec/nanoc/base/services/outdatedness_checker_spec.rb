@@ -4,7 +4,7 @@ describe Nanoc::Int::OutdatednessChecker do
       site: site,
       checksum_store: checksum_store,
       dependency_store: dependency_store,
-      rule_memory_store: rule_memory_store,
+      action_sequence_store: action_sequence_store,
       action_provider: action_provider,
       reps: reps,
     )
@@ -26,17 +26,17 @@ describe Nanoc::Int::OutdatednessChecker do
     )
   end
 
-  let(:rule_memory_store) do
-    Nanoc::Int::RuleMemoryStore.new
+  let(:action_sequence_store) do
+    Nanoc::Int::ActionSequenceStore.new
   end
 
-  let(:old_memory_for_item_rep) do
-    Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+  let(:old_action_sequence_for_item_rep) do
+    Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
       mem.add_filter(:erb, {})
     end
   end
 
-  let(:new_memory_for_item_rep) { old_memory_for_item_rep }
+  let(:new_action_sequence_for_item_rep) { old_action_sequence_for_item_rep }
 
   let(:action_provider) { double(:action_provider) }
 
@@ -51,9 +51,9 @@ describe Nanoc::Int::OutdatednessChecker do
 
   before do
     reps << item_rep
-    rule_memory_store[item_rep] = old_memory_for_item_rep.serialize
+    action_sequence_store[item_rep] = old_action_sequence_for_item_rep.serialize
 
-    allow(action_provider).to receive(:memory_for).with(item_rep).and_return(new_memory_for_item_rep)
+    allow(action_provider).to receive(:action_sequence_for).with(item_rep).and_return(new_action_sequence_for_item_rep)
   end
 
   describe '#basic_outdatedness_reason_for' do
@@ -73,9 +73,9 @@ describe Nanoc::Int::OutdatednessChecker do
     context 'with item' do
       let(:obj) { item }
 
-      context 'rule memory differs' do
-        let(:new_memory_for_item_rep) do
-          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+      context 'action sequence differs' do
+        let(:new_action_sequence_for_item_rep) do
+          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
             mem.add_filter(:super_erb, {})
           end
         end
@@ -91,9 +91,9 @@ describe Nanoc::Int::OutdatednessChecker do
     context 'with item rep' do
       let(:obj) { item_rep }
 
-      context 'rule memory differs' do
-        let(:new_memory_for_item_rep) do
-          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+      context 'action sequence differs' do
+        let(:new_action_sequence_for_item_rep) do
+          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
             mem.add_filter(:super_erb, {})
           end
         end
@@ -123,22 +123,22 @@ describe Nanoc::Int::OutdatednessChecker do
 
     let(:objects) { [item, other_item] }
 
-    let(:old_memory_for_other_item_rep) do
-      Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
+    let(:old_action_sequence_for_other_item_rep) do
+      Nanoc::Int::ActionSequence.new(other_item_rep).tap do |mem|
         mem.add_filter(:erb, {})
       end
     end
 
-    let(:new_memory_for_other_item_rep) { old_memory_for_other_item_rep }
+    let(:new_action_sequence_for_other_item_rep) { old_action_sequence_for_other_item_rep }
 
     before do
       reps << other_item_rep
-      rule_memory_store[other_item_rep] = old_memory_for_other_item_rep.serialize
+      action_sequence_store[other_item_rep] = old_action_sequence_for_other_item_rep.serialize
       checksum_store.add(item)
       checksum_store.add(other_item)
       checksum_store.add(config)
 
-      allow(action_provider).to receive(:memory_for).with(other_item_rep).and_return(new_memory_for_other_item_rep)
+      allow(action_provider).to receive(:action_sequence_for).with(other_item_rep).and_return(new_action_sequence_for_other_item_rep)
       allow(site).to receive(:code_snippets).and_return([])
       allow(site).to receive(:config).and_return(config)
     end
@@ -150,8 +150,8 @@ describe Nanoc::Int::OutdatednessChecker do
       before do
         reps << distant_item_rep
         checksum_store.add(distant_item)
-        rule_memory_store[distant_item_rep] = old_memory_for_other_item_rep.serialize
-        allow(action_provider).to receive(:memory_for).with(distant_item_rep).and_return(new_memory_for_other_item_rep)
+        action_sequence_store[distant_item_rep] = old_action_sequence_for_other_item_rep.serialize
+        allow(action_provider).to receive(:action_sequence_for).with(distant_item_rep).and_return(new_action_sequence_for_other_item_rep)
       end
 
       context 'on attribute + attribute' do
@@ -239,8 +239,8 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'path changed' do
-        let(:new_memory_for_other_item_rep) do
-          Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
+        let(:new_action_sequence_for_other_item_rep) do
+          Nanoc::Int::ActionSequence.new(other_item_rep).tap do |mem|
             mem.add_filter(:erb, {})
             mem.add_snapshot(:donkey, '/giraffe.txt')
           end
@@ -283,8 +283,8 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'path changed' do
-        let(:new_memory_for_other_item_rep) do
-          Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
+        let(:new_action_sequence_for_other_item_rep) do
+          Nanoc::Int::ActionSequence.new(other_item_rep).tap do |mem|
             mem.add_filter(:erb, {})
             mem.add_snapshot(:donkey, '/giraffe.txt')
           end
@@ -316,8 +316,8 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'path changed' do
-        let(:new_memory_for_other_item_rep) do
-          Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
+        let(:new_action_sequence_for_other_item_rep) do
+          Nanoc::Int::ActionSequence.new(other_item_rep).tap do |mem|
             mem.add_filter(:erb, {})
             mem.add_snapshot(:donkey, '/giraffe.txt')
           end
@@ -343,8 +343,8 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'path changed' do
-        let(:new_memory_for_other_item_rep) do
-          Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
+        let(:new_action_sequence_for_other_item_rep) do
+          Nanoc::Int::ActionSequence.new(other_item_rep).tap do |mem|
             mem.add_filter(:erb, {})
             mem.add_snapshot(:donkey, '/giraffe.txt')
           end
@@ -376,8 +376,8 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'rules changed' do
-        let(:new_memory_for_other_item_rep) do
-          Nanoc::Int::RuleMemory.new(other_item_rep).tap do |mem|
+        let(:new_action_sequence_for_other_item_rep) do
+          Nanoc::Int::ActionSequence.new(other_item_rep).tap do |mem|
             mem.add_filter(:erb, {})
             mem.add_filter(:donkey, {})
           end

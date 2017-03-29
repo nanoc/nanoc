@@ -4,7 +4,7 @@ describe Nanoc::Int::Compiler do
       site,
       compiled_content_cache: compiled_content_cache,
       checksum_store: checksum_store,
-      rule_memory_store: rule_memory_store,
+      action_sequence_store: action_sequence_store,
       action_provider: action_provider,
       dependency_store: dependency_store,
       outdatedness_checker: outdatedness_checker,
@@ -13,8 +13,8 @@ describe Nanoc::Int::Compiler do
     )
   end
 
-  let(:checksum_store)    { Nanoc::Int::ChecksumStore.new(objects: items) }
-  let(:rule_memory_store) { Nanoc::Int::RuleMemoryStore.new }
+  let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: items) }
+  let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new }
 
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items.to_a) }
   let(:reps) { Nanoc::Int::ItemRepRepo.new }
@@ -54,7 +54,7 @@ describe Nanoc::Int::Compiler do
         Nanoc::Int::ProcessingActions::Snapshot.new([:last], []),
       ]
 
-    Nanoc::Int::RuleMemory.new(nil, actions: actions)
+    Nanoc::Int::ActionSequence.new(nil, actions: actions)
   end
 
   before do
@@ -69,8 +69,8 @@ describe Nanoc::Int::Compiler do
     allow(outdatedness_checker).to receive(:outdated?).with(other_rep).and_return(true)
 
     # FIXME: eww
-    memories = { rep => memory, other_rep => memory }
-    compiler.instance_variable_set(:@memories, memories)
+    action_sequences = { rep => memory, other_rep => memory }
+    compiler.instance_variable_set(:@action_sequences, action_sequences)
 
     allow(Nanoc::Int::NotificationCenter).to receive(:post)
   end

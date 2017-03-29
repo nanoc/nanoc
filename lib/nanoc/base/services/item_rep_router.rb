@@ -24,7 +24,7 @@ module Nanoc::Int
     end
 
     def run
-      memories = {}
+      action_sequences = {}
       assigned_paths = {}
       @reps.each do |rep|
         # Sigh. We route reps twice, because the first time, the paths might not have converged
@@ -32,12 +32,12 @@ module Nanoc::Int
         # I can think of. For details, see
         # https://github.com/nanoc/nanoc/pull/1085#issuecomment-280628426.
 
-        @action_provider.memory_for(rep).paths.each do |(snapshot_names, paths)|
+        @action_provider.action_sequence_for(rep).paths.each do |(snapshot_names, paths)|
           route_rep(rep, paths, snapshot_names, {})
         end
 
-        mem = @action_provider.memory_for(rep)
-        memories[rep] = mem
+        mem = @action_provider.action_sequence_for(rep)
+        action_sequences[rep] = mem
         mem.paths.each do |(snapshot_names, paths)|
           route_rep(rep, paths, snapshot_names, assigned_paths)
         end
@@ -45,7 +45,7 @@ module Nanoc::Int
         # TODO: verify that paths converge
       end
 
-      memories
+      action_sequences
     end
 
     contract Nanoc::Int::ItemRep, C::IterOf[String], C::IterOf[Symbol], C::HashOf[String => Nanoc::Int::ItemRep] => C::Any

@@ -9,7 +9,7 @@ describe Nanoc::Int::OutdatednessRules do
         site: site,
         checksum_store: checksum_store,
         dependency_store: dependency_store,
-        rule_memory_store: rule_memory_store,
+        action_sequence_store: action_sequence_store,
         action_provider: action_provider,
         reps: reps,
       )
@@ -33,7 +33,7 @@ describe Nanoc::Int::OutdatednessRules do
     let(:action_provider) { double(:action_provider) }
     let(:reps) { Nanoc::Int::ItemRepRepo.new }
     let(:dependency_store) { Nanoc::Int::DependencyStore.new(dependency_store_objects) }
-    let(:rule_memory_store) { Nanoc::Int::RuleMemoryStore.new }
+    let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new }
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
 
     let(:dependency_store_objects) { [item] }
@@ -304,14 +304,14 @@ describe Nanoc::Int::OutdatednessRules do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::RulesModified }
 
       let(:old_mem) do
-        Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+        Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
           mem.add_filter(:erb, {})
         end
       end
 
       before do
-        rule_memory_store[item_rep] = old_mem.serialize
-        allow(action_provider).to receive(:memory_for).with(item_rep).and_return(new_mem)
+        action_sequence_store[item_rep] = old_mem.serialize
+        allow(action_provider).to receive(:action_sequence_for).with(item_rep).and_return(new_mem)
       end
 
       context 'memory is the same' do
@@ -321,7 +321,7 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'memory is different' do
         let(:new_mem) do
-          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
             mem.add_filter(:erb, {})
             mem.add_filter(:donkey, {})
           end
@@ -335,12 +335,12 @@ describe Nanoc::Int::OutdatednessRules do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::PathsModified }
 
       before do
-        allow(action_provider).to receive(:memory_for).with(item_rep).and_return(new_mem)
+        allow(action_provider).to receive(:action_sequence_for).with(item_rep).and_return(new_mem)
       end
 
       context 'old mem does not exist' do
         let(:new_mem) do
-          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
             mem.add_snapshot(:donkey, '/foo.md')
             mem.add_filter(:asdf, {})
           end
@@ -351,19 +351,19 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'old mem exists' do
         let(:old_mem) do
-          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
             mem.add_filter(:erb, {})
             mem.add_snapshot(:donkey, '/foo.md')
           end
         end
 
         before do
-          rule_memory_store[item_rep] = old_mem.serialize
+          action_sequence_store[item_rep] = old_mem.serialize
         end
 
         context 'paths in memory are the same' do
           let(:new_mem) do
-            Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+            Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
               mem.add_snapshot(:donkey, '/foo.md')
               mem.add_filter(:asdf, {})
             end
@@ -374,7 +374,7 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'paths in memory are different' do
           let(:new_mem) do
-            Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+            Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
               mem.add_filter(:erb, {})
               mem.add_snapshot(:donkey, '/foo.md')
               mem.add_filter(:donkey, {})
@@ -514,12 +514,12 @@ describe Nanoc::Int::OutdatednessRules do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::UsesAlwaysOutdatedFilter }
 
       before do
-        allow(action_provider).to receive(:memory_for).with(item_rep).and_return(mem)
+        allow(action_provider).to receive(:action_sequence_for).with(item_rep).and_return(mem)
       end
 
       context 'unknown filter' do
         let(:mem) do
-          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
             mem.add_snapshot(:donkey, '/foo.md')
             mem.add_filter(:asdf, {})
           end
@@ -530,7 +530,7 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'known filter, not always outdated' do
         let(:mem) do
-          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
             mem.add_snapshot(:donkey, '/foo.md')
             mem.add_filter(:erb, {})
           end
@@ -541,7 +541,7 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'known filter, always outdated' do
         let(:mem) do
-          Nanoc::Int::RuleMemory.new(item_rep).tap do |mem|
+          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
             mem.add_snapshot(:donkey, '/foo.md')
             mem.add_filter(:xsl, {})
           end

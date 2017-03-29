@@ -16,7 +16,7 @@ require_relative 'entities/item_rep'
 require_relative 'entities/layout'
 require_relative 'entities/pattern'
 require_relative 'entities/props'
-require_relative 'entities/rule_memory'
+require_relative 'entities/action_sequence'
 require_relative 'entities/site'
 require_relative 'entities/snapshot_def'
 

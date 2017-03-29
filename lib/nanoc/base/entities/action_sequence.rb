@@ -1,5 +1,5 @@
 module Nanoc::Int
-  class RuleMemory
+  class ActionSequence
     include Nanoc::Int::ContractsSupport
     include Enumerable
 

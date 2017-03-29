@@ -3,7 +3,7 @@ module Nanoc::Int::OutdatednessRules
     affects_props :raw_content, :attributes, :path
 
     def apply(obj, outdatedness_checker)
-      mem = outdatedness_checker.memory_for(obj)
+      mem = outdatedness_checker.action_sequence_for(obj)
       if any_always_outdated?(mem)
         Nanoc::Int::OutdatednessReasons::UsesAlwaysOutdatedFilter
       end

@@ -2,7 +2,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
   describe '#render' do
     subject { helper.instance_eval { render('/partial.erb') } }
 
-    let(:rule_memory_for_layout) do
+    let(:action_sequence_for_layout) do
       [Nanoc::Int::ProcessingActions::Filter.new(:erb, {})]
     end
 
@@ -11,7 +11,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
     before do
       ctx.create_layout(layout_content, {}, layout_identifier)
-      ctx.update_rule_memory(layout, rule_memory_for_layout)
+      ctx.update_action_sequence(layout, action_sequence_for_layout)
     end
 
     context 'legacy identifier' do
@@ -87,7 +87,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
       end
 
       context 'layout with unknown filter' do
-        let(:rule_memory_for_layout) do
+        let(:action_sequence_for_layout) do
           [Nanoc::Int::ProcessingActions::Filter.new(:donkey, {})]
         end
 
@@ -99,7 +99,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
       end
 
       context 'layout without filter' do
-        let(:rule_memory_for_layout) do
+        let(:action_sequence_for_layout) do
           [Nanoc::Int::ProcessingActions::Filter.new(nil, {})]
         end
 
