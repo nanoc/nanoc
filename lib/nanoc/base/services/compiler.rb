@@ -137,7 +137,7 @@ module Nanoc::Int
       time_stage(:store_pre_compilation_state) { store_pre_compilation_state_stage.run }
       time_stage(:compile_reps) { compile_reps_stage.run }
       time_stage(:store_post_compilation_state) { store_post_compilation_state_stage.run }
-      time_stage(:postprocess) { @action_provider.postprocess(@site, @reps) }
+      time_stage(:postprocess) { postprocess_stage.run }
     ensure
       time_stage(:cleanup) { cleanup_stage.run }
     end
@@ -242,6 +242,14 @@ module Nanoc::Int
     def store_post_compilation_state_stage
       @_store_post_compilation_state_stage ||= Stages::StorePostCompilationState.new(
         dependency_store: dependency_store,
+      )
+    end
+
+    def postprocess_stage
+      @_postprocess_stage ||= Stages::Postprocess.new(
+        action_provider: @action_provider,
+        site: @site,
+        reps: @reps,
       )
     end
 
