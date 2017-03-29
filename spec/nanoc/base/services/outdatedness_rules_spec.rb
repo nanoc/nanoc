@@ -10,7 +10,7 @@ describe Nanoc::Int::OutdatednessRules do
         checksum_store: checksum_store,
         dependency_store: dependency_store,
         action_sequence_store: action_sequence_store,
-        action_provider: action_provider,
+        action_sequences: action_sequences,
         reps: reps,
       )
     end
@@ -30,7 +30,7 @@ describe Nanoc::Int::OutdatednessRules do
       )
     end
 
-    let(:action_provider) { double(:action_provider) }
+    let(:action_sequences) { {} }
     let(:reps) { Nanoc::Int::ItemRepRepo.new }
     let(:dependency_store) { Nanoc::Int::DependencyStore.new(dependency_store_objects) }
     let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new }
@@ -309,9 +309,10 @@ describe Nanoc::Int::OutdatednessRules do
         end
       end
 
+      let(:action_sequences) { { item_rep => new_mem } }
+
       before do
         action_sequence_store[item_rep] = old_mem.serialize
-        allow(action_provider).to receive(:action_sequence_for).with(item_rep).and_return(new_mem)
       end
 
       context 'memory is the same' do
@@ -334,9 +335,7 @@ describe Nanoc::Int::OutdatednessRules do
     context 'PathsModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::PathsModified }
 
-      before do
-        allow(action_provider).to receive(:action_sequence_for).with(item_rep).and_return(new_mem)
-      end
+      let(:action_sequences) { { item_rep => new_mem } }
 
       context 'old mem does not exist' do
         let(:new_mem) do
@@ -513,9 +512,7 @@ describe Nanoc::Int::OutdatednessRules do
     describe 'UsesAlwaysOutdatedFilter' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::UsesAlwaysOutdatedFilter }
 
-      before do
-        allow(action_provider).to receive(:action_sequence_for).with(item_rep).and_return(mem)
-      end
+      let(:action_sequences) { { item_rep => mem } }
 
       context 'unknown filter' do
         let(:mem) do

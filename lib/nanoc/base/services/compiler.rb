@@ -122,7 +122,7 @@ module Nanoc::Int
         checksum_store: @checksum_store,
         dependency_store: @dependency_store,
         action_sequence_store: @action_sequence_store,
-        action_provider: @action_provider,
+        action_sequences: @action_sequences,
         reps: reps,
       )
     end
@@ -150,7 +150,7 @@ module Nanoc::Int
     def store
       # Calculate action sequence
       (@reps.to_a + @site.layouts.to_a).each do |obj|
-        action_sequence_store[obj] = action_provider.action_sequence_for(obj).serialize
+        action_sequence_store[obj] = @action_sequences[obj].serialize
       end
 
       # Calculate checksums
@@ -168,10 +168,19 @@ module Nanoc::Int
     end
 
     def build_reps
+      # FIXME: This also, as a side effect, generates the action sequences. :(
+      # Better: let this stage return a mapping of reps onto (raw) paths *and* a mapping of objects
+      # onto action sequences.
+
       builder = Nanoc::Int::ItemRepBuilder.new(
         site, action_provider, @reps
       )
+
       @action_sequences = builder.run
+
+      @site.layouts.each do |layout|
+        @action_sequences[layout] = action_provider.action_sequence_for(layout)
+      end
     end
 
     def compilation_context
@@ -232,7 +241,7 @@ module Nanoc::Int
     end
 
     def determine_outdatedness
-      determine_outdatedness_stage.run(@action_sequences) do |outdated_items|
+      determine_outdatedness_stage.run do |outdated_items|
         @outdated_items = outdated_items
       end
     end

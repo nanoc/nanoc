@@ -82,35 +82,32 @@ module Nanoc::Int
     attr_reader :checksum_store
     attr_reader :dependency_store
     attr_reader :action_sequence_store
-    attr_reader :action_provider
+    attr_reader :action_sequences
     attr_reader :site
 
     Reasons = Nanoc::Int::OutdatednessReasons
 
     C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]
+    C_ACTION_SEQUENCES = C::HashOf[C_OBJ => Nanoc::Int::ActionSequence]
 
-    # FIXME: Replace C::Any with proper types
-    contract C::KeywordArgs[site: Nanoc::Int::Site, checksum_store: Nanoc::Int::ChecksumStore, dependency_store: Nanoc::Int::DependencyStore, action_sequence_store: Nanoc::Int::ActionSequenceStore, action_provider: C::Any, reps: Nanoc::Int::ItemRepRepo] => C::Any
-    def initialize(site:, checksum_store:, dependency_store:, action_sequence_store:, action_provider:, reps:)
+    contract C::KeywordArgs[site: Nanoc::Int::Site, checksum_store: Nanoc::Int::ChecksumStore, dependency_store: Nanoc::Int::DependencyStore, action_sequence_store: Nanoc::Int::ActionSequenceStore, action_sequences: C_ACTION_SEQUENCES, reps: Nanoc::Int::ItemRepRepo] => C::Any
+    def initialize(site:, checksum_store:, dependency_store:, action_sequence_store:, action_sequences:, reps:)
       @site = site
       @checksum_store = checksum_store
       @dependency_store = dependency_store
       @action_sequence_store = action_sequence_store
-      @action_provider = action_provider
+      @action_sequences = action_sequences
       @reps = reps
 
       @objects_outdated_due_to_dependencies = {}
     end
 
     def action_sequence_for(rep)
-      # TODO: Pass in action_sequences instead
-      @action_provider.action_sequence_for(rep)
+      @action_sequences.fetch(rep)
     end
-    memoize :action_sequence_for
 
-    contract C_OBJ, C::Maybe[C::HashOf[C_OBJ => Nanoc::Int::ActionSequence]] => C::Bool
-    def outdated?(obj, _action_sequences = nil)
-      # TODO: use action_sequences
+    contract C_OBJ => C::Bool
+    def outdated?(obj)
       outdatedness_reasons_for(obj).any?
     end
 
