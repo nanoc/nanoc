@@ -1,9 +1,9 @@
 module Nanoc::Int::Compiler::Stages
   class CompileReps
-    def initialize(outdatedness_store:, dependency_store:, action_provider:, compilation_context:, compiled_content_cache:)
+    def initialize(outdatedness_store:, dependency_store:, memories:, compilation_context:, compiled_content_cache:)
       @outdatedness_store = outdatedness_store
       @dependency_store = dependency_store
-      @action_provider = action_provider
+      @memories = memories
       @compilation_context = compilation_context
       @compiled_content_cache = compiled_content_cache
     end
@@ -33,7 +33,7 @@ module Nanoc::Int::Compiler::Stages
     def item_rep_compiler
       @_item_rep_compiler ||= begin
         recalculate_phase = Nanoc::Int::Compiler::Phases::Recalculate.new(
-          action_provider: @action_provider,
+          memories: @memories,
           dependency_store: @dependency_store,
           compilation_context: @compilation_context,
         )

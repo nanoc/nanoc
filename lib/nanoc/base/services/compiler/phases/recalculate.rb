@@ -4,10 +4,10 @@ module Nanoc::Int::Compiler::Phases
   class Recalculate < Abstract
     include Nanoc::Int::ContractsSupport
 
-    def initialize(action_provider:, dependency_store:, compilation_context:)
+    def initialize(memories:, dependency_store:, compilation_context:)
       super(wrapped: nil)
 
-      @action_provider = action_provider
+      @memories = memories
       @dependency_store = dependency_store
       @compilation_context = compilation_context
     end
@@ -21,7 +21,7 @@ module Nanoc::Int::Compiler::Phases
 
       @compilation_context.snapshot_repo.set(rep, :last, rep.item.content)
 
-      actions = @action_provider.memory_for(rep)
+      actions = @memories[rep]
       actions.each do |action|
         case action
         when Nanoc::Int::ProcessingActions::Filter

@@ -1,14 +1,19 @@
 module Nanoc::Int::Compiler::Stages
   class DetermineOutdatedness
+    include Nanoc::Int::ContractsSupport
+
     def initialize(reps:, outdatedness_checker:, outdatedness_store:)
       @reps = reps
       @outdatedness_checker = outdatedness_checker
       @outdatedness_store = outdatedness_store
     end
 
-    def run
+    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]
+
+    contract C::HashOf[C_OBJ => Nanoc::Int::RuleMemory], C::Func[C::IterOf[Nanoc::Int::Item] => C::Any] => C::Any
+    def run(memories)
       outdated_reps_tmp = @reps.select do |r|
-        @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r)
+        @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r, memories)
       end
 
       outdated_items = outdated_reps_tmp.map(&:item).uniq

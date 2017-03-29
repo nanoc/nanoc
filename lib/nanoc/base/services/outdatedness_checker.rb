@@ -87,6 +87,8 @@ module Nanoc::Int
 
     Reasons = Nanoc::Int::OutdatednessReasons
 
+    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]
+
     # FIXME: Replace C::Any with proper types
     contract C::KeywordArgs[site: Nanoc::Int::Site, checksum_store: Nanoc::Int::ChecksumStore, dependency_store: Nanoc::Int::DependencyStore, rule_memory_store: Nanoc::Int::RuleMemoryStore, action_provider: C::Any, reps: Nanoc::Int::ItemRepRepo] => C::Any
     def initialize(site:, checksum_store:, dependency_store:, rule_memory_store:, action_provider:, reps:)
@@ -100,7 +102,13 @@ module Nanoc::Int
       @objects_outdated_due_to_dependencies = {}
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
+    def memory_for(rep)
+      # TODO: Pass in memories instead
+      @action_provider.memory_for(rep)
+    end
+    memoize :memory_for
+
+    contract C_OBJ, C::Maybe[C::HashOf[C_OBJ => Nanoc::Int::RuleMemory]] => C::Bool
     # Checks whether the given object is outdated and therefore needs to be
     # recompiled.
     #
@@ -108,7 +116,8 @@ module Nanoc::Int
     #   whose outdatedness should be checked.
     #
     # @return [Boolean] true if the object is outdated, false otherwise
-    def outdated?(obj)
+    def outdated?(obj, _memories = nil)
+      # TODO: use memories
       !outdatedness_reason_for(obj).nil?
     end
 

@@ -164,7 +164,7 @@ module Nanoc::Int
       builder = Nanoc::Int::ItemRepBuilder.new(
         site, action_provider, @reps
       )
-      builder.run
+      @memories = builder.run
     end
 
     def compilation_context
@@ -214,7 +214,7 @@ module Nanoc::Int
       @_compile_reps_stage ||= Stages::CompileReps.new(
         outdatedness_store: @outdatedness_store,
         dependency_store: @dependency_store,
-        action_provider: action_provider,
+        memories: @memories,
         compilation_context: compilation_context,
         compiled_content_cache: compiled_content_cache,
       )
@@ -225,7 +225,7 @@ module Nanoc::Int
     end
 
     def determine_outdatedness
-      determine_outdatedness_stage.run do |outdated_items|
+      determine_outdatedness_stage.run(@memories) do |outdated_items|
         @outdated_items = outdated_items
       end
     end

@@ -16,11 +16,13 @@ module Nanoc::Int
         end
       end
 
-      Nanoc::Int::ItemRepRouter.new(@reps, @action_provider, @site).run
+      memories = Nanoc::Int::ItemRepRouter.new(@reps, @action_provider, @site).run
 
       @reps.each do |rep|
-        rep.snapshot_defs = @action_provider.memory_for(rep).snapshots_defs
+        rep.snapshot_defs = memories[rep].snapshots_defs
       end
+
+      memories
     end
   end
 end

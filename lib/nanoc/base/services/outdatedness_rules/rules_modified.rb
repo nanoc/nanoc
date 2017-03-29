@@ -4,7 +4,7 @@ module Nanoc::Int::OutdatednessRules
 
     def apply(obj, outdatedness_checker)
       mem_old = outdatedness_checker.rule_memory_store[obj]
-      mem_new = outdatedness_checker.action_provider.memory_for(obj).serialize
+      mem_new = outdatedness_checker.memory_for(obj).serialize
       unless mem_old.eql?(mem_new)
         Nanoc::Int::OutdatednessReasons::RulesModified
       end
