@@ -15,11 +15,6 @@ module Nanoc::Int
       raise NotImplementedError
     end
 
-    def paths_for(rep)
-      # TODO: move to RuleMemory
-      memory_for(rep).paths
-    end
-
     def need_preprocessing?
       raise NotImplementedError
     end
