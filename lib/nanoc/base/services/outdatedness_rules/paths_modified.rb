@@ -6,7 +6,7 @@ module Nanoc::Int::OutdatednessRules
       # FIXME: Prefer to not work on serialised version
 
       mem_old = outdatedness_checker.rule_memory_store[obj]
-      mem_new = outdatedness_checker.action_provider.memory_for(obj).serialize
+      mem_new = outdatedness_checker.memory_for(obj).serialize
       return true if mem_old.nil?
 
       paths_old = mem_old.select { |pa| pa[0] == :snapshot }

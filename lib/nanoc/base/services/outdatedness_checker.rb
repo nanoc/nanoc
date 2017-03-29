@@ -100,6 +100,12 @@ module Nanoc::Int
       @objects_outdated_due_to_dependencies = {}
     end
 
+    def memory_for(rep)
+      # TODO: Pass in memories instead
+      @action_provider.memory_for(rep)
+    end
+    memoize :memory_for
+
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Bool
     # Checks whether the given object is outdated and therefore needs to be
     # recompiled.
