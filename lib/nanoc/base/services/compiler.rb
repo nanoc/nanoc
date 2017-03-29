@@ -129,7 +129,7 @@ module Nanoc::Int
 
     def run_all
       time_stage(:preprocess) { preprocess_stage.run }
-      time_stage(:build_reps) { build_reps }
+      @action_sequences = time_stage(:build_reps) { build_reps_stage.run }
       time_stage(:prune) { prune_stage.run }
       time_stage(:load_stores) { load_stores_stage.run }
       @outdated_items = time_stage(:determine_outdatedness) { determine_outdatedness_stage.run }
@@ -140,22 +140,6 @@ module Nanoc::Int
       time_stage(:postprocess) { postprocess_stage.run }
     ensure
       time_stage(:cleanup) { cleanup_stage.run }
-    end
-
-    def build_reps
-      # FIXME: This also, as a side effect, generates the action sequences. :(
-      # Better: let this stage return a mapping of reps onto (raw) paths *and* a mapping of objects
-      # onto action sequences.
-
-      builder = Nanoc::Int::ItemRepBuilder.new(
-        site, action_provider, @reps
-      )
-
-      @action_sequences = builder.run
-
-      @site.layouts.each do |layout|
-        @action_sequences[layout] = action_provider.action_sequence_for(layout)
-      end
     end
 
     def compilation_context
@@ -173,6 +157,11 @@ module Nanoc::Int
       load_stores_stage.run
     end
 
+    # TODO: remove
+    def build_reps
+      @action_sequences = build_reps_stage.run
+    end
+
     private
 
     def time_stage(name)
@@ -188,6 +177,14 @@ module Nanoc::Int
         site: site,
         dependency_store: dependency_store,
         checksum_store: checksum_store,
+      )
+    end
+
+    def build_reps_stage
+      @_build_reps_stage ||= Stages::BuildReps.new(
+        site: site,
+        action_provider: action_provider,
+        reps: @reps,
       )
     end
 
