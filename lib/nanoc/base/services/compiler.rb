@@ -225,7 +225,7 @@ module Nanoc::Int
     end
 
     def determine_outdatedness
-      determine_outdatedness_stage.run do |outdated_items|
+      determine_outdatedness_stage.run(@memories) do |outdated_items|
         @outdated_items = outdated_items
       end
     end
