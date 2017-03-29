@@ -8,7 +8,7 @@ module Nanoc::Int::Compiler::Stages
       @outdatedness_store = outdatedness_store
     end
 
-    contract C::Func[C::IterOf[Nanoc::Int::Item] => C::Any] => C::Any
+    contract C::None => C::Any
     def run
       outdated_reps_tmp = @reps.select do |r|
         @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r)
@@ -19,7 +19,7 @@ module Nanoc::Int::Compiler::Stages
 
       outdated_reps.each { |r| @outdatedness_store.add(r) }
 
-      yield(outdated_items)
+      outdated_items
     end
   end
 end

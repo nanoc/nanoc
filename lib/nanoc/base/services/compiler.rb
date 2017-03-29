@@ -132,7 +132,7 @@ module Nanoc::Int
       time_stage(:build_reps) { build_reps }
       time_stage(:prune) { prune_stage.run }
       time_stage(:load_stores) { load_stores_stage.run }
-      time_stage(:determine_outdatedness) { determine_outdatedness }
+      @outdated_items = time_stage(:determine_outdatedness) { determine_outdatedness_stage.run }
       time_stage(:forget_dependencies_if_needed) { forget_dependencies_if_needed }
       time_stage(:store) { store }
       time_stage(:compile_reps) { compile_reps_stage.run }
@@ -249,12 +249,6 @@ module Nanoc::Int
 
     def cleanup_stage
       @_cleanup_stage ||= Stages::Cleanup.new(site.config)
-    end
-
-    def determine_outdatedness
-      determine_outdatedness_stage.run do |outdated_items|
-        @outdated_items = outdated_items
-      end
     end
 
     def forget_dependencies_if_needed
