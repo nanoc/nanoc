@@ -68,8 +68,9 @@ describe Nanoc::Int::Compiler do
     allow(outdatedness_checker).to receive(:outdated?).with(rep).and_return(true)
     allow(outdatedness_checker).to receive(:outdated?).with(other_rep).and_return(true)
 
-    allow(action_provider).to receive(:memory_for).with(rep).and_return(memory)
-    allow(action_provider).to receive(:memory_for).with(other_rep).and_return(memory)
+    # FIXME: eww
+    memories = { rep => memory, other_rep => memory }
+    compiler.instance_variable_set(:@memories, memories)
 
     allow(Nanoc::Int::NotificationCenter).to receive(:post)
   end
@@ -99,10 +100,6 @@ describe Nanoc::Int::Compiler do
 
     context 'interrupted compilation' do
       let(:item) { Nanoc::Int::Item.new('other=<%= @items["/other.*"].compiled_content %>', {}, '/hi.md') }
-
-      before do
-        expect(action_provider).to receive(:memory_for).with(other_rep).and_return(memory)
-      end
 
       it 'generates expected output' do
         expect(compiler.snapshot_repo.get(rep, :last)).to be_nil

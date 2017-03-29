@@ -3,7 +3,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     described_class.new(
       outdatedness_store: outdatedness_store,
       dependency_store: dependency_store,
-      action_provider: action_provider,
+      memories: memories,
       compilation_context: compilation_context,
       compiled_content_cache: compiled_content_cache,
     )
@@ -20,6 +20,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   end
 
   let(:action_provider) { double(:action_provider) }
+  let(:memories) { double(:memories) }
   let(:reps) { Nanoc::Int::ItemRepRepo.new }
   let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new(items: items) }
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
@@ -70,8 +71,8 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
       rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last, binary: false)
     end
 
-    allow(action_provider).to receive(:memory_for).with(rep).and_return(memory)
-    allow(action_provider).to receive(:memory_for).with(other_rep).and_return(memory)
+    allow(memories).to receive(:[]).with(rep).and_return(memory)
+    allow(memories).to receive(:[]).with(other_rep).and_return(memory)
   end
 
   describe '#compile_reps' do

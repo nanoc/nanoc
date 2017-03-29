@@ -214,7 +214,7 @@ module Nanoc::Int
       @_compile_reps_stage ||= Stages::CompileReps.new(
         outdatedness_store: @outdatedness_store,
         dependency_store: @dependency_store,
-        action_provider: action_provider,
+        memories: @memories,
         compilation_context: compilation_context,
         compiled_content_cache: compiled_content_cache,
       )
