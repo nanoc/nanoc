@@ -2,7 +2,7 @@ describe Nanoc::Int::Executor do
   let(:executor) { described_class.new(rep, compilation_context, dependency_tracker) }
 
   let(:compilation_context) do
-    Nanoc::Int::Compiler::CompilationContext.new(
+    Nanoc::Int::CompilationContext.new(
       action_provider: action_provider,
       reps: reps,
       site: site,

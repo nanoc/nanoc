@@ -10,7 +10,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   end
 
   let(:compilation_context) do
-    Nanoc::Int::Compiler::CompilationContext.new(
+    Nanoc::Int::CompilationContext.new(
       action_provider: action_provider,
       reps: reps,
       site: site,
