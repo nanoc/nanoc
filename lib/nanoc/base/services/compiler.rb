@@ -131,7 +131,7 @@ module Nanoc::Int
       time_stage(:preprocess) { preprocess_stage.run }
       time_stage(:build_reps) { build_reps }
       time_stage(:prune) { prune_stage.run }
-      time_stage(:load_stores) { load_stores }
+      time_stage(:load_stores) { load_stores_stage.run }
       time_stage(:determine_outdatedness) { determine_outdatedness }
       time_stage(:forget_dependencies_if_needed) { forget_dependencies_if_needed }
       time_stage(:store) { store }
@@ -140,10 +140,6 @@ module Nanoc::Int
       time_stage(:postprocess) { @action_provider.postprocess(@site, @reps) }
     ensure
       time_stage(:cleanup) { cleanup_stage.run }
-    end
-
-    def load_stores
-      stores.each(&:load)
     end
 
     # TODO: rename to store_preprocessed_state
@@ -193,6 +189,11 @@ module Nanoc::Int
       )
     end
 
+    # TODO: remove
+    def load_stores
+      load_stores_stage.run
+    end
+
     private
 
     def time_stage(name)
@@ -215,6 +216,16 @@ module Nanoc::Int
       @_prune_stage ||= Stages::Prune.new(
         config: site.config,
         reps: reps,
+      )
+    end
+
+    def load_stores_stage
+      @_load_stores_stage ||= Stages::LoadStores.new(
+        checksum_store: checksum_store,
+        compiled_content_cache: compiled_content_cache,
+        dependency_store: @dependency_store,
+        action_sequence_store: action_sequence_store,
+        outdatedness_store: @outdatedness_store,
       )
     end
 
@@ -248,18 +259,6 @@ module Nanoc::Int
 
     def forget_dependencies_if_needed
       @outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
-    end
-
-    # Returns all stores that can load/store data that can be used for
-    # compilation.
-    def stores
-      [
-        checksum_store,
-        compiled_content_cache,
-        @dependency_store,
-        action_sequence_store,
-        @outdatedness_store,
-      ]
     end
   end
 end
