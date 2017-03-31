@@ -3,8 +3,8 @@ module Nanoc::CLI::Commands::CompileListeners
     attr_reader :telemetry
 
     # @see Listener#enable_for?
-    def self.enable_for?(command_runner)
-      command_runner.options.fetch(:verbose, false)
+    def self.enable_for?(_command_runner)
+      Nanoc::CLI.verbosity >= 1
     end
 
     # @param [Enumerable<Nanoc::Int::ItemRep>] reps
