@@ -39,8 +39,11 @@ module Nanoc::Int
 
     contract C::Any => C::IterOf[C::RespondTo[:identifier]]
     def find_all(arg)
-      pat = Nanoc::Int::Pattern.from(arg)
-      select { |i| pat.match?(i.identifier) }
+      if frozen?
+        find_all_memoized(arg)
+      else
+        find_all_unmemoized(arg)
+      end
     end
 
     contract C::None => C::ArrayOf[C::RespondTo[:identifier]]
@@ -82,6 +85,18 @@ module Nanoc::Int
       get_unmemoized(arg)
     end
     memoize :get_memoized
+
+    contract C::Any => C::IterOf[C::RespondTo[:identifier]]
+    def find_all_unmemoized(arg)
+      pat = Nanoc::Int::Pattern.from(arg)
+      select { |i| pat.match?(i.identifier) }
+    end
+
+    contract C::Any => C::IterOf[C::RespondTo[:identifier]]
+    def find_all_memoized(arg)
+      find_all_unmemoized(arg)
+    end
+    memoize :find_all_memoized
 
     def object_with_identifier(identifier)
       if frozen?
