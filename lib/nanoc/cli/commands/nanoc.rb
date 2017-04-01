@@ -1,5 +1,6 @@
 usage 'nanoc command [options] [arguments]'
 summary 'Nanoc, a static site compiler written in Ruby'
+default_subcommand 'compile'
 
 opt :l, :color, 'enable color' do
   $stdout.remove_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
@@ -36,8 +37,4 @@ end
 
 opt :w, :warn, 'enable warnings' do
   $-w = true
-end
-
-run do |_opts, _args, cmd|
-  cmd.command_named('compile').run([])
 end
