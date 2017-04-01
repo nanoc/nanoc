@@ -4,7 +4,7 @@
 
 Fixes:
 
-* Recognize `--verbose` when calling `nanoc` without subcommand (#1145, #1146)
+* Made `--verbose` be recognised when calling `nanoc` without subcommand (#1145, #1146)
 
 Enhancements:
 
