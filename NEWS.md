@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.7.5 (2017-04-01)
+
+Fixes:
+
+* Recognize `--verbose` when calling `nanoc` without subcommand (#1145, #1146)
+
+Enhancements:
+
+* Made `show-data` print all outdatedness reasons, not just the first (#1142)
+* Sped up `@items.find_all` (#1147)
+
 ## 4.7.4 (2017-03-29)
 
 Enhancements:
