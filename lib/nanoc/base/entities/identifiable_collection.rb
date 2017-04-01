@@ -37,6 +37,12 @@ module Nanoc::Int
       end
     end
 
+    contract C::Any => C::IterOf[C::RespondTo[:identifier]]
+    def find_all(arg)
+      pat = Nanoc::Int::Pattern.from(arg)
+      select { |i| pat.match?(i.identifier) }
+    end
+
     contract C::None => C::ArrayOf[C::RespondTo[:identifier]]
     def to_a
       @objects.to_a
