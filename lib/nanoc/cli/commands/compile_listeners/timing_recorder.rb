@@ -17,13 +17,14 @@ module Nanoc::CLI::Commands::CompileListeners
     def start
       stage_stopwatch = Nanoc::Telemetry::Stopwatch.new
 
-      on(:stage_started) do |_stage_name|
+      on(:stage_started) do |_klass|
         stage_stopwatch.start
       end
 
-      on(:stage_ended) do |stage_name|
+      on(:stage_ended) do |klass|
         stage_stopwatch.stop
-        @telemetry.summary(:stages).observe(stage_stopwatch.duration, stage_name.to_s)
+        name = klass.to_s.sub(/.*::/, '')
+        @telemetry.summary(:stages).observe(stage_stopwatch.duration, name)
         stage_stopwatch = Nanoc::Telemetry::Stopwatch.new
       end
 
@@ -40,7 +41,8 @@ module Nanoc::CLI::Commands::CompileListeners
         stopwatch = stopwatches.fetch(obj)
         stopwatch.stop
 
-        @telemetry.summary(:outdatedness_rules).observe(stopwatch.duration, klass.to_s.sub(/.*::/, ''))
+        name = klass.to_s.sub(/.*::/, '')
+        @telemetry.summary(:outdatedness_rules).observe(stopwatch.duration, name)
       end
 
       filter_stopwatches = {}

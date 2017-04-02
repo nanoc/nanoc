@@ -93,11 +93,10 @@ module Nanoc::Int
     private
 
     def run_stage(stage, *args)
-      name = stage.class.to_s
-      Nanoc::Int::NotificationCenter.post(:stage_started, name)
+      Nanoc::Int::NotificationCenter.post(:stage_started, stage.class)
       stage.run(*args)
     ensure
-      Nanoc::Int::NotificationCenter.post(:stage_ended, name)
+      Nanoc::Int::NotificationCenter.post(:stage_ended, stage.class)
     end
 
     def preprocess_stage
