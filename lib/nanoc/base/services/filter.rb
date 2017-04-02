@@ -1,3 +1,19 @@
+module Final
+  def method_added(sym)
+    root = ancestors.reverse.find { |c| (class << c; self; end).included_modules.include?(Final) }
+    final_methods = root.instance_variable_get(:@__final_methods)
+    if final_methods && final_methods.include?(sym)
+      $stderr.puts "Warning: #{root}##{sym} is not intended to be overridden. Doing so anyway can cause issues."
+    end
+  end
+
+  def final(sym)
+    @__final_methods ||= Set.new
+    @__final_methods << sym
+    sym
+  end
+end
+
 module Nanoc
   # Nanoc::Filter is responsible for filtering items. It is the superclass
   # for all textual filters.
@@ -28,6 +44,7 @@ module Nanoc
     TMP_BINARY_ITEMS_DIR = 'binary_items'.freeze
 
     extend DDPlugin::Plugin
+    extend Final
 
     class << self
       def define(ident, &block)
@@ -134,7 +151,7 @@ module Nanoc
     #   available during filtering.
     #
     # @api private
-    def initialize(hash = {})
+    final def initialize(hash = {})
       @assigns = hash
       super
     end
