@@ -9,14 +9,6 @@ class Nanoc::FilterTest < Nanoc::TestCase
     assert_equal({}, filter.instance_eval { @assigns })
   end
 
-  def test_assigns
-    # Create filter
-    filter = Nanoc::Filter.new(foo: 'bar')
-
-    # Check assigns
-    assert_equal('bar', filter.assigns[:foo])
-  end
-
   def test_assigns_with_instance_variables
     # Create filter
     filter = Nanoc::Filter.new(foo: 'bar')

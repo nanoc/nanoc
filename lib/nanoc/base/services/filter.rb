@@ -27,14 +27,6 @@ module Nanoc
     # @api private
     TMP_BINARY_ITEMS_DIR = 'binary_items'.freeze
 
-    # A hash containing variables that will be made available during
-    # filtering.
-    #
-    # @return [Hash]
-    #
-    # @api private
-    attr_reader :assigns
-
     extend DDPlugin::Plugin
 
     class << self
@@ -196,10 +188,10 @@ module Nanoc
     #
     # @api private
     def filename
-      if assigns[:layout]
-        "layout #{assigns[:layout].identifier}"
-      elsif assigns[:item]
-        "item #{assigns[:item].identifier} (rep #{assigns[:item_rep].name})"
+      if @layout
+        "layout #{@layout.identifier}"
+      elsif @item
+        "item #{@item.identifier} (rep #{@item_rep.name})"
       else
         '?'
       end
