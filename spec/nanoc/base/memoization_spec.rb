@@ -34,12 +34,26 @@ describe Nanoc::Int::Memoization do
     memoize :run
   end
 
-  class MemoizationSpecUpcaserAltSyntax
+  class MemoizationSpecUpcaserInlineSyntax
     extend Nanoc::Int::Memoization
 
     memoized def run(value)
       value.upcase
     end
+  end
+
+  class MemoizationSpecInlineSyntaxReturn
+    extend Nanoc::Int::Memoization
+
+    class << self
+      attr_reader :sym
+    end
+
+    def self.record(sym)
+      @sym = sym
+    end
+
+    record memoized def run; end
   end
 
   example do
@@ -63,7 +77,7 @@ describe Nanoc::Int::Memoization do
   end
 
   it 'supports memoized def … syntax' do
-    upcaser = MemoizationSpecUpcaserAltSyntax.new
+    upcaser = MemoizationSpecUpcaserInlineSyntax.new
     expect(upcaser.run('hi')).to eq('HI')
   end
 
@@ -80,20 +94,7 @@ describe Nanoc::Int::Memoization do
   end
 
   it 'returns method name' do
-    klass =
-      Class.new do
-        extend Nanoc::Int::Memoization
-
-        class << self
-          attr_reader :sym
-        end
-
-        @sym = memoized def hi
-          'hello there'
-        end
-      end
-
-    expect(klass.sym).to eq(:hi)
+    expect(MemoizationSpecInlineSyntaxReturn.sym).to eq(:run)
   end
 
   it 'sends notifications' do
