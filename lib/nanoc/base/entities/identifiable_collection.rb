@@ -81,10 +81,9 @@ module Nanoc::Int
     end
 
     contract C::Any => C::Maybe[C::RespondTo[:identifier]]
-    def get_memoized(arg)
+    memoized def get_memoized(arg)
       get_unmemoized(arg)
     end
-    memoize :get_memoized
 
     contract C::Any => C::IterOf[C::RespondTo[:identifier]]
     def find_all_unmemoized(arg)
@@ -93,10 +92,9 @@ module Nanoc::Int
     end
 
     contract C::Any => C::IterOf[C::RespondTo[:identifier]]
-    def find_all_memoized(arg)
+    memoized def find_all_memoized(arg)
       find_all_unmemoized(arg)
     end
-    memoize :find_all_memoized
 
     def object_with_identifier(identifier)
       if frozen?

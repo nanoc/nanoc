@@ -12,12 +12,11 @@ module Nanoc::Int::OutdatednessRules
 
     private
 
-    def config_modified?(outdatedness_checker)
+    memoized def config_modified?(outdatedness_checker)
       obj = outdatedness_checker.site.config
       ch_old = outdatedness_checker.checksum_store[obj]
       ch_new = Nanoc::Int::Checksummer.calc(obj)
       ch_old != ch_new
     end
-    memoize :config_modified?
   end
 end
