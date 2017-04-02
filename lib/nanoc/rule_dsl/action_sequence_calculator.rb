@@ -82,7 +82,7 @@ module Nanoc::RuleDSL
         executor.snapshot(:pre)
       end
 
-      copy_paths_from_routing_rules(action_sequence.compact_snapshots, rep: rep)
+      copy_paths_from_routing_rules(compact_snapshots(action_sequence), rep: rep)
     end
 
     # @param [Nanoc::Int::Layout] layout
@@ -98,6 +98,18 @@ module Nanoc::RuleDSL
       Nanoc::Int::ActionSequence.new(layout).tap do |rm|
         rm.add_filter(res[0], res[1])
       end
+    end
+
+    def compact_snapshots(mem)
+      actions = []
+      mem.actions.each do |action|
+        if [actions.last, action].all? { |a| a.is_a?(Nanoc::Int::ProcessingActions::Snapshot) }
+          actions[-1] = actions.last.update(snapshot_names: action.snapshot_names, paths: action.paths)
+        else
+          actions << action
+        end
+      end
+      Nanoc::Int::ActionSequence.new(mem.item_rep, actions: actions)
     end
 
     def copy_paths_from_routing_rules(mem, rep:)

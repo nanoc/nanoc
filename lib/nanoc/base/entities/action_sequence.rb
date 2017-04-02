@@ -3,6 +3,9 @@ module Nanoc::Int
     include Nanoc::Int::ContractsSupport
     include Enumerable
 
+    attr_reader :item_rep
+    attr_reader :actions
+
     def initialize(item_rep, actions: [])
       @item_rep = item_rep
       @actions = actions
@@ -69,18 +72,6 @@ module Nanoc::Int
         @item_rep,
         actions: @actions.map { |a| yield(a) },
       )
-    end
-
-    def compact_snapshots
-      actions = []
-      @actions.each do |action|
-        if [actions.last, action].all? { |a| a.is_a?(Nanoc::Int::ProcessingActions::Snapshot) }
-          actions[-1] = actions.last.update(snapshot_names: action.snapshot_names, paths: action.paths)
-        else
-          actions << action
-        end
-      end
-      self.class.new(@item_rep, actions: actions)
     end
 
     def snapshots_defs
