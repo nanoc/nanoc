@@ -54,10 +54,6 @@ module Nanoc::RuleDSL
       end
     end
 
-    # @param [Nanoc::Int::ItemRep] rep The item representation to get the rule
-    #   memory for
-    #
-    # @return [Nanoc::Int::ActionSequence]
     def new_action_sequence_for_rep(rep)
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
       view_context = @site.compiler.compilation_context.create_view_context(dependency_tracker)
@@ -100,20 +96,20 @@ module Nanoc::RuleDSL
       end
     end
 
-    def compact_snapshots(mem)
+    def compact_snapshots(seq)
       actions = []
-      mem.actions.each do |action|
+      seq.actions.each do |action|
         if [actions.last, action].all? { |a| a.is_a?(Nanoc::Int::ProcessingActions::Snapshot) }
           actions[-1] = actions.last.update(snapshot_names: action.snapshot_names, paths: action.paths)
         else
           actions << action
         end
       end
-      Nanoc::Int::ActionSequence.new(mem.item_rep, actions: actions)
+      Nanoc::Int::ActionSequence.new(seq.item_rep, actions: actions)
     end
 
-    def copy_paths_from_routing_rules(mem, rep:)
-      mem.map do |action|
+    def copy_paths_from_routing_rules(seq, rep:)
+      seq.map do |action|
         if action.is_a?(Nanoc::Int::ProcessingActions::Snapshot) && action.paths.empty?
           copy_path_from_routing_rule(action, rep: rep)
         else

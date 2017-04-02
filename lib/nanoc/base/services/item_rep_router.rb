@@ -36,9 +36,9 @@ module Nanoc::Int
           route_rep(rep, paths, snapshot_names, {})
         end
 
-        mem = @action_provider.action_sequence_for(rep)
-        action_sequences[rep] = mem
-        mem.paths.each do |(snapshot_names, paths)|
+        seq = @action_provider.action_sequence_for(rep)
+        action_sequences[rep] = seq
+        seq.paths.each do |(snapshot_names, paths)|
           route_rep(rep, paths, snapshot_names, assigned_paths)
         end
 

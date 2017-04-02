@@ -13,11 +13,11 @@ module Nanoc::Int
     end
 
     def filter_name_and_args_for_layout(layout)
-      mem = @action_provider.action_sequence_for(layout)
-      if mem.nil? || mem.size != 1 || !mem[0].is_a?(Nanoc::Int::ProcessingActions::Filter)
+      seq = @action_provider.action_sequence_for(layout)
+      if seq.nil? || seq.size != 1 || !seq[0].is_a?(Nanoc::Int::ProcessingActions::Filter)
         raise Nanoc::Int::Errors::UndefinedFilterForLayout.new(layout)
       end
-      [mem[0].filter_name, mem[0].params]
+      [seq[0].filter_name, seq[0].params]
     end
 
     def create_view_context(dependency_tracker)
