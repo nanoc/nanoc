@@ -34,6 +34,14 @@ describe Nanoc::Int::Memoization do
     memoize :run
   end
 
+  class MemoizationSpecUpcaserAltSyntax
+    extend Nanoc::Int::Memoization
+
+    memoized def run(value)
+      value.upcase
+    end
+  end
+
   example do
     sample1a = MemoizationSpecSample1.new(10)
     sample1b = MemoizationSpecSample1.new(15)
@@ -52,6 +60,11 @@ describe Nanoc::Int::Memoization do
     sample = MemoizationSpecSample1.new(10)
     sample.freeze
     sample.run(5)
+  end
+
+  it 'supports memoized def … syntax' do
+    upcaser = MemoizationSpecUpcaserAltSyntax.new
+    expect(upcaser.run('hi')).to eq('HI')
   end
 
   it 'does not crash on #inspect' do

@@ -7,7 +7,7 @@ module Nanoc::Int::OutdatednessRules
     affects_props :attributes, :compiled_content
 
     contract C::Or[Nanoc::Int::ItemRep, Nanoc::Int::Item, Nanoc::Int::Layout], C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Int::OutdatednessReasons::Generic]
-    def apply(obj, outdatedness_checker)
+    memoized def apply(obj, outdatedness_checker)
       case obj
       when Nanoc::Int::ItemRep
         apply(obj.item, outdatedness_checker)
@@ -29,6 +29,5 @@ module Nanoc::Int::OutdatednessRules
         raise ArgumentError
       end
     end
-    memoize :apply
   end
 end

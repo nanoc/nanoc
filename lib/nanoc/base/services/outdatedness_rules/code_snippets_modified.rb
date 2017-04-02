@@ -14,13 +14,12 @@ module Nanoc::Int::OutdatednessRules
 
     private
 
-    def any_snippets_modified?(outdatedness_checker)
+    memoized def any_snippets_modified?(outdatedness_checker)
       outdatedness_checker.site.code_snippets.any? do |cs|
         ch_old = outdatedness_checker.checksum_store[cs]
         ch_new = Nanoc::Int::Checksummer.calc(cs)
         ch_old != ch_new
       end
     end
-    memoize :any_snippets_modified?
   end
 end

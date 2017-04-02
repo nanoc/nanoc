@@ -75,5 +75,6 @@ module Nanoc::Int
         end
       end
     end
+    alias memoized memoize
   end
 end

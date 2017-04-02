@@ -37,7 +37,7 @@ module Nanoc::Int
       end
 
       contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[OutdatednessStatus]
-      def outdatedness_status_for(obj)
+      memoized def outdatedness_status_for(obj)
         case obj
         when Nanoc::Int::ItemRep
           apply_rules(RULES_FOR_ITEM_REP, obj)
@@ -49,7 +49,6 @@ module Nanoc::Int
           raise Nanoc::Int::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
         end
       end
-      memoize :outdatedness_status_for
 
       private
 
