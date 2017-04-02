@@ -79,6 +79,23 @@ describe Nanoc::Int::Memoization do
     upcaser.inspect
   end
 
+  it 'returns method name' do
+    klass =
+      Class.new do
+        extend Nanoc::Int::Memoization
+
+        class << self
+          attr_reader :sym
+        end
+
+        @sym = memoized def hi
+          'hello there'
+        end
+      end
+
+    expect(klass.sym).to eq(:hi)
+  end
+
   it 'sends notifications' do
     sample = MemoizationSpecSample1.new(10)
     expect { sample.run(5) }.to send_notification(:memoization_miss, 'MemoizationSpecSample1#run')
