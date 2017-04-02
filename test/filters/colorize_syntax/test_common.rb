@@ -64,7 +64,7 @@ EOS
         input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
 
         # Run filter
-        %i(albino pygmentize simon_highlight).each do |colorizer|
+        %i[albino pygmentize simon_highlight].each do |colorizer|
           begin
             input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
             filter.setup_and_run(

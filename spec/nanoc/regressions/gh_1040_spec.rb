@@ -17,6 +17,6 @@ EOS
   end
 
   it 'errors' do
-    expect { Nanoc::CLI.run(%w(compile)) }.to raise_error(Nanoc::Int::Errors::DependencyCycle)
+    expect { Nanoc::CLI.run(%w[compile]) }.to raise_error(Nanoc::Int::Errors::DependencyCycle)
   end
 end

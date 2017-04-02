@@ -122,8 +122,8 @@ describe Nanoc::Int::ItemRepSelector do
       end
 
       example do
-        expect(successfully_yielded).to eq %i(e d c b a)
-        expect(tentatively_yielded).to eq %i(a b c d e d c b a)
+        expect(successfully_yielded).to eq %i[e d c b a]
+        expect(tentatively_yielded).to eq %i[a b c d e d c b a]
       end
     end
 
@@ -133,21 +133,21 @@ describe Nanoc::Int::ItemRepSelector do
       end
 
       example do
-        expect(successfully_yielded).to eq %i(a b c d e)
-        expect(tentatively_yielded).to eq %i(a b c d e)
+        expect(successfully_yielded).to eq %i[a b c d e]
+        expect(tentatively_yielded).to eq %i[a b c d e]
       end
     end
 
     context 'star dependencies' do
       let(:dependencies) do
         {
-          a: %i(b c d e),
+          a: %i[b c d e],
         }
       end
 
       example do
-        expect(successfully_yielded).to eq %i(b c d e a)
-        expect(tentatively_yielded).to eq %i(a b a c a d a e a)
+        expect(successfully_yielded).to eq %i[b c d e a]
+        expect(tentatively_yielded).to eq %i[a b a c a d a e a]
       end
     end
 
@@ -156,13 +156,13 @@ describe Nanoc::Int::ItemRepSelector do
 
       let(:dependencies) do
         {
-          a: %i(b c d e),
+          a: %i[b c d e],
         }
       end
 
       example do
-        expect(successfully_yielded).to eq %i(b c d e a)
-        expect(tentatively_yielded).to eq %i(a b a c a d a e a)
+        expect(successfully_yielded).to eq %i[b c d e a]
+        expect(tentatively_yielded).to eq %i[a b a c a d a e a]
       end
     end
 
@@ -176,8 +176,8 @@ describe Nanoc::Int::ItemRepSelector do
       end
 
       it 'picks prioritised roots' do
-        expect(successfully_yielded).to eq %i(d a e b c)
-        expect(tentatively_yielded).to eq %i(a d a b e b c)
+        expect(successfully_yielded).to eq %i[d a e b c]
+        expect(tentatively_yielded).to eq %i[a d a b e b c]
       end
     end
   end

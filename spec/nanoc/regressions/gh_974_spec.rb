@@ -10,7 +10,7 @@ EOS
   end
 
   it 'writes to path corresponding to identifier' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
 
     expect(File.file?('output/foo.md')).to eq(true)
   end

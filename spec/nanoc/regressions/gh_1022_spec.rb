@@ -16,7 +16,7 @@ EOS
   end
 
   it 'recompiles all reps of a changed item' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
 
     expect(File.file?('output/ubuntu-16.10-server-amd64.iso.txt')).to be
     expect(File.read('output/ubuntu-16.10-server-amd64.iso.txt')).to eq('Ubuntu / torrent contents')

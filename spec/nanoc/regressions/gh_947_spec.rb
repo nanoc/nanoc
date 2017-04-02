@@ -15,7 +15,7 @@ EOS
 
   example do
     File.write('output/foo', 'I am an older foo!')
-    expect { Nanoc::CLI.run(%w(compile)) }.to output(%r{\s+update.*  output/foo$}).to_stdout
+    expect { Nanoc::CLI.run(%w[compile]) }.to output(%r{\s+update.*  output/foo$}).to_stdout
     expect(File.read('output/foo')).to eq('Foo!')
   end
 end

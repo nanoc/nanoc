@@ -19,7 +19,7 @@ describe Nanoc::Filters::Less, site: true, stdio: true, v8: true do
     end
 
     it 'compiles a.less' do
-      Nanoc::CLI.run(%w(compile))
+      Nanoc::CLI.run(%w[compile])
       expect(File.read('output/a.css')).to match(/^p\s*\{\s*color:\s*red;?\s*\}/)
     end
 
@@ -36,7 +36,7 @@ describe Nanoc::Filters::Less, site: true, stdio: true, v8: true do
       end
 
       it 'compiles and compresses a.less' do
-        Nanoc::CLI.run(%w(compile))
+        Nanoc::CLI.run(%w[compile])
         expect(File.read('output/a.css')).to match(/^\.foo\{bar:a\}\n?\.bar\{foo:b\}/)
       end
     end
@@ -52,16 +52,16 @@ describe Nanoc::Filters::Less, site: true, stdio: true, v8: true do
     end
 
     it 'compiles a.less' do
-      Nanoc::CLI.run(%w(compile))
+      Nanoc::CLI.run(%w[compile])
       expect(File.read('output/a.css')).to match(/^p\s*\{\s*color:\s*red;?\s*\}/)
     end
 
     it 'recompiles a.less if b.less has changed' do
-      Nanoc::CLI.run(%w(compile))
+      Nanoc::CLI.run(%w[compile])
 
       File.write('content/b.less', 'p { color: blue; }')
 
-      Nanoc::CLI.run(%w(compile))
+      Nanoc::CLI.run(%w[compile])
       expect(File.read('output/a.css')).to match(/^p\s*\{\s*color:\s*blue;?\s*\}/)
     end
   end
@@ -78,16 +78,16 @@ describe Nanoc::Filters::Less, site: true, stdio: true, v8: true do
     end
 
     it 'compiles a.less' do
-      Nanoc::CLI.run(%w(compile))
+      Nanoc::CLI.run(%w[compile])
       expect(File.read('output/a.css')).to match(/^p\s*\{\s*color:\s*red;?\s*\}/)
     end
 
     it 'recompiles a.less if b.less has changed' do
-      Nanoc::CLI.run(%w(compile))
+      Nanoc::CLI.run(%w[compile])
 
       File.write('content/foo/bar/imported_file.less', 'p { color: blue; }')
 
-      Nanoc::CLI.run(%w(compile))
+      Nanoc::CLI.run(%w[compile])
       expect(File.read('output/a.css')).to match(/^p\s*\{\s*color:\s*blue;?\s*\}/)
     end
   end
@@ -104,16 +104,16 @@ describe Nanoc::Filters::Less, site: true, stdio: true, v8: true do
     end
 
     it 'compiles a.less' do
-      Nanoc::CLI.run(%w(compile))
+      Nanoc::CLI.run(%w[compile])
       expect(File.read('output/foo/a.css')).to match(/^p\s*\{\s*color:\s*red;?\s*\}/)
     end
 
     it 'recompiles a.less if b.less has changed' do
-      Nanoc::CLI.run(%w(compile))
+      Nanoc::CLI.run(%w[compile])
 
       File.write('content/foo/bar/imported_file.less', 'p { color: blue; }')
 
-      Nanoc::CLI.run(%w(compile))
+      Nanoc::CLI.run(%w[compile])
       expect(File.read('output/foo/a.css')).to match(/^p\s*\{\s*color:\s*blue;?\s*\}/)
     end
   end

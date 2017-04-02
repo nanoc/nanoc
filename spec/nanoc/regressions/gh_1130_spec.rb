@@ -14,6 +14,6 @@ EOS
   end
 
   it 'does not raise fiber error' do
-    Nanoc::CLI.run(%w(check wat))
+    Nanoc::CLI.run(%w[check wat])
   end
 end

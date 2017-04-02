@@ -14,7 +14,7 @@ EOS
   end
 
   it 'requires /b to be compiled first' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/a.txt')).to eql('true')
   end
 end

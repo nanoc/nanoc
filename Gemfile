@@ -49,11 +49,11 @@ group :plugins do
   gem 'mustache', '~> 1.0'
   gem 'nokogiri', '~> 1.6'
   gem 'pandoc-ruby'
-  gem 'pygments.rb', '~> 1.1', '>= 1.1.1', platforms: %i(ruby mswin)
+  gem 'pygments.rb', '~> 1.1', '>= 1.1.1', platforms: %i[ruby mswin]
   gem 'rack'
   gem 'rainpress'
-  gem 'rdiscount', '~> 2.2', platforms: %i(ruby mswin)
-  gem 'redcarpet', platforms: %i(ruby mswin)
+  gem 'rdiscount', '~> 2.2', platforms: %i[ruby mswin]
+  gem 'redcarpet', platforms: %i[ruby mswin]
   gem 'RedCloth', platforms: :ruby
   gem 'rouge'
   gem 'rubypants'

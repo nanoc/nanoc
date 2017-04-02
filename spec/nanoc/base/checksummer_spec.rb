@@ -69,11 +69,11 @@ describe Nanoc::Int::Checksummer do
   end
 
   context 'Array' do
-    let(:obj) { %w(hello goodbye) }
+    let(:obj) { %w[hello goodbye] }
     it { is_expected.to eql('Array<String<hello>,String<goodbye>,>') }
 
     context 'different order' do
-      let(:obj) { %w(goodbye hello) }
+      let(:obj) { %w[goodbye hello] }
       it { is_expected.to eql('Array<String<goodbye>,String<hello>,>') }
     end
 

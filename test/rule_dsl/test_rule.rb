@@ -16,7 +16,7 @@ class Nanoc::Int::RuleTest < Nanoc::TestCase
   def test_matches
     pattern    = Nanoc::Int::Pattern.from(%r{/(.*)/(.*)/})
     identifier = '/anything/else/'
-    expected   = %w(anything else)
+    expected   = %w[anything else]
 
     rule = Nanoc::RuleDSL::Rule.new(pattern, :string, proc {})
 

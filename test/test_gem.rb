@@ -15,7 +15,7 @@ class Nanoc::GemTest < Nanoc::TestCase
     stdout = StringIO.new
     stderr = StringIO.new
     piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
-    piper.run(%w(gem build nanoc.gemspec), nil)
+    piper.run(%w[gem build nanoc.gemspec], nil)
     files_after = Set.new Dir['**/*']
 
     # Check new files

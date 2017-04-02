@@ -20,7 +20,7 @@ class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
 
   def test_per_rules_file_preprocessor
     # Create site
-    Nanoc::CLI.run %w(create_site foo)
+    Nanoc::CLI.run %w[create_site foo]
     FileUtils.cd('foo') do
       # Create a bonus rules file
       File.write(
@@ -51,7 +51,7 @@ class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
 
   def test_per_rules_file_postprocessor
     # Create site
-    Nanoc::CLI.run %w(create_site foo)
+    Nanoc::CLI.run %w[create_site foo]
     FileUtils.cd('foo') do
       # Create a bonus rules file
       File.write(

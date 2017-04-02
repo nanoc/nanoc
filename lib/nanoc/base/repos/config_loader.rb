@@ -26,7 +26,7 @@ module Nanoc::Int
 
     # @return [String]
     def self.config_filename_for_cwd
-      filenames = %w(nanoc.yaml config.yaml)
+      filenames = %w[nanoc.yaml config.yaml]
       candidate = filenames.find { |f| File.file?(f) }
       candidate && File.expand_path(candidate)
     end

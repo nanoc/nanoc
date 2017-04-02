@@ -10,6 +10,6 @@ EOS
   end
 
   it 'preprocesses before running the check' do
-    Nanoc::CLI.run(%w(check stale))
+    Nanoc::CLI.run(%w[check stale])
   end
 end

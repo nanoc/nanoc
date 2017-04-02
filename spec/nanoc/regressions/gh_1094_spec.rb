@@ -15,7 +15,7 @@ EOS
 
   it 'raises CannotGetCompiledContentOfBinaryItem twice' do
     2.times do
-      expect { Nanoc::CLI.run(%w(compile)) }
+      expect { Nanoc::CLI.run(%w[compile]) }
         .to raise_wrapped_error(an_instance_of(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem))
     end
   end

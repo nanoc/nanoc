@@ -12,7 +12,7 @@ EOS
   end
 
   it 'does not reuse old content' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/foo.erb')).to eql('*Bar!*')
   end
 end

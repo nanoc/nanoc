@@ -12,7 +12,7 @@ EOS
   end
 
   it 'does not require any items to be compiled' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/a.txt')).to eql('false')
     expect(File.read('output/b.txt')).to eql('false')
   end

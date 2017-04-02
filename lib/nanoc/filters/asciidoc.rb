@@ -13,7 +13,7 @@ module Nanoc::Filters
       stdout = StringIO.new
       stderr = $stderr
       piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
-      piper.run(%w(asciidoc -o - -), content)
+      piper.run(%w[asciidoc -o - -], content)
       stdout.string
     end
   end

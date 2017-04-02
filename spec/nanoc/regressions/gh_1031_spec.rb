@@ -20,7 +20,7 @@ EOS
   end
 
   it 'recompiles all reps of a changed item' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(File.file?('output/bar.txt')).to be
     expect(File.file?('output/foo.txt')).to be
     expect(File.file?('output/foo_deps.txt')).to be
@@ -40,7 +40,7 @@ EOS
   end
 EOS
 
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(File.file?('output/bar.txt')).to be
     expect(File.file?('output/foo.txt')).to be
     expect(File.file?('output/foo_deps.txt')).to be
@@ -48,7 +48,7 @@ EOS
 
     File.write('content/bar.md', 'I am a newer bar!')
 
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/foo_deps.txt')).to eq('[I am a newer bar!]')
   end
 end

@@ -407,7 +407,7 @@ describe Nanoc::Identifier do
     context 'identifier with multiple extensions' do
       let(:identifier) { described_class.new('/foo.html.md') }
 
-      it { is_expected.to eql(%w(html md)) }
+      it { is_expected.to eql(%w[html md]) }
     end
   end
 

@@ -11,6 +11,6 @@ describe 'GH-948', site: true, stdio: true do
   end
 
   it 'does not crash when output dir is not present' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
   end
 end

@@ -61,7 +61,7 @@ module Nanoc::Deploying::Deployers
         # Verify existence of remote, if remote is not a URL
         if remote_is_name?(remote)
           begin
-            run_cmd(%W(git config --get remote.#{remote}.url))
+            run_cmd(%W[git config --get remote.#{remote}.url])
           rescue Nanoc::Extra::Piper::Error
             raise Errors::RemoteDoesNotExist.new(remote)
           end
@@ -69,7 +69,7 @@ module Nanoc::Deploying::Deployers
 
         # If the branch exists then switch to it, otherwise prompt the user to create one.
         begin
-          run_cmd_unless_dry(%W(git checkout #{branch}))
+          run_cmd_unless_dry(%W[git checkout #{branch}])
         rescue Nanoc::Extra::Piper::Error
           raise Errors::BranchDoesNotExist.new(branch)
         end
@@ -78,13 +78,13 @@ module Nanoc::Deploying::Deployers
 
         msg = "Automated commit at #{Time.now.utc} by Nanoc #{Nanoc::VERSION}"
         author = 'Nanoc <>'
-        run_cmd_unless_dry(%w(git add -A))
-        run_cmd_unless_dry(%W(git commit -a --author #{author} -m #{msg}))
+        run_cmd_unless_dry(%w[git add -A])
+        run_cmd_unless_dry(%W[git commit -a --author #{author} -m #{msg}])
 
         if forced
-          run_cmd_unless_dry(%W(git push -f #{remote} #{branch}))
+          run_cmd_unless_dry(%W[git push -f #{remote} #{branch}])
         else
-          run_cmd_unless_dry(%W(git push #{remote} #{branch}))
+          run_cmd_unless_dry(%W[git push #{remote} #{branch}])
         end
       end
     end
@@ -111,7 +111,7 @@ module Nanoc::Deploying::Deployers
     def clean_repo?
       stdout = StringIO.new
       piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: $stderr)
-      piper.run(%w(git status --porcelain), nil)
+      piper.run(%w[git status --porcelain], nil)
       stdout.string.empty?
     end
   end

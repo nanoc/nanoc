@@ -16,7 +16,7 @@ describe Nanoc::PostCompileItemView do
   shared_examples 'a method that returns modified reps only' do
     it 'returns only modified items' do
       expect(subject.size).to eq(1)
-      expect(subject.map(&:name)).to eq(%i(modded))
+      expect(subject.map(&:name)).to eq(%i[modded])
     end
 
     it 'returns an array' do

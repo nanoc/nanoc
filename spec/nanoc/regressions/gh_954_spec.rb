@@ -22,7 +22,7 @@ EOS
   end
 
   it 'properly filters foo.md' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
 
     # Path is relativized
     expect(File.read('output/foo.html')).to eq('foo <a href="./">root</a>')

@@ -27,7 +27,7 @@ EOS
   end
 
   it 'can access textual content of now-binary item' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/foo.txt')).to eql('[I am bar!]')
   end
 end

@@ -56,7 +56,7 @@ EOS
   end
 
   before do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
   end
 
   example do
@@ -81,7 +81,7 @@ EOS
 </xsl:stylesheet>
 EOS
 
-    expect { Nanoc::CLI.run(%w(compile)) }
+    expect { Nanoc::CLI.run(%w[compile]) }
       .to change { File.read('output/index.xhtml') }
       .from(/<title>Original Title/)
       .to(/<title>Changed Title/)

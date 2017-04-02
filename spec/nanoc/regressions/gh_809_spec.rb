@@ -12,6 +12,6 @@ EOS
     Nanoc::CLI.run(['compile'])
 
     regex = /Running check stale…   (\e\[32m)?ok(\e\[0m)?/
-    expect { Nanoc::CLI.run(%w(check stale)) }.to output(regex).to_stdout
+    expect { Nanoc::CLI.run(%w[check stale]) }.to output(regex).to_stdout
   end
 end

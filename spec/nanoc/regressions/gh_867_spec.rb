@@ -10,6 +10,6 @@ EOS
   end
 
   it 'preprocesses before running show-data' do
-    expect { Nanoc::CLI.run(%w(show-data)) }.not_to output(/foo/).to_stdout
+    expect { Nanoc::CLI.run(%w[show-data]) }.not_to output(/foo/).to_stdout
   end
 end

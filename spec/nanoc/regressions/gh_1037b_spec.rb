@@ -12,7 +12,7 @@ EOS
   end
 
   it 'writes one file' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(Dir['output/*']).to eql(['output/foo-s3cr3t.png'])
   end
 end

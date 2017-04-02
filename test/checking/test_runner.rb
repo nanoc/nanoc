@@ -5,7 +5,7 @@ class Nanoc::Checking::RunnerTest < Nanoc::TestCase
     with_site do |site|
       File.open('output/blah', 'w') { |io| io.write('I am stale! Haha!') }
       runner = Nanoc::Checking::Runner.new(site)
-      runner.run_specific(%w(stale))
+      runner.run_specific(%w[stale])
     end
   end
 
@@ -17,7 +17,7 @@ class Nanoc::Checking::RunnerTest < Nanoc::TestCase
 
       runner = Nanoc::Checking::Runner.new(site)
       ios = capturing_stdio do
-        runner.run_specific(%w(my_foo_check))
+        runner.run_specific(%w[my_foo_check])
       end
 
       assert ios[:stdout].include?('I AM FOO!')

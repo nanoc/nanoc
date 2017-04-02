@@ -300,7 +300,7 @@ EOS
       path = arguments[0]
 
       # Check whether site exists
-      if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w(. ..)).empty?) && !options[:force]
+      if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w[. ..]).empty?) && !options[:force]
         raise(
           Nanoc::Int::Errors::GenericTrivial,
           "The site was not created because '#{path}' already exists. " \

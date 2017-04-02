@@ -12,7 +12,7 @@ EOS
   end
 
   it 'detects missing output file of non-default rep' do
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(File.file?('output/first.html')).to be
     expect(File.file?('output/last.html')).to be
 
@@ -20,7 +20,7 @@ EOS
     expect(File.file?('output/first.html')).not_to be
     expect(File.file?('output/last.html')).to be
 
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(File.file?('output/first.html')).to be
     expect(File.file?('output/last.html')).to be
   end

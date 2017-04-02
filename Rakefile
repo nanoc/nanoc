@@ -14,7 +14,7 @@ end
 
 RSpec::Core::RakeTask.new(:spec)
 
-task test: %i(spec test_all rubocop)
-task test_ci: %i(test coveralls:push)
+task test: %i[spec test_all rubocop]
+task test_ci: %i[test coveralls:push]
 
 task default: :test

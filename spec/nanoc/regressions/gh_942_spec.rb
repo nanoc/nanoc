@@ -15,7 +15,7 @@ EOS
 
   example do
     File.write('output/parent', 'Hahaaa! I am a file and not a directory!')
-    Nanoc::CLI.run(%w(compile))
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/parent/foo')).to eq('Foo!')
   end
 end

@@ -20,7 +20,7 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
   end
 
   def test_forward
-    methods = %i(write << tty? tty? flush tell print puts string reopen exist? exists? close)
+    methods = %i[write << tty? tty? flush tell print puts string reopen exist? exists? close]
 
     s = Stream.new
     cs = Nanoc::CLI::CleaningStream.new(s)

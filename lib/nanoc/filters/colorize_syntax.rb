@@ -358,7 +358,7 @@ module Nanoc::Filters
 
     protected
 
-    KNOWN_COLORIZERS = %i(coderay dummy pygmentize pygmentsrb simon_highlight rouge).freeze
+    KNOWN_COLORIZERS = %i[coderay dummy pygmentize pygmentsrb simon_highlight rouge].freeze
 
     # Removes the first blank lines and any whitespace at the end.
     def strip(s)

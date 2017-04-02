@@ -145,7 +145,7 @@ module Nanoc::CLI::Commands::CompileListeners
     end
 
     def table_for_memoization
-      headers = %w(memoization hit miss %)
+      headers = %w[memoization hit miss %]
 
       rows_raw = @telemetry.counter(:memoization).map do |(name, type), counter|
         { name: name, type: type, count: counter.value }

@@ -106,7 +106,7 @@ describe Nanoc::Int::OutdatednessStatus do
       let(:status) { described_class.new(props: Nanoc::Int::Props.new(attributes: true)) }
 
       it 'updates props' do
-        expect(subject.props.active).to eql(Set.new(%i(raw_content attributes compiled_content)))
+        expect(subject.props.active).to eql(Set.new(%i[raw_content attributes compiled_content]))
       end
     end
   end

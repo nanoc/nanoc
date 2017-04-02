@@ -8,6 +8,6 @@ EOS
   end
 
   it 'raises the proper exception' do
-    expect { Nanoc::CLI.run(%w(compile --verbose)) }.to raise_error(SyntaxError)
+    expect { Nanoc::CLI.run(%w[compile --verbose]) }.to raise_error(SyntaxError)
   end
 end

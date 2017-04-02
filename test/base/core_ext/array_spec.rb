@@ -12,7 +12,7 @@ describe 'Array#__nanoc_freeze_recursively' do
   include Nanoc::TestHelpers
 
   it 'should prevent first-level elements from being modified' do
-    array = [:a, %i(b c), :d]
+    array = [:a, %i[b c], :d]
     array.__nanoc_freeze_recursively
 
     assert_raises_frozen_error do
@@ -21,7 +21,7 @@ describe 'Array#__nanoc_freeze_recursively' do
   end
 
   it 'should prevent second-level elements from being modified' do
-    array = [:a, %i(b c), :d]
+    array = [:a, %i[b c], :d]
     array.__nanoc_freeze_recursively
 
     assert_raises_frozen_error do

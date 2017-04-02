@@ -122,7 +122,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
   def test_disallow_routes_not_starting_with_slash
     # Create site
-    Nanoc::CLI.run %w(create_site bar)
+    Nanoc::CLI.run %w[create_site bar]
 
     FileUtils.cd('bar') do
       # Create routes
@@ -149,7 +149,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
   def test_disallow_duplicate_routes
     # Create site
-    Nanoc::CLI.run %w(create_site bar)
+    Nanoc::CLI.run %w[create_site bar]
 
     FileUtils.cd('bar') do
       # Create routes
@@ -176,7 +176,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
   def test_disallow_multiple_snapshots_with_the_same_name
     # Create site
-    Nanoc::CLI.run %w(create_site bar)
+    Nanoc::CLI.run %w[create_site bar]
 
     FileUtils.cd('bar') do
       # Create routes
@@ -398,8 +398,8 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
       site.compile
 
-      assert_equal Set.new(%w(content/blah.dat)), Set.new(Dir['content/*'])
-      assert_equal Set.new(%w(output/blah.dat)), Set.new(Dir['output/*'])
+      assert_equal Set.new(%w[content/blah.dat]), Set.new(Dir['content/*'])
+      assert_equal Set.new(%w[output/blah.dat]), Set.new(Dir['output/*'])
     end
   end
 
@@ -420,7 +420,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_find_layouts_by_glob
-    Nanoc::CLI.run %w(create_site bar)
+    Nanoc::CLI.run %w[create_site bar]
     FileUtils.cd('bar') do
       File.open('Rules', 'w') do |io|
         io.write "compile '/**/*' do\n"

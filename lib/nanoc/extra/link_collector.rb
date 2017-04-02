@@ -44,11 +44,11 @@ module ::Nanoc::Extra
     end
 
     def hrefs_in_file(filename)
-      uris_in_file filename, %w(a img)
+      uris_in_file filename, %w[a img]
     end
 
     def resource_uris_in_file(filename)
-      uris_in_file filename, %w(audio form img iframe link script video)
+      uris_in_file filename, %w[audio form img iframe link script video]
     end
 
     private

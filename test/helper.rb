@@ -249,7 +249,7 @@ EOS
   end
 
   def command?(cmd)
-    which, null = on_windows? ? %w(where NUL) : ['which', '/dev/null']
+    which, null = on_windows? ? %w[where NUL] : ['which', '/dev/null']
     system("#{which} #{cmd} > #{null} 2>&1")
   end
 
