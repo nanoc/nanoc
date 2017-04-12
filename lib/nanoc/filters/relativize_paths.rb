@@ -78,7 +78,8 @@ module Nanoc::Filters
         content = content.sub(%r{(<html[^>]+)xmlns="http://www.w3.org/1999/xhtml"}, '\1')
       end
 
-      nokogiri_process(content, selectors, namespaces, klass, type)
+      result = nokogiri_process(content, selectors, namespaces, klass, type)
+      result.sub %r{\s*<meta http-equiv="Content-Type" content="[^"]+">}, ''
     end
 
     def nokogiri_process(content, selectors, namespaces, klass, type)
