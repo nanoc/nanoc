@@ -38,7 +38,7 @@ module Nanoc::Filters
       case params[:type]
       when :css
         relativize_css(content)
-      when :html, :xml, :xhtml
+      when :html, :html5, :xml, :xhtml
         relativize_html_like(content, params)
       else
         raise 'The relativize_paths needs to know the type of content to ' \
@@ -63,13 +63,18 @@ module Nanoc::Filters
       namespaces = params.fetch(:namespaces, {})
       type       = params.fetch(:type)
 
-      require 'nokogiri'
       case type
       when :html
+        require 'nokogiri'
         klass = ::Nokogiri::HTML
+      when :html5
+        require 'nokogumbo'
+        klass = ::Nokogiri::HTML5
       when :xml
+        require 'nokogiri'
         klass = ::Nokogiri::XML
       when :xhtml
+        require 'nokogiri'
         klass = ::Nokogiri::XML
         # FIXME: cleanup because it is ugly
         # this cleans the XHTML namespace to process fragments and full
@@ -95,7 +100,13 @@ module Nanoc::Filters
           end
         end
       end
-      doc.send("to_#{type}")
+
+      case type
+      when :html5
+        doc.to_html
+      else
+        doc.send("to_#{type}")
+      end
     end
 
     def nokogiri_process_comment(node, doc, selectors, namespaces, klass, type)
