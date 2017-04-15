@@ -4,6 +4,7 @@ description <<-EOS
 Compile all items of the current site.
 EOS
 flag nil, :profile, 'profile compilation' if Nanoc::Feature.enabled?(Nanoc::Feature::PROFILER)
+flag nil, :diff, 'generate diff'
 
 require_relative 'compile_listeners/abstract'
 require_relative 'compile_listeners/debug_printer'

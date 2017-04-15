@@ -2,7 +2,7 @@ module Nanoc::CLI::Commands::CompileListeners
   class DiffGenerator < Abstract
     # @see Listener#enable_for?
     def self.enable_for?(command_runner)
-      command_runner.site.config[:enable_output_diff]
+      command_runner.site.config[:enable_output_diff] || command_runner.options[:diff]
     end
 
     # @see Listener#start
