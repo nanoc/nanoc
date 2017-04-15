@@ -92,19 +92,11 @@ module Nanoc::Filters
         @colorizers[language] = colorizer
       end
 
-      # Determine syntax (HTML or XML)
-      syntax = params[:syntax] || :html
-      case syntax
-      when :html
-        klass = Nokogiri::HTML
-      when :xml, :xhtml
-        klass = Nokogiri::XML
-      else
-        raise "unknown syntax: #{syntax.inspect} (expected :html or :xml)"
-      end
+      syntax = params.fetch(:syntax, :html)
+      parser = parser_for(syntax)
 
       # Colorize
-      doc = parse(content, klass, params.fetch(:is_fullpage, false))
+      doc = parse(content, parser, params.fetch(:is_fullpage, false))
       selector = params[:outside_pre] ? 'code' : 'pre > code'
       doc.css(selector).each do |element|
         # Get language
@@ -128,7 +120,7 @@ module Nanoc::Filters
         # Highlight
         raw = strip(element.inner_text)
         highlighted_code = highlight(raw, language, params)
-        element.children = Nokogiri::HTML.fragment(strip(highlighted_code), 'utf-8')
+        element.children = parse_fragment(parser, strip(highlighted_code))
 
         # Add language-something class
         unless has_class
@@ -141,8 +133,44 @@ module Nanoc::Filters
         highlight_postprocess(language, element.parent)
       end
 
-      method = "to_#{syntax}".to_sym
-      doc.send(method, encoding: 'UTF-8')
+      serialize(doc, syntax)
+    end
+
+    def parser_for(syntax)
+      case syntax
+      when :html
+        require 'nokogiri'
+        Nokogiri::HTML
+      when :html5
+        require 'nokogumbo'
+        Nokogiri::HTML5
+      when :xml, :xhtml
+        require 'nokogiri'
+        Nokogiri::XML
+      else
+        raise "unknown syntax: #{syntax.inspect} (expected :html, :html5, or :xml)"
+      end
+    end
+
+    def serialize(doc, syntax)
+      case syntax
+      when :html5
+        doc.to_html
+      else
+        doc.send("to_#{syntax}", encoding: 'UTF-8')
+      end
+    end
+
+    def parse_full(parser_class, content)
+      if parser_class.to_s == 'Nokogiri::HTML5'
+        parser_class.parse(content)
+      else
+        parser_class.parse(content, nil, 'UTF-8')
+      end
+    end
+
+    def parse_fragment(parser_class, content)
+      parser_class.fragment(content)
     end
 
     # Parses the given content using the given class. This method also handles
@@ -151,16 +179,15 @@ module Nanoc::Filters
     #
     # @param [String] content The content to parse
     #
-    # @param [Class] klass The Nokogiri parser class (either Nokogiri::HTML
-    #   or Nokogiri::XML)
+    # @param [Class] klass The Nokogiri parser class
     #
     # @param [Boolean] is_fullpage true if the given content is a full page,
     #   false if it is a fragment
     def parse(content, klass, is_fullpage)
       if is_fullpage
-        klass.parse(content, nil, 'UTF-8')
+        parse_full(klass, content)
       else
-        klass.fragment(content)
+        parse_fragment(klass, content)
       end
     rescue => e
       if e.message =~ /can't modify frozen string/

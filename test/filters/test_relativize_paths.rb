@@ -117,6 +117,44 @@ EOS
     assert_match(expected1, actual_content)
   end
 
+  def test_filter_html5_with_boilerplate
+    # Create filter with mock item
+    filter = Nanoc::Filters::RelativizePaths.new
+
+    # Mock item
+    filter.instance_eval do
+      @item_rep = Nanoc::Int::ItemRep.new(
+        Nanoc::Int::Item.new(
+          'content',
+          {},
+          '/foo/bar/baz/',
+        ),
+        :blah,
+      )
+      @item_rep.paths[:last] = ['/foo/bar/baz/']
+    end
+
+    # Set content
+    raw_content = <<EOS
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello</title>
+  </head>
+  <body>
+    <a href=/foo>foo</a>
+  </body>
+</html>
+EOS
+    expected0 = %r{<a href="\.\./\.\.">foo</a>}
+    expected1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>\s*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
+
+    # Test
+    actual_content = filter.setup_and_run(raw_content, type: :html5)
+    assert_match(expected0, actual_content)
+    assert_match(expected1, actual_content)
+  end
+
   def test_filter_html_multiple
     # Create filter with mock item
     filter = Nanoc::Filters::RelativizePaths.new
