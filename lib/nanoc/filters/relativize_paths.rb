@@ -76,14 +76,23 @@ module Nanoc::Filters
       when :xhtml
         require 'nokogiri'
         klass = ::Nokogiri::XML
+      end
+
+      content = fix_content(content, type)
+      nokogiri_process(content, selectors, namespaces, klass, type)
+    end
+
+    def fix_content(content, type)
+      case type
+      when :xhtml
         # FIXME: cleanup because it is ugly
         # this cleans the XHTML namespace to process fragments and full
         # documents in the same way. At least, Nokogiri adds this namespace
         # if detects the `html` element.
-        content = content.sub(%r{(<html[^>]+)xmlns="http://www.w3.org/1999/xhtml"}, '\1')
+        content.sub(%r{(<html[^>]+)xmlns="http://www.w3.org/1999/xhtml"}, '\1')
+      else
+        content
       end
-
-      nokogiri_process(content, selectors, namespaces, klass, type)
     end
 
     def nokogiri_process(content, selectors, namespaces, klass, type)
