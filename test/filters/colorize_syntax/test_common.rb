@@ -51,6 +51,30 @@ EOS
     end
   end
 
+  def test_full_page_html5
+    # Create filter
+    filter = ::Nanoc::Filters::ColorizeSyntax.new
+
+    # Get input and expected output
+    input = <<EOS
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Foo</title>
+</head>
+<body>
+  <pre title="moo"><code class="language-ruby"># comment</code></pre>
+</body>
+</html>
+EOS
+    expected_output_regex = %r{^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta charset="utf-8">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>}
+
+    # Run filter
+    actual_output = filter.setup_and_run(input, syntax: :html5, default_colorizer: :dummy, is_fullpage: true)
+    assert_match expected_output_regex, actual_output
+  end
+
   def test_colorize_syntax_with_missing_executables
     if_have 'nokogiri' do
       begin
