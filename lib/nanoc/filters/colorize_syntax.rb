@@ -5,84 +5,8 @@ module Nanoc::Filters
 
     requires 'nokogiri', 'stringio', 'open3'
 
-    # The default colorizer to use for a language if the colorizer for that
-    # language is not overridden.
     DEFAULT_COLORIZER = :coderay
 
-    # Syntax-highlights code blocks in the given content. Code blocks should
-    # be enclosed in `pre` elements that contain a `code` element. The code
-    # element should have an indication of the language the code is in. There
-    # are two possible ways of adding such an indication:
-    #
-    # 1. A HTML class starting with `language-` and followed by the
-    # code language, as specified by HTML5. For example, `<code class="language-ruby">`.
-    #
-    # 2. A comment on the very first line of the code block in the format
-    # `#!language` where `language` is the language the code is in. For
-    # example, `#!ruby`.
-    #
-    # Options for individual colorizers will be taken from the {#run}
-    # options’ value for the given colorizer. For example, if the filter is
-    # invoked with a `:coderay => coderay_options_hash` option, the
-    # `coderay_options_hash` hash will be passed to the CodeRay colorizer.
-    #
-    # Currently, the following colorizers are supported:
-    #
-    # * `:coderay` for [Coderay](http://coderay.rubychan.de/)
-    # * `:pygmentize` for [pygmentize](http://pygments.org/docs/cmdline/), the
-    #   command-line frontend for [Pygments](http://pygments.org/)
-    # * `:pygmentsrb` for [pygments.rb](https://github.com/tmm1/pygments.rb),
-    #   a Ruby interface for [Pygments](http://pygments.org/)
-    # * `:simon_highlight` for [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html)
-    # * `:rouge` for [Rouge](https://github.com/jayferd/rouge/)
-    #
-    # Additional colorizer implementations are welcome!
-    #
-    # @example Using a class to indicate type of code be highlighted
-    #
-    #     <pre><code class="language-ruby">
-    #     def foo
-    #       "asdf"
-    #     end
-    #     </code></pre>
-    #
-    # @example Using a comment to indicate type of code be highlighted
-    #
-    #     <pre><code>
-    #     #!ruby
-    #     def foo
-    #       "asdf"
-    #     end
-    #     </code></pre>
-    #
-    # @example Invoking the filter with custom parameters
-    #
-    #     filter :colorize_syntax,
-    #            :colorizers => { :ruby => :coderay },
-    #            :coderay    => { :line_numbers => :list }
-    #
-    # @param [String] content The content to filter
-    #
-    # @option params [Symbol] :default_colorizer (DEFAULT_COLORIZER) The
-    #   default colorizer, i.e. the colorizer that will be used when the
-    #   colorizer is not overriden for a specific language.
-    #
-    # @option params [Symbol] :syntax (:html) The syntax to use, which can be
-    #   `:html`, `:xml` or `:xhtml`, the latter two being the same.
-    #
-    # @option params [Hash] :colorizers ({}) A hash containing
-    #   a mapping of programming languages (symbols, not strings) onto
-    #   colorizers (symbols).
-    #
-    # @option params [Boolean] :outside_pre (false) `true` if the colorizer
-    #   should be applied on `code` elements outside `pre` elements, false
-    #   if only `code` elements inside` pre` elements should be colorized.
-    #
-    # @option params [Symbol] :is_fullpage (false) Whether to treat the input
-    #   as a full HTML page or a page fragment. When true, HTML boilerplate
-    #   such as the doctype, `html`, `head` and `body` elements will be added.
-    #
-    # @return [String] The filtered content
     def run(content, params = {})
       Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
 
@@ -173,16 +97,6 @@ module Nanoc::Filters
       parser_class.fragment(content)
     end
 
-    # Parses the given content using the given class. This method also handles
-    # an issue with Nokogiri on JRuby causing “cannot modify frozen string”
-    # errors.
-    #
-    # @param [String] content The content to parse
-    #
-    # @param [Class] klass The Nokogiri parser class
-    #
-    # @param [Boolean] is_fullpage true if the given content is a full page,
-    #   false if it is a fragment
     def parse(content, klass, is_fullpage)
       if is_fullpage
         parse_full(klass, content)
@@ -197,43 +111,16 @@ module Nanoc::Filters
       end
     end
 
-    # Runs the code through [CodeRay](http://coderay.rubychan.de/).
-    #
-    # @param [String] code The code to colorize
-    #
-    # @param [String] language The language the code is written in
-    #
-    # @param [Hash] params Parameters to pass on to CodeRay
-    #
-    # @return [String] The colorized output
     def coderay(code, language, params = {})
       require 'coderay'
 
       ::CodeRay.scan(code, language).html(params)
     end
 
-    # Returns the input itself, not performing any code highlighting.
-    #
-    # @param [String] code The code to colorize
-    #
-    # @param [String] language The language the code is written in (unused)
-    #
-    # @return [String] The colorized output, which is identical to the input
-    #   in this case
     def dummy(code, language, params = {}) # rubocop:disable Lint/UnusedMethodArgument
       code
     end
 
-    # Runs the content through [pygmentize](http://pygments.org/docs/cmdline/),
-    # the command-line frontend for [Pygments](http://pygments.org/).
-    #
-    # @param [String] code The code to colorize
-    #
-    # @param [String] language The language the code is written in
-    #
-    # @option params [String, Symbol] :encoding The encoding of the code block
-    #
-    # @return [String] The colorized output
     def pygmentize(code, language, params = {})
       check_availability('pygmentize', '-V')
 
@@ -251,14 +138,6 @@ module Nanoc::Filters
       stdout.string
     end
 
-    # Runs the content through [Pygments](http://pygments.org/) via
-    # [pygments.rb](https://github.com/tmm1/pygments.rb).
-    #
-    # @param [String] code The code to colorize
-    #
-    # @param [String] language The language the code is written in
-    #
-    # @return [String] The colorized output
     def pygmentsrb(code, language, params = {})
       require 'pygments'
 
@@ -277,15 +156,6 @@ module Nanoc::Filters
       line_numbers: '-l',
     }.freeze
 
-    # Runs the content through [Highlight](http://www.andre-simon.de/doku/highlight/en/highlight.html).
-    #
-    # @param [String] code The code to colorize
-    #
-    # @param [String] language The language the code is written in
-    #
-    # @option params [String] :style The style to use
-    #
-    # @return [String] The colorized output
     def simon_highlight(code, language, params = {})
       check_availability('highlight', '--version')
 
@@ -310,7 +180,6 @@ module Nanoc::Filters
       stdout.string
     end
 
-    # Wraps the element in <div class="CodeRay"><div class="code">
     def coderay_postprocess(_language, element)
       # Skip if we're a free <code>
       return if element.parent.nil?
@@ -329,13 +198,6 @@ module Nanoc::Filters
       element.swap div_outer
     end
 
-    # Runs the content through [Rouge](https://github.com/jayferd/rouge/.
-    #
-    # @param [String] code The code to colorize
-    #
-    # @param [String] language The language the code is written in
-    #
-    # @return [String] The colorized output
     def rouge(code, language, params = {})
       require 'rouge'
 
