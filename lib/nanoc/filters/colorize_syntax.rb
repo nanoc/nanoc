@@ -92,24 +92,11 @@ module Nanoc::Filters
         @colorizers[language] = colorizer
       end
 
-      # Determine syntax (HTML or XML)
-      syntax = params[:syntax] || :html
-      case syntax
-      when :html
-        require 'nokogiri'
-        klass = Nokogiri::HTML
-      when :html5
-        require 'nokogumbo'
-        klass = Nokogiri::HTML5
-      when :xml, :xhtml
-        require 'nokogiri'
-        klass = Nokogiri::XML
-      else
-        raise "unknown syntax: #{syntax.inspect} (expected :html or :xml)"
-      end
+      syntax = params.fetch(:syntax, :html)
+      parser = parser_for(syntax)
 
       # Colorize
-      doc = parse(content, klass, params.fetch(:is_fullpage, false))
+      doc = parse(content, parser, params.fetch(:is_fullpage, false))
       selector = params[:outside_pre] ? 'code' : 'pre > code'
       doc.css(selector).each do |element|
         # Get language
@@ -133,7 +120,7 @@ module Nanoc::Filters
         # Highlight
         raw = strip(element.inner_text)
         highlighted_code = highlight(raw, language, params)
-        element.children = parse_fragment(klass, strip(highlighted_code))
+        element.children = parse_fragment(parser, strip(highlighted_code))
 
         # Add language-something class
         unless has_class
@@ -154,16 +141,32 @@ module Nanoc::Filters
       end
     end
 
-    def parse_full(klass, content)
-      if klass.to_s == 'Nokogiri::HTML5'
-        klass.parse(content)
+    def parser_for(syntax)
+      case syntax
+      when :html
+        require 'nokogiri'
+        Nokogiri::HTML
+      when :html5
+        require 'nokogumbo'
+        Nokogiri::HTML5
+      when :xml, :xhtml
+        require 'nokogiri'
+        Nokogiri::XML
       else
-        klass.parse(content, nil, 'UTF-8')
+        raise "unknown syntax: #{syntax.inspect} (expected :html, :html5, or :xml)"
       end
     end
 
-    def parse_fragment(klass, content)
-      klass.fragment(content)
+    def parse_full(parser_class, content)
+      if parser_class.to_s == 'Nokogiri::HTML5'
+        parser_class.parse(content)
+      else
+        parser_class.parse(content, nil, 'UTF-8')
+      end
+    end
+
+    def parse_fragment(parser_class, content)
+      parser_class.fragment(content)
     end
 
     # Parses the given content using the given class. This method also handles
