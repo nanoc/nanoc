@@ -112,6 +112,8 @@ module Nanoc::Filters
     end
 
     class Colorizer
+      extend DDPlugin::Plugin
+
       def process(_code, _language, params = {}) # rubocop:disable Lint/UnusedMethodArgument
         raise NotImplementedError
       end
@@ -127,12 +129,16 @@ module Nanoc::Filters
     end
 
     class DummyColorizer < Colorizer
+      identifier :dummy
+
       def process(code, language, params = {}) # rubocop:disable Lint/UnusedMethodArgument
         code
       end
     end
 
     class CoderayColorizer < Colorizer
+      identifier :coderay
+
       def process(code, language, params = {})
         require 'coderay'
 
@@ -159,6 +165,8 @@ module Nanoc::Filters
     end
 
     class PygmentizeColorizer < Colorizer
+      identifier :pygmentize
+
       def process(code, language, params = {})
         check_availability('pygmentize', '-V')
 
@@ -178,6 +186,8 @@ module Nanoc::Filters
     end
 
     class PygmentsrbColorizer < Colorizer
+      identifier :pygmentsrb
+
       def process(code, language, params = {})
         require 'pygments'
 
@@ -192,6 +202,8 @@ module Nanoc::Filters
     end
 
     class SimonHighlightColorizer < Colorizer
+      identifier :simon_highlight
+
       SIMON_HIGHLIGHT_OPT_MAP = {
         wrap: '-W',
         include_style: '-I',
@@ -224,6 +236,8 @@ module Nanoc::Filters
     end
 
     class RougeColorizer < Colorizer
+      identifier :rouge
+
       def process(code, language, params = {})
         require 'rouge'
 
@@ -273,41 +287,7 @@ module Nanoc::Filters
       end
     end
 
-    def coderay(code, language, params = {})
-      CoderayColorizer.new.process(code, language, params)
-    end
-
-    def dummy(code, language, params = {})
-      DummyColorizer.new.process(code, language, params)
-    end
-
-    def pygmentize(code, language, params = {})
-      PygmentizeColorizer.new.process(code, language, params)
-    end
-
-    def pygmentsrb(code, language, params = {})
-      PygmentsrbColorizer.new.process(code, language, params)
-    end
-
-    def simon_highlight(code, language, params = {})
-      SimonHighlightColorizer.new.process(code, language, params)
-    end
-
-    def rouge(code, language, params = {})
-      RougeColorizer.new.process(code, language, params)
-    end
-
-    def coderay_postprocess(language, element)
-      CoderayColorizer.new.postprocess(language, element)
-    end
-
-    def rouge_postprocess(language, element)
-      RougeColorizer.new.postprocess(language, element)
-    end
-
     protected
-
-    KNOWN_COLORIZERS = %i[coderay dummy pygmentize pygmentsrb simon_highlight rouge].freeze
 
     # Removes the first blank lines and any whitespace at the end.
     def strip(s)
@@ -315,21 +295,20 @@ module Nanoc::Filters
     end
 
     def highlight(code, language, params = {})
-      colorizer = @colorizers[language.to_sym]
-      if KNOWN_COLORIZERS.include?(colorizer)
-        send(colorizer, code, language, params[colorizer] || {})
+      colorizer_name = @colorizers[language.to_sym]
+      colorizer = Colorizer.named(colorizer_name.to_sym)
+      if colorizer
+        colorizer.new.process(code, language, params[colorizer_name] || {})
       else
-        raise "I don’t know how to highlight code using the “#{colorizer}” colorizer"
+        raise "I don’t know how to highlight code using the “#{colorizer_name}” colorizer"
       end
     end
 
     def highlight_postprocess(language, element)
-      colorizer = @colorizers[language.to_sym]
-      if KNOWN_COLORIZERS.include?(colorizer)
-        sym = (colorizer.to_s + '_postprocess').to_sym
-        if respond_to?(sym)
-          send(sym, language, element)
-        end
+      colorizer_name = @colorizers[language.to_sym]
+      colorizer = Colorizer.named(colorizer_name.to_sym)
+      if colorizer
+        colorizer.new.postprocess(language, element)
       else
         raise "I don’t know how to highlight code using the “#{colorizer}” colorizer"
       end
