@@ -155,7 +155,7 @@ module Nanoc::Filters
     def serialize(doc, syntax)
       case syntax
       when :html5
-        doc.to_s
+        doc.to_html
       else
         doc.send("to_#{syntax}", encoding: 'UTF-8')
       end
