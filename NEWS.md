@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.7.6 (2017-04-15)
+
+Enhancements:
+
+* Added support for `:html5` in `relativize_paths` and `colorize_syntax` filters (#1153)
+
 ## 4.7.5 (2017-04-01)
 
 Fixes:
