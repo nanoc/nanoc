@@ -294,24 +294,28 @@ module Nanoc::Filters
       s.lines.drop_while { |line| line.strip.empty? }.join.rstrip
     end
 
-    def highlight(code, language, params = {})
-      colorizer_name = @colorizers[language.to_sym]
-      colorizer = Colorizer.named(colorizer_name.to_sym)
-      if colorizer
-        colorizer.new.process(code, language, params[colorizer_name] || {})
-      else
-        raise "I don’t know how to highlight code using the “#{colorizer_name}” colorizer"
+    def colorizer_name_for(language)
+      @colorizers[language.to_sym]
+    end
+
+    def colorizer_named(name)
+      colorizer = Colorizer.named(name.to_sym)
+      unless colorizer
+        raise "I don’t know how to highlight code using the “#{name}” colorizer"
       end
+      colorizer
+    end
+
+    def highlight(code, language, params = {})
+      colorizer_name = colorizer_name_for(language)
+      colorizer = colorizer_named(colorizer_name)
+      colorizer.new.process(code, language, params[colorizer_name] || {})
     end
 
     def highlight_postprocess(language, element)
-      colorizer_name = @colorizers[language.to_sym]
-      colorizer = Colorizer.named(colorizer_name.to_sym)
-      if colorizer
-        colorizer.new.postprocess(language, element)
-      else
-        raise "I don’t know how to highlight code using the “#{colorizer}” colorizer"
-      end
+      colorizer_name = colorizer_name_for(language)
+      colorizer = colorizer_named(colorizer_name)
+      colorizer.new.postprocess(language, element)
     end
   end
 end
