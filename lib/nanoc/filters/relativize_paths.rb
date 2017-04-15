@@ -63,23 +63,27 @@ module Nanoc::Filters
       namespaces = params.fetch(:namespaces, {})
       type       = params.fetch(:type)
 
+      parser = parser_for(type)
+      content = fix_content(content, type)
+
+      nokogiri_process(content, selectors, namespaces, parser, type)
+    end
+
+    def parser_for(type)
       case type
       when :html
         require 'nokogiri'
-        klass = ::Nokogiri::HTML
+        ::Nokogiri::HTML
       when :html5
         require 'nokogumbo'
-        klass = ::Nokogiri::HTML5
+        ::Nokogiri::HTML5
       when :xml
         require 'nokogiri'
-        klass = ::Nokogiri::XML
+        ::Nokogiri::XML
       when :xhtml
         require 'nokogiri'
-        klass = ::Nokogiri::XML
+        ::Nokogiri::XML
       end
-
-      content = fix_content(content, type)
-      nokogiri_process(content, selectors, namespaces, klass, type)
     end
 
     def fix_content(content, type)
