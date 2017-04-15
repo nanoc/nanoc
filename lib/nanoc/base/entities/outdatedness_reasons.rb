@@ -62,11 +62,6 @@ module Nanoc::Int
       end
     end
 
-    PathsModified = Generic.new(
-      'One or more output paths of this item have been modified since the last time the site was compiled.',
-      Props.new(path: true),
-    )
-
     UsesAlwaysOutdatedFilter = Generic.new(
       'This item rep uses one or more filters that cannot track dependencies, and will thus always be considered as outdated.',
       Props.new(raw_content: true, attributes: true, compiled_content: true),
