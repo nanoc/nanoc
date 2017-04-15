@@ -7,6 +7,8 @@ module Nanoc::Filters
 
     DEFAULT_COLORIZER = :coderay
 
+    ExtractedLanguage = Struct.new(:language, :from_class)
+
     def run(content, params = {})
       Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
 
@@ -20,40 +22,46 @@ module Nanoc::Filters
       selector = params[:outside_pre] ? 'code' : 'pre > code'
       doc.css(selector).each do |element|
         # Get language
-        has_class = false
-        language = nil
-        if element['class']
-          # Get language from class
-          match = element['class'].match(/(^| )language-([^ ]+)/)
-          language = match[2] if match
-          has_class = true if language
-        else
-          # Get language from comment line
-          match = element.inner_text.strip.split[0].match(/^#!([^\/][^\n]*)$/)
-          language = match[1] if match
-          element.content = element.content.sub(/^#!([^\/][^\n]*)$\n/, '') if language
-        end
+        extracted_language = extract_language(element)
 
         # Give up if there is no hope left
-        next if language.nil?
+        next unless extracted_language
 
         # Highlight
         raw = strip(element.inner_text)
-        highlighted_code = highlight(raw, language, params)
+        highlighted_code = highlight(raw, extracted_language.language, params)
         element.children = parse_fragment(parser, strip(highlighted_code))
 
         # Add language-something class
-        unless has_class
+        unless extracted_language.from_class
           klass = element['class'] || ''
           klass << ' ' unless [' ', nil].include?(klass[-1, 1])
-          klass << "language-#{language}"
+          klass << "language-#{extracted_language.language}"
           element['class'] = klass
         end
 
-        highlight_postprocess(language, element.parent)
+        highlight_postprocess(extracted_language.language, element.parent)
       end
 
       serialize(doc, syntax)
+    end
+
+    def extract_language(element)
+      has_class = false
+      language = nil
+      if element['class']
+        # Get language from class
+        match = element['class'].match(/(^| )language-([^ ]+)/)
+        language = match[2] if match
+        has_class = true if language
+      else
+        # Get language from comment line
+        match = element.inner_text.strip.split[0].match(/^#!([^\/][^\n]*)$/)
+        language = match[1] if match
+        element.content = element.content.sub(/^#!([^\/][^\n]*)$\n/, '') if language
+      end
+
+      language ? ExtractedLanguage.new(language, has_class) : nil
     end
 
     def colorizers_from_params(params)
