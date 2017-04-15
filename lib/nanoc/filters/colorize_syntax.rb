@@ -133,12 +133,7 @@ module Nanoc::Filters
         highlight_postprocess(language, element.parent)
       end
 
-      case syntax
-      when :html5
-        doc.to_s
-      else
-        doc.send("to_#{syntax}", encoding: 'UTF-8')
-      end
+      serialize(doc, syntax)
     end
 
     def parser_for(syntax)
@@ -154,6 +149,15 @@ module Nanoc::Filters
         Nokogiri::XML
       else
         raise "unknown syntax: #{syntax.inspect} (expected :html, :html5, or :xml)"
+      end
+    end
+
+    def serialize(doc, syntax)
+      case syntax
+      when :html5
+        doc.to_s
+      else
+        doc.send("to_#{syntax}", encoding: 'UTF-8')
       end
     end
 
