@@ -10,11 +10,7 @@ module Nanoc::Filters
     def run(content, params = {})
       Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
 
-      # Take colorizers from parameters
-      @colorizers = Hash.new(params[:default_colorizer] || DEFAULT_COLORIZER)
-      (params[:colorizers] || {}).each_pair do |language, colorizer|
-        @colorizers[language] = colorizer
-      end
+      @colorizers = colorizers_from_params(params)
 
       syntax = params.fetch(:syntax, :html)
       parser = parser_for(syntax)
@@ -58,6 +54,14 @@ module Nanoc::Filters
       end
 
       serialize(doc, syntax)
+    end
+
+    def colorizers_from_params(params)
+      colorizers = Hash.new(params[:default_colorizer] || DEFAULT_COLORIZER)
+      (params[:colorizers] || {}).each_pair do |language, colorizer|
+        colorizers[language] = colorizer
+      end
+      colorizers
     end
 
     def parser_for(syntax)
