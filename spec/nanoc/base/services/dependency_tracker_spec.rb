@@ -1,11 +1,17 @@
 describe Nanoc::Int::DependencyTracker do
   let(:tracker) { described_class.new(store) }
 
-  let(:store) { Nanoc::Int::DependencyStore.new([]) }
+  let(:store) { Nanoc::Int::DependencyStore.new(empty_identifiable_collection, empty_identifiable_collection) }
 
   let(:item_a) { Nanoc::Int::Item.new('a', {}, '/a.md') }
   let(:item_b) { Nanoc::Int::Item.new('b', {}, '/b.md') }
   let(:item_c) { Nanoc::Int::Item.new('c', {}, '/c.md') }
+
+  let(:empty_identifiable_collection) do
+    Nanoc::Int::IdentifiableCollection.new(config)
+  end
+
+  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
   shared_examples 'a null dependency tracker' do
     let(:tracker) { Nanoc::Int::DependencyTracker::Null.new }

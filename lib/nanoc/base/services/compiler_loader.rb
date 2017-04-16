@@ -5,7 +5,7 @@ module Nanoc::Int
       action_sequence_store = Nanoc::Int::ActionSequenceStore.new(site: site)
 
       dependency_store =
-        Nanoc::Int::DependencyStore.new(site.items.to_a + site.layouts.to_a, site: site)
+        Nanoc::Int::DependencyStore.new(site.items, site.layouts, site: site)
 
       objects = site.items.to_a + site.layouts.to_a + site.code_snippets + [site.config]
 

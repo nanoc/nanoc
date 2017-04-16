@@ -64,6 +64,14 @@ module Nanoc::Int
       self.class.new(@config, @objects.reject(&block))
     end
 
+    def object_with_identifier(identifier)
+      if frozen?
+        @mapping[identifier.to_s]
+      else
+        @objects.find { |i| i.identifier == identifier }
+      end
+    end
+
     protected
 
     contract C::Any => C::Maybe[C::RespondTo[:identifier]]
@@ -94,14 +102,6 @@ module Nanoc::Int
     contract C::Any => C::IterOf[C::RespondTo[:identifier]]
     memoized def find_all_memoized(arg)
       find_all_unmemoized(arg)
-    end
-
-    def object_with_identifier(identifier)
-      if frozen?
-        @mapping[identifier.to_s]
-      else
-        @objects.find { |i| i.identifier == identifier }
-      end
     end
 
     def object_matching_glob(glob)
