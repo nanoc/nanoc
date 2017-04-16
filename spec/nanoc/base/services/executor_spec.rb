@@ -408,8 +408,8 @@ describe Nanoc::Int::Executor do
     end
 
     let(:action_sequence) do
-      Nanoc::Int::ActionSequence.new(rep).tap do |seq|
-        seq.add_filter(:erb, {})
+      Nanoc::Int::ActionSequence.build(rep) do |b|
+        b.add_filter(:erb, {})
       end
     end
 
