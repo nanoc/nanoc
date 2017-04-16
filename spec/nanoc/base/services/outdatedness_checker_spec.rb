@@ -13,10 +13,11 @@ describe Nanoc::Int::OutdatednessChecker do
   let(:checksum_store) { double(:checksum_store) }
 
   let(:dependency_store) do
-    Nanoc::Int::DependencyStore.new(objects)
+    Nanoc::Int::DependencyStore.new(items, layouts)
   end
 
-  let(:objects) { [item] }
+  let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item]) }
+  let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
 
   let(:site) do
     Nanoc::Int::Site.new(
@@ -49,8 +50,6 @@ describe Nanoc::Int::OutdatednessChecker do
   let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
 
-  let(:objects) { [item] }
-
   before do
     reps << item_rep
     action_sequence_store[item_rep] = old_action_sequence_for_item_rep.serialize
@@ -59,7 +58,7 @@ describe Nanoc::Int::OutdatednessChecker do
   describe 'basic outdatedness reasons' do
     subject { outdatedness_checker.send(:basic).outdatedness_status_for(obj).reasons.first }
 
-    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
+    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: items.to_a + layouts.to_a) }
 
     let(:config) { Nanoc::Int::Configuration.new }
 
@@ -114,14 +113,14 @@ describe Nanoc::Int::OutdatednessChecker do
   describe '#outdated_due_to_dependencies?' do
     subject { outdatedness_checker.send(:outdated_due_to_dependencies?, item) }
 
-    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
+    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: items.to_a + layouts.to_a) }
 
     let(:other_item) { Nanoc::Int::Item.new('other stuff', {}, '/other.md') }
     let(:other_item_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
 
     let(:config) { Nanoc::Int::Configuration.new }
 
-    let(:objects) { [item, other_item] }
+    let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item, other_item]) }
 
     let(:old_action_sequence_for_other_item_rep) do
       Nanoc::Int::ActionSequence.new(other_item_rep).tap do |seq|

@@ -3,16 +3,17 @@ module Nanoc::Int
   class DependencyStore < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
-    # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout>]
-    attr_accessor :objects
+    attr_accessor :items
+    attr_accessor :layouts
 
-    # @param [Array<Nanoc::Int::Item, Nanoc::Int::Layout>] objects
-    def initialize(objects, site: nil)
+    def initialize(items, layouts, site: nil)
       super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'dependencies'), 4)
 
-      @objects = objects
+      @items = items
+      @layouts = layouts
+
       @new_objects = []
-      @graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
+      @graph = Nanoc::Int::DirectedGraph.new([nil] + @items.to_a + @layouts.to_a)
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Nanoc::Int::Dependency]
@@ -113,12 +114,14 @@ module Nanoc::Int
     end
 
     def data=(new_data)
+      objects = @items.to_a + @layouts.to_a
+
       # Create new graph
-      @graph = Nanoc::Int::DirectedGraph.new([nil] + @objects)
+      @graph = Nanoc::Int::DirectedGraph.new([nil] + objects)
 
       # Load vertices
       previous_objects = new_data[:vertices].map do |reference|
-        @objects.find { |obj| reference == obj.reference }
+        objects.find { |obj| reference == obj.reference }
       end
 
       # Load edges
@@ -130,7 +133,7 @@ module Nanoc::Int
       end
 
       # Record dependency from all items on new items
-      @new_objects = @objects - previous_objects
+      @new_objects = objects - previous_objects
     end
   end
 end

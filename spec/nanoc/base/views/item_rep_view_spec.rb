@@ -15,8 +15,14 @@ describe Nanoc::ItemRepView do
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
-  let(:dependency_store) { Nanoc::Int::DependencyStore.new([]) }
+  let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_identifiable_collection, empty_identifiable_collection) }
   let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md') }
+
+  let(:empty_identifiable_collection) do
+    Nanoc::Int::IdentifiableCollection.new(config)
+  end
+
+  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
   before do
     dependency_tracker.enter(base_item)

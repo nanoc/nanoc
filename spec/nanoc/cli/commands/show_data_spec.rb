@@ -28,11 +28,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:config) { Nanoc::Int::Configuration.new }
 
     let(:dependency_store) do
-      Nanoc::Int::DependencyStore.new(objects)
-    end
-
-    let(:objects) do
-      items.to_a + layouts.to_a
+      Nanoc::Int::DependencyStore.new(items, layouts)
     end
 
     let(:layouts) do

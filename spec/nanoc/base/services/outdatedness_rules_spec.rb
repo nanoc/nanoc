@@ -32,11 +32,12 @@ describe Nanoc::Int::OutdatednessRules do
 
     let(:action_sequences) { {} }
     let(:reps) { Nanoc::Int::ItemRepRepo.new }
-    let(:dependency_store) { Nanoc::Int::DependencyStore.new(dependency_store_objects) }
+    let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts) }
     let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new }
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
 
-    let(:dependency_store_objects) { [item] }
+    let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item]) }
+    let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
 
     before do
       allow(site).to receive(:code_snippets).and_return(code_snippets)

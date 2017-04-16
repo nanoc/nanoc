@@ -12,7 +12,8 @@ module Nanoc::Int::Compiler::Stages
         @site.data_source = Nanoc::Int::InMemDataSource.new(@site.items, @site.layouts)
         @action_provider.preprocess(@site)
 
-        @dependency_store.objects = @site.items.to_a + @site.layouts.to_a
+        @dependency_store.items = @site.items
+        @dependency_store.layouts = @site.layouts
         @checksum_store.objects = @site.items.to_a + @site.layouts.to_a + @site.code_snippets + [@site.config]
       end
 
