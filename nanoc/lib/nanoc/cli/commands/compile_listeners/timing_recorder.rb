@@ -20,6 +20,7 @@ module Nanoc::CLI::Commands::CompileListeners
       @phases_summary = DDTelemetry::Summary.new
       @outdatedness_rules_summary = DDTelemetry::Summary.new
       @filters_summary = DDTelemetry::Summary.new
+      @load_stores_summary = DDTelemetry::Summary.new
     end
 
     # @see Listener#start
@@ -67,6 +68,21 @@ module Nanoc::CLI::Commands::CompileListeners
         stopwatch.stop
 
         @filters_summary.observe(stopwatch.duration, filter_name.to_s)
+      end
+
+      load_store_stopwatches = {}
+
+      on(:load_store_started) do |klass|
+        stopwatch_stack = load_store_stopwatches.fetch(klass) { load_store_stopwatches[klass] = [] }
+        stopwatch_stack << DDTelemetry::Stopwatch.new
+        stopwatch_stack.last.start
+      end
+
+      on(:load_store_ended) do |klass|
+        stopwatch = load_store_stopwatches.fetch(klass).pop
+        stopwatch.stop
+
+        @load_stores_summary.observe(stopwatch.duration, klass.to_s)
       end
 
       on(:compilation_suspended) do |rep, _exception|
@@ -150,6 +166,7 @@ module Nanoc::CLI::Commands::CompileListeners
       print_table_for_summary(:phases, @phases_summary) if Nanoc::CLI.verbosity >= 2
       print_table_for_summary_duration(:stages, @stages_summary) if Nanoc::CLI.verbosity >= 2
       print_table_for_summary(:outdatedness_rules, @outdatedness_rules_summary) if Nanoc::CLI.verbosity >= 2
+      print_table_for_summary_duration(:load_stores, @load_stores_summary) if Nanoc::CLI.verbosity >= 2
       DDMemoize.print_telemetry if Nanoc::CLI.verbosity >= 2
     end
 
