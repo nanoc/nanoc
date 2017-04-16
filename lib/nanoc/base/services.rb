@@ -1,4 +1,5 @@
 require_relative 'services/action_provider'
+require_relative 'services/action_sequence_builder'
 require_relative 'services/checksummer'
 require_relative 'services/compilation_context'
 require_relative 'services/compiler'

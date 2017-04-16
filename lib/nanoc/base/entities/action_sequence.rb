@@ -11,6 +11,12 @@ module Nanoc::Int
       @actions = actions
     end
 
+    def self.build(rep)
+      builder = Nanoc::Int::ActionSequenceBuilder.new(rep)
+      yield(builder)
+      builder.action_sequence
+    end
+
     contract C::None => Numeric
     def size
       @actions.size
