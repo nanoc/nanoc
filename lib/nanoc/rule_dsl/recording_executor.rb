@@ -5,7 +5,6 @@ module Nanoc
 
       contract Nanoc::Int::ItemRep => C::Any
       def initialize(rep)
-        @action_sequence = Nanoc::Int::ActionSequence.new(rep)
         @action_sequence_builder = Nanoc::Int::ActionSequenceBuilder.new(rep)
 
         @any_layouts = false
