@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.7.7 (2017-04-16)
+
+Enhancements:
+
+* Added `--diff` option to `compile` command as a one-time alternative to `enable_output_diff` (#1155)
+* Sped up incremental compilation (#1156, #1157)
+
 ## 4.7.6 (2017-04-15)
 
 Enhancements:
