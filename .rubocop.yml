@@ -34,7 +34,7 @@ Style/RescueModifier:
   Exclude:
     - 'spec/**/*.rb'
 
-Style/IndentArray:
+Layout/IndentArray:
   EnforcedStyle: consistent
 
 Lint/DuplicateMethods:
@@ -47,7 +47,7 @@ Lint/UnifiedInteger:
   Enabled: false
 
 # Disabled until Nanoc requires Ruby 2.3+.
-Style/IndentHeredoc:
+Layout/IndentHeredoc:
   Enabled: false
 
 # This breaks RSpec on occasion, e.g. `expect { subject }.not_to change { foo }`,
@@ -82,7 +82,7 @@ Lint/UselessAccessModifier:
 # ----- DISABLED (hard) -----
 
 # Rubocop trips up on this.
-Style/LeadingCommentSpace:
+Layout/LeadingCommentSpace:
   Enabled: false
 
 
