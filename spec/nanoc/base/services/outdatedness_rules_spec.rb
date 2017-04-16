@@ -332,60 +332,6 @@ describe Nanoc::Int::OutdatednessRules do
       end
     end
 
-    context 'PathsModified' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::PathsModified }
-
-      let(:action_sequences) { { item_rep => new_mem } }
-
-      context 'old mem does not exist' do
-        let(:new_mem) do
-          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
-            mem.add_snapshot(:donkey, '/foo.md')
-            mem.add_filter(:asdf, {})
-          end
-        end
-
-        it { is_expected.to be }
-      end
-
-      context 'old mem exists' do
-        let(:old_mem) do
-          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
-            mem.add_filter(:erb, {})
-            mem.add_snapshot(:donkey, '/foo.md')
-          end
-        end
-
-        before do
-          action_sequence_store[item_rep] = old_mem.serialize
-        end
-
-        context 'paths in memory are the same' do
-          let(:new_mem) do
-            Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
-              mem.add_snapshot(:donkey, '/foo.md')
-              mem.add_filter(:asdf, {})
-            end
-          end
-
-          it { is_expected.not_to be }
-        end
-
-        context 'paths in memory are different' do
-          let(:new_mem) do
-            Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
-              mem.add_filter(:erb, {})
-              mem.add_snapshot(:donkey, '/foo.md')
-              mem.add_filter(:donkey, {})
-              mem.add_snapshot(:giraffe, '/bar.md')
-            end
-          end
-
-          it { is_expected.to be }
-        end
-      end
-    end
-
     describe '#{Content,Attributes}Modified' do
       subject do
         [

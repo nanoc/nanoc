@@ -13,7 +13,6 @@ module Nanoc::Int
       RULES_FOR_ITEM_REP =
         [
           Rules::RulesModified,
-          Rules::PathsModified,
           Rules::ContentModified,
           Rules::AttributesModified,
           Rules::NotWritten,
