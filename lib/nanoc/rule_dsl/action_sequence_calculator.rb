@@ -58,8 +58,7 @@ module Nanoc::RuleDSL
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
       view_context = @site.compiler.compilation_context.create_view_context(dependency_tracker)
 
-      action_sequence = Nanoc::Int::ActionSequence.new(rep)
-      executor = Nanoc::RuleDSL::RecordingExecutor.new(action_sequence)
+      executor = Nanoc::RuleDSL::RecordingExecutor.new(rep)
       rule = @rules_collection.compilation_rule_for(rep)
 
       unless rule
@@ -72,7 +71,7 @@ module Nanoc::RuleDSL
       executor.snapshot(:last) unless executor.last_snapshot?
       executor.snapshot(:pre) unless executor.pre_snapshot?
 
-      copy_paths_from_routing_rules(compact_snapshots(action_sequence), rep: rep)
+      copy_paths_from_routing_rules(compact_snapshots(executor.action_sequence), rep: rep)
     end
 
     # @param [Nanoc::Int::Layout] layout

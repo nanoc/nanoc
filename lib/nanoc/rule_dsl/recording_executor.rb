@@ -3,8 +3,11 @@ module Nanoc
     class RecordingExecutor
       include Nanoc::Int::ContractsSupport
 
-      def initialize(action_sequence)
-        @action_sequence = action_sequence
+      attr_reader :action_sequence
+
+      contract Nanoc::Int::ItemRep => C::Any
+      def initialize(rep)
+        @action_sequence = Nanoc::Int::ActionSequence.new(rep)
       end
 
       def filter(filter_name, filter_args = {})
@@ -30,14 +33,17 @@ module Nanoc
         nil
       end
 
+      contract C::None => C::Bool
       def any_layouts?
         @action_sequence.any_layouts?
       end
 
+      contract C::None => C::Bool
       def last_snapshot?
         @action_sequence.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:last) }
       end
 
+      contract C::None => C::Bool
       def pre_snapshot?
         @action_sequence.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:pre) }
       end

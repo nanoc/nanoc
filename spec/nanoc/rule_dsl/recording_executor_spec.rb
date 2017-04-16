@@ -1,8 +1,9 @@
 describe Nanoc::RuleDSL::RecordingExecutor do
-  let(:executor) { described_class.new(action_sequence) }
+  let(:executor) { described_class.new(rep) }
 
-  let(:action_sequence) { Nanoc::Int::ActionSequence.new(rep) }
-  let(:rep) { double(:rep) }
+  let(:action_sequence) { executor.action_sequence }
+  let(:item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
+  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
   describe '#filter' do
     it 'records filter call without arguments' do
