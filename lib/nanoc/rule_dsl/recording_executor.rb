@@ -29,6 +29,18 @@ module Nanoc
         @action_sequence.add_snapshot(snapshot_name, path && path.to_s)
         nil
       end
+
+      def any_layouts?
+        @action_sequence.any_layouts?
+      end
+
+      def last_snapshot?
+        @action_sequence.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:last) }
+      end
+
+      def pre_snapshot?
+        @action_sequence.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:pre) }
+      end
     end
   end
 end
