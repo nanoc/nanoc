@@ -2,6 +2,7 @@ module Nanoc::Int
   class ActionSequence
     include Nanoc::Int::ContractsSupport
     include Enumerable
+    extend Nanoc::Int::Memoization
 
     attr_reader :item_rep
     attr_reader :actions
@@ -38,7 +39,7 @@ module Nanoc::Int
     end
 
     # TODO: Add contract
-    def serialize
+    memoized def serialize
       to_a.map(&:serialize)
     end
 
