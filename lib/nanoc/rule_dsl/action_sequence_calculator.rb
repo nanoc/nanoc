@@ -58,8 +58,7 @@ module Nanoc::RuleDSL
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
       view_context = @site.compiler.compilation_context.create_view_context(dependency_tracker)
 
-      action_sequence = Nanoc::Int::ActionSequence.new(rep)
-      executor = Nanoc::RuleDSL::RecordingExecutor.new(action_sequence)
+      executor = Nanoc::RuleDSL::RecordingExecutor.new(rep)
       rule = @rules_collection.compilation_rule_for(rep)
 
       unless rule
@@ -68,17 +67,11 @@ module Nanoc::RuleDSL
 
       executor.snapshot(:raw)
       rule.apply_to(rep, executor: executor, site: @site, view_context: view_context)
-      if action_sequence.any_layouts?
-        executor.snapshot(:post)
-      end
-      unless action_sequence.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:last) }
-        executor.snapshot(:last)
-      end
-      unless action_sequence.snapshot_actions.any? { |sa| sa.snapshot_names.include?(:pre) }
-        executor.snapshot(:pre)
-      end
+      executor.snapshot(:post) if executor.any_layouts?
+      executor.snapshot(:last) unless executor.last_snapshot?
+      executor.snapshot(:pre) unless executor.pre_snapshot?
 
-      copy_paths_from_routing_rules(compact_snapshots(action_sequence), rep: rep)
+      copy_paths_from_routing_rules(compact_snapshots(executor.action_sequence), rep: rep)
     end
 
     # @param [Nanoc::Int::Layout] layout
@@ -91,8 +84,8 @@ module Nanoc::RuleDSL
         raise NoActionSequenceForLayoutException.new(layout)
       end
 
-      Nanoc::Int::ActionSequence.new(layout).tap do |rm|
-        rm.add_filter(res[0], res[1])
+      Nanoc::Int::ActionSequence.build(layout) do |b|
+        b.add_filter(res[0], res[1])
       end
     end
 

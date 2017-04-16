@@ -175,20 +175,22 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
   describe '#compact_snapshots' do
     subject { action_sequence_calculator.compact_snapshots(action_sequence) }
 
-    let(:action_sequence) { Nanoc::Int::ActionSequence.new(rep) }
-    let(:rep) { double(:rep) }
-
-    before do
-      action_sequence.add_snapshot(:a1, nil)
-      action_sequence.add_snapshot(:a2, '/a2.md')
-      action_sequence.add_snapshot(:a3, nil)
-      action_sequence.add_filter(:erb, awesomeness: 'high')
-      action_sequence.add_snapshot(:b1, '/b1.md')
-      action_sequence.add_snapshot(:b2, nil)
-      action_sequence.add_snapshot(:b3, '/b3.md')
-      action_sequence.add_filter(:erb, awesomeness: 'high')
-      action_sequence.add_snapshot(:c, nil)
+    let(:action_sequence) do
+      Nanoc::Int::ActionSequence.build(rep) do |b|
+        b.add_snapshot(:a1, nil)
+        b.add_snapshot(:a2, '/a2.md')
+        b.add_snapshot(:a3, nil)
+        b.add_filter(:erb, awesomeness: 'high')
+        b.add_snapshot(:b1, '/b1.md')
+        b.add_snapshot(:b2, nil)
+        b.add_snapshot(:b3, '/b3.md')
+        b.add_filter(:erb, awesomeness: 'high')
+        b.add_snapshot(:c, nil)
+      end
     end
+
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
+    let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
     example do
       expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)

@@ -305,8 +305,8 @@ describe Nanoc::Int::OutdatednessRules do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::RulesModified }
 
       let(:old_mem) do
-        Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
-          mem.add_filter(:erb, {})
+        Nanoc::Int::ActionSequence.build(item_rep) do |b|
+          b.add_filter(:erb, {})
         end
       end
 
@@ -323,9 +323,9 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'memory is different' do
         let(:new_mem) do
-          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
-            mem.add_filter(:erb, {})
-            mem.add_filter(:donkey, {})
+          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+            b.add_filter(:erb, {})
+            b.add_filter(:donkey, {})
           end
         end
 
@@ -463,9 +463,9 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'unknown filter' do
         let(:mem) do
-          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
-            mem.add_snapshot(:donkey, '/foo.md')
-            mem.add_filter(:asdf, {})
+          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+            b.add_snapshot(:donkey, '/foo.md')
+            b.add_filter(:asdf, {})
           end
         end
 
@@ -474,9 +474,9 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'known filter, not always outdated' do
         let(:mem) do
-          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
-            mem.add_snapshot(:donkey, '/foo.md')
-            mem.add_filter(:erb, {})
+          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+            b.add_snapshot(:donkey, '/foo.md')
+            b.add_filter(:erb, {})
           end
         end
 
@@ -485,9 +485,9 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'known filter, always outdated' do
         let(:mem) do
-          Nanoc::Int::ActionSequence.new(item_rep).tap do |mem|
-            mem.add_snapshot(:donkey, '/foo.md')
-            mem.add_filter(:xsl, {})
+          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+            b.add_snapshot(:donkey, '/foo.md')
+            b.add_filter(:xsl, {})
           end
         end
 

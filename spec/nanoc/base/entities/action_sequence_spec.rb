@@ -1,17 +1,26 @@
 describe Nanoc::Int::ActionSequence do
-  let(:action_sequence) { described_class.new(rep) }
-  let(:rep) { double(:rep) }
+  let(:action_sequence) { raise 'override me' }
+
+  let(:item) { Nanoc::Int::Item.new('foo', {}, '/foo.md') }
+  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
   describe '#size' do
     subject { action_sequence.size }
 
     context 'no actions' do
+      let(:action_sequence) do
+        described_class.build(rep) do |b|
+        end
+      end
+
       it { is_expected.to eql(0) }
     end
 
     context 'some actions' do
-      before do
-        action_sequence.add_filter(:foo, {})
+      let(:action_sequence) do
+        described_class.build(rep) do |b|
+          b.add_filter(:foo, {})
+        end
       end
 
       it { is_expected.to eql(1) }
@@ -23,12 +32,19 @@ describe Nanoc::Int::ActionSequence do
     let(:index) { 0 }
 
     context 'no actions' do
+      let(:action_sequence) do
+        described_class.build(rep) do |b|
+        end
+      end
+
       it { is_expected.to be_nil }
     end
 
     context 'some actions' do
-      before do
-        action_sequence.add_filter(:foo, {})
+      let(:action_sequence) do
+        described_class.build(rep) do |b|
+          b.add_filter(:foo, {})
+        end
       end
 
       it { is_expected.to be_a(Nanoc::Int::ProcessingActions::Filter) }
@@ -36,9 +52,13 @@ describe Nanoc::Int::ActionSequence do
   end
 
   describe '#add_filter' do
-    example do
-      action_sequence.add_filter(:foo, donkey: 123)
+    let(:action_sequence) do
+      described_class.build(rep) do |b|
+        b.add_filter(:foo, donkey: 123)
+      end
+    end
 
+    example do
       expect(action_sequence.size).to eql(1)
       expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
       expect(action_sequence[0].filter_name).to eql(:foo)
@@ -47,9 +67,13 @@ describe Nanoc::Int::ActionSequence do
   end
 
   describe '#add_layout' do
-    example do
-      action_sequence.add_layout('/foo.*', donkey: 123)
+    let(:action_sequence) do
+      described_class.build(rep) do |b|
+        b.add_layout('/foo.*', donkey: 123)
+      end
+    end
 
+    example do
       expect(action_sequence.size).to eql(1)
       expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Layout)
       expect(action_sequence[0].layout_identifier).to eql('/foo.*')
@@ -59,9 +83,13 @@ describe Nanoc::Int::ActionSequence do
 
   describe '#add_snapshot' do
     context 'snapshot does not yet exist' do
-      example do
-        action_sequence.add_snapshot(:before_layout, '/foo.md')
+      let(:action_sequence) do
+        described_class.build(rep) do |b|
+          b.add_snapshot(:before_layout, '/foo.md')
+        end
+      end
 
+      example do
         expect(action_sequence.size).to eql(1)
         expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
         expect(action_sequence[0].snapshot_names).to eql([:before_layout])
@@ -70,22 +98,23 @@ describe Nanoc::Int::ActionSequence do
     end
 
     context 'snapshot already exist' do
-      before do
-        action_sequence.add_snapshot(:before_layout, '/bar.md')
-      end
-
       it 'raises' do
-        expect { action_sequence.add_snapshot(:before_layout, '/foo.md') }
-          .to raise_error(Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName)
+        described_class.build(rep) do |b|
+          b.add_snapshot(:before_layout, '/bar.md')
+          expect { b.add_snapshot(:before_layout, '/foo.md') }
+            .to raise_error(Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName)
+        end
       end
     end
   end
 
   describe '#each' do
-    before do
-      action_sequence.add_filter(:erb, awesomeness: 'high')
-      action_sequence.add_snapshot(:bar, '/foo.md')
-      action_sequence.add_layout('/default.erb', somelayoutparam: 'yes')
+    let(:action_sequence) do
+      described_class.build(rep) do |b|
+        b.add_filter(:erb, awesomeness: 'high')
+        b.add_snapshot(:bar, '/foo.md')
+        b.add_layout('/default.erb', somelayoutparam: 'yes')
+      end
     end
 
     example do
@@ -96,10 +125,12 @@ describe Nanoc::Int::ActionSequence do
   end
 
   describe '#map' do
-    before do
-      action_sequence.add_filter(:erb, awesomeness: 'high')
-      action_sequence.add_snapshot(:bar, '/foo.md')
-      action_sequence.add_layout('/default.erb', somelayoutparam: 'yes')
+    let(:action_sequence) do
+      described_class.build(rep) do |b|
+        b.add_filter(:erb, awesomeness: 'high')
+        b.add_snapshot(:bar, '/foo.md')
+        b.add_layout('/default.erb', somelayoutparam: 'yes')
+      end
     end
 
     example do
@@ -112,10 +143,12 @@ describe Nanoc::Int::ActionSequence do
   describe '#serialize' do
     subject { action_sequence.serialize }
 
-    before do
-      action_sequence.add_filter(:erb, awesomeness: 'high')
-      action_sequence.add_snapshot(:bar, '/foo.md')
-      action_sequence.add_layout('/default.erb', somelayoutparam: 'yes')
+    let(:action_sequence) do
+      described_class.build(rep) do |b|
+        b.add_filter(:erb, awesomeness: 'high')
+        b.add_snapshot(:bar, '/foo.md')
+        b.add_layout('/default.erb', somelayoutparam: 'yes')
+      end
     end
 
     example do
@@ -130,8 +163,6 @@ describe Nanoc::Int::ActionSequence do
   end
 
   describe '#snapshots_defs' do
-    subject { action_sequence.snapshots_defs }
-
     let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
@@ -164,42 +195,55 @@ describe Nanoc::Int::ActionSequence do
     end
 
     it 'has no snapshot defs by default' do
-      expect(subject).to be_empty
+      action_sequence =
+        described_class.build(rep) do |b|
+        end
+
+      expect(action_sequence.snapshots_defs).to be_empty
     end
 
     context 'textual item' do
       let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
 
       it 'generates initial textual snapshot def' do
-        action_sequence.add_snapshot(:giraffe, nil)
+        action_sequence =
+          described_class.build(rep) do |b|
+            b.add_snapshot(:giraffe, nil)
+          end
 
-        expect(subject.size).to eq(1)
-        expect(subject[0].name).to eq(:giraffe)
-        expect(subject[0]).not_to be_binary
+        expect(action_sequence.snapshots_defs.size).to eq(1)
+        expect(action_sequence.snapshots_defs[0].name).to eq(:giraffe)
+        expect(action_sequence.snapshots_defs[0]).not_to be_binary
       end
 
       it 'generated follow-up textual snapshot def if previous filter is textual' do
-        action_sequence.add_snapshot(:giraffe, nil)
-        action_sequence.add_filter(:RuleMemSpec_filter_t2t, arguments: 'irrelevant')
-        action_sequence.add_snapshot(:zebra, nil)
+        action_sequence =
+          described_class.build(rep) do |b|
+            b.add_snapshot(:giraffe, nil)
+            b.add_filter(:RuleMemSpec_filter_t2t, arguments: 'irrelevant')
+            b.add_snapshot(:zebra, nil)
+          end
 
-        expect(subject.size).to eq(2)
-        expect(subject[0].name).to eq(:giraffe)
-        expect(subject[0]).not_to be_binary
-        expect(subject[1].name).to eq(:zebra)
-        expect(subject[1]).not_to be_binary
+        expect(action_sequence.snapshots_defs.size).to eq(2)
+        expect(action_sequence.snapshots_defs[0].name).to eq(:giraffe)
+        expect(action_sequence.snapshots_defs[0]).not_to be_binary
+        expect(action_sequence.snapshots_defs[1].name).to eq(:zebra)
+        expect(action_sequence.snapshots_defs[1]).not_to be_binary
       end
 
       it 'generated follow-up binary snapshot def if previous filter is text-to-bianry' do
-        action_sequence.add_snapshot(:giraffe, nil)
-        action_sequence.add_filter(:RuleMemSpec_filter_t2b, arguments: 'irrelevant')
-        action_sequence.add_snapshot(:zebra, nil)
+        action_sequence =
+          described_class.build(rep) do |b|
+            b.add_snapshot(:giraffe, nil)
+            b.add_filter(:RuleMemSpec_filter_t2b, arguments: 'irrelevant')
+            b.add_snapshot(:zebra, nil)
+          end
 
-        expect(subject.size).to eq(2)
-        expect(subject[0].name).to eq(:giraffe)
-        expect(subject[0]).not_to be_binary
-        expect(subject[1].name).to eq(:zebra)
-        expect(subject[1]).to be_binary
+        expect(action_sequence.snapshots_defs.size).to eq(2)
+        expect(action_sequence.snapshots_defs[0].name).to eq(:giraffe)
+        expect(action_sequence.snapshots_defs[0]).not_to be_binary
+        expect(action_sequence.snapshots_defs[1].name).to eq(:zebra)
+        expect(action_sequence.snapshots_defs[1]).to be_binary
       end
     end
 
@@ -207,35 +251,44 @@ describe Nanoc::Int::ActionSequence do
       let(:item) { Nanoc::Int::Item.new(Nanoc::Int::BinaryContent.new('/asdf.dat'), {}, '/foo.md') }
 
       it 'generates initial binary snapshot def' do
-        action_sequence.add_snapshot(:giraffe, nil)
+        action_sequence =
+          described_class.build(rep) do |b|
+            b.add_snapshot(:giraffe, nil)
+          end
 
-        expect(subject.size).to eq(1)
-        expect(subject[0].name).to eq(:giraffe)
-        expect(subject[0]).to be_binary
+        expect(action_sequence.snapshots_defs.size).to eq(1)
+        expect(action_sequence.snapshots_defs[0].name).to eq(:giraffe)
+        expect(action_sequence.snapshots_defs[0]).to be_binary
       end
 
       it 'generated follow-up binary snapshot def if previous filter is binary' do
-        action_sequence.add_snapshot(:giraffe, nil)
-        action_sequence.add_filter(:RuleMemSpec_filter_b2b, arguments: 'irrelevant')
-        action_sequence.add_snapshot(:zebra, nil)
+        action_sequence =
+          described_class.build(rep) do |b|
+            b.add_snapshot(:giraffe, nil)
+            b.add_filter(:RuleMemSpec_filter_b2b, arguments: 'irrelevant')
+            b.add_snapshot(:zebra, nil)
+          end
 
-        expect(subject.size).to eq(2)
-        expect(subject[0].name).to eq(:giraffe)
-        expect(subject[0]).to be_binary
-        expect(subject[1].name).to eq(:zebra)
-        expect(subject[1]).to be_binary
+        expect(action_sequence.snapshots_defs.size).to eq(2)
+        expect(action_sequence.snapshots_defs[0].name).to eq(:giraffe)
+        expect(action_sequence.snapshots_defs[0]).to be_binary
+        expect(action_sequence.snapshots_defs[1].name).to eq(:zebra)
+        expect(action_sequence.snapshots_defs[1]).to be_binary
       end
 
       it 'generated follow-up textual snapshot def if previous filter is binary-to-text' do
-        action_sequence.add_snapshot(:giraffe, nil)
-        action_sequence.add_filter(:RuleMemSpec_filter_b2t, arguments: 'irrelevant')
-        action_sequence.add_snapshot(:zebra, nil)
+        action_sequence =
+          described_class.build(rep) do |b|
+            b.add_snapshot(:giraffe, nil)
+            b.add_filter(:RuleMemSpec_filter_b2t, arguments: 'irrelevant')
+            b.add_snapshot(:zebra, nil)
+          end
 
-        expect(subject.size).to eq(2)
-        expect(subject[0].name).to eq(:giraffe)
-        expect(subject[0]).to be_binary
-        expect(subject[1].name).to eq(:zebra)
-        expect(subject[1]).not_to be_binary
+        expect(action_sequence.snapshots_defs.size).to eq(2)
+        expect(action_sequence.snapshots_defs[0].name).to eq(:giraffe)
+        expect(action_sequence.snapshots_defs[0]).to be_binary
+        expect(action_sequence.snapshots_defs[1].name).to eq(:zebra)
+        expect(action_sequence.snapshots_defs[1]).not_to be_binary
       end
     end
   end

@@ -32,8 +32,8 @@ describe Nanoc::Int::OutdatednessChecker do
   end
 
   let(:old_action_sequence_for_item_rep) do
-    Nanoc::Int::ActionSequence.new(item_rep).tap do |seq|
-      seq.add_filter(:erb, {})
+    Nanoc::Int::ActionSequence.build(item_rep) do |b|
+      b.add_filter(:erb, {})
     end
   end
 
@@ -74,8 +74,8 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'action sequence differs' do
         let(:new_action_sequence_for_item_rep) do
-          Nanoc::Int::ActionSequence.new(item_rep).tap do |seq|
-            seq.add_filter(:super_erb, {})
+          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+            b.add_filter(:super_erb, {})
           end
         end
 
@@ -92,8 +92,8 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'action sequence differs' do
         let(:new_action_sequence_for_item_rep) do
-          Nanoc::Int::ActionSequence.new(item_rep).tap do |seq|
-            seq.add_filter(:super_erb, {})
+          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+            b.add_filter(:super_erb, {})
           end
         end
 
@@ -123,8 +123,8 @@ describe Nanoc::Int::OutdatednessChecker do
     let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item, other_item]) }
 
     let(:old_action_sequence_for_other_item_rep) do
-      Nanoc::Int::ActionSequence.new(other_item_rep).tap do |seq|
-        seq.add_filter(:erb, {})
+      Nanoc::Int::ActionSequence.build(other_item_rep) do |b|
+        b.add_filter(:erb, {})
       end
     end
 
@@ -252,9 +252,9 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'path changed' do
         let(:new_action_sequence_for_other_item_rep) do
-          Nanoc::Int::ActionSequence.new(other_item_rep).tap do |seq|
-            seq.add_filter(:erb, {})
-            seq.add_snapshot(:donkey, '/giraffe.txt')
+          Nanoc::Int::ActionSequence.build(other_item_rep) do |b|
+            b.add_filter(:erb, {})
+            b.add_snapshot(:donkey, '/giraffe.txt')
           end
         end
 
@@ -296,9 +296,9 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'path changed' do
         let(:new_action_sequence_for_other_item_rep) do
-          Nanoc::Int::ActionSequence.new(other_item_rep).tap do |seq|
-            seq.add_filter(:erb, {})
-            seq.add_snapshot(:donkey, '/giraffe.txt')
+          Nanoc::Int::ActionSequence.build(other_item_rep) do |b|
+            b.add_filter(:erb, {})
+            b.add_snapshot(:donkey, '/giraffe.txt')
           end
         end
 
@@ -329,9 +329,9 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'path changed' do
         let(:new_action_sequence_for_other_item_rep) do
-          Nanoc::Int::ActionSequence.new(other_item_rep).tap do |seq|
-            seq.add_filter(:erb, {})
-            seq.add_snapshot(:donkey, '/giraffe.txt')
+          Nanoc::Int::ActionSequence.build(other_item_rep) do |b|
+            b.add_filter(:erb, {})
+            b.add_snapshot(:donkey, '/giraffe.txt')
           end
         end
 
@@ -356,9 +356,9 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'path changed' do
         let(:new_action_sequence_for_other_item_rep) do
-          Nanoc::Int::ActionSequence.new(other_item_rep).tap do |seq|
-            seq.add_filter(:erb, {})
-            seq.add_snapshot(:donkey, '/giraffe.txt')
+          Nanoc::Int::ActionSequence.build(other_item_rep) do |b|
+            b.add_filter(:erb, {})
+            b.add_snapshot(:donkey, '/giraffe.txt')
           end
         end
 
@@ -389,9 +389,9 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'rules changed' do
         let(:new_action_sequence_for_other_item_rep) do
-          Nanoc::Int::ActionSequence.new(other_item_rep).tap do |seq|
-            seq.add_filter(:erb, {})
-            seq.add_filter(:donkey, {})
+          Nanoc::Int::ActionSequence.build(other_item_rep) do |b|
+            b.add_filter(:erb, {})
+            b.add_filter(:donkey, {})
           end
         end
 
