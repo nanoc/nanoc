@@ -121,7 +121,18 @@ module Nanoc::Int
 
       # Load vertices
       previous_objects = new_data[:vertices].map do |reference|
-        objects.find { |obj| reference == obj.reference }
+        if reference
+          case reference[0]
+          when :item
+            @items.object_with_identifier(reference[1])
+          when :layout
+            @layouts.object_with_identifier(reference[1])
+          else
+            raise Nanoc::Int::Errors::InternalInconsistency, "unrecognised reference #{reference[0].inspect}"
+          end
+        else
+          nil
+        end
       end
 
       # Load edges
