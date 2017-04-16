@@ -45,11 +45,6 @@ module Nanoc::Int
       @actions.select { |a| a.is_a?(Nanoc::Int::ProcessingActions::Snapshot) }
     end
 
-    contract C::None => C::Bool
-    def any_layouts?
-      @actions.any? { |a| a.is_a?(Nanoc::Int::ProcessingActions::Layout) }
-    end
-
     contract C::None => Array
     def paths
       snapshot_actions.map { |a| [a.snapshot_names, a.paths] }
