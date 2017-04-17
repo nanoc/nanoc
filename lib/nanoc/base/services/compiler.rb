@@ -76,7 +76,7 @@ module Nanoc::Int
       @action_sequences = run_stage(build_reps_stage)
       run_stage(load_stores_stage)
       @checksums = run_stage(calculate_checksums_stage)
-      @outdated_items = run_stage(determine_outdatedness_stage, @checksums)
+      @outdated_items = run_stage(determine_outdatedness_stage)
     end
 
     def compilation_context

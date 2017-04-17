@@ -8,9 +8,8 @@ module Nanoc::Int::Compiler::Stages
       @outdatedness_store = outdatedness_store
     end
 
-    contract Nanoc::Int::ChecksumCollection => C::Any
-    def run(_checksums)
-      # TODO: Pass checksums to outdatedness checker
+    contract C::None => C::Any
+    def run
       outdated_reps_tmp = @reps.select do |r|
         @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r)
       end
