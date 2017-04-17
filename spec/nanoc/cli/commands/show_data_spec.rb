@@ -167,6 +167,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       allow(site).to receive(:compiler).and_return(compiler)
       allow(compiler).to receive(:create_outdatedness_checker).and_return(outdatedness_checker)
       allow(compiler).to receive(:reps).and_return(reps)
+      allow(compiler).to receive(:calculate_checksums)
     end
 
     context 'not outdated' do
@@ -239,6 +240,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       allow(runner).to receive(:site).and_return(site)
       allow(site).to receive(:compiler).and_return(compiler)
       allow(compiler).to receive(:create_outdatedness_checker).and_return(outdatedness_checker)
+      allow(compiler).to receive(:calculate_checksums)
     end
 
     context 'not outdated' do

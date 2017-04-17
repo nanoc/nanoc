@@ -6,7 +6,7 @@ module Nanoc::Int::OutdatednessRules
       obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
 
       ch_old = outdatedness_checker.checksum_store.content_checksum_for(obj)
-      ch_new = Nanoc::Int::Checksummer.calc_for_content_of(obj)
+      ch_new = outdatedness_checker.checksums.content_checksum_for(obj)
       if ch_old != ch_new
         Nanoc::Int::OutdatednessReasons::ContentModified
       end

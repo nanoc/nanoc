@@ -3,6 +3,7 @@ describe Nanoc::Int::OutdatednessChecker do
     described_class.new(
       site: site,
       checksum_store: checksum_store,
+      checksums: checksums,
       dependency_store: dependency_store,
       action_sequence_store: action_sequence_store,
       action_sequences: action_sequences,
@@ -12,6 +13,15 @@ describe Nanoc::Int::OutdatednessChecker do
 
   let(:checksum_store) { double(:checksum_store) }
 
+  let(:checksums) do
+    Nanoc::Int::Compiler::Stages::CalculateChecksums.new(
+      items: items,
+      layouts: layouts,
+      code_snippets: code_snippets,
+      config: config,
+    ).run
+  end
+
   let(:dependency_store) do
     Nanoc::Int::DependencyStore.new(items, layouts)
   end
@@ -19,10 +29,12 @@ describe Nanoc::Int::OutdatednessChecker do
   let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item]) }
   let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
 
+  let(:code_snippets) { [] }
+
   let(:site) do
     Nanoc::Int::Site.new(
       config: config,
-      code_snippets: [],
+      code_snippets: code_snippets,
       data_source: Nanoc::Int::InMemDataSource.new([], []),
     )
   end
@@ -151,6 +163,10 @@ describe Nanoc::Int::OutdatednessChecker do
     context 'transitive dependency' do
       let(:distant_item) { Nanoc::Int::Item.new('distant stuff', {}, '/distant.md') }
       let(:distant_item_rep) { Nanoc::Int::ItemRep.new(distant_item, :default) }
+
+      let(:items) do
+        Nanoc::Int::IdentifiableCollection.new(config, [item, other_item, distant_item])
+      end
 
       let(:action_sequences) do
         {

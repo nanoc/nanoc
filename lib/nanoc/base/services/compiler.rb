@@ -51,6 +51,7 @@ module Nanoc::Int
         dependency_store: @dependency_store,
         action_sequence_store: @action_sequence_store,
         action_sequences: @action_sequences,
+        checksums: @checksums,
         reps: reps,
       )
     end
@@ -96,6 +97,11 @@ module Nanoc::Int
     # TODO: remove
     def build_reps
       @action_sequences = build_reps_stage.run
+    end
+
+    # TODO: remove
+    def calculate_checksums
+      @checksums = run_stage(calculate_checksums_stage)
     end
 
     private

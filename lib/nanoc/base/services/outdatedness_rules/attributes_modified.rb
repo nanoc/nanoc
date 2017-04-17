@@ -17,7 +17,7 @@ module Nanoc::Int::OutdatednessRules
           return Nanoc::Int::OutdatednessReasons::AttributesModified.new(true)
         end
 
-        new_checksums = Nanoc::Int::Checksummer.calc_for_each_attribute_of(obj)
+        new_checksums = outdatedness_checker.checksums.attributes_checksum_for(obj)
 
         attributes = Set.new(old_checksums.keys) + Set.new(new_checksums.keys)
         changed_attributes = attributes.reject { |a| old_checksums[a] == new_checksums[a] }
