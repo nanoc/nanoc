@@ -3,6 +3,7 @@ describe Nanoc::Int::OutdatednessChecker do
     described_class.new(
       site: site,
       checksum_store: checksum_store,
+      checksums: checksums,
       dependency_store: dependency_store,
       action_sequence_store: action_sequence_store,
       action_sequences: action_sequences,
@@ -11,6 +12,8 @@ describe Nanoc::Int::OutdatednessChecker do
   end
 
   let(:checksum_store) { double(:checksum_store) }
+
+  let(:checksums) { Nanoc::Int::ChecksumCollection.new({}) }
 
   let(:dependency_store) do
     Nanoc::Int::DependencyStore.new(items, layouts)

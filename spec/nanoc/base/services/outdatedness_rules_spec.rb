@@ -8,6 +8,7 @@ describe Nanoc::Int::OutdatednessRules do
       Nanoc::Int::OutdatednessChecker.new(
         site: site,
         checksum_store: checksum_store,
+        checksums: checksums,
         dependency_store: dependency_store,
         action_sequence_store: action_sequence_store,
         action_sequences: action_sequences,
@@ -35,6 +36,7 @@ describe Nanoc::Int::OutdatednessRules do
     let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts) }
     let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new }
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
+    let(:checksums) { Nanoc::Int::ChecksumCollection.new({}) }
 
     let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item]) }
     let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }

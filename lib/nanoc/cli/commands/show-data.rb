@@ -144,6 +144,7 @@ module Nanoc::CLI::Commands
     end
 
     def print_outdatedness_reasons_for(obj, compiler)
+      compiler.calculate_checksums
       outdatedness_checker = compiler.create_outdatedness_checker
       reasons = outdatedness_checker.outdatedness_reasons_for(obj)
       if reasons.any?

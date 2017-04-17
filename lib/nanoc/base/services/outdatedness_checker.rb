@@ -88,10 +88,11 @@ module Nanoc::Int
     C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]
     C_ACTION_SEQUENCES = C::HashOf[C_OBJ => Nanoc::Int::ActionSequence]
 
-    contract C::KeywordArgs[site: Nanoc::Int::Site, checksum_store: Nanoc::Int::ChecksumStore, dependency_store: Nanoc::Int::DependencyStore, action_sequence_store: Nanoc::Int::ActionSequenceStore, action_sequences: C_ACTION_SEQUENCES, reps: Nanoc::Int::ItemRepRepo] => C::Any
-    def initialize(site:, checksum_store:, dependency_store:, action_sequence_store:, action_sequences:, reps:)
+    contract C::KeywordArgs[site: Nanoc::Int::Site, checksum_store: Nanoc::Int::ChecksumStore, checksums: Nanoc::Int::ChecksumCollection, dependency_store: Nanoc::Int::DependencyStore, action_sequence_store: Nanoc::Int::ActionSequenceStore, action_sequences: C_ACTION_SEQUENCES, reps: Nanoc::Int::ItemRepRepo] => C::Any
+    def initialize(site:, checksum_store:, checksums:, dependency_store:, action_sequence_store:, action_sequences:, reps:)
       @site = site
       @checksum_store = checksum_store
+      @checksums = checksums
       @dependency_store = dependency_store
       @action_sequence_store = action_sequence_store
       @action_sequences = action_sequences
