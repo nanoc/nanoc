@@ -15,7 +15,7 @@ module Nanoc::Int::OutdatednessRules
     memoized def config_modified?(outdatedness_checker)
       obj = outdatedness_checker.site.config
       ch_old = outdatedness_checker.checksum_store[obj]
-      ch_new = Nanoc::Int::Checksummer.calc(obj)
+      ch_new = outdatedness_checker.checksums.checksum_for(obj)
       ch_old != ch_new
     end
   end
