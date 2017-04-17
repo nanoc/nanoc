@@ -58,6 +58,10 @@ describe Nanoc::Int::Compiler do
     Nanoc::Int::ActionSequence.new(nil, actions: actions)
   end
 
+  let(:action_sequences) do
+    { rep => memory, other_rep => memory }
+  end
+
   before do
     reps << rep
     reps << other_rep
@@ -66,15 +70,11 @@ describe Nanoc::Int::Compiler do
       rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last, binary: false)
     end
 
-    # FIXME: eww
-    action_sequences = { rep => memory, other_rep => memory }
-    compiler.instance_variable_set(:@action_sequences, action_sequences)
-
     allow(Nanoc::Int::NotificationCenter).to receive(:post)
   end
 
   describe '#compile_rep' do
-    let(:stage) { compiler.send(:compile_reps_stage) }
+    let(:stage) { compiler.send(:compile_reps_stage, action_sequences) }
 
     subject { stage.send(:compile_rep, rep, is_outdated: is_outdated) }
 

@@ -56,19 +56,26 @@ module Nanoc::Int
     end
 
     def run_all
-      run_stage(preprocess_stage)
-      @action_sequences = run_stage(build_reps_stage)
+      prepare
+
+      run_stage(forget_outdated_dependencies_stage, @outdated_items)
+      run_stage(store_pre_compilation_state_stage(@action_sequences), @checksums)
       run_stage(prune_stage)
-      run_stage(load_stores_stage)
-      checksums = run_stage(calculate_checksums_stage)
-      outdated_items = run_stage(determine_outdatedness_stage, checksums)
-      run_stage(forget_outdated_dependencies_stage, outdated_items)
-      run_stage(store_pre_compilation_state_stage, checksums)
-      run_stage(compile_reps_stage)
+      run_stage(compile_reps_stage(@action_sequences))
       run_stage(store_post_compilation_state_stage)
       run_stage(postprocess_stage)
     ensure
       run_stage(cleanup_stage)
+    end
+
+    def prepare
+      # FIXME: State is ugly
+
+      run_stage(preprocess_stage)
+      @action_sequences = run_stage(build_reps_stage)
+      run_stage(load_stores_stage)
+      @checksums = run_stage(calculate_checksums_stage)
+      @outdated_items = run_stage(determine_outdatedness_stage, @checksums)
     end
 
     def compilation_context
@@ -151,21 +158,21 @@ module Nanoc::Int
       )
     end
 
-    def store_pre_compilation_state_stage
+    def store_pre_compilation_state_stage(action_sequences)
       @_store_pre_compilation_state_stage ||= Stages::StorePreCompilationState.new(
         reps: @reps,
         layouts: site.layouts,
         checksum_store: checksum_store,
         action_sequence_store: action_sequence_store,
-        action_sequences: @action_sequences,
+        action_sequences: action_sequences,
       )
     end
 
-    def compile_reps_stage
+    def compile_reps_stage(action_sequences)
       @_compile_reps_stage ||= Stages::CompileReps.new(
         outdatedness_store: @outdatedness_store,
         dependency_store: @dependency_store,
-        action_sequences: @action_sequences,
+        action_sequences: action_sequences,
         compilation_context: compilation_context,
         compiled_content_cache: compiled_content_cache,
       )
