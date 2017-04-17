@@ -164,6 +164,10 @@ describe Nanoc::Int::OutdatednessChecker do
       let(:distant_item) { Nanoc::Int::Item.new('distant stuff', {}, '/distant.md') }
       let(:distant_item_rep) { Nanoc::Int::ItemRep.new(distant_item, :default) }
 
+      let(:items) do
+        Nanoc::Int::IdentifiableCollection.new(config, [item, other_item, distant_item])
+      end
+
       let(:action_sequences) do
         {
           item_rep => new_action_sequence_for_item_rep,
