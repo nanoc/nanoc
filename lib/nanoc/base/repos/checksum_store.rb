@@ -6,6 +6,7 @@ module Nanoc::Int
   class ChecksumStore < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
+    attr_writer :checksums
     attr_accessor :objects
 
     c_obj = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet]

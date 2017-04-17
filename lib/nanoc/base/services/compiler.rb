@@ -60,9 +60,10 @@ module Nanoc::Int
       @action_sequences = run_stage(build_reps_stage)
       run_stage(prune_stage)
       run_stage(load_stores_stage)
-      outdated_items = run_stage(determine_outdatedness_stage)
+      checksums = run_stage(calculate_checksums_stage)
+      outdated_items = run_stage(determine_outdatedness_stage, checksums)
       run_stage(forget_outdated_dependencies_stage, outdated_items)
-      run_stage(store_pre_compilation_state_stage)
+      run_stage(store_pre_compilation_state_stage, checksums)
       run_stage(compile_reps_stage)
       run_stage(store_post_compilation_state_stage)
       run_stage(postprocess_stage)
@@ -133,6 +134,15 @@ module Nanoc::Int
       )
     end
 
+    def calculate_checksums_stage
+      @_calculate_checksums_stage ||= Stages::CalculateChecksums.new(
+        items: @site.items,
+        layouts: @site.layouts,
+        code_snippets: @site.code_snippets,
+        config: @site.config,
+      )
+    end
+
     def determine_outdatedness_stage
       @_determine_outdatedness_stage ||= Stages::DetermineOutdatedness.new(
         reps: reps,
@@ -145,9 +155,6 @@ module Nanoc::Int
       @_store_pre_compilation_state_stage ||= Stages::StorePreCompilationState.new(
         reps: @reps,
         layouts: site.layouts,
-        items: site.items,
-        code_snippets: site.code_snippets,
-        config: site.config,
         checksum_store: checksum_store,
         action_sequence_store: action_sequence_store,
         action_sequences: @action_sequences,
