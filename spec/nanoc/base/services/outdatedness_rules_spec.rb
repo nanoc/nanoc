@@ -354,6 +354,8 @@ describe Nanoc::Int::OutdatednessRules do
       let(:stored_obj) { raise 'override me' }
       let(:new_obj)    { raise 'override me' }
 
+      let(:items) { [new_obj] }
+
       shared_examples 'a document' do
         let(:stored_obj) { klass.new('a', {}, '/foo.md') }
         let(:new_obj)    { stored_obj }
