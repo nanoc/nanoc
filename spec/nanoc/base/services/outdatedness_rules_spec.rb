@@ -36,7 +36,15 @@ describe Nanoc::Int::OutdatednessRules do
     let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts) }
     let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new }
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
-    let(:checksums) { Nanoc::Int::ChecksumCollection.new({}) }
+
+    let(:checksums) do
+      Nanoc::Int::Compiler::Stages::CalculateChecksums.new(
+        items: items,
+        layouts: layouts,
+        code_snippets: code_snippets,
+        config: config,
+      ).run
+    end
 
     let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item]) }
     let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
@@ -63,7 +71,7 @@ describe Nanoc::Int::OutdatednessRules do
         it { is_expected.not_to be }
       end
 
-      context 'only non-outdated snippets' do
+      context 'only outdated snippets' do
         let(:code_snippet) { Nanoc::Int::CodeSnippet.new('asdf', 'lib/foo.md') }
         let(:code_snippet_old) { Nanoc::Int::CodeSnippet.new('aaaaaaaa', 'lib/foo.md') }
         let(:code_snippets) { [code_snippet] }

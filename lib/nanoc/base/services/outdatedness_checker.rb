@@ -78,6 +78,7 @@ module Nanoc::Int
     include Nanoc::Int::ContractsSupport
 
     attr_reader :checksum_store
+    attr_reader :checksums
     attr_reader :dependency_store
     attr_reader :action_sequence_store
     attr_reader :action_sequences

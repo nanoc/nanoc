@@ -13,7 +13,14 @@ describe Nanoc::Int::OutdatednessChecker do
 
   let(:checksum_store) { double(:checksum_store) }
 
-  let(:checksums) { Nanoc::Int::ChecksumCollection.new({}) }
+  let(:checksums) do
+    Nanoc::Int::Compiler::Stages::CalculateChecksums.new(
+      items: items,
+      layouts: layouts,
+      code_snippets: code_snippets,
+      config: config,
+    ).run
+  end
 
   let(:dependency_store) do
     Nanoc::Int::DependencyStore.new(items, layouts)
@@ -22,10 +29,12 @@ describe Nanoc::Int::OutdatednessChecker do
   let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item]) }
   let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
 
+  let(:code_snippets) { [] }
+
   let(:site) do
     Nanoc::Int::Site.new(
       config: config,
-      code_snippets: [],
+      code_snippets: code_snippets,
       data_source: Nanoc::Int::InMemDataSource.new([], []),
     )
   end
