@@ -236,6 +236,10 @@ module Nanoc::DataSources
       end
     end
 
+    def meta_ext
+      config.fetch(:meta_ext, '.yaml')
+    end
+
     # e.g.
     #
     #   {
@@ -253,8 +257,8 @@ module Nanoc::DataSources
 
       by_basename.each_pair do |basename, filenames|
         # Divide
-        meta_filenames    = filenames.select { |fn| ext_of(fn) == '.yaml' }
-        content_filenames = filenames.reject { |fn| ext_of(fn) == '.yaml' }
+        meta_filenames    = filenames.select { |fn| ext_of(fn) == meta_ext }
+        content_filenames = filenames.reject { |fn| ext_of(fn) == meta_ext }
 
         # Check number of files per type
         unless [0, 1].include?(meta_filenames.size)
@@ -268,7 +272,7 @@ module Nanoc::DataSources
 
         all[basename] = []
         all[basename][0] =
-          meta_filenames[0] ? 'yaml' : nil
+          meta_filenames[0] ? meta_ext[1..-1] : nil
         all[basename][1] =
           content_filenames.any? ? content_filenames.map { |fn| ext_of(fn)[1..-1] || '' } : [nil]
       end
