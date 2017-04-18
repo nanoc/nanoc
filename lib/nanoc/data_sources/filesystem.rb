@@ -419,6 +419,14 @@ module Nanoc::DataSources
       raise Errors::InvalidMetadata.new(filename, meta.class)
     end
 
+    def original_encoding(filename, data)
+      if @config && @config[:encoding]
+        Encoding.find(@config[:encoding])
+      else
+        data.encoding
+      end
+    end
+
     # Reads the content of the file with the given name and returns a string
     # in UTF-8 encoding. The original encoding of the string is derived from
     # the default external encoding, but this can be overridden by the
@@ -433,12 +441,8 @@ module Nanoc::DataSources
 
       # Fix
       if data.respond_to?(:encode!)
-        if @config && @config[:encoding]
-          original_encoding = Encoding.find(@config[:encoding])
-          data.force_encoding(@config[:encoding])
-        else
-          original_encoding = data.encoding
-        end
+        original_encoding = original_encoding(filename, data)
+        data.force_encoding(original_encoding) if original_encoding != data.encoding
 
         begin
           data.encode!('UTF-8')
