@@ -14,9 +14,16 @@ module Nanoc::DataSources
   #
   # The metadata for items and layouts can be stored in a separate file with
   # the same base name but with the `.yaml` extension. If such a file is
-  # found, metadata is read from that file. Alternatively, the content file
-  # itself can start with a metadata section: it can be stored at the top of
-  # the file, between `---` (three dashes) separators. For example:
+  # found, metadata is read from that file. Metadata file extension can be
+  # redefined with `meta_ext` in the data source configuration:
+  #
+  #     data_sources:
+  #       - type:         filesystem
+  #         meta_ext:     .yml
+  #
+  # Alternatively, the content file itself can start with a metadata section: it
+  # can be stored at the top of the file, between `---` (three dashes) separators.
+  # For example:
   #
   #     ---
   #     title: "Moo!"
