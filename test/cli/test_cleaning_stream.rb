@@ -84,4 +84,12 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
     cleaning_stream << obj
     assert_equal 'Hello… world!', stream.string
   end
+
+  def test_invalid_string
+    s = "\x80"
+    stream = StringIO.new
+    cleaning_stream = Nanoc::CLI::CleaningStream.new(stream)
+    cleaning_stream << s
+    assert_equal "\xef\xbf\xbd", stream.string
+  end
 end
