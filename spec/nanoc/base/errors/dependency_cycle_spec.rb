@@ -21,10 +21,10 @@ describe Nanoc::Int::Errors::DependencyCycle do
     expected = <<EOS
 The site cannot be compiled because there is a dependency cycle:
 
-    (1) item /b.md, rep :default, depends on
-    (2) item /c.md, rep :default, depends on
-    (3) item /d.md, rep :default, depends on
-    (4) item /e.md, rep :default, depends on (1)
+    (1) item /b.md, rep :default, uses compiled content of
+    (2) item /c.md, rep :default, uses compiled content of
+    (3) item /d.md, rep :default, uses compiled content of
+    (4) item /e.md, rep :default, uses compiled content of (1)
 EOS
 
     expect(error.message).to eql(expected)
