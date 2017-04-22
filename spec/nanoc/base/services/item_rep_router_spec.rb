@@ -62,10 +62,10 @@ describe(Nanoc::Int::ItemRepRouter) do
     end
 
     it 'picks the paths last returned' do
-      allow(action_provider).to receive(:action_sequence_for).with(reps[0])
-        .and_return(memory_without_paths, action_sequence_for_default)
-      allow(action_provider).to receive(:action_sequence_for).with(reps[1])
-        .and_return(memory_without_paths, action_sequence_for_csv)
+      allow(action_provider).to receive(:action_sequence_for)
+        .with(reps[0]).and_return(memory_without_paths, action_sequence_for_default)
+      allow(action_provider).to receive(:action_sequence_for)
+        .with(reps[1]).and_return(memory_without_paths, action_sequence_for_csv)
 
       subject
 
