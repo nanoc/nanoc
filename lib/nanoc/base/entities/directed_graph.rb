@@ -158,18 +158,42 @@ module Nanoc::Int
 
     # @group Querying the graph
 
+    # Returns a cycle if there is any.
     def any_cycle
-      path = [@vertices.keys.first]
+      all_paths.lazy.map { |path| cycle_in_path(path) }.find(&:itself)
+    end
 
-      loop do
-        nexts = direct_successors_of(path.last)
-        cycle_start_index = path.find_index { |node| nexts.include?(node) }
-        if cycle_start_index
-          break path[cycle_start_index..-1]
-        elsif nexts.empty?
-          break nil
-        else
-          path << nexts.sample
+    # Given a potentially closed path, returns a cycle if there is any.
+    def cycle_in_path(path)
+      vertex = path.last
+      index = path.index(vertex)
+
+      if index < path.size - 1
+        path[index..-2]
+      end
+    end
+
+    # Yields all paths (including potentially closed ones).
+    def all_paths
+      Enumerator.new do |y|
+        @vertices.keys.each do |vertex|
+          dfs_from(vertex) do |path|
+            y << path
+          end
+        end
+      end
+    end
+
+    # Yields all paths (including potentially closed ones) starting from the given vertex.
+    def dfs_from(vertex, path_so_far = [])
+      new_path = path_so_far + [vertex]
+      yield(new_path)
+
+      unless path_so_far.include?(vertex)
+        direct_successors_of(vertex).each do |next_vertex|
+          dfs_from(next_vertex, new_path) do |path|
+            yield(path)
+          end
         end
       end
     end

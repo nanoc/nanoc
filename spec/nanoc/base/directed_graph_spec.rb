@@ -27,6 +27,18 @@ describe Nanoc::Int::DirectedGraph do
       it { is_expected.to eq([2, 3]) }
     end
 
+    context 'one cycle with tail' do
+      before do
+        graph.add_edge(1, 2)
+        graph.add_edge(2, 20)
+        graph.add_edge(20, 21)
+        graph.add_edge(2, 3)
+        graph.add_edge(3, 1)
+      end
+
+      it { is_expected.to eq([1, 2, 3]) }
+    end
+
     context 'large cycle' do
       before do
         graph.add_edge(1, 2)
