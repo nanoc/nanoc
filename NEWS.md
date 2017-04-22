@@ -1,5 +1,17 @@
 # Nanoc news
 
+## 4.7.8 (2017-04-22)
+
+Fixes:
+
+* Fixed a crash when printing dependency cycle error messages (#1164, #1166)
+* Fixed incorrect ordering in dependency cycle error messages (#1167, #1168)
+* Fixed a crash when attempting to print malformed UTF-8 strings (#1163, #1165)
+
+Enhancements:
+
+* Added various speed improvements (#1158, #1159, #1160)
+
 ## 4.7.7 (2017-04-16)
 
 Enhancements:
