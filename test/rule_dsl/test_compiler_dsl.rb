@@ -438,4 +438,11 @@ EOS
     compiler_dsl.instance_eval { $venetian = @config[:venetian] }
     assert_equal 'snares', $venetian
   end
+
+  def test_config_without_sigil
+    $venetian = 'unsnares'
+    compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, venetian: 'snares')
+    compiler_dsl.instance_eval { $venetian = config[:venetian] }
+    assert_equal 'snares', $venetian
+  end
 end

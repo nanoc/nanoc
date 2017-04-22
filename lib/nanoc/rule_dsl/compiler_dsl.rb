@@ -4,7 +4,7 @@ module Nanoc::RuleDSL
   # Contains methods that will be executed by the site’s `Rules` file.
   #
   # @api private
-  class CompilerDSL
+  class CompilerDSL < Nanoc::Int::Context
     # The current rules filename.
     #
     # @return [String] The current rules filename.
@@ -23,6 +23,7 @@ module Nanoc::RuleDSL
     def initialize(rules_collection, config)
       @rules_collection = rules_collection
       @config = config
+      super({ config: config })
     end
 
     # Creates a preprocessor block that will be executed after all data is

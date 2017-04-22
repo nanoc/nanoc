@@ -34,6 +34,7 @@ module Nanoc::Int
     #
     # @return [void]
     def load
+      eval('def self.use_helper(mod); Nanoc::Int::Context.instance_eval { include mod }; end', TOPLEVEL_BINDING)
       eval(@data, TOPLEVEL_BINDING, @filename)
       nil
     end
