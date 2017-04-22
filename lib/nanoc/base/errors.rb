@@ -75,7 +75,7 @@ module Nanoc::Int
         msg_bits = []
         msg_bits << 'The site cannot be compiled because there is a dependency cycle:'
         msg_bits << ''
-        cycle.each.with_index do |r, i|
+        cycle.reverse_each.with_index do |r, i|
           msg_bits << "    (#{i + 1}) item #{r.item.identifier}, rep #{r.name.inspect}, uses compiled content of"
         end
         msg_bits.last << ' (1)'
