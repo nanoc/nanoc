@@ -1,4 +1,4 @@
 module Nanoc
   # The current Nanoc version.
-  VERSION = '4.7.7'.freeze
+  VERSION = '4.7.8'.freeze
 end
