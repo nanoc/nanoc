@@ -1,17 +1,19 @@
 module Nanoc::Int::OutdatednessRules
   class AttributesModified < Nanoc::Int::OutdatednessRule
-    extend Nanoc::Int::Memoization
-
     include Nanoc::Int::ContractsSupport
 
     affects_props :attributes, :compiled_content
 
     contract C::Or[Nanoc::Int::ItemRep, Nanoc::Int::Item, Nanoc::Int::Layout], C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Int::OutdatednessReasons::Generic]
-    memoized def apply(obj, outdatedness_checker)
+    def apply(obj, outdatedness_checker)
       case obj
       when Nanoc::Int::ItemRep
         apply(obj.item, outdatedness_checker)
       when Nanoc::Int::Item, Nanoc::Int::Layout
+        if outdatedness_checker.checksum_store[obj] == outdatedness_checker.checksums.checksum_for(obj)
+          return nil
+        end
+
         old_checksums = outdatedness_checker.checksum_store.attributes_checksum_for(obj)
         unless old_checksums
           return Nanoc::Int::OutdatednessReasons::AttributesModified.new(true)
