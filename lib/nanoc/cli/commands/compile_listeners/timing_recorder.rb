@@ -193,20 +193,8 @@ module Nanoc::CLI::Commands::CompileListeners
       print_table(table_for_memoization)
     end
 
-    def print_table(table)
-      lengths = table.transpose.map { |r| r.map(&:size).max }
-
-      print_row(table[0], lengths)
-
-      puts "#{'─' * lengths[0]}─┼─#{lengths[1..-1].map { |length| '─' * length }.join('───')}"
-
-      table[1..-1].each { |row| print_row(row, lengths) }
-    end
-
-    def print_row(row, lengths)
-      values = row.zip(lengths).map { |text, length| text.rjust length }
-
-      puts values[0] + ' │ ' + values[1..-1].join('   ')
+    def print_table(rows)
+      puts Nanoc::Telemetry::Table.new(rows).to_s
     end
   end
 end

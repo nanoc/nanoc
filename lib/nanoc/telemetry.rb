@@ -15,3 +15,5 @@ require_relative 'telemetry/labelled_summary'
 
 require_relative 'telemetry/registry'
 require_relative 'telemetry/stopwatch'
+
+require_relative 'telemetry/table'
