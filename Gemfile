@@ -59,7 +59,7 @@ group :plugins do
   gem 'rouge'
   gem 'rubypants'
   gem 'sass'
-  gem 'slim'
+  gem 'slim', '~> 3.0'
   gem 'therubyracer', '~> 0.12'
   gem 'typogruby'
   gem 'uglifier'
