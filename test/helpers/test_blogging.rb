@@ -608,6 +608,27 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     end
   end
 
+  def test_atom_feed_with_xml_base
+    if_have 'builder' do
+      # Mock article
+      @items = [mock_article]
+
+      # Mock site
+      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+
+      # Create feed item
+      @item = mock
+      @item.stubs(:[]).with(:title).returns('My Blog Or Something')
+      @item.stubs(:[]).with(:author_name).returns('J. Doe')
+      @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+      @item.stubs(:[]).with(:feed_url).returns('http://example.com/feed')
+
+      # Check
+      result = atom_feed
+      assert_match 'xml:base="http://example.com/"', result
+    end
+  end
+
   def test_atom_feed_with_item_without_path
     if_have 'builder' do
       # Create items
