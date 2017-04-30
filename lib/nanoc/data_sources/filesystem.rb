@@ -431,24 +431,24 @@ module Nanoc::DataSources
         raise Errors::FileUnreadable.new(filename, e)
       end
 
-      # Fix
-      if data.respond_to?(:encode!)
-        if @config && @config[:encoding]
-          original_encoding = Encoding.find(@config[:encoding])
-          data.force_encoding(@config[:encoding])
-        else
-          original_encoding = data.encoding
-        end
+      # Set original encoding, if any
+      if @config && @config[:encoding]
+        original_encoding = Encoding.find(@config[:encoding])
+        data.force_encoding(@config[:encoding])
+      else
+        original_encoding = data.encoding
+      end
 
-        begin
-          data.encode!('UTF-8')
-        rescue
-          raise Errors::InvalidEncoding.new(filename, original_encoding)
-        end
+      # Set encoding to UTF-8
+      begin
+        data.encode!('UTF-8')
+      rescue
+        raise Errors::InvalidEncoding.new(filename, original_encoding)
+      end
 
-        unless data.valid_encoding?
-          raise Errors::InvalidEncoding.new(filename, original_encoding)
-        end
+      # Verify
+      unless data.valid_encoding?
+        raise Errors::InvalidEncoding.new(filename, original_encoding)
       end
 
       # Remove UTF-8 BOM (ugly)

@@ -486,12 +486,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
   end
 
   def test_compile_iso_8859_1_site
-    # Check encoding
-    unless ''.respond_to?(:encode)
-      skip 'Test only works on 1.9.x'
-      return
-    end
-
     # Create data source
     data_source = new_data_source
 
@@ -514,12 +508,6 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
   end
 
   def test_compile_iso_8859_1_site_with_explicit_encoding
-    # Check encoding
-    unless ''.respond_to?(:encode)
-      skip 'Test only works on 1.9.x'
-      return
-    end
-
     # Create data source
     data_source = new_data_source({})
     data_source.config[:encoding] = 'ISO-8859-1'
