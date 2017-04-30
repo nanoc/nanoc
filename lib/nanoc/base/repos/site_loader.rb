@@ -72,11 +72,31 @@ module Nanoc::Int
       config[:lib_dirs].flat_map do |lib|
         Dir["#{lib}/**/*.rb"].sort.map do |filename|
           Nanoc::Int::CodeSnippet.new(
-            File.read(filename),
+            read_code_snippet_contents(filename),
             filename,
           )
         end
       end
+    end
+
+    ENCODING_REGEX = /\A#\s+(-\*-\s+)?(en)?coding: (?<encoding>[^\s]+)(\s+-\*-\s*)?\n{0,2}/
+
+    def encoding_from_magic_comment(raw)
+      match = ENCODING_REGEX.match(raw)
+      match ? match['encoding'] : nil
+    end
+
+    def read_code_snippet_contents(filename)
+      raw = File.read(filename, encoding: 'ASCII-8BIT')
+
+      enc = encoding_from_magic_comment(raw)
+      if enc
+        raw = raw.force_encoding(enc).encode('UTF-8').sub(ENCODING_REGEX, '')
+      else
+        raw.force_encoding('UTF-8')
+      end
+
+      raw
     end
   end
 end

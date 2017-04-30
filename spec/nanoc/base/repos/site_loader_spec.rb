@@ -211,4 +211,52 @@ describe Nanoc::Int::SiteLoader do
       end
     end
   end
+
+  describe '#code_snippets_from_config' do
+    subject { loader.send(:code_snippets_from_config, config) }
+
+    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+
+    before { FileUtils.mkdir_p('lib') }
+
+    context 'no explicit encoding specified' do
+      example do
+        File.write('lib/asdf.rb', 'hi 🔥', encoding: 'utf-8')
+        expect(subject.size).to eq(1)
+        expect(subject.first.data).to eq('hi 🔥')
+      end
+    end
+
+    context '# encoding: x specified' do
+      example do
+        File.write('lib/asdf.rb', "# encoding: iso-8859-1\n\nBRØKEN", encoding: 'iso-8859-1')
+        expect(subject.size).to eq(1)
+        expect(subject.first.data).to eq('BRØKEN')
+      end
+    end
+
+    context '# coding: x specified' do
+      example do
+        File.write('lib/asdf.rb', "# coding: iso-8859-1\n\nBRØKEN", encoding: 'iso-8859-1')
+        expect(subject.size).to eq(1)
+        expect(subject.first.data).to eq('BRØKEN')
+      end
+    end
+
+    context '# -*- encoding: x -*- specified' do
+      example do
+        File.write('lib/asdf.rb', "# -*- encoding: iso-8859-1 -*-\n\nBRØKEN", encoding: 'iso-8859-1')
+        expect(subject.size).to eq(1)
+        expect(subject.first.data).to eq('BRØKEN')
+      end
+    end
+
+    context '# -*- coding: x -*- specified' do
+      example do
+        File.write('lib/asdf.rb', "# -*- coding: iso-8859-1 -*-\n\nBRØKEN", encoding: 'iso-8859-1')
+        expect(subject.size).to eq(1)
+        expect(subject.first.data).to eq('BRØKEN')
+      end
+    end
+  end
 end
