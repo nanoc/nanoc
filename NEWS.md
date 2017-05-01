@@ -1,5 +1,17 @@
 # Nanoc news
 
+## 4.7.9 (2017-05-01)
+
+Fixes:
+
+* Fixed character set handling of code snippets (#1171, #1174)
+
+Enhancements:
+
+* Added `xml:base` support (#1172, #1173) [Chris Burkhardt]
+
+This release drops support for Ruby 2.2, as it is no longer maintained.
+
 ## 4.7.8 (2017-04-22)
 
 Fixes:
