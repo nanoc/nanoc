@@ -104,13 +104,12 @@ module Nanoc::Filters
       namespaces = namespaces.reduce({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
 
       doc = content =~ /<html[\s>]/ ? klass.parse(content) : klass.fragment(content)
-      selectors.map { |sel| "descendant-or-self::#{sel}" }.each do |selector|
-        doc.xpath(selector, namespaces).each do |node|
-          if node.name == 'comment'
-            nokogiri_process_comment(node, doc, selectors, namespaces, klass, type)
-          elsif path_is_relativizable?(node.content)
-            node.content = relative_path_to(node.content)
-          end
+      selector = selectors.map { |sel| "descendant-or-self::#{sel}" }.join('|')
+      doc.xpath(selector, namespaces).each do |node|
+        if node.name == 'comment'
+          nokogiri_process_comment(node, doc, selectors, namespaces, klass, type)
+        elsif path_is_relativizable?(node.content)
+          node.content = relative_path_to(node.content)
         end
       end
 
