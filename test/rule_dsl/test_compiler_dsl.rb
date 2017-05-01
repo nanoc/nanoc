@@ -325,7 +325,6 @@ EOS
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
-    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
     assert_equal(expected.casefold?, actual.casefold?)
     assert_equal(expected.options,   actual.options)
   end
@@ -339,7 +338,6 @@ EOS
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
-    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
     assert_equal(expected.casefold?, actual.casefold?)
     assert_equal(expected.options,   actual.options)
   end
@@ -353,7 +351,6 @@ EOS
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
-    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
     assert_equal(expected.casefold?, actual.casefold?)
     assert_equal(expected.options,   actual.options)
   end
@@ -367,7 +364,6 @@ EOS
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
-    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
     assert_equal(expected.casefold?, actual.casefold?)
     assert_equal(expected.options,   actual.options)
   end
@@ -381,7 +377,6 @@ EOS
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
-    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
     assert_equal(expected.casefold?, actual.casefold?)
     assert_equal(expected.options,   actual.options)
   end
@@ -395,7 +390,6 @@ EOS
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
-    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
     assert_equal(expected.casefold?, actual.casefold?)
     assert_equal(expected.options,   actual.options)
   end
@@ -409,7 +403,6 @@ EOS
 
     assert_equal(expected.to_s,      actual.to_s)
     assert_equal(expected.source,    actual.source)
-    assert_equal(expected.kcode,     actual.kcode) if expected.respond_to?(:kcode)
     assert_equal(expected.casefold?, actual.casefold?)
     assert_equal(expected.options,   actual.options)
     assert('/foo/bar/' =~ actual)
