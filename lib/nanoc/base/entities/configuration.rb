@@ -106,9 +106,14 @@ module Nanoc::Int
       @wrapped[key] = value
     end
 
+    def merge_recursively(c1, c2)
+      c1.merge(c2) { |_, v1, v2| v1.is_a?(Hash) && v2.is_a?(Hash) ? merge_recursively(v1, v2) : v2 }
+    end
+    private :merge_recursively
+
     contract C::Or[Hash, self] => self
     def merge(hash)
-      self.class.new(hash: @wrapped.merge(hash.to_h), env_name: @env_name)
+      self.class.new(hash: merge_recursively(@wrapped, hash.to_h), env_name: @env_name)
     end
 
     contract C::Any => self
