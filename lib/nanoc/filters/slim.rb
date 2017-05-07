@@ -20,7 +20,7 @@ module Nanoc::Filters
       # Create context
       context = ::Nanoc::Int::Context.new(assigns)
 
-      ::Slim::Template.new(params) { content }.render(context) { assigns[:content] }
+      ::Slim::Template.new(filename, params) { content }.render(context) { assigns[:content] }
     end
   end
 end
