@@ -1,7 +1,7 @@
 # ----- CONFIGURED -----
 
 AllCops:
-  TargetRubyVersion: 2.1
+  TargetRubyVersion: 2.2
   DisplayCopNames: true
 
 # We use filenames such as “create-site.rb” that translate to method names.
