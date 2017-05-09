@@ -24,6 +24,9 @@ module Nanoc::Int::Compiler::Phases
       raise NotImplementedError
     end
 
+    def finalize
+    end
+
     private
 
     def notify(sym, rep)
