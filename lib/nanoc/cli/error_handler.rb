@@ -70,6 +70,11 @@ module Nanoc::CLI
     rescue StandardError, ScriptError => e
       print_error(e)
       exit(1)
+    rescue RegexpError => e
+      if e.message =~ /invalid multibyte character/
+        $stderr.puts "\n'RegexpError: invalid multibyte character' usually happens when LANG environment variable is not set to UTF.\n"
+      end
+      raise e
     end
 
     # Prints the given error to stderr. Includes message, possible resolution
