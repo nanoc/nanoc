@@ -99,7 +99,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
         it 'does not change compiled content cache' do
           expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
-            .not_to change { compiled_content_cache[rep] }
+            .not_to change { compiled_content_cache[rep][:last].string }
         end
       end
 
