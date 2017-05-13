@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc
   # @return [String] A string containing information about this Nanoc version
   #   and its environment (Ruby engine and version, Rubygems version if any).
@@ -6,7 +8,7 @@ module Nanoc
   def self.version_information
     gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : 'without RubyGems'
     engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : 'ruby'
-    res = ''
+    res = String.new
     res << "Nanoc #{Nanoc::VERSION} © 2007-2017 Denis Defreyne.\n"
     res << "Running #{engine} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} #{gem_info}.\n"
     res

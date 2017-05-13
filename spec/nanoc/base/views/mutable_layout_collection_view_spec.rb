@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::MutableLayoutCollectionView do
   let(:view_class) { Nanoc::MutableLayoutView }
   it_behaves_like 'an identifiable collection'

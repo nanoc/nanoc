@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 describe 'GH-1134', site: true, stdio: true do
   before do
     File.write('content/foo.txt', 'asdf')
 
-    File.write('Rules', <<EOS)
-compile '/**/*' do
-  write '/first.html'
-  filter :erb
-  write '/last.html'
-end
+    File.write('Rules', <<~EOS)
+      compile '/**/*' do
+        write '/first.html'
+        filter :erb
+        write '/last.html'
+      end
 EOS
   end
 

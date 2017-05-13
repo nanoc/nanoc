@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api private
 module Nanoc::StringExtensions
   # Transforms string into an actual identifier

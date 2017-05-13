@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-813', site: true, stdio: true do
   before do
     File.write('nanoc.yaml', "enable_output_diff: true\n")

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::ChecksumStore do
   let(:store) { described_class.new(objects: objects) }
 

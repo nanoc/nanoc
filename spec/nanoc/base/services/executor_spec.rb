@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Executor do
   let(:executor) { described_class.new(rep, compilation_context, dependency_tracker) }
 

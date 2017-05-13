@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::RuleDSL
   # Provides a context in which compilation and routing rules can be executed.
   # It provides access to the item representation that is being compiled or

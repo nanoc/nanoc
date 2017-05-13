@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 class Nanoc::Checking::Checks::HTMLTest < Nanoc::TestCase

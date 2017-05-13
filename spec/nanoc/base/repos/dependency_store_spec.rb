@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::DependencyStore do
   let(:store) { described_class.new(items, layouts) }
 

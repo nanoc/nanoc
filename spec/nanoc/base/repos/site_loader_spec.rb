@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::SiteLoader do
   let(:loader) { described_class.new }
 

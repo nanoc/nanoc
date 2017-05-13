@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Telemetry::Counter do
   subject(:counter) { described_class.new }
 

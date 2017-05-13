@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   class AggregateDataSource < Nanoc::DataSource
     def initialize(data_sources, config)

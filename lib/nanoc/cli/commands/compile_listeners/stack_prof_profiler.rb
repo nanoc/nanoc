@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Nanoc::CLI::Commands::CompileListeners
   class StackProfProfiler < Abstract
-    PROFILE_FILE = 'tmp/stackprof_profile'.freeze
+    PROFILE_FILE = 'tmp/stackprof_profile'
 
     # @see Listener#enable_for?
     def self.enable_for?(command_runner)

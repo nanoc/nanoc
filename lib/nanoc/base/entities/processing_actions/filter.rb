@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::ProcessingActions
   class Filter < Nanoc::Int::ProcessingAction
     # filter :foo

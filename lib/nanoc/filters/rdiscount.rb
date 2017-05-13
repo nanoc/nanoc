@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Filters
   # @api private
   class RDiscount < Nanoc::Filter

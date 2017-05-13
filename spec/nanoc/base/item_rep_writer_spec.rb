@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::ItemRepWriter do
   describe '#write' do
     let(:raw_path) { 'output/blah.dat' }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 usage 'check [options] [names]'
 summary 'run issue checks'
 description "

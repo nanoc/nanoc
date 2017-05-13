@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Deploying::Deployers
   # A deployer that deploys a site using [fog](https://github.com/geemus/fog).
   #

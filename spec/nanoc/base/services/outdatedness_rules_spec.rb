@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::OutdatednessRules do
   describe '#apply' do
     subject { rule_class.instance.apply(obj, outdatedness_checker) }

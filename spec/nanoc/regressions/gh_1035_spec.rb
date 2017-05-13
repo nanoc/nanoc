@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 describe 'GH-1035', site: true, stdio: true do
   before do
     File.write('content/foo.md', '[<%= @items["/bar.*"].compiled_content(snapshot: :raw) %>]')
     File.write('content/bar.md', 'I am bar!')
 
-    File.write('lib/stuff.rb', <<EOS)
-Class.new(Nanoc::Filter) do
-  identifier :gh_1031_text2bin
-  type :text => :binary
+    File.write('lib/stuff.rb', <<~EOS)
+      Class.new(Nanoc::Filter) do
+        identifier :gh_1031_text2bin
+        type :text => :binary
 
-  def run(content, params = {})
-    File.write(output_filename, content)
-  end
-end
+        def run(content, params = {})
+          File.write(output_filename, content)
+        end
+      end
 EOS
 
     File.write('Rules', <<EOS)

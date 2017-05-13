@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::Compiler::Phases
   class Abstract
     include Nanoc::Int::ContractsSupport

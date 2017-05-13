@@ -1,7 +1,7 @@
 # ----- CONFIGURED -----
 
 AllCops:
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
   DisplayCopNames: true
 
 # We use filenames such as “create-site.rb” that translate to method names.
@@ -46,9 +46,8 @@ Lint/DuplicateMethods:
 Lint/UnifiedInteger:
   Enabled: false
 
-# Disabled until Nanoc requires Ruby 2.3+.
 Layout/IndentHeredoc:
-  Enabled: false
+  EnforcedStyle: squiggly
 
 # This breaks RSpec on occasion, e.g. `expect { subject }.not_to change { foo }`,
 # and generally does not provide useful warnings

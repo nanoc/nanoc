@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # Responsible for determining whether an item or a layout is outdated.
   #

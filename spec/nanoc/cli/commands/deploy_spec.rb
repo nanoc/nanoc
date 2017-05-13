@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
   describe '#run' do
     let(:config) { {} }

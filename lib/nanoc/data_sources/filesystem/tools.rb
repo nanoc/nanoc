@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Nanoc::DataSources::Filesystem < Nanoc::DataSource
   # Contains useful functions for managing the filesystem.
   #

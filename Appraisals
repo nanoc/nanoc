@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 appraise 'rouge-1' do
   group :plugins do
     gem 'rouge', '~> 1.0'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 usage 'nanoc command [options] [arguments]'
 summary 'Nanoc, a static site compiler written in Ruby'
 default_subcommand 'compile'

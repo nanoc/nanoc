@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::Compiler::Stages
   class CompileReps
     def initialize(outdatedness_store:, dependency_store:, action_sequences:, compilation_context:, compiled_content_cache:)

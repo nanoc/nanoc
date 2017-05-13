@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 describe 'GH-970 (show-rules)', site: true, stdio: true do
   before do
     File.write('content/foo.md', 'foo')
 
-    File.write('Rules', <<EOS)
-compile '/foo.*' do
-  write '/donkey.html'
-end
+    File.write('Rules', <<~EOS)
+      compile '/foo.*' do
+        write '/donkey.html'
+      end
 EOS
   end
 

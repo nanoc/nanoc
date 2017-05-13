@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 describe 'Compile command', site: true, stdio: true do
   describe 'diff generation' do
     before do
       File.write('content/foo.md', "I am foo!\n")
 
-      File.write('Rules', <<EOS)
-compile '/foo.*' do
-  write '/foo.html'
-end
+      File.write('Rules', <<~EOS)
+        compile '/foo.*' do
+          write '/foo.html'
+        end
 EOS
     end
 

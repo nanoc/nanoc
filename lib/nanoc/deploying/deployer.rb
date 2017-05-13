@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Deploying
   # Represents a deployer, an object that allows uploading the compiled site
   # to a specific (remote) location.

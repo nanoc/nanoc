@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::SnapshotRepo do
   subject(:repo) { described_class.new }
 

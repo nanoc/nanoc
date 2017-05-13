@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::Compiler::Stages
   class ForgetOutdatedDependencies
     include Nanoc::Int::ContractsSupport

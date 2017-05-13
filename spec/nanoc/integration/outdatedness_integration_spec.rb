@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Outdatedness integration', site: true, stdio: true do
   context 'only attribute dependency' do
     let(:time) { Time.now }
@@ -9,15 +11,15 @@ describe 'Outdatedness integration', site: true, stdio: true do
       FileUtils.touch('content/foo.md', mtime: time)
       FileUtils.touch('content/bar.md', mtime: time)
 
-      File.write('Rules', <<EOS)
-compile '/foo.*' do
-  write '/foo.html'
-end
+      File.write('Rules', <<~EOS)
+        compile '/foo.*' do
+          write '/foo.html'
+        end
 
-compile '/bar.*' do
-  filter :erb
-  write '/bar.html'
-end
+        compile '/bar.*' do
+          filter :erb
+          write '/bar.html'
+        end
 EOS
     end
 
@@ -74,15 +76,15 @@ EOS
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoo")
       File.write('content/bar.md', '<%= @items["/foo.*"].raw_content %>')
 
-      File.write('Rules', <<EOS)
-compile '/foo.*' do
-  write '/foo.html'
-end
+      File.write('Rules', <<~EOS)
+        compile '/foo.*' do
+          write '/foo.html'
+        end
 
-compile '/bar.*' do
-  filter :erb
-  write '/bar.html'
-end
+        compile '/bar.*' do
+          filter :erb
+          write '/bar.html'
+        end
 EOS
     end
 
@@ -136,15 +138,15 @@ EOS
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoo")
       File.write('content/bar.md', '<%= @items["/foo.*"].raw_content %> / <%= @items["/foo.*"][:title] %>')
 
-      File.write('Rules', <<EOS)
-compile '/foo.*' do
-  write '/foo.html'
-end
+      File.write('Rules', <<~EOS)
+        compile '/foo.*' do
+          write '/foo.html'
+        end
 
-compile '/bar.*' do
-  filter :erb
-  write '/bar.html'
-end
+        compile '/bar.*' do
+          filter :erb
+          write '/bar.html'
+        end
 EOS
     end
 
@@ -193,16 +195,16 @@ EOS
     end
 
     it 'shows file and dependencies as not outdated after rule modification' do
-      File.write('Rules', <<EOS)
-compile '/foo.*' do
-  filter :erb
-  write '/foo.html'
-end
+      File.write('Rules', <<~EOS)
+        compile '/foo.*' do
+          filter :erb
+          write '/foo.html'
+        end
 
-compile '/bar.*' do
-  filter :erb
-  write '/bar.html'
-end
+        compile '/bar.*' do
+          filter :erb
+          write '/bar.html'
+        end
 EOS
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(

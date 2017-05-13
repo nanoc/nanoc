@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Errors::DependencyCycle do
   subject(:error) { described_class.new(graph) }
 
@@ -18,13 +20,13 @@ describe Nanoc::Int::Errors::DependencyCycle do
   let(:rep_e) { Nanoc::Int::ItemRep.new(Nanoc::Int::Item.new('e', {}, '/e.md'), :default) }
 
   it 'has an informative error message' do
-    expected = <<EOS
-The site cannot be compiled because there is a dependency cycle:
+    expected = <<~EOS
+      The site cannot be compiled because there is a dependency cycle:
 
-    (1) item /e.md, rep :default, uses compiled content of
-    (2) item /d.md, rep :default, uses compiled content of
-    (3) item /c.md, rep :default, uses compiled content of
-    (4) item /b.md, rep :default, uses compiled content of (1)
+          (1) item /e.md, rep :default, uses compiled content of
+          (2) item /d.md, rep :default, uses compiled content of
+          (3) item /c.md, rep :default, uses compiled content of
+          (4) item /b.md, rep :default, uses compiled content of (1)
 EOS
 
     expect(error.message).to eql(expected)

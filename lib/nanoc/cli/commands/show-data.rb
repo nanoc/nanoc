@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 usage 'show-data'
 aliases :debug
 summary 'show data in this site'
-description <<-EOS
-Show information about all items, item representations and layouts in the
-current site, along with dependency information.
+description <<~EOS
+  Show information about all items, item representations and layouts in the
+  current site, along with dependency information.
 EOS
 
 module Nanoc::CLI::Commands
@@ -89,7 +91,7 @@ module Nanoc::CLI::Commands
               'item'
             end
 
-          props = ''
+          props = String.new
           props << (dep.props.raw_content? ? 'r' : '_')
           props << (dep.props.attributes? ? 'a' : '_')
           props << (dep.props.compiled_content? ? 'c' : '_')

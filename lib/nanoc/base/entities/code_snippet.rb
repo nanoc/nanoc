@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # Nanoc::Int::CodeSnippet represent a piece of custom code of a Nanoc site.
   #

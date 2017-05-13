@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api private
 module Nanoc::ArrayExtensions
   # Returns a new array where all items' keys are recursively converted to

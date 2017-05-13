@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::DataSources
   # The filesystem data source stores its items and layouts in nested
   # directories. Items and layouts are represented by one or two files; if it

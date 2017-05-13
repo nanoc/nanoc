@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::ProcessingActions
   class Snapshot < Nanoc::Int::ProcessingAction
     # snapshot :before_layout

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::RuleDSL
   # Calculates action sequences for objects that can be run through a rule (item
   # representations and layouts).

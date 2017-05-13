@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Filters::Less, site: true, stdio: true, v8: true do
   # These tests are high-level in order to interact well with the compiler. This is important for
   # this :less filter, because of the way it handles fibers.

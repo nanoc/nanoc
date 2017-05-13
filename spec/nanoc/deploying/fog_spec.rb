@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Deploying::Deployers::Fog, stdio: true do
   let(:deployer) do
     Nanoc::Deploying::Deployers::Fog.new(

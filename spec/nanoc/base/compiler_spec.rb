@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Compiler do
   let(:compiler) do
     described_class.new(

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::CLI::Commands::ShowPlugins, site: true, stdio: true do
   describe '#run' do
     it 'can be invoked' do

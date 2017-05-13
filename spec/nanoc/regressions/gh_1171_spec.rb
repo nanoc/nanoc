@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 describe 'GH-1171', site: true, stdio: true do
   before do
-    File.write('nanoc.yaml', <<EOS)
-data_sources:
-  -
-    type: filesystem
-    encoding: utf-8
+    File.write('nanoc.yaml', <<~EOS)
+      data_sources:
+        -
+          type: filesystem
+          encoding: utf-8
 EOS
   end
 
@@ -13,11 +15,11 @@ EOS
       File.write('content/hi.md', '<%= ::EMOJI_🔥 %>', encoding: 'utf-8')
       File.write('lib/asdf.rb', 'EMOJI_🔥 = "hot"', encoding: 'utf-8')
 
-      File.write('Rules', <<EOS)
-compile '/**/*' do
-  filter :erb
-  write '/last.html'
-end
+      File.write('Rules', <<~EOS)
+        compile '/**/*' do
+          filter :erb
+          write '/last.html'
+        end
 EOS
     end
 
@@ -39,11 +41,11 @@ EOS
       File.write('content/hi.md', '<%= ::BRØKEN %>')
       File.write('lib/asdf.rb', "# encoding: iso-8859-1\n\nBRØKEN = 1", encoding: 'ISO-8859-1')
 
-      File.write('Rules', <<EOS)
-compile '/**/*' do
-  filter :erb
-  write '/last.html'
-end
+      File.write('Rules', <<~EOS)
+        compile '/**/*' do
+          filter :erb
+          write '/last.html'
+        end
 EOS
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api private
 module Nanoc::HashExtensions
   # Returns a new hash where all keys are recursively converted to symbols by

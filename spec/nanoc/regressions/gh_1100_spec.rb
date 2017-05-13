@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-1100', site: true, stdio: true do
   before do
     File.write('content/index.html', '<% @items["stuff"] %>')

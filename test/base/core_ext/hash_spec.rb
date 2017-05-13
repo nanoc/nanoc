@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 describe 'Hash#__nanoc_symbolize_keys_recursively' do

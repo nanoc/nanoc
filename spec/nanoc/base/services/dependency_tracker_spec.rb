@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::DependencyTracker do
   let(:tracker) { described_class.new(store) }
 

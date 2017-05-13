@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Content do
   describe '.create' do
     subject { described_class.create(arg, params) }

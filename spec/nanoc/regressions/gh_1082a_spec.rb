@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-1082', site: true, stdio: true do
   before do
     File.write('content/a.erb', '<%= @items["/b.*"].binary? %>')

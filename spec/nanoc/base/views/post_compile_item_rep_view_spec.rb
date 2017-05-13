@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::PostCompileItemRepView do
   let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
   let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }

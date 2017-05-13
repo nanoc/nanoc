@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::Compiler::Phases
   # Provides functionality for (re)calculating the content of an item rep, without caching or
   # outdatedness checking.

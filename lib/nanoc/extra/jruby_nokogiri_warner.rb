@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'singleton'
 
 module Nanoc::Extra
@@ -5,22 +7,22 @@ module Nanoc::Extra
   class JRubyNokogiriWarner
     include Singleton
 
-    TEXT = <<EOS.freeze
---------------------------------------------------------------------------------
-Note:
+    TEXT = <<~EOS
+      --------------------------------------------------------------------------------
+      Note:
 
-The behavior of Pure Java Nokogiri differs from the Nokogiri used on the
-standard Ruby interpreter (MRI) due to differences in underlying libraries.
+      The behavior of Pure Java Nokogiri differs from the Nokogiri used on the
+      standard Ruby interpreter (MRI) due to differences in underlying libraries.
 
-These sometimes problematic behavioral differences can cause Nanoc filters not
-to function properly, if at all. If you need reliable (X)HTML and XML handling
-functionality, consider not using Nokogiri on JRuby for the time being.
+      These sometimes problematic behavioral differences can cause Nanoc filters not
+      to function properly, if at all. If you need reliable (X)HTML and XML handling
+      functionality, consider not using Nokogiri on JRuby for the time being.
 
-These issues are being worked on both from the Nokogiri and the Nanoc side. Keep
-your Nokogiri and Nanoc versions up to date!
+      These issues are being worked on both from the Nokogiri and the Nanoc side. Keep
+      your Nokogiri and Nanoc versions up to date!
 
-For details, see https://github.com/nanoc/nanoc/pull/422.
---------------------------------------------------------------------------------
+      For details, see https://github.com/nanoc/nanoc/pull/422.
+      --------------------------------------------------------------------------------
 EOS
 
     def self.check_and_warn

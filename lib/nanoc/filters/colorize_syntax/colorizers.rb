@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Filters::ColorizeSyntax::Colorizers
   class Abstract
     extend DDPlugin::Plugin

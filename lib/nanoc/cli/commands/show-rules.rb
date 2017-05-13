@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 usage 'show-rules [thing]'
 aliases :explain
 summary 'describe the rules for each item'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::PostCompileItemView do
   let(:item) { Nanoc::Int::Item.new('blah', {}, '/foo.md') }
   let(:rep_a) { Nanoc::Int::ItemRep.new(item, :no_mod) }

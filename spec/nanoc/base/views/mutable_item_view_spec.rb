@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::MutableItemView do
   let(:entity_class) { Nanoc::Int::Item }
   it_behaves_like 'a mutable document view'

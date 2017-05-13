@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Configuration do
   let(:hash) { { foo: 'bar' } }
   let(:config) { described_class.new(hash: hash) }

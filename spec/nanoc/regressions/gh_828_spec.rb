@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-828', site: true, stdio: true do
   before do
     File.write('content/bad.md', "---\nbad: true\n---\n\nI am bad!")

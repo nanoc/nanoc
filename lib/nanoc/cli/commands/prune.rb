@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 usage 'prune'
 summary 'remove files not managed by Nanoc from the output directory'
-description <<-EOS
-Find all files in the output directory that do not correspond to an item
-managed by Nanoc and remove them. Since this is a hazardous operation, an
-additional `--yes` flag is needed as confirmation.
+description <<~EOS
+  Find all files in the output directory that do not correspond to an item
+  managed by Nanoc and remove them. Since this is a hazardous operation, an
+  additional `--yes` flag is needed as confirmation.
 
-Also see the `auto_prune` configuration option in `nanoc.yaml` (`config.yaml`
-for older Nanoc sites), which will automatically prune after compilation.
+  Also see the `auto_prune` configuration option in `nanoc.yaml` (`config.yaml`
+  for older Nanoc sites), which will automatically prune after compilation.
 EOS
 
 flag :y, :yes,       'confirm deletion'

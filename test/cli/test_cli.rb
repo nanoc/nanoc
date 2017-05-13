@@ -1,24 +1,26 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 class Nanoc::CLITest < Nanoc::TestCase
-  COMMAND_CODE = <<EOS.freeze
-usage       '_test [options]'
-summary     'meh'
-description 'longer meh'
+  COMMAND_CODE = <<~EOS
+    usage       '_test [options]'
+    summary     'meh'
+    description 'longer meh'
 
-run do |opts, args, cmd|
-  File.open('_test.out', 'w') { |io| io.write('It works!') }
-end
+    run do |opts, args, cmd|
+      File.open('_test.out', 'w') { |io| io.write('It works!') }
+    end
 EOS
 
-  SUBCOMMAND_CODE = <<EOS.freeze
-usage       '_sub [options]'
-summary     'meh sub'
-description 'longer meh sub'
+  SUBCOMMAND_CODE = <<~EOS
+    usage       '_sub [options]'
+    summary     'meh sub'
+    description 'longer meh sub'
 
-run do |opts, args, cmd|
-  File.open('_test_sub.out', 'w') { |io| io.write('It works sub!') }
-end
+    run do |opts, args, cmd|
+      File.open('_test_sub.out', 'w') { |io| io.write('It works sub!') }
+    end
 EOS
 
   def test_load_custom_commands

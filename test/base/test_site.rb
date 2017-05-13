@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 class Nanoc::Int::SiteTest < Nanoc::TestCase
@@ -34,26 +36,26 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
 
   def test_initialize_with_existing_parent_config_file
     File.open('nanoc.yaml', 'w') do |io|
-      io.write <<-EOF
-output_dir: public_html
-parent_config_file: foo/foo.yaml
+      io.write <<~EOF
+        output_dir: public_html
+        parent_config_file: foo/foo.yaml
 EOF
     end
     FileUtils.mkdir_p('foo')
     FileUtils.cd('foo') do
       File.open('foo.yaml', 'w') do |io|
-        io.write <<-EOF
-parent_config_file: ../bar/bar.yaml
+        io.write <<~EOF
+          parent_config_file: ../bar/bar.yaml
 EOF
       end
     end
     FileUtils.mkdir_p('bar')
     FileUtils.cd('bar') do
       File.open('bar.yaml', 'w') do |io|
-        io.write <<-EOF
-enable_output_diff: true
-foo: bar
-output_dir: output
+        io.write <<~EOF
+          enable_output_diff: true
+          foo: bar
+          output_dir: output
 EOF
       end
     end
@@ -67,8 +69,8 @@ EOF
 
   def test_initialize_with_missing_parent_config_file
     File.open('nanoc.yaml', 'w') do |io|
-      io.write <<-EOF
-parent_config_file: foo/foo.yaml
+      io.write <<~EOF
+        parent_config_file: foo/foo.yaml
 EOF
     end
 
@@ -79,15 +81,15 @@ EOF
 
   def test_initialize_with_parent_config_file_cycle
     File.open('nanoc.yaml', 'w') do |io|
-      io.write <<-EOF
-parent_config_file: foo/foo.yaml
+      io.write <<~EOF
+        parent_config_file: foo/foo.yaml
 EOF
     end
     FileUtils.mkdir_p('foo')
     FileUtils.cd('foo') do
       File.open('foo.yaml', 'w') do |io|
-        io.write <<-EOF
-parent_config_file: ../nanoc.yaml
+        io.write <<~EOF
+          parent_config_file: ../nanoc.yaml
 EOF
       end
     end

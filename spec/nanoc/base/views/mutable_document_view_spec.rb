@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples 'a mutable document view' do
   let(:view) { described_class.new(document, view_context) }
 

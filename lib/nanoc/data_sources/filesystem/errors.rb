@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Nanoc::DataSources::Filesystem < Nanoc::DataSource
   # @api private
   module Errors

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Helpers::HTMLEscape, helper: true do
   describe '#html_escape' do
     subject { helper.html_escape(string) }
@@ -8,7 +10,7 @@ describe Nanoc::Helpers::HTMLEscape, helper: true do
     end
 
     context 'given a block' do
-      let!(:_erbout) { 'moo' }
+      let!(:_erbout) { String.new('moo') }
 
       it 'adds escaped content to _erbout' do
         helper.html_escape { _erbout << '<h1>Stuff!</h1>' }

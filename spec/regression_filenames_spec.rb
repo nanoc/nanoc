@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'regression tests', chdir: false do
   let(:regression_test_filenames) do
     Dir['spec/nanoc/regressions/*']
@@ -5,7 +7,7 @@ describe 'regression tests', chdir: false do
 
   let(:regression_test_numbers) do
     regression_test_filenames
-      .map { |fn| File.readlines(fn).first.match(/GH-(\d+)/)[1] }
+      .map { |fn| File.readlines(fn).find { |l| l =~ /^describe/ }.match(/GH-(\d+)/)[1] }
   end
 
   it 'should have the proper filenames' do

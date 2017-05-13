@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # @api private
   class Props
@@ -23,7 +25,7 @@ module Nanoc::Int
 
     contract C::None => String
     def inspect
-      ''.tap do |s|
+      String.new.tap do |s|
         s << 'Props('
         s << (raw_content? ? 'r' : '_')
         s << (attributes? ? 'a' : '_')

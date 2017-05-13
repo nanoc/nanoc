@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Helpers
   # @see http://nanoc.ws/doc/reference/helpers/#blogging
   module Blogging
@@ -50,7 +52,7 @@ module Nanoc::Helpers
       end
 
       def build
-        buffer = ''
+        buffer = String.new
         xml = Builder::XmlMarkup.new(target: buffer, indent: 2)
         build_for_feed(xml)
         buffer

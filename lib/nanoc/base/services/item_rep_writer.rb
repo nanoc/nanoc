@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # @api private
   class ItemRepWriter
-    TMP_TEXT_ITEMS_DIR = 'text_items'.freeze
+    TMP_TEXT_ITEMS_DIR = 'text_items'
 
     def write_all(item_rep, snapshot_repo)
       written_paths = Set.new

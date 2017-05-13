@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'list of contributors in README', chdir: false do
   let(:contributors_in_readme) do
     File.readlines('README.md').last.chomp("\n").split(', ')

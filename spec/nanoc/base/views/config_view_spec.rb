@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::ConfigView do
   let(:config) do
     Nanoc::Int::Configuration.new(hash: hash)

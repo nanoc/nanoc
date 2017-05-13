@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::RuleDSL::RecordingExecutor do
   let(:executor) { described_class.new(rep) }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc
   class ItemCollectionWithRepsView < ::Nanoc::IdentifiableCollectionView
     # @api private

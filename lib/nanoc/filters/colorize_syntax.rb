@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Filters
   # @api private
   class ColorizeSyntax < Nanoc::Filter
@@ -34,7 +36,7 @@ module Nanoc::Filters
 
         # Add language-something class
         unless extracted_language.from_class
-          klass = element['class'] || ''
+          klass = element['class'] || String.new
           klass << ' ' unless [' ', nil].include?(klass[-1, 1])
           klass << "language-#{extracted_language.language}"
           element['class'] = klass

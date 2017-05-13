@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Telemetry
   class Table
     def initialize(rows)
@@ -23,7 +25,7 @@ module Nanoc::Telemetry
     end
 
     def separator(column_lengths)
-      ''.tap do |s|
+      String.new.tap do |s|
         s << '─' * column_lengths[0]
         s << '─┼─'
         s << column_lengths[1..-1].map { |l| '─' * l }.join('───')

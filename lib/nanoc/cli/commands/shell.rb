@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 usage 'shell'
 summary 'open a shell on the Nanoc environment'
 aliases 'console'

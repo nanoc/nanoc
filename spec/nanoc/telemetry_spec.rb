@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Telemetry do
   subject { described_class.new }
 

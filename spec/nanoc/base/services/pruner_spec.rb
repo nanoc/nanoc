@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Pruner do
   subject(:pruner) { described_class.new(config, reps, dry_run: dry_run, exclude: exclude) }
 

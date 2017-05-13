@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 summary 'show all available plugins'
 aliases :info
 usage 'show-plugins [options]'
-description <<-EOS
-Show a list of available plugins, including filters and data sources.
-If the current directory contains a Nanoc web site, the plugins defined in this site will be shown as well.
+description <<~EOS
+  Show a list of available plugins, including filters and data sources.
+  If the current directory contains a Nanoc web site, the plugins defined in this site will be shown as well.
 EOS
 
 module Nanoc::CLI::Commands
@@ -16,7 +18,7 @@ module Nanoc::CLI::Commands
 
       # Get list of plugins (before and after)
       plugins_before = PLUGIN_CLASSES.keys.each_with_object({}) { |c, acc| acc[c] = c.all }
-      site.code_snippets if site
+      site&.code_snippets
       plugins_after = PLUGIN_CLASSES.keys.each_with_object({}) { |c, acc| acc[c] = c.all }
 
       # Divide list of plugins into builtin and custom

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-937', site: true, stdio: true do
   before do
     File.write('content/style.sass', ".test\n  color: red")
@@ -7,11 +9,11 @@ describe 'GH-937', site: true, stdio: true do
       "sass_style: compact\nenvironments:\n  staging:\n    sass_style: expanded",
     )
 
-    File.write('Rules', <<EOS)
-compile '/*.sass' do
-  filter :sass, style: @config[:sass_style].to_sym
-  write item.identifier.without_ext + '.css'
-end
+    File.write('Rules', <<~EOS)
+      compile '/*.sass' do
+        filter :sass, style: @config[:sass_style].to_sym
+        write item.identifier.without_ext + '.css'
+      end
 EOS
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'find'
 
 module Nanoc
@@ -72,11 +74,11 @@ module Nanoc
         basename = File.basename(f)
 
         case File.ftype(f)
-        when 'file'.freeze
+        when 'file'
           unless exclude?(basename)
             present_files << f
           end
-        when 'directory'.freeze
+        when 'directory'
           if exclude?(basename)
             Find.prune
           else

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Telemetry::Stopwatch do
   subject(:stopwatch) { described_class.new }
 

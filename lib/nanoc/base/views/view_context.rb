@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc
   # @api private
   class ViewContext

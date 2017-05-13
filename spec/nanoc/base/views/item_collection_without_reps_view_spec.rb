@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::ItemCollectionWithoutRepsView do
   let(:view_class) { Nanoc::ItemWithoutRepsView }
   it_behaves_like 'an identifiable collection'

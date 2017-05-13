@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   let(:listener) { described_class.new(reps: reps) }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Memoization do
   class MemoizationSpecSample1
     extend Nanoc::Int::Memoization

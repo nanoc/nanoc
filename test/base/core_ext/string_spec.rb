@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 describe 'String#__nanoc_cleaned_identifier' do

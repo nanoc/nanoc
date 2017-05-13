@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Feature do
   describe '.enabled?' do
     subject { described_class.enabled?(feature_name) }
@@ -6,7 +8,7 @@ describe Nanoc::Feature do
 
     before do
       Nanoc::Feature.reset_caches
-      ENV['NANOC_FEATURES'] = ''
+      ENV['NANOC_FEATURES'] = String.new
     end
 
     context 'not set' do
@@ -40,7 +42,7 @@ describe Nanoc::Feature do
 
     before do
       Nanoc::Feature.reset_caches
-      ENV['NANOC_FEATURES'] = ''
+      ENV['NANOC_FEATURES'] = String.new
     end
 
     context 'not set' do

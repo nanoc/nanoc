@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::CLI::Commands::ShowRules, stdio: true do
   describe '#run' do
     subject { runner.run }

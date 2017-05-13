@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::CompiledContentCache do
   let(:cache) { described_class.new(items: items) }
 

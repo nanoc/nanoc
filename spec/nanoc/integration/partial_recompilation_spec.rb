@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 describe 'Partial recompilation', site: true, stdio: true do
   before do
     File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoo")
     File.write('content/bar.md', '<%= @items["/foo.*"].compiled_content %><% raise "boom" %>')
 
-    File.write('Rules', <<EOS)
-compile '/foo.*' do
-  write '/foo.html'
-end
+    File.write('Rules', <<~EOS)
+      compile '/foo.*' do
+        write '/foo.html'
+      end
 
-compile '/bar.*' do
-  filter :erb
-  write '/bar.html'
-end
+      compile '/bar.*' do
+        filter :erb
+        write '/bar.html'
+      end
 EOS
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples 'a document' do
   describe '#initialize' do
     let(:content_arg) { 'Hello world' }

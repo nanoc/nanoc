@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-882', site: true, stdio: true do
   before do
     File.write('content/foo.md', 'I am foo!')

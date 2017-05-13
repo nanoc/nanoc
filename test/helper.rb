@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 $VERBOSE = false
 
 require 'simplecov'
@@ -70,22 +72,27 @@ module Nanoc::TestHelpers
     end
 
     # Build rules
-    rules_content = <<EOS
-compile '*' do
-  {{compilation_rule_content}}
-end
+    rules_content = <<~EOS
+      compile '*' do
+        {{compilation_rule_content}}
+      end
 
-route '*' do
-  if item.binary?
-    item.identifier.chop + (item[:extension] ? '.' + item[:extension] : '')
-  else
-    item.identifier + 'index.html'
-  end
-end
+      route '*' do
+        if item.binary?
+          item.identifier.chop + (item[:extension] ? '.' + item[:extension] : '')
+        else
+          item.identifier + 'index.html'
+        end
+      end
 
-layout '*', :erb
+      layout '*', :erb
 EOS
-    rules_content.gsub!('{{compilation_rule_content}}', params[:compilation_rule_content] || '')
+
+    rules_content =
+      rules_content.gsub(
+        '{{compilation_rule_content}}',
+        params[:compilation_rule_content] || '',
+      )
 
     # Create site
     unless File.directory?(site_name)

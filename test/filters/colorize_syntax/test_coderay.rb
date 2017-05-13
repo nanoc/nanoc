@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
-  CODERAY_PRE  = '<div class="CodeRay"><div class="code">'.freeze
-  CODERAY_POST = '</div></div>'.freeze
+  CODERAY_PRE  = '<div class="CodeRay"><div class="code">'
+  CODERAY_POST = '</div></div>'
 
   def test_coderay_simple
     if_have 'coderay', 'nokogiri' do
@@ -132,21 +134,21 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = <<EOS
-before
-<pre><code>
-#!/usr/bin/env ruby
-puts 'hi!'
-</code></pre>
-after
+      input = <<~EOS
+        before
+        <pre><code>
+        #!/usr/bin/env ruby
+        puts 'hi!'
+        </code></pre>
+        after
 EOS
-      expected_output = <<EOS.sub(/\s*\Z/m, '')
-before
-<pre><code>
-#!/usr/bin/env ruby
-puts 'hi!'
-</code></pre>
-after
+      expected_output = <<~EOS.sub(/\s*\Z/m, '')
+        before
+        <pre><code>
+        #!/usr/bin/env ruby
+        puts 'hi!'
+        </code></pre>
+        after
 EOS
 
       # Run filter
@@ -161,20 +163,20 @@ EOS
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = <<EOS
-before
-<pre><code>
-#!ruby
-#!/usr/bin/env ruby
-puts 'hi!'
-</code></pre>
-after
+      input = <<~EOS
+        before
+        <pre><code>
+        #!ruby
+        #!/usr/bin/env ruby
+        puts 'hi!'
+        </code></pre>
+        after
 EOS
-      expected_output = <<EOS.sub(/\s*\Z/m, '')
-before
-#{CODERAY_PRE}<pre><code class=\"language-ruby\"><span class=\"doctype\">#!/usr/bin/env ruby</span>
-puts <span class=\"string\"><span class=\"delimiter\">'</span><span class=\"content\">hi!</span><span class=\"delimiter\">'</span></span></code></pre>#{CODERAY_POST}
-after
+      expected_output = <<~EOS.sub(/\s*\Z/m, '')
+        before
+        #{CODERAY_PRE}<pre><code class=\"language-ruby\"><span class=\"doctype\">#!/usr/bin/env ruby</span>
+        puts <span class=\"string\"><span class=\"delimiter\">'</span><span class=\"content\">hi!</span><span class=\"delimiter\">'</span></span></code></pre>#{CODERAY_POST}
+        after
 EOS
 
       # Run filter
@@ -222,19 +224,19 @@ EOS
       assert_equal '  bar', filter.send(:strip, "\n  bar")
 
       # Get input and expected output
-      input = <<EOS
-before
-<pre><code class="language-ruby">
-  def foo
-  end
-</code></pre>
-after
+      input = <<~EOS
+        before
+        <pre><code class="language-ruby">
+          def foo
+          end
+        </code></pre>
+        after
 EOS
-      expected_output = <<EOS.sub(/\s*\Z/m, '')
-before
-#{CODERAY_PRE}<pre><code class="language-ruby">  <span class=\"keyword\">def</span> <span class=\"function\">foo</span>
-  <span class=\"keyword\">end</span></code></pre>#{CODERAY_POST}
-after
+      expected_output = <<~EOS.sub(/\s*\Z/m, '')
+        before
+        #{CODERAY_PRE}<pre><code class="language-ruby">  <span class=\"keyword\">def</span> <span class=\"function\">foo</span>
+          <span class=\"keyword\">end</span></code></pre>#{CODERAY_POST}
+        after
 EOS
 
       # Run filter

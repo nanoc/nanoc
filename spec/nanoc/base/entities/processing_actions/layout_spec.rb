@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::ProcessingActions::Layout do
   let(:action) { described_class.new('/foo.erb', awesome: true) }
 

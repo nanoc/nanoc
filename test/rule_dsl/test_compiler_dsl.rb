@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
@@ -55,14 +57,14 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
     with_site do |site|
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write <<EOS
-compile '*' do
-end
-route '*' do
-end
-postprocess do
-  puts @items.select(&:modified).length
-end
+        io.write <<~EOS
+          compile '*' do
+          end
+          route '*' do
+          end
+          postprocess do
+            puts @items.select(&:modified).length
+          end
 EOS
       end
 
@@ -109,11 +111,11 @@ EOS
     with_site do
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write <<-EOS
-passthrough "/robots/"
+        io.write <<~EOS
+          passthrough "/robots/"
 
-compile '*' do ; end
-route '*' do ; item.identifier.chop + '-xyz' + item[:extension] ; end
+          compile '*' do ; end
+          route '*' do ; item.identifier.chop + '-xyz' + item[:extension] ; end
 EOS
       end
 
@@ -136,8 +138,8 @@ EOS
     with_site do
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write <<EOS
-passthrough "/foo/"
+        io.write <<~EOS
+          passthrough "/foo/"
 EOS
       end
 
@@ -160,16 +162,16 @@ EOS
     with_site do
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write <<EOS
-compile '*' do
-  filter :erb
-end
+        io.write <<~EOS
+          compile '*' do
+            filter :erb
+          end
 
-route '*' do
-  item.identifier + 'index.html'
-end
+          route '*' do
+            item.identifier + 'index.html'
+          end
 
-passthrough "/foo/"
+          passthrough "/foo/"
 EOS
       end
 
@@ -223,10 +225,10 @@ EOS
     with_site do
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write <<EOS
-ignore '/lame/'
+        io.write <<~EOS
+          ignore '/lame/'
 
-passthrough '*'
+          passthrough '*'
 EOS
       end
 
@@ -253,16 +255,16 @@ EOS
     with_site do
       # Create rules
       File.open('Rules', 'w') do |io|
-        io.write <<EOS
-compile '*' do
-  filter :erb
-end
+        io.write <<~EOS
+          compile '*' do
+            filter :erb
+          end
 
-route '*' do
-  item.identifier + 'index.html'
-end
+          route '*' do
+            item.identifier + 'index.html'
+          end
 
-ignore "/foo/"
+          ignore "/foo/"
 EOS
       end
 
