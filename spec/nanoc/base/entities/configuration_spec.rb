@@ -84,6 +84,19 @@ describe Nanoc::Int::Configuration do
     end
   end
 
+  describe '#merge' do
+    let(:hash1) { { foo: { bar: 'baz', baz: ['biz'] } } }
+    let(:hash2) { { foo: { bar: :boz, biz: 'buz' } } }
+    let(:config1) { described_class.new(hash: hash1) }
+    let(:config2) { described_class.new(hash: hash2) }
+
+    subject { config1.merge(config2).to_h }
+
+    it 'contains the recursive merge of both configurations' do
+      expect(subject).to include(foo: { bar: :boz, baz: ['biz'], biz: 'buz' })
+    end
+  end
+
   context 'with environments defined' do
     let(:hash) { { foo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } } }
     let(:config) { described_class.new(hash: hash, env_name: env_name).with_environment }
