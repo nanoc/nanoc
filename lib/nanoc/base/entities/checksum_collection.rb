@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   class ChecksumCollection
     include Nanoc::Int::ContractsSupport

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   class Compiler
     include Nanoc::Int::ContractsSupport

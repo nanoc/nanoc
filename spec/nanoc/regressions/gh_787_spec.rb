@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-787', site: true, stdio: true do
   before do
     File.write('Rules', <<EOS)

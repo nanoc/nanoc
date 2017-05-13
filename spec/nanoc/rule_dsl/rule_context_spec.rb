@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe(Nanoc::RuleDSL::RuleContext) do
   subject(:rule_context) do
     described_class.new(rep: rep, site: site, executor: executor, view_context: view_context)

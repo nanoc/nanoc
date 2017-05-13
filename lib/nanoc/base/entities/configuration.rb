@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # Represents the site configuration.
   #
@@ -38,8 +40,8 @@ module Nanoc::Int
 
     # Configuration environments property key
     ENVIRONMENTS_CONFIG_KEY = :environments
-    NANOC_ENV = 'NANOC_ENV'.freeze
-    NANOC_ENV_DEFAULT = 'default'.freeze
+    NANOC_ENV = 'NANOC_ENV'
+    NANOC_ENV_DEFAULT = 'default'
 
     contract C::KeywordArgs[hash: C::Optional[Hash], env_name: C::Maybe[String]] => C::Any
     # Creates a new configuration with the given hash.

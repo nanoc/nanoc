@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Nanoc::Deploying::Deployers::GitTest < Nanoc::TestCase
   def test_run_with_defaults_options
     # Create deployer
@@ -24,12 +26,12 @@ class Nanoc::Deploying::Deployers::GitTest < Nanoc::TestCase
     # Try running
     git.run
 
-    commands = <<-EOS
-git config --get remote.origin.url
-git checkout master
-git add -A
-git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
-git push origin master
+    commands = <<~EOS
+      git config --get remote.origin.url
+      git checkout master
+      git add -A
+      git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
+      git push origin master
 EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
@@ -60,9 +62,9 @@ EOS
     # Try running
     git.run
 
-    commands = <<-EOS
-git config --get remote.origin.url
-git checkout master
+    commands = <<~EOS
+      git config --get remote.origin.url
+      git checkout master
 EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
@@ -93,12 +95,12 @@ EOS
     # Try running
     git.run
 
-    commands = <<-EOS
-git config --get remote.github.url
-git checkout gh-pages
-git add -A
-git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
-git push -f github gh-pages
+    commands = <<~EOS
+      git config --get remote.github.url
+      git checkout gh-pages
+      git add -A
+      git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
+      git push -f github gh-pages
 EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
@@ -128,12 +130,12 @@ EOS
     # Try running
     git.run
 
-    commands = <<-EOS
-git config --get remote.origin.url
-git checkout master
-git add -A
-git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
-git push origin master
+    commands = <<~EOS
+      git config --get remote.origin.url
+      git checkout master
+      git add -A
+      git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
+      git push origin master
 EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
@@ -164,11 +166,11 @@ EOS
     # Try running
     git.run
 
-    commands = <<-EOS
-git checkout master
-git add -A
-git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
-git push git@github.com:myself/myproject.git master
+    commands = <<~EOS
+      git checkout master
+      git add -A
+      git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
+      git push git@github.com:myself/myproject.git master
 EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
@@ -199,11 +201,11 @@ EOS
     # Try running
     git.run
 
-    commands = <<-EOS
-git checkout master
-git add -A
-git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
-git push https://github.com/nanoc/nanoc.git master
+    commands = <<~EOS
+      git checkout master
+      git add -A
+      git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
+      git push https://github.com/nanoc/nanoc.git master
 EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }

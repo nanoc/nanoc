@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Helpers::Text, helper: true do
   describe '#excerptize' do
     subject { helper.excerptize(string, params) }

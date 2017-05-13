@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-1040', site: true, stdio: true do
   before do
     File.write('content/foo.txt', 'bar=<%= @items["/bar.*"].compiled_content %>')

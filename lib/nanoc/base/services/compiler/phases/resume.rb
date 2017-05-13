@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::Compiler::Phases
   # Provides functionality for suspending and resuming item rep compilation (using fibers).
   class Resume < Abstract

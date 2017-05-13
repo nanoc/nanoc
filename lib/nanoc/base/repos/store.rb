@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # An abstract superclass for classes that need to store data to the
   # filesystem, such as checksums, cached compiled content and dependency

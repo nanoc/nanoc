@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::RuleDSL
   # Contains the processing information for a item.
   #

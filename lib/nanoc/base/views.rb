@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'views/mixins/document_view_mixin'
 require_relative 'views/mixins/mutable_document_view_mixin'
 require_relative 'views/mixins/with_reps_view_mixin'

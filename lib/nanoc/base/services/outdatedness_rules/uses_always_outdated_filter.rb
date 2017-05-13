@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::OutdatednessRules
   class UsesAlwaysOutdatedFilter < Nanoc::Int::OutdatednessRule
     affects_props :raw_content, :attributes, :path

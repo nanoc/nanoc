@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::OutdatednessRules
   class CodeSnippetsModified < Nanoc::Int::OutdatednessRule
     extend Nanoc::Int::Memoization

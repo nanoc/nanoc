@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::RuleDSL
   # Contains methods that will be executed by the site’s `Rules` file.
   #

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::CLI::StreamCleaners::UTF8 do
   subject { described_class.new }
 

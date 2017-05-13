@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # Holds a value that might be generated lazily.
   #

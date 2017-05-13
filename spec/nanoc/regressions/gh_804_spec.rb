@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-804', site: true, stdio: true do
   before do
     File.write('content/item.md', 'Stuff!')
@@ -8,11 +10,11 @@ describe 'GH-804', site: true, stdio: true do
   end
 EOS
 
-    File.write('Checks', <<EOS)
-check :donkey do
-  self.add_issue('Not enough donkeys')
-  self.add_issue('Too many cats', subject: '/catlady.md')
-end
+    File.write('Checks', <<~EOS)
+      check :donkey do
+        self.add_issue('Not enough donkeys')
+        self.add_issue('Too many cats', subject: '/catlady.md')
+      end
 EOS
   end
 

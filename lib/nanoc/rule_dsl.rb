@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'rule_dsl/compiler_dsl'
 require_relative 'rule_dsl/action_provider'
 require_relative 'rule_dsl/recording_executor'

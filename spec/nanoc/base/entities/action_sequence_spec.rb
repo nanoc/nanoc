@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::ActionSequence do
   let(:action_sequence) { raise 'override me' }
 

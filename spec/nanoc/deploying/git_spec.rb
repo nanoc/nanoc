@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Deploying::Deployers::Git, stdio: true do
   let(:deployer) { described_class.new(output_dir, options, dry_run: dry_run) }
 
@@ -12,8 +14,9 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
   let(:forced_options) { {} }
 
   def run_and_get_stdout(*args)
-    stdout = ''
-    piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: '')
+    stdout = String.new
+    stderr = String.new
+    piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
     piper.run(args, '')
     stdout
   end

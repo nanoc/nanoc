@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Extra::ParallelCollection do
   subject(:col) { described_class.new(wrapped, parallelism: parallelism) }
   let(:wrapped) { [1, 2, 3, 4, 5] }

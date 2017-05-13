@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Helpers::Breadcrumbs, helper: true do
   before do
     allow(ctx.dependency_tracker).to receive(:enter)

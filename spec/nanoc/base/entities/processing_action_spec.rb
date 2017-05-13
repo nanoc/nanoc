@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::ProcessingAction do
   let(:action) { described_class.new }
 

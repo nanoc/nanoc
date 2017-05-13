@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::CLI
   # Catches errors and prints nice diagnostic messages, then exits.
   #

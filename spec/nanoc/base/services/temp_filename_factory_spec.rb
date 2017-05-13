@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::TempFilenameFactory do
   subject(:factory) { described_class.new }
 

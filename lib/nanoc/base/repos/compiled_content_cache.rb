@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # Represents a cache than can be used to store already compiled content,
   # to prevent it from being needlessly recompiled.

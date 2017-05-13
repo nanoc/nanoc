@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-769', site: true do
   before do
     File.write('content/index.md', 'Index!')

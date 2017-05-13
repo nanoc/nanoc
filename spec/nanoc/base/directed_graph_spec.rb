@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::DirectedGraph do
   subject(:graph) { described_class.new([1, 2, 3]) }
 

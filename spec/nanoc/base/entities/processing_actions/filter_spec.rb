@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::ProcessingActions::Filter do
   let(:action) { described_class.new(:foo, awesome: true) }
 

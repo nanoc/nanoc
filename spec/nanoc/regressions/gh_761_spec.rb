@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-761', site: true do
   before do
     File.write('content/donkey.md', 'Compiled content donkey!')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Identifier do
   describe '.from' do
     subject { described_class.from(arg) }

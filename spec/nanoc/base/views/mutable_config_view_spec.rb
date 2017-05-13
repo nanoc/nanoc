@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::MutableConfigView do
   let(:config) { {} }
   let(:view) { described_class.new(config, nil) }

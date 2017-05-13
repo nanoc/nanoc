@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Telemetry
   class LabelledCounter
     def initialize

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::CLI::StreamCleaners
   # Simplifies output by replacing UTF-8 characters with their ASCII decompositions.
   #

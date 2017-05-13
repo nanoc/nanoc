@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Filter do
   describe '.define' do
     context 'simple filter' do

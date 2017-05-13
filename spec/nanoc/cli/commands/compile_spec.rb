@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::CLI::Commands::CompileListeners::Abstract do
   let(:klass) do
     Class.new(described_class) do

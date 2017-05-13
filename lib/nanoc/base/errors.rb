@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # Module that contains all Nanoc-specific errors.
   #
@@ -78,7 +80,7 @@ module Nanoc::Int
         cycle.reverse_each.with_index do |r, i|
           msg_bits << "    (#{i + 1}) item #{r.item.identifier}, rep #{r.name.inspect}, uses compiled content of"
         end
-        msg_bits.last << ' (1)'
+        msg_bits << msg_bits.pop + ' (1)'
 
         super(msg_bits.map { |x| x + "\n" }.join(''))
       end

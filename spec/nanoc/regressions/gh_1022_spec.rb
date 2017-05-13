@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-1022', site: true, stdio: true do
   before do
     File.write('content/ubuntu-16.10-server-amd64.iso.txt', 'torrent contents')

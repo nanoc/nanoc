@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc
   # Nanoc::Filter is responsible for filtering items. It is the superclass
   # for all textual filters.
@@ -25,7 +27,7 @@ module Nanoc
   # @abstract Subclass and override {#run} to implement a custom filter.
   class Filter < Nanoc::Int::Context
     # @api private
-    TMP_BINARY_ITEMS_DIR = 'binary_items'.freeze
+    TMP_BINARY_ITEMS_DIR = 'binary_items'
 
     extend DDPlugin::Plugin
 

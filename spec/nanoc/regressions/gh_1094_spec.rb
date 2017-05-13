@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-1094', site: true, stdio: true do
   before do
     File.write('content/a.dat', 'foo')

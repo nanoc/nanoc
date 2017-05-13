@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 usage 'deploy [target] [options]'
 summary 'deploy the compiled site'
 description "

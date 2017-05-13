@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc
   # @api private
   module Spec
@@ -11,7 +13,7 @@ module Nanoc
       def initialize(mod)
         @mod = mod
 
-        @erbout = ''
+        @erbout = String.new
         @action_sequence = {}
         @config = Nanoc::Int::Configuration.new.with_defaults
         @reps = Nanoc::Int::ItemRepRepo.new

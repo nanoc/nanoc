@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::IdentifiableCollection do
   subject(:identifiable_collection) { described_class.new(config, objects) }
 

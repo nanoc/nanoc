@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::RuleDSL::RulesCollection do
   let(:rules_collection) { described_class.new }
 

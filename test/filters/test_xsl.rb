@@ -1,84 +1,86 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 require 'tempfile'
 
 class Nanoc::Filters::XSLTest < Nanoc::TestCase
-  SAMPLE_XSL = <<-EOS.freeze
-<?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"/>
-  <xsl:template match="/">
-    <html>
-      <head>
-        <title><xsl:value-of select="report/title"/></title>
-      </head>
-      <body>
-        <h1><xsl:value-of select="report/title"/></h1>
-      </body>
-    </html>
-  </xsl:template>
-</xsl:stylesheet>
+  SAMPLE_XSL = <<~EOS
+    <?xml version="1.0" encoding="utf-8"?>
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"/>
+      <xsl:template match="/">
+        <html>
+          <head>
+            <title><xsl:value-of select="report/title"/></title>
+          </head>
+          <body>
+            <h1><xsl:value-of select="report/title"/></h1>
+          </body>
+        </html>
+      </xsl:template>
+    </xsl:stylesheet>
 EOS
 
-  SAMPLE_XML_IN = <<-EOS.freeze
-<?xml version="1.0" encoding="utf-8"?>
-<report>
-  <title>My Report</title>
-</report>
+  SAMPLE_XML_IN = <<~EOS
+    <?xml version="1.0" encoding="utf-8"?>
+    <report>
+      <title>My Report</title>
+    </report>
 EOS
 
   SAMPLE_XML_OUT = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m
 
-  SAMPLE_XSL_WITH_PARAMS = <<-EOS.freeze
-<?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"/>
-  <xsl:param name="foo"/>
-  <xsl:template match="/">
-    <html>
-      <head>
-        <title><xsl:value-of select="report/title"/></title>
-      </head>
-      <body>
-        <h1><xsl:value-of select="$foo"/></h1>
-      </body>
-    </html>
-  </xsl:template>
-</xsl:stylesheet>
+  SAMPLE_XSL_WITH_PARAMS = <<~EOS
+    <?xml version="1.0" encoding="utf-8"?>
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"/>
+      <xsl:param name="foo"/>
+      <xsl:template match="/">
+        <html>
+          <head>
+            <title><xsl:value-of select="report/title"/></title>
+          </head>
+          <body>
+            <h1><xsl:value-of select="$foo"/></h1>
+          </body>
+        </html>
+      </xsl:template>
+    </xsl:stylesheet>
 EOS
 
-  SAMPLE_XML_IN_WITH_PARAMS = <<-EOS.freeze
-<?xml version="1.0" encoding="utf-8"?>
-<report>
-  <title>My Report</title>
-</report>
+  SAMPLE_XML_IN_WITH_PARAMS = <<~EOS
+    <?xml version="1.0" encoding="utf-8"?>
+    <report>
+      <title>My Report</title>
+    </report>
 EOS
 
   SAMPLE_XML_OUT_WITH_PARAMS = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>bar</h1>\s*</body>\s*</html>\s*\Z}m
 
-  SAMPLE_XSL_WITH_OMIT_XML_DECL = <<-EOS.freeze
-<?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"
-              omit-xml-declaration="yes"/>
-  <xsl:template match="/">
-    <html>
-      <head>
-        <title><xsl:value-of select="report/title"/></title>
-      </head>
-      <body>
-        <h1><xsl:value-of select="report/title"/></h1>
-      </body>
-    </html>
-  </xsl:template>
-</xsl:stylesheet>
+  SAMPLE_XSL_WITH_OMIT_XML_DECL = <<~EOS
+    <?xml version="1.0" encoding="utf-8"?>
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"
+                  omit-xml-declaration="yes"/>
+      <xsl:template match="/">
+        <html>
+          <head>
+            <title><xsl:value-of select="report/title"/></title>
+          </head>
+          <body>
+            <h1><xsl:value-of select="report/title"/></h1>
+          </body>
+        </html>
+      </xsl:template>
+    </xsl:stylesheet>
 EOS
 
-  SAMPLE_XML_IN_WITH_OMIT_XML_DECL = <<-EOS.freeze
-<?xml version="1.0" encoding="utf-8"?>
-<report>
-  <title>My Report</title>
-</report>
+  SAMPLE_XML_IN_WITH_OMIT_XML_DECL = <<~EOS
+    <?xml version="1.0" encoding="utf-8"?>
+    <report>
+      <title>My Report</title>
+    </report>
 EOS
 
   SAMPLE_XML_OUT_WITH_OMIT_XML_DECL = %r{\A<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m

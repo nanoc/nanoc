@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 describe 'GH-1067', site: true, stdio: true do
   before do
-    File.write('nanoc.yaml', <<EOS)
-environments:
-  default:
-    build: dev
-  prod:
-    build: prod
+    File.write('nanoc.yaml', <<~EOS)
+      environments:
+        default:
+          build: dev
+        prod:
+          build: prod
 EOS
 
     File.write('content/foo.erb', 'build=<%= @config[:build] %>')

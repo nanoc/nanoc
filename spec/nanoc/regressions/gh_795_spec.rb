@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'GH-795', site: true, stdio: true do
   before do
     File.write('content/items.md', 'Frozen? <%= @items.unwrap.frozen? %>!')

@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 describe 'GH-970 (show-data)', site: true, stdio: true do
   before do
     File.write('content/foo.md', 'foo')
     File.write('content/bar.md', '<%= @items["/foo.*"].compiled_content %>')
 
-    File.write('Rules', <<EOS)
-compile '/foo.*' do
-  write '/foo.html'
-end
+    File.write('Rules', <<~EOS)
+      compile '/foo.*' do
+        write '/foo.html'
+      end
 
-compile '/bar.*' do
-  filter :erb
-  write '/bar.html'
-end
+      compile '/bar.*' do
+        filter :erb
+        write '/bar.html'
+      end
 EOS
   end
 

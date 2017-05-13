@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::ProcessingActions::Snapshot do
   let(:action) { described_class.new([:before_layout], ['/foo.md']) }
 

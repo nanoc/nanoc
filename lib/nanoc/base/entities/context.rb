@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # Provides a context and a binding for use in filters such as the ERB and
   # Haml ones.

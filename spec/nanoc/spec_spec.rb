@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Spec::HelperContext do
   let(:helper) do
     Module.new {}

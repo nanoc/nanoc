@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true do
   let(:listener) { described_class.new(reps: reps) }
 

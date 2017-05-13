@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc
   class PostCompileItemRepView < ::Nanoc::ItemRepView
     def compiled_content(snapshot: nil)

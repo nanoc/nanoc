@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::RuleDSL
   class ActionProvider < Nanoc::Int::ActionProvider
     identifier :rule_dsl

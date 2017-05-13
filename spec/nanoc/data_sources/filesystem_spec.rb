@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::DataSources::Filesystem do
   let(:data_source) { Nanoc::DataSources::Filesystem.new(site.config, nil, nil, params) }
   let(:params) { {} }

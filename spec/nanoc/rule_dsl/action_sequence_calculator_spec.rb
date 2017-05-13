@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
   subject(:action_sequence_calculator) do
     described_class.new(site: site, rules_collection: rules_collection)

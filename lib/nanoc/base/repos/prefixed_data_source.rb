@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   class PrefixedDataSource < Nanoc::DataSource
     def initialize(data_source, items_prefix, layouts_prefix)

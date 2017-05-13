@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Helpers
   # @see http://nanoc.ws/doc/reference/helpers/#capturing
   module Capturing
@@ -128,7 +130,7 @@ module Nanoc::Helpers
               "of the capture, optionally params, and the content) but got #{args.size} instead"
           end
 
-        _erbout = '' # rubocop:disable Lint/UnderscorePrefixedVariableName
+        _erbout = String.new # rubocop:disable Lint/UnderscorePrefixedVariableName
         SetContent.new(name, params, @item).run { _erbout << content }
       else # Get content
         if args.size != 2
@@ -155,7 +157,7 @@ module Nanoc::Helpers
       erbout_addition = erbout[erbout_length..-1]
 
       # Remove addition
-      erbout[erbout_length..-1] = ''
+      erbout[erbout_length..-1] = String.new
 
       # Depending on how the filter outputs, the result might be a
       # single string or an array of strings (slim outputs the latter).

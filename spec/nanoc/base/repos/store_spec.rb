@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Store do
   describe '#tmp_path_for' do
     context 'passing site' do

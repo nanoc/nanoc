@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::CLI
   # A simple ANSI colorizer for strings. When given a string and a list of
   # attributes, it returns a colorized string.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
@@ -18,7 +20,7 @@ class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
 
   def test_with_frozen_input
     if_have 'nokogiri' do
-      input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'.freeze
+      input = '<pre title="moo"><code class="language-ruby"># comment</code></pre>'
       input.freeze
 
       filter = ::Nanoc::Filters::ColorizeSyntax.new
@@ -32,16 +34,16 @@ class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
       # Get input and expected output
-      input = <<EOS
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Foo</title>
-  </head>
-  <body>
-    <pre title="moo"><code class="language-ruby"># comment</code></pre>
-  </body>
-</html>
+      input = <<~EOS
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Foo</title>
+          </head>
+          <body>
+            <pre title="moo"><code class="language-ruby"># comment</code></pre>
+          </body>
+        </html>
 EOS
       expected_output_regex = %r{^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>}
 
@@ -56,17 +58,17 @@ EOS
     filter = ::Nanoc::Filters::ColorizeSyntax.new
 
     # Get input and expected output
-    input = <<EOS
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Foo</title>
-</head>
-<body>
-  <pre title="moo"><code class="language-ruby"># comment</code></pre>
-</body>
-</html>
+    input = <<~EOS
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Foo</title>
+      </head>
+      <body>
+        <pre title="moo"><code class="language-ruby"># comment</code></pre>
+      </body>
+      </html>
 EOS
     expected_output_regex = %r{^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta charset="utf-8">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>}
 

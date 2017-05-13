@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
@@ -66,16 +68,16 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
     end
 
-    content = <<EOS
-head
-<% content_for :box do %>
-  basic
-<% end %>
-<% content_for :outerbox do %>
-  before <%= content_for @item, :box %> after
-<% end %>
-<%= content_for @item, :outerbox %>
-foot
+    content = <<~EOS
+      head
+      <% content_for :box do %>
+        basic
+      <% end %>
+      <% content_for :outerbox do %>
+        before <%= content_for @item, :box %> after
+      <% end %>
+      <%= content_for @item, :outerbox %>
+      foot
 EOS
 
     item = Nanoc::Int::Item.new('content', {}, '/')

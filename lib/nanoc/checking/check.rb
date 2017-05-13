@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Checking
   # @api private
   class OutputDirNotFoundError < Nanoc::Int::Errors::Generic

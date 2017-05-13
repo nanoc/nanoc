@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 require 'net/https'
 require 'timeout'
@@ -114,7 +116,7 @@ module ::Nanoc::Checking::Checks
         end
 
       if url.query
-        path << '?' << url.query
+        path = path + '?' + url.query
       end
 
       path

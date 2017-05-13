@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::CLI
   # A command runner subclass for Nanoc commands that adds Nanoc-specific
   # convenience methods and error handling.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::CLI::Commands::CompileListeners::DiffGenerator do
   describe '.enable_for?' do
     subject { described_class.enable_for?(command_runner) }

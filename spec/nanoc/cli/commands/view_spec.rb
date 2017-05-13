@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 
 describe Nanoc::CLI::Commands::View, site: true, stdio: true do

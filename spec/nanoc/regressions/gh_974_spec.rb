@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 describe 'GH-974', site: true, stdio: true do
   before do
     File.write('content/foo.md', 'foo')
 
-    File.write('Rules', <<EOS)
-compile '/foo.*' do
-  write item.identifier
-end
+    File.write('Rules', <<~EOS)
+      compile '/foo.*' do
+        write item.identifier
+      end
 EOS
   end
 

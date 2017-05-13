@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Checking::Checks
   # A check that verifies HTML files do not reference external resources with
   # URLs that would trigger "mixed content" warnings.

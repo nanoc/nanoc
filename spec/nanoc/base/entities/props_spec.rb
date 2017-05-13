@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Props do
   let(:props) { described_class.new }
 

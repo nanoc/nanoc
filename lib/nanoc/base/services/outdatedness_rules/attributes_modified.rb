@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::OutdatednessRules
   class AttributesModified < Nanoc::Int::OutdatednessRule
     include Nanoc::Int::ContractsSupport

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ::Nanoc::Checking::Checks
   # @api private
   class W3CValidator < ::Nanoc::Checking::Check

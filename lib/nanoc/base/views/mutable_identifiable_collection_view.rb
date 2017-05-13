@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc
   class MutableIdentifiableCollectionView < Nanoc::IdentifiableCollectionView
     # Deletes every object for which the block evaluates to true.

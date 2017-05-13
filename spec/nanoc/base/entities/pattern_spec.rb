@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Pattern do
   describe '.from' do
     it 'converts from string' do

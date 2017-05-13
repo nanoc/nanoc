@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'repos/store'
 
 require_relative 'repos/checksum_store'

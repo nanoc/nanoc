@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Helpers::Tagging, helper: true do
   describe '#tags_for' do
     subject { helper.tags_for(item, params) }

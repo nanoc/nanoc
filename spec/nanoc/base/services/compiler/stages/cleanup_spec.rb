@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Compiler::Stages::Cleanup do
   let(:stage) { described_class.new(config) }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # Stores action sequences for objects that can be run through a rule (item
   # representations and layouts).

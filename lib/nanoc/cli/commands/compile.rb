@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 usage 'compile [options]'
 summary 'compile items of this site'
-description <<-EOS
-Compile all items of the current site.
+description <<~EOS
+  Compile all items of the current site.
 EOS
 flag nil, :profile, 'profile compilation' if Nanoc::Feature.enabled?(Nanoc::Feature::PROFILER)
 flag nil, :diff, 'generate diff'

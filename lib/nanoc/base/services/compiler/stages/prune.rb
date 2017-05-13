@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::Compiler::Stages
   class Prune
     def initialize(config:, reps:)

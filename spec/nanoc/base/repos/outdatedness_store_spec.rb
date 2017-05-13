@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::OutdatednessStore do
   subject(:store) { described_class.new(site: site, reps: reps) }
 

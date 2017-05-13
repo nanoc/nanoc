@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::ItemRepView do
   let(:view_context) do
     Nanoc::ViewContext.new(

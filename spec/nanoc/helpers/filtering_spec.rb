@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Helpers::Filtering, helper: true do
   describe '#filter' do
     before do

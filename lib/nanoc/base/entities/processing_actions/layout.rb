@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::ProcessingActions
   class Layout < Nanoc::Int::ProcessingAction
     # layout '/foo.erb'

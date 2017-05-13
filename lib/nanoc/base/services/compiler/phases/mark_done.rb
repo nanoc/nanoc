@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::Compiler::Phases
   class MarkDone < Abstract
     include Nanoc::Int::ContractsSupport

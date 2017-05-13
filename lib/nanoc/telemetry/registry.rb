@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Telemetry
   class Registry
     def initialize

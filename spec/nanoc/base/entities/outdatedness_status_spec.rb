@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::OutdatednessStatus do
   let(:status) { described_class.new }
 

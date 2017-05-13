@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc
   class IdentifiableCollectionView < ::Nanoc::View
     include Enumerable

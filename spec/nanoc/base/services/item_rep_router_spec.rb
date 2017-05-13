@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe(Nanoc::Int::ItemRepRouter) do
   subject(:item_rep_router) { described_class.new(reps, action_provider, site) }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # @api private
 class ::Sass::Importers::Filesystem
   alias _orig_find _find

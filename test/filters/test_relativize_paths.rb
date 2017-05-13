@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'helper'
 
 class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
@@ -97,16 +99,16 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     end
 
     # Set content
-    raw_content = <<EOS
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello</title>
-  </head>
-  <body>
-    <a href=/foo>foo</a>
-  </body>
-</html>
+    raw_content = <<~EOS
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Hello</title>
+        </head>
+        <body>
+          <a href=/foo>foo</a>
+        </body>
+      </html>
 EOS
     expected0 = %r{<a href="\.\./\.\.">foo</a>}
     expected1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
@@ -135,16 +137,16 @@ EOS
     end
 
     # Set content
-    raw_content = <<EOS
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello</title>
-  </head>
-  <body>
-    <a href=/foo>foo</a>
-  </body>
-</html>
+    raw_content = <<~EOS
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Hello</title>
+        </head>
+        <body>
+          <a href=/foo>foo</a>
+        </body>
+      </html>
 EOS
     expected0 = %r{<a href="\.\./\.\.">foo</a>}
     expected1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>\s*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
@@ -602,11 +604,11 @@ EOS
 
       # Set content
       expected = /<bar boo="\.\.\/\.\.">baz<\/bar>/
-      raw_content = <<-XML
-<?xml version="1.0" encoding="utf-8"?>
-<foo>
-  <bar boo="/foo">baz</bar>
-</foo>
+      raw_content = <<~XML
+        <?xml version="1.0" encoding="utf-8"?>
+        <foo>
+          <bar boo="/foo">baz</bar>
+        </foo>
 XML
 
       actual_content = filter.setup_and_run(raw_content, type: :xml, select: ['*/@boo'])
@@ -634,10 +636,10 @@ XML
       end
 
       # Set content
-      raw_content = <<-XML
-<foo>
-  <bar><far href="/foo">baz</far></bar>
-</foo>
+      raw_content = <<~XML
+        <foo>
+          <bar><far href="/foo">baz</far></bar>
+        </foo>
 XML
 
       actual_content = filter.setup_and_run(raw_content, type: :xml, select: ['far/@href'])
@@ -666,10 +668,10 @@ XML
       end
 
       # Set content
-      raw_content = <<-XML
-<foo xmlns="http://example.org">
-  <bar><a href="/foo">baz</a></bar>
-</foo>
+      raw_content = <<~XML
+        <foo xmlns="http://example.org">
+          <bar><a href="/foo">baz</a></bar>
+        </foo>
 XML
 
       options = {
@@ -703,18 +705,18 @@ XML
       end
 
       # Set content
-      raw_content = <<-XML
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <link rel="stylesheet" href="/css"/>
-    <script src="/js"></script>
-  </head>
-  <body>
-    <a href="/foo">bar</a>
-    <img src="/img"/>
-  </body>
-</html>
+      raw_content = <<~XML
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml">
+          <head>
+            <link rel="stylesheet" href="/css"/>
+            <script src="/js"></script>
+          </head>
+          <body>
+            <a href="/foo">bar</a>
+            <img src="/img"/>
+          </body>
+        </html>
 XML
 
       actual_content = filter.setup_and_run(raw_content, type: :xhtml)
@@ -745,11 +747,11 @@ XML
       end
 
       # Set content
-      raw_content = <<-XML
-<a href="/foo">bar</a>
-<p>
-  <img src="/img"/>
-</p>
+      raw_content = <<~XML
+        <a href="/foo">bar</a>
+        <p>
+          <img src="/img"/>
+        </p>
 XML
 
       expected_content =

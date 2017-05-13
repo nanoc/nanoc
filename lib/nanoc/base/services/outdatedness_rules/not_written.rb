@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::OutdatednessRules
   class NotWritten < Nanoc::Int::OutdatednessRule
     affects_props :raw_content, :attributes, :compiled_content, :path

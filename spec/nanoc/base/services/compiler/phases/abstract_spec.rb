@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::Compiler::Phases::Abstract do
   subject(:phase) do
     described_class.new(wrapped: wrapped)

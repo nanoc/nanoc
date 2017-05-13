@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::CLI::Commands::CompileListeners
   class DebugPrinter < Abstract
     # @see Listener#enable_for?

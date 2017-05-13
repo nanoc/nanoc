@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int
   # Creates checksums for given objects.
   #
@@ -8,7 +10,7 @@ module Nanoc::Int
   class Checksummer
     class VerboseDigest
       def initialize
-        @str = ''
+        @str = String.new
       end
 
       def update(str)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::ItemRepSelector do
   let(:selector) { described_class.new(reps_for_selector) }
 

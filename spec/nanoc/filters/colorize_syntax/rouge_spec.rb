@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rouge'
 
 describe Nanoc::Filters::ColorizeSyntax, filter: true, rouge: true do
@@ -7,21 +9,21 @@ describe Nanoc::Filters::ColorizeSyntax, filter: true, rouge: true do
   let(:wrap) { false }
   let(:css_class) { 'highlight' }
   let(:input) do
-    <<-EOS.freeze
-before
-<pre><code class="language-ruby">
-  def foo
-  end
-</code></pre>
-after
+    <<~EOS
+      before
+      <pre><code class="language-ruby">
+        def foo
+        end
+      </code></pre>
+      after
     EOS
   end
   let(:output) do
-    <<-EOS
-before
-<pre><code class=\"language-ruby#{wrap ? " #{css_class}" : ''}\">  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
-  <span class=\"k\">end</span></code></pre>
-after
+    <<~EOS
+      before
+      <pre><code class=\"language-ruby#{wrap ? " #{css_class}" : ''}\">  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
+        <span class=\"k\">end</span></code></pre>
+      after
     EOS
   end
 
@@ -49,16 +51,16 @@ after
         let(:line_numbers) { true }
         let(:params) { super().merge(line_numbers: line_numbers) }
         let(:output) do
-          <<-EOS
-before
-<pre><code class="language-ruby"><table style="border-spacing: 0"><tbody><tr>
-<td class="gutter gl" style="text-align: right"><pre class="lineno">1
-2</pre></td>
-<td class="code"><pre>  <span class="k">def</span> <span class="nf">foo</span>
-  <span class="k">end</span><span class="w">
-</span></pre></td>
-</tr></tbody></table></code></pre>
-after
+          <<~EOS
+            before
+            <pre><code class="language-ruby"><table style="border-spacing: 0"><tbody><tr>
+            <td class="gutter gl" style="text-align: right"><pre class="lineno">1
+            2</pre></td>
+            <td class="code"><pre>  <span class="k">def</span> <span class="nf">foo</span>
+              <span class="k">end</span><span class="w">
+            </span></pre></td>
+            </tr></tbody></table></code></pre>
+            after
           EOS
         end
 
@@ -95,16 +97,16 @@ after
           let(:line_numbers) { true }
           let(:params) { super().merge(line_numbers: line_numbers) }
           let(:output) do
-            <<-EOS
-before
-<pre><code class="language-ruby"><table class="rouge-table"><tbody><tr>
-<td class="rouge-gutter gl"><pre class="lineno">1
-2
-</pre></td>
-<td class="rouge-code"><pre>  <span class="k">def</span> <span class="nf">foo</span>
-  <span class="k">end</span></pre></td>
-</tr></tbody></table></code></pre>
-after
+            <<~EOS
+              before
+              <pre><code class="language-ruby"><table class="rouge-table"><tbody><tr>
+              <td class="rouge-gutter gl"><pre class="lineno">1
+              2
+              </pre></td>
+              <td class="rouge-code"><pre>  <span class="k">def</span> <span class="nf">foo</span>
+                <span class="k">end</span></pre></td>
+              </tr></tbody></table></code></pre>
+              after
             EOS
           end
 
@@ -121,11 +123,11 @@ after
           context 'with github theme' do
             let(:theme) { Rouge::Themes::Github.new }
             let(:output) do
-              <<-EOS
-before
-<pre><code class="language-ruby">  <span style="color: #000000;font-weight: bold">def</span> <span style="color: #990000;font-weight: bold">foo</span>
-  <span style="color: #000000;font-weight: bold">end</span></code></pre>
-after
+              <<~EOS
+                before
+                <pre><code class="language-ruby">  <span style="color: #000000;font-weight: bold">def</span> <span style="color: #990000;font-weight: bold">foo</span>
+                  <span style="color: #000000;font-weight: bold">end</span></code></pre>
+                after
               EOS
             end
 
@@ -135,11 +137,11 @@ after
           context 'with colorful theme' do
             let(:theme) { Rouge::Themes::Colorful.new }
             let(:output) do
-              <<-EOS
-before
-<pre><code class="language-ruby">  <span style="color: #080;font-weight: bold">def</span> <span style="color: #06B;font-weight: bold">foo</span>
-  <span style="color: #080;font-weight: bold">end</span></code></pre>
-after
+              <<~EOS
+                before
+                <pre><code class="language-ruby">  <span style="color: #080;font-weight: bold">def</span> <span style="color: #06B;font-weight: bold">foo</span>
+                  <span style="color: #080;font-weight: bold">end</span></code></pre>
+                after
               EOS
             end
 
@@ -150,13 +152,13 @@ after
         context 'with linewise' do
           let(:formatter) { Rouge::Formatters::HTMLLinewise.new(Rouge::Formatters::HTML.new) }
           let(:output) do
-            <<-EOS
-before
-<pre><code class="language-ruby"><div class="line-1">  <span class="k">def</span> <span class="nf">foo</span>
-</div>
-<div class="line-2">  <span class="k">end</span>
-</div></code></pre>
-after
+            <<~EOS
+              before
+              <pre><code class="language-ruby"><div class="line-1">  <span class="k">def</span> <span class="nf">foo</span>
+              </div>
+              <div class="line-2">  <span class="k">end</span>
+              </div></code></pre>
+              after
             EOS
           end
 
@@ -174,16 +176,16 @@ after
         context 'with table' do
           let(:formatter) { Rouge::Formatters::HTMLTable.new(Rouge::Formatters::HTML.new) }
           let(:output) do
-            <<-EOS
-before
-<pre><code class="language-ruby"><table class="rouge-table"><tbody><tr>
-<td class="rouge-gutter gl"><pre class="lineno">1
-2
-</pre></td>
-<td class="rouge-code"><pre>  <span class="k">def</span> <span class="nf">foo</span>
-  <span class="k">end</span></pre></td>
-</tr></tbody></table></code></pre>
-after
+            <<~EOS
+              before
+              <pre><code class="language-ruby"><table class="rouge-table"><tbody><tr>
+              <td class="rouge-gutter gl"><pre class="lineno">1
+              2
+              </pre></td>
+              <td class="rouge-code"><pre>  <span class="k">def</span> <span class="nf">foo</span>
+                <span class="k">end</span></pre></td>
+              </tr></tbody></table></code></pre>
+              after
             EOS
           end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nanoc::Int::OutdatednessRules
   class RulesModified < Nanoc::Int::OutdatednessRule
     affects_props :compiled_content, :path
