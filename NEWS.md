@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.7.10 (2017-05-14)
+
+Fixes:
+
+* Fixed behavior of `parent_config_file` so that it merges, rather than overwrites (#1176) [Gregory Pakosz]
+
+Enhancements:
+
+* Made `slim` filter show the filename in error messages (#1175) [Alexander Groß]
+* Added `#use_helper` as an alternative to `#include` for enabling helpers (#1170)
+
 ## 4.7.9 (2017-05-01)
 
 Fixes:
