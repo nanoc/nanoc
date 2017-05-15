@@ -51,20 +51,6 @@ class Nanoc::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
     end
   end
 
-  def test_fallback_to_get_when_head_is_not_allowed
-    with_site do |site|
-      # Create check
-      check = Nanoc::Checking::Checks::ExternalLinks.create(site)
-      def check.request_url_once(url, req_method = Net::HTTP::Head)
-        Net::HTTPResponse.new('1.1', req_method == Net::HTTP::Head || url.path == '/405' ? '405' : '200', 'okay')
-      end
-
-      # Test
-      assert_nil check.validate('http://127.0.0.1:9204')
-      refute_nil check.validate('http://127.0.0.1:9204/405')
-    end
-  end
-
   def test_path_for_url
     with_site do |site|
       check = Nanoc::Checking::Checks::ExternalLinks.create(site)
