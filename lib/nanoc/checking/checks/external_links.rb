@@ -69,13 +69,10 @@ module ::Nanoc::Checking::Checks
         begin
           Timeout.timeout(timeouts[i]) do
             res = request_url_once(url)
-            if res.code == '405'
-              res = request_url_once(url, Net::HTTP::Get)
-            end
           end
         rescue => e
           last_err = e
-          next # can not allow
+          next
         end
 
         if res.code =~ /^3..$/
@@ -122,8 +119,8 @@ module ::Nanoc::Checking::Checks
       path
     end
 
-    def request_url_once(url, req_method = Net::HTTP::Head)
-      req = req_method.new(path_for_url(url))
+    def request_url_once(url)
+      req = Net::HTTP::Get.new(path_for_url(url))
       http = Net::HTTP.new(url.host, url.port)
       if url.instance_of? URI::HTTPS
         http.use_ssl = true
