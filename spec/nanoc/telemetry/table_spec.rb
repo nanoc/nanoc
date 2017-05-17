@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Telemetry::Table do
   let(:table) { described_class.new(rows) }
 
