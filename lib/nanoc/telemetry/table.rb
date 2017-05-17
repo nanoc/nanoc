@@ -13,7 +13,7 @@ module Nanoc::Telemetry
       [].tap do |lines|
         lines << row_to_s(@rows[0], column_lengths)
         lines << separator(column_lengths)
-        lines.concat(@rows.map { |r| row_to_s(r, column_lengths) })
+        lines.concat(@rows.drop(1).map { |r| row_to_s(r, column_lengths) })
       end.join("\n")
     end
 
