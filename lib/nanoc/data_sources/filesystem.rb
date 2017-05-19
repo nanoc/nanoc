@@ -16,9 +16,16 @@ module Nanoc::DataSources
   #
   # The metadata for items and layouts can be stored in a separate file with
   # the same base name but with the `.yaml` extension. If such a file is
-  # found, metadata is read from that file. Alternatively, the content file
-  # itself can start with a metadata section: it can be stored at the top of
-  # the file, between `---` (three dashes) separators. For example:
+  # found, metadata is read from that file. Metadata file extension can be
+  # redefined with `meta_ext` in the data source configuration:
+  #
+  #     data_sources:
+  #       - type:         filesystem
+  #         meta_ext:     .yml
+  #
+  # Alternatively, the content file itself can start with a metadata section: it
+  # can be stored at the top of the file, between `---` (three dashes) separators.
+  # For example:
   #
   #     ---
   #     title: "Moo!"
@@ -238,6 +245,10 @@ module Nanoc::DataSources
       end
     end
 
+    def meta_ext
+      config.fetch(:meta_ext, '.yaml')
+    end
+
     # e.g.
     #
     #   {
@@ -255,8 +266,8 @@ module Nanoc::DataSources
 
       by_basename.each_pair do |basename, filenames|
         # Divide
-        meta_filenames    = filenames.select { |fn| ext_of(fn) == '.yaml' }
-        content_filenames = filenames.reject { |fn| ext_of(fn) == '.yaml' }
+        meta_filenames    = filenames.select { |fn| ext_of(fn) == meta_ext }
+        content_filenames = filenames.reject { |fn| ext_of(fn) == meta_ext }
 
         # Check number of files per type
         unless [0, 1].include?(meta_filenames.size)
@@ -270,7 +281,7 @@ module Nanoc::DataSources
 
         all[basename] = []
         all[basename][0] =
-          meta_filenames[0] ? 'yaml' : nil
+          meta_filenames[0] ? meta_ext[1..-1] : nil
         all[basename][1] =
           content_filenames.any? ? content_filenames.map { |fn| ext_of(fn)[1..-1] || '' } : [nil]
       end
