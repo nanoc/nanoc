@@ -277,3 +277,31 @@ RSpec::Matchers.define :send_notification do |name, *expected_args|
     "expected that proc would not send notification #{name.inspect} with args #{expected_args.inspect}"
   end
 end
+
+RSpec::Matchers.define :leak_open_files do |_name, *_expected_args|
+  supports_block_expectations
+
+  match do |actual|
+    open_files_before = []
+    ObjectSpace.each_object(File) { |f| open_files_before << f.fileno unless f.closed? }
+
+    actual.call
+
+    open_files_after = []
+    ObjectSpace.each_object(File) { |f| open_files_after << f.fileno unless f.closed? }
+
+    open_files_before.sort != open_files_after.sort
+  end
+
+  description do
+    'leak open files'
+  end
+
+  failure_message do |_actual|
+    'expected that proc would leak open files'
+  end
+
+  failure_message_when_negated do |_actual|
+    'expected that proc would not leak open files'
+  end
+end
