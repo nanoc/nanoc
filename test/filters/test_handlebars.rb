@@ -4,8 +4,6 @@ require 'helper'
 
 class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
   def test_filter
-    skip_v8_on_ruby24
-
     if_have 'handlebars' do
       # Create data
       item = Nanoc::Int::Item.new(
@@ -40,8 +38,6 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
   end
 
   def test_filter_without_layout
-    skip_v8_on_ruby24
-
     if_have 'handlebars' do
       # Create data
       item = Nanoc::Int::Item.new(

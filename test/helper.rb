@@ -33,12 +33,6 @@ module Nanoc::TestHelpers
     ENV.key?('DISABLE_NOKOGIRI')
   end
 
-  def skip_v8_on_ruby24
-    if ENV.key?('DISABLE_V8')
-      skip 'V8 specs are disabled (broken on Ruby 2.4)'
-    end
-  end
-
   def if_have(*libs)
     libs.each do |lib|
       if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' && lib == 'nokogiri' && disable_nokogiri?

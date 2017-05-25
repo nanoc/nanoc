@@ -1,6 +1,7 @@
 language: ruby
 rvm:
   - ruby-2.3.3
+  - ruby-2.4.1
 branches:
   only:
     - "master"
@@ -14,8 +15,6 @@ matrix:
   include:
     - rvm: jruby-9.1.5.0
       env: DISABLE_NOKOGIRI=1
-    - rvm: ruby-2.4.1
-      env: DISABLE_V8=1
   allow_failures:
     - rvm: jruby-9.1.5.0
       env: DISABLE_NOKOGIRI=1

@@ -4,8 +4,6 @@ require 'helper'
 
 class Nanoc::Filters::CoffeeScriptTest < Nanoc::TestCase
   def test_filter
-    skip_v8_on_ruby24
-
     if_have 'coffee-script' do
       # Create filter
       filter = ::Nanoc::Filters::CoffeeScript.new
