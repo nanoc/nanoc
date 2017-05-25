@@ -4,7 +4,7 @@ module Nanoc::Int
   # @api private
   class Layout < ::Nanoc::Int::Document
     def reference
-      [:layout, identifier]
+      [:layout, identifier.to_s]
     end
   end
 end
