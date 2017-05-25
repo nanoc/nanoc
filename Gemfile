@@ -44,13 +44,14 @@ group :plugins do
   gem 'handlebars', platforms: :ruby
   gem 'kramdown'
   gem 'less', '~> 2.0', platforms: :ruby
+  gem 'libv8', platforms: :ruby
   gem 'listen'
   gem 'markaby'
   gem 'maruku'
   gem 'mime-types'
   gem 'mustache', '~> 1.0'
   gem 'nokogiri', '~> 1.6'
-  gem 'nokogumbo', '~> 1.4'
+  gem 'nokogumbo', '~> 1.4', platforms: :ruby
   gem 'pandoc-ruby'
   gem 'pygments.rb', '~> 1.1', '>= 1.1.1', platforms: %i[ruby mswin]
   gem 'rack'
@@ -62,7 +63,7 @@ group :plugins do
   gem 'rubypants'
   gem 'sass'
   gem 'slim', '~> 3.0'
-  gem 'therubyracer', '~> 0.12'
+  gem 'therubyracer', '~> 0.12', platforms: :ruby
   gem 'typogruby'
   gem 'uglifier'
   gem 'w3c_validators'
