@@ -10,7 +10,7 @@ RuboCop::RakeTask.new(:rubocop)
 Coveralls::RakeTask.new
 
 Rake::TestTask.new(:test_all) do |t|
-  t.test_files = Dir['test/**/*_spec.rb'] + Dir['test/**/test_*.rb']
+  t.test_files = Dir['test/**/test_*.rb']
   t.libs << 'test'
   t.verbose = false
 end
