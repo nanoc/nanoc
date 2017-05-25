@@ -12,6 +12,62 @@ describe Nanoc::Int::IdentifiableCollection do
     it { is_expected.to be_a(described_class) }
   end
 
+  describe '#[]' do
+    let(:objects) do
+      [
+        Nanoc::Int::Item.new('asdf', {}, Nanoc::Identifier.new('/one')),
+        Nanoc::Int::Item.new('asdf', {}, Nanoc::Identifier.new('/two')),
+      ]
+    end
+
+    context 'string pattern style is glob' do
+      let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+
+      it 'handles glob' do
+        expect(identifiable_collection['/on*']).to equal(objects[0])
+        expect(identifiable_collection['/*wo']).to equal(objects[1])
+      end
+    end
+
+    context 'string pattern style is glob' do
+      let(:config) { Nanoc::Int::Configuration.new }
+
+      it 'does not handle glob' do
+        expect(identifiable_collection['/on*']).to be_nil
+        expect(identifiable_collection['/*wo']).to be_nil
+      end
+    end
+
+    it 'handles identifier' do
+      expect(identifiable_collection['/one']).to equal(objects[0])
+      expect(identifiable_collection['/two']).to equal(objects[1])
+    end
+
+    it 'handles malformed identifier' do
+      expect(identifiable_collection['one/']).to be_nil
+      expect(identifiable_collection['/one/']).to be_nil
+      expect(identifiable_collection['one']).to be_nil
+      expect(identifiable_collection['//one']).to be_nil
+      expect(identifiable_collection['/one//']).to be_nil
+    end
+
+    it 'handles regex' do
+      expect(identifiable_collection[/one/]).to equal(objects[0])
+      expect(identifiable_collection[/on/]).to equal(objects[0])
+      expect(identifiable_collection[/\/o/]).to equal(objects[0])
+      expect(identifiable_collection[/e$/]).to equal(objects[0])
+    end
+
+    context 'frozen' do
+      before { identifiable_collection.freeze }
+
+      example do
+        expect(identifiable_collection['/one']).to equal(objects[0])
+        expect(identifiable_collection['/fifty']).to be_nil
+      end
+    end
+  end
+
   describe '#find_all' do
     let(:objects) do
       [
