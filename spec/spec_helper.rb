@@ -45,12 +45,6 @@ RSpec.configure do |c|
     Nanoc::Int::NotificationCenter.reset
   end
 
-  c.before(:each, v8: true) do
-    if ENV.key?('DISABLE_V8')
-      skip 'V8 specs are disabled (broken on Ruby 2.4)'
-    end
-  end
-
   c.around(:each, stdio: true) do |example|
     orig_stdout = $stdout
     orig_stderr = $stderr
