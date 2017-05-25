@@ -5,20 +5,35 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
     before do
       # Prevent double-loading
       expect(Nanoc::CLI).to receive(:setup)
+
+      File.write('content/hello.md', 'Hello!')
+
+      File.write('Rules', <<~EOS)
+        preprocess do
+          @items['/hello.*'].raw_content = 'Better hello!'
+        end
+
+        compile '/**/*' do
+        end
+      EOS
     end
 
     it 'can be invoked' do
-      rules_collection = Nanoc::RuleDSL::RulesCollection.new
-      config = Nanoc::Int::Configuration.new.with_defaults
-
-      dsl = Nanoc::RuleDSL::CompilerDSL.new(rules_collection, config)
-      allow(Nanoc::RuleDSL::CompilerDSL).to receive(:new).and_return(dsl)
-
-      context = Object.new
-      allow(Nanoc::Int::Context).to receive(:new).with(anything).and_return(context)
-      expect(context).to receive(:pry)
+      expect_any_instance_of(Nanoc::Int::Context).to receive(:pry) do |ctx|
+        expect(ctx.items.size).to eq(1)
+        expect(ctx.items.to_a[0].unwrap.content.string).to eq('Hello!')
+      end
 
       Nanoc::CLI.run(['shell'])
+    end
+
+    it 'will preprocess if requested' do
+      expect_any_instance_of(Nanoc::Int::Context).to receive(:pry) do |ctx|
+        expect(ctx.items.size).to eq(1)
+        expect(ctx.items.to_a[0].unwrap.content.string).to eq('Better hello!')
+      end
+
+      Nanoc::CLI.run(['shell', '--preprocess'])
     end
   end
 

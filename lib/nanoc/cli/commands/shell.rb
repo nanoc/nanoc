@@ -6,13 +6,14 @@ aliases 'console'
 description "
 Open an IRB shell on a context that contains @items, @layouts, and @config.
 "
+flag :p, :preprocess, 'run preprocessor'
 
 module Nanoc::CLI::Commands
   class Shell < ::Nanoc::CLI::CommandRunner
     def run
       require 'pry'
 
-      load_site
+      load_site(preprocess: options[:preprocess])
 
       Nanoc::Int::Context.new(env).pry
     end
