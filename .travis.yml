@@ -1,7 +1,7 @@
 language: ruby
 rvm:
-  - ruby-2.3.3
-  - ruby-2.4.1
+  - "2.3"
+  - "2.4"
 branches:
   only:
     - "master"
@@ -13,12 +13,11 @@ env:
 matrix:
   fast_finish: true
   include:
-    - rvm: jruby-9.1.5.0
+    - rvm: jruby-9.1.9.0
       env: DISABLE_NOKOGIRI=1
   allow_failures:
-    - rvm: jruby-9.1.5.0
+    - rvm: jruby-9.1.9.0
       env: DISABLE_NOKOGIRI=1
-    - rvm: jruby-9.1.5.0
 script:
   - bundle exec rake test_ci
   - bundle exec appraisal install && FOCUS=rouge bundle exec appraisal rake spec
