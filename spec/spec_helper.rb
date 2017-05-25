@@ -12,10 +12,15 @@ require 'nanoc/spec'
 
 require 'timecop'
 require 'rspec/its'
+require 'fuubar'
 
 Nanoc::CLI.setup
 
 RSpec.configure do |c|
+  c.fuubar_progress_bar_options = {
+    format: '%c/%C |<%b>%i| %p%%',
+  }
+
   c.around(:each) do |example|
     Nanoc::CLI::ErrorHandler.disable
     example.run
