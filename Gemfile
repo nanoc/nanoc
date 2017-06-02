@@ -21,7 +21,7 @@ group :devel do
   gem 'rspec'
   gem 'rspec-its', '~> 1.2'
   gem 'rspec-mocks'
-  gem 'rubocop', github: 'bbatsov/rubocop'
+  gem 'rubocop', '~> 0.49'
   gem 'simplecov', require: false
   gem 'timecop'
   gem 'vcr'
