@@ -166,7 +166,10 @@ module Nanoc::Filters::ColorizeSyntax::Colorizers
       code1 = element.xpath('code').first
       return if code1.nil?
 
-      pre = code1.xpath('pre').first
+      div = code1.xpath('div').first
+      return if div.nil?
+
+      pre = div.xpath('pre').first
       return if pre.nil?
 
       code2 = pre.xpath('code').first
