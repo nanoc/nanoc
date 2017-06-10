@@ -169,7 +169,8 @@ module Nanoc::Filters::ColorizeSyntax::Colorizers
       div = code1.xpath('div').first
       return if div.nil?
 
-      pre = div.xpath('pre').first
+      # For Rouge 2.x and 1.x, respectively
+      pre = div.xpath('pre').first || code1.xpath('pre').first
       return if pre.nil?
 
       code2 = pre.xpath('code').first
