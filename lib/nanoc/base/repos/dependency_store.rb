@@ -14,8 +14,12 @@ module Nanoc::Int
       @items = items
       @layouts = layouts
 
+      @refs2objs = {}
+      items.each   { |o| add_vertex_for(o) }
+      layouts.each { |o| add_vertex_for(o) }
+
       @new_objects = []
-      @graph = Nanoc::Int::DirectedGraph.new([nil] + @items.to_a + @layouts.to_a)
+      @graph = Nanoc::Int::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))
     end
 
     contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::ArrayOf[Nanoc::Int::Dependency]
@@ -34,6 +38,16 @@ module Nanoc::Int
           ),
         )
       end
+    end
+
+    def items=(items)
+      @items = items
+      items.each { |o| @refs2objs[obj2ref(o)] = o }
+    end
+
+    def layouts=(layouts)
+      @layouts = layouts
+      layouts.each { |o| @refs2objs[obj2ref(o)] = o }
     end
 
     # Returns the direct dependencies for the given object.
@@ -57,7 +71,7 @@ module Nanoc::Int
       if @new_objects.any?
         [@new_objects.first]
       else
-        @graph.direct_predecessors_of(object)
+        refs2objs(@graph.direct_predecessors_of(obj2ref(object)))
       end
     end
 
@@ -76,11 +90,23 @@ module Nanoc::Int
     #
     # @return [void]
     def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false)
-      existing_props = Nanoc::Int::Props.new(@graph.props_for(dst, src) || {})
+      # TODO: do src == dst check first (faster)
+
+      add_vertex_for(src)
+      add_vertex_for(dst)
+
+      src_ref = obj2ref(src)
+      dst_ref = obj2ref(dst)
+
+      existing_props = Nanoc::Int::Props.new(@graph.props_for(dst_ref, src_ref) || {})
       new_props = Nanoc::Int::Props.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
       props = existing_props.merge(new_props)
 
-      @graph.add_edge(dst, src, props: props.to_h) unless src == dst
+      @graph.add_edge(dst_ref, src_ref, props: props.to_h) unless src == dst
+    end
+
+    def add_vertex_for(o)
+      @refs2objs[obj2ref(o)] = o
     end
 
     # Empties the list of dependencies for the given object. This is necessary
@@ -93,13 +119,33 @@ module Nanoc::Int
     #
     # @return [void]
     def forget_dependencies_for(object)
-      @graph.delete_edges_to(object)
+      @graph.delete_edges_to(obj2ref(object))
     end
 
     protected
 
+    def obj2ref(obj)
+      obj && obj.reference
+    end
+
+    def ref2obj(reference)
+      if reference
+        @refs2objs[reference]
+      else
+        nil
+      end
+    end
+
+    def objs2refs(objs)
+      objs.map { |o| obj2ref(o) }
+    end
+
+    def refs2objs(refs)
+      refs.map { |r| ref2obj(r) }
+    end
+
     def props_for(a, b)
-      props = @graph.props_for(a, b) || {}
+      props = @graph.props_for(obj2ref(a), obj2ref(b)) || {}
 
       if props.values.any? { |v| v }
         props
@@ -111,37 +157,26 @@ module Nanoc::Int
     def data
       {
         edges: @graph.edges,
-        vertices: @graph.vertices.map { |obj| obj && obj.reference },
+        vertices: @graph.vertices,
       }
     end
 
     def data=(new_data)
-      objects = @items.to_a + @layouts.to_a
+      objects = Set.new(@items.to_a + @layouts.to_a)
+      refs = objs2refs(objects)
 
       # Create new graph
-      @graph = Nanoc::Int::DirectedGraph.new([nil] + objects)
+      @graph = Nanoc::Int::DirectedGraph.new([nil] + refs)
 
       # Load vertices
-      previous_objects = new_data[:vertices].map do |reference|
-        if reference
-          case reference[0]
-          when :item
-            @items.object_with_identifier(reference[1])
-          when :layout
-            @layouts.object_with_identifier(reference[1])
-          else
-            raise Nanoc::Int::Errors::InternalInconsistency, "unrecognised reference #{reference[0].inspect}"
-          end
-        else
-          nil
-        end
-      end
+      previous_refs = new_data[:vertices]
+      previous_objects = Set.new(refs2objs(previous_refs))
 
       # Load edges
       new_data[:edges].each do |edge|
         from_index, to_index, props = *edge
-        from = from_index && previous_objects[from_index]
-        to   = to_index && previous_objects[to_index]
+        from = from_index && previous_refs[from_index]
+        to   = to_index && previous_refs[to_index]
         @graph.add_edge(from, to, props: props)
       end
 
