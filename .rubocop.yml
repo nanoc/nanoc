@@ -70,9 +70,6 @@ Style/EmptyElse:
 Style/Next:
   Enabled: false
 
-Lint/UselessAccessModifier:
-  Enabled: false
-
 
 
 # ----- DISABLED (hard) -----
