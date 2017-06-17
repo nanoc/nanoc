@@ -85,10 +85,10 @@ module Nanoc::CLI::Commands
             case pred
             when Nanoc::Int::Layout
               'layout'
-            when Nanoc::Int::ItemRep
-              'item rep'
             when Nanoc::Int::Item
               'item'
+            else
+              raise Nanoc::Int::Errors::InternalInconsistency, "unexpected pred type #{pred}"
             end
 
           props = String.new
