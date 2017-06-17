@@ -20,7 +20,7 @@ describe 'Outdatedness integration', site: true, stdio: true do
           filter :erb
           write '/bar.html'
         end
-EOS
+      EOS
     end
 
     before { Nanoc::CLI.run(%w[compile]) }
@@ -85,7 +85,7 @@ EOS
           filter :erb
           write '/bar.html'
         end
-EOS
+      EOS
     end
 
     before { Nanoc::CLI.run(%w[compile]) }
@@ -147,7 +147,7 @@ EOS
           filter :erb
           write '/bar.html'
         end
-EOS
+      EOS
     end
 
     before { Nanoc::CLI.run(%w[compile]) }
@@ -205,7 +205,7 @@ EOS
           filter :erb
           write '/bar.html'
         end
-EOS
+      EOS
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
         output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
