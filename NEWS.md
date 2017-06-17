@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.7.11 (2017-06-17)
+
+Fixes:
+
+* Made the `external_links` check always use GET, not HEAD (#1178, #1179)
+* Fixed an issue where changing identifiers during preprocessing could cause a crash (#1184, #1185)
+
+Enhancements:
+
+* Added `--preprocess` to `shell` command, to load preprocessed site data (#1180)
+
 ## 4.7.10 (2017-05-14)
 
 Fixes:
