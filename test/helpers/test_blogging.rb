@@ -28,6 +28,24 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     item
   end
 
+  def setup
+    super
+
+    config = Nanoc::Int::Configuration.new.with_defaults
+    items = Nanoc::Int::IdentifiableCollection.new(config)
+    layouts = Nanoc::Int::IdentifiableCollection.new(config)
+    dep_store = Nanoc::Int::DependencyStore.new(items, layouts)
+    dependency_tracker = Nanoc::Int::DependencyTracker.new(dep_store)
+
+    @view_context = Nanoc::ViewContext.new(
+      reps: :__irrelevant__,
+      items: nil,
+      dependency_tracker: dependency_tracker,
+      compilation_context: :__irrelevant__,
+      snapshot_repo: :__irrelevant_snapshot_repo,
+    )
+  end
+
   def test_atom_feed
     if_have 'builder' do
       # Create items
@@ -51,7 +69,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[2].expects(:compiled_content).with(snapshot: :pre).returns('item 2 content')
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -82,7 +101,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[2].expects(:compiled_content).returns('item 2 content')
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -113,7 +133,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[2].expects(:compiled_content).returns('item 2 content')
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -144,7 +165,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[2].expects(:compiled_content).returns('item 2 content')
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -165,7 +187,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [mock_item, mock_item]
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -190,7 +213,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [mock_item, mock_article]
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: nil }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: nil })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -215,7 +239,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [mock_item, mock_article]
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -240,7 +265,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [mock_item, mock_article]
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -270,7 +296,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[0].expects(:compiled_content).returns('item 1 content')
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com/' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com/' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -312,7 +339,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [mock_item, mock_article]
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -339,7 +367,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[2].stubs(:[]).with(:created_at).returns(nil)
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -365,7 +394,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[1].expects(:compiled_content).with(snapshot: :pre).returns('asdf')
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -390,15 +420,15 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[1].expects(:compiled_content).with(snapshot: :pre).returns('asdf')
 
       # Mock site
-      @config = Nanoc::ConfigView.new(
+      config_hash =
         {
           author_name: 'Bob',
           author_uri: 'http://example.com/~bob/',
           title: 'My Blog Or Something',
           base_url: 'http://example.com',
-        },
-        nil,
-      )
+        }
+      config = Nanoc::Int::Configuration.new(hash: config_hash)
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -422,7 +452,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[1].expects(:compiled_content).with(snapshot: :pre).returns('asdf')
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -446,7 +477,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       end
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -479,7 +511,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[1].stubs(:[]).with(:created_at).returns('22-03-2009')
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -508,7 +541,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[1].stubs(:[]).with(:created_at).returns('01-01-2014')
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -532,7 +566,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [mock_article]
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -553,7 +588,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [mock_article]
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -574,7 +610,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [mock_article]
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -595,7 +632,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [mock_article]
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -616,7 +654,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items = [mock_article]
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock
@@ -638,7 +677,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       @items[0].stubs(:path).returns(nil)
 
       # Mock site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Create feed item
       @item = mock

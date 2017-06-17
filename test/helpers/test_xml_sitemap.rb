@@ -8,9 +8,20 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def setup
     super
 
+    config = Nanoc::Int::Configuration.new.with_defaults
+    items = Nanoc::Int::IdentifiableCollection.new(config)
+    layouts = Nanoc::Int::IdentifiableCollection.new(config)
+    dep_store = Nanoc::Int::DependencyStore.new(items, layouts)
+    dependency_tracker = Nanoc::Int::DependencyTracker.new(dep_store)
+
     @reps = Nanoc::Int::ItemRepRepo.new
-    dependency_tracker = Nanoc::Int::DependencyTracker.new(nil)
-    @view_context = Nanoc::ViewContext.new(reps: @reps, items: nil, dependency_tracker: dependency_tracker, compilation_context: :__irrelevant__, snapshot_repo: :__irrelevant_snapshot_repo)
+    @view_context = Nanoc::ViewContext.new(
+      reps: @reps,
+      items: nil,
+      dependency_tracker: dependency_tracker,
+      compilation_context: :__irrelevant__,
+      snapshot_repo: :__irrelevant_snapshot_repo,
+    )
 
     @items = nil
     @item = nil
@@ -52,7 +63,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), @view_context)
 
       # Create site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Build sitemap
       res = xml_sitemap
@@ -98,7 +110,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/')
 
       # Create site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Build sitemap
       res = xml_sitemap(items: [item])
@@ -132,7 +145,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), @view_context)
 
       # Create site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Build sitemap
       res = xml_sitemap(rep_select: ->(rep) { rep.name == :one_a })
@@ -172,7 +186,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), @view_context)
 
       # Create site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Build sitemap
       res = xml_sitemap(items: @items)
@@ -203,7 +218,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::ItemWithRepsView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap/'), @view_context)
 
       # Create site
-      @config = Nanoc::ConfigView.new({ base_url: 'http://example.com' }, nil)
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Build sitemap
       res = xml_sitemap(items: @items)

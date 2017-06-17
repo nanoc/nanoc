@@ -5,7 +5,7 @@ module Nanoc::Int
   class DependencyTracker
     include Nanoc::Int::ContractsSupport
 
-    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration]
     C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
     C_ARGS = C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
 

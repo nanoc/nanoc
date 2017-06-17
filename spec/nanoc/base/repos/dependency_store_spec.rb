@@ -7,8 +7,11 @@ describe Nanoc::Int::DependencyStore do
   let(:item_b) { Nanoc::Int::Item.new('b', {}, '/b.md') }
   let(:item_c) { Nanoc::Int::Item.new('c', {}, '/c.md') }
 
+  let(:layout_a) { Nanoc::Int::Layout.new('la', {}, '/la.md') }
+  let(:layout_b) { Nanoc::Int::Layout.new('lb', {}, '/lb.md') }
+
   let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item_a, item_b, item_c]) }
-  let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
+  let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config, [layout_a, layout_b]) }
   let(:config) { Nanoc::Int::Configuration.new }
 
   describe '#dependencies_causing_outdatedness_of' do
@@ -21,9 +24,75 @@ describe Nanoc::Int::DependencyStore do
     end
 
     context 'one dependency' do
+      context 'dependency on config, no props' do
+        before do
+          store.record_dependency(item_a, config)
+        end
+
+        it 'returns one dependency' do
+          deps = store.dependencies_causing_outdatedness_of(item_a)
+          expect(deps.size).to eql(1)
+        end
+
+        it 'returns dependency from a onto config' do
+          deps = store.dependencies_causing_outdatedness_of(item_a)
+          expect(deps[0].from).to eql(config)
+          expect(deps[0].to).to eql(item_a)
+        end
+
+        it 'returns true for all props by default' do
+          deps = store.dependencies_causing_outdatedness_of(item_a)
+          expect(deps[0].props.raw_content?).to eq(true)
+          expect(deps[0].props.attributes?).to eq(true)
+          expect(deps[0].props.compiled_content?).to eq(true)
+          expect(deps[0].props.path?).to eq(true)
+        end
+
+        it 'returns nothing for the others' do
+          expect(store.dependencies_causing_outdatedness_of(item_b)).to be_empty
+          expect(store.dependencies_causing_outdatedness_of(item_c)).to be_empty
+        end
+      end
+
+      context 'dependency on config, generic attributes prop' do
+        before do
+          store.record_dependency(item_a, config, attributes: true)
+        end
+
+        it 'returns false for all unspecified props' do
+          deps = store.dependencies_causing_outdatedness_of(item_a)
+          expect(deps[0].props.raw_content?).to eq(false)
+          expect(deps[0].props.compiled_content?).to eq(false)
+          expect(deps[0].props.path?).to eq(false)
+        end
+
+        it 'returns the specified props' do
+          deps = store.dependencies_causing_outdatedness_of(item_a)
+          expect(deps[0].props.attributes?).to eq(true)
+        end
+      end
+
+      context 'dependency on config, specific attributes prop' do
+        before do
+          store.record_dependency(item_a, config, attributes: [:donkey])
+        end
+
+        it 'returns false for all unspecified props' do
+          deps = store.dependencies_causing_outdatedness_of(item_a)
+          expect(deps[0].props.raw_content?).to eq(false)
+          expect(deps[0].props.compiled_content?).to eq(false)
+          expect(deps[0].props.path?).to eq(false)
+        end
+
+        it 'returns the specified props' do
+          deps = store.dependencies_causing_outdatedness_of(item_a)
+          expect(deps[0].props.attributes?).to eq(true)
+          expect(deps[0].props.attributes).to contain_exactly(:donkey)
+        end
+      end
+
       context 'no props' do
         before do
-          # FIXME: weird argument order (item_b depends on item_a, not th other way around)
           store.record_dependency(item_a, item_b)
         end
 
@@ -54,7 +123,6 @@ describe Nanoc::Int::DependencyStore do
 
       context 'one prop' do
         before do
-          # FIXME: weird argument order (item_b depends on item_a, not th other way around)
           store.record_dependency(item_a, item_b, compiled_content: true)
         end
 
@@ -73,7 +141,6 @@ describe Nanoc::Int::DependencyStore do
 
       context 'two props' do
         before do
-          # FIXME: weird argument order (item_b depends on item_a, not th other way around)
           store.record_dependency(item_a, item_b, compiled_content: true)
           store.record_dependency(item_a, item_b, attributes: true)
         end
@@ -94,7 +161,6 @@ describe Nanoc::Int::DependencyStore do
 
     context 'two dependency in a chain' do
       before do
-        # FIXME: weird argument order (item_b depends on item_a, not th other way around)
         store.record_dependency(item_a, item_b)
         store.record_dependency(item_b, item_c)
       end
@@ -117,7 +183,7 @@ describe Nanoc::Int::DependencyStore do
     end
   end
 
-  describe 'reloading' do
+  describe 'reloading - item a -> b' do
     before do
       store.record_dependency(item_a, item_b, compiled_content: true)
       store.record_dependency(item_a, item_b, attributes: true)
@@ -195,75 +261,154 @@ describe Nanoc::Int::DependencyStore do
     end
   end
 
-  describe '#record_dependency' do
+  describe 'reloading - item a -> config' do
+    before do
+      store.record_dependency(item_a, config, attributes: [:donkey])
+
+      store.store
+      store.load
+    end
+
+    it 'has the right dependencies for item A' do
+      deps = store.dependencies_causing_outdatedness_of(item_a)
+      expect(deps.size).to eql(1)
+
+      expect(deps[0].from).to eql(config)
+      expect(deps[0].to).to eql(item_a)
+
+      expect(deps[0].props.raw_content?).to eq(false)
+      expect(deps[0].props.attributes?).to eq(true)
+      expect(deps[0].props.attributes).to contain_exactly(:donkey)
+      expect(deps[0].props.compiled_content?).to eq(false)
+      expect(deps[0].props.path?).to eq(false)
+    end
+
+    it 'has the right dependencies for item B' do
+      deps = store.dependencies_causing_outdatedness_of(item_b)
+      expect(deps).to be_empty
+    end
+
+    it 'has the right dependencies for item C' do
+      deps = store.dependencies_causing_outdatedness_of(item_c)
+      expect(deps).to be_empty
+    end
+  end
+
+  shared_examples 'records dependencies' do
     context 'no props' do
-      subject { store.record_dependency(item_a, item_b) }
+      subject { store.record_dependency(source_obj, item_b) }
 
       it 'records a dependency' do
         expect { subject }
-          .to change { store.objects_causing_outdatedness_of(item_a) }
+          .to change { store.objects_causing_outdatedness_of(source_obj) }
           .from([])
           .to([item_b])
+      end
+
+      it 'ignores all other objects' do
+        subject
+        expect(other_objs).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
       end
     end
 
     context 'compiled content prop' do
-      subject { store.record_dependency(item_a, item_b, compiled_content: true) }
+      subject { store.record_dependency(source_obj, target_obj, compiled_content: true) }
 
       it 'records a dependency' do
         expect { subject }
-          .to change { store.objects_causing_outdatedness_of(item_a) }
+          .to change { store.objects_causing_outdatedness_of(source_obj) }
           .from([])
-          .to([item_b])
+          .to([target_obj])
       end
 
       it 'records a dependency with the right props' do
         subject
-        deps = store.dependencies_causing_outdatedness_of(item_a)
+        deps = store.dependencies_causing_outdatedness_of(source_obj)
 
         expect(deps.first.props.attributes?).not_to be
         expect(deps.first.props.compiled_content?).to be
       end
+
+      it 'ignores all other objects' do
+        subject
+        expect(other_objs).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
+      end
     end
 
     context 'attribute prop (true)' do
-      subject { store.record_dependency(item_a, item_b, attributes: true) }
+      subject { store.record_dependency(source_obj, target_obj, attributes: true) }
 
       it 'records a dependency' do
         expect { subject }
-          .to change { store.objects_causing_outdatedness_of(item_a) }
+          .to change { store.objects_causing_outdatedness_of(source_obj) }
           .from([])
-          .to([item_b])
+          .to([target_obj])
       end
 
       it 'records a dependency with the right props' do
         subject
-        deps = store.dependencies_causing_outdatedness_of(item_a)
+        deps = store.dependencies_causing_outdatedness_of(source_obj)
 
         expect(deps.first.props.attributes?).to be
         expect(deps.first.props.attributes).to be
         expect(deps.first.props.compiled_content?).not_to be
       end
+
+      it 'ignores all other objects' do
+        subject
+        expect(other_objs).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
+      end
     end
 
     context 'attribute prop (true)' do
-      subject { store.record_dependency(item_a, item_b, attributes: [:giraffe]) }
+      subject { store.record_dependency(source_obj, target_obj, attributes: [:giraffe]) }
 
       it 'records a dependency' do
         expect { subject }
-          .to change { store.objects_causing_outdatedness_of(item_a) }
+          .to change { store.objects_causing_outdatedness_of(source_obj) }
           .from([])
-          .to([item_b])
+          .to([target_obj])
       end
 
       it 'records a dependency with the right props' do
         subject
-        deps = store.dependencies_causing_outdatedness_of(item_a)
+        deps = store.dependencies_causing_outdatedness_of(source_obj)
 
         expect(deps.first.props.attributes?).to be
         expect(deps.first.props.attributes).to match_array([:giraffe])
         expect(deps.first.props.compiled_content?).not_to be
       end
+
+      it 'ignores all other objects' do
+        subject
+        expect(other_objs).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
+      end
+    end
+  end
+
+  describe '#record_dependency' do
+    context 'item on item' do
+      let(:source_obj) { item_a }
+      let(:target_obj) { item_b }
+      let(:other_objs) { [config, item_c, layout_a, layout_b] }
+
+      include_examples 'records dependencies'
+    end
+
+    context 'item on layout' do
+      let(:source_obj) { item_a }
+      let(:target_obj) { layout_a }
+      let(:other_objs) { [config, item_b, item_c, layout_b] }
+
+      include_examples 'records dependencies'
+    end
+
+    context 'item on config' do
+      let(:source_obj) { item_a }
+      let(:target_obj) { config }
+      let(:other_objs) { [item_b, item_c, layout_a, layout_b] }
+
+      include_examples 'records dependencies'
     end
   end
 end
