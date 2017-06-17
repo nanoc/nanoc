@@ -13,11 +13,7 @@ Gem::Specification.new do |s|
   s.email   = 'denis.defreyne@stoneship.org'
   s.license = 'MIT'
 
-  s.files =
-    Dir['[A-Z]*'] +
-    Dir['doc/yardoc_{templates,handlers}/**/*'] +
-    Dir['{bin,lib,tasks,test,spec}/**/*'] +
-    ['nanoc.gemspec']
+  s.files              = `git ls-files -z`.split("\x0")
   s.executables        = ['nanoc']
   s.require_paths      = ['lib']
 
