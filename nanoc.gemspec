@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = 'Nanoc is a static-site generator focused on flexibility. It transforms content from a format such as Markdown or AsciiDoc into another format, usually HTML, and lays out pages consistently to retain the site’s look and feel throughout. Static sites built with Nanoc can be deployed to any web server.'
 
   s.author  = 'Denis Defreyne'
-  s.email   = 'denis.defreyne@stoneship.org'
+  s.email   = 'denis@stoneship.org'
   s.license = 'MIT'
 
   s.files              = `git ls-files -z`.split("\x0")
