@@ -31,13 +31,15 @@ module Nanoc::Int
           Rules::UsesAlwaysOutdatedFilter,
         ].freeze
 
+      C_OBJ_MAYBE_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]
+
       contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Int::ItemRepRepo] => C::Any
       def initialize(outdatedness_checker:, reps:)
         @outdatedness_checker = outdatedness_checker
         @reps = reps
       end
 
-      contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::Maybe[OutdatednessStatus]
+      contract C_OBJ_MAYBE_REP => C::Maybe[OutdatednessStatus]
       memoized def outdatedness_status_for(obj)
         case obj
         when Nanoc::Int::ItemRep
@@ -53,7 +55,7 @@ module Nanoc::Int
 
       private
 
-      contract C::ArrayOf[Class], C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout], OutdatednessStatus => C::Maybe[OutdatednessStatus]
+      contract C::ArrayOf[Class], C_OBJ_MAYBE_REP, OutdatednessStatus => C::Maybe[OutdatednessStatus]
       def apply_rules(rules, obj, status = OutdatednessStatus.new)
         rules.inject(status) do |acc, rule|
           if !acc.useful_to_apply?(rule)
@@ -69,7 +71,7 @@ module Nanoc::Int
         end
       end
 
-      contract C::ArrayOf[Class], C::ArrayOf[C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]] => C::Maybe[OutdatednessStatus]
+      contract C::ArrayOf[Class], C::ArrayOf[C_OBJ_MAYBE_REP] => C::Maybe[OutdatednessStatus]
       def apply_rules_multi(rules, objs)
         objs.inject(OutdatednessStatus.new) { |acc, elem| apply_rules(rules, elem, acc) }
       end
@@ -113,7 +115,7 @@ module Nanoc::Int
       outdatedness_reasons_for(obj).any?
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout] => C::IterOf[Reasons::Generic]
+    contract C_OBJ => C::IterOf[Reasons::Generic]
     def outdatedness_reasons_for(obj)
       reasons = basic.outdatedness_status_for(obj).reasons
       if reasons.any?
@@ -132,7 +134,7 @@ module Nanoc::Int
       @_basic ||= Basic.new(outdatedness_checker: self, reps: @reps)
     end
 
-    contract C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout], Hamster::Set => C::Bool
+    contract C_OBJ, Hamster::Set => C::Bool
     def outdated_due_to_dependencies?(obj, processed = Hamster::Set.new)
       # Convert from rep to item if necessary
       obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
