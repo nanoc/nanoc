@@ -19,7 +19,6 @@ module Nanoc::Int
           Rules::AttributesModified,
           Rules::NotWritten,
           Rules::CodeSnippetsModified,
-          Rules::ConfigurationModified,
           Rules::UsesAlwaysOutdatedFilter,
         ].freeze
 
@@ -31,7 +30,12 @@ module Nanoc::Int
           Rules::UsesAlwaysOutdatedFilter,
         ].freeze
 
-      C_OBJ_MAYBE_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]
+      RULES_FOR_CONFIG =
+        [
+          Rules::AttributesModified,
+        ].freeze
+
+      C_OBJ_MAYBE_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout]
 
       contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Int::ItemRepRepo] => C::Any
       def initialize(outdatedness_checker:, reps:)
@@ -48,6 +52,8 @@ module Nanoc::Int
           apply_rules_multi(RULES_FOR_ITEM_REP, @reps[obj])
         when Nanoc::Int::Layout
           apply_rules(RULES_FOR_LAYOUT, obj)
+        when Nanoc::Int::Configuration
+          apply_rules(RULES_FOR_CONFIG, obj)
         else
           raise Nanoc::Int::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
         end
@@ -90,7 +96,7 @@ module Nanoc::Int
 
     Reasons = Nanoc::Int::OutdatednessReasons
 
-    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout]
+    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout]
     C_ACTION_SEQUENCES = C::HashOf[C_OBJ => Nanoc::Int::ActionSequence]
 
     contract C::KeywordArgs[site: Nanoc::Int::Site, checksum_store: Nanoc::Int::ChecksumStore, checksums: Nanoc::Int::ChecksumCollection, dependency_store: Nanoc::Int::DependencyStore, action_sequence_store: Nanoc::Int::ActionSequenceStore, action_sequences: C_ACTION_SEQUENCES, reps: Nanoc::Int::ItemRepRepo] => C::Any

@@ -30,7 +30,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:config) { Nanoc::Int::Configuration.new }
 
     let(:dependency_store) do
-      Nanoc::Int::DependencyStore.new(items, layouts)
+      Nanoc::Int::DependencyStore.new(items, layouts, config)
     end
 
     let(:layouts) do
@@ -48,6 +48,24 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
 
       it 'outputs no dependencies for /dog.md' do
         expect { subject }.to output(%r{^item /dog.md depends on:\n  \(nothing\)$}m).to_stdout
+      end
+
+      it 'outputs no dependencies for /other.dat' do
+        expect { subject }.to output(%r{^item /other.dat depends on:\n  \(nothing\)$}m).to_stdout
+      end
+    end
+
+    context 'dependency (without props) from config to dog' do
+      before do
+        dependency_store.record_dependency(item_dog, config)
+      end
+
+      it 'outputs no dependencies for /about.md' do
+        expect { subject }.to output(%r{^item /about.md depends on:\n  \(nothing\)$}m).to_stdout
+      end
+
+      it 'outputs dependencies for /dog.md' do
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[ config \] \(racp\) $}m).to_stdout
       end
 
       it 'outputs no dependencies for /other.dat' do
@@ -90,6 +108,16 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
 
       it 'outputs dependencies for /dog.md' do
         expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   item \] \(_a__\) /about.md$}m).to_stdout
+      end
+    end
+
+    context 'dependency (with attributes prop) from config to dog' do
+      before do
+        dependency_store.record_dependency(item_dog, config, attributes: true)
+      end
+
+      it 'outputs dependencies for /dog.md' do
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[ config \] \(_a__\) $}m).to_stdout
       end
     end
 

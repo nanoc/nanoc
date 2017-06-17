@@ -8,7 +8,7 @@ module Nanoc::Int
     attr_accessor :items
     attr_accessor :layouts
 
-    def initialize(items, layouts, site: nil)
+    def initialize(items, layouts, config, site: nil)
       super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'dependencies'), 4)
 
       @items = items
@@ -17,6 +17,7 @@ module Nanoc::Int
       @refs2objs = {}
       items.each   { |o| add_vertex_for(o) }
       layouts.each { |o| add_vertex_for(o) }
+      add_vertex_for(config)
 
       @new_objects = []
       @graph = Nanoc::Int::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))

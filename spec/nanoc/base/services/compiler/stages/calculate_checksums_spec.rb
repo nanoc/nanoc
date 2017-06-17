@@ -61,6 +61,9 @@ describe Nanoc::Int::Compiler::Stages::CalculateChecksums do
     it 'checksums config' do
       expect(subject.checksum_for(config))
         .to eq(Nanoc::Int::Checksummer.calc(config))
+
+      expect(subject.attributes_checksum_for(config))
+        .to eq(Nanoc::Int::Checksummer.calc_for_each_attribute_of(config))
     end
 
     it 'checksums code snippets' do

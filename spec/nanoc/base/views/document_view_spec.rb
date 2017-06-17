@@ -14,7 +14,7 @@ shared_examples 'a document view' do
   end
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
-  let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_identifiable_collection, empty_identifiable_collection) }
+  let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_identifiable_collection, empty_identifiable_collection, config) }
   let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md') }
 
   let(:empty_identifiable_collection) do
