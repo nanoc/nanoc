@@ -18,8 +18,6 @@ module Nanoc::CLI::Commands
       Nanoc::Int::Context.new(env).pry
     end
 
-    protected
-
     def env
       self.class.env_for_site(site)
     end
