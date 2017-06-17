@@ -80,6 +80,12 @@ module Nanoc::Int
       @wrapped
     end
 
+    # For compat
+    contract C::None => Hash
+    def attributes
+      to_h
+    end
+
     contract C::Any => C::Bool
     def key?(key)
       @wrapped.key?(key)

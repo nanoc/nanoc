@@ -35,7 +35,7 @@ describe Nanoc::Int::OutdatednessRules do
 
     let(:action_sequences) { {} }
     let(:reps) { Nanoc::Int::ItemRepRepo.new }
-    let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts) }
+    let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
     let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new }
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
 
@@ -79,27 +79,6 @@ describe Nanoc::Int::OutdatednessRules do
         let(:code_snippets) { [code_snippet] }
 
         before { checksum_store.add(code_snippet_old) }
-
-        it { is_expected.to be }
-      end
-    end
-
-    context 'ConfigurationModified' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::ConfigurationModified }
-
-      context 'non-outdated' do
-        let(:config) { Nanoc::Int::Configuration.new }
-
-        before { checksum_store.add(config) }
-
-        it { is_expected.not_to be }
-      end
-
-      context 'outdated' do
-        let(:config) { Nanoc::Int::Configuration.new }
-        let(:config_old) { Nanoc::Int::Configuration.new(hash: { foo: 125 }) }
-
-        before { checksum_store.add(config_old) }
 
         it { is_expected.to be }
       end
@@ -310,6 +289,10 @@ describe Nanoc::Int::OutdatednessRules do
             expect(subject.attributes).to contain_exactly(:greeting)
           end
         end
+      end
+
+      context 'config' do
+        # TODO
       end
     end
 

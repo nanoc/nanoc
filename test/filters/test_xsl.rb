@@ -92,7 +92,7 @@ EOS
     items = Nanoc::Int::IdentifiableCollection.new(config)
     layouts = Nanoc::Int::IdentifiableCollection.new(config)
 
-    @dependency_store = Nanoc::Int::DependencyStore.new(items, layouts)
+    @dependency_store = Nanoc::Int::DependencyStore.new(items, layouts, config)
     @dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
 
     @base_item = Nanoc::Int::Item.new('base', {}, '/base.md')

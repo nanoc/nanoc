@@ -8,7 +8,6 @@ end
 
 require_relative 'outdatedness_rules/attributes_modified'
 require_relative 'outdatedness_rules/code_snippets_modified'
-require_relative 'outdatedness_rules/configuration_modified'
 require_relative 'outdatedness_rules/content_modified'
 require_relative 'outdatedness_rules/not_written'
 require_relative 'outdatedness_rules/rules_modified'

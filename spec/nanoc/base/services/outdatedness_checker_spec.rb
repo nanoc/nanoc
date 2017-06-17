@@ -25,7 +25,7 @@ describe Nanoc::Int::OutdatednessChecker do
   end
 
   let(:dependency_store) do
-    Nanoc::Int::DependencyStore.new(items, layouts)
+    Nanoc::Int::DependencyStore.new(items, layouts, config)
   end
 
   let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item]) }
@@ -320,6 +320,46 @@ describe Nanoc::Int::OutdatednessChecker do
           end
         end
 
+        it { is_expected.not_to be }
+      end
+    end
+
+    context 'generic dependency on config' do
+      before do
+        dependency_store.record_dependency(item, config, attributes: true)
+      end
+
+      context 'nothing changed' do
+        it { is_expected.not_to be }
+      end
+
+      context 'attribute changed' do
+        before { config[:title] = 'omg new title' }
+        it { is_expected.to be }
+      end
+
+      context 'other attribute changed' do
+        before { config[:subtitle] = 'tagline here' }
+        it { is_expected.to be }
+      end
+    end
+
+    context 'specific dependency on config' do
+      before do
+        dependency_store.record_dependency(item, config, attributes: [:title])
+      end
+
+      context 'nothing changed' do
+        it { is_expected.not_to be }
+      end
+
+      context 'attribute changed' do
+        before { config[:title] = 'omg new title' }
+        it { is_expected.to be }
+      end
+
+      context 'other attribute changed' do
+        before { config[:subtitle] = 'tagline here' }
         it { is_expected.not_to be }
       end
     end

@@ -21,11 +21,16 @@ module Nanoc::Int::Compiler::Stages
         end
       end
 
-      [@items, @layouts, @code_snippets, [@config]].each do |objs|
+      [@items, @layouts, @code_snippets].each do |objs|
         objs.each do |obj|
           checksums[obj.reference] = Nanoc::Int::Checksummer.calc(obj)
         end
       end
+
+      checksums[@config.reference] =
+        Nanoc::Int::Checksummer.calc(@config)
+      checksums[[@config.reference, :each_attribute]] =
+        Nanoc::Int::Checksummer.calc_for_each_attribute_of(@config)
 
       Nanoc::Int::ChecksumCollection.new(checksums)
     end

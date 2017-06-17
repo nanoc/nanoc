@@ -13,7 +13,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     ])
 
     # Create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Verify no dependencies yet
     assert_empty store.objects_causing_outdatedness_of(items.to_a[0])
@@ -30,7 +30,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     ])
 
     # Create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Record some dependencies
     store.record_dependency(items.to_a[0], items.to_a[1])
@@ -49,7 +49,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     ])
 
     # Create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Record some dependencies
     store.record_dependency(items.to_a[0], items.to_a[0])
@@ -69,7 +69,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     ])
 
     # Create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Record some dependencies
     store.record_dependency(items.to_a[0], items.to_a[1])
@@ -91,7 +91,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     ])
 
     # Create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Record some dependencies
     store.record_dependency(items.to_a[0], items.to_a[1])
@@ -113,7 +113,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     ])
 
     # Create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Record some dependencies
     store.record_dependency(items.to_a[0], items.to_a[1])
@@ -125,7 +125,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     assert File.file?(store.filename)
 
     # Re-create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Load
     store.load
@@ -153,7 +153,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     new_items = Nanoc::Int::IdentifiableCollection.new(config, [items.to_a[0], items.to_a[1], items.to_a[2]])
 
     # Create
-    store = Nanoc::Int::DependencyStore.new(old_items, layouts)
+    store = Nanoc::Int::DependencyStore.new(old_items, layouts, config)
 
     # Record some dependencies
     store.record_dependency(items.to_a[0], items.to_a[1])
@@ -165,7 +165,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     assert File.file?(store.filename)
 
     # Re-create
-    store = Nanoc::Int::DependencyStore.new(new_items, layouts)
+    store = Nanoc::Int::DependencyStore.new(new_items, layouts, config)
 
     # Load
     store.load
@@ -187,7 +187,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     ])
 
     # Create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Record some dependencies
     store.record_dependency(items.to_a[0], items.to_a[1])
@@ -198,7 +198,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     assert File.file?(store.filename)
 
     # Re-create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Load
     store.load
@@ -219,7 +219,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     ])
 
     # Create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Record some dependencies
     store.record_dependency(items.to_a[0], items.to_a[1])
@@ -230,7 +230,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     assert File.file?(store.filename)
 
     # Re-create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Load
     store.load
@@ -251,7 +251,7 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     ])
 
     # Create
-    store = Nanoc::Int::DependencyStore.new(items, layouts)
+    store = Nanoc::Int::DependencyStore.new(items, layouts, config)
 
     # Record some dependencies
     store.record_dependency(items.to_a[0], items.to_a[1])

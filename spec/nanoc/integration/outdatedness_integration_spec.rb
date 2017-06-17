@@ -71,6 +71,57 @@ describe 'Outdatedness integration', site: true, stdio: true do
     end
   end
 
+  context 'only attribute dependency on config' do
+    let(:time) { Time.now }
+
+    before do
+      File.write('content/bar.md', '<%= @config[:title] %>')
+
+      FileUtils.touch('content/bar.md', mtime: time)
+
+      File.write('nanoc.yaml', <<~EOS)
+        title: The Original
+      EOS
+
+      File.write('Rules', <<~EOS)
+        compile '/foo.*' do
+          write '/foo.html'
+        end
+
+        compile '/bar.*' do
+          filter :erb
+          write '/bar.html'
+        end
+      EOS
+    end
+
+    before { Nanoc::CLI.run(%w[compile]) }
+
+    it 'shows default rep outdatedness' do
+      expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
+        output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
+      )
+    end
+
+    it 'shows file as outdated after modification' do
+      File.write('content/bar.md', 'JUST BAR!')
+      FileUtils.touch('content/bar.md', mtime: time)
+
+      expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
+        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+      )
+    end
+
+    it 'shows file and dependencies as outdated after title modification' do
+      File.write('nanoc.yaml', 'title: Totes Newz')
+      FileUtils.touch('nanoc.yaml', mtime: time)
+
+      expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
+        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+      )
+    end
+  end
+
   context 'only raw content dependency' do
     before do
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoo")

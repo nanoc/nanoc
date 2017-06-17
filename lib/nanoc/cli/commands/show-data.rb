@@ -71,13 +71,23 @@ module Nanoc::CLI::Commands
       puts '  p = dependency on the path'
       puts
 
+      sorter =
+        lambda do |dep|
+          case dep
+          when Nanoc::Int::Document
+            dep.from.identifier.to_s
+          else
+            ''
+          end
+        end
+
       sorted_with_prev(items) do |item, prev|
         puts if prev
         puts "item #{item.identifier} depends on:"
         dependencies =
           dependency_store
           .dependencies_causing_outdatedness_of(item)
-          .sort_by { |dep| dep.from ? dep.from.identifier : '' }
+          .sort_by(&sorter)
         dependencies.each do |dep|
           pred = dep.from
 
@@ -87,8 +97,18 @@ module Nanoc::CLI::Commands
               'layout'
             when Nanoc::Int::Item
               'item'
+            when Nanoc::Int::Configuration
+              'config'
             else
               raise Nanoc::Int::Errors::InternalInconsistency, "unexpected pred type #{pred}"
+            end
+
+          pred_identifier =
+            case pred
+            when Nanoc::Int::Document
+              pred.identifier.to_s
+            when Nanoc::Int::Configuration
+              nil
             end
 
           props = String.new
@@ -98,7 +118,7 @@ module Nanoc::CLI::Commands
           props << (dep.props.path? ? 'p' : '_')
 
           if pred
-            puts "  [ #{format '%6s', type} ] (#{props}) #{pred.identifier}"
+            puts "  [ #{format '%6s', type} ] (#{props}) #{pred_identifier}"
           else
             puts '  ( removed item )'
           end

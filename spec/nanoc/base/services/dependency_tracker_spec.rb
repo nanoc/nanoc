@@ -3,7 +3,7 @@
 describe Nanoc::Int::DependencyTracker do
   let(:tracker) { described_class.new(store) }
 
-  let(:store) { Nanoc::Int::DependencyStore.new(empty_identifiable_collection, empty_identifiable_collection) }
+  let(:store) { Nanoc::Int::DependencyStore.new(empty_identifiable_collection, empty_identifiable_collection, config) }
 
   let(:item_a) { Nanoc::Int::Item.new('a', {}, '/a.md') }
   let(:item_b) { Nanoc::Int::Item.new('b', {}, '/b.md') }

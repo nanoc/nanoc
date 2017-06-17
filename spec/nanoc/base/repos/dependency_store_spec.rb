@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Int::DependencyStore do
-  let(:store) { described_class.new(items, layouts) }
+  let(:store) { described_class.new(items, layouts, config) }
 
   let(:item_a) { Nanoc::Int::Item.new('a', {}, '/a.md') }
   let(:item_b) { Nanoc::Int::Item.new('b', {}, '/b.md') }

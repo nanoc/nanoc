@@ -28,7 +28,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
   let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site, reps: reps) }
-  let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts) }
+  let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
 
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:item) { Nanoc::Int::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
