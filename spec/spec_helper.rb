@@ -279,6 +279,17 @@ RSpec::Matchers.define :send_notification do |name, *expected_args|
 end
 
 RSpec::Matchers.define :leak_open_files do |_name, *_expected_args|
+  # Some remarks:
+  #
+  # • This matcher relies on global state (list of file descriptors and their
+  #   state), which means that a test case that uses this matcher can fail if
+  #   tests are being run in parallel.
+  #
+  # • This matcher assumes that file descriptors are closed explicitly, rather
+  #   than implicitly through garbage collection. This means that a test case
+  #   that uses this matcher can fail if the code exercised by the test case
+  #   relies on file descriptors to be closed when they are garbage collected.
+
   supports_block_expectations
 
   match do |actual|
