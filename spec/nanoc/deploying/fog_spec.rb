@@ -48,6 +48,10 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
           'remote/bucky/woof',
         ])
     end
+
+    it 'does not leave lingering open files' do
+      expect { subject }.not_to leak_open_files
+    end
   end
 
   context 'dry run' do

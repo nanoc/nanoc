@@ -35,12 +35,13 @@ module Nanoc::Deploying::Deployers
         log_effectful("uploading #{source_filename} -> #{destination_key}")
 
         unless dry_run?
-          # FIXME: source_filename file is never closed
-          @directory.files.create(
-            key: destination_key,
-            body: File.open(source_filename),
-            public: true,
-          )
+          File.open(source_filename) do |io|
+            @directory.files.create(
+              key: destination_key,
+              body: io,
+              public: true,
+            )
+          end
         end
       end
 
