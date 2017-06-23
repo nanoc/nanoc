@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.7.12 (2017-06-23)
+
+Fixes:
+
+* Fixed an issue in which the fog deployer could run out of open file descriptors (#1189)
+
+Enhancements:
+
+* Made changes to `@config` only cause outdatedness of items that depend on `@config` (#1188)
+
 ## 4.7.11 (2017-06-17)
 
 Fixes:
