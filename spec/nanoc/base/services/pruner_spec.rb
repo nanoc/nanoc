@@ -25,6 +25,15 @@ describe Nanoc::Pruner do
     expect(Nanoc::Extra::Pruner).to equal(Nanoc::Pruner)
   end
 
+  describe '#pathname_components' do
+    subject { pruner.pathname_components(pathname) }
+
+    context 'regular path' do
+      let(:pathname) { Pathname.new('/a/bb/ccc/dd/e') }
+      it { is_expected.to eql(%w[/ a bb ccc dd e]) }
+    end
+  end
+
   describe '#files_and_dirs_in' do
     subject { pruner.files_and_dirs_in('output/') }
 

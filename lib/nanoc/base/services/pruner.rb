@@ -46,7 +46,19 @@ module Nanoc
     # @return [Boolean] true if the given file is excluded, false otherwise
     def filename_excluded?(filename)
       pathname = Pathname.new(filename)
-      @exclude.any? { |e| pathname.__nanoc_include_component?(e) }
+      @exclude.any? { |e| pathname_components(pathname).include?(e) }
+    end
+
+    def pathname_components(pathname)
+      components = []
+      tmp = pathname
+      loop do
+        old = tmp
+        components << File.basename(tmp)
+        tmp = File.dirname(tmp)
+        break if old == tmp
+      end
+      components.reverse
     end
 
     # @api private
