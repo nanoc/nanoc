@@ -59,14 +59,17 @@ module Nanoc::Int
       @objects.empty?
     end
 
+    contract C::RespondTo[:identifier] => self
     def add(obj)
       self.class.new(@config, @objects.add(obj))
     end
 
+    contract C::Func[C::RespondTo[:identifier] => C::Any] => self
     def reject(&block)
       self.class.new(@config, @objects.reject(&block))
     end
 
+    contract C::Any => C::Maybe[C::RespondTo[:identifier]]
     def object_with_identifier(identifier)
       if frozen?
         @mapping[identifier.to_s]
@@ -124,6 +127,7 @@ module Nanoc::Int
       @mapping.freeze
     end
 
+    contract C::None => C::Bool
     def use_globs?
       @config[:string_pattern_type] == 'glob'
     end
