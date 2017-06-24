@@ -12,10 +12,8 @@ module Nanoc::Int
     def_delegator :@objects, :each
     def_delegator :@objects, :size
 
-    contract C::Or[Hash, C::Named['Nanoc::Int::Configuration']], C::IterOf[C::RespondTo[:identifier]], C::Maybe[String] => C::Any
-    def initialize(config, objects = [], name = nil)
-      # TODO: make this raise
-      initialize_basic(config, objects, name)
+    def initialize(*)
+      raise 'IdentifiableCollection is abstract and cannot be instantiated'
     end
 
     contract C::Or[Hash, C::Named['Nanoc::Int::Configuration']], C::IterOf[C::RespondTo[:identifier]], C::Maybe[String] => C::Any
