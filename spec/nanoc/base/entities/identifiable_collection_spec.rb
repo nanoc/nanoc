@@ -131,13 +131,20 @@ describe Nanoc::Int::IdentifiableCollection do
         it { is_expected.to be_nil }
       end
     end
+
+    describe '#reference' do
+      subject { identifiable_collection.reference }
+      it { is_expected.to eql(expected_reference) }
+    end
   end
 
   describe Nanoc::Int::ItemCollection do
+    let(:expected_reference) { :items }
     it_behaves_like 'a generic identifiable collection'
   end
 
   describe Nanoc::Int::LayoutCollection do
+    let(:expected_reference) { :layouts }
     it_behaves_like 'a generic identifiable collection'
   end
 end

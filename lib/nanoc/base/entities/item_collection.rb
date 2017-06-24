@@ -6,5 +6,9 @@ module Nanoc::Int
     def initialize(config, objects = [])
       initialize_basic(config, objects, 'items')
     end
+
+    def reference
+      :items
+    end
   end
 end
