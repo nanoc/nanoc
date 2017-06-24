@@ -26,7 +26,7 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true do
     end
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new(
+      Nanoc::Int::ItemCollection.new(
         config,
         [
           Nanoc::Int::Item.new('About Me', {}, '/about.md'),
@@ -47,7 +47,7 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true do
     end
 
     let(:layouts) do
-      Nanoc::Int::IdentifiableCollection.new(
+      Nanoc::Int::LayoutCollection.new(
         config,
         [
           Nanoc::Int::Layout.new('Default', {}, '/default.erb'),

@@ -48,8 +48,8 @@ describe Nanoc::Int::OutdatednessRules do
       ).run
     end
 
-    let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item]) }
-    let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
+    let(:items) { Nanoc::Int::ItemCollection.new(config, [item]) }
+    let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
     before do
       allow(site).to receive(:code_snippets).and_return(code_snippets)

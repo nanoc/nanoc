@@ -2,6 +2,7 @@
 
 describe Nanoc::MutableItemCollectionView do
   let(:view_class) { Nanoc::MutableItemView }
+  let(:collection_class) { Nanoc::Int::ItemCollection }
   it_behaves_like 'an identifiable collection'
   it_behaves_like 'a mutable identifiable collection'
 
@@ -15,7 +16,7 @@ describe Nanoc::MutableItemCollectionView do
     end
 
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config, [item])
+      Nanoc::Int::ItemCollection.new(config, [item])
     end
 
     let(:view) { described_class.new(wrapped, nil) }
@@ -42,7 +43,7 @@ describe Nanoc::MutableItemCollectionView do
 
   describe '#inspect' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config)
+      Nanoc::Int::ItemCollection.new(config)
     end
 
     let(:view) { described_class.new(wrapped, view_context) }

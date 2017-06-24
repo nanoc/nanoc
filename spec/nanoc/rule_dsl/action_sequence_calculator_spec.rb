@@ -16,8 +16,8 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
 
       let(:item) { Nanoc::Int::Item.new('content', {}, Nanoc::Identifier.from('/list.md')) }
       let(:config) { Nanoc::Int::Configuration.new.with_defaults }
-      let(:items) { Nanoc::Int::IdentifiableCollection.new(config) }
-      let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
+      let(:items) { Nanoc::Int::ItemCollection.new(config) }
+      let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
       let(:site) { double(:site, items: items, layouts: layouts, config: config, compiler: compiler) }
       let(:compiler) { double(:compiler, compilation_context: compilation_context) }
       let(:compilation_context) { double(:compilation_context) }

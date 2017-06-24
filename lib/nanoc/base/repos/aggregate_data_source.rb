@@ -12,14 +12,14 @@ module Nanoc::Int
     def items
       @_items ||= begin
         objs = @data_sources.flat_map(&:items)
-        Nanoc::Int::IdentifiableCollection.from(objs, @config)
+        Nanoc::Int::ItemCollection.new(@config, objs)
       end
     end
 
     def layouts
       @_layouts ||= begin
         objs = @data_sources.flat_map(&:layouts)
-        Nanoc::Int::IdentifiableCollection.from(objs, @config)
+        Nanoc::Int::LayoutCollection.new(@config, objs)
       end
     end
   end

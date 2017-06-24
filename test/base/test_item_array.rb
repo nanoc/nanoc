@@ -9,7 +9,7 @@ class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
     @one = Nanoc::Int::Item.new('Item One', {}, '/one/')
     @two = Nanoc::Int::Item.new('Item Two', {}, '/two/')
 
-    @items = Nanoc::Int::IdentifiableCollection.new({}, [@one, @two])
+    @items = Nanoc::Int::ItemCollection.new({}, [@one, @two])
   end
 
   def test_change_item_identifier
@@ -30,7 +30,7 @@ class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
     assert_nil @items['/foo/']
 
     foo = Nanoc::Int::Item.new('Item Foo', {}, '/foo/')
-    @items = Nanoc::Int::IdentifiableCollection.new({}, [@one, @two, foo])
+    @items = Nanoc::Int::ItemCollection.new({}, [@one, @two, foo])
 
     assert_equal foo, @items['/foo/']
   end

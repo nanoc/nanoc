@@ -12,7 +12,7 @@ shared_examples 'an identifiable collection' do
 
   describe '#frozen?' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(
+      collection_class.new(
         config,
         [
           double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
@@ -39,7 +39,7 @@ shared_examples 'an identifiable collection' do
 
   describe '#unwrap' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(
+      collection_class.new(
         config,
         [
           double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
@@ -56,7 +56,7 @@ shared_examples 'an identifiable collection' do
 
   describe '#each' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(
+      collection_class.new(
         config,
         [
           double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
@@ -77,7 +77,7 @@ shared_examples 'an identifiable collection' do
 
   describe '#size' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(
+      collection_class.new(
         config,
         [
           double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
@@ -102,7 +102,7 @@ shared_examples 'an identifiable collection' do
     end
 
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(
+      collection_class.new(
         config,
         [
           page_object,
@@ -171,7 +171,7 @@ shared_examples 'an identifiable collection' do
 
   describe '#find_all' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(
+      collection_class.new(
         config,
         [
           double(:identifiable, identifier: Nanoc::Identifier.new('/about.css')),

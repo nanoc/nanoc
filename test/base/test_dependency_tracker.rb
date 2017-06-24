@@ -6,8 +6,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_initialize
     # Mock objects
     config = Nanoc::Int::Configuration.new.with_defaults
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
-    items = Nanoc::Int::IdentifiableCollection.new(config, [
+    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config, [
       Nanoc::Int::Item.new('a', {}, '/a.md'),
       Nanoc::Int::Item.new('b', {}, '/b.md'),
     ])
@@ -23,8 +23,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_record_dependency
     # Mock objects
     config = Nanoc::Int::Configuration.new.with_defaults
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
-    items = Nanoc::Int::IdentifiableCollection.new(config, [
+    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config, [
       Nanoc::Int::Item.new('a', {}, '/a.md'),
       Nanoc::Int::Item.new('b', {}, '/b.md'),
     ])
@@ -42,8 +42,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_record_dependency_no_self
     # Mock objects
     config = Nanoc::Int::Configuration.new.with_defaults
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
-    items = Nanoc::Int::IdentifiableCollection.new(config, [
+    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config, [
       Nanoc::Int::Item.new('a', {}, '/a.md'),
       Nanoc::Int::Item.new('b', {}, '/b.md'),
     ])
@@ -62,8 +62,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_record_dependency_no_doubles
     # Mock objects
     config = Nanoc::Int::Configuration.new.with_defaults
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
-    items = Nanoc::Int::IdentifiableCollection.new(config, [
+    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config, [
       Nanoc::Int::Item.new('a', {}, '/a.md'),
       Nanoc::Int::Item.new('b', {}, '/b.md'),
     ])
@@ -83,8 +83,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_objects_causing_outdatedness_of
     # Mock objects
     config = Nanoc::Int::Configuration.new.with_defaults
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
-    items = Nanoc::Int::IdentifiableCollection.new(config, [
+    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config, [
       Nanoc::Int::Item.new('a', {}, '/a.md'),
       Nanoc::Int::Item.new('b', {}, '/b.md'),
       Nanoc::Int::Item.new('c', {}, '/c.md'),
@@ -104,8 +104,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_store_graph_and_load_graph_simple
     # Mock objects
     config = Nanoc::Int::Configuration.new.with_defaults
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
-    items = Nanoc::Int::IdentifiableCollection.new(config, [
+    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config, [
       Nanoc::Int::Item.new('a', {}, '/a.md'),
       Nanoc::Int::Item.new('b', {}, '/b.md'),
       Nanoc::Int::Item.new('c', {}, '/c.md'),
@@ -140,8 +140,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_store_graph_and_load_graph_with_removed_items
     # Mock objects
     config = Nanoc::Int::Configuration.new.with_defaults
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
-    items = Nanoc::Int::IdentifiableCollection.new(config, [
+    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config, [
       Nanoc::Int::Item.new('a', {}, '/a.md'),
       Nanoc::Int::Item.new('b', {}, '/b.md'),
       Nanoc::Int::Item.new('c', {}, '/c.md'),
@@ -149,8 +149,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
     ])
 
     # Create new and old lists
-    old_items = Nanoc::Int::IdentifiableCollection.new(config, [items.to_a[0], items.to_a[1], items.to_a[2], items.to_a[3]])
-    new_items = Nanoc::Int::IdentifiableCollection.new(config, [items.to_a[0], items.to_a[1], items.to_a[2]])
+    old_items = Nanoc::Int::ItemCollection.new(config, [items.to_a[0], items.to_a[1], items.to_a[2], items.to_a[3]])
+    new_items = Nanoc::Int::ItemCollection.new(config, [items.to_a[0], items.to_a[1], items.to_a[2]])
 
     # Create
     store = Nanoc::Int::DependencyStore.new(old_items, layouts, config)
@@ -179,8 +179,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_store_graph_with_nils_in_dst
     # Mock objects
     config = Nanoc::Int::Configuration.new.with_defaults
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
-    items = Nanoc::Int::IdentifiableCollection.new(config, [
+    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config, [
       Nanoc::Int::Item.new('a', {}, '/a.md'),
       Nanoc::Int::Item.new('b', {}, '/b.md'),
       Nanoc::Int::Item.new('c', {}, '/c.md'),
@@ -211,8 +211,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_store_graph_with_nils_in_src
     # Mock objects
     config = Nanoc::Int::Configuration.new.with_defaults
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
-    items = Nanoc::Int::IdentifiableCollection.new(config, [
+    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config, [
       Nanoc::Int::Item.new('a', {}, '/a.md'),
       Nanoc::Int::Item.new('b', {}, '/b.md'),
       Nanoc::Int::Item.new('c', {}, '/c.md'),
@@ -243,8 +243,8 @@ class Nanoc::Int::DependencyTrackerTest < Nanoc::TestCase
   def test_forget_dependencies_for
     # Mock objects
     config = Nanoc::Int::Configuration.new.with_defaults
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
-    items = Nanoc::Int::IdentifiableCollection.new(config, [
+    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config, [
       Nanoc::Int::Item.new('a', {}, '/a.md'),
       Nanoc::Int::Item.new('b', {}, '/b.md'),
       Nanoc::Int::Item.new('c', {}, '/c.md'),
