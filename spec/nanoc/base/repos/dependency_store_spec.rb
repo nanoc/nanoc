@@ -91,6 +91,25 @@ describe Nanoc::Int::DependencyStore do
         end
       end
 
+      context 'dependency on items, generic prop' do
+        before do
+          store.record_dependency(item_a, items)
+        end
+
+        it 'creates one dependency' do
+          deps = store.dependencies_causing_outdatedness_of(item_a)
+          expect(deps.size).to eql(1)
+        end
+
+        it 'returns true for all props' do
+          deps = store.dependencies_causing_outdatedness_of(item_a)
+          expect(deps[0].props.raw_content?).to be
+          expect(deps[0].props.compiled_content?).to be
+          expect(deps[0].props.path?).to be
+          expect(deps[0].props.attributes?).to be
+        end
+      end
+
       context 'no props' do
         before do
           store.record_dependency(item_a, item_b)
