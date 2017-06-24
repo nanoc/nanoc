@@ -8,6 +8,7 @@ module Nanoc::Int
     attr_accessor :items
     attr_accessor :layouts
 
+    contract Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection, Nanoc::Int::Configuration, C::KeywordArgs[site: C::Optional[C::Maybe[Nanoc::Int::Site]]] => C::Any
     def initialize(items, layouts, config, site: nil)
       super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'dependencies'), 4)
 
