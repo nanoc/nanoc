@@ -11,7 +11,7 @@ shared_examples 'a mutable identifiable collection' do
 
   describe '#delete_if' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(
+      collection_class.new(
         config,
         [double(:identifiable, identifier: Nanoc::Identifier.new('/asdf/'))],
       )

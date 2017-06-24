@@ -28,8 +28,8 @@ describe Nanoc::Int::OutdatednessChecker do
     Nanoc::Int::DependencyStore.new(items, layouts, config)
   end
 
-  let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item]) }
-  let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
+  let(:items) { Nanoc::Int::ItemCollection.new(config, [item]) }
+  let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
   let(:code_snippets) { [] }
 
@@ -134,7 +134,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
     let(:config) { Nanoc::Int::Configuration.new }
 
-    let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item, other_item]) }
+    let(:items) { Nanoc::Int::ItemCollection.new(config, [item, other_item]) }
 
     let(:old_action_sequence_for_other_item_rep) do
       Nanoc::Int::ActionSequence.build(other_item_rep) do |b|
@@ -167,7 +167,7 @@ describe Nanoc::Int::OutdatednessChecker do
       let(:distant_item_rep) { Nanoc::Int::ItemRep.new(distant_item, :default) }
 
       let(:items) do
-        Nanoc::Int::IdentifiableCollection.new(config, [item, other_item, distant_item])
+        Nanoc::Int::ItemCollection.new(config, [item, other_item, distant_item])
       end
 
       let(:action_sequences) do

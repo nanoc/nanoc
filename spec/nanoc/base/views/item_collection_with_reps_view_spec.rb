@@ -2,11 +2,12 @@
 
 describe Nanoc::ItemCollectionWithRepsView do
   let(:view_class) { Nanoc::ItemWithRepsView }
+  let(:collection_class) { Nanoc::Int::ItemCollection }
   it_behaves_like 'an identifiable collection'
 
   describe '#inspect' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config)
+      Nanoc::Int::ItemCollection.new(config)
     end
 
     let(:view) { described_class.new(wrapped, view_context) }

@@ -14,11 +14,11 @@ describe Nanoc::Int::Compiler::Stages::CalculateChecksums do
   end
 
   let(:items) do
-    Nanoc::Int::IdentifiableCollection.new(config, [item])
+    Nanoc::Int::ItemCollection.new(config, [item])
   end
 
   let(:layouts) do
-    Nanoc::Int::IdentifiableCollection.new(config, [layout])
+    Nanoc::Int::LayoutCollection.new(config, [layout])
   end
 
   let(:code_snippet) do

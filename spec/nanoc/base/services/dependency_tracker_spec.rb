@@ -3,15 +3,14 @@
 describe Nanoc::Int::DependencyTracker do
   let(:tracker) { described_class.new(store) }
 
-  let(:store) { Nanoc::Int::DependencyStore.new(empty_identifiable_collection, empty_identifiable_collection, config) }
+  let(:store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
 
   let(:item_a) { Nanoc::Int::Item.new('a', {}, '/a.md') }
   let(:item_b) { Nanoc::Int::Item.new('b', {}, '/b.md') }
   let(:item_c) { Nanoc::Int::Item.new('c', {}, '/c.md') }
 
-  let(:empty_identifiable_collection) do
-    Nanoc::Int::IdentifiableCollection.new(config)
-  end
+  let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
+  let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
   let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 

@@ -32,8 +32,8 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     super
 
     config = Nanoc::Int::Configuration.new.with_defaults
-    items = Nanoc::Int::IdentifiableCollection.new(config)
-    layouts = Nanoc::Int::IdentifiableCollection.new(config)
+    items = Nanoc::Int::ItemCollection.new(config)
+    layouts = Nanoc::Int::LayoutCollection.new(config)
     dep_store = Nanoc::Int::DependencyStore.new(items, layouts, config)
     dependency_tracker = Nanoc::Int::DependencyTracker.new(dep_store)
 

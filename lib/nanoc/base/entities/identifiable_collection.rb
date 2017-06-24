@@ -12,14 +12,17 @@ module Nanoc::Int
     def_delegator :@objects, :each
     def_delegator :@objects, :size
 
-    contract C::Or[Hash, C::Named['Nanoc::Int::Configuration']], C::IterOf[C::RespondTo[:identifier]] => C::Any
-    def initialize(config, objects = [])
-      @config = config
-      @objects = Hamster::Vector.new(objects)
+    contract C::Or[Hash, C::Named['Nanoc::Int::Configuration']], C::IterOf[C::RespondTo[:identifier]], C::Maybe[String] => C::Any
+    def initialize(config, objects = [], name = nil)
+      # TODO: make this raise
+      initialize_basic(config, objects, name)
     end
 
-    def self.from(enum, config)
-      new(config, enum)
+    contract C::Or[Hash, C::Named['Nanoc::Int::Configuration']], C::IterOf[C::RespondTo[:identifier]], C::Maybe[String] => C::Any
+    def initialize_basic(config, objects = [], name = nil)
+      @config = config
+      @objects = Hamster::Vector.new(objects)
+      @name = name
     end
 
     contract C::None => self

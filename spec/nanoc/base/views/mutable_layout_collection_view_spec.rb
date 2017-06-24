@@ -2,6 +2,7 @@
 
 describe Nanoc::MutableLayoutCollectionView do
   let(:view_class) { Nanoc::MutableLayoutView }
+  let(:collection_class) { Nanoc::Int::LayoutCollection }
   it_behaves_like 'an identifiable collection'
   it_behaves_like 'a mutable identifiable collection'
 
@@ -15,7 +16,7 @@ describe Nanoc::MutableLayoutCollectionView do
     end
 
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config, [layout])
+      Nanoc::Int::LayoutCollection.new(config, [layout])
     end
 
     let(:view) { described_class.new(wrapped, nil) }
@@ -42,7 +43,7 @@ describe Nanoc::MutableLayoutCollectionView do
 
   describe '#inspect' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config)
+      Nanoc::Int::LayoutCollection.new(config)
     end
 
     let(:view) { described_class.new(wrapped, view_context) }

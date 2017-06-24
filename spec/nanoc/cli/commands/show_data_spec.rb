@@ -13,7 +13,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:command) { double(:command) }
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new(
+      Nanoc::Int::ItemCollection.new(
         config,
         [
           item_about,
@@ -34,7 +34,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     end
 
     let(:layouts) do
-      Nanoc::Int::IdentifiableCollection.new(config)
+      Nanoc::Int::LayoutCollection.new(config)
     end
 
     it 'prints a legend' do
@@ -166,7 +166,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:config) { Nanoc::Int::Configuration.new }
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new(
+      Nanoc::Int::ItemCollection.new(
         config,
         [
           item_about,
@@ -257,7 +257,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:config) { Nanoc::Int::Configuration.new }
 
     let(:layouts) do
-      Nanoc::Int::IdentifiableCollection.new(config, [layout])
+      Nanoc::Int::LayoutCollection.new(config, [layout])
     end
 
     let(:layout) { Nanoc::Int::Layout.new('stuff', {}, '/default.erb') }

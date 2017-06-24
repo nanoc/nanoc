@@ -17,8 +17,8 @@ module Nanoc
         @action_sequence = {}
         @config = Nanoc::Int::Configuration.new.with_defaults
         @reps = Nanoc::Int::ItemRepRepo.new
-        @items = Nanoc::Int::IdentifiableCollection.new(@config)
-        @layouts = Nanoc::Int::IdentifiableCollection.new(@config)
+        @items = Nanoc::Int::ItemCollection.new(@config)
+        @layouts = Nanoc::Int::LayoutCollection.new(@config)
         @dependency_tracker = Nanoc::Int::DependencyTracker.new(Object.new)
       end
 

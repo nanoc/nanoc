@@ -18,15 +18,14 @@ describe Nanoc::ItemWithRepsView do
   let(:reps) { [] }
   let(:items) { [] }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
-  let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_identifiable_collection, empty_identifiable_collection, config) }
+  let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:compilation_context) { double(:compilation_context) }
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
   let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md') }
 
-  let(:empty_identifiable_collection) do
-    Nanoc::Int::IdentifiableCollection.new(config)
-  end
+  let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
+  let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
   let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
@@ -42,7 +41,7 @@ describe Nanoc::ItemWithRepsView do
     let(:view) { described_class.new(item, view_context) }
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new(
+      Nanoc::Int::ItemCollection.new(
         {},
         [
           item,
@@ -141,7 +140,7 @@ describe Nanoc::ItemWithRepsView do
     let(:view) { described_class.new(item, view_context) }
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new(
+      Nanoc::Int::ItemCollection.new(
         {},
         [
           item,

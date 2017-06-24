@@ -10,8 +10,8 @@ describe Nanoc::Int::DependencyStore do
   let(:layout_a) { Nanoc::Int::Layout.new('la', {}, '/la.md') }
   let(:layout_b) { Nanoc::Int::Layout.new('lb', {}, '/lb.md') }
 
-  let(:items) { Nanoc::Int::IdentifiableCollection.new(config, [item_a, item_b, item_c]) }
-  let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config, [layout_a, layout_b]) }
+  let(:items) { Nanoc::Int::ItemCollection.new(config, [item_a, item_b, item_c]) }
+  let(:layouts) { Nanoc::Int::LayoutCollection.new(config, [layout_a, layout_b]) }
   let(:config) { Nanoc::Int::Configuration.new }
 
   describe '#dependencies_causing_outdatedness_of' do
@@ -222,7 +222,7 @@ describe Nanoc::Int::DependencyStore do
 
     context 'one new item' do
       let(:items_after) do
-        Nanoc::Int::IdentifiableCollection.new(config, [item_a, item_b, item_c, item_d])
+        Nanoc::Int::ItemCollection.new(config, [item_a, item_b, item_c, item_d])
       end
 
       let(:item_d) { Nanoc::Int::Item.new('d', {}, '/d.md') }
@@ -240,7 +240,7 @@ describe Nanoc::Int::DependencyStore do
 
     context 'two new items' do
       let(:items_after) do
-        Nanoc::Int::IdentifiableCollection.new(config, [item_a, item_b, item_c, item_d, item_e])
+        Nanoc::Int::ItemCollection.new(config, [item_a, item_b, item_c, item_d, item_e])
       end
 
       let(:item_d) { Nanoc::Int::Item.new('d', {}, '/d.md') }

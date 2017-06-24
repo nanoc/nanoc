@@ -43,11 +43,11 @@ describe Nanoc::Int::Compiler do
   let(:code_snippets) { [] }
 
   let(:items) do
-    Nanoc::Int::IdentifiableCollection.new(config, [item, other_item])
+    Nanoc::Int::ItemCollection.new(config, [item, other_item])
   end
 
   let(:layouts) do
-    Nanoc::Int::IdentifiableCollection.new(config)
+    Nanoc::Int::LayoutCollection.new(config)
   end
 
   let(:memory) do

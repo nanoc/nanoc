@@ -8,8 +8,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
   let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
   let(:config) { Nanoc::Int::Configuration.new }
-  let(:items) { Nanoc::Int::IdentifiableCollection.new(config) }
-  let(:layouts) { Nanoc::Int::IdentifiableCollection.new(config) }
+  let(:items) { Nanoc::Int::ItemCollection.new(config) }
+  let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
   let(:rep) { double(:rep, item: item) }
   let(:site) { double(:site, items: items, layouts: layouts, config: config) }
@@ -59,7 +59,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
       let(:child) { Nanoc::Int::Item.new('child', {}, child_identifier) }
 
       let(:items) do
-        Nanoc::Int::IdentifiableCollection.new(config, [item, parent, child])
+        Nanoc::Int::ItemCollection.new(config, [item, parent, child])
       end
 
       it 'has a parent' do
@@ -98,7 +98,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
     let(:child) { Nanoc::Int::Item.new('child', {}, child_identifier) }
 
     let(:items) do
-      Nanoc::Int::IdentifiableCollection.new(config, [item, parent, child])
+      Nanoc::Int::ItemCollection.new(config, [item, parent, child])
     end
 
     it 'is a view without reps access' do

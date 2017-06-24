@@ -2,11 +2,12 @@
 
 describe Nanoc::LayoutCollectionView do
   let(:view_class) { Nanoc::LayoutView }
+  let(:collection_class) { Nanoc::Int::LayoutCollection }
   it_behaves_like 'an identifiable collection'
 
   describe '#inspect' do
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(config)
+      Nanoc::Int::LayoutCollection.new(config)
     end
 
     let(:view) { described_class.new(wrapped, view_context) }

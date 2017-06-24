@@ -301,7 +301,7 @@ describe Nanoc::Int::Checksummer do
     let(:config) { Nanoc::Int::Configuration.new(hash: { 'foo' => 'bar' }) }
 
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(
+      Nanoc::Int::ItemCollection.new(
         config,
         [
           Nanoc::Int::Item.new('foo', {}, '/foo.md'),
@@ -310,7 +310,7 @@ describe Nanoc::Int::Checksummer do
       )
     end
 
-    it { is_expected.to eql('Nanoc::ItemCollectionWithRepsView<Nanoc::Int::IdentifiableCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
+    it { is_expected.to eql('Nanoc::ItemCollectionWithRepsView<Nanoc::Int::ItemCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
   end
 
   context 'Nanoc::ItemCollectionWithoutRepsView' do
@@ -319,7 +319,7 @@ describe Nanoc::Int::Checksummer do
     let(:config) { Nanoc::Int::Configuration.new(hash: { 'foo' => 'bar' }) }
 
     let(:wrapped) do
-      Nanoc::Int::IdentifiableCollection.new(
+      Nanoc::Int::ItemCollection.new(
         config,
         [
           Nanoc::Int::Item.new('foo', {}, '/foo.md'),
@@ -328,7 +328,7 @@ describe Nanoc::Int::Checksummer do
       )
     end
 
-    it { is_expected.to eql('Nanoc::ItemCollectionWithoutRepsView<Nanoc::Int::IdentifiableCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
+    it { is_expected.to eql('Nanoc::ItemCollectionWithoutRepsView<Nanoc::Int::ItemCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
   end
 
   context 'Nanoc::RuleDSL::RuleContext' do
