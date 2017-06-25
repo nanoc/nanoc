@@ -97,6 +97,7 @@ module Nanoc::Int
     Reasons = Nanoc::Int::OutdatednessReasons
 
     C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout]
+    C_ITEM_OR_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep]
     C_ACTION_SEQUENCES = C::HashOf[C_OBJ => Nanoc::Int::ActionSequence]
 
     contract C::KeywordArgs[site: Nanoc::Int::Site, checksum_store: Nanoc::Int::ChecksumStore, checksums: Nanoc::Int::ChecksumCollection, dependency_store: Nanoc::Int::DependencyStore, action_sequence_store: Nanoc::Int::ActionSequenceStore, action_sequences: C_ACTION_SEQUENCES, reps: Nanoc::Int::ItemRepRepo] => C::Any
@@ -140,7 +141,7 @@ module Nanoc::Int
       @_basic ||= Basic.new(outdatedness_checker: self, reps: @reps)
     end
 
-    contract C_OBJ, Hamster::Set => C::Bool
+    contract C_ITEM_OR_REP, Hamster::Set => C::Bool
     def outdated_due_to_dependencies?(obj, processed = Hamster::Set.new)
       # Convert from rep to item if necessary
       obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
