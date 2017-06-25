@@ -15,7 +15,7 @@ module Nanoc::Int
 
     contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], objects: C::IterOf[c_obj]] => C::Any
     def initialize(site: nil, objects:)
-      super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'checksums'), 1)
+      super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'checksums'), 2)
 
       @objects = objects
 
