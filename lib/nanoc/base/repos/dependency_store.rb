@@ -24,7 +24,7 @@ module Nanoc::Int
       @graph = Nanoc::Int::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))
     end
 
-    C_OBJ_SRC = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+    C_OBJ_SRC = C::Or[Nanoc::Int::Item]
     C_OBJ_DST = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration]
 
     contract C_OBJ_SRC => C::ArrayOf[Nanoc::Int::Dependency]

@@ -307,7 +307,7 @@ describe Nanoc::Int::DependencyStore do
 
       it 'ignores all other objects' do
         subject
-        expect(other_objs).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
+        expect(other_items).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
       end
     end
 
@@ -331,7 +331,7 @@ describe Nanoc::Int::DependencyStore do
 
       it 'ignores all other objects' do
         subject
-        expect(other_objs).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
+        expect(other_items).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
       end
     end
 
@@ -356,7 +356,7 @@ describe Nanoc::Int::DependencyStore do
 
       it 'ignores all other objects' do
         subject
-        expect(other_objs).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
+        expect(other_items).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
       end
     end
 
@@ -381,7 +381,7 @@ describe Nanoc::Int::DependencyStore do
 
       it 'ignores all other objects' do
         subject
-        expect(other_objs).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
+        expect(other_items).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
       end
     end
   end
@@ -390,7 +390,7 @@ describe Nanoc::Int::DependencyStore do
     context 'item on item' do
       let(:source_obj) { item_a }
       let(:target_obj) { item_b }
-      let(:other_objs) { [item_c, layout_a, layout_b] }
+      let(:other_items) { [item_c] }
 
       include_examples 'records dependencies'
     end
@@ -398,7 +398,7 @@ describe Nanoc::Int::DependencyStore do
     context 'item on layout' do
       let(:source_obj) { item_a }
       let(:target_obj) { layout_a }
-      let(:other_objs) { [item_b, item_c, layout_b] }
+      let(:other_items) { [item_b, item_c] }
 
       include_examples 'records dependencies'
     end
@@ -406,7 +406,7 @@ describe Nanoc::Int::DependencyStore do
     context 'item on config' do
       let(:source_obj) { item_a }
       let(:target_obj) { config }
-      let(:other_objs) { [item_b, item_c, layout_a, layout_b] }
+      let(:other_items) { [item_b, item_c] }
 
       include_examples 'records dependencies'
     end
