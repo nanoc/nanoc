@@ -160,11 +160,6 @@ module Nanoc::Int
       # Convert from rep to item if necessary
       obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
 
-      if obj.is_a?(Nanoc::Int::ItemCollection)
-        # FIXME: what about config? layout? layout collection?
-        return false
-      end
-
       # Get from cache
       if @objects_outdated_due_to_dependencies.key?(obj)
         return @objects_outdated_due_to_dependencies[obj]
