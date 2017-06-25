@@ -110,6 +110,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
     end
 
     it 'provides no rep access' do
+      allow(dependency_tracker).to receive(:bounce).and_return(nil)
+
       expect(subject['/']).not_to be_nil
       expect(subject['/']).not_to respond_to(:compiled_content)
       expect(subject['/']).not_to respond_to(:path)

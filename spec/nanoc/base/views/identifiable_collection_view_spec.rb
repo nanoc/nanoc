@@ -4,7 +4,19 @@
 shared_examples 'an identifiable collection' do
   let(:view) { described_class.new(wrapped, view_context) }
 
-  let(:view_context) { double(:view_context) }
+  let(:view_context) do
+    Nanoc::ViewContext.new(
+      reps:                double(:__reps),
+      items:               double(:__items),
+      dependency_tracker:  dependency_tracker,
+      compilation_context: double(:__compilation_context),
+      snapshot_repo:       double(:__snapshot_repo),
+    )
+  end
+
+  let(:dependency_tracker) do
+    Nanoc::Int::DependencyTracker::Null.new
+  end
 
   let(:config) do
     { string_pattern_type: 'glob' }
@@ -52,6 +64,11 @@ shared_examples 'an identifiable collection' do
     subject { view.unwrap }
 
     it { should equal(wrapped) }
+
+    it 'does not create dependency' do
+      expect(dependency_tracker).not_to receive(:bounce)
+      subject
+    end
   end
 
   describe '#each' do
@@ -64,6 +81,11 @@ shared_examples 'an identifiable collection' do
           double(:identifiable, identifier: Nanoc::Identifier.new('/baz')),
         ],
       )
+    end
+
+    it 'creates dependency' do
+      expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+      view.each { |_i| }
     end
 
     it 'returns self' do
@@ -88,6 +110,11 @@ shared_examples 'an identifiable collection' do
     end
 
     subject { view.size }
+
+    it 'creates dependency' do
+      expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+      subject
+    end
 
     it { should == 3 }
   end
@@ -116,10 +143,20 @@ shared_examples 'an identifiable collection' do
     context 'no objects found' do
       let(:arg) { '/donkey.*' }
       it { is_expected.to equal(nil) }
+
+      it 'creates dependency' do
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+        subject
+      end
     end
 
     context 'string' do
       let(:arg) { '/home.erb' }
+
+      it 'creates dependency' do
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+        subject
+      end
 
       it 'returns wrapped object' do
         expect(subject.class).to equal(view_class)
@@ -134,6 +171,11 @@ shared_examples 'an identifiable collection' do
     context 'identifier' do
       let(:arg) { Nanoc::Identifier.new('/home.erb') }
 
+      it 'creates dependency' do
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+        subject
+      end
+
       it 'returns wrapped object' do
         expect(subject.class).to equal(view_class)
         expect(subject.unwrap).to equal(home_object)
@@ -146,12 +188,22 @@ shared_examples 'an identifiable collection' do
       context 'globs not enabled' do
         let(:config) { { string_pattern_type: 'legacy' } }
 
+        it 'creates dependency' do
+          expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+          subject
+        end
+
         it 'returns nil' do
           expect(subject).to be_nil
         end
       end
 
       context 'globs enabled' do
+        it 'creates dependency' do
+          expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+          subject
+        end
+
         it 'returns wrapped object' do
           expect(subject.class).to equal(view_class)
           expect(subject.unwrap).to equal(home_object)
@@ -161,6 +213,11 @@ shared_examples 'an identifiable collection' do
 
     context 'regex' do
       let(:arg) { %r{\A/home} }
+
+      it 'creates dependency' do
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+        subject
+      end
 
       it 'returns wrapped object' do
         expect(subject.class).to equal(view_class)
