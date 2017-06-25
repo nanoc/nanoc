@@ -40,7 +40,12 @@ module Nanoc::Int
           Rules::ItemCollectionExtended,
         ].freeze
 
-      C_OBJ_MAYBE_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout, Nanoc::Int::ItemCollection]
+      RULES_FOR_LAYOUT_COLLECTION =
+        [
+          Rules::LayoutCollectionExtended,
+        ].freeze
+
+      C_OBJ_MAYBE_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout, Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection]
 
       contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Int::ItemRepRepo] => C::Any
       def initialize(outdatedness_checker:, reps:)
@@ -61,6 +66,8 @@ module Nanoc::Int
           apply_rules(RULES_FOR_CONFIG, obj)
         when Nanoc::Int::ItemCollection
           apply_rules(RULES_FOR_ITEM_COLLECTION, obj)
+        when Nanoc::Int::LayoutCollection
+          apply_rules(RULES_FOR_LAYOUT_COLLECTION, obj)
         else
           raise Nanoc::Int::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
         end
