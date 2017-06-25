@@ -35,7 +35,17 @@ module Nanoc::Int
           Rules::AttributesModified,
         ].freeze
 
-      C_OBJ_MAYBE_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout]
+      RULES_FOR_ITEM_COLLECTION =
+        [
+          Rules::ItemCollectionExtended,
+        ].freeze
+
+      RULES_FOR_LAYOUT_COLLECTION =
+        [
+          Rules::LayoutCollectionExtended,
+        ].freeze
+
+      C_OBJ_MAYBE_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout, Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection]
 
       contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Int::ItemRepRepo] => C::Any
       def initialize(outdatedness_checker:, reps:)
@@ -54,6 +64,10 @@ module Nanoc::Int
           apply_rules(RULES_FOR_LAYOUT, obj)
         when Nanoc::Int::Configuration
           apply_rules(RULES_FOR_CONFIG, obj)
+        when Nanoc::Int::ItemCollection
+          apply_rules(RULES_FOR_ITEM_COLLECTION, obj)
+        when Nanoc::Int::LayoutCollection
+          apply_rules(RULES_FOR_LAYOUT_COLLECTION, obj)
         else
           raise Nanoc::Int::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
         end
@@ -96,7 +110,7 @@ module Nanoc::Int
 
     Reasons = Nanoc::Int::OutdatednessReasons
 
-    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout]
+    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout, Nanoc::Int::ItemCollection]
     C_ITEM_OR_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep]
     C_ACTION_SEQUENCES = C::HashOf[C_OBJ => Nanoc::Int::ActionSequence]
 
@@ -145,6 +159,11 @@ module Nanoc::Int
     def outdated_due_to_dependencies?(obj, processed = Hamster::Set.new)
       # Convert from rep to item if necessary
       obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
+
+      if obj.is_a?(Nanoc::Int::ItemCollection)
+        # FIXME: what about config? layout? layout collection?
+        return false
+      end
 
       # Get from cache
       if @objects_outdated_due_to_dependencies.key?(obj)

@@ -122,6 +122,48 @@ describe Nanoc::Int::OutdatednessChecker do
     context 'with layout' do
       # …
     end
+
+    context 'with item collection' do
+      let(:obj) { items }
+
+      context 'no new items' do
+        it { is_expected.to be_nil }
+      end
+
+      context 'new items' do
+        before do
+          dependency_store.store
+
+          new_item = Nanoc::Int::Item.new('stuff', {}, '/newblahz.md')
+          dependency_store.items = Nanoc::Int::ItemCollection.new(config, [item, new_item])
+
+          dependency_store.load
+        end
+
+        it { is_expected.to eq(Nanoc::Int::OutdatednessReasons::ItemCollectionExtended) }
+      end
+    end
+
+    context 'with layout collection' do
+      let(:obj) { layouts }
+
+      context 'no new layouts' do
+        it { is_expected.to be_nil }
+      end
+
+      context 'new layouts' do
+        before do
+          dependency_store.store
+
+          new_layout = Nanoc::Int::Layout.new('stuff', {}, '/newblahz.md')
+          dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, layouts.to_a + [new_layout])
+
+          dependency_store.load
+        end
+
+        it { is_expected.to eq(Nanoc::Int::OutdatednessReasons::LayoutCollectionExtended) }
+      end
+    end
   end
 
   describe '#outdated_due_to_dependencies?' do
@@ -486,6 +528,66 @@ describe Nanoc::Int::OutdatednessChecker do
       context 'raw content changed' do
         before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
         it { is_expected.not_to be }
+      end
+    end
+
+    context 'only item collection dependency' do
+      before do
+        dependency_store.record_dependency(item, items, raw_content: true)
+      end
+
+      context 'nothing changed' do
+        it { is_expected.not_to be }
+      end
+
+      context 'item added' do
+        before do
+          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker.bounce(items, raw_content: true)
+
+          dependency_store.store
+
+          new_item = Nanoc::Int::Item.new('stuff', {}, '/newblahz.md')
+          dependency_store.items = Nanoc::Int::ItemCollection.new(config, items.to_a + [new_item])
+
+          dependency_store.load
+        end
+
+        it { is_expected.to be }
+      end
+
+      context 'item removed' do
+        # …
+      end
+    end
+
+    context 'only layout collection dependency' do
+      before do
+        dependency_store.record_dependency(item, layouts, raw_content: true)
+      end
+
+      context 'nothing changed' do
+        it { is_expected.not_to be }
+      end
+
+      context 'layout added' do
+        before do
+          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker.bounce(layouts, raw_content: true)
+
+          dependency_store.store
+
+          new_layout = Nanoc::Int::Layout.new('stuff', {}, '/newblahz.md')
+          dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, layouts.to_a + [new_layout])
+
+          dependency_store.load
+        end
+
+        it { is_expected.to be }
+      end
+
+      context 'layout removed' do
+        # …
       end
     end
   end

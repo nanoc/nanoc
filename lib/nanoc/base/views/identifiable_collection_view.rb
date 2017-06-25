@@ -30,12 +30,14 @@ module Nanoc
     #
     # @return [self]
     def each
+      @context.dependency_tracker.bounce(unwrap, raw_content: true)
       @objects.each { |i| yield view_class.new(i, @context) }
       self
     end
 
     # @return [Integer]
     def size
+      @context.dependency_tracker.bounce(unwrap, raw_content: true)
       @objects.size
     end
 
@@ -45,6 +47,7 @@ module Nanoc
     #
     # @return [Enumerable]
     def find_all(arg)
+      @context.dependency_tracker.bounce(unwrap, raw_content: true)
       @objects.find_all(arg).map { |i| view_class.new(i, @context) }
     end
 
@@ -71,6 +74,7 @@ module Nanoc
     #
     #   @return [#identifier] if an object was found
     def [](arg)
+      @context.dependency_tracker.bounce(unwrap, raw_content: true)
       res = @objects[arg]
       res && view_class.new(res, @context)
     end

@@ -10,7 +10,7 @@ module Nanoc::Int
 
     contract Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection, Nanoc::Int::Configuration, C::KeywordArgs[site: C::Optional[C::Maybe[Nanoc::Int::Site]]] => C::Any
     def initialize(items, layouts, config, site: nil)
-      super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'dependencies'), 4)
+      super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'dependencies'), 5)
 
       @items = items
       @layouts = layouts
@@ -19,13 +19,15 @@ module Nanoc::Int
       items.each   { |o| add_vertex_for(o) }
       layouts.each { |o| add_vertex_for(o) }
       add_vertex_for(config)
+      add_vertex_for(items)
+      add_vertex_for(layouts)
 
       @new_objects = []
       @graph = Nanoc::Int::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))
     end
 
     C_OBJ_SRC = Nanoc::Int::Item
-    C_OBJ_DST = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration]
+    C_OBJ_DST = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::IdentifiableCollection]
 
     contract C_OBJ_SRC => C::ArrayOf[Nanoc::Int::Dependency]
     def dependencies_causing_outdatedness_of(object)
@@ -48,11 +50,18 @@ module Nanoc::Int
     def items=(items)
       @items = items
       items.each { |o| @refs2objs[obj2ref(o)] = o }
+      add_vertex_for(items)
     end
 
     def layouts=(layouts)
       @layouts = layouts
       layouts.each { |o| @refs2objs[obj2ref(o)] = o }
+      add_vertex_for(layouts)
+    end
+
+    contract C::None => C::Bool
+    def any_new_objects?
+      @new_objects.any?
     end
 
     # Returns the direct dependencies for the given object.
@@ -73,11 +82,7 @@ module Nanoc::Int
     # predecessors of
     #   the given object
     def objects_causing_outdatedness_of(object)
-      if @new_objects.any?
-        [@new_objects.first]
-      else
-        refs2objs(@graph.direct_predecessors_of(obj2ref(object)))
-      end
+      refs2objs(@graph.direct_predecessors_of(obj2ref(object)))
     end
 
     C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]

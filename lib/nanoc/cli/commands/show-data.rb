@@ -99,6 +99,10 @@ module Nanoc::CLI::Commands
               'item'
             when Nanoc::Int::Configuration
               'config'
+            when Nanoc::Int::ItemCollection
+              'items'
+            when Nanoc::Int::LayoutCollection
+              'layouts'
             else
               raise Nanoc::Int::Errors::InternalInconsistency, "unexpected pred type #{pred}"
             end
