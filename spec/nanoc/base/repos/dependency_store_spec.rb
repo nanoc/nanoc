@@ -246,36 +246,11 @@ describe Nanoc::Int::DependencyStore do
 
       let(:item_d) { Nanoc::Int::Item.new('d', {}, '/d.md') }
 
-      it 'marks existing items as outdated' do
-        expect(store.objects_causing_outdatedness_of(item_a)).to eq([item_d])
-        expect(store.objects_causing_outdatedness_of(item_b)).to eq([item_d])
-        expect(store.objects_causing_outdatedness_of(item_c)).to eq([item_d])
-      end
-
-      it 'marks new items as outdated' do
-        expect(store.objects_causing_outdatedness_of(item_d)).to eq([item_d])
-      end
-    end
-
-    context 'two new items' do
-      let(:items_after) do
-        Nanoc::Int::ItemCollection.new(config, [item_a, item_b, item_c, item_d, item_e])
-      end
-
-      let(:item_d) { Nanoc::Int::Item.new('d', {}, '/d.md') }
-      let(:item_e) { Nanoc::Int::Item.new('e', {}, '/e.md') }
-
-      it 'marks existing items as outdated' do
-        # Only one of obj D or E needed!
-        expect(store.objects_causing_outdatedness_of(item_a)).to eq([item_d]).or eq([item_e])
-        expect(store.objects_causing_outdatedness_of(item_b)).to eq([item_d]).or eq([item_e])
-        expect(store.objects_causing_outdatedness_of(item_c)).to eq([item_d]).or eq([item_e])
-      end
-
-      it 'marks new items as outdated' do
-        # Only one of obj D or E needed!
-        expect(store.objects_causing_outdatedness_of(item_d)).to eq([item_d]).or eq([item_e])
-        expect(store.objects_causing_outdatedness_of(item_e)).to eq([item_d]).or eq([item_e])
+      it 'does not mark items as outdated' do
+        expect(store.objects_causing_outdatedness_of(item_a)).not_to include(item_d)
+        expect(store.objects_causing_outdatedness_of(item_b)).not_to include(item_d)
+        expect(store.objects_causing_outdatedness_of(item_c)).not_to include(item_d)
+        expect(store.objects_causing_outdatedness_of(item_d)).not_to include(item_d)
       end
     end
   end

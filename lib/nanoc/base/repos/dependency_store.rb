@@ -59,6 +59,11 @@ module Nanoc::Int
       add_vertex_for(layouts)
     end
 
+    contract C::None => C::Bool
+    def any_new_objects?
+      @new_objects.any?
+    end
+
     # Returns the direct dependencies for the given object.
     #
     # The direct dependencies of the given object include the items and
@@ -77,11 +82,7 @@ module Nanoc::Int
     # predecessors of
     #   the given object
     def objects_causing_outdatedness_of(object)
-      if @new_objects.any?
-        [@new_objects.first]
-      else
-        refs2objs(@graph.direct_predecessors_of(obj2ref(object)))
-      end
+      refs2objs(@graph.direct_predecessors_of(obj2ref(object)))
     end
 
     C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
