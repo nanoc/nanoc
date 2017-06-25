@@ -557,7 +557,18 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'item removed' do
-        # …
+        before do
+          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker.bounce(items, raw_content: true)
+
+          dependency_store.store
+
+          dependency_store.items = Nanoc::Int::ItemCollection.new(config, [])
+
+          dependency_store.load
+        end
+
+        it { is_expected.not_to be }
       end
     end
 
@@ -587,7 +598,18 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'layout removed' do
-        # …
+        before do
+          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker.bounce(layouts, raw_content: true)
+
+          dependency_store.store
+
+          dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, [])
+
+          dependency_store.load
+        end
+
+        it { is_expected.not_to be }
       end
     end
   end
