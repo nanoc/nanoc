@@ -23,8 +23,10 @@ module Nanoc::Int
       @graph = Nanoc::Int::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))
     end
 
-    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration]
-    contract C_OBJ => C::ArrayOf[Nanoc::Int::Dependency]
+    C_OBJ_SRC = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
+    C_OBJ_DST = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration]
+
+    contract C_OBJ_SRC => C::ArrayOf[Nanoc::Int::Dependency]
     def dependencies_causing_outdatedness_of(object)
       objects_causing_outdatedness_of(object).map do |other_object|
         props = props_for(other_object, object)
@@ -78,7 +80,8 @@ module Nanoc::Int
     end
 
     C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
-    contract C::Maybe[C_OBJ], C::Maybe[C_OBJ], C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+    C_KEYWORD_PROPS = C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
+    contract C::Maybe[C_OBJ_SRC], C::Maybe[C_OBJ_DST], C_KEYWORD_PROPS => C::Any
     # Records a dependency from `src` to `dst` in the dependency graph. When
     # `dst` is oudated, `src` will also become outdated.
     #

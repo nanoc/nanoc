@@ -390,7 +390,7 @@ describe Nanoc::Int::DependencyStore do
     context 'item on item' do
       let(:source_obj) { item_a }
       let(:target_obj) { item_b }
-      let(:other_objs) { [config, item_c, layout_a, layout_b] }
+      let(:other_objs) { [item_c, layout_a, layout_b] }
 
       include_examples 'records dependencies'
     end
@@ -398,7 +398,7 @@ describe Nanoc::Int::DependencyStore do
     context 'item on layout' do
       let(:source_obj) { item_a }
       let(:target_obj) { layout_a }
-      let(:other_objs) { [config, item_b, item_c, layout_b] }
+      let(:other_objs) { [item_b, item_c, layout_b] }
 
       include_examples 'records dependencies'
     end
