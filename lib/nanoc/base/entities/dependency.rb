@@ -6,18 +6,19 @@ module Nanoc::Int
   class Dependency
     include Nanoc::Int::ContractsSupport
 
-    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration]
+    C_OBJ_FROM = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration]
+    C_OBJ_TO   = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]
 
-    contract C::None => C::Maybe[C_OBJ]
+    contract C::None => C::Maybe[C_OBJ_FROM]
     attr_reader :from
 
-    contract C::None => C::Maybe[C_OBJ]
+    contract C::None => C::Maybe[C_OBJ_TO]
     attr_reader :to
 
     contract C::None => Nanoc::Int::Props
     attr_reader :props
 
-    contract C::Maybe[C_OBJ], C::Maybe[C_OBJ], Nanoc::Int::Props => C::Any
+    contract C::Maybe[C_OBJ_FROM], C::Maybe[C_OBJ_TO], Nanoc::Int::Props => C::Any
     def initialize(from, to, props)
       @from  = from
       @to    = to
