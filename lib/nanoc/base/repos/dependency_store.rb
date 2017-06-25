@@ -95,7 +95,7 @@ module Nanoc::Int
     #
     # @return [void]
     def record_dependency(src, dst, raw_content: false, attributes: false, compiled_content: false, path: false)
-      # TODO: do src == dst check first (faster)
+      return if src == dst
 
       add_vertex_for(src)
       add_vertex_for(dst)
@@ -107,7 +107,7 @@ module Nanoc::Int
       new_props = Nanoc::Int::Props.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
       props = existing_props.merge(new_props)
 
-      @graph.add_edge(dst_ref, src_ref, props: props.to_h) unless src == dst
+      @graph.add_edge(dst_ref, src_ref, props: props.to_h)
     end
 
     def add_vertex_for(o)
