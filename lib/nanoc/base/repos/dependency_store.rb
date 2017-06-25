@@ -23,8 +23,7 @@ module Nanoc::Int
       @graph = Nanoc::Int::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))
     end
 
-    # FIXME: ItemRep?
-    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Layout, Nanoc::Int::Configuration]
+    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration]
     contract C_OBJ => C::ArrayOf[Nanoc::Int::Dependency]
     def dependencies_causing_outdatedness_of(object)
       objects_causing_outdatedness_of(object).map do |other_object|
