@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://validator.nu/?out=json&parser=html&showsource=yes
+    uri: https://validator.w3.org/nu/?out=json&parser=html&showsource=yes
     body:
       encoding: UTF-8
       string: <!DOCTYPE html><html><head><meta charset="utf-8"><title>Hello</title></head><body><h1>Hi!</h1></body>
@@ -20,16 +20,8 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Server:
-      - nginx/1.11.10
       Date:
-      - Fri, 10 Mar 2017 20:24:28 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
+      - Fri, 30 Jun 2017 20:45:19 GMT
       Accept-Encoding:
       - gzip
       Access-Control-Allow-Origin:
@@ -40,8 +32,21 @@ http_interactions:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Cache-Control:
       - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(9.2.9.v20150224)
       Strict-Transport-Security:
-      - max-age=31536000; includeSubDomains; preload
+      - max-age=15552015; preload
+      Public-Key-Pins:
+      - pin-sha256="cN0QSpPIkuwpT6iP2YjEo1bEwGpH/yiUn6yhdy+HNto="; pin-sha256="WGJkyYjx1QMdMe0UqlyOKXtydPDVrk7sl2fV+nNm1r4=";
+        pin-sha256="LrKdTxZLRTvyHM4/atX2nquX9BeHRZMCxg3cf4rhc2I="; max-age=864000
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
     body:
       encoding: UTF-8
       string: '{"messages":[],"source":{"type":"text/html","encoding":"UTF-8","code":"<!DOCTYPE
@@ -49,5 +54,5 @@ http_interactions:
 
 '
     http_version: 
-  recorded_at: Fri, 10 Mar 2017 20:24:28 GMT
+  recorded_at: Fri, 30 Jun 2017 20:45:19 GMT
 recorded_with: VCR 3.0.3

@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://validator.nu/?out=json&parser=html&showsource=yes
+    uri: https://validator.w3.org/nu/?out=json&parser=html&showsource=yes
     body:
       encoding: UTF-8
       string: "<h2>Hi!</h1>"
@@ -20,16 +20,8 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      Server:
-      - nginx/1.11.10
       Date:
-      - Sat, 04 Mar 2017 21:33:40 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
+      - Fri, 30 Jun 2017 20:45:18 GMT
       Accept-Encoding:
       - gzip
       Access-Control-Allow-Origin:
@@ -40,12 +32,25 @@ http_interactions:
       - Thu, 01 Jan 1970 00:00:00 GMT
       Cache-Control:
       - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Server:
+      - Jetty(9.2.9.v20150224)
       Strict-Transport-Security:
-      - max-age=31536000; includeSubDomains; preload
+      - max-age=15552015; preload
+      Public-Key-Pins:
+      - pin-sha256="cN0QSpPIkuwpT6iP2YjEo1bEwGpH/yiUn6yhdy+HNto="; pin-sha256="WGJkyYjx1QMdMe0UqlyOKXtydPDVrk7sl2fV+nNm1r4=";
+        pin-sha256="LrKdTxZLRTvyHM4/atX2nquX9BeHRZMCxg3cf4rhc2I="; max-age=864000
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
     body:
       encoding: ASCII-8BIT
       string: !binary |-
         eyJtZXNzYWdlcyI6W3sidHlwZSI6ImVycm9yIiwibGFzdExpbmUiOjEsImxhc3RDb2x1bW4iOjQsImZpcnN0Q29sdW1uIjoxLCJtZXNzYWdlIjoiU3RhcnQgdGFnIHNlZW4gd2l0aG91dCBzZWVpbmcgYSBkb2N0eXBlIGZpcnN0LiBFeHBlY3RlZCBlLmcuIOKAnDwhRE9DVFlQRSBodG1sPuKAnS4iLCJleHRyYWN0IjoiPGgyPkhpITwvaCIsImhpbGl0ZVN0YXJ0IjowLCJoaWxpdGVMZW5ndGgiOjR9LHsidHlwZSI6ImVycm9yIiwibGFzdExpbmUiOjEsImxhc3RDb2x1bW4iOjQsImZpcnN0Q29sdW1uIjoxLCJtZXNzYWdlIjoiRWxlbWVudCDigJxoZWFk4oCdIGlzIG1pc3NpbmcgYSByZXF1aXJlZCBpbnN0YW5jZSBvZiBjaGlsZCBlbGVtZW50IOKAnHRpdGxl4oCdLiIsImV4dHJhY3QiOiI8aDI+SGkhPC9oIiwiaGlsaXRlU3RhcnQiOjAsImhpbGl0ZUxlbmd0aCI6NH0seyJ0eXBlIjoiZXJyb3IiLCJsYXN0TGluZSI6MSwibGFzdENvbHVtbiI6MTIsImZpcnN0Q29sdW1uIjo4LCJtZXNzYWdlIjoiRW5kIHRhZyDigJxoMeKAnSBzZWVuLCBidXQgdGhlcmUgd2VyZSBvcGVuIGVsZW1lbnRzLiIsImV4dHJhY3QiOiI8aDI+SGkhPC9oMT4iLCJoaWxpdGVTdGFydCI6NywiaGlsaXRlTGVuZ3RoIjo1fV0sInNvdXJjZSI6eyJ0eXBlIjoidGV4dC9odG1sIiwiZW5jb2RpbmciOiJVVEYtOCIsImNvZGUiOiI8aDI+SGkhPC9oMT4ifX0K
     http_version: 
-  recorded_at: Sat, 04 Mar 2017 21:33:40 GMT
+  recorded_at: Fri, 30 Jun 2017 20:45:19 GMT
 recorded_with: VCR 3.0.3
