@@ -6,8 +6,10 @@ module Nanoc::Int::OutdatednessRules
 
     contract Nanoc::Int::LayoutCollection, C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Int::OutdatednessReasons::Generic]
     def apply(_obj, outdatedness_checker)
-      if outdatedness_checker.dependency_store.any_new_objects?
-        Nanoc::Int::OutdatednessReasons::LayoutCollectionExtended
+      new_layouts = outdatedness_checker.dependency_store.new_layouts
+
+      if new_layouts.any?
+        Nanoc::Int::OutdatednessReasons::LayoutCollectionExtended.new(new_layouts)
       end
     end
   end

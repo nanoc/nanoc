@@ -46,15 +46,24 @@ module Nanoc::Int
       Props.new(raw_content: true, compiled_content: true),
     )
 
-    ItemCollectionExtended = Generic.new(
-      'A new item has been added to the site.',
-      Props.new(raw_content: true),
-    )
+    class DocumentCollectionExtended < Generic
+      attr_reader :objects
 
-    LayoutCollectionExtended = Generic.new(
-      'A new layout has been added to the site.',
-      Props.new(raw_content: true),
-    )
+      def initialize(objects)
+        super(
+          'New items/layouts have been added to the site.',
+          Props.new(raw_content: true),
+        )
+
+        @objects = objects
+      end
+    end
+
+    class ItemCollectionExtended < DocumentCollectionExtended
+    end
+
+    class LayoutCollectionExtended < DocumentCollectionExtended
+    end
 
     class AttributesModified < Generic
       attr_reader :attributes

@@ -191,19 +191,27 @@ module Nanoc::Int
       status = basic.outdatedness_status_for(dependency.from)
 
       active = status.props.active & dependency.props.active
-      if attributes_unaffected?(status, dependency)
-        active.delete(:attributes)
-      end
+      active.delete(:attributes) if attributes_unaffected?(status, dependency)
+      active.delete(:raw_content) if raw_content_unaffected?(status, dependency)
 
       active.any?
     end
 
     def attributes_unaffected?(status, dependency)
-      attr_reason = status.reasons.find do |r|
-        r.is_a?(Nanoc::Int::OutdatednessReasons::AttributesModified)
-      end
+      reason = status.reasons.find { |r| r.is_a?(Nanoc::Int::OutdatednessReasons::AttributesModified) }
+      reason && dependency.props.attributes.is_a?(Enumerable) && (dependency.props.attributes & reason.attributes).empty?
+    end
 
-      attr_reason && dependency.props.attributes.is_a?(Enumerable) && (dependency.props.attributes & attr_reason.attributes).empty?
+    def raw_content_unaffected?(status, dependency)
+      reason = status.reasons.find { |r| r.is_a?(Nanoc::Int::OutdatednessReasons::DocumentCollectionExtended) }
+      if reason.nil?
+        false
+      elsif !dependency.props.raw_content.is_a?(Enumerable)
+        false
+      else
+        patterns = dependency.props.raw_content.map { |r| Nanoc::Int::Pattern.from(r) }
+        patterns.none? { |pat| reason.objects.any? { |obj| pat.match?(obj.identifier) } }
+      end
     end
   end
 end
