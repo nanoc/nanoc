@@ -31,7 +31,41 @@ describe Nanoc::Int::Props do
   end
 
   describe '#raw_content?' do
-    # …
+    subject { props.raw_content? }
+
+    context 'nothing active' do
+      it { is_expected.not_to be }
+    end
+
+    context 'raw_content active' do
+      let(:props) { described_class.new(raw_content: true) }
+      it { is_expected.to be }
+    end
+
+    context 'raw_content and compiled_content active' do
+      let(:props) { described_class.new(raw_content: true, compiled_content: true) }
+      it { is_expected.to be }
+    end
+
+    context 'compiled_content active' do
+      let(:props) { described_class.new(compiled_content: true) }
+      it { is_expected.not_to be }
+    end
+
+    context 'all active' do
+      let(:props) { described_class.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
+      it { is_expected.to be }
+    end
+
+    context 'raw_content is empty list' do
+      let(:props) { described_class.new(raw_content: []) }
+      it { is_expected.not_to be }
+    end
+
+    context 'raw_content is non-empty list' do
+      let(:props) { described_class.new(raw_content: ['/asdf.*']) }
+      it { is_expected.to be }
+    end
   end
 
   describe '#attributes?' do
@@ -230,6 +264,92 @@ describe Nanoc::Int::Props do
 
       it { is_expected.to be_a(Set) }
       it { is_expected.to match_array(%i[donkey giraffe zebra]) }
+    end
+  end
+
+  describe '#merge_raw_content' do
+    let(:props_raw_content_true) do
+      described_class.new(raw_content: true)
+    end
+
+    let(:props_raw_content_false) do
+      described_class.new(raw_content: false)
+    end
+
+    let(:props_raw_content_list_a) do
+      described_class.new(raw_content: %w[donkey giraffe])
+    end
+
+    let(:props_raw_content_list_b) do
+      described_class.new(raw_content: %w[giraffe zebra])
+    end
+
+    subject { props.merge(other_props).raw_content }
+
+    context 'false + false' do
+      let(:props) { props_raw_content_false }
+      let(:other_props) { props_raw_content_false }
+
+      it { is_expected.to be(false) }
+    end
+
+    context 'false + true' do
+      let(:props) { props_raw_content_false }
+      let(:other_props) { props_raw_content_true }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'false + list' do
+      let(:props) { props_raw_content_false }
+      let(:other_props) { props_raw_content_list_a }
+
+      it { is_expected.to be_a(Set) }
+      it { is_expected.to match_array(%w[donkey giraffe]) }
+    end
+
+    context 'true + false' do
+      let(:props) { props_raw_content_true }
+      let(:other_props) { props_raw_content_false }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'true + true' do
+      let(:props) { props_raw_content_true }
+      let(:other_props) { props_raw_content_true }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'true + list' do
+      let(:props) { props_raw_content_true }
+      let(:other_props) { props_raw_content_list_a }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'list + false' do
+      let(:props) { props_raw_content_list_a }
+      let(:other_props) { props_raw_content_false }
+
+      it { is_expected.to be_a(Set) }
+      it { is_expected.to match_array(%w[donkey giraffe]) }
+    end
+
+    context 'list + true' do
+      let(:props) { props_raw_content_list_a }
+      let(:other_props) { props_raw_content_true }
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'list + list' do
+      let(:props) { props_raw_content_list_a }
+      let(:other_props) { props_raw_content_list_b }
+
+      it { is_expected.to be_a(Set) }
+      it { is_expected.to match_array(%w[donkey giraffe zebra]) }
     end
   end
 

@@ -6,11 +6,13 @@ module Nanoc::Int
     include Nanoc::Int::ContractsSupport
 
     attr_reader :attributes
+    attr_reader :raw_content
 
+    # TODO: Split raw_content for documents and collections
+    C_RAW_CONTENT = C::Or[C::IterOf[String], C::Bool]
     C_ATTRS = C::Or[C::IterOf[Symbol], C::Bool]
-    contract C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C_ATTRS], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+    contract C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTRS], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
     def initialize(raw_content: false, attributes: false, compiled_content: false, path: false)
-      @raw_content = raw_content
       @compiled_content = compiled_content
       @path = path
 
@@ -20,6 +22,14 @@ module Nanoc::Int
           Set.new(attributes)
         else
           attributes
+        end
+
+      @raw_content =
+        case raw_content
+        when Enumerable
+          Set.new(raw_content)
+        else
+          raw_content
         end
     end
 
@@ -37,7 +47,12 @@ module Nanoc::Int
 
     contract C::None => C::Bool
     def raw_content?
-      @raw_content
+      case @raw_content
+      when Enumerable
+        @raw_content.any?
+      else
+        @raw_content
+      end
     end
 
     contract C::None => C::Bool
@@ -63,27 +78,35 @@ module Nanoc::Int
     contract Nanoc::Int::Props => Nanoc::Int::Props
     def merge(other)
       Props.new(
-        raw_content: raw_content? || other.raw_content?,
+        raw_content: merge_raw_content(other),
         attributes: merge_attributes(other),
         compiled_content: compiled_content? || other.compiled_content?,
         path: path? || other.path?,
       )
     end
 
+    def merge_raw_content(other)
+      merge_prop(raw_content, other.raw_content)
+    end
+
     def merge_attributes(other)
-      case attributes
+      merge_prop(attributes, other.attributes)
+    end
+
+    def merge_prop(own, other)
+      case own
       when true
         true
       when false
-        other.attributes
+        other
       else
-        case other.attributes
+        case other
         when true
           true
         when false
-          attributes
+          own
         else
-          attributes + other.attributes
+          own + other
         end
       end
     end
@@ -101,7 +124,7 @@ module Nanoc::Int
     contract C::None => Hash
     def to_h
       {
-        raw_content: raw_content?,
+        raw_content: raw_content,
         attributes: attributes,
         compiled_content: compiled_content?,
         path: path?,
