@@ -47,13 +47,12 @@ module Nanoc
     #
     # @return [Enumerable]
     def find_all(arg)
-      # TODO: support regex
       prop_attribute =
         case arg
-        when String
-          [arg]
-        when Nanoc::Identifier
+        when String, Nanoc::Identifier
           [arg.to_s]
+        when Regexp
+          [arg]
         else
           true
         end
@@ -85,13 +84,12 @@ module Nanoc
     #
     #   @return [#identifier] if an object was found
     def [](arg)
-      # TODO: support regex
       prop_attribute =
         case arg
-        when String
-          [arg]
-        when Nanoc::Identifier
+        when String, Nanoc::Identifier
           [arg.to_s]
+        when Regexp
+          [arg]
         else
           true
         end

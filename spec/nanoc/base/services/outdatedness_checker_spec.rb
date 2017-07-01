@@ -572,11 +572,53 @@ describe Nanoc::Int::OutdatednessChecker do
         end
       end
 
-      context 'dependency on specific new items' do
+      context 'dependency on specific new items (string)' do
         before do
           dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
           dependency_tracker.enter(item)
           dependency_tracker.bounce(items, raw_content: ['/new*'])
+          dependency_store.store
+        end
+
+        context 'nothing changed' do
+          it { is_expected.not_to be }
+        end
+
+        context 'matching item added' do
+          before do
+            new_item = Nanoc::Int::Item.new('stuff', {}, '/newblahz.md')
+            dependency_store.items = Nanoc::Int::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.load
+          end
+
+          it { is_expected.to be }
+        end
+
+        context 'non-matching item added' do
+          before do
+            new_item = Nanoc::Int::Item.new('stuff', {}, '/nublahz.md')
+            dependency_store.items = Nanoc::Int::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.load
+          end
+
+          it { is_expected.not_to be }
+        end
+
+        context 'item removed' do
+          before do
+            dependency_store.items = Nanoc::Int::ItemCollection.new(config, [])
+            dependency_store.load
+          end
+
+          it { is_expected.not_to be }
+        end
+      end
+
+      context 'dependency on specific new items (regex)' do
+        before do
+          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker.enter(item)
+          dependency_tracker.bounce(items, raw_content: [%r{^/new.*}])
           dependency_store.store
         end
 

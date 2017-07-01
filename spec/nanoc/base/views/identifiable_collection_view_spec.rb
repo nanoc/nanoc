@@ -215,7 +215,7 @@ shared_examples 'an identifiable collection' do
       let(:arg) { %r{\A/home} }
 
       it 'creates dependency' do
-        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: [%r{\A/home}])
         subject
       end
 
@@ -261,7 +261,7 @@ shared_examples 'an identifiable collection' do
       let(:arg) { %r{\.css\z} }
 
       it 'creates dependency' do
-        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: [%r{\.css\z}])
         subject
       end
 
