@@ -6,8 +6,10 @@ module Nanoc::Int::OutdatednessRules
 
     contract Nanoc::Int::ItemCollection, C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Int::OutdatednessReasons::Generic]
     def apply(_obj, outdatedness_checker)
-      if outdatedness_checker.dependency_store.any_new_objects?
-        Nanoc::Int::OutdatednessReasons::ItemCollectionExtended
+      new_items = outdatedness_checker.dependency_store.new_items
+
+      if new_items.any?
+        Nanoc::Int::OutdatednessReasons::ItemCollectionExtended.new(new_items)
       end
     end
   end

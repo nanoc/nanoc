@@ -59,9 +59,12 @@ module Nanoc::Int
       add_vertex_for(layouts)
     end
 
-    contract C::None => C::Bool
-    def any_new_objects?
-      @new_objects.any?
+    def new_items
+      @new_objects.select { |o| o.is_a?(Nanoc::Int::Item) }
+    end
+
+    def new_layouts
+      @new_objects.select { |o| o.is_a?(Nanoc::Int::Layout) }
     end
 
     # Returns the direct dependencies for the given object.
