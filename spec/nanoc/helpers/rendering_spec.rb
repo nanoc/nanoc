@@ -29,7 +29,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
           it 'tracks proper dependencies' do
             expect(ctx.dependency_tracker).to receive(:enter)
-              .with(an_instance_of(Nanoc::Int::LayoutCollection), raw_content: true, attributes: false, compiled_content: false, path: false)
+              .with(an_instance_of(Nanoc::Int::LayoutCollection), raw_content: ['/partial/'], attributes: false, compiled_content: false, path: false)
               .ordered
             expect(ctx.dependency_tracker).to receive(:enter)
               .with(layout, raw_content: true, attributes: false, compiled_content: false, path: false)

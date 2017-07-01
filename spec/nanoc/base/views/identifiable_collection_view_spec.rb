@@ -145,7 +145,7 @@ shared_examples 'an identifiable collection' do
       it { is_expected.to equal(nil) }
 
       it 'creates dependency' do
-        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/donkey.*'])
         subject
       end
     end
@@ -154,7 +154,7 @@ shared_examples 'an identifiable collection' do
       let(:arg) { '/home.erb' }
 
       it 'creates dependency' do
-        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/home.erb'])
         subject
       end
 
@@ -172,7 +172,7 @@ shared_examples 'an identifiable collection' do
       let(:arg) { Nanoc::Identifier.new('/home.erb') }
 
       it 'creates dependency' do
-        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/home.erb'])
         subject
       end
 
@@ -189,7 +189,7 @@ shared_examples 'an identifiable collection' do
         let(:config) { { string_pattern_type: 'legacy' } }
 
         it 'creates dependency' do
-          expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+          expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/home.*'])
           subject
         end
 
@@ -200,7 +200,7 @@ shared_examples 'an identifiable collection' do
 
       context 'globs enabled' do
         it 'creates dependency' do
-          expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+          expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/home.*'])
           subject
         end
 
@@ -243,6 +243,11 @@ shared_examples 'an identifiable collection' do
     context 'with string' do
       let(:arg) { '/*.css' }
 
+      it 'creates dependency' do
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/*.css'])
+        subject
+      end
+
       it 'contains views' do
         expect(subject.size).to eql(2)
         about_css = subject.find { |iv| iv.identifier == '/about.css' }
@@ -254,6 +259,11 @@ shared_examples 'an identifiable collection' do
 
     context 'with regex' do
       let(:arg) { %r{\.css\z} }
+
+      it 'creates dependency' do
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
+        subject
+      end
 
       it 'contains views' do
         expect(subject.size).to eql(2)

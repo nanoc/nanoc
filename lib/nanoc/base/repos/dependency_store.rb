@@ -85,8 +85,10 @@ module Nanoc::Int
       refs2objs(@graph.direct_predecessors_of(obj2ref(object)))
     end
 
+    C_RAW_CONTENT = C::Or[C::IterOf[String], C::Bool]
     C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
-    C_KEYWORD_PROPS = C::KeywordArgs[raw_content: C::Optional[C::Bool], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
+    C_KEYWORD_PROPS = C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
+
     contract C::Maybe[C_OBJ_SRC], C::Maybe[C_OBJ_DST], C_KEYWORD_PROPS => C::Any
     # Records a dependency from `src` to `dst` in the dependency graph. When
     # `dst` is oudated, `src` will also become outdated.

@@ -47,7 +47,18 @@ module Nanoc
     #
     # @return [Enumerable]
     def find_all(arg)
-      @context.dependency_tracker.bounce(unwrap, raw_content: true)
+      # TODO: support regex
+      prop_attribute =
+        case arg
+        when String
+          [arg]
+        when Nanoc::Identifier
+          [arg.to_s]
+        else
+          true
+        end
+
+      @context.dependency_tracker.bounce(unwrap, raw_content: prop_attribute)
       @objects.find_all(arg).map { |i| view_class.new(i, @context) }
     end
 
@@ -74,7 +85,18 @@ module Nanoc
     #
     #   @return [#identifier] if an object was found
     def [](arg)
-      @context.dependency_tracker.bounce(unwrap, raw_content: true)
+      # TODO: support regex
+      prop_attribute =
+        case arg
+        when String
+          [arg]
+        when Nanoc::Identifier
+          [arg.to_s]
+        else
+          true
+        end
+
+      @context.dependency_tracker.bounce(unwrap, raw_content: prop_attribute)
       res = @objects[arg]
       res && view_class.new(res, @context)
     end
