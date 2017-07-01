@@ -3,6 +3,48 @@
 describe Nanoc::Int::DirectedGraph do
   subject(:graph) { described_class.new([1, 2, 3]) }
 
+  describe '#inspect' do
+    subject { graph.inspect }
+
+    context 'empty graph' do
+      it { is_expected.to eq('Nanoc::Int::DirectedGraph()') }
+    end
+
+    context 'one edge, no props' do
+      before do
+        graph.add_edge(1, 2)
+      end
+
+      it { is_expected.to eq('Nanoc::Int::DirectedGraph(1 -> 2 props=nil)') }
+    end
+
+    context 'two edges, no props' do
+      before do
+        graph.add_edge(1, 2)
+        graph.add_edge(2, 3)
+      end
+
+      it { is_expected.to eq('Nanoc::Int::DirectedGraph(1 -> 2 props=nil, 2 -> 3 props=nil)') }
+    end
+
+    context 'one edge, props' do
+      before do
+        graph.add_edge(1, 2, props: 'giraffe')
+      end
+
+      it { is_expected.to eq('Nanoc::Int::DirectedGraph(1 -> 2 props="giraffe")') }
+    end
+
+    context 'two edges, props' do
+      before do
+        graph.add_edge(1, 2, props: 'donkey')
+        graph.add_edge(2, 3, props: 'zebra')
+      end
+
+      it { is_expected.to eq('Nanoc::Int::DirectedGraph(1 -> 2 props="donkey", 2 -> 3 props="zebra")') }
+    end
+  end
+
   describe '#any_cycle' do
     subject { graph.any_cycle }
 

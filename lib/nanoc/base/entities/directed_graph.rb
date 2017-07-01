@@ -50,6 +50,18 @@ module Nanoc::Int
       invalidate_caches
     end
 
+    def inspect
+      s = []
+
+      @vertices.each_pair do |v1, _|
+        direct_successors_of(v1).each do |v2|
+          s << [v1.inspect + ' -> ' + v2.inspect + ' props=' + @edge_props[[v1, v2]].inspect]
+        end
+      end
+
+      self.class.to_s + '(' + s.join(', ') + ')'
+    end
+
     # @group Modifying the graph
 
     # Adds an edge from the first vertex to the second vertex.
