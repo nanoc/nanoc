@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.7.13 (2017-07-02)
+
+Enhancements:
+
+* Made adding an item or a layout only recompile items that likely depend on it (#1191, #1193)
+
 ## 4.7.12 (2017-06-23)
 
 Fixes:
