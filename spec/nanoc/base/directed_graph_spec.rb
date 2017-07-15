@@ -4,65 +4,65 @@ describe Nanoc::Int::DirectedGraph do
   subject(:graph) { described_class.new(%w[1 2 3]) }
 
   describe '#direct_predecessors_of' do
-    subject { graph.direct_predecessors_of(2) }
+    subject { graph.direct_predecessors_of('2') }
 
     context 'no edges' do
       it { is_expected.to be_empty }
     end
 
     context 'one edge to' do
-      before { graph.add_edge(1, 2) }
-      it { is_expected.to eq([1]) }
+      before { graph.add_edge('1', '2') }
+      it { is_expected.to eq(['1']) }
     end
 
     context 'two edges to' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(3, 2)
+        graph.add_edge('1', '2')
+        graph.add_edge('3', '2')
       end
 
-      it { is_expected.to match_array([1, 3]) }
+      it { is_expected.to match_array(%w[1 3]) }
     end
 
     context 'edge from' do
-      before { graph.add_edge(2, 3) }
+      before { graph.add_edge('2', '3') }
       it { is_expected.to be_empty }
     end
   end
 
   describe '#direct_successors_of' do
-    subject { graph.direct_successors_of(2) }
+    subject { graph.direct_successors_of('2') }
 
     context 'no edges' do
       it { is_expected.to be_empty }
     end
 
     context 'one edge to' do
-      before { graph.add_edge(1, 2) }
+      before { graph.add_edge('1', '2') }
       it { is_expected.to be_empty }
     end
 
     context 'one edge from' do
-      before { graph.add_edge(2, 3) }
-      it { is_expected.to eq([3]) }
+      before { graph.add_edge('2', '3') }
+      it { is_expected.to eq(['3']) }
     end
 
     context 'two edges from' do
       before do
-        graph.add_edge(2, 1)
-        graph.add_edge(2, 3)
+        graph.add_edge('2', '1')
+        graph.add_edge('2', '3')
       end
 
-      it { is_expected.to match_array([1, 3]) }
+      it { is_expected.to match_array(%w[1 3]) }
     end
   end
 
   describe '#predecessors_of' do
-    subject { graph.predecessors_of(2) }
+    subject { graph.predecessors_of('2') }
 
     context 'no predecessors' do
       before do
-        graph.add_edge(2, 3)
+        graph.add_edge('2', '3')
       end
 
       it { is_expected.to be_empty }
@@ -70,27 +70,27 @@ describe Nanoc::Int::DirectedGraph do
 
     context 'direct predecessor' do
       before do
-        graph.add_edge(2, 3)
-        graph.add_edge(1, 2)
+        graph.add_edge('2', '3')
+        graph.add_edge('1', '2')
       end
 
       context 'no indirect predecessors' do
-        it { is_expected.to match_array([1]) }
+        it { is_expected.to match_array(['1']) }
       end
 
       context 'indirect predecessors' do
-        before { graph.add_edge(3, 1) }
-        it { is_expected.to match_array([1, 2, 3]) }
+        before { graph.add_edge('3', '1') }
+        it { is_expected.to match_array(%w[1 2 3]) }
       end
     end
   end
 
   describe '#successors_of' do
-    subject { graph.successors_of(2) }
+    subject { graph.successors_of('2') }
 
     context 'no successors' do
       before do
-        graph.add_edge(1, 2)
+        graph.add_edge('1', '2')
       end
 
       it { is_expected.to be_empty }
@@ -98,17 +98,17 @@ describe Nanoc::Int::DirectedGraph do
 
     context 'direct predecessor' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
       end
 
       context 'no indirect successors' do
-        it { is_expected.to match_array([3]) }
+        it { is_expected.to match_array(['3']) }
       end
 
       context 'indirect successors' do
-        before { graph.add_edge(3, 1) }
-        it { is_expected.to match_array([1, 2, 3]) }
+        before { graph.add_edge('3', '1') }
+        it { is_expected.to match_array(%w[1 2 3]) }
       end
     end
   end
