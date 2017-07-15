@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Int::DirectedGraph do
-  subject(:graph) { described_class.new([1, 2, 3]) }
+  subject(:graph) { described_class.new(%w[1 2 3]) }
 
   describe '#inspect' do
     subject { graph.inspect }
@@ -12,36 +12,36 @@ describe Nanoc::Int::DirectedGraph do
 
     context 'one edge, no props' do
       before do
-        graph.add_edge(1, 2)
+        graph.add_edge('1', '2')
       end
 
-      it { is_expected.to eq('Nanoc::Int::DirectedGraph(1 -> 2 props=nil)') }
+      it { is_expected.to eq('Nanoc::Int::DirectedGraph("1" -> "2" props=nil)') }
     end
 
     context 'two edges, no props' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
       end
 
-      it { is_expected.to eq('Nanoc::Int::DirectedGraph(1 -> 2 props=nil, 2 -> 3 props=nil)') }
+      it { is_expected.to eq('Nanoc::Int::DirectedGraph("1" -> "2" props=nil, "2" -> "3" props=nil)') }
     end
 
     context 'one edge, props' do
       before do
-        graph.add_edge(1, 2, props: 'giraffe')
+        graph.add_edge('1', '2', props: 'giraffe')
       end
 
-      it { is_expected.to eq('Nanoc::Int::DirectedGraph(1 -> 2 props="giraffe")') }
+      it { is_expected.to eq('Nanoc::Int::DirectedGraph("1" -> "2" props="giraffe")') }
     end
 
     context 'two edges, props' do
       before do
-        graph.add_edge(1, 2, props: 'donkey')
-        graph.add_edge(2, 3, props: 'zebra')
+        graph.add_edge('1', '2', props: 'donkey')
+        graph.add_edge('2', '3', props: 'zebra')
       end
 
-      it { is_expected.to eq('Nanoc::Int::DirectedGraph(1 -> 2 props="donkey", 2 -> 3 props="zebra")') }
+      it { is_expected.to eq('Nanoc::Int::DirectedGraph("1" -> "2" props="donkey", "2" -> "3" props="zebra")') }
     end
   end
 
@@ -54,57 +54,57 @@ describe Nanoc::Int::DirectedGraph do
 
     context 'one cycle without head' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 1)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '1')
       end
 
-      it { is_expected.to eq([1, 2]) }
+      it { is_expected.to eq(%w[1 2]) }
     end
 
     context 'one cycle with head' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 2)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '2')
       end
 
-      it { is_expected.to eq([2, 3]) }
+      it { is_expected.to eq(%w[2 3]) }
     end
 
     context 'one cycle with tail' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 20)
-        graph.add_edge(20, 21)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 1)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '20')
+        graph.add_edge('20', '21')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '1')
       end
 
-      it { is_expected.to eq([1, 2, 3]) }
+      it { is_expected.to eq(%w[1 2 3]) }
     end
 
     context 'large cycle' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 4)
-        graph.add_edge(4, 5)
-        graph.add_edge(5, 1)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '4')
+        graph.add_edge('4', '5')
+        graph.add_edge('5', '1')
       end
 
-      it { is_expected.to eq([1, 2, 3, 4, 5]) }
+      it { is_expected.to eq(%w[1 2 3 4 5]) }
     end
 
     context 'large cycle with head' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 4)
-        graph.add_edge(4, 5)
-        graph.add_edge(5, 2)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '4')
+        graph.add_edge('4', '5')
+        graph.add_edge('5', '2')
       end
 
-      it { is_expected.to eq([2, 3, 4, 5]) }
+      it { is_expected.to eq(%w[2 3 4 5]) }
     end
   end
 
@@ -114,173 +114,173 @@ describe Nanoc::Int::DirectedGraph do
     context 'no cycles' do
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [2],
-          [3],
+          ['1'],
+          ['2'],
+          ['3'],
         )
       end
     end
 
     context 'one cycle without head' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 1)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '1')
       end
 
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [1, 2],
-          [1, 2, 1],
-          [2],
-          [2, 1],
-          [2, 1, 2],
-          [3],
+          ['1'],
+          %w[1 2],
+          %w[1 2 1],
+          ['2'],
+          %w[2 1],
+          %w[2 1 2],
+          ['3'],
         )
       end
     end
 
     context 'one cycle with head' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 2)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '2')
       end
 
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [1, 2],
-          [1, 2, 3],
-          [1, 2, 3, 2],
-          [2],
-          [2, 3],
-          [2, 3, 2],
-          [3],
-          [3, 2],
-          [3, 2, 3],
+          ['1'],
+          %w[1 2],
+          %w[1 2 3],
+          %w[1 2 3 2],
+          ['2'],
+          %w[2 3],
+          %w[2 3 2],
+          ['3'],
+          %w[3 2],
+          %w[3 2 3],
         )
       end
     end
 
     context 'one cycle with tail' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 20)
-        graph.add_edge(20, 21)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 1)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '20')
+        graph.add_edge('20', '21')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '1')
       end
 
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [1, 2],
-          [1, 2, 20],
-          [1, 2, 20, 21],
-          [1, 2, 3],
-          [1, 2, 3, 1],
-          [2],
-          [2, 20],
-          [2, 20, 21],
-          [2, 3],
-          [2, 3, 1],
-          [2, 3, 1, 2],
-          [3],
-          [3, 1],
-          [3, 1, 2],
-          [3, 1, 2, 20],
-          [3, 1, 2, 20, 21],
-          [3, 1, 2, 3],
-          [20],
-          [20, 21],
-          [21],
+          ['1'],
+          %w[1 2],
+          %w[1 2 20],
+          %w[1 2 20 21],
+          %w[1 2 3],
+          %w[1 2 3 1],
+          ['2'],
+          %w[2 20],
+          %w[2 20 21],
+          %w[2 3],
+          %w[2 3 1],
+          %w[2 3 1 2],
+          ['3'],
+          %w[3 1],
+          %w[3 1 2],
+          %w[3 1 2 20],
+          %w[3 1 2 20 21],
+          %w[3 1 2 3],
+          ['20'],
+          %w[20 21],
+          ['21'],
         )
       end
     end
 
     context 'large cycle' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 4)
-        graph.add_edge(4, 5)
-        graph.add_edge(5, 1)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '4')
+        graph.add_edge('4', '5')
+        graph.add_edge('5', '1')
       end
 
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [1, 2],
-          [1, 2, 3],
-          [1, 2, 3, 4],
-          [1, 2, 3, 4, 5],
-          [1, 2, 3, 4, 5, 1],
-          [2],
-          [2, 3],
-          [2, 3, 4],
-          [2, 3, 4, 5],
-          [2, 3, 4, 5, 1],
-          [2, 3, 4, 5, 1, 2],
-          [3],
-          [3, 4],
-          [3, 4, 5],
-          [3, 4, 5, 1],
-          [3, 4, 5, 1, 2],
-          [3, 4, 5, 1, 2, 3],
-          [4],
-          [4, 5],
-          [4, 5, 1],
-          [4, 5, 1, 2],
-          [4, 5, 1, 2, 3],
-          [4, 5, 1, 2, 3, 4],
-          [5],
-          [5, 1],
-          [5, 1, 2],
-          [5, 1, 2, 3],
-          [5, 1, 2, 3, 4],
-          [5, 1, 2, 3, 4, 5],
+          ['1'],
+          %w[1 2],
+          %w[1 2 3],
+          %w[1 2 3 4],
+          %w[1 2 3 4 5],
+          %w[1 2 3 4 5 1],
+          ['2'],
+          %w[2 3],
+          %w[2 3 4],
+          %w[2 3 4 5],
+          %w[2 3 4 5 1],
+          %w[2 3 4 5 1 2],
+          ['3'],
+          %w[3 4],
+          %w[3 4 5],
+          %w[3 4 5 1],
+          %w[3 4 5 1 2],
+          %w[3 4 5 1 2 3],
+          ['4'],
+          %w[4 5],
+          %w[4 5 1],
+          %w[4 5 1 2],
+          %w[4 5 1 2 3],
+          %w[4 5 1 2 3 4],
+          ['5'],
+          %w[5 1],
+          %w[5 1 2],
+          %w[5 1 2 3],
+          %w[5 1 2 3 4],
+          %w[5 1 2 3 4 5],
         )
       end
     end
 
     context 'large cycle with head' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 4)
-        graph.add_edge(4, 5)
-        graph.add_edge(5, 2)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '4')
+        graph.add_edge('4', '5')
+        graph.add_edge('5', '2')
       end
 
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [1, 2],
-          [1, 2, 3],
-          [1, 2, 3, 4],
-          [1, 2, 3, 4, 5],
-          [1, 2, 3, 4, 5, 2],
-          [2],
-          [2, 3],
-          [2, 3, 4],
-          [2, 3, 4, 5],
-          [2, 3, 4, 5, 2],
-          [3],
-          [3, 4],
-          [3, 4, 5],
-          [3, 4, 5, 2],
-          [3, 4, 5, 2, 3],
-          [4],
-          [4, 5],
-          [4, 5, 2],
-          [4, 5, 2, 3],
-          [4, 5, 2, 3, 4],
-          [5],
-          [5, 2],
-          [5, 2, 3],
-          [5, 2, 3, 4],
-          [5, 2, 3, 4, 5],
+          ['1'],
+          %w[1 2],
+          %w[1 2 3],
+          %w[1 2 3 4],
+          %w[1 2 3 4 5],
+          %w[1 2 3 4 5 2],
+          ['2'],
+          %w[2 3],
+          %w[2 3 4],
+          %w[2 3 4 5],
+          %w[2 3 4 5 2],
+          ['3'],
+          %w[3 4],
+          %w[3 4 5],
+          %w[3 4 5 2],
+          %w[3 4 5 2 3],
+          ['4'],
+          %w[4 5],
+          %w[4 5 2],
+          %w[4 5 2 3],
+          %w[4 5 2 3 4],
+          ['5'],
+          %w[5 2],
+          %w[5 2 3],
+          %w[5 2 3 4],
+          %w[5 2 3 4 5],
         )
       end
     end
@@ -289,7 +289,7 @@ describe Nanoc::Int::DirectedGraph do
   describe '#dfs_from' do
     subject do
       [].tap do |ps|
-        graph.dfs_from(1) do |p|
+        graph.dfs_from('1') do |p|
           ps << p
         end
       end
@@ -298,102 +298,102 @@ describe Nanoc::Int::DirectedGraph do
     context 'no cycles' do
       example do
         expect(subject).to contain_exactly(
-          [1],
+          ['1'],
         )
       end
     end
 
     context 'one cycle without head' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 1)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '1')
       end
 
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [1, 2],
-          [1, 2, 1],
+          ['1'],
+          %w[1 2],
+          %w[1 2 1],
         )
       end
     end
 
     context 'one cycle with head' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 2)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '2')
       end
 
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [1, 2],
-          [1, 2, 3],
-          [1, 2, 3, 2],
+          ['1'],
+          %w[1 2],
+          %w[1 2 3],
+          %w[1 2 3 2],
         )
       end
     end
 
     context 'one cycle with tail' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 20)
-        graph.add_edge(20, 21)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 1)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '20')
+        graph.add_edge('20', '21')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '1')
       end
 
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [1, 2],
-          [1, 2, 20],
-          [1, 2, 20, 21],
-          [1, 2, 3],
-          [1, 2, 3, 1],
+          ['1'],
+          %w[1 2],
+          %w[1 2 20],
+          %w[1 2 20 21],
+          %w[1 2 3],
+          %w[1 2 3 1],
         )
       end
     end
 
     context 'large cycle' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 4)
-        graph.add_edge(4, 5)
-        graph.add_edge(5, 1)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '4')
+        graph.add_edge('4', '5')
+        graph.add_edge('5', '1')
       end
 
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [1, 2],
-          [1, 2, 3],
-          [1, 2, 3, 4],
-          [1, 2, 3, 4, 5],
-          [1, 2, 3, 4, 5, 1],
+          ['1'],
+          %w[1 2],
+          %w[1 2 3],
+          %w[1 2 3 4],
+          %w[1 2 3 4 5],
+          %w[1 2 3 4 5 1],
         )
       end
     end
 
     context 'large cycle with head' do
       before do
-        graph.add_edge(1, 2)
-        graph.add_edge(2, 3)
-        graph.add_edge(3, 4)
-        graph.add_edge(4, 5)
-        graph.add_edge(5, 2)
+        graph.add_edge('1', '2')
+        graph.add_edge('2', '3')
+        graph.add_edge('3', '4')
+        graph.add_edge('4', '5')
+        graph.add_edge('5', '2')
       end
 
       example do
         expect(subject).to contain_exactly(
-          [1],
-          [1, 2],
-          [1, 2, 3],
-          [1, 2, 3, 4],
-          [1, 2, 3, 4, 5],
-          [1, 2, 3, 4, 5, 2],
+          ['1'],
+          %w[1 2],
+          %w[1 2 3],
+          %w[1 2 3 4],
+          %w[1 2 3 4 5],
+          %w[1 2 3 4 5 2],
         )
       end
     end
