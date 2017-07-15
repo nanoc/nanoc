@@ -71,13 +71,14 @@ module Nanoc::Int
     # Error that is raised during site compilation when an item (directly or
     # indirectly) includes its own item content, leading to endless recursion.
     class DependencyCycle < Generic
-      def initialize(graph)
-        cycle = graph.any_cycle
+      def initialize(stack)
+        start_idx = stack.index(stack.last)
+        cycle = stack[start_idx..-2]
 
         msg_bits = []
         msg_bits << 'The site cannot be compiled because there is a dependency cycle:'
         msg_bits << ''
-        cycle.reverse_each.with_index do |r, i|
+        cycle.each.with_index do |r, i|
           msg_bits << "    (#{i + 1}) item #{r.item.identifier}, rep #{r.name.inspect}, uses compiled content of"
         end
         msg_bits << msg_bits.pop + ' (1)'

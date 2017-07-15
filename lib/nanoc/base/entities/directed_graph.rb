@@ -46,8 +46,6 @@ module Nanoc::Int
 
       @edge_props = {}
 
-      @roots = Set.new(@vertices.keys)
-
       invalidate_caches
     end
 
@@ -86,8 +84,6 @@ module Nanoc::Int
         @edge_props[[from, to]] = props
       end
 
-      @roots.delete(to)
-
       invalidate_caches
     end
 
@@ -108,8 +104,6 @@ module Nanoc::Int
 
       @edge_props.delete([from, to])
 
-      @roots.add(to) if @to_graph[to].empty?
-
       invalidate_caches
     end
 
@@ -122,8 +116,6 @@ module Nanoc::Int
       return if @vertices.key?(v)
 
       @vertices[v] = @next_vertex_idx.tap { @next_vertex_idx += 1 }
-
-      @roots << v
     end
 
     # Deletes all edges coming from the given vertex.
@@ -137,7 +129,6 @@ module Nanoc::Int
       @from_graph[from].each do |to|
         @to_graph[to].delete(from)
         @edge_props.delete([from, to])
-        @roots.add(to) if @to_graph[to].empty?
       end
       @from_graph.delete(from)
     end
@@ -155,63 +146,9 @@ module Nanoc::Int
         @edge_props.delete([from, to])
       end
       @to_graph.delete(to)
-      @roots.add(to)
-    end
-
-    # Removes the given vertex from the graph.
-    #
-    # @param v Vertex to remove from the graph
-    #
-    # @return [void]
-    def delete_vertex(v)
-      delete_edges_to(v)
-      delete_edges_from(v)
-
-      @vertices.delete(v)
-      @roots.delete(v)
     end
 
     # @group Querying the graph
-
-    # Returns a cycle if there is any.
-    def any_cycle
-      all_paths.lazy.map { |path| cycle_in_path(path) }.find(&:itself)
-    end
-
-    # Given a potentially closed path, returns a cycle if there is any.
-    def cycle_in_path(path)
-      vertex = path.last
-      index = path.index(vertex)
-
-      if index < path.size - 1
-        path[index..-2]
-      end
-    end
-
-    # Yields all paths (including potentially closed ones).
-    def all_paths
-      Enumerator.new do |y|
-        @vertices.keys.each do |vertex|
-          dfs_from(vertex) do |path|
-            y << path
-          end
-        end
-      end
-    end
-
-    # Yields all paths (including potentially closed ones) starting from the given vertex.
-    def dfs_from(vertex, path_so_far = [])
-      new_path = path_so_far + [vertex]
-      yield(new_path)
-
-      unless path_so_far.include?(vertex)
-        direct_successors_of(vertex).each do |next_vertex|
-          dfs_from(next_vertex, new_path) do |path|
-            yield(path)
-          end
-        end
-      end
-    end
 
     # Returns the direct predecessors of the given vertex, i.e. the vertices
     # x where there is an edge from x to the given vertex y.
@@ -274,13 +211,6 @@ module Nanoc::Int
         end
       end
       result
-    end
-
-    # Returns all root vertices, i.e. vertices where no edge points to.
-    #
-    # @return [Set] The set of all root vertices in this graph.
-    def roots
-      @roots
     end
 
     private

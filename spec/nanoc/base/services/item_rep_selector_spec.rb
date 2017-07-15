@@ -111,6 +111,47 @@ describe Nanoc::Int::ItemRepSelector do
     end
   end
 
+  describe 'cycle' do
+    context 'dependency on self' do
+      subject do
+        selector.each { |r| raise Nanoc::Int::Errors::UnmetDependency.new(r) }
+      end
+
+      example do
+        expect { subject }.to raise_error(Nanoc::Int::Errors::DependencyCycle, <<~EOS)
+          The site cannot be compiled because there is a dependency cycle:
+
+              (1) item /foo.md, rep :a, uses compiled content of (1)
+          EOS
+      end
+    end
+
+    context 'cycle with three dependencies' do
+      subject do
+        selector.each do |r|
+          case r
+          when reps_array[0]
+            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[1])
+          when reps_array[1]
+            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[2])
+          when reps_array[2]
+            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[0])
+          end
+        end
+      end
+
+      example do
+        expect { subject }.to raise_error(Nanoc::Int::Errors::DependencyCycle, <<~EOS)
+          The site cannot be compiled because there is a dependency cycle:
+
+              (1) item /foo.md, rep :a, uses compiled content of
+              (2) item /foo.md, rep :b, uses compiled content of
+              (3) item /foo.md, rep :c, uses compiled content of (1)
+          EOS
+      end
+    end
+  end
+
   describe 'yield order' do
     context 'linear dependencies' do
       let(:dependencies) do
