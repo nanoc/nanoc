@@ -3,33 +3,6 @@
 require 'helper'
 
 class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
-  def test_edges
-    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
-    graph.add_edge(1, 2)
-    graph.add_edge(2, 3)
-
-    assert_equal [[0, 1, nil], [1, 2, nil]], graph.edges.sort
-  end
-
-  def test_edges_with_new_vertices
-    graph = Nanoc::Int::DirectedGraph.new([1])
-    assert_equal [1], graph.vertices
-    graph.add_edge(1, 2)
-    assert_equal [1, 2], graph.vertices
-    graph.add_edge(3, 2)
-    assert_equal [1, 2, 3], graph.vertices
-
-    assert_equal [[0, 1, nil], [2, 1, nil]], graph.edges.sort
-  end
-
-  def test_edge_with_props
-    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
-    graph.add_edge(1, 2, props: { donkey: 14 })
-    graph.add_edge(2, 3, props: { giraffe: 3 })
-
-    assert_equal [[0, 1, { donkey: 14 }], [1, 2, { giraffe: 3 }]], graph.edges.sort
-  end
-
   def test_props_for
     graph = Nanoc::Int::DirectedGraph.new([1, 2, 3, 4])
     graph.add_edge(1, 2, props: { donkey: 14 })

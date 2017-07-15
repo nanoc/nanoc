@@ -3,6 +3,54 @@
 describe Nanoc::Int::DirectedGraph do
   subject(:graph) { described_class.new(%w[1 2 3]) }
 
+  describe '#edges' do
+    subject { graph.edges }
+
+    context 'empty graph' do
+      it { is_expected.to be_empty }
+    end
+
+    context 'graph with vertices, but no edges' do
+      before do
+        graph.add_vertex('1')
+        graph.add_vertex('2')
+      end
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'graph with edges from previously added vertices' do
+      before do
+        graph.add_vertex('1')
+        graph.add_vertex('2')
+        graph.add_vertex('3')
+
+        graph.add_edge('1', '2')
+        graph.add_edge('1', '3')
+      end
+
+      it { is_expected.to match_array([[0, 1, nil], [0, 2, nil]]) }
+    end
+
+    context 'graph with edges from new vertices' do
+      before do
+        graph.add_edge('1', '2')
+        graph.add_edge('1', '3')
+      end
+
+      it { is_expected.to match_array([[0, 1, nil], [0, 2, nil]]) }
+    end
+
+    context 'graph with edge props' do
+      before do
+        graph.add_edge('1', '2', props: { name: 'Mr. C' })
+        graph.add_edge('1', '3', props: { name: 'Cooper' })
+      end
+
+      it { is_expected.to match_array([[0, 1, { name: 'Mr. C' }], [0, 2, { name: 'Cooper' }]]) }
+    end
+  end
+
   describe '#direct_predecessors_of' do
     subject { graph.direct_predecessors_of('2') }
 
