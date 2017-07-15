@@ -3,46 +3,6 @@
 require 'helper'
 
 class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
-  def test_direct_predecessors
-    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
-    graph.add_edge(1, 2)
-    graph.add_edge(2, 3)
-
-    assert_equal [], graph.direct_predecessors_of(1)
-    assert_equal [1], graph.direct_predecessors_of(2)
-    assert_equal [2], graph.direct_predecessors_of(3)
-  end
-
-  def test_predecessors
-    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
-    graph.add_edge(1, 2)
-    graph.add_edge(2, 3)
-
-    assert_equal [], graph.predecessors_of(1).sort
-    assert_equal [1],    graph.predecessors_of(2).sort
-    assert_equal [1, 2], graph.predecessors_of(3).sort
-  end
-
-  def test_direct_successors
-    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
-    graph.add_edge(1, 2)
-    graph.add_edge(2, 3)
-
-    assert_equal [2], graph.direct_successors_of(1)
-    assert_equal [3], graph.direct_successors_of(2)
-    assert_equal [], graph.direct_successors_of(3)
-  end
-
-  def test_successors
-    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
-    graph.add_edge(1, 2)
-    graph.add_edge(2, 3)
-
-    assert_equal [2, 3], graph.successors_of(1).sort
-    assert_equal [3],    graph.successors_of(2).sort
-    assert_equal [], graph.successors_of(3).sort
-  end
-
   def test_edges
     graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
     graph.add_edge(1, 2)
