@@ -7,27 +7,28 @@ module Nanoc::Int
   # @example Creating and using a directed graph
   #
   #   # Create a graph with three vertices
-  #   graph = Nanoc::Int::DirectedGraph.new(%w( a b c d ))
+  #   graph = Nanoc::Int::DirectedGraph.new(%w( a b c d e ))
   #
   #   # Add edges
   #   graph.add_edge('a', 'b')
   #   graph.add_edge('b', 'c')
   #   graph.add_edge('c', 'd')
+  #   graph.add_edge('b', 'e')
   #
-  #   # Get (direct) predecessors
-  #   graph.direct_predecessors_of('d').sort
-  #     # => %w( c )
-  #   graph.predecessors_of('d').sort
-  #     # => %w( a b c )
+  #   # Get (direct) successors
+  #   graph.direct_successors_of('a').sort
+  #     # => %w( b )
+  #   graph.successors_of('a').sort
+  #     # => %w( b c d e )
   #
   #   # Modify edges
-  #   graph.delete_edge('a', 'b')
+  #   graph.delete_edges_to('c')
   #
-  #   # Get (direct) predecessors again
-  #   graph.direct_predecessors_of('d').sort
-  #     # => %w( c )
-  #   graph.predecessors_of('d').sort
-  #     # => %w( b c )
+  #   # Get (direct) successors again
+  #   graph.direct_successors_of('a').sort
+  #     # => %w( b )
+  #   graph.successors_of('a').sort
+  #     # => %w( b e )
   #
   # @api private
   class DirectedGraph
@@ -87,26 +88,6 @@ module Nanoc::Int
       invalidate_caches
     end
 
-    # Removes the edge from the first vertex to the second vertex. If the
-    # edge does not exist, nothing is done.
-    #
-    # @param from Start vertex of the edge
-    #
-    # @param to   End vertex of the edge
-    #
-    # @return [void]
-    def delete_edge(from, to)
-      @from_graph[from] ||= Set.new
-      @from_graph[from].delete(to)
-
-      @to_graph[to] ||= Set.new
-      @to_graph[to].delete(from)
-
-      @edge_props.delete([from, to])
-
-      invalidate_caches
-    end
-
     # Adds the given vertex to the graph.
     #
     # @param v The vertex to add to the graph
@@ -116,21 +97,6 @@ module Nanoc::Int
       return if @vertices.key?(v)
 
       @vertices[v] = @next_vertex_idx.tap { @next_vertex_idx += 1 }
-    end
-
-    # Deletes all edges coming from the given vertex.
-    #
-    # @param from Vertex from which all edges should be removed
-    #
-    # @return [void]
-    def delete_edges_from(from)
-      return if @from_graph[from].nil?
-
-      @from_graph[from].each do |to|
-        @to_graph[to].delete(from)
-        @edge_props.delete([from, to])
-      end
-      @from_graph.delete(from)
     end
 
     # Deletes all edges going to the given vertex.
@@ -146,6 +112,8 @@ module Nanoc::Int
         @edge_props.delete([from, to])
       end
       @to_graph.delete(to)
+
+      invalidate_caches
     end
 
     # @group Querying the graph

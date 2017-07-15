@@ -67,16 +67,6 @@ describe Nanoc::Int::DirectedGraph do
       before { graph.add_edge('1', '2', props: { name: 'Mr. C' }) }
       it { is_expected.to eq(name: 'Mr. C') }
 
-      context 'deleted edge (#delete_edge)' do
-        before { graph.delete_edge('1', '2') }
-        it { is_expected.to be_nil }
-      end
-
-      context 'deleted edge (#delete_edges_from)' do
-        before { graph.delete_edges_from('1') }
-        it { is_expected.to be_nil }
-      end
-
       context 'deleted edge (#delete_edges_to)' do
         before { graph.delete_edges_to('2') }
         it { is_expected.to be_nil }
