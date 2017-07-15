@@ -589,4 +589,96 @@ describe Nanoc::Int::DirectedGraph do
       end
     end
   end
+
+  describe '#delete_vertex' do
+    subject { graph.delete_vertex('4') }
+
+    context 'vertex does not exist' do
+      it 'stays the same' do
+        expect(graph.vertices).to match_array(%w[1 2 3])
+        expect { subject }.not_to change { graph.vertices }
+      end
+    end
+
+    context 'vertex exists, but has no edges' do
+      before do
+        graph.add_vertex('4')
+      end
+
+      it 'removes the vertex' do
+        expect { subject }
+          .to change { graph.vertices }
+          .from(match_array(%w[1 2 3 4]))
+          .to(match_array(%w[1 2 3]))
+      end
+    end
+
+    context 'vertex exists and has edges' do
+      before do
+        graph.add_vertex('4')
+        graph.add_edge('1', '4')
+        graph.add_edge('4', '2')
+      end
+
+      it 'removes the vertex' do
+        expect { subject }
+          .to change { graph.vertices }
+          .from(match_array(%w[1 2 3 4]))
+          .to(match_array(%w[1 2 3]))
+      end
+
+      it 'removes edges from vertex' do
+        expect { subject }
+          .to change { graph.direct_predecessors_of('2') }
+          .from(match_array(%w[4]))
+          .to(be_empty)
+      end
+
+      it 'removes edges to vertex' do
+        expect { subject }
+          .to change { graph.direct_successors_of('1') }
+          .from(match_array(%w[4]))
+          .to(be_empty)
+      end
+
+      it 'removes its direct predecessor edges' do
+        expect { subject }
+          .to change { graph.direct_predecessors_of('4') }
+          .from(match_array(%w[1]))
+          .to(be_empty)
+      end
+
+      it 'removes its direct successor edges' do
+        expect { subject }
+          .to change { graph.direct_successors_of('4') }
+          .from(match_array(%w[2]))
+          .to(be_empty)
+      end
+    end
+
+    context 'vertex is a root' do
+      before do
+        graph.add_vertex('4')
+      end
+
+      it 'removes the vertex as a root' do
+        expect { subject }
+          .to change { graph.roots }
+          .from(match_array(%w[1 2 3 4]))
+          .to(match_array(%w[1 2 3]))
+      end
+    end
+
+    context 'vertex is not a root' do
+      before do
+        graph.add_vertex('4')
+        graph.add_edge('1', '4')
+      end
+
+      it 'removes the vertex as a root' do
+        expect { subject }
+          .not_to change { graph.roots }
+      end
+    end
+  end
 end

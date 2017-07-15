@@ -115,37 +115,6 @@ class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
     assert_equal Set.new([1, 2]), graph.roots
   end
 
-  def test_delete_vertex
-    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
-
-    graph.add_edge(1, 2)
-    graph.add_edge(2, 1)
-    graph.add_edge(2, 3)
-    graph.add_edge(3, 2)
-    graph.add_edge(1, 3)
-    graph.add_edge(3, 1)
-
-    graph.delete_vertex(2)
-
-    assert_equal [3], graph.direct_predecessors_of(1).sort
-    assert_equal [3], graph.direct_successors_of(1).sort
-    assert_equal [1], graph.direct_predecessors_of(3).sort
-    assert_equal [1], graph.direct_successors_of(3).sort
-    assert_equal Set.new([]), graph.roots
-  end
-
-  def test_delete_vertex_resulting_roots
-    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
-    assert_equal Set.new([1, 2, 3]), graph.roots
-
-    graph.add_edge(1, 2)
-    graph.add_edge(2, 3)
-    assert_equal Set.new([1]), graph.roots
-
-    graph.delete_vertex(2)
-    assert_equal Set.new([1, 3]), graph.roots
-  end
-
   def test_should_return_empty_array_for_nonexistant_vertices
     graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
 
