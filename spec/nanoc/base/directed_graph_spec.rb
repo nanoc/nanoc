@@ -680,5 +680,16 @@ describe Nanoc::Int::DirectedGraph do
           .not_to change { graph.roots }
       end
     end
+
+    it 'does not reuse vertex indices' do
+      graph.add_vertex('4')
+      graph.add_vertex('5')
+      graph.add_edge('5', '1')
+      subject
+      graph.add_vertex('6')
+      graph.add_edge('6', '1')
+
+      expect(graph.edges).to eq([[4, 0, nil], [5, 0, nil]])
+    end
   end
 end

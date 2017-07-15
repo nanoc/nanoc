@@ -36,8 +36,9 @@ module Nanoc::Int
     # Creates a new directed graph with the given vertices.
     def initialize(vertices)
       @vertices = {}
-      vertices.each_with_index do |v, i|
-        @vertices[v] = i
+      @next_vertex_idx = 0
+      vertices.each do |v|
+        @vertices[v] = @next_vertex_idx.tap { @next_vertex_idx += 1 }
       end
 
       @from_graph = {}
@@ -120,7 +121,7 @@ module Nanoc::Int
     def add_vertex(v)
       return if @vertices.key?(v)
 
-      @vertices[v] = @vertices.size
+      @vertices[v] = @next_vertex_idx.tap { @next_vertex_idx += 1 }
 
       @roots << v
     end
