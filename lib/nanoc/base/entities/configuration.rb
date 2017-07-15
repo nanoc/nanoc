@@ -164,7 +164,7 @@ module Nanoc::Int
     #
     # @return [Object] An unique reference to this object
     def reference
-      :config
+      'configuration'
     end
 
     def inspect

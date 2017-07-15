@@ -8,7 +8,7 @@ module Nanoc::Int
     end
 
     def reference
-      :items
+      'items'
     end
   end
 end

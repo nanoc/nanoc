@@ -43,7 +43,7 @@ module Nanoc::Int
     #
     # @return [Object] An unique reference to this object
     def reference
-      [:code_snippet, filename]
+      "code_snippet:#{filename}"
     end
 
     def inspect

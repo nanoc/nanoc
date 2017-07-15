@@ -112,7 +112,7 @@ module Nanoc::RuleDSL
     #
     # @return [Object] An unique reference to this object
     def reference
-      :rules
+      'rules'
     end
 
     def inspect

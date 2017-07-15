@@ -8,7 +8,7 @@ module Nanoc::Int
     end
 
     def reference
-      :layouts
+      'layouts'
     end
   end
 end

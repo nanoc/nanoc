@@ -7,7 +7,7 @@ describe Nanoc::Int::Item do
     let(:item) { described_class.new('hi', {}, '/foo.md') }
 
     it 'has the proper reference' do
-      expect(item.reference).to eql([:item, '/foo.md'])
+      expect(item.reference).to eql('item:/foo.md')
     end
   end
 end
