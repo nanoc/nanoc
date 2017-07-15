@@ -51,6 +51,39 @@ describe Nanoc::Int::DirectedGraph do
     end
   end
 
+  describe '#props_for' do
+    subject { graph.props_for('1', '2') }
+
+    context 'no edge' do
+      it { is_expected.to be_nil }
+    end
+
+    context 'edge, but no props' do
+      before { graph.add_edge('1', '2') }
+      it { is_expected.to be_nil }
+    end
+
+    context 'edge with props' do
+      before { graph.add_edge('1', '2', props: { name: 'Mr. C' }) }
+      it { is_expected.to eq(name: 'Mr. C') }
+
+      context 'deleted edge (#delete_edge)' do
+        before { graph.delete_edge('1', '2') }
+        it { is_expected.to be_nil }
+      end
+
+      context 'deleted edge (#delete_edges_from)' do
+        before { graph.delete_edges_from('1') }
+        it { is_expected.to be_nil }
+      end
+
+      context 'deleted edge (#delete_edges_to)' do
+        before { graph.delete_edges_to('2') }
+        it { is_expected.to be_nil }
+      end
+    end
+  end
+
   describe '#direct_predecessors_of' do
     subject { graph.direct_predecessors_of('2') }
 
