@@ -53,18 +53,18 @@ jobs:
       script: bundle exec rake spec test_all coveralls:push
     - stage: test
       rvm: 2.3
-      gemfile: gemfiles/rouge_1.gemfile
       before_script: bundle exec appraisal install
       script: bundle exec rake spec
       env:
         - FOCUS=rouge
+        - BUNDLE_GEMFILE=gemfiles/rouge_1.gemfile
     - stage: test
       rvm: 2.4
-      gemfile: gemfiles/rouge_1.gemfile
       before_script: bundle exec appraisal install
       script: bundle exec rake spec
       env:
         - FOCUS=rouge
+        - BUNDLE_GEMFILE=gemfiles/rouge_1.gemfile
     - stage: test
       rvm: 2.4
       script: bundle exec rake rubocop
