@@ -1,27 +1,72 @@
-language: ruby
-rvm:
-  - "2.3"
-  - "2.4"
+sudo: false
+dist: trusty
+
 branches:
   only:
     - "master"
+
 env:
   global:
     -
       LC_ALL=en_US.UTF_8
       LANG=en_US.UTF_8
-matrix:
-  fast_finish: true
-  include:
-    - rvm: jruby-9.1.9.0
-      env: DISABLE_NOKOGIRI=1
-  allow_failures:
-    - rvm: jruby-9.1.9.0
-      env: DISABLE_NOKOGIRI=1
-script:
-  - bundle exec rake test_ci
-  - bundle exec appraisal install && FOCUS=rouge bundle exec appraisal rake spec
+
 cache: bundler
-sudo: false
 git:
   depth: 10
+
+jobs:
+  fast_finish: true
+
+  allow_failures:
+    - stage: prepare cache
+      rvm: jruby-9.1.9.0
+      env:
+        - DISABLE_NOKOGIRI=1
+      script: true
+
+  include:
+    # Prepare cache
+    - stage: prepare cache
+      rvm: 2.3
+      script: true
+    - stage: prepare cache
+      rvm: 2.4
+      script: true
+    - stage: prepare cache
+      rvm: jruby-9.1.9.0
+      script: true
+      env:
+        - DISABLE_NOKOGIRI=1
+
+    # Test
+    - stage: test
+      rvm: 2.3
+      script: bundle exec rake spec test_all coveralls:push
+    - stage: test
+      rvm: 2.4
+      script: bundle exec rake spec test_all coveralls:push
+    - stage: test
+      rvm: jruby-9.1.9.0
+      env:
+        - DISABLE_NOKOGIRI=1
+      script: bundle exec rake spec test_all coveralls:push
+    - stage: test
+      rvm: 2.3
+      before_script: bundle exec appraisal install
+      script: bundle exec rake spec
+      env:
+        - FOCUS=rouge
+        - BUNDLE_GEMFILE=gemfiles/rouge_1.gemfile
+    - stage: test
+      rvm: 2.4
+      before_script: bundle exec appraisal install
+      script: bundle exec rake spec
+      env:
+        - FOCUS=rouge
+        - BUNDLE_GEMFILE=gemfiles/rouge_1.gemfile
+    - stage: test
+      rvm: 2.4
+      script: bundle exec rake rubocop
+      env:
+        - JOB_NAME=test-style

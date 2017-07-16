@@ -30,6 +30,8 @@ group :devel do
   gem 'yard-contracts'
 end
 
+gem 'nanoc-rust' if ENV['USE_NANOC_RUST'] == 'y'
+
 group :plugins do
   gem 'adsf'
   gem 'bluecloth', platforms: :ruby
