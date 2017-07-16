@@ -2,6 +2,13 @@
 # frozen_string_literal: true
 
 require 'nanoc'
+
+begin
+  require 'nanoc-rust'
+  NanocRust.activate!
+rescue LoadError
+end
+
 require 'nanoc/cli'
 
 if File.file?('Gemfile') && !defined?(Bundler)
