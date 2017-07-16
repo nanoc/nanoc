@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.7.14 (2017-07-16)
+
+Enhancements:
+
+* Various speed improvements (#1195, #1198)
+
 ## 4.7.13 (2017-07-02)
 
 Enhancements:
