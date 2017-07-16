@@ -5,6 +5,7 @@ module Nanoc::Filters
 end
 
 require_relative 'filters/asciidoc'
+require_relative 'filters/asciidoctor'
 require_relative 'filters/bluecloth'
 require_relative 'filters/colorize_syntax'
 require_relative 'filters/coffeescript'
