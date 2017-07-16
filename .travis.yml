@@ -53,12 +53,16 @@ jobs:
       script: bundle exec rake spec test_all coveralls:push
     - stage: test
       rvm: 2.3
-      script: "bundle exec appraisal install && bundle exec appraisal rake spec"
+      gemfile: gemfiles/rouge_1.gemfile
+      before_script: bundle exec appraisal install
+      script: bundle exec rake spec
       env:
         - FOCUS=rouge
     - stage: test
       rvm: 2.4
-      script: "bundle exec appraisal install && bundle exec appraisal rake spec"
+      gemfile: gemfiles/rouge_1.gemfile
+      before_script: bundle exec appraisal install
+      script: bundle exec rake spec
       env:
         - FOCUS=rouge
     - stage: test
