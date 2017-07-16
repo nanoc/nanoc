@@ -183,7 +183,7 @@ module Nanoc::DataSources
 
     def attributes_checksum_data_for(proto_doc, content_filename, meta_filename)
       Digest::SHA1.digest(
-        YAML.dump(
+        Marshal.dump(
           attributes: proto_doc.attributes_checksum_data,
           extra_attributes: extra_attributes_for(content_filename, meta_filename),
         ),
