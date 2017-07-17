@@ -90,5 +90,3 @@ module Nanoc
     end
   end
 end
-
-Nanoc::Feature.define('profiler', version: '4.7')

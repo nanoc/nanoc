@@ -5,14 +5,12 @@ summary 'compile items of this site'
 description <<~EOS
   Compile all items of the current site.
 EOS
-flag nil, :profile, 'profile compilation' if Nanoc::Feature.enabled?(Nanoc::Feature::PROFILER)
 flag nil, :diff, 'generate diff'
 
 require_relative 'compile_listeners/abstract'
 require_relative 'compile_listeners/debug_printer'
 require_relative 'compile_listeners/diff_generator'
 require_relative 'compile_listeners/file_action_printer'
-require_relative 'compile_listeners/stack_prof_profiler'
 require_relative 'compile_listeners/timing_recorder'
 
 module Nanoc::CLI::Commands
@@ -43,7 +41,6 @@ module Nanoc::CLI::Commands
 
     def default_listener_classes
       [
-        Nanoc::CLI::Commands::CompileListeners::StackProfProfiler,
         Nanoc::CLI::Commands::CompileListeners::DiffGenerator,
         Nanoc::CLI::Commands::CompileListeners::DebugPrinter,
         Nanoc::CLI::Commands::CompileListeners::TimingRecorder,
