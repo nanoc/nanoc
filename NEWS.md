@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.0 (2017-07-17)
+
+Featured:
+
+* Added `asciidoctor` filter (#1199)
+
 ## 4.7.14 (2017-07-16)
 
 Enhancements:
