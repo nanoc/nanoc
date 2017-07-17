@@ -2,7 +2,7 @@
 
 ## 4.8.0 (2017-07-17)
 
-Featured:
+Features:
 
 * Added `asciidoctor` filter (#1199)
 
