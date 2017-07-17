@@ -32,6 +32,7 @@ end
 
 group :plugins do
   gem 'adsf'
+  gem 'asciidoctor'
   gem 'bluecloth', platforms: :ruby
   gem 'builder'
   gem 'coderay'
