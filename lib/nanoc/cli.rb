@@ -96,7 +96,7 @@ module Nanoc::CLI
     @root_command = nil
 
     # Add root command
-    filename = File.dirname(__FILE__) + '/cli/commands/nanoc.rb'
+    filename = __dir__ + '/cli/commands/nanoc.rb'
     @root_command = load_command_at(filename)
 
     # Add help command
@@ -104,7 +104,7 @@ module Nanoc::CLI
     add_command(help_cmd)
 
     # Add other commands
-    cmd_filenames = Dir[File.dirname(__FILE__) + '/cli/commands/*.rb']
+    cmd_filenames = Dir[__dir__ + '/cli/commands/*.rb']
     cmd_filenames.each do |cmd_filename|
       next if File.basename(cmd_filename, '.rb') == 'nanoc'
       cmd = load_command_at(cmd_filename)

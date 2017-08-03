@@ -36,7 +36,7 @@ RSpec.configure do |c|
   end
 
   c.around(:each, chdir: false) do |example|
-    FileUtils.cd(File.dirname(__FILE__) + '/..') do
+    FileUtils.cd(__dir__ + '/..') do
       example.run
     end
   end
