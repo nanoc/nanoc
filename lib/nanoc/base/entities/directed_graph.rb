@@ -122,7 +122,7 @@ module Nanoc::Int
     #
     # @return [Array] Direct predecessors of the given vertex
     def direct_predecessors_of(to)
-      @to_graph[to].to_a
+      @to_graph.fetch(to, Set.new)
     end
 
     # Returns the predecessors of the given vertex, i.e. the vertices x for
@@ -188,7 +188,7 @@ module Nanoc::Int
         end
       end
 
-      all_vertices.to_a
+      all_vertices
     end
   end
 end

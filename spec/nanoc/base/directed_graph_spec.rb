@@ -81,9 +81,18 @@ describe Nanoc::Int::DirectedGraph do
       it { is_expected.to be_empty }
     end
 
+    context 'requested for non-existant vertex' do
+      subject { graph.direct_predecessors_of('12345') }
+
+      it { is_expected.to be_empty }
+      it { is_expected.to be_a(Set) }
+    end
+
     context 'one edge to' do
       before { graph.add_edge('1', '2') }
-      it { is_expected.to eq(['1']) }
+
+      it { is_expected.to match_array(['1']) }
+      it { is_expected.to be_a(Set) }
     end
 
     context 'two edges to' do
@@ -93,16 +102,26 @@ describe Nanoc::Int::DirectedGraph do
       end
 
       it { is_expected.to match_array(%w[1 3]) }
+      it { is_expected.to be_a(Set) }
     end
 
     context 'edge from' do
       before { graph.add_edge('2', '3') }
+
       it { is_expected.to be_empty }
+      it { is_expected.to be_a(Set) }
     end
   end
 
   describe '#predecessors_of' do
     subject { graph.predecessors_of('2') }
+
+    context 'requested for non-existant vertex' do
+      subject { graph.predecessors_of('12345') }
+
+      it { is_expected.to be_empty }
+      it { is_expected.to be_a(Set) }
+    end
 
     context 'no predecessors' do
       before do

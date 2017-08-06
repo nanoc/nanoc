@@ -6,11 +6,11 @@ class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
   def test_add_edge
     graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
 
-    assert_equal [], graph.predecessors_of(2)
+    assert_equal [], graph.predecessors_of(2).to_a
 
     graph.add_edge(1, 2)
 
-    assert_equal [1], graph.predecessors_of(2)
+    assert_equal [1], graph.predecessors_of(2).to_a
   end
 
   def test_add_edge_with_new_vertices
@@ -47,13 +47,6 @@ class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
     assert_equal [], graph.direct_predecessors_of(1).sort
     assert_equal [], graph.direct_predecessors_of(2).sort
     assert_equal [1, 2], graph.direct_predecessors_of(3).sort
-  end
-
-  def test_should_return_empty_array_for_nonexistant_vertices
-    graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
-
-    assert_equal [], graph.direct_predecessors_of(4)
-    assert_equal [], graph.predecessors_of(4)
   end
 
   def test_example
