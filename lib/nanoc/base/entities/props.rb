@@ -18,6 +18,8 @@ module Nanoc::Int
 
       @attributes =
         case attributes
+        when Set
+          attributes
         when Enumerable
           Set.new(attributes)
         else
@@ -26,6 +28,8 @@ module Nanoc::Int
 
       @raw_content =
         case raw_content
+        when Set
+          raw_content
         when Enumerable
           Set.new(raw_content)
         else
