@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.1 (2017-08-06)
+
+Enhancements:
+
+* Various speed improvements
+
 ## 4.8.0 (2017-07-17)
 
 Features:
