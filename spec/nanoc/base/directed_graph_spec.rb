@@ -156,34 +156,6 @@ describe Nanoc::Int::DirectedGraph do
     end
   end
 
-  describe '#successors_of' do
-    subject { graph.successors_of('2') }
-
-    context 'no successors' do
-      before do
-        graph.add_edge('1', '2')
-      end
-
-      it { is_expected.to be_empty }
-    end
-
-    context 'direct predecessor' do
-      before do
-        graph.add_edge('1', '2')
-        graph.add_edge('2', '3')
-      end
-
-      context 'no indirect successors' do
-        it { is_expected.to match_array(['3']) }
-      end
-
-      context 'indirect successors' do
-        before { graph.add_edge('3', '1') }
-        it { is_expected.to match_array(%w[1 2 3]) }
-      end
-    end
-  end
-
   describe '#inspect' do
     subject { graph.inspect }
 

@@ -6,12 +6,10 @@ class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
   def test_add_edge
     graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
 
-    assert_equal [], graph.successors_of(1)
     assert_equal [], graph.predecessors_of(2)
 
     graph.add_edge(1, 2)
 
-    assert_equal [2], graph.successors_of(1)
     assert_equal [1], graph.predecessors_of(2)
   end
 
@@ -66,7 +64,6 @@ class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
     assert_equal [], graph.direct_predecessors_of(4)
     assert_equal [], graph.predecessors_of(4)
     assert_equal [], graph.direct_successors_of(4)
-    assert_equal [], graph.successors_of(4)
   end
 
   def test_example
