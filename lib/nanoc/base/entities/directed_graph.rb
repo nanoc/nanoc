@@ -7,28 +7,30 @@ module Nanoc::Int
   # @example Creating and using a directed graph
   #
   #   # Create a graph with three vertices
-  #   graph = Nanoc::Int::DirectedGraph.new(%w( a b c d e ))
+  #   graph = Nanoc::Int::DirectedGraph.new(%w( a b c d e f g ))
   #
   #   # Add edges
   #   graph.add_edge('a', 'b')
   #   graph.add_edge('b', 'c')
+  #   graph.add_edge('b', 'f')
+  #   graph.add_edge('b', 'g')
   #   graph.add_edge('c', 'd')
-  #   graph.add_edge('b', 'e')
+  #   graph.add_edge('d', 'e')
   #
-  #   # Get (direct) successors
-  #   graph.direct_successors_of('a').sort
-  #     # => %w( b )
-  #   graph.successors_of('a').sort
-  #     # => %w( b c d e )
+  #   # Get (direct) predecessors
+  #   graph.direct_predecessors_of('b').sort
+  #     # => %w( a )
+  #   graph.predecessors_of('e').sort
+  #     # => %w( a b c d )
   #
   #   # Modify edges
   #   graph.delete_edges_to('c')
   #
-  #   # Get (direct) successors again
-  #   graph.direct_successors_of('a').sort
-  #     # => %w( b )
-  #   graph.successors_of('a').sort
-  #     # => %w( b e )
+  #   # Get (direct) predecessors again
+  #   graph.direct_predecessors_of('e').sort
+  #     # => %w( d )
+  #   graph.predecessors_of('e').sort
+  #     # => %w( c d )
   #
   # @api private
   class DirectedGraph
@@ -42,7 +44,6 @@ module Nanoc::Int
         @vertices[v] = @next_vertex_idx.tap { @next_vertex_idx += 1 }
       end
 
-      @from_graph = {}
       @to_graph   = {}
 
       @edge_props = {}
@@ -53,8 +54,8 @@ module Nanoc::Int
     def inspect
       s = []
 
-      @vertices.each_pair do |v1, _|
-        direct_successors_of(v1).each do |v2|
+      @vertices.each_pair do |v2, _|
+        direct_predecessors_of(v2).each do |v1|
           s << [v1.inspect + ' -> ' + v2.inspect + ' props=' + @edge_props[[v1, v2]].inspect]
         end
       end
@@ -74,9 +75,6 @@ module Nanoc::Int
     def add_edge(from, to, props: nil)
       add_vertex(from)
       add_vertex(to)
-
-      @from_graph[from] ||= Set.new
-      @from_graph[from] << to
 
       @to_graph[to] ||= Set.new
       @to_graph[to] << from
@@ -108,7 +106,6 @@ module Nanoc::Int
       return if @to_graph[to].nil?
 
       @to_graph[to].each do |from|
-        @from_graph[from].delete(to)
         @edge_props.delete([from, to])
       end
       @to_graph.delete(to)
@@ -128,16 +125,6 @@ module Nanoc::Int
       @to_graph[to].to_a
     end
 
-    # Returns the direct successors of the given vertex, i.e. the vertices y
-    # where there is an edge from the given vertex x to y.
-    #
-    # @param from The vertex of which the successors should be calculated
-    #
-    # @return [Array] Direct successors of the given vertex
-    def direct_successors_of(from)
-      @from_graph[from].to_a
-    end
-
     # Returns the predecessors of the given vertex, i.e. the vertices x for
     # which there is a path from x to the given vertex y.
     #
@@ -146,16 +133,6 @@ module Nanoc::Int
     # @return [Array] Predecessors of the given vertex
     def predecessors_of(to)
       @predecessors[to] ||= recursively_find_vertices(to, :direct_predecessors_of)
-    end
-
-    # Returns the successors of the given vertex, i.e. the vertices y for
-    # which there is a path from the given vertex x to y.
-    #
-    # @param from The vertex of which the successors should be calculated
-    #
-    # @return [Array] Successors of the given vertex
-    def successors_of(from)
-      @successors[from] ||= recursively_find_vertices(from, :direct_successors_of)
     end
 
     def props_for(from, to)
@@ -173,8 +150,8 @@ module Nanoc::Int
     # @return [Array] The list of all edges in this graph.
     def edges
       result = []
-      @vertices.each_pair do |v1, i1|
-        direct_successors_of(v1).map { |v2| [@vertices[v2], v2] }.each do |i2, v2|
+      @vertices.each_pair do |v2, i2|
+        direct_predecessors_of(v2).map { |v1| [@vertices[v1], v1] }.each do |i1, v1|
           result << [i1, i2, @edge_props[[v1, v2]]]
         end
       end
@@ -187,7 +164,6 @@ module Nanoc::Int
     # graph representation is changed.
     def invalidate_caches
       @predecessors = {}
-      @successors   = {}
     end
 
     # Recursively finds vertices, starting at the vertex start, using the

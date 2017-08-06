@@ -6,12 +6,10 @@ class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
   def test_add_edge
     graph = Nanoc::Int::DirectedGraph.new([1, 2, 3])
 
-    assert_equal [], graph.successors_of(1)
     assert_equal [], graph.predecessors_of(2)
 
     graph.add_edge(1, 2)
 
-    assert_equal [2], graph.successors_of(1)
     assert_equal [1], graph.predecessors_of(2)
   end
 
@@ -35,29 +33,20 @@ class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
     graph.add_edge(3, 1)
 
     assert_equal [2, 3], graph.direct_predecessors_of(1).sort
-    assert_equal [2, 3], graph.direct_successors_of(1).sort
     assert_equal [1, 3], graph.direct_predecessors_of(2).sort
-    assert_equal [1, 3], graph.direct_successors_of(2).sort
     assert_equal [1, 2], graph.direct_predecessors_of(3).sort
-    assert_equal [1, 2], graph.direct_successors_of(3).sort
 
     graph.delete_edges_to(1)
 
     assert_equal [], graph.direct_predecessors_of(1).sort
-    assert_equal [2, 3], graph.direct_successors_of(1).sort
     assert_equal [1, 3], graph.direct_predecessors_of(2).sort
-    assert_equal [3], graph.direct_successors_of(2).sort
     assert_equal [1, 2], graph.direct_predecessors_of(3).sort
-    assert_equal [2], graph.direct_successors_of(3).sort
 
     graph.delete_edges_to(2)
 
     assert_equal [], graph.direct_predecessors_of(1).sort
-    assert_equal [3], graph.direct_successors_of(1).sort
     assert_equal [], graph.direct_predecessors_of(2).sort
-    assert_equal [3], graph.direct_successors_of(2).sort
     assert_equal [1, 2], graph.direct_predecessors_of(3).sort
-    assert_equal [], graph.direct_successors_of(3).sort
   end
 
   def test_should_return_empty_array_for_nonexistant_vertices
@@ -65,8 +54,6 @@ class Nanoc::Int::DirectedGraphTest < Nanoc::TestCase
 
     assert_equal [], graph.direct_predecessors_of(4)
     assert_equal [], graph.predecessors_of(4)
-    assert_equal [], graph.direct_successors_of(4)
-    assert_equal [], graph.successors_of(4)
   end
 
   def test_example
