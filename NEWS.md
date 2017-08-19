@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.2 (2017-08-19)
+
+Fixed:
+
+* Fixed compatibility issue with guard-nanoc
+
 ## 4.8.1 (2017-08-06)
 
 Enhancements:
