@@ -98,6 +98,18 @@ module Nanoc
       []
     end
 
+    # @api private
+    def item_changes
+      warn "Caution: Data source #{self.class.identifier.inspect} does not implement #item_changes; live compilation will not pick up changes in this data source."
+      Enumerator.new { |_y| sleep }
+    end
+
+    # @api private
+    def layout_changes
+      warn "Caution: Data source #{self.class.identifier.inspect} does not implement #layout_changes; live compilation will not pick up changes in this data source."
+      Enumerator.new { |_y| sleep }
+    end
+
     # Returns the collection of layouts (represented by {Nanoc::Int::Layout}) in
     # this site. The default implementation simply returns an empty array.
     #

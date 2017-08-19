@@ -8,6 +8,7 @@ group :devel do
   gem 'codecov', require: false
   gem 'contracts', '~> 0.14'
   gem 'coveralls', require: false
+  gem 'ddbuffer', '~> 1.0'
   gem 'fuubar'
   gem 'guard-rake'
   gem 'json', '~> 2.0'
@@ -47,7 +48,7 @@ group :plugins do
   gem 'kramdown'
   gem 'less', '~> 2.0', platforms: :ruby
   gem 'libv8', platforms: :ruby
-  gem 'listen'
+  gem 'listen', '~> 3.0'
   gem 'markaby'
   gem 'maruku'
   gem 'mime-types'

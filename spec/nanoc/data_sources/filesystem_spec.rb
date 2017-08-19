@@ -79,4 +79,50 @@ describe Nanoc::DataSources::Filesystem do
       end
     end
   end
+
+  describe '#item_changes' do
+    subject { data_source.item_changes }
+
+    it 'returns a stream' do
+      expect(subject).to be_a(Nanoc::ChangesStream)
+    end
+
+    it 'contains one element after changing' do
+      FileUtils.mkdir_p('content')
+
+      enum = DDBuffer.new(1).call(subject.to_enum)
+      q = SizedQueue.new(1)
+      Thread.new { q << enum.take(1).first }
+
+      # FIXME: sleep is ugly
+      sleep 0.3
+      File.write('content/wat.md', 'stuff')
+
+      expect(q.pop).to eq(:unknown)
+      subject.stop
+    end
+  end
+
+  describe '#layout_changes' do
+    subject { data_source.layout_changes }
+
+    it 'returns a stream' do
+      expect(subject).to be_a(Nanoc::ChangesStream)
+    end
+
+    it 'contains one element after changing' do
+      FileUtils.mkdir_p('layouts')
+
+      enum = DDBuffer.new(1).call(subject.to_enum)
+      q = SizedQueue.new(1)
+      Thread.new { q << enum.take(1).first }
+
+      # FIXME: sleep is ugly
+      sleep 0.3
+      File.write('layouts/wat.md', 'stuff')
+
+      expect(q.pop).to eq(:unknown)
+      subject.stop
+    end
+  end
 end

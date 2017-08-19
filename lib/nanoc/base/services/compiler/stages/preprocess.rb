@@ -13,7 +13,7 @@ module Nanoc::Int::Compiler::Stages
       return if @site.preprocessed?
 
       if @action_provider.need_preprocessing?
-        @site.data_source = Nanoc::Int::InMemDataSource.new(@site.items, @site.layouts)
+        @site.data_source = Nanoc::Int::InMemDataSource.new(@site.items, @site.layouts, @site.data_source)
         @action_provider.preprocess(@site)
 
         @dependency_store.items = @site.items
