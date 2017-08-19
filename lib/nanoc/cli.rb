@@ -21,6 +21,12 @@ require_relative 'cli/cleaning_stream'
 require_relative 'cli/stream_cleaners'
 require_relative 'cli/error_handler'
 
+require_relative 'cli/commands/compile_listeners/abstract'
+require_relative 'cli/commands/compile_listeners/debug_printer'
+require_relative 'cli/commands/compile_listeners/diff_generator'
+require_relative 'cli/commands/compile_listeners/file_action_printer'
+require_relative 'cli/commands/compile_listeners/timing_recorder'
+
 # @api private
 module Nanoc::CLI
   # @return [Boolean] true if debug output is enabled, false if not

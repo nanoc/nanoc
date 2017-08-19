@@ -7,12 +7,6 @@ description <<~EOS
 EOS
 flag nil, :diff, 'generate diff'
 
-require_relative 'compile_listeners/abstract'
-require_relative 'compile_listeners/debug_printer'
-require_relative 'compile_listeners/diff_generator'
-require_relative 'compile_listeners/file_action_printer'
-require_relative 'compile_listeners/timing_recorder'
-
 module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
     attr_accessor :listener_classes
