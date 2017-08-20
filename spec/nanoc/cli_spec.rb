@@ -6,7 +6,7 @@ describe Nanoc::CLI do
   end
 
   let(:exceptions) do
-    # FIXME: Get rid of these exceptions by Nanoc 5.0
+    # FIXME: [Nanoc 5] Get rid of these exceptions
     [
       ['deploy', ['C']],
       ['help', ['v']],
