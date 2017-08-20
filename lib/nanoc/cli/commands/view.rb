@@ -52,6 +52,10 @@ module Nanoc::CLI::Commands
         run Rack::File.new(site.config[:output_dir])
       end.to_app
 
+      # Print a link
+      url = "http://#{options[:host] || 'localhost'}:#{options_for_rack[:Port]}/"
+      puts "View the site at #{url}"
+
       # Run autocompiler
       handler.run(app, options_for_rack)
     end
