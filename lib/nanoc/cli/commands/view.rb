@@ -9,7 +9,7 @@ description <<~EOS
 EOS
 
 required :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
-required :o, :host,    'specify the host to listen on (default: 0.0.0.0)'
+required :o, :host,    'specify the host to listen on (default: 127.0.0.1)'
 required :p, :port,    'specify the port to listen on (default: 3000)'
 
 module Nanoc::CLI::Commands
@@ -25,7 +25,7 @@ module Nanoc::CLI::Commands
       # Set options
       options_for_rack = {
         Port: (options[:port] || 3000).to_i,
-        Host: (options[:host] || '0.0.0.0'),
+        Host: (options[:host] || '127.0.0.1'),
       }
 
       # Get handler
@@ -53,7 +53,7 @@ module Nanoc::CLI::Commands
       end.to_app
 
       # Print a link
-      url = "http://#{options[:host] || 'localhost'}:#{options_for_rack[:Port]}/"
+      url = "http://#{options_for_rack[:Host]}:#{options_for_rack[:Port]}/"
       puts "View the site at #{url}"
 
       # Run autocompiler
