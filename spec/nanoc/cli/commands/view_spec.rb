@@ -58,5 +58,14 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
         expect(Net::HTTP.get('127.0.0.1', '/', 50_385)).to eql("File not found: /\n")
       end
     end
+
+    it 'does not listen on non-local interfaces' do
+      addresses = Socket.getifaddrs.map(&:addr).select(&:ipv4?).map(&:ip_address)
+      non_local_addresses = addresses - ['127.0.0.1']
+
+      run_nanoc_cmd(['view', '--port', '50385']) do
+        expect { Net::HTTP.get(non_local_addresses[0], '/', 50_385) }.to raise_error(Errno::ECONNREFUSED)
+      end
+    end
   end
 end
