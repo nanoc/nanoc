@@ -13,7 +13,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -39,7 +39,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -65,7 +65,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -91,7 +91,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -129,7 +129,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -167,7 +167,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -193,7 +193,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -219,7 +219,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -245,7 +245,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -271,7 +271,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -297,7 +297,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -323,7 +323,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -349,7 +349,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -375,7 +375,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -399,7 +399,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -435,7 +435,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -461,7 +461,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -487,7 +487,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -513,7 +513,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -542,7 +542,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -568,7 +568,7 @@ EOS
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )
@@ -595,7 +595,7 @@ EOS
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/bar/baz/',
+            '/foo/bar/baz',
           ),
           :blah,
         )
@@ -628,7 +628,7 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/bar/baz/',
+            '/foo/bar/baz',
           ),
           :blah,
         )
@@ -660,7 +660,7 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/bar/baz/',
+            '/foo/bar/baz',
           ),
           :blah,
         )
@@ -697,7 +697,7 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/bar/baz/',
+            '/foo/bar/baz',
           ),
           :blah,
         )
@@ -739,7 +739,7 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/bar/baz/',
+            '/foo/bar/baz',
           ),
           :blah,
         )
@@ -774,7 +774,7 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/baz/',
+            '/foo/baz',
           ),
           :blah,
         )
@@ -808,7 +808,7 @@ XML
           Nanoc::Int::Item.new(
             'content',
             {},
-            '/foo/baz/',
+            '/foo/baz',
           ),
           :blah,
         )
@@ -839,7 +839,7 @@ XML
         Nanoc::Int::Item.new(
           'content',
           {},
-          '/foo/bar/baz/',
+          '/foo/bar/baz',
         ),
         :blah,
       )

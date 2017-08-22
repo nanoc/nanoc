@@ -13,22 +13,22 @@ shared_examples 'a mutable identifiable collection' do
     let(:wrapped) do
       collection_class.new(
         config,
-        [double(:identifiable, identifier: Nanoc::Identifier.new('/asdf/'))],
+        [double(:identifiable, identifier: Nanoc::Identifier.new('/asdf'))],
       )
     end
 
     it 'deletes matching' do
-      view.delete_if { |i| i.identifier == '/asdf/' }
+      view.delete_if { |i| i.identifier == '/asdf' }
       expect(view.unwrap).to be_empty
     end
 
     it 'does not mutate' do
-      view.delete_if { |i| i.identifier == '/asdf/' }
+      view.delete_if { |i| i.identifier == '/asdf' }
       expect(wrapped).not_to be_empty
     end
 
     it 'deletes no non-matching' do
-      view.delete_if { |i| i.identifier == '/blah/' }
+      view.delete_if { |i| i.identifier == '/blah' }
       expect(wrapped).not_to be_empty
     end
 

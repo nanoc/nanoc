@@ -13,6 +13,13 @@ module Nanoc
     end
 
     # @api private
+    class InvalidFullIdentifierError < ::Nanoc::Error
+      def initialize(string)
+        super("Invalid full identifier (ends with a slash): #{string.inspect}")
+      end
+    end
+
+    # @api private
     class InvalidTypeError < ::Nanoc::Error
       def initialize(type)
         super("Invalid type for identifier: #{type.inspect} (can be :full or :legacy)")
@@ -60,9 +67,9 @@ module Nanoc
       when :legacy
         @string = "/#{string}/".gsub(/^\/+|\/+$/, '/').freeze
       when :full
-        if string !~ /\A\//
-          raise InvalidIdentifierError.new(string)
-        end
+        raise InvalidIdentifierError.new(string) if string !~ /\A\//
+        raise InvalidFullIdentifierError.new(string) if string =~ /\/\z/
+
         @string = string.dup.freeze
       else
         raise InvalidTypeError.new(@type)

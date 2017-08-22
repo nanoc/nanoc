@@ -304,7 +304,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
         Nanoc::Int::Item.new(
           'blah',
           { content_filename: 'content/xyzzy.sass' },
-          '/blah/',
+          '/blah',
         ),
         nil,
       ),

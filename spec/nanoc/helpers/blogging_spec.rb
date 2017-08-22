@@ -10,13 +10,13 @@ describe Nanoc::Helpers::Blogging, helper: true do
     subject { helper.articles }
 
     before do
-      ctx.create_item('blah', { kind: 'item' }, '/0/')
-      ctx.create_item('blah blah', { kind: 'article' }, '/1/')
-      ctx.create_item('blah blah blah', { kind: 'article' }, '/2/')
+      ctx.create_item('blah', { kind: 'item' }, '/0')
+      ctx.create_item('blah blah', { kind: 'article' }, '/1')
+      ctx.create_item('blah blah blah', { kind: 'article' }, '/2')
     end
 
     it 'returns the two articles' do
-      expect(subject.map(&:identifier)).to match_array(['/1/', '/2/'])
+      expect(subject.map(&:identifier)).to match_array(['/1', '/2'])
     end
   end
 
@@ -25,28 +25,28 @@ describe Nanoc::Helpers::Blogging, helper: true do
 
     before do
       attrs = { kind: 'item' }
-      ctx.create_item('blah', attrs, '/0/')
+      ctx.create_item('blah', attrs, '/0')
 
       attrs = { kind: 'article', created_at: (Date.today - 1).to_s }
-      ctx.create_item('blah blah', attrs, '/1/')
+      ctx.create_item('blah blah', attrs, '/1')
 
       attrs = { kind: 'article', created_at: (Time.now - 500).to_s }
-      ctx.create_item('blah blah blah', attrs, '/2/')
+      ctx.create_item('blah blah blah', attrs, '/2')
     end
 
     it 'returns the two articles in descending order' do
-      expect(subject.map(&:identifier)).to eq(['/2/', '/1/'])
+      expect(subject.map(&:identifier)).to eq(['/2', '/1'])
     end
   end
 
   describe '#url_for' do
-    subject { helper.url_for(ctx.items['/stuff/']) }
+    subject { helper.url_for(ctx.items['/stuff']) }
 
     let(:item_attributes) { {} }
 
     before do
-      ctx.create_item('Stuff', item_attributes, '/stuff/')
-      ctx.create_rep(ctx.items['/stuff/'], '/rep/path/stuff.html')
+      ctx.create_item('Stuff', item_attributes, '/stuff')
+      ctx.create_rep(ctx.items['/stuff'], '/rep/path/stuff.html')
 
       ctx.config[:base_url] = base_url
     end
@@ -98,10 +98,10 @@ describe Nanoc::Helpers::Blogging, helper: true do
     let(:item_attributes) { {} }
 
     before do
-      ctx.create_item('Feed', item_attributes, '/feed/')
-      ctx.create_rep(ctx.items['/feed/'], '/feed.xml')
+      ctx.create_item('Feed', item_attributes, '/feed')
+      ctx.create_rep(ctx.items['/feed'], '/feed.xml')
 
-      ctx.item = ctx.items['/feed/']
+      ctx.item = ctx.items['/feed']
       ctx.config[:base_url] = base_url
     end
 
@@ -166,15 +166,15 @@ describe Nanoc::Helpers::Blogging, helper: true do
   end
 
   describe '#atom_tag_for' do
-    subject { helper.atom_tag_for(ctx.items['/stuff/']) }
+    subject { helper.atom_tag_for(ctx.items['/stuff']) }
 
     let(:item_attributes) { { created_at: '2015-05-19 12:34:56' } }
     let(:item_rep_path) { '/stuff.xml' }
     let(:base_url) { 'http://url.base' }
 
     before do
-      ctx.create_item('Stuff', item_attributes, '/stuff/')
-      ctx.create_rep(ctx.items['/stuff/'], item_rep_path)
+      ctx.create_item('Stuff', item_attributes, '/stuff')
+      ctx.create_rep(ctx.items['/stuff'], item_rep_path)
 
       ctx.config[:base_url] = base_url
     end
@@ -186,7 +186,7 @@ describe Nanoc::Helpers::Blogging, helper: true do
 
     context 'item without path' do
       let(:item_rep_path) { nil }
-      it { is_expected.to eql('tag:url.base,2015-05-19:/stuff/') }
+      it { is_expected.to eql('tag:url.base,2015-05-19:/stuff') }
     end
 
     context 'bare URL without subdir' do

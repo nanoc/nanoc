@@ -4,7 +4,7 @@ describe Nanoc::MutableItemView do
   let(:entity_class) { Nanoc::Int::Item }
   it_behaves_like 'a mutable document view'
 
-  let(:item) { entity_class.new('content', {}, '/asdf/') }
+  let(:item) { entity_class.new('content', {}, '/asdf') }
   let(:view) { described_class.new(item, nil) }
 
   it 'does have rep access' do
@@ -14,11 +14,11 @@ describe Nanoc::MutableItemView do
   end
 
   describe '#inspect' do
-    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
+    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf') }
     let(:view) { described_class.new(item, nil) }
 
     subject { view.inspect }
 
-    it { is_expected.to eql('<Nanoc::MutableItemView identifier=/asdf/>') }
+    it { is_expected.to eql('<Nanoc::MutableItemView identifier=/asdf>') }
   end
 end

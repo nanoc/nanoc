@@ -15,7 +15,7 @@ module Nanoc
       end
 
       # @return [Nanoc::Identifier]
-      attr_accessor :identifier
+      attr_reader :identifier
 
       # @return [String, nil]
       attr_accessor :checksum_data
@@ -79,6 +79,11 @@ module Nanoc
       # @return Unique reference to this object
       def reference
         raise NotImplementedError
+      end
+
+      contract C::Or[Nanoc::Identifier, String] => Nanoc::Identifier
+      def identifier=(new_identifier)
+        @identifier = Nanoc::Identifier.from(new_identifier)
       end
 
       contract C::None => String

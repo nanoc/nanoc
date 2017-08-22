@@ -9,7 +9,7 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
       item = Nanoc::Int::Item.new(
         'content',
         { title: 'Max Payne', protagonist: 'Max Payne' },
-        '/games/max-payne/',
+        '/games/max-payne',
       )
 
       # Create filter
@@ -27,7 +27,7 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
       item = Nanoc::Int::Item.new(
         'content',
         { title: 'Max Payne', protagonist: 'Max Payne' },
-        '/games/max-payne/',
+        '/games/max-payne',
       )
 
       # Create filter

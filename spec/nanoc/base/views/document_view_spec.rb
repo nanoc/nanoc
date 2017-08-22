@@ -27,7 +27,7 @@ shared_examples 'a document view' do
   end
 
   describe '#frozen?' do
-    let(:document) { entity_class.new('content', {}, '/asdf/') }
+    let(:document) { entity_class.new('content', {}, '/asdf') }
 
     subject { view.frozen? }
 
@@ -42,10 +42,10 @@ shared_examples 'a document view' do
   end
 
   describe '#== and #eql?' do
-    let(:document) { entity_class.new('content', {}, '/asdf/') }
+    let(:document) { entity_class.new('content', {}, '/asdf') }
 
     context 'comparing with document with same identifier' do
-      let(:other) { entity_class.new('content', {}, '/asdf/') }
+      let(:other) { entity_class.new('content', {}, '/asdf') }
 
       it 'is ==' do
         expect(view).to eq(other)
@@ -57,7 +57,7 @@ shared_examples 'a document view' do
     end
 
     context 'comparing with document with different identifier' do
-      let(:other) { entity_class.new('content', {}, '/fdsa/') }
+      let(:other) { entity_class.new('content', {}, '/fdsa') }
 
       it 'is not ==' do
         expect(view).not_to eq(other)
@@ -69,7 +69,7 @@ shared_examples 'a document view' do
     end
 
     context 'comparing with document view with same identifier' do
-      let(:other) { other_view_class.new(entity_class.new('content', {}, '/asdf/'), nil) }
+      let(:other) { other_view_class.new(entity_class.new('content', {}, '/asdf'), nil) }
 
       it 'is ==' do
         expect(view).to eq(other)
@@ -81,7 +81,7 @@ shared_examples 'a document view' do
     end
 
     context 'comparing with document view with different identifier' do
-      let(:other) { other_view_class.new(entity_class.new('content', {}, '/fdsa/'), nil) }
+      let(:other) { other_view_class.new(entity_class.new('content', {}, '/fdsa'), nil) }
 
       it 'is not ==' do
         expect(view).not_to eq(other)
@@ -106,7 +106,7 @@ shared_examples 'a document view' do
   end
 
   describe '#[]' do
-    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
 
     subject { view[key] }
 
@@ -154,7 +154,7 @@ shared_examples 'a document view' do
   end
 
   describe '#attributes' do
-    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
 
     subject { view.attributes }
 
@@ -179,7 +179,7 @@ shared_examples 'a document view' do
   end
 
   describe '#fetch' do
-    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
 
     context 'with existant key' do
       let(:key) { :animal }
@@ -260,7 +260,7 @@ shared_examples 'a document view' do
   end
 
   describe '#key?' do
-    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
 
     subject { view.key?(key) }
 
@@ -308,15 +308,15 @@ shared_examples 'a document view' do
   end
 
   describe '#hash' do
-    let(:document) { double(:document, identifier: '/foo/') }
+    let(:document) { double(:document, identifier: '/foo') }
 
     subject { view.hash }
 
-    it { should == described_class.hash ^ '/foo/'.hash }
+    it { should == described_class.hash ^ '/foo'.hash }
   end
 
   describe '#raw_content' do
-    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo/') }
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
 
     subject { view.raw_content }
 
