@@ -4,7 +4,7 @@ describe Nanoc::Int::ItemRepWriter do
   describe '#write' do
     let(:raw_path) { 'output/blah.dat' }
 
-    let(:item) { Nanoc::Int::Item.new(orig_content, {}, '/') }
+    let(:item) { Nanoc::Int::Item.new(orig_content, {}, '/foo') }
 
     let(:item_rep) do
       Nanoc::Int::ItemRep.new(item, :default).tap do |ir|

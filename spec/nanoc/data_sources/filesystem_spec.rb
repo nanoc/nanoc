@@ -47,7 +47,7 @@ describe Nanoc::DataSources::Filesystem do
 
           expect(subject[0].content.string).to eq('test 1')
           expect(subject[0].attributes).to eq(expected_attributes)
-          expect(subject[0].identifier).to eq(Nanoc::Identifier.new('/bar/'))
+          expect(subject[0].identifier).to eq(Nanoc::Identifier.new('/bar/', type: :legacy))
           expect(subject[0].checksum_data).to be_nil
           expect(subject[0].attributes_checksum_data).to be_a(String)
           expect(subject[0].attributes_checksum_data.size).to eq(20)

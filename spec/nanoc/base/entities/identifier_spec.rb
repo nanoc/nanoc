@@ -67,6 +67,16 @@ describe Nanoc::Identifier do
           .to raise_error(Nanoc::Identifier::InvalidIdentifierError)
       end
 
+      it 'refuses string ending with a slash' do
+        expect { described_class.new('/foo/') }
+          .to raise_error(Nanoc::Identifier::InvalidFullIdentifierError)
+      end
+
+      it 'refuses string with only slash' do
+        expect { described_class.new('/') }
+          .to raise_error(Nanoc::Identifier::InvalidFullIdentifierError)
+      end
+
       it 'has proper string representation' do
         expect(described_class.new('/foo').to_s).to eql('/foo')
       end
@@ -422,7 +432,7 @@ describe Nanoc::Identifier do
     end
 
     context 'full type' do
-      let(:identifier) { described_class.new('/foo/', type: :full) }
+      let(:identifier) { described_class.new('/foo', type: :full) }
       it { is_expected.to eql(false) }
     end
   end
@@ -436,7 +446,7 @@ describe Nanoc::Identifier do
     end
 
     context 'full type' do
-      let(:identifier) { described_class.new('/foo/', type: :full) }
+      let(:identifier) { described_class.new('/foo', type: :full) }
       it { is_expected.to eql(true) }
     end
   end
@@ -445,7 +455,7 @@ describe Nanoc::Identifier do
     subject { identifier.components }
 
     context 'no components' do
-      let(:identifier) { described_class.new('/') }
+      let(:identifier) { described_class.new('/', type: :legacy) }
       it { is_expected.to eql([]) }
     end
 

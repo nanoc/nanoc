@@ -36,21 +36,21 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
     context 'with rep' do
       before do
-        ctx.create_item('content', {}, '/target/')
-        ctx.create_rep(ctx.items['/target/'], '/target.html')
+        ctx.create_item('content', {}, '/target')
+        ctx.create_rep(ctx.items['/target'], '/target.html')
       end
 
-      let(:target) { ctx.items['/target/'].reps[:default] }
+      let(:target) { ctx.items['/target'].reps[:default] }
 
       it { is_expected.to eql('<a href="/target.html">Text</a>') }
     end
 
     context 'with item' do
       before do
-        ctx.create_item('content', {}, '/target/')
+        ctx.create_item('content', {}, '/target')
       end
 
-      let(:target) { ctx.items['/target/'] }
+      let(:target) { ctx.items['/target'] }
 
       before do
         ctx.create_rep(target, '/target.html')
@@ -77,11 +77,11 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
     context 'with nil path' do
       before do
-        ctx.create_item('content', {}, '/target/')
-        ctx.create_rep(ctx.items['/target/'], nil)
+        ctx.create_item('content', {}, '/target')
+        ctx.create_rep(ctx.items['/target'], nil)
       end
 
-      let(:target) { ctx.items['/target/'].reps[:default] }
+      let(:target) { ctx.items['/target'].reps[:default] }
 
       it 'raises' do
         expect { subject }.to raise_error(RuntimeError)

@@ -31,7 +31,7 @@ describe Nanoc::ItemRepView do
 
   describe '#frozen?' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
-    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
     subject { view.frozen? }
@@ -48,11 +48,11 @@ describe Nanoc::ItemRepView do
 
   describe '#== and #eql?' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
-    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
     context 'comparing with item rep with same identifier' do
-      let(:other_item) { double(:other_item, identifier: '/foo/') }
+      let(:other_item) { double(:other_item, identifier: '/foo') }
       let(:other) { double(:other_item_rep, item: other_item, name: :jacques) }
 
       it 'is ==' do
@@ -65,7 +65,7 @@ describe Nanoc::ItemRepView do
     end
 
     context 'comparing with item rep with different identifier' do
-      let(:other_item) { double(:other_item, identifier: '/bar/') }
+      let(:other_item) { double(:other_item, identifier: '/bar') }
       let(:other) { double(:other_item_rep, item: other_item, name: :jacques) }
 
       it 'is not ==' do
@@ -78,7 +78,7 @@ describe Nanoc::ItemRepView do
     end
 
     context 'comparing with item rep with different name' do
-      let(:other_item) { double(:other_item, identifier: '/foo/') }
+      let(:other_item) { double(:other_item, identifier: '/foo') }
       let(:other) { double(:other_item_rep, item: other_item, name: :marvin) }
 
       it 'is not ==' do
@@ -91,7 +91,7 @@ describe Nanoc::ItemRepView do
     end
 
     context 'comparing with item rep with same identifier' do
-      let(:other_item) { double(:other_item, identifier: '/foo/') }
+      let(:other_item) { double(:other_item, identifier: '/foo') }
       let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), view_context) }
 
       it 'is ==' do
@@ -104,7 +104,7 @@ describe Nanoc::ItemRepView do
     end
 
     context 'comparing with item rep with different identifier' do
-      let(:other_item) { double(:other_item, identifier: '/bar/') }
+      let(:other_item) { double(:other_item, identifier: '/bar') }
       let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), view_context) }
 
       it 'is not equal' do
@@ -114,7 +114,7 @@ describe Nanoc::ItemRepView do
     end
 
     context 'comparing with item rep with different name' do
-      let(:other_item) { double(:other_item, identifier: '/foo/') }
+      let(:other_item) { double(:other_item, identifier: '/foo') }
       let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :marvin), view_context) }
 
       it 'is not equal' do
@@ -124,7 +124,7 @@ describe Nanoc::ItemRepView do
     end
 
     context 'comparing with something that is not an item rep' do
-      let(:other_item) { double(:other_item, identifier: '/foo/') }
+      let(:other_item) { double(:other_item, identifier: '/foo') }
       let(:other) { :donkey }
 
       it 'is not equal' do
@@ -136,12 +136,12 @@ describe Nanoc::ItemRepView do
 
   describe '#hash' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
-    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
     subject { view.hash }
 
-    it { should == described_class.hash ^ Nanoc::Identifier.new('/foo/').hash ^ :jacques.hash }
+    it { should == described_class.hash ^ Nanoc::Identifier.new('/foo').hash ^ :jacques.hash }
   end
 
   describe '#snapshot?' do
@@ -349,7 +349,7 @@ describe Nanoc::ItemRepView do
 
   describe '#binary?' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
-    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
     subject { view.binary? }
@@ -383,7 +383,7 @@ describe Nanoc::ItemRepView do
 
   describe '#item' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
-    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
     subject { view.item }
@@ -399,11 +399,11 @@ describe Nanoc::ItemRepView do
 
   describe '#inspect' do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
-    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
     subject { view.inspect }
 
-    it { is_expected.to eql('<Nanoc::ItemRepView item.identifier=/foo/ name=jacques>') }
+    it { is_expected.to eql('<Nanoc::ItemRepView item.identifier=/foo name=jacques>') }
   end
 end

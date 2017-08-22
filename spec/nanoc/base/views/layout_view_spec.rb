@@ -6,11 +6,11 @@ describe Nanoc::LayoutView do
   it_behaves_like 'a document view'
 
   describe '#inspect' do
-    let(:item) { Nanoc::Int::Layout.new('content', {}, '/asdf/') }
+    let(:item) { Nanoc::Int::Layout.new('content', {}, '/asdf') }
     let(:view) { described_class.new(item, nil) }
 
     subject { view.inspect }
 
-    it { is_expected.to eql('<Nanoc::LayoutView identifier=/asdf/>') }
+    it { is_expected.to eql('<Nanoc::LayoutView identifier=/asdf>') }
   end
 end

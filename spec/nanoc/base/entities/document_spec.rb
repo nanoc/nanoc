@@ -225,4 +225,34 @@ shared_examples 'a document' do
       expect(subject.attributes).to eq(at: 'ribut')
     end
   end
+
+  describe '#identifier=' do
+    let(:document) { described_class.new('stuff', {}, '/foo.md') }
+
+    it 'allows changing to a string that contains a full identifier' do
+      expect { document.identifier = '/thing' }.not_to raise_error
+
+      expect(document.identifier).to eq('/thing')
+      expect(document.identifier).to be_full
+    end
+
+    it 'refuses changing to a string that does not contain a full identifier' do
+      expect { document.identifier = '/thing/' }
+        .to raise_error(Nanoc::Identifier::InvalidFullIdentifierError)
+    end
+
+    it 'allos changing to a full identifier' do
+      document.identifier = Nanoc::Identifier.new('/thing')
+
+      expect(document.identifier.to_s).to eq('/thing')
+      expect(document.identifier).to be_full
+    end
+
+    it 'allos changing to a legacy identifier' do
+      document.identifier = Nanoc::Identifier.new('/thing/', type: :legacy)
+
+      expect(document.identifier).to eq('/thing/')
+      expect(document.identifier).to be_legacy
+    end
+  end
 end

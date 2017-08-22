@@ -653,7 +653,7 @@ describe Nanoc::Int::Executor do
       let(:arg) { '/default' }
 
       let(:layouts) do
-        [Nanoc::Int::Layout.new('head <%= @foo %> foot', {}, '/default/')]
+        [Nanoc::Int::Layout.new('head <%= @foo %> foot', {}, Nanoc::Identifier.new('/default/', type: :legacy))]
       end
 
       it { is_expected.to eq(layouts[0]) }

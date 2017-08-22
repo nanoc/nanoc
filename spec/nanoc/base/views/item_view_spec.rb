@@ -53,13 +53,13 @@ describe Nanoc::ItemWithRepsView do
     subject { view.parent }
 
     context 'with parent' do
-      let(:parent_item) do
-        Nanoc::Int::Item.new('parent', {}, '/parent/')
-      end
-
       context 'full identifier' do
         let(:identifier) do
           Nanoc::Identifier.new('/parent/me.md')
+        end
+
+        let(:parent_item) do
+          Nanoc::Int::Item.new('parent', {}, '/parent.md')
         end
 
         it 'raises' do
@@ -70,6 +70,10 @@ describe Nanoc::ItemWithRepsView do
       context 'legacy identifier' do
         let(:identifier) do
           Nanoc::Identifier.new('/parent/me/', type: :legacy)
+        end
+
+        let(:parent_item) do
+          Nanoc::Int::Item.new('parent', {}, Nanoc::Identifier.new('/parent/', type: :legacy))
         end
 
         it 'returns a view for the parent' do
@@ -91,8 +95,9 @@ describe Nanoc::ItemWithRepsView do
         end
 
         context 'with root parent' do
-          let(:parent_item) { Nanoc::Int::Item.new('parent', {}, '/') }
+          let(:parent_item) { Nanoc::Int::Item.new('parent', {}, parent_identifier) }
           let(:identifier) { Nanoc::Identifier.new('/me/', type: :legacy) }
+          let(:parent_identifier) { Nanoc::Identifier.new('/', type: :legacy) }
 
           it 'returns a view for the parent' do
             expect(subject.class).to eql(Nanoc::ItemWithRepsView)
@@ -133,10 +138,6 @@ describe Nanoc::ItemWithRepsView do
       Nanoc::Int::Item.new('me', {}, identifier)
     end
 
-    let(:children) do
-      [Nanoc::Int::Item.new('child', {}, '/me/child/')]
-    end
-
     let(:view) { described_class.new(item, view_context) }
 
     let(:items) do
@@ -156,6 +157,10 @@ describe Nanoc::ItemWithRepsView do
         Nanoc::Identifier.new('/me.md')
       end
 
+      let(:children) do
+        [Nanoc::Int::Item.new('child', {}, '/me/child.md')]
+      end
+
       it 'raises' do
         expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem)
       end
@@ -164,6 +169,10 @@ describe Nanoc::ItemWithRepsView do
     context 'legacy identifier' do
       let(:identifier) do
         Nanoc::Identifier.new('/me/', type: :legacy)
+      end
+
+      let(:children) do
+        [Nanoc::Int::Item.new('child', {}, Nanoc::Identifier.new('/me/child/', type: :legacy))]
       end
 
       it 'returns views for the children' do
@@ -208,7 +217,7 @@ describe Nanoc::ItemWithRepsView do
     let(:view) { described_class.new(item, view_context) }
 
     let(:item) do
-      Nanoc::Int::Item.new('content', {}, '/asdf/')
+      Nanoc::Int::Item.new('content', {}, '/asdf')
     end
 
     let(:reps) do
@@ -355,11 +364,11 @@ describe Nanoc::ItemWithRepsView do
   end
 
   describe '#inspect' do
-    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf/') }
+    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf') }
     let(:view) { described_class.new(item, nil) }
 
     subject { view.inspect }
 
-    it { is_expected.to eql('<Nanoc::ItemWithRepsView identifier=/asdf/>') }
+    it { is_expected.to eql('<Nanoc::ItemWithRepsView identifier=/asdf>') }
   end
 end

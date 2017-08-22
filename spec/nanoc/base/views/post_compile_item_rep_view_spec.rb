@@ -2,7 +2,7 @@
 
 describe Nanoc::PostCompileItemRepView do
   let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
-  let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo/') }
+  let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo') }
   let(:view) { described_class.new(item_rep, view_context) }
 
   let(:view_context) do
