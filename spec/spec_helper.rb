@@ -17,6 +17,10 @@ require 'fuubar'
 Nanoc::CLI.setup
 
 RSpec.configure do |c|
+  c.include(Nanoc::Spec::Helper)
+
+  c.include(Nanoc::Spec::HelperHelper, helper: true)
+
   c.fuubar_progress_bar_options = {
     format: '%c/%C |<%b>%i| %p%%',
   }
@@ -29,16 +33,13 @@ RSpec.configure do |c|
 
   c.around(:each) do |example|
     Dir.mktmpdir('nanoc-test') do |dir|
-      FileUtils.cd(dir) do
-        example.run
-      end
+      chdir(dir) { example.run }
     end
   end
 
   c.around(:each, chdir: false) do |example|
-    FileUtils.cd(__dir__ + '/..') do
-      example.run
-    end
+    Dir.chdir(__dir__ + '/..')
+    example.run
   end
 
   c.before(:each) do
@@ -70,8 +71,6 @@ RSpec.configure do |c|
 
     File.write('Rules', 'passthrough "/**/*"')
   end
-
-  c.include(Nanoc::Spec::HelperHelper, helper: true)
 
   # Set focus if any
   if ENV.fetch('FOCUS', false)

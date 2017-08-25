@@ -107,6 +107,7 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true do
 
     before do
       expect(compiler).to receive(:build_reps).once
+      expect(Nanoc::CLI::CommandRunner).to receive(:find_site_dir).and_return(Dir.getwd)
     end
 
     it 'writes item and layout rules to stdout' do

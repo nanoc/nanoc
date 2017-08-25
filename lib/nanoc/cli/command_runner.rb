@@ -43,16 +43,39 @@ module Nanoc::CLI
     end
     alias is_in_site_dir? in_site_dir?
 
+    def self.find_site_dir
+      start_here = Dir.pwd
+
+      here = start_here
+      until Nanoc::Int::SiteLoader.cwd_is_nanoc_site?
+        Dir.chdir('..')
+        return nil if Dir.pwd == here
+        here = Dir.pwd
+      end
+      here
+    ensure
+      Dir.chdir(start_here)
+    end
+
+    def self.enter_site_dir
+      dir = find_site_dir
+      if dir.nil?
+        raise ::Nanoc::Int::Errors::GenericTrivial, 'The current working directory, nor any of its parents, seems to be a Nanoc site.'
+      end
+
+      return if Dir.getwd == dir
+      $stderr.puts "Using Nanoc site in #{dir}"
+      Dir.chdir(dir)
+    end
+
     # Asserts that the current working directory contains a site and loads the site into memory.
     #
     # @return [void]
     def load_site(preprocess: false)
+      self.class.enter_site_dir
+
       $stderr.print 'Loading site… '
       $stderr.flush
-
-      if site.nil?
-        raise ::Nanoc::Int::Errors::GenericTrivial, 'The current working directory does not seem to be a Nanoc site.'
-      end
 
       if preprocess
         site.compiler.action_provider.preprocess(site)
