@@ -63,6 +63,10 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
       addresses = Socket.getifaddrs.map(&:addr).select(&:ipv4?).map(&:ip_address)
       non_local_addresses = addresses - ['127.0.0.1']
 
+      if non_local_addresses.empty?
+        skip 'Need non-local network interfaces for this spec'
+      end
+
       run_nanoc_cmd(['view', '--port', '50385']) do
         expect { Net::HTTP.get(non_local_addresses[0], '/', 50_385) }.to raise_error(Errno::ECONNREFUSED)
       end
