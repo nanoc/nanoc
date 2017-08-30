@@ -77,6 +77,8 @@ module Nanoc::CLI
       $stderr.print 'Loading site… '
       $stderr.flush
 
+      site
+
       if preprocess
         site.compiler.action_provider.preprocess(site)
       end
