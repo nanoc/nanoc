@@ -2,7 +2,7 @@
 
 ## 4.8.2 (2017-08-19)
 
-Fixed:
+Fixes:
 
 * Fixed compatibility issue with guard-nanoc
 
