@@ -3,6 +3,16 @@
 module Nanoc
   # @api private
   module Spec
+    module Helper
+      def chdir(dir)
+        here = Dir.getwd
+        Dir.chdir(dir)
+        yield
+      ensure
+        Dir.chdir(here)
+      end
+    end
+
     class HelperContext
       # @return [Nanoc::Int::DependencyTracker]
       attr_reader :dependency_tracker
