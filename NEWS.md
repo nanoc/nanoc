@@ -1,5 +1,17 @@
 # Nanoc news
 
+## 4.8.3 (2017-08-30)
+
+Fixes:
+
+* Disallowed full identifiers from ending with a slash (#1206)
+* Made `nanoc view` listen on 127.0.0.1, not 0.0.0.0, by default (#1205)
+
+Enhancements:
+
+* Made `nanoc view` print site URL (#1204)
+* Made `nanoc` search for parent directory containing Nanoc site (#1210)
+
 ## 4.8.2 (2017-08-19)
 
 Fixes:
