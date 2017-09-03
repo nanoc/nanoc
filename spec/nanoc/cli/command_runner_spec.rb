@@ -87,4 +87,16 @@ describe Nanoc::CLI::CommandRunner, stdio: true do
       end
     end
   end
+
+  describe '#load_site' do
+    let(:command_runner) { described_class.new(nil, nil, nil) }
+
+    subject { command_runner.load_site }
+
+    before { File.write('nanoc.yaml', '{}') }
+
+    example do
+      expect { subject }.to change { command_runner.instance_variable_get(:@site) }.from(nil).to(satisfy { |e| !e.nil? })
+    end
+  end
 end
