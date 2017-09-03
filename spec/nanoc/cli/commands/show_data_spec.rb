@@ -155,6 +155,10 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
   describe '#print_item_rep_outdatedness' do
     subject { runner.send(:print_item_rep_outdatedness, items, compiler) }
 
+    before do
+      runner.instance_variable_set(:@site, site)
+    end
+
     let(:runner) do
       described_class.new(options, arguments, command)
     end

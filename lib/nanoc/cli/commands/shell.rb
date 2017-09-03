@@ -13,13 +13,13 @@ module Nanoc::CLI::Commands
     def run
       require 'pry'
 
-      load_site(preprocess: options[:preprocess])
+      @site = load_site(preprocess: options[:preprocess])
 
       Nanoc::Int::Context.new(env).pry
     end
 
     def env
-      self.class.env_for_site(site)
+      self.class.env_for_site(@site)
     end
 
     def self.reps_for(site)

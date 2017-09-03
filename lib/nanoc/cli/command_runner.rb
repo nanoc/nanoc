@@ -15,27 +15,6 @@ module Nanoc::CLI
       end
     end
 
-    # Gets the site ({Nanoc::Int::Site} instance) in the current directory and
-    # loads its data.
-    #
-    # @return [Nanoc::Int::Site] The site in the current working directory
-    def site
-      # Load site if possible
-      @site ||= nil
-      if is_in_site_dir? && @site.nil?
-        @site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      end
-
-      @site
-    end
-
-    # For debugging purposes.
-    #
-    # @api private
-    def site=(new_site)
-      @site = new_site
-    end
-
     # @return [Boolean] true if the current working directory is a Nanoc site
     #   directory, false otherwise
     def in_site_dir?
@@ -77,13 +56,15 @@ module Nanoc::CLI
       $stderr.print 'Loading site… '
       $stderr.flush
 
-      site
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
 
       if preprocess
         site.compiler.action_provider.preprocess(site)
       end
 
       $stderr.puts 'done'
+
+      site
     end
 
     # @return [Boolean] true if debug output is enabled, false if not

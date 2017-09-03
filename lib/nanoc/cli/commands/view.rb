@@ -20,7 +20,7 @@ module Nanoc::CLI::Commands
       load_adsf
       require 'rack'
 
-      load_site
+      @site = load_site
 
       # Set options
       options_for_rack = {
@@ -40,7 +40,7 @@ module Nanoc::CLI::Commands
       end
 
       # Build app
-      site = self.site
+      site = @site
       app = Rack::Builder.new do
         use Rack::CommonLogger
         use Rack::ShowExceptions

@@ -5,7 +5,7 @@ module Nanoc::CLI::Commands::CompileListeners
     attr_reader :telemetry
 
     # @see Listener#enable_for?
-    def self.enable_for?(_command_runner)
+    def self.enable_for?(_command_runner, _site)
       Nanoc::CLI.verbosity >= 1
     end
 

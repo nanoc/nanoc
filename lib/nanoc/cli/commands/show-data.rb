@@ -11,14 +11,14 @@ EOS
 module Nanoc::CLI::Commands
   class ShowData < ::Nanoc::CLI::CommandRunner
     def run
-      load_site(preprocess: true)
+      @site = load_site(preprocess: true)
 
       # Get data
-      items   = site.items
-      layouts = site.layouts
+      items   = @site.items
+      layouts = @site.layouts
 
       # Get dependency tracker
-      compiler = site.compiler
+      compiler = @site.compiler
       compiler.load_stores
       dependency_store = compiler.dependency_store
 
@@ -45,7 +45,7 @@ module Nanoc::CLI::Commands
     def sorted_reps_with_prev(items)
       prev = nil
       items.sort_by(&:identifier).each do |item|
-        site.compiler.reps[item].sort_by { |r| r.name.to_s }.each do |rep|
+        @site.compiler.reps[item].sort_by { |r| r.name.to_s }.each do |rep|
           yield(rep, prev)
           prev = rep
         end

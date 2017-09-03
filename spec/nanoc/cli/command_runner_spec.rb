@@ -95,8 +95,13 @@ describe Nanoc::CLI::CommandRunner, stdio: true do
 
     before { File.write('nanoc.yaml', '{}') }
 
-    example do
-      expect { subject }.to change { command_runner.instance_variable_get(:@site) }.from(nil).to(satisfy { |e| !e.nil? })
+    it 'does not set @site' do
+      expect(command_runner.instance_variable_get(:@site)).to be_nil
+      expect { subject }.not_to change { command_runner.instance_variable_get(:@site) }
+    end
+
+    it 'returns site' do
+      expect(subject).to be_a(Nanoc::Int::Site)
     end
   end
 end

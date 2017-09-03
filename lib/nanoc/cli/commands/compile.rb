@@ -19,11 +19,11 @@ module Nanoc::CLI::Commands
     def run
       time_before = Time.now
 
-      load_site
+      @site = load_site
 
       puts 'Compiling site…'
       run_listeners_while do
-        site.compile
+        @site.compile
       end
 
       time_after = Time.now
@@ -45,7 +45,7 @@ module Nanoc::CLI::Commands
     def setup_listeners
       @listeners =
         @listener_classes
-        .select { |klass| klass.enable_for?(self) }
+        .select { |klass| klass.enable_for?(self, @site) }
         .map    { |klass| klass.new(reps: reps) }
 
       @listeners.each(&:start_safely)
@@ -68,7 +68,7 @@ module Nanoc::CLI::Commands
     end
 
     def reps
-      site.compiler.reps
+      @site.compiler.reps
     end
   end
 end
