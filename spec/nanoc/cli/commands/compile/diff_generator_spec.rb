@@ -2,7 +2,7 @@
 
 describe Nanoc::CLI::Commands::CompileListeners::DiffGenerator do
   describe '.enable_for?' do
-    subject { described_class.enable_for?(command_runner) }
+    subject { described_class.enable_for?(command_runner, site) }
 
     let(:options) { {} }
     let(:config_hash) { {} }
@@ -24,9 +24,7 @@ describe Nanoc::CLI::Commands::CompileListeners::DiffGenerator do
     let(:code_snippets) { [] }
 
     let(:command_runner) do
-      Nanoc::CLI::Commands::Compile.new(options, arguments, command).tap do |cr|
-        cr.site = site
-      end
+      Nanoc::CLI::Commands::Compile.new(options, arguments, command)
     end
 
     context 'default' do

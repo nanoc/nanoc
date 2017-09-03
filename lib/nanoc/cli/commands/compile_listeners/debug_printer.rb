@@ -3,7 +3,7 @@
 module Nanoc::CLI::Commands::CompileListeners
   class DebugPrinter < Abstract
     # @see Listener#enable_for?
-    def self.enable_for?(command_runner)
+    def self.enable_for?(command_runner, _site)
       command_runner.debug?
     end
 

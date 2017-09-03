@@ -4,7 +4,7 @@ module Nanoc::CLI::Commands::CompileListeners
   class Abstract
     def initialize(*); end
 
-    def self.enable_for?(command_runner) # rubocop:disable Lint/UnusedMethodArgument
+    def self.enable_for?(command_runner, site) # rubocop:disable Lint/UnusedMethodArgument
       true
     end
 

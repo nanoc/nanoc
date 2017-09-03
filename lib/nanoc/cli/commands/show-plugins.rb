@@ -18,6 +18,7 @@ module Nanoc::CLI::Commands
 
       # Get list of plugins (before and after)
       plugins_before = PLUGIN_CLASSES.keys.each_with_object({}) { |c, acc| acc[c] = c.all }
+      site = load_site
       site&.code_snippets
       plugins_after = PLUGIN_CLASSES.keys.each_with_object({}) { |c, acc| acc[c] = c.all }
 

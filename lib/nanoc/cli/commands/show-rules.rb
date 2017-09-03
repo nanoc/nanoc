@@ -10,15 +10,15 @@ Prints the rules used for all items and layouts in the current site.
 module Nanoc::CLI::Commands
   class ShowRules < ::Nanoc::CLI::CommandRunner
     def run
-      load_site
+      @site = load_site
 
       @c = Nanoc::CLI::ANSIStringColorizer
 
-      compiler = site.compiler
+      compiler = @site.compiler
       compiler.build_reps
       @reps = compiler.reps
 
-      action_provider = site.compiler.action_provider
+      action_provider = @site.compiler.action_provider
       unless action_provider.respond_to?(:rules_collection)
         raise(
           ::Nanoc::Int::Errors::GenericTrivial,
@@ -27,8 +27,8 @@ module Nanoc::CLI::Commands
       end
       @rules = action_provider.rules_collection
 
-      site.items.sort_by(&:identifier).each   { |e| explain_item(e) }
-      site.layouts.sort_by(&:identifier).each { |e| explain_layout(e) }
+      @site.items.sort_by(&:identifier).each   { |e| explain_item(e) }
+      @site.layouts.sort_by(&:identifier).each { |e| explain_layout(e) }
     end
 
     def explain_item(item)

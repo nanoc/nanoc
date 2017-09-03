@@ -15,7 +15,7 @@ option :n, :'dry-run',      'show what would be deployed'
 module Nanoc::CLI::Commands
   class Deploy < ::Nanoc::CLI::CommandRunner
     def run
-      load_site(preprocess: true)
+      @site = load_site(preprocess: true)
 
       if options[:'list-deployers']
         list_deployers
@@ -80,14 +80,14 @@ module Nanoc::CLI::Commands
 
     def deployer_for(config)
       deployer_class_for_config(config).new(
-        site.config[:output_dir],
+        @site.config[:output_dir],
         config,
         dry_run: options[:'dry-run'],
       )
     end
 
     def check
-      runner = Nanoc::Checking::Runner.new(site)
+      runner = Nanoc::Checking::Runner.new(@site)
       if runner.dsl_present?
         puts 'Running issue checks…'
         is_success = runner.run_for_deploy
@@ -103,7 +103,7 @@ module Nanoc::CLI::Commands
     end
 
     def deploy_configs
-      site.config.fetch(:deploy, {})
+      @site.config.fetch(:deploy, {})
     end
 
     def deployer_class_for_config(config)

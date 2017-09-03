@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
-describe Nanoc::CLI::Commands::ShowRules, stdio: true do
+describe Nanoc::CLI::Commands::ShowRules, stdio: true, site: true do
   describe '#run' do
     subject { runner.run }
 
     let(:runner) do
-      described_class.new(options, arguments, command).tap do |runner|
-        runner.site = site
-      end
+      described_class.new(options, arguments, command)
     end
 
     let(:options) { {} }
@@ -105,16 +103,13 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true do
         .gsub(/^ {8}/, '')
     end
 
-    before do
-      expect(compiler).to receive(:build_reps).once
-      expect(Nanoc::CLI::CommandRunner).to receive(:find_site_dir).and_return(Dir.getwd)
-    end
-
     it 'writes item and layout rules to stdout' do
+      expect(runner).to receive(:load_site).and_return(site)
+      expect(compiler).to receive(:build_reps).once
       expect { subject }.to output(expected_out).to_stdout
     end
 
-    it 'writes status informaion to stderr' do
+    it 'writes status information to stderr' do
       expect { subject }.to output("Loading site… done\n").to_stderr
     end
   end
