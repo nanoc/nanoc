@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.4 (2017-09-03)
+
+Fixes:
+
+* Fixed issue which caused the CLI to load the site at the wrong moment (#1211, #1212, #1213)
+
 ## 4.8.3 (2017-08-30)
 
 Fixes:
