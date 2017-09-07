@@ -8,12 +8,13 @@ module Nanoc::CLI
   #
   # @api private
   class Logger
-    # Maps actions (`:create`, `:update`, `:identical`, `:skip` and `:delete`)
+    # Maps actions (`:create`, `:update`, `:identical`, `:cached`, `:skip` and `:delete`)
     # onto their ANSI color codes.
     ACTION_COLORS = {
       create: "\e[32m", # green
       update: "\e[33m", # yellow
       identical: '',    # (nothing)
+      cached: '',       # (nothing)
       skip: '',         # (nothing)
       delete: "\e[31m"  # red
     }.freeze
@@ -35,7 +36,7 @@ module Nanoc::CLI
     #
     # @param [:high, :low] level The importance of this action
     #
-    # @param [:create, :update, :identical, :skip, :delete] action The kind of file action
+    # @param [:create, :update, :identical, :cached, :skip, :delete] action The kind of file action
     #
     # @param [String] name The name of the file the action was performed on
     #

@@ -20,6 +20,11 @@ module Nanoc::CLI::Commands::CompileListeners
         @acc_durations[rep] += Time.now - @start_times[rep]
       end
 
+      cached_reps = Set.new
+      Nanoc::Int::NotificationCenter.on(:cached_content_used, self) do |rep|
+        cached_reps << rep
+      end
+
       Nanoc::Int::NotificationCenter.on(:rep_written, self) do |rep, _binary, path, is_created, is_modified|
         @acc_durations[rep] += Time.now - @start_times[rep]
         duration = @acc_durations[rep]
@@ -27,6 +32,7 @@ module Nanoc::CLI::Commands::CompileListeners
         action =
           if is_created then :create
           elsif is_modified then :update
+          elsif cached_reps.include?(rep) then :cached
           else :identical
           end
         level =

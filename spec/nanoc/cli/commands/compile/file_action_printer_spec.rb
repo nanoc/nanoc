@@ -60,9 +60,26 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
     before { listener.start }
     before { Nanoc::CLI::Logger.instance.level = :high }
 
-    it 'prints skipped (uncompiled) reps' do
+    it 'does not print skipped (uncompiled) reps' do
       expect { listener.stop }
         .not_to output(/skip/).to_stdout
+    end
+
+    it 'prints nothing' do
+      Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+      Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+
+      expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, false, '/foo.html', false, false) }
+        .not_to output(/identical/).to_stdout
+    end
+
+    it 'prints nothing' do
+      Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+      Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
+      Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+
+      expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, false, '/foo.html', false, false) }
+        .not_to output(/cached/).to_stdout
     end
   end
 
@@ -70,9 +87,26 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
     before { listener.start }
     before { Nanoc::CLI::Logger.instance.level = :low }
 
-    it 'prints nothing' do
+    it 'prints skipped (uncompiled) reps' do
       expect { listener.stop }
         .to output(/skip.*\/hi\.html/).to_stdout
+    end
+
+    it 'prints “identical” if not cached' do
+      Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+      Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+
+      expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, false, '/foo.html', false, false) }
+        .to output(/identical/).to_stdout
+    end
+
+    it 'prints “cached” if cached' do
+      Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+      Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
+      Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+
+      expect { Nanoc::Int::NotificationCenter.post(:rep_written, rep, false, '/foo.html', false, false) }
+        .to output(/cached/).to_stdout
     end
   end
 end
