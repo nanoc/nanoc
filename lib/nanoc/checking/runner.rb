@@ -98,10 +98,11 @@ module Nanoc::Checking
       Nanoc::Checking::Check.all
     end
 
-    def check_classes_named(n)
-      n.map do |a|
-        klass = Nanoc::Checking::Check.named(a.to_sym)
-        raise Nanoc::Int::Errors::GenericTrivial, "Unknown check: #{a}" if klass.nil?
+    def check_classes_named(names)
+      names.map do |name|
+        name = name.to_s.tr('-', '_').to_sym
+        klass = Nanoc::Checking::Check.named(name)
+        raise Nanoc::Int::Errors::GenericTrivial, "Unknown check: #{name}" if klass.nil?
         klass
       end
     end
