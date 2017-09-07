@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.8.5 (2017-09-07)
+
+Enhancements:
+
+* Made `nanoc check` accept hyphenated check names (e.g. `internal-links`, in addition to `internal_links`).
+* `compile --verbose` now prints “cached” rather than “identical” when cached compiled content is used. (#1214)
+
 ## 4.8.4 (2017-09-03)
 
 Fixes:
