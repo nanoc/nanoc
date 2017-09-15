@@ -44,16 +44,14 @@ module Nanoc::Int
       @modified = false
     end
 
-    contract C::HashOf[Symbol => C::IterOf[String]] => self
+    contract C::HashOf[Symbol => C::IterOf[String]] => C::HashOf[Symbol => C::IterOf[String]]
     def raw_paths=(val)
       @raw_paths = val
-      self
     end
 
-    contract C::HashOf[Symbol => C::IterOf[String]] => self
+    contract C::HashOf[Symbol => C::IterOf[String]] => C::HashOf[Symbol => C::IterOf[String]]
     def paths=(val)
       @paths = val
-      self
     end
 
     contract Symbol => C::Bool

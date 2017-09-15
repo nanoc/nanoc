@@ -39,7 +39,7 @@ module Nanoc::Int
 
     contract C::None => String
     def inspect
-      String.new.tap do |s|
+      (+'').tap do |s|
         s << 'Props('
         s << (raw_content? ? 'r' : '_')
         s << (attributes? ? 'a' : '_')

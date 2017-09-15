@@ -9,7 +9,7 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::Erubi.new(location: 'a cheap motel')
 
       # Run filter
-      result = filter.setup_and_run('<%= "I was hiding in #{@location}." %>')
+      result = filter.setup_and_run('<%= "I was hiding in #{@location}." %>') # rubocop:disable Lint/InterpolationCheck
       assert_equal('I was hiding in a cheap motel.', result)
     end
   end
@@ -20,7 +20,7 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::Erubi.new(location: 'a cheap motel')
 
       # Run filter
-      result = filter.setup_and_run('<%= "I was hiding in #{location}." %>')
+      result = filter.setup_and_run('<%= "I was hiding in #{location}." %>') # rubocop:disable Lint/InterpolationCheck
       assert_equal('I was hiding in a cheap motel.', result)
     end
   end
@@ -48,7 +48,7 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::Erubi.new(content: 'a cheap motel')
 
       # Run filter
-      result = filter.setup_and_run('<%= "I was hiding in #{yield}." %>')
+      result = filter.setup_and_run('<%= "I was hiding in #{yield}." %>') # rubocop:disable Lint/InterpolationCheck
       assert_equal('I was hiding in a cheap motel.', result)
     end
   end
@@ -60,7 +60,7 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
 
       # Run filter
       assert_raises LocalJumpError do
-        filter.setup_and_run('<%= "I was hiding in #{yield}." %>')
+        filter.setup_and_run('<%= "I was hiding in #{yield}." %>') # rubocop:disable Lint/InterpolationCheck
       end
     end
   end

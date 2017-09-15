@@ -36,7 +36,7 @@ module Nanoc::Filters
 
         # Add language-something class
         unless extracted_language.from_class
-          klass = element['class'] || String.new
+          klass = element['class'] || +''
           klass << ' ' unless [' ', nil].include?(klass[-1, 1])
           klass << "language-#{extracted_language.language}"
           element['class'] = klass

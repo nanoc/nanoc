@@ -328,7 +328,7 @@ describe Nanoc::Int::OutdatednessRules do
       end
     end
 
-    describe '#{Content,Attributes}Modified' do
+    describe '#ContentModified, #AttributesModified' do
       subject do
         [
           Nanoc::Int::OutdatednessRules::ContentModified,

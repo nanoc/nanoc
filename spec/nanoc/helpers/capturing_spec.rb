@@ -9,7 +9,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
     end
 
     describe 'setting content' do
-      let(:_erbout) { String.new('existing content') }
+      let(:_erbout) { +'existing content' }
 
       let(:params) { raise 'overwrite me' }
 
@@ -129,7 +129,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
     describe 'with item + name' do
       subject { helper.content_for(item, :foo) }
 
-      let(:_erbout) { String.new('existing content') }
+      let(:_erbout) { +'existing content' }
 
       context 'requesting for same item' do
         let(:item) { ctx.item }
@@ -198,7 +198,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
   describe '#capture' do
     context 'with string' do
-      let(:_erbout) { String.new('existing content') }
+      let(:_erbout) { +'existing content' }
 
       subject { helper.capture { _erbout << 'new content' } }
 
@@ -244,7 +244,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
       context 'output field separator set to nothing' do
         around do |ex|
           orig_output_field_separator = $OUTPUT_FIELD_SEPARATOR
-          $OUTPUT_FIELD_SEPARATOR = String.new
+          $OUTPUT_FIELD_SEPARATOR = +''
           ex.run
           $OUTPUT_FIELD_SEPARATOR = orig_output_field_separator
         end

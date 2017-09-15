@@ -14,8 +14,8 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
   let(:forced_options) { {} }
 
   def run_and_get_stdout(*args)
-    stdout = String.new
-    stderr = String.new
+    stdout = +''
+    stderr = +''
     piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
     piper.run(args, '')
     stdout

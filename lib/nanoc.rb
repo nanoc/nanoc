@@ -8,7 +8,7 @@ module Nanoc
   def self.version_information
     gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : 'without RubyGems'
     engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : 'ruby'
-    res = String.new
+    res = +''
     res << "Nanoc #{Nanoc::VERSION} © 2007-2017 Denis Defreyne.\n"
     res << "Running #{engine} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} #{gem_info}.\n"
     res
@@ -26,6 +26,7 @@ end
 require 'hamster'
 require 'ref'
 require 'ddplugin'
+require 'addressable'
 
 # Load general requirements
 require 'digest'

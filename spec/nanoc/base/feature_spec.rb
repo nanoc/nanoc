@@ -8,7 +8,7 @@ describe Nanoc::Feature do
 
     before do
       Nanoc::Feature.reset_caches
-      ENV['NANOC_FEATURES'] = String.new
+      ENV['NANOC_FEATURES'] = +''
     end
 
     context 'not set' do
@@ -42,7 +42,7 @@ describe Nanoc::Feature do
 
     before do
       Nanoc::Feature.reset_caches
-      ENV['NANOC_FEATURES'] = String.new
+      ENV['NANOC_FEATURES'] = +''
     end
 
     context 'not set' do

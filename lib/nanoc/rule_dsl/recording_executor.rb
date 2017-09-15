@@ -35,7 +35,7 @@ module Nanoc
       Pathlike = C::Maybe[C::Or[String, Nanoc::Identifier]]
       contract Symbol, C::KeywordArgs[path: C::Optional[Pathlike]] => nil
       def snapshot(snapshot_name, path: nil)
-        @action_sequence_builder.add_snapshot(snapshot_name, path && path.to_s)
+        @action_sequence_builder.add_snapshot(snapshot_name, path&.to_s)
         case snapshot_name
         when :last
           @last_snapshot = true

@@ -5,8 +5,8 @@ module Nanoc::Int
   class DependencyStore < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
-    attr_accessor :items
-    attr_accessor :layouts
+    attr_reader :items
+    attr_reader :layouts
 
     contract Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection, Nanoc::Int::Configuration, C::KeywordArgs[site: C::Optional[C::Maybe[Nanoc::Int::Site]]] => C::Any
     def initialize(items, layouts, config, site: nil)
@@ -140,7 +140,7 @@ module Nanoc::Int
     protected
 
     def obj2ref(obj)
-      obj && obj.reference
+      obj&.reference
     end
 
     def ref2obj(reference)

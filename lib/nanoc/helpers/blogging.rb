@@ -52,7 +52,7 @@ module Nanoc::Helpers
       end
 
       def build
-        buffer = String.new
+        buffer = +''
         xml = Builder::XmlMarkup.new(target: buffer, indent: 2)
         build_for_feed(xml)
         buffer

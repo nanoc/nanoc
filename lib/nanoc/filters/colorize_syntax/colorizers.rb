@@ -104,7 +104,7 @@ module Nanoc::Filters::ColorizeSyntax::Colorizers
       check_availability('highlight', '--version')
 
       cmd = ['highlight', '--syntax', language, '--fragment']
-      params.each do |key, _value|
+      params.each_key do |key|
         if SIMON_HIGHLIGHT_OPT_MAP[key]
           cmd << SIMON_HIGHLIGHT_OPT_MAP[key]
         else

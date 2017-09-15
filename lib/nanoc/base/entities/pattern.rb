@@ -72,7 +72,7 @@ module Nanoc::Int
     contract C::Or[Nanoc::Identifier, String] => C::Maybe[C::ArrayOf[String]]
     def captures(identifier)
       matches = @regexp.match(identifier.to_s)
-      matches && matches.captures
+      matches&.captures
     end
 
     contract C::None => String
