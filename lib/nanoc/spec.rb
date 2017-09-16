@@ -23,7 +23,7 @@ module Nanoc
       def initialize(mod)
         @mod = mod
 
-        @erbout = String.new
+        @erbout = +''
         @action_sequence = {}
         @config = Nanoc::Int::Configuration.new.with_defaults
         @reps = Nanoc::Int::ItemRepRepo.new

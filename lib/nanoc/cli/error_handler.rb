@@ -155,12 +155,12 @@ module Nanoc::CLI
 
     # @return [Nanoc::Int::Site] The site that is currently being processed
     def site
-      @command && @command.site
+      @command&.site
     end
 
     # @return [Nanoc::Int::Compiler] The compiler for the current site
     def compiler
-      site && site.compiler
+      site&.compiler
     end
 
     # @return [Hash<String, Array>] A hash containing the gem names as keys and gem versions as value

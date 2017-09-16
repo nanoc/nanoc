@@ -89,7 +89,7 @@ module Nanoc::Deploying::Deployers
       path     = config[:path]
       cdn_id   = config[:cdn_id]
 
-      if path && path.end_with?('/')
+      if path&.end_with?('/')
         raise "The path `#{path}` is not supposed to have a trailing slash"
       end
 

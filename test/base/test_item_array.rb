@@ -23,7 +23,7 @@ class Nanoc::Int::IdentifiableCollectionTest < Nanoc::TestCase
   end
 
   def test_enumerable
-    assert_equal @one, @items.find { |i| i.identifier == '/one' }
+    assert_equal @one, (@items.find { |i| i.identifier == '/one' })
   end
 
   def test_less_than_less_than

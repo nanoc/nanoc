@@ -25,7 +25,7 @@ module Nanoc::Telemetry
     end
 
     def separator(column_lengths)
-      String.new.tap do |s|
+      (+'').tap do |s|
         s << '─' * column_lengths[0]
         s << '─┼─'
         s << column_lengths[1..-1].map { |l| '─' * l }.join('───')

@@ -8,7 +8,7 @@ module Nanoc::Int
     attr_reader :code_snippets
     attr_reader :config
     attr_accessor :data_source
-    attr_accessor :compiler
+    attr_writer :compiler
 
     contract C::KeywordArgs[config: Nanoc::Int::Configuration, code_snippets: C::IterOf[Nanoc::Int::CodeSnippet], data_source: C::Maybe[C::Named['Nanoc::DataSource']]] => C::Any
     def initialize(config:, code_snippets:, data_source:)

@@ -52,7 +52,10 @@ Layout/IndentHeredoc:
 # This breaks RSpec on occasion, e.g. `expect { subject }.not_to change { foo }`,
 # and generally does not provide useful warnings
 Lint/AmbiguousBlockAssociation:
-  Enabled: false
+  Exclude:
+    - 'spec/**/*.rb'
+
+
 
 # ----- TO ENABLE LATER -----
 
@@ -68,6 +71,13 @@ Style/EmptyElse:
   Enabled: false
 
 Style/Next:
+  Enabled: false
+
+# This cop is broken (#4731, #4745)
+Style/SafeNavigation:
+  Enabled: false
+
+Naming/HeredocDelimiterNaming:
   Enabled: false
 
 
@@ -171,4 +181,8 @@ TrivialAccessors:
 
 # This does not always semantically make sense.
 GuardClause:
+  Enabled: false
+
+# Used for “undo work, whatever error happens”
+Lint/RescueWithoutErrorClass:
   Enabled: false

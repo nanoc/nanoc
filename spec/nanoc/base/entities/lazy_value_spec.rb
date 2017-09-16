@@ -2,7 +2,7 @@
 
 describe Nanoc::Int::LazyValue do
   describe '#value' do
-    let(:value_arg) { 'Hello world'.dup }
+    let(:value_arg) { +'Hello world' }
     let(:lazy_value) { described_class.new(value_arg) }
 
     subject { lazy_value.value }

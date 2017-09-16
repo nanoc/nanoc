@@ -34,7 +34,7 @@ class Nanoc::Deploying::Deployers::GitTest < Nanoc::TestCase
       git push origin master
 EOS
 
-    assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
+    assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
 
   def test_run_with_clean_repository
@@ -67,7 +67,7 @@ EOS
       git checkout master
 EOS
 
-    assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
+    assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
 
   def test_run_with_custom_options
@@ -103,7 +103,7 @@ EOS
       git push -f github gh-pages
 EOS
 
-    assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
+    assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
 
   def test_run_without_git_init
@@ -138,7 +138,7 @@ EOS
       git push origin master
 EOS
 
-    assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
+    assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
 
   def test_run_with_ssh_url
@@ -173,7 +173,7 @@ EOS
       git push git@github.com:myself/myproject.git master
 EOS
 
-    assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
+    assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
 
   def test_run_with_http_url
@@ -208,7 +208,7 @@ EOS
       git push https://github.com/nanoc/nanoc.git master
 EOS
 
-    assert_match Regexp.new(/^#{commands.chomp}$/), git.instance_eval { @shell_cmd_args.join("\n") }
+    assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
 
   def test_clean_repo_on_a_clean_repo

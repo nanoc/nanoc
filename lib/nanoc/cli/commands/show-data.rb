@@ -115,7 +115,7 @@ module Nanoc::CLI::Commands
               nil
             end
 
-          props = String.new
+          props = +''
           props << (dep.props.raw_content? ? 'r' : '_')
           props << (dep.props.attributes? ? 'a' : '_')
           props << (dep.props.compiled_content? ? 'c' : '_')

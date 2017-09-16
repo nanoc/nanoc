@@ -10,7 +10,7 @@ describe Nanoc::Helpers::HTMLEscape, helper: true do
     end
 
     context 'given a block' do
-      let!(:_erbout) { String.new('moo') }
+      let!(:_erbout) { +'moo' }
 
       it 'adds escaped content to _erbout' do
         helper.html_escape { _erbout << '<h1>Stuff!</h1>' }

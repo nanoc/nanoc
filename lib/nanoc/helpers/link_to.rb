@@ -42,7 +42,7 @@ module Nanoc::Helpers
       # Find path
       path = target.is_a?(String) ? target : target.path
 
-      if @item_rep && @item_rep.path == path
+      if @item_rep&.path == path
         # Create message
         "<span class=\"active\">#{text}</span>"
       else

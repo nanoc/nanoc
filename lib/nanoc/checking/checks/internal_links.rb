@@ -53,7 +53,7 @@ module Nanoc::Checking::Checks
       return true if path.empty?
 
       # Decode URL (e.g. '%20' -> ' ')
-      path = URI.unescape(path)
+      path = CGI.unescape(path)
 
       # Make absolute
       path =

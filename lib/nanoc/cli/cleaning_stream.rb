@@ -140,11 +140,11 @@ module Nanoc::CLI
     end
 
     # @see ARGF.set_encoding
-    # rubocop:disable Style/AccessorMethodName
+    # rubocop:disable Naming/AccessorMethodName
     def set_encoding(*args)
       @stream.set_encoding(*args)
     end
-    # rubocop:enable Style/AccessorMethodName
+    # rubocop:enable Naming/AccessorMethodName
 
     protected
 

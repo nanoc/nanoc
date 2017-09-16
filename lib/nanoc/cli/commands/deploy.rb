@@ -42,7 +42,7 @@ module Nanoc::CLI::Commands
         puts 'No deployment configurations.'
       else
         puts 'Available deployment configurations:'
-        deploy_configs.keys.each do |name|
+        deploy_configs.each_key do |name|
           puts "  #{name}"
         end
       end

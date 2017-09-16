@@ -26,7 +26,7 @@ module Nanoc::Int
       item_cache[rep.name]
     end
 
-    contract Nanoc::Int::ItemRep, C::HashOf[Symbol => Nanoc::Int::Content] => self
+    contract Nanoc::Int::ItemRep, C::HashOf[Symbol => Nanoc::Int::Content] => C::HashOf[Symbol => Nanoc::Int::Content]
     # Sets the compiled content for the given representation.
     #
     # This cached compiled content is a hash where the keys are the snapshot
@@ -34,7 +34,6 @@ module Nanoc::Int
     def []=(rep, content)
       @cache[rep.item.identifier] ||= {}
       @cache[rep.item.identifier][rep.name] = content
-      self
     end
 
     protected

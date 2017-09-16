@@ -10,7 +10,7 @@ module Nanoc::Int
   class Checksummer
     class VerboseDigest
       def initialize
-        @str = String.new
+        @str = +''
       end
 
       def update(str)

@@ -15,7 +15,7 @@ module Nanoc::Helpers
       select_proc = params.fetch(:rep_select, nil)
 
       # Create builder
-      buffer = String.new
+      buffer = +''
       xml = Builder::XmlMarkup.new(target: buffer, indent: 2)
 
       # Check for required attributes
@@ -32,7 +32,7 @@ module Nanoc::Helpers
           reps.select! { |r| select_proc[r] } if select_proc
           reps.sort_by { |r| r.name.to_s }.each do |rep|
             xml.url do
-              xml.loc URI.escape(@config[:base_url] + rep.path)
+              xml.loc Addressable::URI.escape(@config[:base_url] + rep.path)
               xml.lastmod item[:mtime].__nanoc_to_iso8601_date unless item[:mtime].nil?
               xml.changefreq item[:changefreq] unless item[:changefreq].nil?
               xml.priority item[:priority] unless item[:priority].nil?
