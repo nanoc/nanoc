@@ -10,29 +10,11 @@ FileName:
     - 'lib/nanoc/cli/commands/*.rb'
     - 'Appraisals'
 
-# A common pattern in tests is to define anonymous classes in which methods are defined, which trips
-# up Rubocop’s nested method definition cop.
-Lint/NestedMethodDefinition:
-  Exclude:
-    - 'test/**/*.rb'
-    - 'spec/**/*.rb'
-
-# This is used in tests, to verify the effect of state-changing functions.
-Style/GlobalVars:
-  Exclude:
-    - 'test/**/*.rb'
-
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
 
 Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
-
-# `rescue nil` is useful in specs where the exception is not important, but
-# the size effects are.
-Style/RescueModifier:
-  Exclude:
-    - 'spec/**/*.rb'
 
 Layout/IndentArray:
   EnforcedStyle: consistent
@@ -45,11 +27,33 @@ Lint/DuplicateMethods:
 Layout/IndentHeredoc:
   EnforcedStyle: squiggly
 
+
+
+# ----- CONFIGURED (exceptions for tests) -----
+
 # This breaks RSpec on occasion, e.g. `expect { subject }.not_to change { foo }`,
 # and generally does not provide useful warnings
 Lint/AmbiguousBlockAssociation:
   Exclude:
     - 'spec/**/*.rb'
+
+# `rescue nil` is useful in specs where the exception is not important, but
+# the size effects are.
+Style/RescueModifier:
+  Exclude:
+    - 'spec/**/*.rb'
+
+# A common pattern in tests is to define anonymous classes in which methods are defined, which trips
+# up Rubocop’s nested method definition cop.
+Lint/NestedMethodDefinition:
+  Exclude:
+    - 'test/**/*.rb'
+    - 'spec/**/*.rb'
+
+# This is used in tests, to verify the effect of state-changing functions.
+Style/GlobalVars:
+  Exclude:
+    - 'test/**/*.rb'
 
 
 
