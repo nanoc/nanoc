@@ -19,7 +19,7 @@ describe Nanoc::Int::CodeSnippet do
         EOS
       end
 
-      it 'makes helper functions available in contexts' do
+      it 'makes helper functions available everywhere' do
         expect { subject }
           .to change { [Nanoc::Int::Context.new({}).respond_to?(:fe345b48e4), Complex.respond_to?(:fe345b48e4)] }
           .from([false, false])
@@ -40,7 +40,7 @@ describe Nanoc::Int::CodeSnippet do
         EOS
       end
 
-      it 'makes helper functions available everywhere' do
+      it 'makes helper functions available in helpers only' do
         expect { subject }
           .to change { [Nanoc::Int::Context.new({}).respond_to?(:e0f0c30b5e), Complex.respond_to?(:e0f0c30b5e)] }
           .from([false, false])
