@@ -157,11 +157,6 @@ IfUnlessModifier:
 RaiseArgs:
   Enabled: false
 
-# Personal preference is to use `raise` to signal exceptions (normal control
-# flow should not use exceptions anyway).
-SignalException:
-  Enabled: false
-
 # Some methods that appear to be accessors (return a single value or set a
 # single value) should still not be considered to be accessors. This is a purely
 # semantic difference.
