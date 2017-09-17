@@ -19,11 +19,6 @@ Style/TrailingCommaInLiteral:
 Layout/IndentArray:
   EnforcedStyle: consistent
 
-Lint/DuplicateMethods:
-  Exclude:
-    - 'test/data_sources/test_filesystem.rb'
-    - 'spec/spec_helper.rb'
-
 Layout/IndentHeredoc:
   EnforcedStyle: squiggly
 
