@@ -8,7 +8,6 @@ AllCops:
 Naming/FileName:
   Exclude:
     - 'lib/nanoc/cli/commands/*.rb'
-    - 'Appraisals'
 
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
