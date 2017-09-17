@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.6 (2017-09-17)
+
+Fixes:
+
+* Fixed issue which would cause items not to be considered as outdated when their content and/or attributes are changed in the preprocessor (#1216, #1217)
+
 ## 4.8.5 (2017-09-07)
 
 Enhancements:
