@@ -42,10 +42,6 @@ Lint/DuplicateMethods:
     - 'test/data_sources/test_filesystem.rb'
     - 'spec/spec_helper.rb'
 
-# This needs to be fixed in Ruby 2.4.
-Lint/UnifiedInteger:
-  Enabled: false
-
 Layout/IndentHeredoc:
   EnforcedStyle: squiggly
 
