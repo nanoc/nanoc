@@ -312,24 +312,12 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # TODO: Use xpath matchers for more specific test
       result = atom_feed
       # Still should keep feed level author
-      assert_match(
-        /#{Regexp.escape('<name>Denis Defreyne</name>')}/, #'
-        result,
-      )
-      assert_match(
-        /#{Regexp.escape('<uri>http://stoneship.org/</uri>')}/, #'
-        result,
-      )
+      assert_includes(result, '<name>Denis Defreyne</name>')
+      assert_includes(result, '<uri>http://stoneship.org/</uri>')
 
       # Overrides on specific items
-      assert_match(
-        /#{Regexp.escape('<name>Don Alias</name>')}/, #'
-        result,
-      )
-      assert_match(
-        /#{Regexp.escape('<uri>http://don.example.com/</uri>')}/, #'
-        result,
-      )
+      assert_includes(result, '<name>Don Alias</name>')
+      assert_includes(result, '<uri>http://don.example.com/</uri>')
     end
   end
 

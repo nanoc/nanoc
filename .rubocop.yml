@@ -78,14 +78,6 @@ Naming/HeredocDelimiterNaming:
 
 
 
-# ----- DISABLED (hard) -----
-
-# Rubocop trips up on this.
-Layout/LeadingCommentSpace:
-  Enabled: false
-
-
-
 # ----- DISABLED (security) -----
 
 # Nanoc runs offline in a trusted environment, and these security checks are false positives.
@@ -102,6 +94,7 @@ Security/Eval:
     - 'spec/**/*.rb'
     - 'lib/nanoc/base/entities/code_snippet.rb'
     - 'lib/nanoc/filters/erubi.rb'
+
 
 
 # ----- DISABLED (metrics) -----
