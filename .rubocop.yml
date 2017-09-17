@@ -18,9 +18,6 @@ Style/TrailingCommaInLiteral:
 Layout/IndentArray:
   EnforcedStyle: consistent
 
-Layout/IndentHeredoc:
-  EnforcedStyle: squiggly
-
 
 
 # ----- CONFIGURED (exceptions for tests) -----
