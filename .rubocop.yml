@@ -5,7 +5,7 @@ AllCops:
   DisplayCopNames: true
 
 # We use filenames such as “create-site.rb” that translate to method names.
-FileName:
+Naming/FileName:
   Exclude:
     - 'lib/nanoc/cli/commands/*.rb'
     - 'Appraisals'
@@ -56,10 +56,10 @@ Style/GlobalVars:
 
 # Valid cops, but fixing the offenses they report is non-trivial.
 
-RegexpLiteral:
+Style/RegexpLiteral:
   Enabled: false
 
-ClassAndModuleChildren:
+Style/ClassAndModuleChildren:
   Enabled: false
 
 Style/EmptyElse:
@@ -136,34 +136,34 @@ Metrics/PerceivedComplexity:
 
 # We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
 # there’s no point in enforcing ASCII comments.
-AsciiComments:
+Style/AsciiComments:
   Enabled: false
 
 # It does not make sense to enforce everything to have documentation.
-Documentation:
+Style/Documentation:
   Enabled: false
 
 # Nanoc suppresses exceptions for valid reasons in a few cases.
-HandleExceptions:
+Lint/HandleExceptions:
   Enabled: false
 
 # if/unless at the end of the line makes it too easy to oversee.
-IfUnlessModifier:
+Style/IfUnlessModifier:
   Enabled: false
 
 # Personal preference is to have decent constructors for exceptions rather than
 # just a class and a message.
-RaiseArgs:
+Style/RaiseArgs:
   Enabled: false
 
 # Some methods that appear to be accessors (return a single value or set a
 # single value) should still not be considered to be accessors. This is a purely
 # semantic difference.
-TrivialAccessors:
+Style/TrivialAccessors:
   Enabled: false
 
 # This does not always semantically make sense.
-GuardClause:
+Style/GuardClause:
   Enabled: false
 
 # Used for “undo work, whatever error happens”
