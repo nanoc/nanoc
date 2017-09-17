@@ -25,6 +25,33 @@ shared_examples 'a mutable document view' do
         .from('content')
         .to('donkey')
     end
+
+    context 'checksum_data set' do
+      before do
+        document.checksum_data = 'my checksum data'
+        document.content_checksum_data = 'my content checksum data'
+        document.attributes_checksum_data = 'my attributes checksum data'
+      end
+
+      it 'unsets checksum_data' do
+        expect { view.raw_content = 'donkey' }
+          .to change { document.checksum_data }
+          .from('my checksum data')
+          .to(nil)
+      end
+
+      it 'unsets content_checksum_data' do
+        expect { view.raw_content = 'donkey' }
+          .to change { document.content_checksum_data }
+          .from('my content checksum data')
+          .to(nil)
+      end
+
+      it 'keeps attributes_checksum_data' do
+        expect { view.raw_content = 'donkey' }
+          .not_to change { document.attributes_checksum_data }
+      end
+    end
   end
 
   describe '#[]=' do
@@ -53,6 +80,33 @@ shared_examples 'a mutable document view' do
     it 'disallows layout views' do
       layout = Nanoc::LayoutView.new(Nanoc::Int::Layout.new('content', {}, '/foo.md'), nil)
       expect { view[:layout] = layout }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
+    end
+
+    context 'checksum_data set' do
+      before do
+        document.checksum_data = 'my checksum data'
+        document.content_checksum_data = 'my content checksum data'
+        document.attributes_checksum_data = 'my attributes checksum data'
+      end
+
+      it 'unsets checksum_data' do
+        expect { view[:title] = 'Donkey' }
+          .to change { document.checksum_data }
+          .from('my checksum data')
+          .to(nil)
+      end
+
+      it 'unsets attributes_checksum_data' do
+        expect { view[:title] = 'Donkey' }
+          .to change { document.attributes_checksum_data }
+          .from('my attributes checksum data')
+          .to(nil)
+      end
+
+      it 'keeps content_checksum_data' do
+        expect { view[:title] = 'Donkey' }
+          .not_to change { document.content_checksum_data }
+      end
     end
   end
 
@@ -101,6 +155,33 @@ shared_examples 'a mutable document view' do
 
     it 'returns self' do
       expect(subject).to equal(view)
+    end
+
+    context 'checksum_data set' do
+      before do
+        document.checksum_data = 'my checksum data'
+        document.content_checksum_data = 'my content checksum data'
+        document.attributes_checksum_data = 'my attributes checksum data'
+      end
+
+      it 'unsets checksum_data' do
+        expect { subject }
+          .to change { document.checksum_data }
+          .from('my checksum data')
+          .to(nil)
+      end
+
+      it 'unsets attributes_checksum_data' do
+        expect { subject }
+          .to change { document.attributes_checksum_data }
+          .from('my attributes checksum data')
+          .to(nil)
+      end
+
+      it 'keeps content_checksum_data' do
+        expect { subject }
+          .not_to change { document.content_checksum_data }
+      end
     end
   end
 end

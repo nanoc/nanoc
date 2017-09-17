@@ -16,6 +16,10 @@ module Nanoc
     end
 
     def raw_content=(arg)
+      # FIXME: clearing checksum data should be done in the document
+      unwrap.checksum_data = nil
+      unwrap.content_checksum_data = nil
+
       unwrap.content = Nanoc::Int::Content.create(arg)
     end
 
@@ -25,6 +29,10 @@ module Nanoc
     #
     # @see Hash#[]=
     def []=(key, value)
+      # FIXME: clearing checksum data should be done in the document
+      unwrap.checksum_data = nil
+      unwrap.attributes_checksum_data = nil
+
       disallowed_value_classes = Set.new([
         Nanoc::Int::Item,
         Nanoc::Int::Layout,
@@ -51,6 +59,10 @@ module Nanoc
     #
     # @return [self]
     def update_attributes(hash)
+      # FIXME: clearing checksum data should be done in the document
+      unwrap.checksum_data = nil
+      unwrap.attributes_checksum_data = nil
+
       hash.each { |k, v| unwrap.attributes[k] = v }
       self
     end
