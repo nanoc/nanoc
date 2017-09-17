@@ -23,6 +23,11 @@ module Nanoc::Int
       @name = name
     end
 
+    contract C::None => String
+    def inspect
+      "<#{self.class}>"
+    end
+
     contract C::None => self
     def freeze
       @objects.freeze

@@ -13,6 +13,12 @@ describe Nanoc::Int::IdentifiableCollection do
       it { is_expected.to be_a(described_class) }
     end
 
+    describe '#inspect' do
+      subject { identifiable_collection.inspect }
+
+      it { is_expected.to eq("<#{described_class}>") }
+    end
+
     describe '#[]' do
       let(:objects) do
         [
