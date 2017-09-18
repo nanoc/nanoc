@@ -29,6 +29,7 @@ require 'ddplugin'
 require 'addressable'
 
 # Load general requirements
+require 'cgi'
 require 'digest'
 require 'enumerator'
 require 'fiber'
