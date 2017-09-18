@@ -5,7 +5,7 @@ describe 'GH-1216', site: true, stdio: true do
     FileUtils.mkdir_p('content/talks')
     File.write('content/talks/aaa.html', 'A')
     File.write('content/talks/bbb.html', 'B')
-    File.write('content/talks.html', '<%= @items.find_all("/talks/*").map { |i| i.raw_content + "=" + i[:status].to_s }.join(" ") %>')
+    File.write('content/talks.html', '<%= @items.find_all("/talks/*").map { |i| i.raw_content + "=" + i[:status].to_s }.sort.join(" ") %>')
 
     File.write('Rules', <<~EOS)
       compile '/**/*' do
