@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.7 (2017-09-18)
+
+Fixes:
+
+* Fixed “uninitialized constant CGI” issue (#1218)
+
 ## 4.8.6 (2017-09-17)
 
 Fixes:
