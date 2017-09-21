@@ -96,6 +96,11 @@ module Nanoc::Int
       @wrapped[key]
     end
 
+    contract C::Args[C::Any] => C::Any
+    def dig(*keys)
+      @wrapped.dig(*keys)
+    end
+
     contract C::Any, C::Maybe[C::Any], C::Maybe[C::Func[C::None => C::Any]] => C::Any
     def fetch(key, fallback = NONE, &_block)
       @wrapped.fetch(key) do

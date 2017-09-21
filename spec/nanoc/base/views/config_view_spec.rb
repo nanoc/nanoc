@@ -5,7 +5,7 @@ describe Nanoc::ConfigView do
     Nanoc::Int::Configuration.new(hash: hash)
   end
 
-  let(:hash) { { amount: 9000, animal: 'donkey' } }
+  let(:hash) { { amount: 9000, animal: 'donkey', foo: { bar: :baz } } }
 
   let(:view) { described_class.new(config, view_context) }
 
@@ -41,12 +41,12 @@ describe Nanoc::ConfigView do
       expect(dependency_tracker).to receive(:bounce).with(config, attributes: [key])
     end
 
-    context 'with existant key' do
+    context 'with existing key' do
       let(:key) { :animal }
       it { is_expected.to eql('donkey') }
     end
 
-    context 'with non-existant key' do
+    context 'with non-existing key' do
       let(:key) { :weapon }
       it { is_expected.to eql(nil) }
     end
@@ -57,7 +57,7 @@ describe Nanoc::ConfigView do
       expect(dependency_tracker).to receive(:bounce).with(config, attributes: [key])
     end
 
-    context 'with existant key' do
+    context 'with existing key' do
       let(:key) { :animal }
 
       subject { view.fetch(key) }
@@ -65,7 +65,7 @@ describe Nanoc::ConfigView do
       it { is_expected.to eql('donkey') }
     end
 
-    context 'with non-existant key' do
+    context 'with non-existing key' do
       let(:key) { :weapon }
 
       context 'with fallback' do
@@ -95,12 +95,12 @@ describe Nanoc::ConfigView do
       expect(dependency_tracker).to receive(:bounce).with(config, attributes: [key])
     end
 
-    context 'with existant key' do
+    context 'with existing key' do
       let(:key) { :animal }
       it { is_expected.to eql(true) }
     end
 
-    context 'with non-existant key' do
+    context 'with non-existing key' do
       let(:key) { :weapon }
       it { is_expected.to eql(false) }
     end
@@ -115,7 +115,25 @@ describe Nanoc::ConfigView do
       res = []
       view.each { |k, v| res << [k, v] }
 
-      expect(res).to eql([[:amount, 9000], [:animal, 'donkey']])
+      expect(res).to eql([[:amount, 9000], [:animal, 'donkey'], [:foo, { bar: :baz }]])
+    end
+  end
+
+  describe '#dig' do
+    subject { view.dig(*keys) }
+
+    before do
+      expect(dependency_tracker).to receive(:bounce).with(config, attributes: keys)
+    end
+
+    context 'with existing keys' do
+      let(:keys) { %i[foo bar] }
+      it { is_expected.to eql(:baz) }
+    end
+
+    context 'with non-existing keys' do
+      let(:keys) { %i[foo baz bar] }
+      it { is_expected.to eql(nil) }
     end
   end
 
