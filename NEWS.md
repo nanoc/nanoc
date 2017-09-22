@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.9 (2017-09-22)
+
+Fixes:
+
+* Fixed “uninitialized constant DisabledContracts::Args” error
+
 ## 4.8.8 (2017-09-22)
 
 Enhancements:
