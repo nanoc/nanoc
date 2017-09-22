@@ -133,7 +133,7 @@ describe Nanoc::ConfigView do
 
     context 'with non-existing keys' do
       let(:keys) { %i[foo baz bar] }
-      it { is_expected.to eql(nil) }
+      it { is_expected.to be_nil }
     end
   end
 
