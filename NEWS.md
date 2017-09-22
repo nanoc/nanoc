@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.8 (2017-09-22)
+
+Enhancements:
+
+* Added `#dig` to configuration (#1221) [Gregory Pakosz]
+
 ## 4.8.7 (2017-09-18)
 
 Fixes:
