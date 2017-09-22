@@ -123,7 +123,7 @@ describe Nanoc::ConfigView do
     subject { view.dig(*keys) }
 
     before do
-      expect(dependency_tracker).to receive(:bounce).with(config, attributes: keys)
+      expect(dependency_tracker).to receive(:bounce).with(config, attributes: [:foo])
     end
 
     context 'with existing keys' do

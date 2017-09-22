@@ -50,7 +50,7 @@ module Nanoc
 
     # @see Hash#dig
     def dig(*keys)
-      @context.dependency_tracker.bounce(unwrap, attributes: keys)
+      @context.dependency_tracker.bounce(unwrap, attributes: keys.take(1))
       @config.dig(*keys)
     end
   end
