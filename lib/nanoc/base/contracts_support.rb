@@ -24,6 +24,7 @@ module Nanoc::Int
       Bool        = Ignorer.instance
       Num         = Ignorer.instance
       KeywordArgs = Ignorer.instance
+      Args        = Ignorer.instance
       Optional    = Ignorer.instance
       Maybe       = Ignorer.instance
       None        = Ignorer.instance
