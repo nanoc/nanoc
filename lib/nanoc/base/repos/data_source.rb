@@ -40,21 +40,6 @@ module Nanoc
       @references = 0
     end
 
-    # Loads the data source when necessary (calling {#up}), yields, and
-    # unloads (using {#down}) the data source when it is not being used
-    # elsewhere. All data source queries and data manipulations should be
-    # wrapped in a {#loading} block; it ensures that the data source is loaded
-    # when necessary and makes sure the data source does not get unloaded
-    # while it is still being used elsewhere.
-    #
-    # @return [void]
-    def loading
-      use
-      yield
-    ensure
-      unuse
-    end
-
     # Marks the data source as used by the caller.
     #
     # Calling this method increases the internal reference count. When the
