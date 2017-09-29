@@ -375,7 +375,7 @@ module Nanoc::DataSources
     def parse_with_frontmatter(content_filename)
       data = read(content_filename)
 
-      if data !~ /\A-{3,5}\s*$/
+      if data !~ /\A(-{5}|-{3})\s*$/
         return ParseResult.new(content: data, attributes: {}, attributes_data: '')
       end
 

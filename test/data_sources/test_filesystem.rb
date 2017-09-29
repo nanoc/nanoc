@@ -1004,6 +1004,22 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     end
   end
 
+  def test_parse_internal_four_dashes
+    content = \
+      "----\n" \
+      "fav_animal: donkey\n" \
+      "----\n" \
+      "blah blah\n"
+
+    File.open('test.html', 'w') { |io| io.write(content) }
+
+    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, nil)
+
+    result = data_source.instance_eval { parse('test.html', nil) }
+    assert_equal({}, result.attributes)
+    assert_equal(content, result.content)
+  end
+
   def test_parse_external_bad_metadata
     File.open('test.html', 'w') { |io| io.write('blah blah') }
     File.open('test.yaml', 'w') { |io| io.write('Hello world!') }
