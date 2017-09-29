@@ -371,15 +371,17 @@ module Nanoc::DataSources
       ParseResult.new(content: content, attributes: meta, attributes_data: meta_raw)
     end
 
+    SEPARATOR = /(-{5}|-{3})/.source
+
     # @return [ParseResult]
     def parse_with_frontmatter(content_filename)
       data = read(content_filename)
 
-      if data !~ /\A(-{5}|-{3})\s*$/
+      if data !~ /\A#{SEPARATOR}\s*$/
         return ParseResult.new(content: data, attributes: {}, attributes_data: '')
       end
 
-      pieces = data.split(/^(-{5}|-{3})[ \t]*\r?\n?/, 3)
+      pieces = data.split(/^#{SEPARATOR}[ \t]*\r?\n?/, 3)
       if pieces.size < 4
         raise Errors::InvalidFormat.new(content_filename)
       end
