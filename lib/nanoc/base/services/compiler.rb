@@ -19,9 +19,6 @@ module Nanoc::Int
     # @api private
     attr_reader :reps
 
-    # @api private
-    attr_reader :snapshot_repo
-
     def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, reps:, outdatedness_store:)
       @site = site
 
@@ -74,7 +71,7 @@ module Nanoc::Int
         reps: @reps,
         site: @site,
         compiled_content_cache: @compiled_content_cache,
-        snapshot_repo: snapshot_repo,
+        snapshot_repo: @snapshot_repo,
       )
     end
 
