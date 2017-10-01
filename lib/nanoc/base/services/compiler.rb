@@ -11,9 +11,6 @@ module Nanoc::Int
     attr_reader :compiled_content_cache
 
     # @api private
-    attr_reader :checksum_store
-
-    # @api private
     attr_reader :action_sequence_store
 
     # @api private
@@ -116,7 +113,7 @@ module Nanoc::Int
         action_provider: action_provider,
         site: site,
         dependency_store: dependency_store,
-        checksum_store: checksum_store,
+        checksum_store: @checksum_store,
       )
     end
 
@@ -137,7 +134,7 @@ module Nanoc::Int
 
     def load_stores_stage
       @_load_stores_stage ||= Stages::LoadStores.new(
-        checksum_store: checksum_store,
+        checksum_store: @checksum_store,
         compiled_content_cache: compiled_content_cache,
         dependency_store: @dependency_store,
         action_sequence_store: action_sequence_store,
@@ -166,7 +163,7 @@ module Nanoc::Int
       @_store_pre_compilation_state_stage ||= Stages::StorePreCompilationState.new(
         reps: @reps,
         layouts: site.layouts,
-        checksum_store: checksum_store,
+        checksum_store: @checksum_store,
         action_sequence_store: action_sequence_store,
         action_sequences: action_sequences,
       )
