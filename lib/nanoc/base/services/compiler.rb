@@ -8,9 +8,6 @@ module Nanoc::Int
     attr_reader :site
 
     # @api private
-    attr_reader :compiled_content_cache
-
-    # @api private
     attr_reader :action_sequence_store
 
     # TODO: remove -- used in show-rules command
@@ -79,7 +76,7 @@ module Nanoc::Int
         action_provider: action_provider,
         reps: @reps,
         site: @site,
-        compiled_content_cache: compiled_content_cache,
+        compiled_content_cache: @compiled_content_cache,
         snapshot_repo: snapshot_repo,
       )
     end
@@ -135,7 +132,7 @@ module Nanoc::Int
     def load_stores_stage
       @_load_stores_stage ||= Stages::LoadStores.new(
         checksum_store: @checksum_store,
-        compiled_content_cache: compiled_content_cache,
+        compiled_content_cache: @compiled_content_cache,
         dependency_store: @dependency_store,
         action_sequence_store: action_sequence_store,
         outdatedness_store: @outdatedness_store,
@@ -175,7 +172,7 @@ module Nanoc::Int
         dependency_store: @dependency_store,
         action_sequences: action_sequences,
         compilation_context: compilation_context,
-        compiled_content_cache: compiled_content_cache,
+        compiled_content_cache: @compiled_content_cache,
       )
     end
 
