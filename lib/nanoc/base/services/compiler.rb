@@ -172,6 +172,7 @@ module Nanoc::Int
 
     def compile_reps_stage(action_sequences)
       @_compile_reps_stage ||= Stages::CompileReps.new(
+        reps: @reps,
         outdatedness_store: @outdatedness_store,
         dependency_store: @dependency_store,
         action_sequences: action_sequences,

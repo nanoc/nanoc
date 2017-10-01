@@ -5,47 +5,46 @@ module Nanoc::Int
   class OutdatednessStore < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
-    contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site], reps: Nanoc::Int::ItemRepRepo] => C::Any
-    def initialize(site: nil, reps:)
+    contract C::KeywordArgs[site: C::Maybe[Nanoc::Int::Site]] => C::Any
+    def initialize(site: nil)
       super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'outdatedness'), 1)
 
-      @outdated_reps = Set.new
-      @all_reps = reps
+      @outdated_refs = Set.new
     end
 
-    contract Nanoc::Int::ItemRep => C::Bool
+    contract C::Or[String, Nanoc::Int::ItemRep] => C::Bool
     def include?(obj)
-      @outdated_reps.include?(obj)
+      case obj
+      when String
+        @outdated_refs.include?(obj)
+      else
+        @outdated_refs.include?(obj.reference)
+      end
     end
 
     contract Nanoc::Int::ItemRep => self
     def add(obj)
-      @outdated_reps << obj
+      @outdated_refs << obj.reference
+
       self
     end
 
     contract Nanoc::Int::ItemRep => self
     def remove(obj)
-      @outdated_reps.delete(obj)
-      self
-    end
+      # TODO: clear all when completed
+      @outdated_refs.delete(obj.reference)
 
-    contract C::None => C::ArrayOf[Nanoc::Int::ItemRep]
-    def to_a
-      @outdated_reps.to_a
+      self
     end
 
     protected
 
     def data
-      @outdated_reps.map(&:reference)
+      @outdated_refs
     end
 
     def data=(new_data)
-      outdated_refs = Set.new(new_data)
-      all_reps = Set.new(@all_reps)
-
-      @outdated_reps = Set.new(all_reps.select { |rep| outdated_refs.include?(rep.reference) })
+      @outdated_refs = Set.new(new_data)
     end
   end
 end

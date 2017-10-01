@@ -19,7 +19,7 @@ module Nanoc::Int
       action_provider ||= Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
 
       outdatedness_store =
-        Nanoc::Int::OutdatednessStore.new(site: site, reps: item_rep_repo)
+        Nanoc::Int::OutdatednessStore.new(site: site)
 
       compiled_content_cache =
         Nanoc::Int::CompiledContentCache.new(

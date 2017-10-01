@@ -20,7 +20,7 @@ describe Nanoc::Int::Compiler do
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
   let(:reps) { Nanoc::Int::ItemRepRepo.new }
 
-  let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site, reps: reps) }
+  let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site) }
   let(:action_provider) { double(:action_provider) }
 
   let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new(items: items) }

@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 describe Nanoc::Int::OutdatednessStore do
-  subject(:store) { described_class.new(site: site, reps: reps) }
+  subject(:store) { described_class.new(site: site) }
 
   let(:site) { double(:site) }
-  let(:reps) { Nanoc::Int::ItemRepRepo.new }
 
   let(:item) { Nanoc::Int::Item.new('foo', {}, '/foo.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
@@ -22,9 +21,7 @@ describe Nanoc::Int::OutdatednessStore do
   let(:layouts) { [] }
   let(:code_snippets) { [] }
 
-  describe '#include?, #add and #remove' do
-    subject { store.include?(rep) }
-
+  shared_examples 'include check' do
     context 'nothing added' do
       it { is_expected.not_to be }
     end
@@ -54,16 +51,15 @@ describe Nanoc::Int::OutdatednessStore do
     end
   end
 
-  describe '#to_a' do
-    subject { store.to_a }
-
-    context 'nothing added' do
-      it { is_expected.to be_empty }
+  describe '#include?, #add and #remove' do
+    context 'with rep' do
+      subject { store.include?(rep) }
+      include_examples 'include check'
     end
 
-    context 'one rep added' do
-      before { store.add(rep) }
-      it { is_expected.to eql([rep]) }
+    context 'with rep reference' do
+      subject { store.include?(rep.reference) }
+      include_examples 'include check'
     end
   end
 
@@ -75,27 +71,12 @@ describe Nanoc::Int::OutdatednessStore do
     end
 
     context 'not added' do
-      context 'rep part of new reps' do
-        before { reps << rep }
-        it { is_expected.not_to be }
-      end
-
-      context 'rep not part of new reps' do
-        it { is_expected.not_to be }
-      end
+      it { is_expected.not_to be }
     end
 
     context 'added' do
       before { store.add(rep) }
-
-      context 'rep part of new reps' do
-        before { reps << rep }
-        it { is_expected.to be }
-      end
-
-      context 'rep not part of new reps' do
-        it { is_expected.not_to be }
-      end
+      it { is_expected.to be }
     end
   end
 end

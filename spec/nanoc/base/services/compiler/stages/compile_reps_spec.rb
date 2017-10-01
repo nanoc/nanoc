@@ -3,6 +3,7 @@
 describe Nanoc::Int::Compiler::Stages::CompileReps do
   let(:stage) do
     described_class.new(
+      reps: reps,
       outdatedness_store: outdatedness_store,
       dependency_store: dependency_store,
       action_sequences: action_sequences,
@@ -27,7 +28,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new(items: items) }
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
-  let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site, reps: reps) }
+  let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
 
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }

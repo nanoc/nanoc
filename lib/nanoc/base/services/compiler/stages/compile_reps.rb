@@ -2,7 +2,8 @@
 
 module Nanoc::Int::Compiler::Stages
   class CompileReps
-    def initialize(outdatedness_store:, dependency_store:, action_sequences:, compilation_context:, compiled_content_cache:)
+    def initialize(reps:, outdatedness_store:, dependency_store:, action_sequences:, compilation_context:, compiled_content_cache:)
+      @reps = reps
       @outdatedness_store = outdatedness_store
       @dependency_store = dependency_store
       @action_sequences = action_sequences
@@ -11,7 +12,8 @@ module Nanoc::Int::Compiler::Stages
     end
 
     def run
-      selector = Nanoc::Int::ItemRepSelector.new(@outdatedness_store.to_a)
+      outdated_reps = @reps.select { |r| @outdatedness_store.include?(r) }
+      selector = Nanoc::Int::ItemRepSelector.new(outdated_reps)
       selector.each do |rep|
         handle_errors_while(rep) { compile_rep(rep, is_outdated: @outdatedness_store.include?(rep)) }
       end
