@@ -13,9 +13,12 @@ module Nanoc::Int
     # @api private
     attr_reader :action_sequence_store
 
+    # TODO: remove -- used in show-rules command
+    # TODO: remove -- used to preprocess in all commands
     # @api private
     attr_reader :action_provider
 
+    # TODO: remove -- used in show-data command
     # @api private
     attr_reader :dependency_store
 
@@ -84,17 +87,17 @@ module Nanoc::Int
       )
     end
 
-    # TODO: remove
+    # TODO: remove -- used in show-data command
     def load_stores
       load_stores_stage.run
     end
 
-    # TODO: remove
+    # TODO: remove -- used in various places
     def build_reps
       @action_sequences = build_reps_stage.run
     end
 
-    # TODO: remove
+    # TODO: remove -- used in show-data command
     def calculate_checksums
       @checksums = run_stage(calculate_checksums_stage)
     end
