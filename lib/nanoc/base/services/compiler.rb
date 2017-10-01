@@ -59,7 +59,13 @@ module Nanoc::Int
     end
 
     def run_all
-      prepare
+      # FIXME: State is ugly
+
+      run_stage(preprocess_stage)
+      @action_sequences = run_stage(build_reps_stage)
+      run_stage(load_stores_stage)
+      @checksums = run_stage(calculate_checksums_stage)
+      @outdated_items = run_stage(determine_outdatedness_stage)
 
       run_stage(forget_outdated_dependencies_stage, @outdated_items)
       run_stage(store_pre_compilation_state_stage(@action_sequences), @checksums)
@@ -69,16 +75,6 @@ module Nanoc::Int
       run_stage(postprocess_stage)
     ensure
       run_stage(cleanup_stage)
-    end
-
-    def prepare
-      # FIXME: State is ugly
-
-      run_stage(preprocess_stage)
-      @action_sequences = run_stage(build_reps_stage)
-      run_stage(load_stores_stage)
-      @checksums = run_stage(calculate_checksums_stage)
-      @outdated_items = run_stage(determine_outdatedness_stage)
     end
 
     def compilation_context
