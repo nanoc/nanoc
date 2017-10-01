@@ -26,9 +26,6 @@ module Nanoc::Int
     attr_reader :reps
 
     # @api private
-    attr_reader :outdatedness_store
-
-    # @api private
     attr_reader :snapshot_repo
 
     def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, reps:, outdatedness_store:)
@@ -158,7 +155,7 @@ module Nanoc::Int
       @_determine_outdatedness_stage ||= Stages::DetermineOutdatedness.new(
         reps: reps,
         outdatedness_checker: create_outdatedness_checker,
-        outdatedness_store: outdatedness_store,
+        outdatedness_store: @outdatedness_store,
       )
     end
 
