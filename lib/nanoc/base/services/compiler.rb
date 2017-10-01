@@ -4,10 +4,6 @@ module Nanoc::Int
   class Compiler
     include Nanoc::Int::ContractsSupport
 
-    # TODO: remove -- used to preprocess in all commands
-    # @api private
-    attr_reader :action_provider
-
     # TODO: remove -- used in show-data command
     # @api private
     attr_reader :dependency_store
@@ -63,12 +59,17 @@ module Nanoc::Int
 
     def compilation_context
       @_compilation_context ||= Nanoc::Int::CompilationContext.new(
-        action_provider: action_provider,
+        action_provider: @action_provider,
         reps: @reps,
         site: @site,
         compiled_content_cache: @compiled_content_cache,
         snapshot_repo: @snapshot_repo,
       )
+    end
+
+    # TODO: remove -- used in all commands
+    def preprocess
+      preprocess_stage.run
     end
 
     # TODO: remove -- used in show-data command
@@ -97,7 +98,7 @@ module Nanoc::Int
 
     def preprocess_stage
       @_preprocess_stage ||= Stages::Preprocess.new(
-        action_provider: action_provider,
+        action_provider: @action_provider,
         site: @site,
         dependency_store: dependency_store,
         checksum_store: @checksum_store,
@@ -107,7 +108,7 @@ module Nanoc::Int
     def build_reps_stage
       @_build_reps_stage ||= Stages::BuildReps.new(
         site: @site,
-        action_provider: action_provider,
+        action_provider: @action_provider,
         reps: @reps,
       )
     end
