@@ -7,9 +7,6 @@ module Nanoc::Int
     # @api private
     attr_reader :site
 
-    # @api private
-    attr_reader :action_sequence_store
-
     # TODO: remove -- used in show-rules command
     # TODO: remove -- used to preprocess in all commands
     # @api private
@@ -134,7 +131,7 @@ module Nanoc::Int
         checksum_store: @checksum_store,
         compiled_content_cache: @compiled_content_cache,
         dependency_store: @dependency_store,
-        action_sequence_store: action_sequence_store,
+        action_sequence_store: @action_sequence_store,
         outdatedness_store: @outdatedness_store,
       )
     end
@@ -161,7 +158,7 @@ module Nanoc::Int
         reps: @reps,
         layouts: site.layouts,
         checksum_store: @checksum_store,
-        action_sequence_store: action_sequence_store,
+        action_sequence_store: @action_sequence_store,
         action_sequences: action_sequences,
       )
     end
