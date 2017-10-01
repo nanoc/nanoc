@@ -12,7 +12,8 @@ module Nanoc::CLI::Commands
     def run
       site = load_site
 
-      reps = build_reps(site: site)
+      res = site.compiler.run_until_reps_built
+      reps = res.fetch(:reps)
 
       action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
       rules = action_provider.rules_collection
@@ -22,10 +23,6 @@ module Nanoc::CLI::Commands
 
       items.each   { |e| explain_item(e, rules: rules, reps: reps) }
       layouts.each { |e| explain_layout(e, rules: rules) }
-    end
-
-    def build_reps(site:)
-      site.compiler.tap(&:build_reps).reps
     end
 
     def explain_item(item, rules:, reps:)

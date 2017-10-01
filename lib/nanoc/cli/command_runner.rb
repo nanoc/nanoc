@@ -59,7 +59,7 @@ module Nanoc::CLI
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
 
       if preprocess
-        site.compiler.preprocess
+        site.compiler.run_until_preprocessed
       end
 
       $stderr.puts 'done'

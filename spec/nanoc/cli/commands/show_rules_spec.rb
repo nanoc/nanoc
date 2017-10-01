@@ -105,8 +105,7 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true, site: true do
 
     it 'writes item and layout rules to stdout' do
       expect(runner).to receive(:load_site).and_return(site)
-      expect(compiler).to receive(:build_reps).ordered
-      expect(compiler).to receive(:reps).and_return(reps).ordered
+      expect(compiler).to receive(:run_until_reps_built).and_return(reps: reps)
       expect(Nanoc::RuleDSL::ActionProvider).to receive(:for).with(site).and_return(action_provider)
       expect { subject }.to output(expected_out).to_stdout
     end

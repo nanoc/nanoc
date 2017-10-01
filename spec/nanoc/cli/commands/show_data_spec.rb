@@ -153,11 +153,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
   end
 
   describe '#print_item_rep_outdatedness' do
-    subject { runner.send(:print_item_rep_outdatedness, items, compiler) }
-
-    before do
-      runner.instance_variable_set(:@site, site)
-    end
+    subject { runner.send(:print_item_rep_outdatedness, items, outdatedness_checker, reps) }
 
     let(:runner) do
       described_class.new(options, arguments, command)
@@ -186,7 +182,6 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:item_rep_dog)   { Nanoc::Int::ItemRep.new(item_dog, :default) }
 
     let(:site) { double(:site) }
-    let(:compiler) { double(:compiler) }
     let(:outdatedness_checker) { double(:outdatedness_checker) }
 
     let(:reps) do
@@ -194,14 +189,6 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
         item_about => [item_rep_about],
         item_dog => [item_rep_dog],
       }
-    end
-
-    before do
-      allow(runner).to receive(:site).and_return(site)
-      allow(site).to receive(:compiler).and_return(compiler)
-      allow(compiler).to receive(:create_outdatedness_checker).and_return(outdatedness_checker)
-      allow(compiler).to receive(:reps).and_return(reps)
-      allow(compiler).to receive(:calculate_checksums)
     end
 
     context 'not outdated' do
@@ -248,7 +235,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
   end
 
   describe '#print_layouts' do
-    subject { runner.send(:print_layouts, layouts, compiler) }
+    subject { runner.send(:print_layouts, layouts, outdatedness_checker) }
 
     let(:runner) do
       described_class.new(options, arguments, command)
@@ -267,15 +254,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:layout) { Nanoc::Int::Layout.new('stuff', {}, '/default.erb') }
 
     let(:site) { double(:site) }
-    let(:compiler) { double(:compiler) }
     let(:outdatedness_checker) { double(:outdatedness_checker) }
-
-    before do
-      allow(runner).to receive(:site).and_return(site)
-      allow(site).to receive(:compiler).and_return(compiler)
-      allow(compiler).to receive(:create_outdatedness_checker).and_return(outdatedness_checker)
-      allow(compiler).to receive(:calculate_checksums)
-    end
 
     context 'not outdated' do
       before do

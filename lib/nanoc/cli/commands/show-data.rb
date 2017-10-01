@@ -11,25 +11,20 @@ EOS
 module Nanoc::CLI::Commands
   class ShowData < ::Nanoc::CLI::CommandRunner
     def run
-      @site = load_site(preprocess: true)
+      site = load_site
+      res = site.compiler.run_until_precompiled
 
-      # Get data
-      items   = @site.items
-      layouts = @site.layouts
-
-      # Get dependency tracker
-      compiler = @site.compiler
-      compiler.load_stores
-      dependency_store = compiler.dependency_store
-
-      # Build reps
-      compiler.build_reps
+      items                = site.items
+      layouts              = site.layouts
+      reps                 = res.fetch(:reps)
+      dependency_store     = res.fetch(:dependency_store)
+      outdatedness_checker = res.fetch(:outdatedness_checker)
 
       # Print data
       print_item_dependencies(items, dependency_store)
-      print_item_rep_paths(items)
-      print_item_rep_outdatedness(items, compiler)
-      print_layouts(layouts, compiler)
+      print_item_rep_paths(items, reps)
+      print_item_rep_outdatedness(items, outdatedness_checker, reps)
+      print_layouts(layouts, outdatedness_checker)
     end
 
     protected
@@ -42,10 +37,10 @@ module Nanoc::CLI::Commands
       end
     end
 
-    def sorted_reps_with_prev(items)
+    def sorted_reps_with_prev(items, reps)
       prev = nil
       items.sort_by(&:identifier).each do |item|
-        @site.compiler.reps[item].sort_by { |r| r.name.to_s }.each do |rep|
+        reps[item].sort_by { |r| r.name.to_s }.each do |rep|
           yield(rep, prev)
           prev = rep
         end
@@ -131,10 +126,10 @@ module Nanoc::CLI::Commands
       end
     end
 
-    def print_item_rep_paths(items)
+    def print_item_rep_paths(items, reps)
       print_header('Item representation paths')
 
-      sorted_reps_with_prev(items) do |rep, prev|
+      sorted_reps_with_prev(items, reps) do |rep, prev|
         puts if prev
         puts "item #{rep.item.identifier}, rep #{rep.name}:"
         if rep.raw_paths.empty?
@@ -149,29 +144,27 @@ module Nanoc::CLI::Commands
       end
     end
 
-    def print_item_rep_outdatedness(items, compiler)
+    def print_item_rep_outdatedness(items, outdatedness_checker, reps)
       print_header('Item representation outdatedness')
 
-      sorted_reps_with_prev(items) do |rep, prev|
+      sorted_reps_with_prev(items, reps) do |rep, prev|
         puts if prev
         puts "item #{rep.item.identifier}, rep #{rep.name}:"
-        print_outdatedness_reasons_for(rep, compiler)
+        print_outdatedness_reasons_for(rep, outdatedness_checker)
       end
     end
 
-    def print_layouts(layouts, compiler)
+    def print_layouts(layouts, outdatedness_checker)
       print_header('Layouts')
 
       sorted_with_prev(layouts) do |layout, prev|
         puts if prev
         puts "layout #{layout.identifier}:"
-        print_outdatedness_reasons_for(layout, compiler)
+        print_outdatedness_reasons_for(layout, outdatedness_checker)
       end
     end
 
-    def print_outdatedness_reasons_for(obj, compiler)
-      compiler.calculate_checksums
-      outdatedness_checker = compiler.create_outdatedness_checker
+    def print_outdatedness_reasons_for(obj, outdatedness_checker)
       reasons = outdatedness_checker.outdatedness_reasons_for(obj)
       if reasons.any?
         puts '  is outdated:'

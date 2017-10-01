@@ -30,7 +30,8 @@ EOS
 
   context 'with pruning' do
     before do
-      Nanoc::Pruner.new(site.config, site.compiler.reps).run
+      res = site.compiler.run_until_reps_built
+      Nanoc::Pruner.new(site.config, res.fetch(:reps)).run
     end
 
     it 'does not prune written snapshots' do

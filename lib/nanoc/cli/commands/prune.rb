@@ -17,13 +17,14 @@ flag :n, :'dry-run', 'print files to be deleted instead of actually deleting the
 module Nanoc::CLI::Commands
   class Prune < ::Nanoc::CLI::CommandRunner
     def run
-      @site = load_site(preprocess: true)
-      @site.compiler.build_reps
+      @site = load_site
+      res = @site.compiler.run_until_reps_built
+      reps = res.fetch(:reps)
 
       if options.key?(:yes)
-        Nanoc::Pruner.new(@site.config, @site.compiler.reps, exclude: prune_config_exclude).run
+        Nanoc::Pruner.new(@site.config, reps, exclude: prune_config_exclude).run
       elsif options.key?(:'dry-run')
-        Nanoc::Pruner.new(@site.config, @site.compiler.reps, exclude: prune_config_exclude, dry_run: true).run
+        Nanoc::Pruner.new(@site.config, reps, exclude: prune_config_exclude, dry_run: true).run
       else
         $stderr.puts 'WARNING: Since the prune command is a destructive command, it requires an additional --yes flag in order to work.'
         $stderr.puts

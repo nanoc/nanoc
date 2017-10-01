@@ -68,7 +68,10 @@ module Nanoc::CLI::Commands
     end
 
     def reps
-      @site.compiler.reps
+      @_reps ||= begin
+        res = @site.compiler.run_until_reps_built
+        res.fetch(:reps)
+      end
     end
   end
 end
