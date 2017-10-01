@@ -12,14 +12,9 @@ module Nanoc::Int
       @outdated_refs = Set.new
     end
 
-    contract C::Or[String, Nanoc::Int::ItemRep] => C::Bool
+    contract Nanoc::Int::ItemRep => C::Bool
     def include?(obj)
-      case obj
-      when String
-        @outdated_refs.include?(obj)
-      else
-        @outdated_refs.include?(obj.reference)
-      end
+      @outdated_refs.include?(obj.reference)
     end
 
     contract Nanoc::Int::ItemRep => self

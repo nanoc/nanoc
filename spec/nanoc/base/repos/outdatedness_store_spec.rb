@@ -21,7 +21,9 @@ describe Nanoc::Int::OutdatednessStore do
   let(:layouts) { [] }
   let(:code_snippets) { [] }
 
-  shared_examples 'include check' do
+  describe '#include?, #add and #remove' do
+    subject { store.include?(rep) }
+
     context 'nothing added' do
       it { is_expected.not_to be }
     end
@@ -48,18 +50,6 @@ describe Nanoc::Int::OutdatednessStore do
       end
 
       it { is_expected.to be }
-    end
-  end
-
-  describe '#include?, #add and #remove' do
-    context 'with rep' do
-      subject { store.include?(rep) }
-      include_examples 'include check'
-    end
-
-    context 'with rep reference' do
-      subject { store.include?(rep.reference) }
-      include_examples 'include check'
     end
   end
 
