@@ -40,7 +40,8 @@ group :plugins do
   gem 'compass'
   gem 'erubi'
   gem 'erubis'
-  gem 'fog'
+  gem 'fog-aws'
+  gem 'fog-local'
   gem 'haml'
   gem 'handlebars', platforms: :ruby
   gem 'kramdown'

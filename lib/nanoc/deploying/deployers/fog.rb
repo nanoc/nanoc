@@ -82,7 +82,7 @@ module Nanoc::Deploying::Deployers
 
     # @see Nanoc::Deploying::Deployer#run
     def run
-      require 'fog'
+      require 'fog/core'
 
       src      = File.expand_path(source_path)
       bucket   = config[:bucket] || config[:bucket_name]
@@ -125,6 +125,9 @@ module Nanoc::Deploying::Deployers
     end
 
     def connect
+      ::Fog::Storage.new(config_for_fog)
+    rescue ArgumentError
+      require "fog/#{config[:provider]}"
       ::Fog::Storage.new(config_for_fog)
     end
 
