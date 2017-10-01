@@ -82,7 +82,8 @@ module Nanoc::Deploying::Deployers
 
     # @see Nanoc::Deploying::Deployer#run
     def run
-      require 'fog'
+      require 'fog/core'
+      require 'fog/aws'
 
       src      = File.expand_path(source_path)
       bucket   = config[:bucket] || config[:bucket_name]
