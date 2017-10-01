@@ -65,11 +65,10 @@ class Nanoc::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
 
   def test_excluded
     with_site do |site|
-      # Create check
-      check = Nanoc::Checking::Checks::ExternalLinks.create(site)
       site.config.update(checks: { external_links: { exclude: ['^http://excluded.com$'] } })
 
-      # Test
+      check = Nanoc::Checking::Checks::ExternalLinks.create(site)
+
       assert check.send(:excluded?, 'http://excluded.com')
       refute check.send(:excluded?, 'http://excluded.com/notexcluded')
       refute check.send(:excluded?, 'http://notexcluded.com')
@@ -78,11 +77,10 @@ class Nanoc::Checking::Checks::ExternalLinksTest < Nanoc::TestCase
 
   def test_excluded_file
     with_site do |site|
-      # Create check
-      check = Nanoc::Checking::Checks::ExternalLinks.create(site)
       site.config.update(checks: { external_links: { exclude_files: ['blog/page'] } })
 
-      # Test
+      check = Nanoc::Checking::Checks::ExternalLinks.create(site)
+
       assert check.send(:excluded_file?, 'output/blog/page1/index.html')
       refute check.send(:excluded_file?, 'output/blog/pag1/index.html')
     end

@@ -14,7 +14,6 @@ module Nanoc::Int
       @action_provider        = action_provider
       @outdatedness_store     = outdatedness_store
 
-      @reps          = Nanoc::Int::ItemRepRepo.new
       @snapshot_repo = Nanoc::Int::SnapshotRepo.new
     end
 
@@ -29,12 +28,11 @@ module Nanoc::Int
       @_res_reps_built ||= begin
         run_until_preprocessed
 
-        # NOTE: build_reps_stage mutates @reps
-        action_sequences = run_stage(build_reps_stage)
+        res = run_stage(build_reps_stage)
 
         {
-          reps: @reps,
-          action_sequences: action_sequences,
+          reps: res.fetch(:reps),
+          action_sequences: res.fetch(:action_sequences),
         }
       end
     end
@@ -43,14 +41,16 @@ module Nanoc::Int
       @_res_precompiled ||= begin
         res = run_until_reps_built
         action_sequences = res.fetch(:action_sequences)
+        reps = res.fetch(:reps)
 
         run_stage(load_stores_stage)
         checksums = run_stage(calculate_checksums_stage)
         outdatedness_checker = create_outdatedness_checker(
           checksums: checksums,
           action_sequences: action_sequences,
+          reps: reps,
         )
-        outdated_items = run_stage(determine_outdatedness_stage(outdatedness_checker))
+        outdated_items = run_stage(determine_outdatedness_stage(outdatedness_checker, reps))
 
         res.merge(
           checksums: checksums,
@@ -64,23 +64,24 @@ module Nanoc::Int
     def run_all
       res = run_until_precompiled
       action_sequences = res.fetch(:action_sequences)
+      reps = res.fetch(:reps)
       checksums = res.fetch(:checksums)
       outdated_items = res.fetch(:outdated_items)
 
       run_stage(forget_outdated_dependencies_stage, outdated_items)
-      run_stage(store_pre_compilation_state_stage(action_sequences), checksums)
-      run_stage(prune_stage)
-      run_stage(compile_reps_stage(action_sequences))
+      run_stage(store_pre_compilation_state_stage(action_sequences, reps), checksums)
+      run_stage(prune_stage(reps))
+      run_stage(compile_reps_stage(action_sequences, reps))
       run_stage(store_post_compilation_state_stage)
-      run_stage(postprocess_stage)
+      run_stage(postprocess_stage(reps))
     ensure
       run_stage(cleanup_stage)
     end
 
-    def compilation_context
-      @_compilation_context ||= Nanoc::Int::CompilationContext.new(
+    def compilation_context(reps:)
+      Nanoc::Int::CompilationContext.new(
         action_provider: @action_provider,
-        reps: @reps,
+        reps: reps,
         site: @site,
         compiled_content_cache: @compiled_content_cache,
         snapshot_repo: @snapshot_repo,
@@ -96,7 +97,7 @@ module Nanoc::Int
       Nanoc::Int::NotificationCenter.post(:stage_ended, stage.class)
     end
 
-    def create_outdatedness_checker(checksums:, action_sequences:)
+    def create_outdatedness_checker(checksums:, action_sequences:, reps:)
       Nanoc::Int::OutdatednessChecker.new(
         site: @site,
         checksum_store: @checksum_store,
@@ -104,7 +105,7 @@ module Nanoc::Int
         action_sequence_store: @action_sequence_store,
         action_sequences: action_sequences,
         checksums: checksums,
-        reps: @reps,
+        reps: reps,
       )
     end
 
@@ -121,14 +122,13 @@ module Nanoc::Int
       @_build_reps_stage ||= Stages::BuildReps.new(
         site: @site,
         action_provider: @action_provider,
-        reps: @reps,
       )
     end
 
-    def prune_stage
+    def prune_stage(reps)
       @_prune_stage ||= Stages::Prune.new(
         config: @site.config,
-        reps: @reps,
+        reps: reps,
       )
     end
 
@@ -151,17 +151,17 @@ module Nanoc::Int
       )
     end
 
-    def determine_outdatedness_stage(outdatedness_checker)
+    def determine_outdatedness_stage(outdatedness_checker, reps)
       @_determine_outdatedness_stage ||= Stages::DetermineOutdatedness.new(
-        reps: @reps,
+        reps: reps,
         outdatedness_checker: outdatedness_checker,
         outdatedness_store: @outdatedness_store,
       )
     end
 
-    def store_pre_compilation_state_stage(action_sequences)
+    def store_pre_compilation_state_stage(action_sequences, reps)
       @_store_pre_compilation_state_stage ||= Stages::StorePreCompilationState.new(
-        reps: @reps,
+        reps: reps,
         layouts: @site.layouts,
         checksum_store: @checksum_store,
         action_sequence_store: @action_sequence_store,
@@ -169,13 +169,13 @@ module Nanoc::Int
       )
     end
 
-    def compile_reps_stage(action_sequences)
+    def compile_reps_stage(action_sequences, reps)
       @_compile_reps_stage ||= Stages::CompileReps.new(
-        reps: @reps,
+        reps: reps,
         outdatedness_store: @outdatedness_store,
         dependency_store: @dependency_store,
         action_sequences: action_sequences,
-        compilation_context: compilation_context,
+        compilation_context: compilation_context(reps: reps),
         compiled_content_cache: @compiled_content_cache,
       )
     end
@@ -186,11 +186,11 @@ module Nanoc::Int
       )
     end
 
-    def postprocess_stage
+    def postprocess_stage(reps)
       @_postprocess_stage ||= Stages::Postprocess.new(
         action_provider: @action_provider,
         site: @site,
-        reps: @reps,
+        reps: reps,
       )
     end
 

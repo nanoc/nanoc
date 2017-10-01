@@ -3,7 +3,8 @@
 module Nanoc
   class PostCompileItemRepView < ::Nanoc::ItemRepView
     def compiled_content(snapshot: nil)
-      snapshot_contents = @context.compilation_context.compiled_content_cache[unwrap]
+      compilation_context = @context.compilation_context
+      snapshot_contents = compilation_context.compiled_content_cache[unwrap]
 
       snapshot_name = snapshot || (snapshot_contents[:pre] ? :pre : :last)
 

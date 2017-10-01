@@ -2,19 +2,16 @@
 
 module Nanoc::Int::Compiler::Stages
   class BuildReps
-    def initialize(site:, action_provider:, reps:)
+    def initialize(site:, action_provider:)
       @site = site
       @action_provider = action_provider
-      @reps = reps
     end
 
     def run
-      # FIXME: This also, as a side effect, generates the action sequences. :(
-      # Better: let this stage return a mapping of reps onto (raw) paths *and* a mapping of objects
-      # onto action sequences.
+      reps = Nanoc::Int::ItemRepRepo.new
 
       builder = Nanoc::Int::ItemRepBuilder.new(
-        @site, @action_provider, @reps
+        @site, @action_provider, reps
       )
 
       action_sequences = builder.run
@@ -23,7 +20,10 @@ module Nanoc::Int::Compiler::Stages
         action_sequences[layout] = @action_provider.action_sequence_for(layout)
       end
 
-      action_sequences
+      {
+        reps: reps,
+        action_sequences: action_sequences,
+      }
     end
   end
 end

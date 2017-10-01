@@ -58,7 +58,8 @@ module Nanoc::RuleDSL
 
     def new_action_sequence_for_rep(rep)
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
-      view_context = @site.compiler.compilation_context.create_view_context(dependency_tracker)
+      reps = Nanoc::Int::ItemRepRepo.new
+      view_context = @site.compiler.compilation_context(reps: reps).create_view_context(dependency_tracker)
 
       executor = Nanoc::RuleDSL::RecordingExecutor.new(rep)
       rule = @rules_collection.compilation_rule_for(rep)

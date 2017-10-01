@@ -63,28 +63,31 @@ describe Nanoc::Int::Compiler do
   end
 
   before do
-    # FIXME: eewww
-    reps = compiler.instance_variable_get(:@reps)
-    reps << rep
-    reps << other_rep
-
-    reps.each do |rep|
-      rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last, binary: false)
-    end
-
     allow(Nanoc::Int::NotificationCenter).to receive(:post)
   end
 
   describe '#compile_rep' do
-    let(:stage) { compiler.send(:compile_reps_stage, action_sequences) }
+    let(:stage) { compiler.send(:compile_reps_stage, action_sequences, reps) }
 
     subject { stage.send(:compile_rep, rep, is_outdated: is_outdated) }
 
     let(:is_outdated) { true }
 
+    let(:reps) do
+      Nanoc::Int::ItemRepRepo.new.tap do |rs|
+        rs << rep
+        rs << other_rep
+
+        rs.each do |rep|
+          rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last, binary: false)
+        end
+      end
+    end
+
     it 'generates expected output' do
+      reps = Nanoc::Int::ItemRepRepo.new
       expect { subject }
-        .to change { compiler.compilation_context.snapshot_repo.get(rep, :last) }
+        .to change { compiler.compilation_context(reps: reps).snapshot_repo.get(rep, :last) }
         .from(nil)
         .to(some_textual_content('3'))
     end
@@ -102,14 +105,15 @@ describe Nanoc::Int::Compiler do
       let(:item) { Nanoc::Int::Item.new('other=<%= @items["/other.*"].compiled_content %>', {}, '/hi.md') }
 
       it 'generates expected output' do
-        expect(compiler.compilation_context.snapshot_repo.get(rep, :last)).to be_nil
+        reps = Nanoc::Int::ItemRepRepo.new
+        expect(compiler.compilation_context(reps: reps).snapshot_repo.get(rep, :last)).to be_nil
 
         expect { stage.send(:compile_rep, rep, is_outdated: true) }
           .to raise_error(Nanoc::Int::Errors::UnmetDependency)
         stage.send(:compile_rep, other_rep, is_outdated: true)
         stage.send(:compile_rep, rep, is_outdated: true)
 
-        expect(compiler.compilation_context.snapshot_repo.get(rep, :last).string).to eql('other=other content')
+        expect(compiler.compilation_context(reps: reps).snapshot_repo.get(rep, :last).string).to eql('other=other content')
       end
 
       it 'generates notifications in the proper order' do

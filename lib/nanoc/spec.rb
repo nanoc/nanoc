@@ -130,12 +130,14 @@ module Nanoc
       private
 
       def view_context
+        compilation_context = site.compiler.compilation_context(reps: @reps)
+
         Nanoc::ViewContext.new(
           reps: @reps,
           items: @items,
           dependency_tracker: @dependency_tracker,
-          compilation_context: site.compiler.compilation_context,
-          snapshot_repo: site.compiler.compilation_context.snapshot_repo,
+          compilation_context: compilation_context,
+          snapshot_repo: compilation_context.snapshot_repo,
         )
       end
 

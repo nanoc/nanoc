@@ -55,12 +55,16 @@ module Nanoc::RuleDSL
 
     def postprocess(site, reps)
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
+
+      res = site.compiler.run_until_reps_built
+      reps = res.fetch(:reps)
+
       view_context =
         Nanoc::ViewContext.new(
           reps: reps,
           items: site.items,
           dependency_tracker: dependency_tracker,
-          compilation_context: site.compiler.compilation_context,
+          compilation_context: site.compiler.compilation_context(reps: reps),
           snapshot_repo: nil,
         )
       ctx = new_postprocessor_context(site, view_context)
