@@ -58,7 +58,7 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true, site: true do
     let(:config) { Nanoc::Int::Configuration.new }
 
     let(:action_provider) { double(:action_provider, rules_collection: rules_collection) }
-    let(:compiler) { double(:compiler, action_provider: action_provider, reps: reps) }
+    let(:compiler) { double(:compiler) }
 
     let(:rules_collection) do
       Nanoc::RuleDSL::RulesCollection.new.tap do |rc|
@@ -105,7 +105,9 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true, site: true do
 
     it 'writes item and layout rules to stdout' do
       expect(runner).to receive(:load_site).and_return(site)
-      expect(compiler).to receive(:build_reps).once
+      expect(compiler).to receive(:build_reps).ordered
+      expect(compiler).to receive(:reps).and_return(reps).ordered
+      expect(Nanoc::RuleDSL::ActionProvider).to receive(:for).with(site).and_return(action_provider)
       expect { subject }.to output(expected_out).to_stdout
     end
 

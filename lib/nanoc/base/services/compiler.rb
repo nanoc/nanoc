@@ -4,7 +4,6 @@ module Nanoc::Int
   class Compiler
     include Nanoc::Int::ContractsSupport
 
-    # TODO: remove -- used in show-rules command
     # TODO: remove -- used to preprocess in all commands
     # @api private
     attr_reader :action_provider

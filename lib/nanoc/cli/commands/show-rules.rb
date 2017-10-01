@@ -10,43 +10,40 @@ Prints the rules used for all items and layouts in the current site.
 module Nanoc::CLI::Commands
   class ShowRules < ::Nanoc::CLI::CommandRunner
     def run
-      @site = load_site
+      site = load_site
 
-      @c = Nanoc::CLI::ANSIStringColorizer
+      reps = build_reps(site: site)
 
-      compiler = @site.compiler
-      compiler.build_reps
-      @reps = compiler.reps
+      action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
+      rules = action_provider.rules_collection
 
-      action_provider = @site.compiler.action_provider
-      unless action_provider.respond_to?(:rules_collection)
-        raise(
-          ::Nanoc::Int::Errors::GenericTrivial,
-          'The show-rules command can only be used for sites with the Rule DSL action provider.',
-        )
-      end
-      @rules = action_provider.rules_collection
+      items = site.items.sort_by(&:identifier)
+      layouts = site.layouts.sort_by(&:identifier)
 
-      @site.items.sort_by(&:identifier).each   { |e| explain_item(e) }
-      @site.layouts.sort_by(&:identifier).each { |e| explain_layout(e) }
+      items.each   { |e| explain_item(e, rules: rules, reps: reps) }
+      layouts.each { |e| explain_layout(e, rules: rules) }
     end
 
-    def explain_item(item)
-      puts "#{@c.c('Item ' + item.identifier, :bold, :yellow)}:"
+    def build_reps(site:)
+      site.compiler.tap(&:build_reps).reps
+    end
 
-      @reps[item].each do |rep|
-        rule = @rules.compilation_rule_for(rep)
+    def explain_item(item, rules:, reps:)
+      puts(fmt_heading("Item #{item.identifier}") + ':')
+
+      reps[item].each do |rep|
+        rule = rules.compilation_rule_for(rep)
         puts "  Rep #{rep.name}: #{rule ? rule.pattern : '(none)'}"
       end
 
       puts
     end
 
-    def explain_layout(layout)
-      puts "#{@c.c('Layout ' + layout.identifier, :bold, :yellow)}:"
+    def explain_layout(layout, rules:)
+      puts(fmt_heading("Layout #{layout.identifier}") + ':')
 
       found = false
-      @rules.layout_filter_mapping.each_key do |pattern|
+      rules.layout_filter_mapping.each_key do |pattern|
         if pattern.match?(layout.identifier)
           puts "  #{pattern}"
           found = true
@@ -58,6 +55,10 @@ module Nanoc::CLI::Commands
       end
 
       puts
+    end
+
+    def fmt_heading(s)
+      Nanoc::CLI::ANSIStringColorizer.c(s, :bold, :yellow)
     end
   end
 end
