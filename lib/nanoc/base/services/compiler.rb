@@ -4,9 +4,6 @@ module Nanoc::Int
   class Compiler
     include Nanoc::Int::ContractsSupport
 
-    # @api private
-    attr_reader :site
-
     # TODO: remove -- used in show-rules command
     # TODO: remove -- used to preprocess in all commands
     # @api private
@@ -102,7 +99,7 @@ module Nanoc::Int
     def preprocess_stage
       @_preprocess_stage ||= Stages::Preprocess.new(
         action_provider: action_provider,
-        site: site,
+        site: @site,
         dependency_store: dependency_store,
         checksum_store: @checksum_store,
       )
@@ -110,7 +107,7 @@ module Nanoc::Int
 
     def build_reps_stage
       @_build_reps_stage ||= Stages::BuildReps.new(
-        site: site,
+        site: @site,
         action_provider: action_provider,
         reps: @reps,
       )
@@ -118,7 +115,7 @@ module Nanoc::Int
 
     def prune_stage
       @_prune_stage ||= Stages::Prune.new(
-        config: site.config,
+        config: @site.config,
         reps: reps,
       )
     end
@@ -153,7 +150,7 @@ module Nanoc::Int
     def store_pre_compilation_state_stage(action_sequences)
       @_store_pre_compilation_state_stage ||= Stages::StorePreCompilationState.new(
         reps: @reps,
-        layouts: site.layouts,
+        layouts: @site.layouts,
         checksum_store: @checksum_store,
         action_sequence_store: @action_sequence_store,
         action_sequences: action_sequences,
@@ -185,7 +182,7 @@ module Nanoc::Int
     end
 
     def cleanup_stage
-      @_cleanup_stage ||= Stages::Cleanup.new(site.config)
+      @_cleanup_stage ||= Stages::Cleanup.new(@site.config)
     end
 
     def forget_outdated_dependencies_stage
