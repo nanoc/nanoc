@@ -65,9 +65,9 @@ module Nanoc::Int
       @action_sequences = run_stage(build_reps_stage)
       run_stage(load_stores_stage)
       @checksums = run_stage(calculate_checksums_stage)
-      @outdated_items = run_stage(determine_outdatedness_stage)
+      outdated_items = run_stage(determine_outdatedness_stage)
 
-      run_stage(forget_outdated_dependencies_stage, @outdated_items)
+      run_stage(forget_outdated_dependencies_stage, outdated_items)
       run_stage(store_pre_compilation_state_stage(@action_sequences), @checksums)
       run_stage(prune_stage)
       run_stage(compile_reps_stage(@action_sequences))
