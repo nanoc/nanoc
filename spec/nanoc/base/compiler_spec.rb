@@ -9,7 +9,6 @@ describe Nanoc::Int::Compiler do
       action_sequence_store: action_sequence_store,
       action_provider: action_provider,
       dependency_store: dependency_store,
-      reps: reps,
       outdatedness_store: outdatedness_store,
     )
   end
@@ -18,7 +17,6 @@ describe Nanoc::Int::Compiler do
   let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new }
 
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
-  let(:reps) { Nanoc::Int::ItemRepRepo.new }
 
   let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site) }
   let(:action_provider) { double(:action_provider) }
@@ -65,6 +63,8 @@ describe Nanoc::Int::Compiler do
   end
 
   before do
+    # FIXME: eewww
+    reps = compiler.instance_variable_get(:@reps)
     reps << rep
     reps << other_rep
 

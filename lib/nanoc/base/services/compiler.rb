@@ -4,18 +4,17 @@ module Nanoc::Int
   class Compiler
     include Nanoc::Int::ContractsSupport
 
-    def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, reps:, outdatedness_store:)
+    def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, outdatedness_store:)
       @site = site
 
       @compiled_content_cache = compiled_content_cache
       @checksum_store         = checksum_store
       @action_sequence_store  = action_sequence_store
       @dependency_store       = dependency_store
-      @reps                   = reps
       @action_provider        = action_provider
       @outdatedness_store     = outdatedness_store
 
-      # TODO: inject
+      @reps          = Nanoc::Int::ItemRepRepo.new
       @snapshot_repo = Nanoc::Int::SnapshotRepo.new
     end
 

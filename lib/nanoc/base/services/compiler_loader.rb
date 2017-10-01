@@ -14,8 +14,6 @@ module Nanoc::Int
       checksum_store =
         Nanoc::Int::ChecksumStore.new(site: site, objects: objects)
 
-      item_rep_repo = Nanoc::Int::ItemRepRepo.new
-
       action_provider ||= Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
 
       outdatedness_store =
@@ -32,7 +30,6 @@ module Nanoc::Int
         checksum_store: checksum_store,
         action_sequence_store: action_sequence_store,
         dependency_store: dependency_store,
-        reps: item_rep_repo,
         action_provider: action_provider,
         outdatedness_store: outdatedness_store,
       }
