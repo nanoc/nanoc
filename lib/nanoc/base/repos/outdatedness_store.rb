@@ -32,6 +32,17 @@ module Nanoc::Int
       self
     end
 
+    contract C::None => C::Bool
+    def empty?
+      @outdated_refs.empty?
+    end
+
+    contract C::None => self
+    def clear
+      @outdated_refs = Set.new
+      self
+    end
+
     protected
 
     def data

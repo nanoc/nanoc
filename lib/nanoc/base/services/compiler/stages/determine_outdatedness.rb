@@ -16,6 +16,8 @@ module Nanoc::Int::Compiler::Stages
 
       outdated_items = outdated_reps.map(&:item).uniq
 
+      @outdatedness_store.clear
+
       reps_of_outdated_items = Set.new(outdated_items.flat_map { |i| @reps[i] })
       reps_of_outdated_items.each { |r| @outdatedness_store.add(r) }
 
