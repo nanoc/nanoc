@@ -13,12 +13,19 @@ module Nanoc::Int::Compiler::Stages
     contract C::None => C::Any
     def run
       outdated_items = select_outdated_items
-      @outdatedness_store.clear
-      reps_of_items(outdated_items).each { |r| @outdatedness_store.add(r) }
+      outdated_reps = reps_of_items(outdated_items)
+
+      store_outdated_reps(outdated_reps)
+
       outdated_items
     end
 
     private
+
+    def store_outdated_reps(reps)
+      @outdatedness_store.clear
+      reps.each { |r| @outdatedness_store.add(r) }
+    end
 
     def select_outdated_items
       @reps
