@@ -141,7 +141,7 @@ module Nanoc
             snapshot_repo:          @snapshot_repo,
           )
 
-        Nanoc::ViewContext.new(
+        Nanoc::ViewContextForCompilation.new(
           reps:                @reps,
           items:               @items,
           dependency_tracker:  @dependency_tracker,

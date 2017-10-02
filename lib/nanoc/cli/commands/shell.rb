@@ -31,7 +31,7 @@ module Nanoc::CLI::Commands
     end
 
     def self.view_context_for(site)
-      Nanoc::ViewContext.new(
+      Nanoc::ViewContextForCompilation.new(
         reps: reps_for(site),
         items: site.items,
         dependency_tracker: Nanoc::Int::DependencyTracker::Null.new,

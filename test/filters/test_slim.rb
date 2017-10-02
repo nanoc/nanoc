@@ -34,7 +34,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
   def new_view_context
     config = Nanoc::Int::Configuration.new
 
-    Nanoc::ViewContext.new(
+    Nanoc::ViewContextForCompilation.new(
       reps:                Nanoc::Int::ItemRepRepo.new,
       items:               Nanoc::Int::ItemCollection.new(config),
       dependency_tracker:  :__irrelevant_dependency_tracker,

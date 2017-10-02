@@ -86,7 +86,7 @@ describe Nanoc::Filter do
     let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
     let(:view_context) do
-      Nanoc::ViewContext.new(
+      Nanoc::ViewContextForCompilation.new(
         reps:                reps,
         items:               Nanoc::Int::ItemCollection.new(config),
         dependency_tracker:  dependency_tracker,

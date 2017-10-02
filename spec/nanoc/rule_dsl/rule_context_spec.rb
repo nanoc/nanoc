@@ -18,7 +18,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
   let(:compilation_context) { double(:compilation_context) }
 
   let(:view_context) do
-    Nanoc::ViewContext.new(
+    Nanoc::ViewContextForCompilation.new(
       reps:                Nanoc::Int::ItemRepRepo.new,
       items:               items,
       dependency_tracker:  dependency_tracker,

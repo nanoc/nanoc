@@ -14,7 +14,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
   def view_context_for(item)
     config = Nanoc::Int::Configuration.new
 
-    Nanoc::ViewContext.new(
+    Nanoc::ViewContextForCompilation.new(
       reps:                item_rep_repo_for(item),
       items:               Nanoc::Int::ItemCollection.new(config),
       dependency_tracker:  :__irrelevant__,

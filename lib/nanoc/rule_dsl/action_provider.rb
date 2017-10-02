@@ -60,7 +60,7 @@ module Nanoc::RuleDSL
       reps = res.fetch(:reps)
 
       view_context =
-        Nanoc::ViewContext.new(
+        Nanoc::ViewContextForCompilation.new(
           reps: reps,
           items: site.items,
           dependency_tracker: dependency_tracker,
@@ -79,7 +79,7 @@ module Nanoc::RuleDSL
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
       config = Nanoc::Int::Configuration.new
       view_context =
-        Nanoc::ViewContext.new(
+        Nanoc::ViewContextForCompilation.new(
           reps: Nanoc::Int::ItemRepRepo.new,             # FIXME: nonsensical
           items: Nanoc::Int::ItemCollection.new(config), # FIXME: nonsensical
           dependency_tracker: dependency_tracker,        # FIXME: nonsensical

@@ -6,7 +6,7 @@ describe Nanoc::ItemWithRepsView do
   it_behaves_like 'a document view'
 
   let(:view_context) do
-    Nanoc::ViewContext.new(
+    Nanoc::ViewContextForCompilation.new(
       reps: reps,
       items: items,
       dependency_tracker: dependency_tracker,

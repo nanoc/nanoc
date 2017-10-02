@@ -4,7 +4,7 @@ shared_examples 'a document view' do
   let(:view) { described_class.new(document, view_context) }
 
   let(:view_context) do
-    Nanoc::ViewContext.new(
+    Nanoc::ViewContextForCompilation.new(
       reps:                Nanoc::Int::ItemRepRepo.new,
       items:               Nanoc::Int::ItemCollection.new(config),
       dependency_tracker:  dependency_tracker,

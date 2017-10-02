@@ -58,7 +58,7 @@ module Nanoc::RuleDSL
 
     def new_action_sequence_for_rep(rep)
       view_context =
-        Nanoc::ViewContext.new(
+        Nanoc::ViewContextForCompilation.new(
           reps: Nanoc::Int::ItemRepRepo.new,
           items: @site.items,
           dependency_tracker: Nanoc::Int::DependencyTracker::Null.new,
@@ -140,7 +140,7 @@ module Nanoc::RuleDSL
 
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
       config = Nanoc::Int::Configuration.new
-      view_context = Nanoc::ViewContext.new(
+      view_context = Nanoc::ViewContextForCompilation.new(
         reps:                Nanoc::Int::ItemRepRepo.new,            # FIXME: nonsensical
         items:               Nanoc::Int::ItemCollection.new(config), # FIXME: nonsensical
         dependency_tracker:  dependency_tracker,                     # FIXME: nonsensical

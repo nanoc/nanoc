@@ -103,7 +103,7 @@ EOS
   def new_view_context
     config = Nanoc::Int::Configuration.new
 
-    Nanoc::ViewContext.new(
+    Nanoc::ViewContextForCompilation.new(
       reps:                Nanoc::Int::ItemRepRepo.new,
       items:               Nanoc::Int::ItemCollection.new(config),
       dependency_tracker:  @dependency_tracker,

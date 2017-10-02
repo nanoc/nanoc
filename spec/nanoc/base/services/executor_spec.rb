@@ -400,7 +400,7 @@ describe Nanoc::Int::Executor do
     end
 
     let(:view_context) do
-      Nanoc::ViewContext.new(
+      Nanoc::ViewContextForCompilation.new(
         reps:                Nanoc::Int::ItemRepRepo.new,
         items:               Nanoc::Int::ItemCollection.new(config),
         dependency_tracker:  dependency_tracker,
