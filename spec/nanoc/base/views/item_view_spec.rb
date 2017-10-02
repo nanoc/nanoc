@@ -15,8 +15,8 @@ describe Nanoc::ItemWithRepsView do
     )
   end
 
-  let(:reps) { [] }
-  let(:items) { [] }
+  let(:reps) { Nanoc::Int::ItemRepRepo.new }
+  let(:items) { Nanoc::Int::ItemCollection.new(config) }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:compilation_context) { double(:compilation_context) }

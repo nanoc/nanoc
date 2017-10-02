@@ -77,13 +77,14 @@ module Nanoc::RuleDSL
     # @api private
     def new_preprocessor_context(site)
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
+      config = Nanoc::Int::Configuration.new
       view_context =
         Nanoc::ViewContext.new(
-          reps: nil,
-          items: nil,
-          dependency_tracker: dependency_tracker,
-          compilation_context: nil,
-          snapshot_repo: nil,
+          reps: Nanoc::Int::ItemRepRepo.new,             # FIXME: nonsensical
+          items: Nanoc::Int::ItemCollection.new(config), # FIXME: nonsensical
+          dependency_tracker: dependency_tracker,        # FIXME: nonsensical
+          compilation_context: nil,                      # FIXME: nonsensical
+          snapshot_repo: nil,                            # FIXME: nonsensical
         )
 
       Nanoc::Int::Context.new(

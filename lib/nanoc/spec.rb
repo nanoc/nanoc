@@ -30,6 +30,8 @@ module Nanoc
         @items = Nanoc::Int::ItemCollection.new(@config)
         @layouts = Nanoc::Int::LayoutCollection.new(@config)
         @dependency_tracker = Nanoc::Int::DependencyTracker.new(Object.new)
+        @snapshot_repo = Nanoc::Int::SnapshotRepo.new
+        @action_provider = new_action_provider
       end
 
       # Creates a new item and adds it to the site’s collection of items.
@@ -130,14 +132,21 @@ module Nanoc
       private
 
       def view_context
-        compilation_context = site.compiler.compilation_context(reps: @reps)
+        compilation_context =
+          Nanoc::Int::CompilationContext.new(
+            action_provider:        @action_provider,
+            reps:                   @reps,
+            site:                   @site,
+            compiled_content_cache: :__compiled_content_cache,
+            snapshot_repo:          @snapshot_repo,
+          )
 
         Nanoc::ViewContext.new(
-          reps: @reps,
-          items: @items,
-          dependency_tracker: @dependency_tracker,
+          reps:                @reps,
+          items:               @items,
+          dependency_tracker:  @dependency_tracker,
           compilation_context: compilation_context,
-          snapshot_repo: compilation_context.snapshot_repo,
+          snapshot_repo:       @snapshot_repo,
         )
       end
 
@@ -166,7 +175,7 @@ module Nanoc
       end
 
       def new_compiler_for(site)
-        Nanoc::Int::CompilerLoader.new.load(site, action_provider: new_action_provider)
+        Nanoc::Int::CompilerLoader.new.load(site, action_provider: @action_provider)
       end
 
       def site

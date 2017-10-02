@@ -7,8 +7,8 @@ describe Nanoc::PostCompileItemRepView do
 
   let(:view_context) do
     Nanoc::ViewContext.new(
-      reps: reps,
-      items: items,
+      reps:                Nanoc::Int::ItemRepRepo.new,
+      items:               Nanoc::Int::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
       compilation_context: compilation_context,
       snapshot_repo: snapshot_repo,

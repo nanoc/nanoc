@@ -5,11 +5,11 @@ shared_examples 'a document view' do
 
   let(:view_context) do
     Nanoc::ViewContext.new(
-      reps: double(:reps),
-      items: double(:items),
-      dependency_tracker: dependency_tracker,
+      reps:                Nanoc::Int::ItemRepRepo.new,
+      items:               Nanoc::Int::ItemCollection.new(config),
+      dependency_tracker:  dependency_tracker,
       compilation_context: double(:compilation_context),
-      snapshot_repo: double(:snapshot_repo),
+      snapshot_repo:       double(:snapshot_repo),
     )
   end
 

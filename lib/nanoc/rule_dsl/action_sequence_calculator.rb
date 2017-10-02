@@ -57,9 +57,14 @@ module Nanoc::RuleDSL
     end
 
     def new_action_sequence_for_rep(rep)
-      dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
-      reps = Nanoc::Int::ItemRepRepo.new
-      view_context = @site.compiler.compilation_context(reps: reps).create_view_context(dependency_tracker)
+      view_context =
+        Nanoc::ViewContext.new(
+          reps: Nanoc::Int::ItemRepRepo.new,
+          items: @site.items,
+          dependency_tracker: Nanoc::Int::DependencyTracker::Null.new,
+          compilation_context: :__invalid__compilation_context,
+          snapshot_repo: :__invalid__snapshot_repo,
+        )
 
       executor = Nanoc::RuleDSL::RecordingExecutor.new(rep)
       rule = @rules_collection.compilation_rule_for(rep)
@@ -134,7 +139,15 @@ module Nanoc::RuleDSL
       return nil if routing_rule.nil?
 
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
-      view_context = Nanoc::ViewContext.new(reps: nil, items: nil, dependency_tracker: dependency_tracker, compilation_context: nil, snapshot_repo: nil)
+      config = Nanoc::Int::Configuration.new
+      view_context = Nanoc::ViewContext.new(
+        reps:                Nanoc::Int::ItemRepRepo.new,            # FIXME: nonsensical
+        items:               Nanoc::Int::ItemCollection.new(config), # FIXME: nonsensical
+        dependency_tracker:  dependency_tracker,                     # FIXME: nonsensical
+        compilation_context: nil,                                    # FIXME: nonsensical
+        snapshot_repo:       nil,                                    # FIXME: nonsensical
+      )
+
       basic_path = routing_rule.apply_to(rep, executor: nil, site: @site, view_context: view_context)
       if basic_path && !basic_path.start_with?('/')
         raise PathWithoutInitialSlashError.new(rep, basic_path)

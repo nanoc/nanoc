@@ -87,15 +87,16 @@ describe Nanoc::Filter do
 
     let(:view_context) do
       Nanoc::ViewContext.new(
-        reps: reps,
-        items: double(:items),
-        dependency_tracker: dependency_tracker,
+        reps:                reps,
+        items:               Nanoc::Int::ItemCollection.new(config),
+        dependency_tracker:  dependency_tracker,
         compilation_context: double(:compilation_context),
-        snapshot_repo: double(:snapshot_repo),
+        snapshot_repo:       double(:snapshot_repo),
       )
     end
 
     let(:dependency_tracker) { double(:dependency_tracker) }
+    let(:config) { Nanoc::Int::Configuration.new }
 
     let(:reps) { Nanoc::Int::ItemRepRepo.new }
 
