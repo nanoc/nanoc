@@ -20,15 +20,12 @@ module Nanoc::Int
     contract Nanoc::Int::ItemRep => self
     def add(obj)
       @outdated_refs << obj.reference
-
       self
     end
 
     contract Nanoc::Int::ItemRep => self
     def remove(obj)
-      # TODO: clear all when completed
       @outdated_refs.delete(obj.reference)
-
       self
     end
 

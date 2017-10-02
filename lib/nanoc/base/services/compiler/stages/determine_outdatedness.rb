@@ -12,19 +12,24 @@ module Nanoc::Int::Compiler::Stages
 
     contract C::None => C::Any
     def run
-      outdated_reps = @reps.select { |r| outdated?(r) }
-
-      outdated_items = outdated_reps.map(&:item).uniq
-
+      outdated_items = select_outdated_items
       @outdatedness_store.clear
-
-      reps_of_outdated_items = Set.new(outdated_items.flat_map { |i| @reps[i] })
-      reps_of_outdated_items.each { |r| @outdatedness_store.add(r) }
-
+      reps_of_items(outdated_items).each { |r| @outdatedness_store.add(r) }
       outdated_items
     end
 
     private
+
+    def select_outdated_items
+      @reps
+        .select { |r| outdated?(r) }
+        .map(&:item)
+        .uniq
+    end
+
+    def reps_of_items(items)
+      Set.new(items.flat_map { |i| @reps[i] })
+    end
 
     def outdated?(r)
       @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r)

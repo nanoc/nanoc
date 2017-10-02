@@ -43,12 +43,10 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
           reps << other_rep
 
           expect(outdatedness_checker)
-            .to receive(:outdated?).with(rep)
-            .and_return(true)
+            .to receive(:outdated?).with(rep).and_return(true)
 
           expect(outdatedness_checker)
-            .to receive(:outdated?).with(other_rep)
-            .and_return(false)
+            .to receive(:outdated?).with(other_rep).and_return(false)
         end
 
         it 'adds the rep' do
@@ -102,8 +100,7 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
         outdatedness_store.add(rep)
 
         expect(outdatedness_checker)
-          .to receive(:outdated?).with(other_rep)
-          .and_return(false)
+          .to receive(:outdated?).with(other_rep).and_return(false)
       end
 
       it 'keeps the rep' do
