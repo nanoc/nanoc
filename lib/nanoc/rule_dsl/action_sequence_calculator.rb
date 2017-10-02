@@ -58,13 +58,7 @@ module Nanoc::RuleDSL
 
     def new_action_sequence_for_rep(rep)
       view_context =
-        Nanoc::ViewContextForCompilation.new(
-          reps: Nanoc::Int::ItemRepRepo.new,
-          items: @site.items,
-          dependency_tracker: Nanoc::Int::DependencyTracker::Null.new,
-          compilation_context: :__invalid__compilation_context,
-          snapshot_repo: :__invalid__snapshot_repo,
-        )
+        Nanoc::ViewContextForPreCompilation.new(items: @site.items)
 
       executor = Nanoc::RuleDSL::RecordingExecutor.new(rep)
       rule = @rules_collection.compilation_rule_for(rep)
@@ -138,20 +132,21 @@ module Nanoc::RuleDSL
       routing_rule = routing_rules[snapshot_name]
       return nil if routing_rule.nil?
 
-      dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
-      config = Nanoc::Int::Configuration.new
-      view_context = Nanoc::ViewContextForCompilation.new(
-        reps:                Nanoc::Int::ItemRepRepo.new,            # FIXME: nonsensical
-        items:               Nanoc::Int::ItemCollection.new(config), # FIXME: nonsensical
-        dependency_tracker:  dependency_tracker,                     # FIXME: nonsensical
-        compilation_context: nil,                                    # FIXME: nonsensical
-        snapshot_repo:       nil,                                    # FIXME: nonsensical
-      )
+      view_context =
+        Nanoc::ViewContextForPreCompilation.new(items: @site.items)
 
-      basic_path = routing_rule.apply_to(rep, executor: nil, site: @site, view_context: view_context)
+      basic_path =
+        routing_rule.apply_to(
+          rep,
+          executor: nil,
+          site: @site,
+          view_context: view_context,
+        )
+
       if basic_path && !basic_path.start_with?('/')
         raise PathWithoutInitialSlashError.new(rep, basic_path)
       end
+
       basic_path
     end
   end
