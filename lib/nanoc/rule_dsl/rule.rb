@@ -49,7 +49,7 @@ module Nanoc::RuleDSL
     # @param [Nanoc::Int::ItemRep] rep
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::Int::Executor, Nanoc::RuleDSL::RecordingExecutor] executor
-    # @param [Nanoc::ViewContext] view_context
+    # @param [Nanoc::ViewContextForCompilation] view_context
     #
     # @return [void]
     def apply_to(rep, site:, executor:, view_context:)

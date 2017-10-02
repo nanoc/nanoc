@@ -5,9 +5,9 @@ shared_examples 'an identifiable collection' do
   let(:view) { described_class.new(wrapped, view_context) }
 
   let(:view_context) do
-    Nanoc::ViewContext.new(
-      reps:                double(:__reps),
-      items:               double(:__items),
+    Nanoc::ViewContextForCompilation.new(
+      reps:                Nanoc::Int::ItemRepRepo.new,
+      items:               Nanoc::Int::ItemCollection.new(config),
       dependency_tracker:  dependency_tracker,
       compilation_context: double(:__compilation_context),
       snapshot_repo:       double(:__snapshot_repo),

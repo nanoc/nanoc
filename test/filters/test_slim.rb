@@ -32,12 +32,14 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
   end
 
   def new_view_context
-    Nanoc::ViewContext.new(
-      reps: :__irrelevat_reps,
-      items: :__irrelevat_items,
-      dependency_tracker: :__irrelevant_dependency_tracker,
+    config = Nanoc::Int::Configuration.new
+
+    Nanoc::ViewContextForCompilation.new(
+      reps:                Nanoc::Int::ItemRepRepo.new,
+      items:               Nanoc::Int::ItemCollection.new(config),
+      dependency_tracker:  :__irrelevant_dependency_tracker,
       compilation_context: :__irrelevat_compiler,
-      snapshot_repo: :__irrelevant_snapshot_repo,
+      snapshot_repo:       :__irrelevant_snapshot_repo,
     )
   end
 

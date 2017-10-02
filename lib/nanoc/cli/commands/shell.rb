@@ -31,12 +31,9 @@ module Nanoc::CLI::Commands
     end
 
     def self.view_context_for(site)
-      Nanoc::ViewContext.new(
-        reps: reps_for(site),
+      Nanoc::ViewContextForShell.new(
         items: site.items,
-        dependency_tracker: Nanoc::Int::DependencyTracker::Null.new,
-        compilation_context: nil,
-        snapshot_repo: nil,
+        reps: reps_for(site),
       )
     end
 

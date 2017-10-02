@@ -23,7 +23,7 @@ module Nanoc::Int
     end
 
     def create_view_context(dependency_tracker)
-      Nanoc::ViewContext.new(
+      Nanoc::ViewContextForCompilation.new(
         reps: @reps,
         items: @site.items,
         dependency_tracker: dependency_tracker,

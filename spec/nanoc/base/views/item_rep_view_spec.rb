@@ -2,17 +2,15 @@
 
 describe Nanoc::ItemRepView do
   let(:view_context) do
-    Nanoc::ViewContext.new(
-      reps: reps,
-      items: items,
-      dependency_tracker: dependency_tracker,
+    Nanoc::ViewContextForCompilation.new(
+      reps:                Nanoc::Int::ItemRepRepo.new,
+      items:               Nanoc::Int::ItemCollection.new(config),
+      dependency_tracker:  dependency_tracker,
       compilation_context: compilation_context,
-      snapshot_repo: snapshot_repo,
+      snapshot_repo:       snapshot_repo,
     )
   end
 
-  let(:reps) { double(:reps) }
-  let(:items) { double(:items) }
   let(:compilation_context) { double(:compilation_context) }
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
