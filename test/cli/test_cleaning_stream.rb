@@ -88,7 +88,7 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
   end
 
   def test_invalid_string
-    s = [128].pack('C')
+    s = [128].pack('C').force_encoding('UTF-8')
     stream = StringIO.new
     cleaning_stream = Nanoc::CLI::CleaningStream.new(stream)
     cleaning_stream << s
