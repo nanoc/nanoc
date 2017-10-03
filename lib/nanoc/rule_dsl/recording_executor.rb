@@ -14,6 +14,10 @@ module Nanoc
         @pre_snapshot = false
       end
 
+      def inspect
+        "<#{self.class}>"
+      end
+
       def filter(filter_name, filter_args = {})
         @action_sequence_builder.add_filter(filter_name, filter_args)
       end

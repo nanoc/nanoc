@@ -5,6 +5,8 @@ module Nanoc::RuleDSL
   #
   # @api private
   class Rule
+    include Nanoc::Int::ContractsSupport
+
     # @return [Symbol] The name of the representation that will be compiled
     #   using this rule
     attr_reader :rep_name
@@ -44,18 +46,21 @@ module Nanoc::RuleDSL
       @pattern.match?(item.identifier)
     end
 
-    # Applies this rule to the given item rep.
-    #
-    # @param [Nanoc::Int::ItemRep] rep
-    # @param [Nanoc::Int::Site] site
-    # @param [Nanoc::Int::Executor, Nanoc::RuleDSL::RecordingExecutor] executor
-    # @param [Nanoc::ViewContextForCompilation] view_context
-    #
-    # @return [void]
+    contract Nanoc::Int::ItemRep, C::KeywordArgs[
+      site: Nanoc::Int::Site,
+      executor: C::Or[nil, Nanoc::Int::Executor, Nanoc::RuleDSL::RecordingExecutor],
+      view_context: Nanoc::ViewContextForPreCompilation,
+    ] => C::Any
     def apply_to(rep, site:, executor:, view_context:)
+      # FIXME: allowing executor to be nil is ugly
+
       context = Nanoc::RuleDSL::RuleContext.new(
-        rep: rep, executor: executor, site: site, view_context: view_context,
+        rep: rep,
+        executor: executor,
+        site: site,
+        view_context: view_context,
       )
+
       context.instance_exec(matches(rep.item.identifier), &@block)
     end
 

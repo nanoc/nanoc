@@ -6,7 +6,31 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
   end
 
   let(:rules_collection) { Nanoc::RuleDSL::RulesCollection.new }
-  let(:site) { double(:site) }
+
+  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+  let(:items) { Nanoc::Int::ItemCollection.new(config) }
+  let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
+
+  let(:data_source_class) do
+    Class.new(Nanoc::DataSource) do
+      def items
+        @config.fetch(:items)
+      end
+
+      def layouts
+        @config.fetch(:layouts)
+      end
+    end
+  end
+
+  let(:data_source) do
+    data_source_config = { items: items, layouts: layouts }
+    data_source_class.new(config, '/', '/', data_source_config)
+  end
+
+  let(:site) do
+    Nanoc::Int::Site.new(config: config, code_snippets: [], data_source: data_source)
+  end
 
   describe '#[]' do
     subject { action_sequence_calculator[obj] }
@@ -15,10 +39,6 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
       let(:obj) { Nanoc::Int::ItemRep.new(item, :csv) }
 
       let(:item) { Nanoc::Int::Item.new('content', {}, Nanoc::Identifier.from('/list.md')) }
-      let(:config) { Nanoc::Int::Configuration.new.with_defaults }
-      let(:items) { Nanoc::Int::ItemCollection.new(config) }
-      let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
-      let(:site) { double(:site, items: items, layouts: layouts, config: config) }
 
       context 'no rules exist' do
         it 'raises error' do
