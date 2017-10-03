@@ -53,10 +53,10 @@ module Nanoc::RuleDSL
         Nanoc::Int::InMemDataSource.new(ctx.items.unwrap, ctx.layouts.unwrap)
     end
 
-    def postprocess(site, reps)
+    def postprocess(site, compiler, reps)
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
 
-      res = site.compiler.run_until_reps_built
+      res = compiler.run_until_reps_built
       reps = res.fetch(:reps)
 
       view_context =
@@ -64,7 +64,7 @@ module Nanoc::RuleDSL
           reps: reps,
           items: site.items,
           dependency_tracker: dependency_tracker,
-          compilation_context: site.compiler.compilation_context(reps: reps),
+          compilation_context: compiler.compilation_context(reps: reps),
           snapshot_repo: nil,
         )
       ctx = new_postprocessor_context(site, view_context)

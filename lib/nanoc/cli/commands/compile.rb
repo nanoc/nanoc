@@ -22,8 +22,9 @@ module Nanoc::CLI::Commands
       @site = load_site
 
       puts 'Compiling site…'
-      run_listeners_while do
-        @site.compile
+      compiler = Nanoc::Int::Compiler.new_for(@site)
+      run_listeners_while(compiler) do
+        compiler.run_until_end
       end
 
       time_after = Time.now
@@ -42,7 +43,9 @@ module Nanoc::CLI::Commands
       ]
     end
 
-    def setup_listeners
+    def setup_listeners(compiler)
+      reps = reps_for(compiler)
+
       @listeners =
         @listener_classes
         .select { |klass| klass.enable_for?(self, @site) }
@@ -55,8 +58,8 @@ module Nanoc::CLI::Commands
       @listeners
     end
 
-    def run_listeners_while
-      setup_listeners
+    def run_listeners_while(compiler)
+      setup_listeners(compiler)
       yield
     ensure
       teardown_listeners
@@ -67,11 +70,9 @@ module Nanoc::CLI::Commands
       @listeners.reverse_each(&:stop_safely)
     end
 
-    def reps
-      @_reps ||= begin
-        res = @site.compiler.run_until_reps_built
-        res.fetch(:reps)
-      end
+    def reps_for(compiler)
+      res = compiler.run_until_reps_built
+      res.fetch(:reps)
     end
   end
 end

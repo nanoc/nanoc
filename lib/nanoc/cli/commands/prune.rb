@@ -18,7 +18,7 @@ module Nanoc::CLI::Commands
   class Prune < ::Nanoc::CLI::CommandRunner
     def run
       @site = load_site
-      res = @site.compiler.run_until_reps_built
+      res = Nanoc::Int::Compiler.new_for(@site).run_until_reps_built
       reps = res.fetch(:reps)
 
       if options.key?(:yes)

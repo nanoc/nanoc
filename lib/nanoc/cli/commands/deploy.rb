@@ -15,7 +15,8 @@ option :n, :'dry-run',      'show what would be deployed'
 module Nanoc::CLI::Commands
   class Deploy < ::Nanoc::CLI::CommandRunner
     def run
-      @site = load_site(preprocess: true)
+      @site = load_site
+      Nanoc::Int::Compiler.new_for(@site).run_until_preprocessed
 
       if options[:'list-deployers']
         list_deployers

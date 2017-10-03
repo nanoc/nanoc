@@ -179,15 +179,12 @@ module Nanoc
       end
 
       def site
-        @_site ||= begin
-          site = Nanoc::Int::Site.new(
+        @_site ||=
+          Nanoc::Int::Site.new(
             config: @config,
             code_snippets: [],
             data_source: Nanoc::Int::InMemDataSource.new(@items, @layouts),
           )
-          site.compiler = new_compiler_for(site)
-          site
-        end
       end
 
       def assigns

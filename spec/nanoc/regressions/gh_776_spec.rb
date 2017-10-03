@@ -30,7 +30,7 @@ EOS
 
   context 'with pruning' do
     before do
-      res = site.compiler.run_until_reps_built
+      res = Nanoc::Int::Compiler.new_for(site).run_until_reps_built
       Nanoc::Pruner.new(site.config, res.fetch(:reps)).run
     end
 

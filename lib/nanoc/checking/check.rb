@@ -22,9 +22,10 @@ module Nanoc::Checking
       output_filenames = Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
 
       # FIXME: ugly
-      res = site.compiler.run_until_reps_built
+      compiler = Nanoc::Int::Compiler.new_for(site)
+      res = compiler.run_until_reps_built
       reps = res.fetch(:reps)
-      compilation_context = site.compiler.compilation_context(reps: reps)
+      compilation_context = compiler.compilation_context(reps: reps)
       view_context = compilation_context.create_view_context(Nanoc::Int::DependencyTracker::Null.new)
 
       context = {
