@@ -66,7 +66,7 @@ module Nanoc::Int
       end
     end
 
-    def run_all
+    def run_until_end
       res = run_until_precompiled
       action_sequences = res.fetch(:action_sequences)
       reps = res.fetch(:reps)

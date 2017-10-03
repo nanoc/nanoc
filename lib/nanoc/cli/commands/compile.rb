@@ -24,7 +24,7 @@ module Nanoc::CLI::Commands
       puts 'Compiling site…'
       compiler = Nanoc::Int::Compiler.new_for(@site)
       run_listeners_while(compiler) do
-        compiler.run_all
+        compiler.run_until_end
       end
 
       time_after = Time.now

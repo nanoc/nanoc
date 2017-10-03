@@ -23,7 +23,7 @@ module Nanoc::Int
 
     contract C::None => self
     def compile
-      Nanoc::Int::Compiler.new_for(self).run_all
+      Nanoc::Int::Compiler.new_for(self).run_until_end
       self
     end
 
