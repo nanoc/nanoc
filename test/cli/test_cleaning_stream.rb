@@ -88,7 +88,7 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
   end
 
   def test_invalid_string
-    s = "\x80"
+    s = [128].pack('C')
     stream = StringIO.new
     cleaning_stream = Nanoc::CLI::CleaningStream.new(stream)
     cleaning_stream << s
