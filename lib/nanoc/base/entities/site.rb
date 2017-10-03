@@ -8,7 +8,6 @@ module Nanoc::Int
     attr_reader :code_snippets
     attr_reader :config
     attr_accessor :data_source
-    attr_writer :compiler
 
     contract C::KeywordArgs[config: Nanoc::Int::Configuration, code_snippets: C::IterOf[Nanoc::Int::CodeSnippet], data_source: C::Maybe[C::Named['Nanoc::DataSource']]] => C::Any
     def initialize(config:, code_snippets:, data_source:)
@@ -24,13 +23,8 @@ module Nanoc::Int
 
     contract C::None => self
     def compile
-      compiler.run_all
+      Nanoc::Int::Compiler.new_for(self).run_all
       self
-    end
-
-    contract C::None => C::Named['Nanoc::Int::Compiler']
-    def compiler
-      @compiler ||= Nanoc::Int::Compiler.new_for(self)
     end
 
     def mark_as_preprocessed

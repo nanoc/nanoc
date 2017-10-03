@@ -111,7 +111,7 @@ module Nanoc::Checking
       return [] if classes.empty?
 
       # TODO: remove me
-      @site.compiler.run_until_reps_built
+      Nanoc::Int::Compiler.new_for(@site).run_until_reps_built
 
       checks = []
       issues = Set.new

@@ -16,7 +16,7 @@ module Nanoc::CLI::Commands
   class Deploy < ::Nanoc::CLI::CommandRunner
     def run
       @site = load_site
-      @site.compiler.run_until_preprocessed
+      Nanoc::Int::Compiler.new_for(@site).run_until_preprocessed
 
       if options[:'list-deployers']
         list_deployers

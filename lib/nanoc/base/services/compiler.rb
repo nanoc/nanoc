@@ -17,6 +17,11 @@ module Nanoc::Int
       @snapshot_repo = Nanoc::Int::SnapshotRepo.new
     end
 
+    contract Nanoc::Int::Site => Nanoc::Int::Compiler
+    def self.new_for(site)
+      Nanoc::Int::CompilerLoader.new.load(site)
+    end
+
     def run_until_preprocessed
       @_res_preprocessed ||= begin
         run_stage(preprocess_stage)
@@ -73,7 +78,7 @@ module Nanoc::Int
       run_stage(prune_stage(reps))
       run_stage(compile_reps_stage(action_sequences, reps))
       run_stage(store_post_compilation_state_stage)
-      run_stage(postprocess_stage(reps))
+      run_stage(postprocess_stage(reps), self)
     ensure
       run_stage(cleanup_stage)
     end

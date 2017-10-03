@@ -10,9 +10,9 @@ module Nanoc::Int::Compiler::Stages
       @reps = reps
     end
 
-    contract C::None => C::Any
-    def run
-      @action_provider.postprocess(@site, @reps)
+    contract Nanoc::Int::Compiler => C::Any
+    def run(compiler)
+      @action_provider.postprocess(@site, compiler, @reps)
     end
   end
 end

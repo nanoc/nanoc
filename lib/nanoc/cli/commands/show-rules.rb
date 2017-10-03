@@ -12,7 +12,7 @@ module Nanoc::CLI::Commands
     def run
       site = load_site
 
-      res = site.compiler.run_until_reps_built
+      res = Nanoc::Int::Compiler.new_for(site).run_until_reps_built
       reps = res.fetch(:reps)
 
       action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)

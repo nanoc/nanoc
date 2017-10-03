@@ -14,7 +14,7 @@ module Nanoc::CLI::Commands
       require 'pry'
 
       @site = load_site
-      @site.compiler.run_until_preprocessed if options[:preprocess]
+      Nanoc::Int::Compiler.new_for(@site).run_until_preprocessed if options[:preprocess]
 
       Nanoc::Int::Context.new(env).pry
     end
