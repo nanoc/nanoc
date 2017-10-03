@@ -16,6 +16,8 @@ module Nanoc::Int
       @code_snippets = code_snippets
       @data_source = data_source
 
+      @preprocessed = false
+
       ensure_identifier_uniqueness(@data_source.items, 'item')
       ensure_identifier_uniqueness(@data_source.layouts, 'layout')
     end
@@ -28,7 +30,15 @@ module Nanoc::Int
 
     contract C::None => C::Named['Nanoc::Int::Compiler']
     def compiler
-      @compiler ||= Nanoc::Int::CompilerLoader.new.load(self)
+      @compiler ||= Nanoc::Int::Compiler.new_for(self)
+    end
+
+    def mark_as_preprocessed
+      @preprocessed = true
+    end
+
+    def preprocessed?
+      @preprocessed
     end
 
     def items

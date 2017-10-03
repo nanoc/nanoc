@@ -10,6 +10,8 @@ module Nanoc::Int::Compiler::Stages
     end
 
     def run
+      return if @site.preprocessed?
+
       if @action_provider.need_preprocessing?
         @site.data_source = Nanoc::Int::InMemDataSource.new(@site.items, @site.layouts)
         @action_provider.preprocess(@site)
@@ -19,6 +21,7 @@ module Nanoc::Int::Compiler::Stages
         @checksum_store.objects = @site.items.to_a + @site.layouts.to_a + @site.code_snippets + [@site.config]
       end
 
+      @site.mark_as_preprocessed
       @site.freeze
     end
   end
