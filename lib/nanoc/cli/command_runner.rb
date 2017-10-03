@@ -50,20 +50,14 @@ module Nanoc::CLI
     # Asserts that the current working directory contains a site and loads the site into memory.
     #
     # @return [void]
-    def load_site(preprocess: false)
+    def load_site
       self.class.enter_site_dir
 
       $stderr.print 'Loading site… '
       $stderr.flush
-
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
 
-      if preprocess
-        site.compiler.run_until_preprocessed
-      end
-
       $stderr.puts 'done'
-
       site
     end
 
