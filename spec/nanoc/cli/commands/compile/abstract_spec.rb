@@ -1,48 +1,62 @@
 # frozen_string_literal: true
 
 describe Nanoc::CLI::Commands::CompileListeners::Abstract do
-  let(:klass) do
-    Class.new(described_class) do
-      attr_reader :started
-      attr_reader :stopped
+  subject { klass.new }
 
-      def initialize
-        @started = false
-        @stopped = false
-      end
+  context 'abstract class' do
+    let(:klass) { described_class }
 
-      def start
-        @started = true
-      end
+    it 'errors on starting' do
+      expect { subject.start }.to raise_error(NotImplementedError)
+    end
 
-      def stop
-        @stopped = true
-      end
+    it 'stops silently' do
+      subject.stop
     end
   end
 
-  subject { klass.new }
+  context 'concrete subclass' do
+    let(:klass) do
+      Class.new(described_class) do
+        attr_reader :started
+        attr_reader :stopped
 
-  it 'starts' do
-    subject.start
-    expect(subject.started).to be
-  end
+        def initialize
+          @started = false
+          @stopped = false
+        end
 
-  it 'stops' do
-    subject.start
-    subject.stop
-    expect(subject.stopped).to be
-  end
+        def start
+          @started = true
+        end
 
-  it 'starts safely' do
-    subject.start_safely
-    expect(subject.started).to be
-  end
+        def stop
+          @stopped = true
+        end
+      end
+    end
 
-  it 'stops safely' do
-    subject.start_safely
-    subject.stop_safely
-    expect(subject.stopped).to be
+    it 'starts' do
+      subject.start
+      expect(subject.started).to be
+    end
+
+    it 'stops' do
+      subject.start
+      subject.stop
+      expect(subject.stopped).to be
+    end
+
+    it 'starts safely' do
+      subject.start_safely
+      expect(subject.started).to be
+    end
+
+    it 'stops safely' do
+      subject.start_safely
+      subject.stop_safely
+      expect(subject.stopped).to be
+    end
   end
 
   context 'listener that does not start or stop properly' do
