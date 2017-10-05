@@ -26,6 +26,7 @@ require_relative 'cli/commands/compile_listeners/debug_printer'
 require_relative 'cli/commands/compile_listeners/diff_generator'
 require_relative 'cli/commands/compile_listeners/file_action_printer'
 require_relative 'cli/commands/compile_listeners/timing_recorder'
+require_relative 'cli/commands/compile_listeners/aggregate'
 
 # @api private
 module Nanoc::CLI

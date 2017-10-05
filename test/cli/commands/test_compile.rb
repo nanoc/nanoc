@@ -129,41 +129,6 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     end
   end
 
-  def test_setup_and_teardown_listeners
-    with_site do
-      test_listener_class = Class.new(::Nanoc::CLI::Commands::CompileListeners::Abstract) do
-        def start
-          @started = true
-        end
-
-        def stop
-          @stopped = true
-        end
-
-        def started?
-          @started
-        end
-
-        def stopped?
-          @stopped
-        end
-      end
-
-      options = {}
-      arguments = []
-      cmd = nil
-      cmd_runner = Nanoc::CLI::Commands::Compile.new(options, arguments, cmd)
-      cmd_runner.listener_classes = [test_listener_class]
-
-      cmd_runner.run
-
-      listeners = cmd_runner.send(:listeners)
-      assert listeners.size == 1
-      assert listeners.first.started?
-      assert listeners.first.stopped?
-    end
-  end
-
   def test_file_action_printer_normal
     # Create data
     item = Nanoc::Int::Item.new('content', {}, '/a')

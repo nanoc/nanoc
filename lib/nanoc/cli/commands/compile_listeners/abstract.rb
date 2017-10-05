@@ -8,11 +8,20 @@ module Nanoc::CLI::Commands::CompileListeners
       true
     end
 
+    # @abstract
     def start
       raise NotImplementedError, "Subclasses of #{self.class} must implement #start"
     end
 
+    # @abstract
     def stop; end
+
+    def run_while
+      start
+      yield
+    ensure
+      stop
+    end
 
     def start_safely
       start
