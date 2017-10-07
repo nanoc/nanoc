@@ -45,8 +45,8 @@ module Nanoc::Int
 
       content_or_filename_assigns.merge(
         item: Nanoc::ItemWithRepsView.new(rep.item, view_context),
-        rep: Nanoc::BasicItemRepView.new(rep, view_context),
-        item_rep: Nanoc::BasicItemRepView.new(rep, view_context),
+        rep: Nanoc::CompilationItemRepView.new(rep, view_context),
+        item_rep: Nanoc::CompilationItemRepView.new(rep, view_context),
         items: Nanoc::ItemCollectionWithRepsView.new(@site.items, view_context),
         layouts: Nanoc::LayoutCollectionView.new(@site.layouts, view_context),
         config: Nanoc::ConfigView.new(@site.config, view_context),

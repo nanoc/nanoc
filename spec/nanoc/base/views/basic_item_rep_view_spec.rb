@@ -402,7 +402,7 @@ shared_examples 'a basic item rep view' do
 
     subject { view.inspect }
 
-    it { is_expected.to eql('<Nanoc::BasicItemRepView item.identifier=/foo name=jacques>') }
+    it { is_expected.to eql('<' + described_class.to_s + ' item.identifier=/foo name=jacques>') }
   end
 end
 
