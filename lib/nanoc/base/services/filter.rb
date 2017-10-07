@@ -210,14 +210,7 @@ module Nanoc
     #
     # @return [void]
     def depend_on(items)
-      reps = items.flat_map(&:reps).map(&:unwrap)
-      reps.each do |rep|
-        @item._context.dependency_tracker.bounce(rep.item, compiled_content: true)
-
-        unless rep.compiled?
-          Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep))
-        end
-      end
+      items.flat_map(&:reps).flat_map(&:raw_path)
     end
   end
 end
