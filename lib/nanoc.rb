@@ -6,12 +6,8 @@ module Nanoc
   #
   # @api private
   def self.version_information
-    gem_info = defined?(Gem) ? "with RubyGems #{Gem::VERSION}" : 'without RubyGems'
-    engine   = defined?(RUBY_ENGINE) ? RUBY_ENGINE : 'ruby'
-    res = +''
-    res << "Nanoc #{Nanoc::VERSION} © 2007-2017 Denis Defreyne.\n"
-    res << "Running #{engine} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} #{gem_info}.\n"
-    res
+    "Nanoc #{Nanoc::VERSION} © 2007-2017 Denis Defreyne.\n" \
+    "Running #{RUBY_ENGINE} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} with RubyGems #{Gem::VERSION}.\n"
   end
 
   # @return [Boolean] True if the current platform is Windows, false otherwise.
