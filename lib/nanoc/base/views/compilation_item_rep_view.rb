@@ -2,7 +2,13 @@
 
 module Nanoc
   class CompilationItemRepView < ::Nanoc::BasicItemRepView
-    # @api private
+    # Returns the item rep’s raw path. It includes the path to the output
+    # directory and the full filename.
+    #
+    # @param [Symbol] snapshot The snapshot for which the path should be
+    #   returned.
+    #
+    # @return [String] The item rep’s raw path.
     def raw_path(snapshot: :last)
       @context.dependency_tracker.bounce(unwrap.item, compiled_content: true)
 
