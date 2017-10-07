@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  class ItemRepView < ::Nanoc::View
+  class BasicItemRepView < ::Nanoc::View
     # @api private
     def initialize(item_rep, context)
       super(context)

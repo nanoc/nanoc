@@ -23,7 +23,7 @@ module Nanoc
 
     # @api private
     def view_class
-      Nanoc::ItemRepView
+      Nanoc::BasicItemRepView
     end
 
     def to_ary
@@ -53,7 +53,7 @@ module Nanoc
     #
     # @return [nil] if no item rep with the given name was found
     #
-    # @return [Nanoc::ItemRepView] if an item rep with the given name was found
+    # @return [Nanoc::BasicItemRepView] if an item rep with the given name was found
     def [](rep_name)
       case rep_name
       when Symbol
@@ -71,7 +71,7 @@ module Nanoc
     #
     # @param [Symbol] rep_name
     #
-    # @return [Nanoc::ItemRepView]
+    # @return [Nanoc::BasicItemRepView]
     #
     # @raise if no rep was found
     def fetch(rep_name)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::ItemRepView do
+shared_examples 'a basic item rep view' do
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
       reps:                Nanoc::Int::ItemRepRepo.new,
@@ -402,6 +402,10 @@ describe Nanoc::ItemRepView do
 
     subject { view.inspect }
 
-    it { is_expected.to eql('<Nanoc::ItemRepView item.identifier=/foo name=jacques>') }
+    it { is_expected.to eql('<Nanoc::BasicItemRepView item.identifier=/foo name=jacques>') }
   end
+end
+
+describe Nanoc::BasicItemRepView do
+  it_behaves_like 'a basic item rep view'
 end

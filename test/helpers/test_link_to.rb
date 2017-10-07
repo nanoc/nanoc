@@ -11,9 +11,9 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
     # Mock
     @items = [
-      Nanoc::ItemRepView.new(mock, {}),
-      Nanoc::ItemRepView.new(mock, {}),
-      Nanoc::ItemRepView.new(mock, {}),
+      Nanoc::BasicItemRepView.new(mock, {}),
+      Nanoc::BasicItemRepView.new(mock, {}),
+      Nanoc::BasicItemRepView.new(mock, {}),
     ]
     @items[0].stubs(:identifier).returns('/about/')
     @items[0].stubs(:path).returns('/about.html')
@@ -21,7 +21,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     @items[1].stubs(:path).returns('/software.html')
     @items[2].stubs(:identifier).returns('/software/nanoc/')
     @items[2].stubs(:path).returns('/software/nanoc.html')
-    about_rep_vcard = Nanoc::ItemRepView.new(mock, {})
+    about_rep_vcard = Nanoc::BasicItemRepView.new(mock, {})
     about_rep_vcard.stubs(:path).returns('/about.vcf')
     @items[0].stubs(:rep).with(:vcard).returns(about_rep_vcard)
 

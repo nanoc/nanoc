@@ -32,7 +32,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
 
   describe '#initialize' do
     it 'wraps objects in view classes' do
-      expect(subject.rep.class).to eql(Nanoc::ItemRepView)
+      expect(subject.rep.class).to eql(Nanoc::BasicItemRepView)
       expect(subject.item.class).to eql(Nanoc::ItemWithoutRepsView)
       expect(subject.config.class).to eql(Nanoc::ConfigView)
       expect(subject.layouts.class).to eql(Nanoc::LayoutCollectionView)

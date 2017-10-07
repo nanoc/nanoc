@@ -266,12 +266,12 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::Int::ItemRep<item=Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,name=Symbol<pdf>>') }
   end
 
-  context 'Nanoc::ItemRepView' do
-    let(:obj) { Nanoc::ItemRepView.new(rep, :_unused_context) }
+  context 'Nanoc::BasicItemRepView' do
+    let(:obj) { Nanoc::BasicItemRepView.new(rep, :_unused_context) }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::ItemRepView<Nanoc::Int::ItemRep<item=Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
+    it { is_expected.to eql('Nanoc::BasicItemRepView<Nanoc::Int::ItemRep<item=Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
   end
 
   context 'Nanoc::ItemWithoutRepsView' do
@@ -364,7 +364,7 @@ describe Nanoc::Int::Checksummer do
         'item=',
         'Nanoc::ItemWithoutRepsView<' + expected_item_checksum + '>',
         ',rep=',
-        'Nanoc::ItemRepView<' + expected_item_rep_checksum + '>',
+        'Nanoc::BasicItemRepView<' + expected_item_rep_checksum + '>',
         ',items=',
         'Nanoc::ItemCollectionWithoutRepsView<Array<' + expected_item_checksum + ',>>',
         ',layouts=',
