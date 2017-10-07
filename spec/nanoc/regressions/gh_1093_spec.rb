@@ -2,7 +2,7 @@
 
 describe 'GH-1093', site: true, stdio: true do
   before do
-    File.write('content/index.html', '<%= @items["/z.dat"].reps.all? { |r| File.file?(r.unwrap.raw_path) } %>')
+    File.write('content/index.html', '<%= @items["/z.dat"].reps.all? { |r| File.file?(r.raw_path) } %>')
     File.write('content/z.dat', 'asdf')
 
     File.write('Rules', <<EOS)
