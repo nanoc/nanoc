@@ -75,19 +75,6 @@ module Nanoc
     end
 
     # @api private
-    def raw_path(snapshot: :last)
-      @context.dependency_tracker.bounce(unwrap.item, compiled_content: true)
-
-      res = @item_rep.raw_path(snapshot: snapshot)
-
-      unless @item_rep.compiled?
-        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(@item_rep))
-      end
-
-      res
-    end
-
-    # @api private
     def binary?
       snapshot_def = unwrap.snapshot_defs.find { |sd| sd.name == :last }
       raise Nanoc::Int::Errors::NoSuchSnapshot.new(unwrap, :last) if snapshot_def.nil?
