@@ -190,7 +190,7 @@ module Nanoc
       def assigns
         {
           config: Nanoc::MutableConfigView.new(@config, view_context),
-          item_rep: @item_rep ? Nanoc::BasicItemRepView.new(@item_rep, view_context) : nil,
+          item_rep: @item_rep ? Nanoc::CompilationItemRepView.new(@item_rep, view_context) : nil,
           item: @item ? Nanoc::ItemWithRepsView.new(@item, view_context) : nil,
           items: Nanoc::ItemCollectionWithRepsView.new(@items, view_context),
           layouts: Nanoc::LayoutCollectionView.new(@layouts, view_context),

@@ -274,6 +274,8 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::BasicItemRepView<Nanoc::Int::ItemRep<item=Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
   end
 
+  # TODO: add CompilationItemRepView
+
   context 'Nanoc::ItemWithoutRepsView' do
     let(:obj) { Nanoc::ItemWithoutRepsView.new(item, nil) }
     let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }

@@ -20,7 +20,7 @@ class Nanoc::Filters::KramdownTest < Nanoc::TestCase
       item = Nanoc::Int::Item.new('foo', {}, '/foo.md')
       item_view = Nanoc::ItemWithRepsView.new(item, nil)
       item_rep = Nanoc::Int::ItemRep.new(item, :default)
-      item_rep_view = Nanoc::BasicItemRepView.new(item_rep, nil)
+      item_rep_view = Nanoc::CompilationItemRepView.new(item_rep, nil)
 
       # Create filter
       filter = ::Nanoc::Filters::Kramdown.new(item: item_view, item_rep: item_rep_view)
@@ -40,7 +40,7 @@ class Nanoc::Filters::KramdownTest < Nanoc::TestCase
       item = Nanoc::Int::Item.new('foo', {}, '/foo.md')
       item_view = Nanoc::ItemWithRepsView.new(item, nil)
       item_rep = Nanoc::Int::ItemRep.new(item, :default)
-      item_rep_view = Nanoc::BasicItemRepView.new(item_rep, nil)
+      item_rep_view = Nanoc::CompilationItemRepView.new(item_rep, nil)
 
       # Create filter
       filter = ::Nanoc::Filters::Kramdown.new(item: item_view, item_rep: item_rep_view)

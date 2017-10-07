@@ -209,49 +209,6 @@ shared_examples 'a basic item rep view' do
     end
   end
 
-  describe '#compiled_content' do
-    subject { view.compiled_content }
-
-    let(:view) { described_class.new(rep, view_context) }
-
-    let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
-        ir.compiled = true
-        ir.snapshot_defs = [
-          Nanoc::Int::SnapshotDef.new(:last, binary: false),
-        ]
-      end
-    end
-
-    let(:item) do
-      Nanoc::Int::Item.new('content', {}, '/asdf.md')
-    end
-
-    before do
-      snapshot_repo.set(rep, :last, Nanoc::Int::TextualContent.new('Hallo'))
-    end
-
-    it 'creates a dependency' do
-      expect { subject }
-        .to change { dependency_store.objects_causing_outdatedness_of(base_item) }
-        .from([])
-        .to([item])
-    end
-
-    it 'creates a dependency with the right props' do
-      subject
-      dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
-
-      expect(dep.props.compiled_content?).to eq(true)
-
-      expect(dep.props.raw_content?).to eq(false)
-      expect(dep.props.attributes?).to eq(false)
-      expect(dep.props.path?).to eq(false)
-    end
-
-    it { should eq('Hallo') }
-  end
-
   describe '#path' do
     subject { view.path }
 
@@ -285,64 +242,6 @@ shared_examples 'a basic item rep view' do
     end
 
     it { should eq('/about/') }
-  end
-
-  describe '#raw_path' do
-    subject { Fiber.new { view.raw_path }.resume }
-
-    let(:view) { described_class.new(rep, view_context) }
-
-    let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
-        ir.raw_paths = {
-          last: ['output/about/index.html'],
-        }
-      end
-    end
-
-    let(:item) do
-      Nanoc::Int::Item.new('content', {}, '/asdf.md')
-    end
-
-    context 'rep is not compiled' do
-      it 'creates a dependency' do
-        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
-      end
-
-      it 'creates a dependency with the right props' do
-        subject
-        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
-
-        expect(dep.props.compiled_content?).to eq(true)
-
-        expect(dep.props.raw_content?).to eq(false)
-        expect(dep.props.attributes?).to eq(false)
-        expect(dep.props.path?).to eq(false)
-      end
-
-      it { should be_a(Nanoc::Int::Errors::UnmetDependency) }
-    end
-
-    context 'rep is compiled' do
-      before { rep.compiled = true }
-
-      it 'creates a dependency' do
-        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
-      end
-
-      it 'creates a dependency with the right props' do
-        subject
-        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
-
-        expect(dep.props.compiled_content?).to eq(true)
-
-        expect(dep.props.raw_content?).to eq(false)
-        expect(dep.props.attributes?).to eq(false)
-        expect(dep.props.path?).to eq(false)
-      end
-
-      it { should eq('output/about/index.html') }
-    end
   end
 
   describe '#binary?' do

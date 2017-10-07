@@ -23,7 +23,8 @@ module Nanoc
 
     # @api private
     def view_class
-      Nanoc::BasicItemRepView
+      # FIXME: Return Basic/CompilationItemRepView depending on case
+      Nanoc::CompilationItemRepView
     end
 
     def to_ary
