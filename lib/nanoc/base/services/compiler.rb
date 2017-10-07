@@ -31,22 +31,22 @@ module Nanoc::Int
 
     def run_until_reps_built
       @_res_reps_built ||= begin
-        run_until_preprocessed
+        prev = run_until_preprocessed
 
         res = run_stage(build_reps_stage)
 
-        {
+        prev.merge(
           reps: res.fetch(:reps),
           action_sequences: res.fetch(:action_sequences),
-        }
+        )
       end
     end
 
     def run_until_precompiled
       @_res_precompiled ||= begin
-        res = run_until_reps_built
-        action_sequences = res.fetch(:action_sequences)
-        reps = res.fetch(:reps)
+        prev = run_until_reps_built
+        action_sequences = prev.fetch(:action_sequences)
+        reps = prev.fetch(:reps)
 
         run_stage(load_stores_stage)
         checksums = run_stage(calculate_checksums_stage)
@@ -57,7 +57,7 @@ module Nanoc::Int
         )
         outdated_items = run_stage(determine_outdatedness_stage(outdatedness_checker, reps))
 
-        res.merge(
+        prev.merge(
           checksums: checksums,
           dependency_store: @dependency_store,
           outdatedness_checker: outdatedness_checker,
