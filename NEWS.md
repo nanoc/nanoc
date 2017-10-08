@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.8.10 (2017-10-08)
+
+Fixes:
+
+* Fixed handling of four dashes for separating metadata (#1222, #1223)
+* Made `#raw_path` unavailable in rules context (#1231)
+
 ## 4.8.9 (2017-09-22)
 
 Fixes:
