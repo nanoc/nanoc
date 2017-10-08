@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'support/item_rep_view_examples'
+
 describe Nanoc::PostCompileItemRepView do
+  let(:expected_item_view_class) { Nanoc::PostCompileItemView }
+
+  it_behaves_like 'an item rep view'
+
   let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
   let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo') }
   let(:view) { described_class.new(item_rep, view_context) }

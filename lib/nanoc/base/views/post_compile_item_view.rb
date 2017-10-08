@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  class PostCompileItemView < Nanoc::ItemWithRepsView
+  class PostCompileItemView < Nanoc::CompilationItemView
     def reps
       Nanoc::PostCompileItemRepCollectionView.new(@context.reps[unwrap], @context)
     end

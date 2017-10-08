@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  class PostCompileItemRepCollectionView < Nanoc::ItemRepCollectionView
+  class PostCompileItemRepCollectionView < Nanoc::BasicItemRepCollectionView
     # @api private
     def view_class
       Nanoc::PostCompileItemRepView

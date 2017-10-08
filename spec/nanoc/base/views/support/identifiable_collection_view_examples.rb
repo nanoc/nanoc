@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Needs :view_class
-shared_examples 'an identifiable collection' do
+shared_examples 'an identifiable collection view' do
   let(:view) { described_class.new(wrapped, view_context) }
 
   let(:view_context) do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-shared_examples 'a mutable identifiable collection' do
+shared_examples 'a mutable identifiable collection view' do
   let(:view) { described_class.new(wrapped, view_context) }
 
   let(:view_context) { double(:view_context) }

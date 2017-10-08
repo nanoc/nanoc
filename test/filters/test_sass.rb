@@ -300,7 +300,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
     File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green') }
 
     items = [
-      Nanoc::ItemWithRepsView.new(
+      Nanoc::CompilationItemView.new(
         Nanoc::Int::Item.new(
           'blah',
           { content_filename: 'content/xyzzy.sass' },

@@ -4,7 +4,7 @@ module Nanoc
   class ItemCollectionWithRepsView < ::Nanoc::IdentifiableCollectionView
     # @api private
     def view_class
-      Nanoc::ItemWithRepsView
+      Nanoc::CompilationItemView
     end
   end
 end

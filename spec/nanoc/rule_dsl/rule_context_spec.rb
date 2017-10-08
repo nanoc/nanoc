@@ -32,8 +32,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
 
   describe '#initialize' do
     it 'wraps objects in view classes' do
-      expect(subject.rep.class).to eql(Nanoc::ItemRepView)
-      expect(subject.item.class).to eql(Nanoc::ItemWithoutRepsView)
+      expect(subject.rep.class).to eql(Nanoc::BasicItemRepView)
+      expect(subject.item.class).to eql(Nanoc::BasicItemView)
       expect(subject.config.class).to eql(Nanoc::ConfigView)
       expect(subject.layouts.class).to eql(Nanoc::LayoutCollectionView)
       expect(subject.items.class).to eql(Nanoc::ItemCollectionWithoutRepsView)
@@ -52,7 +52,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
     subject { rule_context.item }
 
     it 'is a view without reps access' do
-      expect(subject.class).to eql(Nanoc::ItemWithoutRepsView)
+      expect(subject.class).to eql(Nanoc::BasicItemView)
     end
 
     it 'contains the right item' do
@@ -77,7 +77,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
       end
 
       it 'wraps the parent in a view without reps access' do
-        expect(subject.parent.class).to eql(Nanoc::ItemWithoutRepsView)
+        expect(subject.parent.class).to eql(Nanoc::BasicItemView)
         expect(subject.parent).not_to respond_to(:compiled_content)
         expect(subject.parent).not_to respond_to(:path)
         expect(subject.parent).not_to respond_to(:reps)
@@ -88,7 +88,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
       end
 
       it 'wraps the children in a view without reps access' do
-        expect(subject.children.map(&:class)).to eql([Nanoc::ItemWithoutRepsView])
+        expect(subject.children.map(&:class)).to eql([Nanoc::BasicItemView])
         expect(subject.children[0]).not_to respond_to(:compiled_content)
         expect(subject.children[0]).not_to respond_to(:path)
         expect(subject.children[0]).not_to respond_to(:reps)

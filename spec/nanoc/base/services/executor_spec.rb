@@ -482,7 +482,7 @@ describe Nanoc::Int::Executor do
         let(:layout_content) { 'head <%= @item_rep.compiled_content(snapshot: :pre) %> foot' }
 
         let(:assigns) do
-          { item_rep: Nanoc::ItemRepView.new(rep, view_context) }
+          { item_rep: Nanoc::CompilationItemRepView.new(rep, view_context) }
         end
 
         before do

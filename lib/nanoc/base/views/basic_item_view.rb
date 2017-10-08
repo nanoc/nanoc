@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module Nanoc
-  class ItemWithoutRepsView < ::Nanoc::View
+  class BasicItemView < ::Nanoc::View
     include Nanoc::DocumentViewMixin
 
     # Returns the children of this item. For items with identifiers that have
     # extensions, returns an empty collection.
     #
-    # @return [Enumerable<Nanoc::ItemWithRepsView>]
+    # @return [Enumerable<Nanoc::CompilationItemView>]
     def children
       unless unwrap.identifier.legacy?
         raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(unwrap.identifier)
@@ -22,7 +22,7 @@ module Nanoc
     # Returns the parent of this item, if one exists. For items with identifiers
     # that have extensions, returns nil.
     #
-    # @return [Nanoc::ItemWithRepsView] if the item has a parent
+    # @return [Nanoc::CompilationItemView] if the item has a parent
     #
     # @return [nil] if the item has no parent
     def parent

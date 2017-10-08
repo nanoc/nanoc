@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-describe Nanoc::ItemWithRepsView do
+require_relative 'support/document_view_examples'
+
+describe Nanoc::CompilationItemView do
   let(:entity_class) { Nanoc::Int::Item }
   let(:other_view_class) { Nanoc::LayoutView }
   it_behaves_like 'a document view'
@@ -77,7 +79,7 @@ describe Nanoc::ItemWithRepsView do
         end
 
         it 'returns a view for the parent' do
-          expect(subject.class).to eql(Nanoc::ItemWithRepsView)
+          expect(subject.class).to eql(Nanoc::CompilationItemView)
           expect(subject.unwrap).to eql(parent_item)
         end
 
@@ -100,7 +102,7 @@ describe Nanoc::ItemWithRepsView do
           let(:parent_identifier) { Nanoc::Identifier.new('/', type: :legacy) }
 
           it 'returns a view for the parent' do
-            expect(subject.class).to eql(Nanoc::ItemWithRepsView)
+            expect(subject.class).to eql(Nanoc::CompilationItemView)
             expect(subject.unwrap).to eql(parent_item)
           end
         end
@@ -177,7 +179,7 @@ describe Nanoc::ItemWithRepsView do
 
       it 'returns views for the children' do
         expect(subject.size).to eql(1)
-        expect(subject[0].class).to eql(Nanoc::ItemWithRepsView)
+        expect(subject[0].class).to eql(Nanoc::CompilationItemView)
         expect(subject[0].unwrap).to eql(children[0])
       end
 
@@ -203,7 +205,7 @@ describe Nanoc::ItemWithRepsView do
 
     it 'returns a proper item rep collection' do
       expect(subject.size).to eq(2)
-      expect(subject.class).to eql(Nanoc::ItemRepCollectionView)
+      expect(subject.class).to eql(Nanoc::CompilationItemRepCollectionView)
     end
 
     it 'returns a view with the right context' do
@@ -285,7 +287,7 @@ describe Nanoc::ItemWithRepsView do
       let(:params) { { rep: :other } }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::ItemRepCollectionView::NoSuchItemRepError)
+        expect { subject }.to raise_error(Nanoc::BasicItemRepCollectionView::NoSuchItemRepError)
       end
     end
   end
@@ -350,7 +352,7 @@ describe Nanoc::ItemWithRepsView do
       let(:params) { { rep: :other } }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::ItemRepCollectionView::NoSuchItemRepError)
+        expect { subject }.to raise_error(Nanoc::BasicItemRepCollectionView::NoSuchItemRepError)
       end
     end
   end
@@ -369,6 +371,6 @@ describe Nanoc::ItemWithRepsView do
 
     subject { view.inspect }
 
-    it { is_expected.to eql('<Nanoc::ItemWithRepsView identifier=/asdf>') }
+    it { is_expected.to eql('<Nanoc::CompilationItemView identifier=/asdf>') }
   end
 end

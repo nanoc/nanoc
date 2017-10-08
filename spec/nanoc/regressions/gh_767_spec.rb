@@ -16,6 +16,6 @@ EOS
 
   it 'does not expose #path on @item' do
     site = Nanoc::Int::SiteLoader.new.new_from_cwd
-    expect { site.compile }.to raise_error(NoMethodError, /undefined method .*path.* for .*Nanoc::ItemWithoutRepsView/)
+    expect { site.compile }.to raise_error(NoMethodError, /undefined method .*path.* for .*Nanoc::BasicItemView/)
   end
 end

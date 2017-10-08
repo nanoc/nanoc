@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require_relative 'support/identifiable_collection_view_examples'
+
 describe Nanoc::ItemCollectionWithoutRepsView do
-  let(:view_class) { Nanoc::ItemWithoutRepsView }
+  let(:view_class) { Nanoc::BasicItemView }
   let(:collection_class) { Nanoc::Int::ItemCollection }
-  it_behaves_like 'an identifiable collection'
+  it_behaves_like 'an identifiable collection view'
 
   describe '#inspect' do
     let(:wrapped) do

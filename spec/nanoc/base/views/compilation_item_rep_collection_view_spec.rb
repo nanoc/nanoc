@@ -2,7 +2,7 @@
 
 require_relative 'support/item_rep_collection_view_examples'
 
-describe Nanoc::PostCompileItemRepCollectionView do
+describe Nanoc::CompilationItemRepCollectionView do
   it_behaves_like 'an item rep collection view'
-  let(:expected_view_class) { Nanoc::PostCompileItemRepView }
+  let(:expected_view_class) { Nanoc::CompilationItemRepView }
 end

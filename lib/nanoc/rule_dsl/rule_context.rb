@@ -15,9 +15,9 @@ module Nanoc::RuleDSL
       @_executor = executor
 
       super({
-        item: Nanoc::ItemWithoutRepsView.new(rep.item, view_context),
-        rep: Nanoc::ItemRepView.new(rep, view_context),
-        item_rep: Nanoc::ItemRepView.new(rep, view_context),
+        item: Nanoc::BasicItemView.new(rep.item, view_context),
+        rep: Nanoc::BasicItemRepView.new(rep, view_context),
+        item_rep: Nanoc::BasicItemRepView.new(rep, view_context),
         items: Nanoc::ItemCollectionWithoutRepsView.new(site.items, view_context),
         layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
         config: Nanoc::ConfigView.new(site.config, view_context),

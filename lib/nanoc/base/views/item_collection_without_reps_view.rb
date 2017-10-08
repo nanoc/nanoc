@@ -4,7 +4,7 @@ module Nanoc
   class ItemCollectionWithoutRepsView < ::Nanoc::IdentifiableCollectionView
     # @api private
     def view_class
-      Nanoc::ItemWithoutRepsView
+      Nanoc::BasicItemView
     end
   end
 end

@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 module Nanoc
-  class PostCompileItemRepView < ::Nanoc::ItemRepView
+  class PostCompileItemRepView < ::Nanoc::BasicItemRepView
+    def item_view_class
+      Nanoc::PostCompileItemView
+    end
+
     def compiled_content(snapshot: nil)
       compilation_context = @context.compilation_context
       snapshot_contents = compilation_context.compiled_content_cache[unwrap]

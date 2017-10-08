@@ -44,9 +44,9 @@ module Nanoc::Int
       view_context = create_view_context(dependency_tracker)
 
       content_or_filename_assigns.merge(
-        item: Nanoc::ItemWithRepsView.new(rep.item, view_context),
-        rep: Nanoc::ItemRepView.new(rep, view_context),
-        item_rep: Nanoc::ItemRepView.new(rep, view_context),
+        item: Nanoc::CompilationItemView.new(rep.item, view_context),
+        rep: Nanoc::CompilationItemRepView.new(rep, view_context),
+        item_rep: Nanoc::CompilationItemRepView.new(rep, view_context),
         items: Nanoc::ItemCollectionWithRepsView.new(@site.items, view_context),
         layouts: Nanoc::LayoutCollectionView.new(@site.layouts, view_context),
         config: Nanoc::ConfigView.new(@site.config, view_context),
