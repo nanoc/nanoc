@@ -2,6 +2,11 @@
 
 module Nanoc
   class CompilationItemRepView < ::Nanoc::BasicItemRepView
+    # @abstract
+    def item_view_class
+      Nanoc::CompilationItemView
+    end
+
     # Returns the item rep’s raw path. It includes the path to the output
     # directory and the full filename.
     #

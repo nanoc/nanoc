@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 shared_examples 'an item rep view' do
+  # needs expected_item_view_class
+
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
       reps:                Nanoc::Int::ItemRepRepo.new,
@@ -286,7 +288,7 @@ shared_examples 'an item rep view' do
     subject { view.item }
 
     it 'returns an item view' do
-      expect(subject).to be_a(Nanoc::CompilationItemView)
+      expect(subject).to be_a(expected_item_view_class)
     end
 
     it 'returns an item view with the right context' do

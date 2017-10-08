@@ -39,8 +39,6 @@ module Nanoc
     #
     # @return [Nanoc::BasicItemRepCollectionView]
     def reps
-      # FIXME: dedup into BasicCompilationItemView and CompilationCompilationItemView
-
       Nanoc::CompilationItemRepCollectionView.new(@context.reps[unwrap], @context)
     end
   end

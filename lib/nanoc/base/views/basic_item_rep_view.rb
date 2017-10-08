@@ -8,6 +8,11 @@ module Nanoc
       @item_rep = item_rep
     end
 
+    # @abstract
+    def item_view_class
+      Nanoc::BasicItemView
+    end
+
     # @api private
     def unwrap
       @item_rep
@@ -58,7 +63,7 @@ module Nanoc
     #
     # @return [Nanoc::CompilationItemView]
     def item
-      Nanoc::CompilationItemView.new(@item_rep.item, @context)
+      item_view_class.new(@item_rep.item, @context)
     end
 
     # @api private
