@@ -13,6 +13,7 @@ require_relative 'views/basic_item_rep_view'
 require_relative 'views/basic_item_rep_collection_view'
 
 require_relative 'views/compilation_item_rep_view'
+require_relative 'views/compilation_item_rep_collection_view'
 
 require_relative 'views/config_view'
 require_relative 'views/identifiable_collection_view'

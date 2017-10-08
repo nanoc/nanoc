@@ -203,7 +203,7 @@ describe Nanoc::ItemWithRepsView do
 
     it 'returns a proper item rep collection' do
       expect(subject.size).to eq(2)
-      expect(subject.class).to eql(Nanoc::BasicItemRepCollectionView)
+      expect(subject.class).to eql(Nanoc::CompilationItemRepCollectionView)
     end
 
     it 'returns a view with the right context' do

@@ -141,7 +141,5 @@ end
 
 describe Nanoc::BasicItemRepCollectionView do
   it_behaves_like 'an item rep collection view'
-  let(:expected_view_class) { Nanoc::CompilationItemRepView }
-
-  # FIXME: dedup into BasicBasicItemRepCollectionView and CompilationBasicItemRepCollectionView
+  let(:expected_view_class) { Nanoc::BasicItemRepView }
 end
