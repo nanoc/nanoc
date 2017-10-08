@@ -286,7 +286,7 @@ shared_examples 'an item rep view' do
     subject { view.item }
 
     it 'returns an item view' do
-      expect(subject).to be_a(Nanoc::ItemWithRepsView)
+      expect(subject).to be_a(Nanoc::CompilationItemView)
     end
 
     it 'returns an item view with the right context' do

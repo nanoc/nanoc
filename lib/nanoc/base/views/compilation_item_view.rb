@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  class ItemWithRepsView < ::Nanoc::ItemWithoutRepsView
+  class CompilationItemView < ::Nanoc::BasicItemView
     # Returns the compiled content.
     #
     # @param [String] rep The name of the representation
@@ -39,7 +39,7 @@ module Nanoc
     #
     # @return [Nanoc::BasicItemRepCollectionView]
     def reps
-      # FIXME: dedup into BasicItemWithRepsView and CompilationItemWithRepsView
+      # FIXME: dedup into BasicCompilationItemView and CompilationCompilationItemView
 
       Nanoc::CompilationItemRepCollectionView.new(@context.reps[unwrap], @context)
     end

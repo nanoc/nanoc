@@ -42,7 +42,7 @@ module Nanoc
       #
       # @param [Nanoc::Identifier, String] identifier This item's identifier
       #
-      # @return [Nanoc::ItemWithRepsView] A view for the newly created item
+      # @return [Nanoc::CompilationItemView] A view for the newly created item
       def create_item(content, attributes, identifier)
         item = Nanoc::Int::Item.new(content, attributes, identifier)
         @items = @items.add(item)
@@ -57,7 +57,7 @@ module Nanoc
       #
       # @param [Nanoc::Identifier, String] identifier This layout's identifier
       #
-      # @return [Nanoc::ItemWithRepsView] A view for the newly created layout
+      # @return [Nanoc::CompilationItemView] A view for the newly created layout
       def create_layout(content, attributes, identifier)
         layout = Nanoc::Int::Layout.new(content, attributes, identifier)
         @layouts = @layouts.add(layout)
@@ -66,7 +66,7 @@ module Nanoc
 
       # Creates a new representation for the given item.
       #
-      # @param [Nanoc::ItemWithRepsView] item The item to create a represetation for
+      # @param [Nanoc::CompilationItemView] item The item to create a represetation for
       #
       # @param [String] path The path of the `:last` snapshot of this item representation
       # @param [Symbol] rep The rep name to create
@@ -97,7 +97,7 @@ module Nanoc
         assigns[:config]
       end
 
-      # @return [Nanoc::ItemWithRepsView, nil]
+      # @return [Nanoc::CompilationItemView, nil]
       def item
         assigns[:item]
       end
@@ -191,7 +191,7 @@ module Nanoc
         {
           config: Nanoc::MutableConfigView.new(@config, view_context),
           item_rep: @item_rep ? Nanoc::CompilationItemRepView.new(@item_rep, view_context) : nil,
-          item: @item ? Nanoc::ItemWithRepsView.new(@item, view_context) : nil,
+          item: @item ? Nanoc::CompilationItemView.new(@item, view_context) : nil,
           items: Nanoc::ItemCollectionWithRepsView.new(@items, view_context),
           layouts: Nanoc::LayoutCollectionView.new(@layouts, view_context),
           _erbout: @erbout,

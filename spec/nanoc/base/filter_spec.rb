@@ -82,7 +82,7 @@ describe Nanoc::Filter do
     let(:item_views) { [item_view] }
 
     let(:item) { Nanoc::Int::Item.new('foo', {}, '/stuff.md') }
-    let(:item_view) { Nanoc::ItemWithRepsView.new(item, view_context) }
+    let(:item_view) { Nanoc::CompilationItemView.new(item, view_context) }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
     let(:view_context) do
