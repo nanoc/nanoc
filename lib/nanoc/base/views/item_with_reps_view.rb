@@ -37,9 +37,9 @@ module Nanoc
 
     # Returns the representations of this item.
     #
-    # @return [Nanoc::ItemRepCollectionView]
+    # @return [Nanoc::BasicItemRepCollectionView]
     def reps
-      Nanoc::ItemRepCollectionView.new(@context.reps[unwrap], @context)
+      Nanoc::BasicItemRepCollectionView.new(@context.reps[unwrap], @context)
     end
   end
 end

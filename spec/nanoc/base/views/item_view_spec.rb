@@ -203,7 +203,7 @@ describe Nanoc::ItemWithRepsView do
 
     it 'returns a proper item rep collection' do
       expect(subject.size).to eq(2)
-      expect(subject.class).to eql(Nanoc::ItemRepCollectionView)
+      expect(subject.class).to eql(Nanoc::BasicItemRepCollectionView)
     end
 
     it 'returns a view with the right context' do
@@ -285,7 +285,7 @@ describe Nanoc::ItemWithRepsView do
       let(:params) { { rep: :other } }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::ItemRepCollectionView::NoSuchItemRepError)
+        expect { subject }.to raise_error(Nanoc::BasicItemRepCollectionView::NoSuchItemRepError)
       end
     end
   end
@@ -350,7 +350,7 @@ describe Nanoc::ItemWithRepsView do
       let(:params) { { rep: :other } }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::ItemRepCollectionView::NoSuchItemRepError)
+        expect { subject }.to raise_error(Nanoc::BasicItemRepCollectionView::NoSuchItemRepError)
       end
     end
   end

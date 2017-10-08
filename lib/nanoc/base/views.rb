@@ -10,6 +10,7 @@ require_relative 'views/view_context_for_shell'
 require_relative 'views/view'
 
 require_relative 'views/basic_item_rep_view'
+require_relative 'views/basic_item_rep_collection_view'
 
 require_relative 'views/compilation_item_rep_view'
 
@@ -19,7 +20,6 @@ require_relative 'views/item_without_reps_view'
 require_relative 'views/item_with_reps_view'
 require_relative 'views/item_collection_with_reps_view'
 require_relative 'views/item_collection_without_reps_view'
-require_relative 'views/item_rep_collection_view'
 require_relative 'views/layout_view'
 require_relative 'views/layout_collection_view'
 

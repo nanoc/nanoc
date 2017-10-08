@@ -94,7 +94,7 @@ shared_examples 'an item rep collection view' do
       let(:name) { 'foo' }
 
       it 'raises' do
-        expect { subject }.to raise_error(ArgumentError, 'expected ItemRepCollectionView#[] to be called with a symbol')
+        expect { subject }.to raise_error(ArgumentError, 'expected BasicItemRepCollectionView#[] to be called with a symbol')
       end
     end
 
@@ -102,7 +102,7 @@ shared_examples 'an item rep collection view' do
       let(:name) { 0 }
 
       it 'raises' do
-        expect { subject }.to raise_error(ArgumentError, 'expected ItemRepCollectionView#[] to be called with a symbol (you likely want `.reps[:default]` rather than `.reps[0]`)')
+        expect { subject }.to raise_error(ArgumentError, 'expected BasicItemRepCollectionView#[] to be called with a symbol (you likely want `.reps[:default]` rather than `.reps[0]`)')
       end
     end
   end
@@ -114,7 +114,7 @@ shared_examples 'an item rep collection view' do
       let(:name) { :donkey }
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::ItemRepCollectionView::NoSuchItemRepError)
+        expect { subject }.to raise_error(Nanoc::BasicItemRepCollectionView::NoSuchItemRepError)
       end
     end
 
@@ -139,9 +139,9 @@ shared_examples 'an item rep collection view' do
   end
 end
 
-describe Nanoc::ItemRepCollectionView do
+describe Nanoc::BasicItemRepCollectionView do
   it_behaves_like 'an item rep collection view'
   let(:expected_view_class) { Nanoc::CompilationItemRepView }
 
-  # FIXME: dedup into BasicItemRepCollectionView and CompilationItemRepCollectionView
+  # FIXME: dedup into BasicBasicItemRepCollectionView and CompilationBasicItemRepCollectionView
 end
