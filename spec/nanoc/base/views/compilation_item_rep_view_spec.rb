@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require_relative 'support/item_rep_view_examples'
+
 describe Nanoc::CompilationItemRepView do
-  it_behaves_like 'a basic item rep view'
+  it_behaves_like 'an item rep view'
 
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(

@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+require_relative 'support/identifiable_collection_view_examples'
+require_relative 'support/mutable_identifiable_collection_view_examples'
+
 describe Nanoc::MutableItemCollectionView do
   let(:view_class) { Nanoc::MutableItemView }
   let(:collection_class) { Nanoc::Int::ItemCollection }
-  it_behaves_like 'an identifiable collection'
-  it_behaves_like 'a mutable identifiable collection'
+  it_behaves_like 'an identifiable collection view'
+  it_behaves_like 'a mutable identifiable collection view'
 
   let(:config) do
     { string_pattern_type: 'glob' }

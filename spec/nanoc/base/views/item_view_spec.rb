@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'support/document_view_examples'
+
 describe Nanoc::ItemWithRepsView do
   let(:entity_class) { Nanoc::Int::Item }
   let(:other_view_class) { Nanoc::LayoutView }
