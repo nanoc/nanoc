@@ -12,8 +12,3 @@
 Lint/UnusedMethodArgument:
   Exclude:
     - 'lib/nanoc/rule_dsl/action_provider.rb'
-
-# Offense count: 1
-Style/DateTime:
-  Exclude:
-    - 'spec/nanoc/helpers/blogging_spec.rb'
