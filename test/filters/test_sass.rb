@@ -109,7 +109,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
   def test_recompile_includes
     if_have 'sass' do
-      with_site do |site|
+      with_site do |_site|
         # Create two Sass files
         Dir['content/*'].each { |i| FileUtils.rm(i) }
         File.open('content/a.sass', 'w') do |io|
@@ -164,7 +164,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
   def test_recompile_includes_with_underscore_without_extension
     if_have 'sass' do
-      with_site do |site|
+      with_site do |_site|
         # Create two Sass files
         Dir['content/*'].each { |i| FileUtils.rm(i) }
         File.open('content/a.sass', 'w') do |io|
@@ -219,7 +219,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
   def test_recompile_includes_with_relative_path
     if_have 'sass', 'compass' do
-      with_site do |site|
+      with_site do |_site|
         # Write compass config
         FileUtils.mkdir_p('compass')
         File.open('compass/config.rb', 'w') do |io|

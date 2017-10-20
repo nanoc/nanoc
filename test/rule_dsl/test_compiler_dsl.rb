@@ -54,7 +54,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   end
 
   def test_postprocessor_modified_method
-    with_site do |site|
+    with_site do |_site|
       # Create rules
       File.open('Rules', 'w') do |io|
         io.write <<~EOS
@@ -80,7 +80,7 @@ EOS
   end
 
   def test_include_rules
-    with_site(legacy: false) do |site|
+    with_site(legacy: false) do |_site|
       # Create a bonus rules file
       File.write(
         'more_rules.rb',
