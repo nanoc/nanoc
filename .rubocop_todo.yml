@@ -8,14 +8,6 @@
 
 # Offense count: 3
 # Cop supports --auto-correct.
-# Configuration parameters: Include, TreatCommentsAsGroupSeparators.
-# Include: **/*.gemspec
-Gemspec/OrderedDependencies:
-  Exclude:
-    - 'nanoc.gemspec'
-
-# Offense count: 3
-# Cop supports --auto-correct.
 Lint/UnneededRequireStatement:
   Exclude:
     - 'lib/nanoc.rb'
