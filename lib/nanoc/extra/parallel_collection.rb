@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'thread'
-
 module Nanoc::Extra
   # @api private
   class ParallelCollection
