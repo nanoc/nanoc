@@ -53,7 +53,7 @@ module Nanoc::RuleDSL
         Nanoc::Int::InMemDataSource.new(ctx.items.unwrap, ctx.layouts.unwrap)
     end
 
-    def postprocess(site, compiler, reps)
+    def postprocess(site, compiler)
       dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
 
       res = compiler.run_until_reps_built

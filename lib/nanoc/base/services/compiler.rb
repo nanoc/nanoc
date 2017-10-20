@@ -78,7 +78,7 @@ module Nanoc::Int
       run_stage(prune_stage(reps))
       run_stage(compile_reps_stage(action_sequences, reps))
       run_stage(store_post_compilation_state_stage)
-      run_stage(postprocess_stage(reps), self)
+      run_stage(postprocess_stage, self)
     ensure
       run_stage(cleanup_stage)
     end
@@ -191,11 +191,10 @@ module Nanoc::Int
       )
     end
 
-    def postprocess_stage(reps)
+    def postprocess_stage
       @_postprocess_stage ||= Stages::Postprocess.new(
         action_provider: @action_provider,
         site: @site,
-        reps: reps,
       )
     end
 

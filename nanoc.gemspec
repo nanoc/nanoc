@@ -22,12 +22,12 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.3.0'
 
+  s.add_runtime_dependency('addressable', '~> 2.5')
   s.add_runtime_dependency('cri', '~> 2.8')
+  s.add_runtime_dependency('ddplugin', '~> 1.0')
   s.add_runtime_dependency('hamster', '~> 3.0')
   s.add_runtime_dependency('ref', '~> 2.0')
-  s.add_runtime_dependency('ddplugin', '~> 1.0')
-  s.add_runtime_dependency('addressable', '~> 2.5')
 
-  s.add_development_dependency('bundler', '>= 1.7.10', '< 2.0')
   s.add_development_dependency('appraisal', '~> 2.1')
+  s.add_development_dependency('bundler', '>= 1.7.10', '< 2.0')
 end

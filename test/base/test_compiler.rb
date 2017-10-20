@@ -4,7 +4,7 @@ require 'helper'
 
 class Nanoc::Int::CompilerTest < Nanoc::TestCase
   def test_compile_rep_should_write_proper_snapshots_real
-    with_site do |site|
+    with_site do |_site|
       File.write('content/moo.txt', '<%= 1 %> <%%= 2 %> <%%%= 3 %>')
       File.write('layouts/default.erb', 'head <%= yield %> foot')
 
@@ -58,7 +58,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_with_one_rep
-    with_site do |site|
+    with_site do |_site|
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
 
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
@@ -71,7 +71,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_with_two_independent_reps
-    with_site do |site|
+    with_site do |_site|
       File.open('content/foo.html', 'w') { |io| io.write('o hai') }
       File.open('content/bar.html', 'w') { |io| io.write('o bai') }
 
@@ -87,7 +87,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_with_two_dependent_reps
-    with_site(compilation_rule_content: 'filter :erb') do |site|
+    with_site(compilation_rule_content: 'filter :erb') do |_site|
       File.open('content/foo.html', 'w') do |io|
         io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>!!!')
       end
@@ -107,7 +107,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_compile_with_two_mutually_dependent_reps
-    with_site(compilation_rule_content: 'filter :erb') do |site|
+    with_site(compilation_rule_content: 'filter :erb') do |_site|
       File.open('content/foo.html', 'w') do |io|
         io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>')
       end
@@ -204,7 +204,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_include_compiled_content_of_active_item_at_previous_snapshot
-    with_site do |site|
+    with_site do |_site|
       # Create item
       File.open('content/index.html', 'w') do |io|
         io.write('[<%= @item.compiled_content(:snapshot => :aaa) %>]')
@@ -235,7 +235,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_mutually_include_compiled_content_at_previous_snapshot
-    with_site do |site|
+    with_site do |_site|
       # Create items
       File.open('content/a.html', 'w') do |io|
         io.write('[<%= @items.find { |i| i.identifier == "/z/" }.compiled_content(:snapshot => :guts) %>]')
@@ -269,7 +269,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_layout_with_extra_filter_args
-    with_site do |site|
+    with_site do |_site|
       # Create item
       File.open('content/index.html', 'w') do |io|
         io.write('This is <%= @foo %>.')
@@ -298,7 +298,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_change_routing_rule_and_recompile
-    with_site do |site|
+    with_site do |_site|
       # Create items
       File.open('content/a.html', 'w') do |io|
         io.write('<h1>A</h1>')
@@ -352,7 +352,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_rep_assigns
-    with_site do |site|
+    with_site do |_site|
       # Create item
       File.open('content/index.html', 'w') do |io|
         io.write('@rep.name = <%= @rep.name %> - @item_rep.name = <%= @item_rep.name %>')
@@ -406,7 +406,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
   end
 
   def test_tmp_text_items_are_removed_after_compilation
-    with_site do |site|
+    with_site do |_site|
       # Create item
       File.open('content/index.html', 'w') do |io|
         io.write('stuff')
