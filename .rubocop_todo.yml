@@ -17,17 +17,3 @@ Lint/UnusedMethodArgument:
 Style/DateTime:
   Exclude:
     - 'spec/nanoc/helpers/blogging_spec.rb'
-
-# Offense count: 19
-# Cop supports --auto-correct.
-Style/StderrPuts:
-  Exclude:
-    - 'lib/nanoc/cli.rb'
-    - 'lib/nanoc/cli/command_runner.rb'
-    - 'lib/nanoc/cli/commands/deploy.rb'
-    - 'lib/nanoc/cli/commands/prune.rb'
-    - 'lib/nanoc/cli/commands/view.rb'
-    - 'lib/nanoc/cli/error_handler.rb'
-    - 'lib/nanoc/extra/jruby_nokogiri_warner.rb'
-    - 'lib/nanoc/filters/kramdown.rb'
-    - 'scripts/release'

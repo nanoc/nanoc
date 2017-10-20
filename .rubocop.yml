@@ -167,3 +167,8 @@ Style/GuardClause:
 # Used for “undo work, whatever error happens”
 Lint/RescueWithoutErrorClass:
   Enabled: false
+
+# For the sake of consistency, it makes the most sense to retain $stderr.puts
+# when used in situations where $stderr.flush, $stderr.print, … are also used.
+Style/StderrPuts:
+  Enabled: false
