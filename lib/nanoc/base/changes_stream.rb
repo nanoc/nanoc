@@ -34,7 +34,7 @@ module Nanoc
     end
 
     def stop
-      @listener.to_stop.call
+      @listener&.to_stop&.call
     end
 
     def map
