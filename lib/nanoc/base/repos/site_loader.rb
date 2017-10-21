@@ -19,12 +19,7 @@ module Nanoc::Int
       Nanoc::Int::ConfigLoader.cwd_is_nanoc_site?
     end
 
-    private
-
-    def site_from_config(config)
-      code_snippets = code_snippets_from_config(config)
-      code_snippets.each(&:load)
-
+    def gen_data_source_for_config(config)
       data_sources_to_aggregate =
         with_data_sources(config) do |data_sources|
           data_sources.map do |ds|
@@ -32,7 +27,16 @@ module Nanoc::Int
           end
         end
 
-      data_source = Nanoc::Int::AggregateDataSource.new(data_sources_to_aggregate, config)
+      Nanoc::Int::AggregateDataSource.new(data_sources_to_aggregate, config)
+    end
+
+    private
+
+    def site_from_config(config)
+      code_snippets = code_snippets_from_config(config)
+      code_snippets.each(&:load)
+
+      data_source = gen_data_source_for_config(config)
 
       Nanoc::Int::Site.new(
         config: config,
