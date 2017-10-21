@@ -10,6 +10,7 @@ require 'nanoc'
 require 'nanoc/cli'
 require 'nanoc/spec'
 
+require 'ddbuffer'
 require 'timecop'
 require 'rspec/its'
 require 'fuubar'

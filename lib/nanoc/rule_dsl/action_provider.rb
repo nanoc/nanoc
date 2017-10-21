@@ -50,7 +50,7 @@ module Nanoc::RuleDSL
       end
 
       site.data_source =
-        Nanoc::Int::InMemDataSource.new(ctx.items.unwrap, ctx.layouts.unwrap)
+        Nanoc::Int::InMemDataSource.new(ctx.items.unwrap, ctx.layouts.unwrap, site.data_source)
     end
 
     def postprocess(site, compiler)

@@ -17,5 +17,13 @@ module Nanoc::Int
     def layouts
       @data_source.layouts.map { |d| d.with_identifier_prefix(@layouts_prefix) }
     end
+
+    def item_changes
+      @data_source.item_changes
+    end
+
+    def layout_changes
+      @data_source.layout_changes
+    end
   end
 end

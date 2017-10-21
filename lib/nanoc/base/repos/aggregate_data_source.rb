@@ -22,5 +22,13 @@ module Nanoc::Int
         Nanoc::Int::LayoutCollection.new(@config, objs)
       end
     end
+
+    def item_changes
+      SlowEnumeratorTools.merge(@data_sources.map(&:item_changes))
+    end
+
+    def layout_changes
+      SlowEnumeratorTools.merge(@data_sources.map(&:layout_changes))
+    end
   end
 end

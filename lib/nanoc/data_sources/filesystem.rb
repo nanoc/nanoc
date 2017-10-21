@@ -74,6 +74,31 @@ module Nanoc::DataSources
       load_objects(layouts_dir_name, Nanoc::Int::Layout)
     end
 
+    def item_changes
+      changes_for_dir(content_dir_name)
+    end
+
+    def layout_changes
+      changes_for_dir(layouts_dir_name)
+    end
+
+    def changes_for_dir(dir)
+      require 'listen'
+
+      Nanoc::ChangesStream.new do |cl|
+        listener =
+          Listen.to(dir, latency: 0.0, wait_for_delay: 0.0) do |_modifieds, _addeds, _deleteds|
+            cl.unknown
+          end
+
+        listener.start
+
+        cl.to_stop { listener.stop }
+
+        sleep
+      end
+    end
+
     protected
 
     class ProtoDocument

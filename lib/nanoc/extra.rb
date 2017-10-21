@@ -16,6 +16,7 @@ module Nanoc::Extra
 end
 
 require_relative 'extra/link_collector.rb'
+require_relative 'extra/live_recompiler'
 require_relative 'extra/piper'
 require_relative 'extra/jruby_nokogiri_warner'
 require_relative 'extra/core_ext'

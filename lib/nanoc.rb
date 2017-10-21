@@ -23,6 +23,7 @@ require 'hamster'
 require 'ref'
 require 'ddplugin'
 require 'addressable'
+require 'slow_enumerator_tools'
 
 # Load general requirements
 require 'cgi'

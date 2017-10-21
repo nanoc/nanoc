@@ -45,6 +45,7 @@ Lint/NestedMethodDefinition:
 Style/GlobalVars:
   Exclude:
     - 'test/**/*.rb'
+    - 'spec/**/*.rb'
 
 
 

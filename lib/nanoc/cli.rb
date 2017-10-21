@@ -113,7 +113,12 @@ module Nanoc::CLI
     # Add other commands
     cmd_filenames = Dir[__dir__ + '/cli/commands/*.rb']
     cmd_filenames.each do |cmd_filename|
-      next if File.basename(cmd_filename, '.rb') == 'nanoc'
+      basename = File.basename(cmd_filename, '.rb')
+
+      next if basename == 'nanoc'
+
+      next if basename == 'live' && !Nanoc::Feature.enabled?(Nanoc::Feature::LIVE_CMD)
+
       cmd = load_command_at(cmd_filename)
       add_command(cmd)
     end
