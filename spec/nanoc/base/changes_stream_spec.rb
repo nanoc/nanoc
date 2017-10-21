@@ -38,6 +38,7 @@ describe Nanoc::ChangesStream do
 
     example do
       DDBuffer.new(1).call(simple_stream)
+      sleep 0.1
       expect { simple_stream.stop }.to change { $changes_stream_stopped }.from(nil).to(true)
     end
   end
