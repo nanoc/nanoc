@@ -103,6 +103,14 @@ module Nanoc::Live
       puts
     end
 
+    def notify_success
+      Nanoc::Live::Notifier.instance.notify_success
+    end
+
+    def notify_error
+      Nanoc::Live::Notifier.instance.notify_error
+    end
+
     def gen_lib_changes
       Nanoc::ChangesStream.new do |cl|
         opts = {

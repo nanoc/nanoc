@@ -5,6 +5,10 @@ describe Nanoc::Live::LiveRecompiler, site: true, stdio: true do
     Nanoc::CLI::ErrorHandler.enable
   end
 
+  it 'has the proper path to the Nanoc icon' do
+    expect(File.file?(Nanoc::Live::LiveRecompiler::ICON_PATH)).to be(true)
+  end
+
   it 'detects content changes' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
