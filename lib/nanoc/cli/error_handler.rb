@@ -238,12 +238,11 @@ module Nanoc::CLI
 
     def write_section_header(stream, title, verbose: false)
       stream.puts
+
       if verbose
         stream.puts '===== ' + title.upcase + ':'
-      else
-        stream.puts "\e[1m\e[31m" + title + ':' + "\e[0m"
+        stream.puts
       end
-      stream.puts
     end
 
     def write_error_message(stream, error, verbose: false)
@@ -251,7 +250,11 @@ module Nanoc::CLI
 
       error = unwrap_error(error)
 
-      stream.puts "#{error.class}: #{error.message}"
+      message = "#{error.class}: #{error.message}"
+      unless verbose
+        message = "\e[1m\e[31m" + message + "\e[0m"
+      end
+      stream.puts message
       resolution = resolution_for(error)
       stream.puts resolution.to_s if resolution
     end
