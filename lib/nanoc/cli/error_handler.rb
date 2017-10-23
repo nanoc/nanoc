@@ -118,6 +118,9 @@ module Nanoc::CLI
       write_error_message(stream, error)
       write_item_rep(stream, error)
       write_stack_trace(stream, error)
+
+      stream.puts
+      stream.puts 'A detailed crash log has been written to ./crash.log.'
     end
 
     # Writes a verbose representation of the error on the given stream.
@@ -271,14 +274,6 @@ module Nanoc::CLI
     def write_stack_trace(stream, error, verbose: false)
       write_section_header(stream, 'Stack trace', verbose: verbose)
       StackTraceWriter.new(stream).write(unwrap_error(error), verbose: verbose)
-    end
-
-    def write_issue_link(stream, _params = {})
-      stream.puts
-      stream.puts 'If you believe this is a bug in Nanoc, please do report it at'
-      stream.puts '-> https://github.com/nanoc/nanoc/issues/new <-'
-      stream.puts
-      stream.puts 'A detailed crash log has been written to ./crash.log.'
     end
 
     def write_version_information(stream, verbose: false)
