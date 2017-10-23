@@ -65,8 +65,7 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
   def test_write_item_rep
     stream = StringIO.new
     @handler.send(:write_item_rep, stream, new_wrapped_error(new_error), verbose: false)
-    assert_match(/^Item identifier: \/about\.md$/, stream.string)
-    assert_match(/^Item rep name:   :latex$/, stream.string)
+    assert_match(/^Current item: \/about\.md \(:latex representation\)$/, stream.string)
   end
 
   def test_resolution_for_wrapped

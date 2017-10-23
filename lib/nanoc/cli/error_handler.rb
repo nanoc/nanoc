@@ -265,8 +265,7 @@ module Nanoc::CLI
       write_section_header(stream, 'Item being compiled', verbose: verbose)
 
       item_rep = error.item_rep
-      stream.puts "Item identifier: #{item_rep.item.identifier}"
-      stream.puts "Item rep name:   #{item_rep.name.inspect}"
+      stream.puts "Current item: #{item_rep.item.identifier} (#{item_rep.name.inspect} representation)"
     end
 
     def write_stack_trace(stream, error, verbose: false)
