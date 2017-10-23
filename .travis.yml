@@ -13,9 +13,11 @@ env:
 matrix:
   fast_finish: true
   include:
+    - rvm: ruby-head
     - rvm: jruby-9.1.9.0
       env: DISABLE_NOKOGIRI=1
   allow_failures:
+    - rvm: ruby-head
     - rvm: jruby-9.1.9.0
       env: DISABLE_NOKOGIRI=1
 script:
