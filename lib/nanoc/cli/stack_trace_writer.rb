@@ -15,7 +15,7 @@ module Nanoc::CLI
       end
 
       if !verbose && error.backtrace.size > count
-        @stream.puts "  ... #{error.backtrace.size - count} more lines omitted. See full crash log for details."
+        @stream.puts "  ... #{error.backtrace.size - count} lines omitted (see crash.log for details)"
       end
     end
   end

@@ -76,7 +76,7 @@ describe Nanoc::CLI::StackTraceWriter do
 
     it 'does not contain a see-more explanation' do
       subject
-      expect(io.string).to include(" more lines omitted. See full crash log for details.\n")
+      expect(io.string).to include(" lines omitted (see crash.log for details)\n")
     end
   end
 end
