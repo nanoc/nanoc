@@ -115,9 +115,15 @@ module Nanoc::CLI
       stream.puts
       stream.puts 'Captain! We’ve been hit!'
 
-      write_error_message(stream, error)
-      write_item_rep(stream, error)
-      write_stack_trace(stream, error)
+      if forwards_stack_trace?
+        write_stack_trace(stream, error)
+        write_error_message(stream, error)
+        write_item_rep(stream, error)
+      else
+        write_error_message(stream, error)
+        write_item_rep(stream, error)
+        write_stack_trace(stream, error)
+      end
 
       stream.puts
       stream.puts 'A detailed crash log has been written to ./crash.log.'
@@ -141,6 +147,14 @@ module Nanoc::CLI
       write_installed_gems(stream, verbose: true)
       write_gemfile_lock(stream, verbose: true)
       write_load_paths(stream, verbose: true)
+    end
+
+    # @api private
+    def forwards_stack_trace?
+      feature_enabled = Nanoc::Feature.enabled?(Nanoc::Feature::SENSIBLE_STACK_TRACES)
+      ruby_2_5_used = ruby_version.start_with?('2.5')
+
+      feature_enabled || ruby_2_5_used
     end
 
     protected
@@ -239,6 +253,10 @@ module Nanoc::CLI
       defined?(Bundler) && Bundler::SharedHelpers.in_bundle?
     end
 
+    def ruby_version
+      RUBY_VERSION
+    end
+
     def write_section_header(stream, title, verbose: false)
       stream.puts
 
@@ -273,7 +291,9 @@ module Nanoc::CLI
 
     def write_stack_trace(stream, error, verbose: false)
       write_section_header(stream, 'Stack trace', verbose: verbose)
-      StackTraceWriter.new(stream).write(unwrap_error(error), verbose: verbose)
+
+      writer = StackTraceWriter.new(stream, forwards: forwards_stack_trace?)
+      writer.write(unwrap_error(error), verbose: verbose)
     end
 
     def write_version_information(stream, verbose: false)
