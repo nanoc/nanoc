@@ -221,6 +221,9 @@ module Nanoc::CLI
           'be modified once compilation has started. Such data includes ' \
           'content and attributes of items and layouts, and filter arguments.'
         end
+      when Errno::EADDRINUSE
+        'There already is a server running. Either shut down that one, or ' \
+        'specify a different port to run this server on.'
       end
     end
 
