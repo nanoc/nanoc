@@ -64,13 +64,16 @@ module Nanoc::CLI
 
       # Run
       yield
-    rescue Nanoc::Int::Errors::GenericTrivial => e
-      $stderr.puts "Error: #{e.message}"
-      exit(1)
     rescue Interrupt
       exit(1)
     rescue StandardError, ScriptError => e
-      print_error(e)
+      if trivial?(e)
+        $stderr.puts "Error: #{e.message}"
+        resolution = resolution_for(e)
+        $stderr.puts resolution if resolution
+      else
+        print_error(e)
+      end
       exit(1)
     end
 
@@ -190,6 +193,15 @@ module Nanoc::CLI
       'sass'           => 'sass',
       'w3c_validators' => 'w3c_validators',
     }.freeze
+
+    def trivial?(error)
+      case error
+      when Nanoc::Int::Errors::GenericTrivial, Errno::EADDRINUSE
+        true
+      else
+        false
+      end
+    end
 
     # Attempts to find a resolution for the given error, or nil if no
     # resolution can be automatically obtained.
