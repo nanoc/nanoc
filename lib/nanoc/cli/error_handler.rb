@@ -112,17 +112,12 @@ module Nanoc::CLI
     #
     # @return [void]
     def write_compact_error(error, stream)
-      # Header
       stream.puts
       stream.puts 'Captain! We’ve been hit!'
 
-      # Sections
       write_error_message(stream, error)
       write_item_rep(stream, error)
       write_stack_trace(stream, error)
-
-      # Issue link
-      write_issue_link(stream)
     end
 
     # Writes a verbose representation of the error on the given stream.
@@ -133,10 +128,8 @@ module Nanoc::CLI
     #
     # @return [void]
     def write_verbose_error(error, stream)
-      # Header
       stream.puts "Crashlog created at #{Time.now}"
 
-      # Sections
       write_error_message(stream, error, verbose: true)
       write_item_rep(stream, error, verbose: true)
       write_stack_trace(stream, error, verbose: true)
