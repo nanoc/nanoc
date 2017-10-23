@@ -20,7 +20,7 @@ module Nanoc::CLI::Commands
       load_adsf
       require 'rack'
 
-      @site = load_site
+      config = Nanoc::Int::ConfigLoader.new.new_from_cwd
 
       # Set options
       options_for_rack = {
@@ -40,16 +40,15 @@ module Nanoc::CLI::Commands
       end
 
       # Build app
-      site = @site
       app = Rack::Builder.new do
         use Rack::CommonLogger
         use Rack::ShowExceptions
         use Rack::Lint
         use Rack::Head
         use Adsf::Rack::IndexFileFinder,
-            root: site.config[:output_dir],
-            index_filenames: site.config[:index_filenames]
-        run Rack::File.new(site.config[:output_dir])
+            root: config[:output_dir],
+            index_filenames: config[:index_filenames]
+        run Rack::File.new(config[:output_dir])
       end.to_app
 
       # Print a link
