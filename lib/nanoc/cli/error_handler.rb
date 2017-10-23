@@ -275,16 +275,7 @@ module Nanoc::CLI
 
     def write_stack_trace(stream, error, verbose: false)
       write_section_header(stream, 'Stack trace', verbose: verbose)
-
-      error = unwrap_error(error)
-
-      count = verbose ? -1 : 10
-      error.backtrace[0...count].each_with_index do |item, index|
-        stream.puts "  #{index}. #{item}"
-      end
-      if !verbose && error.backtrace.size > count
-        stream.puts "  ... #{error.backtrace.size - count} more lines omitted. See full crash log for details."
-      end
+      StackTraceWriter.new(stream).write(unwrap_error(error), verbose: verbose)
     end
 
     def write_issue_link(stream, _params = {})

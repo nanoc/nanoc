@@ -20,6 +20,7 @@ require_relative 'cli/command_runner'
 require_relative 'cli/cleaning_stream'
 require_relative 'cli/stream_cleaners'
 require_relative 'cli/error_handler'
+require_relative 'cli/stack_trace_writer'
 
 require_relative 'cli/commands/compile_listeners/abstract'
 require_relative 'cli/commands/compile_listeners/debug_printer'
