@@ -6,8 +6,6 @@ module Nanoc::Checking::Checks
     identifier :stale
 
     def run
-      require 'set'
-
       output_filenames.each do |f|
         next if pruner.filename_excluded?(f)
         next if item_rep_paths.include?(f)

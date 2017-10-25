@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'uri'
-
 module Nanoc::Checking::Checks
   # A check that verifies that all internal links point to a location that exists.
   #

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'tempfile'
-
 describe Nanoc::Int::Checksummer::VerboseDigest do
   let(:digest) { described_class.new }
 

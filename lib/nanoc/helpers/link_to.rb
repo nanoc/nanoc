@@ -52,8 +52,6 @@ module Nanoc::Helpers
 
     # @return [String]
     def relative_path_to(target)
-      require 'pathname'
-
       # Find path
       if target.is_a?(String)
         path = target

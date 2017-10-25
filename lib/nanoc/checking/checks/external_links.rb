@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require 'net/http'
-require 'net/https'
-require 'timeout'
-require 'uri'
-
 module ::Nanoc::Checking::Checks
   # A validator that verifies that all external links point to a location that exists.
   #

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'singleton'
-
 module Nanoc::CLI
   # Nanoc::CLI::Logger is a singleton class responsible for generating
   # feedback in the terminal.

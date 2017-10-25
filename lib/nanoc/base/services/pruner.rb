@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'find'
-
 module Nanoc
   # Responsible for finding and deleting files in the site’s output directory
   # that are not managed by Nanoc.

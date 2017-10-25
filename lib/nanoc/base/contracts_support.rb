@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'singleton'
-
 module Nanoc::Int
   # @api private
   module ContractsSupport

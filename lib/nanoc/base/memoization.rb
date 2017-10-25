@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'weakref'
-
 module Nanoc::Int
   # Adds support for memoizing functions.
   #

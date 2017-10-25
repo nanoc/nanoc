@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'tmpdir'
-
 module Nanoc::Int
   # @api private
   class TempFilenameFactory

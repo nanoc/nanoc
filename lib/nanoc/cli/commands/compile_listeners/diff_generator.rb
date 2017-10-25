@@ -9,7 +9,6 @@ module Nanoc::CLI::Commands::CompileListeners
 
     # @see Listener#start
     def start
-      require 'tempfile'
       setup_diffs
       old_contents = {}
       Nanoc::Int::NotificationCenter.on(:will_write_rep, self) do |rep, path|
@@ -65,8 +64,6 @@ module Nanoc::CLI::Commands::CompileListeners
     end
 
     def diff_strings(a, b)
-      require 'open3'
-
       # Create files
       Tempfile.open('old') do |old_file|
         Tempfile.open('new') do |new_file|
