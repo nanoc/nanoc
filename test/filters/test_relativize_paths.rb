@@ -854,4 +854,34 @@ XML
     actual_content = filter.setup_and_run(raw_content, type: :html)
     assert_equal(expected_content, actual_content)
   end
+
+  def test_filter_nokogiri_save_with
+    if_have 'nokogiri' do
+      # Create filter with mock item
+      filter = Nanoc::Filters::RelativizePaths.new
+
+      # Mock item
+      filter.instance_eval do
+        @item_rep = Nanoc::Int::ItemRep.new(
+          Nanoc::Int::Item.new(
+            'content',
+            {},
+            '/foo/baz',
+          ),
+          :blah,
+        )
+        @item_rep.paths[:last] = ['/foo/baz/']
+      end
+
+      # Set content
+      raw_content = %(
+<td><span>some</span><span>moderately</span><span>long</span><span>content</span></td>
+)
+
+      # Test
+      nokogiri_save_options = Nokogiri::XML::Node::SaveOptions::DEFAULT_HTML & ~Nokogiri::XML::Node::SaveOptions::FORMAT
+      actual_content = filter.setup_and_run(raw_content.freeze, type: :html, nokogiri_save_options: nokogiri_save_options)
+      assert_equal(actual_content, raw_content)
+    end
+  end
 end
