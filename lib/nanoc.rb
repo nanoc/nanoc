@@ -19,15 +19,16 @@ module Nanoc
 end
 
 # Load external dependencies
+require 'addressable'
+require 'ddplugin'
 require 'hamster'
 require 'ref'
-require 'ddplugin'
-require 'addressable'
 require 'slow_enumerator_tools'
 
 # Load general requirements
 require 'cgi'
 require 'digest'
+require 'English'
 require 'fiber'
 require 'fileutils'
 require 'forwardable'
@@ -37,9 +38,8 @@ require 'set'
 require 'singleton'
 require 'tempfile'
 require 'time'
-require 'yaml'
 require 'uri'
-require 'English'
+require 'yaml'
 
 # Load Nanoc
 require 'nanoc/version'
