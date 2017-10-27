@@ -323,7 +323,17 @@ RSpec::Matchers.define :have_correct_yard_examples do |_name, *_expected_args|
   end
 
   failure_message do |_actual|
-    @failing_examples.map { |ex| "%s\nexpected to be\n    %s\nbut was\n    %s" % [ex[:input], ex[:expected].inspect, ex[:actual].inspect] }.join("\n\n---\n\n")
+    parts =
+      @failing_examples.map do |ex|
+        format(
+          "%s\nexpected to be\n    %s\nbut was\n    %s",
+          ex[:input],
+          ex[:expected].inspect,
+          ex[:actual].inspect,
+        )
+      end
+
+    parts.join("\n\n---\n\n")
   end
 end
 
