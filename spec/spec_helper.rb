@@ -14,6 +14,7 @@ require 'ddbuffer'
 require 'timecop'
 require 'rspec/its'
 require 'fuubar'
+require 'yard'
 
 Nanoc::CLI.setup
 
@@ -275,6 +276,51 @@ RSpec::Matchers.define :send_notification do |name, *expected_args|
 
   failure_message_when_negated do |_actual|
     "expected that proc would not send notification #{name.inspect} with args #{expected_args.inspect}"
+  end
+end
+
+LIB_DIR = File.expand_path(__dir__ + '/../lib')
+
+RSpec::Matchers.define :have_correct_yard_examples do |_name, *_expected_args|
+  match do |actual|
+    examples =
+      P(actual).tags(:example).flat_map do |example|
+        # Classify
+        lines = example.text.lines.map do |line|
+          [line =~ /^\s*# ?=>/ ? :result : :code, line]
+        end
+
+        # Join
+        pieces = []
+        lines.each do |line|
+          if !pieces.empty? && pieces.last.first == line.first
+            pieces.last.last << line.last
+          else
+            pieces << line
+          end
+        end
+        lines = pieces.map(&:last)
+
+        # Collect
+        lines.each_slice(2).to_a
+      end
+
+    b = binding
+    executed_examples = examples.map do |pair|
+      {
+        input:    pair.first,
+        expected: eval(pair.last.match(/# ?=>(.*)/)[1], b),
+        actual:   eval(pair.first, b),
+      }
+    end
+
+    @failing_examples = executed_examples.reject { |ex| ex[:expected] == ex[:actual] }
+
+    @failing_examples.empty?
+  end
+
+  failure_message do |_actual|
+    @failing_examples.map { |ex| "%s\nexpected to be\n    %s\nbut was\n    %s" % [ex[:input], ex[:expected].inspect, ex[:actual].inspect] }.join("\n\n---\n\n")
   end
 end
 
