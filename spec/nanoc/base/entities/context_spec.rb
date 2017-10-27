@@ -19,7 +19,8 @@ describe Nanoc::Int::Context do
   end
 
   it 'has correct examples' do
-    YARD.parse(LIB_DIR + '/nanoc/base/entities/context.rb')
-    expect('Nanoc::Int::Context#initialize').to have_correct_yard_examples
+    expect('Nanoc::Int::Context#initialize')
+      .to have_correct_yard_examples
+      .in_file('lib/nanoc/base/entities/context.rb')
   end
 end

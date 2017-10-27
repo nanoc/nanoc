@@ -279,9 +279,12 @@ RSpec::Matchers.define :send_notification do |name, *expected_args|
   end
 end
 
-LIB_DIR = File.expand_path(__dir__ + '/../lib')
-
 RSpec::Matchers.define :have_correct_yard_examples do |_name, *_expected_args|
+  chain :in_file do |file|
+    root_dir = File.expand_path(__dir__ + '/..')
+    YARD.parse(root_dir + '/' + file)
+  end
+
   match do |actual|
     examples =
       P(actual).tags(:example).flat_map do |example|
