@@ -142,6 +142,59 @@ describe Nanoc::Int::IdentifiableCollection do
       subject { identifiable_collection.reference }
       it { is_expected.to eql(expected_reference) }
     end
+
+    describe 'changing identifiers' do
+      let(:objects) do
+        [
+          Nanoc::Int::Item.new('Foo', {}, '/foo'),
+        ]
+      end
+
+      subject { objects[0].identifier = '/bar' }
+
+      it 'makes /foo nil' do
+        expect { subject }
+          .to change { identifiable_collection['/foo'] }
+          .from(objects[0])
+          .to(nil)
+      end
+
+      it 'makes /bar non-nil' do
+        expect { subject }
+          .to change { identifiable_collection['/bar'] }
+          .from(nil)
+          .to(objects[0])
+      end
+    end
+
+    describe '#each' do
+      let(:objects) do
+        [
+          Nanoc::Int::Item.new('Foo', {}, '/foo'),
+          Nanoc::Int::Item.new('Bar', {}, '/bar'),
+        ]
+      end
+
+      it 'loops' do
+        res = []
+        identifiable_collection.each { |i| res << i.identifier.to_s }
+        expect(res).to match_array(['/foo', '/bar'])
+      end
+    end
+
+    describe '#map' do
+      let(:objects) do
+        [
+          Nanoc::Int::Item.new('Foo', {}, '/foo'),
+          Nanoc::Int::Item.new('Bar', {}, '/bar'),
+        ]
+      end
+
+      it 'loops' do
+        res = identifiable_collection.map { |i| i.identifier.to_s }
+        expect(res).to match_array(['/foo', '/bar'])
+      end
+    end
   end
 
   describe Nanoc::Int::ItemCollection do
