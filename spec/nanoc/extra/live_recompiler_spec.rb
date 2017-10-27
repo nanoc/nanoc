@@ -18,6 +18,7 @@ describe Nanoc::Extra::LiveRecompiler, site: true, stdio: true do
     sleep 0.1 until File.file?('output/lol.html')
     expect(File.read('output/lol.html')).to eq('hej')
 
+    sleep 1.0 # HFS+ mtime resolution is 1s
     File.write('content/lol.html', 'bye')
     sleep 0.1 until File.read('output/lol.html') == 'bye'
 
@@ -43,6 +44,7 @@ describe Nanoc::Extra::LiveRecompiler, site: true, stdio: true do
     sleep 0.1 until File.file?('output/lol.html')
     expect(File.read('output/lol.html')).to eq('<%= "hej" %>')
 
+    sleep 1.0 # HFS+ mtime resolution is 1s
     File.write('Rules', <<~RULES)
       compile '/**/*' do
         filter :erb
@@ -81,6 +83,7 @@ describe Nanoc::Extra::LiveRecompiler, site: true, stdio: true do
     sleep 0.1 until File.file?('output/lol.html')
     expect(File.read('output/lol.html')).to eq('Oldz')
 
+    sleep 1.0 # HFS+ mtime resolution is 1s
     File.write('nanoc.yaml', 'site_name: Newz')
     sleep 0.1 until File.read('output/lol.html') == 'Newz'
 
@@ -115,6 +118,7 @@ describe Nanoc::Extra::LiveRecompiler, site: true, stdio: true do
     sleep 0.1 until File.file?('output/lol.html')
     expect(File.read('output/lol.html')).to eq('hi')
 
+    sleep 1.0 # HFS+ mtime resolution is 1s
     File.write('lib/lol.rb', 'def greeting; "yo"; end')
     sleep 0.1 until File.read('output/lol.html') == 'yo'
 
