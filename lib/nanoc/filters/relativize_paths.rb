@@ -61,14 +61,15 @@ module Nanoc::Filters
     end
 
     def relativize_html_like(content, params)
-      selectors  = params.fetch(:select, SELECTORS)
-      namespaces = params.fetch(:namespaces, {})
-      type       = params.fetch(:type)
+      selectors             = params.fetch(:select, SELECTORS)
+      namespaces            = params.fetch(:namespaces, {})
+      type                  = params.fetch(:type)
+      nokogiri_save_options = params.fetch(:nokogiri_save_options, nil)
 
       parser = parser_for(type)
       content = fix_content(content, type)
 
-      nokogiri_process(content, selectors, namespaces, parser, type)
+      nokogiri_process(content, selectors, namespaces, parser, type, nokogiri_save_options)
     end
 
     def parser_for(type)
@@ -101,7 +102,7 @@ module Nanoc::Filters
       end
     end
 
-    def nokogiri_process(content, selectors, namespaces, klass, type)
+    def nokogiri_process(content, selectors, namespaces, klass, type, nokogiri_save_options = nil)
       # Ensure that all prefixes are strings
       namespaces = namespaces.reduce({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
 
@@ -117,9 +118,9 @@ module Nanoc::Filters
 
       case type
       when :html5
-        doc.to_html
+        doc.to_html(save_with: nokogiri_save_options)
       else
-        doc.send("to_#{type}")
+        doc.send("to_#{type}", save_with: nokogiri_save_options)
       end
     end
 
