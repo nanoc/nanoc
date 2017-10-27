@@ -51,6 +51,37 @@ describe Nanoc::Int::DirectedGraph do
     end
   end
 
+  it 'has correct examples' do
+    expect('Nanoc::Int::DirectedGraph')
+      .to have_correct_yard_examples
+      .in_file('lib/nanoc/base/entities/directed_graph.rb')
+  end
+
+  describe '#vertices' do
+    subject { graph.vertices }
+
+    it { is_expected.to include('1') }
+    it { is_expected.not_to include('4') }
+  end
+
+  describe '#add_edge' do
+    subject { graph.add_edge('1', '4') }
+
+    it 'adds vertex' do
+      expect { subject }
+        .to change { graph.vertices.include?('4') }
+        .from(false)
+        .to(true)
+    end
+
+    it 'changes direct predecessors' do
+      expect { subject }
+        .to change { graph.direct_predecessors_of('4') }
+        .from([])
+        .to(['1'])
+    end
+  end
+
   describe '#props_for' do
     subject { graph.props_for('1', '2') }
 
@@ -145,6 +176,41 @@ describe Nanoc::Int::DirectedGraph do
         before { graph.add_edge('3', '1') }
         it { is_expected.to match_array(%w[1 2 3]) }
       end
+    end
+  end
+
+  describe '#delete_edges_to' do
+    before do
+      graph.add_edge('1', '2')
+      graph.add_edge('2', '1')
+      graph.add_edge('2', '3')
+      graph.add_edge('3', '2')
+      graph.add_edge('1', '3')
+      graph.add_edge('3', '1')
+    end
+
+    subject { graph.delete_edges_to('1') }
+
+    it 'deletes edges to 1' do
+      expect { subject }
+        .to change { graph.direct_predecessors_of('1') }
+        .from(%w[2 3])
+        .to([])
+    end
+
+    it 'keeps edges to 2' do
+      expect { subject }
+        .not_to change { graph.direct_predecessors_of('2') }
+    end
+
+    it 'keeps edges to 3' do
+      expect { subject }
+        .not_to change { graph.direct_predecessors_of('3') }
+    end
+
+    it 'keeps edges to 4' do
+      expect { subject }
+        .not_to change { graph.direct_predecessors_of('4') }
     end
   end
 
