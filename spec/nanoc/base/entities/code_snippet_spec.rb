@@ -47,5 +47,14 @@ describe Nanoc::Int::CodeSnippet do
           .to([true, false])
       end
     end
+
+    it 'defines at top level' do
+      @foo = 'meow'
+
+      code_snippet = Nanoc::Int::CodeSnippet.new("@foo = 'woof'", 'dog.rb')
+      code_snippet.load
+
+      expect(@foo).to eq('meow')
+    end
   end
 end
