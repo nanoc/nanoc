@@ -1,0 +1,12 @@
+.rspec-nanoc-live
+nanoc-live.gemspec
+nanoc-live.manifest
+
+lib/nanoc/live.rb
+lib/nanoc/live/version.rb
+lib/nanoc/live/command.rb
+lib/nanoc/live/live_recompiler.rb
+
+spec/nanoc/live/live_recompiler_spec.rb
+spec/spec_helper_nanoc_live.rb
+spec/spec_helper_common.rb

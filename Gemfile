@@ -2,7 +2,8 @@
 
 source 'https://rubygems.org'
 
-gemspec
+gemspec name: 'nanoc'
+gemspec name: 'nanoc-live'
 
 group :devel do
   gem 'codecov', require: false

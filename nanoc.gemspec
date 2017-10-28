@@ -13,6 +13,9 @@ ignored_files = %w[
   Guardfile
 ]
 
+gemspecs = Dir['nanoc-*.gemspec'].map { |fn| eval(File.read(fn), binding, fn) }
+plugin_files = gemspecs.flat_map(&:files).uniq.reject { |fn| fn =~ /spec_helper_common/ }
+
 Gem::Specification.new do |s|
   s.name        = 'nanoc'
   s.version     = Nanoc::VERSION
@@ -24,7 +27,8 @@ Gem::Specification.new do |s|
   s.email   = 'denis@stoneship.org'
   s.license = 'MIT'
 
-  s.files = `git ls-files -z`.split("\x0") - ignored_files
+  all_files = `git ls-files -z`.split("\x0")
+  s.files = all_files - plugin_files - ignored_files
   s.executables        = ['nanoc']
   s.require_paths      = ['lib']
 
