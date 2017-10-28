@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.8.11 (2017-10-28)
+
+Enhancements:
+
+* Added `:save_with` parameter to `relativize_paths` filter (#1237) [Gregory Pakosz]
+* Made error messages more compact and easier to read
+
 ## 4.8.10 (2017-10-08)
 
 Fixes:
