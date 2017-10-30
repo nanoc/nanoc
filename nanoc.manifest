@@ -326,6 +326,7 @@ spec/nanoc/base/services/dependency_tracker_spec.rb
 spec/nanoc/base/services/executor_spec.rb
 spec/nanoc/base/services/item_rep_router_spec.rb
 spec/nanoc/base/services/item_rep_selector_spec.rb
+spec/nanoc/base/services/notification_center_spec.rb
 spec/nanoc/base/services/outdatedness_checker_spec.rb
 spec/nanoc/base/services/outdatedness_rules_spec.rb
 spec/nanoc/base/services/pruner_spec.rb
@@ -467,7 +468,6 @@ spec/spec_helper.rb
 
 test/base/test_compiler.rb
 test/base/test_filter.rb
-test/base/test_notification_center.rb
 test/base/test_site.rb
 test/checking/checks/test_css.rb
 test/checking/checks/test_external_links.rb
