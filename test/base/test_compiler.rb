@@ -149,60 +149,6 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
     end
   end
 
-  def test_disallow_duplicate_routes
-    # Create site
-    Nanoc::CLI.run %w[create_site bar]
-
-    FileUtils.cd('bar') do
-      # Create routes
-      File.open('Rules', 'w') do |io|
-        io.write "compile '/**/*' do\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  '/index.html'\n"
-        io.write "end\n"
-      end
-
-      # Create files
-      File.write('content/foo.html', 'asdf')
-      File.write('content/bar.html', 'asdf')
-
-      # Create site
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      assert_raises(Nanoc::Int::ItemRepRouter::IdenticalRoutesError) do
-        site.compile
-      end
-    end
-  end
-
-  def test_disallow_multiple_snapshots_with_the_same_name
-    # Create site
-    Nanoc::CLI.run %w[create_site bar]
-
-    FileUtils.cd('bar') do
-      # Create routes
-      File.open('Rules', 'w') do |io|
-        io.write "compile '/**/*' do\n"
-        io.write "  snapshot :aaa\n"
-        io.write "  snapshot :aaa\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "route '/**/*' do\n"
-        io.write "  item.identifier.to_s\n"
-        io.write "end\n"
-        io.write "\n"
-        io.write "layout '/**/*', :erb\n"
-      end
-
-      # Compile
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      assert_raises Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName do
-        site.compile
-      end
-    end
-  end
-
   def test_include_compiled_content_of_active_item_at_previous_snapshot
     with_site do |_site|
       # Create item
