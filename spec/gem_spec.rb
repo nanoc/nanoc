@@ -2,9 +2,9 @@
 
 describe 'nanoc.gem', chdir: false, stdio: true do
   around do |ex|
-    Dir['nanoc-*.gem'].each { |f| FileUtils.rm(f) }
+    Dir['*.gem'].each { |f| FileUtils.rm(f) }
     ex.run
-    Dir['nanoc-*.gem'].each { |f| FileUtils.rm(f) }
+    Dir['*.gem'].each { |f| FileUtils.rm(f) }
   end
 
   subject do
@@ -14,7 +14,7 @@ describe 'nanoc.gem', chdir: false, stdio: true do
 
   it 'builds gem' do
     expect { subject }
-      .to change { Dir['**/*.gem'] }
+      .to change { Dir['*.gem'] }
       .from([])
       .to(include(match(/^nanoc-.*\.gem$/)))
   end
