@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nanoc::Int::NotificationCenter do
   it 'receives notification after subscribing' do
     ping_received = false
