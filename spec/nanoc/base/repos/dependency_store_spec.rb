@@ -14,6 +14,14 @@ describe Nanoc::Int::DependencyStore do
   let(:layouts) { Nanoc::Int::LayoutCollection.new(config, [layout_a, layout_b]) }
   let(:config) { Nanoc::Int::Configuration.new }
 
+  it 'is empty by default' do
+    expect(store.objects_causing_outdatedness_of(item_a)).to be_empty
+    expect(store.objects_causing_outdatedness_of(item_b)).to be_empty
+    expect(store.objects_causing_outdatedness_of(item_c)).to be_empty
+    expect(store.objects_causing_outdatedness_of(layout_a)).to be_empty
+    expect(store.objects_causing_outdatedness_of(layout_b)).to be_empty
+  end
+
   describe '#dependencies_causing_outdatedness_of' do
     context 'no dependencies' do
       it 'returns nothing for each' do
@@ -302,6 +310,29 @@ describe Nanoc::Int::DependencyStore do
       it 'ignores all other objects' do
         subject
         expect(other_items).to all(satisfy { |o| store.dependencies_causing_outdatedness_of(o).empty? })
+      end
+
+      context 'dependency on self' do
+        subject { store.record_dependency(source_obj, item_a) }
+
+        it 'does not create dependency on self' do
+          expect { subject }
+            .not_to change { store.objects_causing_outdatedness_of(source_obj) }
+        end
+      end
+
+      context 'two dependencies' do
+        subject do
+          store.record_dependency(source_obj, item_b)
+          store.record_dependency(source_obj, item_b)
+        end
+
+        it 'does not create duplicate dependencies' do
+          expect { subject }
+            .to change { store.objects_causing_outdatedness_of(source_obj) }
+            .from([])
+            .to([item_b])
+        end
       end
     end
 
