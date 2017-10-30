@@ -49,13 +49,6 @@ module Nanoc::TestHelpers
     yield
   end
 
-  def if_implemented
-    yield
-  rescue NotImplementedError, NameError
-    skip $ERROR_INFO
-    return
-  end
-
   def with_site(params = {})
     # Build site name
     site_name = params[:name]
@@ -122,13 +115,6 @@ EOS
   end
 
   def setup
-    # Check skipped
-    if ENV['skip']
-      if ENV['skip'].split(',').include?(self.class.to_s)
-        skip 'manually skipped'
-      end
-    end
-
     # Clean up
     GC.start
 
@@ -213,28 +199,6 @@ EOS
         )
       end
     end
-  end
-
-  def assert_contains_exactly(expected, actual)
-    assert_equal(
-      expected.size,
-      actual.size,
-      format('Expected %s to be of same size as %s', actual.inspect, expected.inspect),
-    )
-    remaining = actual.dup.to_a
-    expected.each do |e|
-      index = remaining.index(e)
-      remaining.delete_at(index) if index
-    end
-    assert(
-      remaining.empty?,
-      format('Expected %s to contain all the elements of %s', actual.inspect, expected.inspect),
-    )
-  end
-
-  def assert_raises_frozen_error
-    error = assert_raises(RuntimeError, TypeError) { yield }
-    assert_match(/(^can't modify frozen |^unable to modify frozen object$)/, error.message)
   end
 
   def with_env_vars(hash, &_block)
