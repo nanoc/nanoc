@@ -456,6 +456,7 @@ spec/nanoc/rule_dsl/action_sequence_calculator_spec.rb
 spec/nanoc/rule_dsl/recording_executor_spec.rb
 spec/nanoc/rule_dsl/rule_context_spec.rb
 spec/nanoc/rule_dsl/rules_collection_spec.rb
+spec/nanoc/rule_dsl/rule_spec.rb
 spec/nanoc/spec_spec.rb
 spec/nanoc/telemetry_spec.rb
 spec/nanoc/telemetry/counter_spec.rb
@@ -539,5 +540,4 @@ test/helpers/test_link_to.rb
 test/helpers/test_xml_sitemap.rb
 test/rule_dsl/test_action_provider.rb
 test/rule_dsl/test_compiler_dsl.rb
-test/rule_dsl/test_rule.rb
 test/rule_dsl/test_rules_collection.rb
