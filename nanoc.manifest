@@ -271,6 +271,7 @@ lib/nanoc/version.rb
 
 spec/contributors_spec.rb
 spec/manifest_spec.rb
+spec/gem_spec.rb
 spec/nanoc/base/changes_stream_spec.rb
 spec/nanoc/base/checksummer_spec.rb
 spec/nanoc/base/compiler_spec.rb
@@ -540,4 +541,3 @@ test/rule_dsl/test_action_provider.rb
 test/rule_dsl/test_compiler_dsl.rb
 test/rule_dsl/test_rule.rb
 test/rule_dsl/test_rules_collection.rb
-test/test_gem.rb
