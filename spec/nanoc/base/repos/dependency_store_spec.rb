@@ -216,15 +216,17 @@ describe Nanoc::Int::DependencyStore do
       store.record_dependency(item_a, item_b, attributes: true)
 
       store.store
-      store.items = items_after
-      store.load
+    end
+
+    let(:reloaded_store) do
+      described_class.new(items_after, layouts, config).tap(&:load)
     end
 
     context 'no new items' do
       let(:items_after) { items }
 
       it 'has the right dependencies for item A' do
-        deps = store.dependencies_causing_outdatedness_of(item_a)
+        deps = reloaded_store.dependencies_causing_outdatedness_of(item_a)
         expect(deps.size).to eql(1)
 
         expect(deps[0].from).to eql(item_b)
@@ -237,12 +239,12 @@ describe Nanoc::Int::DependencyStore do
       end
 
       it 'has the right dependencies for item B' do
-        deps = store.dependencies_causing_outdatedness_of(item_b)
+        deps = reloaded_store.dependencies_causing_outdatedness_of(item_b)
         expect(deps).to be_empty
       end
 
       it 'has the right dependencies for item C' do
-        deps = store.dependencies_causing_outdatedness_of(item_c)
+        deps = reloaded_store.dependencies_causing_outdatedness_of(item_c)
         expect(deps).to be_empty
       end
     end
@@ -255,10 +257,34 @@ describe Nanoc::Int::DependencyStore do
       let(:item_d) { Nanoc::Int::Item.new('d', {}, '/d.md') }
 
       it 'does not mark items as outdated' do
-        expect(store.objects_causing_outdatedness_of(item_a)).not_to include(item_d)
-        expect(store.objects_causing_outdatedness_of(item_b)).not_to include(item_d)
-        expect(store.objects_causing_outdatedness_of(item_c)).not_to include(item_d)
-        expect(store.objects_causing_outdatedness_of(item_d)).not_to include(item_d)
+        expect(reloaded_store.objects_causing_outdatedness_of(item_a)).not_to include(item_d)
+        expect(reloaded_store.objects_causing_outdatedness_of(item_b)).not_to include(item_d)
+        expect(reloaded_store.objects_causing_outdatedness_of(item_c)).not_to include(item_d)
+        expect(reloaded_store.objects_causing_outdatedness_of(item_d)).not_to include(item_d)
+      end
+    end
+
+    context 'unrelated item removed' do
+      let(:items_after) do
+        Nanoc::Int::ItemCollection.new(config, [item_a, item_b])
+      end
+
+      it 'does not mark items as outdated' do
+        expect(reloaded_store.objects_causing_outdatedness_of(item_a)).to eq([item_b])
+        expect(reloaded_store.objects_causing_outdatedness_of(item_b)).to be_empty
+        expect(reloaded_store.objects_causing_outdatedness_of(item_c)).to be_empty
+      end
+    end
+
+    context 'related item removed' do
+      let(:items_after) do
+        Nanoc::Int::ItemCollection.new(config, [item_a, item_c])
+      end
+
+      it 'does not mark items as outdated' do
+        expect(reloaded_store.objects_causing_outdatedness_of(item_a)).to eq([nil])
+        expect(reloaded_store.objects_causing_outdatedness_of(item_b)).to be_empty
+        expect(reloaded_store.objects_causing_outdatedness_of(item_c)).to be_empty
       end
     end
   end
@@ -332,6 +358,26 @@ describe Nanoc::Int::DependencyStore do
             .to change { store.objects_causing_outdatedness_of(source_obj) }
             .from([])
             .to([item_b])
+        end
+      end
+
+      context 'dependency to nil' do
+        subject { store.record_dependency(source_obj, nil) }
+
+        it 'creates a dependency to nil' do
+          expect { subject }
+            .to change { store.objects_causing_outdatedness_of(source_obj) }
+            .from([])
+            .to([nil])
+        end
+      end
+
+      context 'dependency from nil' do
+        subject { store.record_dependency(nil, item_b) }
+
+        it 'does not create a dependency from nil' do
+          expect { subject }
+            .not_to change { store.objects_causing_outdatedness_of(item_b) }
         end
       end
     end
@@ -434,6 +480,36 @@ describe Nanoc::Int::DependencyStore do
       let(:other_items) { [item_b, item_c] }
 
       include_examples 'records dependencies'
+    end
+  end
+
+  describe '#forget_dependencies_for' do
+    before do
+      store.record_dependency(item_a, item_b)
+      store.record_dependency(item_a, item_c)
+      store.record_dependency(item_b, item_a)
+      store.record_dependency(item_b, item_c)
+      store.record_dependency(item_c, item_a)
+      store.record_dependency(item_c, item_b)
+    end
+
+    subject { store.forget_dependencies_for(item_b) }
+
+    it 'removes dependencies from item_a' do
+      expect { subject }
+        .not_to change { store.objects_causing_outdatedness_of(item_a) }
+    end
+
+    it 'removes dependencies from item_b' do
+      expect { subject }
+        .to change { store.objects_causing_outdatedness_of(item_b) }
+        .from(match_array([item_a, item_c]))
+        .to(be_empty)
+    end
+
+    it 'removes dependencies from item_c' do
+      expect { subject }
+        .not_to change { store.objects_causing_outdatedness_of(item_c) }
     end
   end
 end

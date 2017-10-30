@@ -466,7 +466,6 @@ spec/regression_filenames_spec.rb
 spec/spec_helper.rb
 
 test/base/test_compiler.rb
-test/base/test_dependency_tracker.rb
 test/base/test_filter.rb
 test/base/test_notification_center.rb
 test/base/test_site.rb
