@@ -469,7 +469,6 @@ test/base/test_compiler.rb
 test/base/test_filter.rb
 test/base/test_notification_center.rb
 test/base/test_site.rb
-test/base/test_store.rb
 test/checking/checks/test_css.rb
 test/checking/checks/test_external_links.rb
 test/checking/checks/test_html.rb

@@ -56,4 +56,38 @@ describe Nanoc::Int::Store do
       end
     end
   end
+
+  let(:test_store_klass) do
+    Class.new(Nanoc::Int::Store) do
+      def data
+        @data
+      end
+
+      def data=(new_data)
+        @data = new_data
+      end
+    end
+  end
+
+  it 'deletes and reloads on error' do
+    store = test_store_klass.new('test.db', 1)
+
+    # Create
+    store.load
+    store.data = { fun: 'sure' }
+    store.store
+
+    # Test stored values
+    store = test_store_klass.new('test.db', 1)
+    store.load
+    expect(store.data).to eq(fun: 'sure')
+
+    # Mess up
+    File.write('test.db', 'Damn {}#}%@}$^)@&$&*^#@ broken stores!!!')
+
+    # Reload
+    store = test_store_klass.new('test.db', 1)
+    store.load
+    expect(store.data).to be_nil
+  end
 end
