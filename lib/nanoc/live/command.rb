@@ -22,7 +22,7 @@ module Nanoc::CLI::Commands
         Nanoc::CLI::Commands::View.new(options, [], self).run
       end
 
-      Nanoc::Extra::LiveRecompiler.new(command_runner: self).run
+      Nanoc::Live::LiveRecompiler.new(command_runner: self).run
     end
   end
 end

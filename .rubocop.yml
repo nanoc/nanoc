@@ -86,6 +86,7 @@ Security/MarshalLoad:
 
 Security/Eval:
   Exclude:
+    - 'nanoc.gemspec'
     - 'test/**/*.rb'
     - 'spec/**/*.rb'
     - 'lib/nanoc/base/entities/code_snippet.rb'

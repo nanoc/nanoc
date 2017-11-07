@@ -1,22 +1,24 @@
 # frozen_string_literal: true
 
-require 'simplecov'
-SimpleCov.start
-
-require 'codecov'
-SimpleCov.formatter = SimpleCov::Formatter::Codecov
-
-require 'nanoc'
-require 'nanoc/cli'
-require 'nanoc/spec'
-
 require 'ddbuffer'
 require 'timecop'
 require 'rspec/its'
 require 'fuubar'
 require 'yard'
 
+def safe_chdir(dir)
+  cwd = Dir.getwd
+  begin
+    Dir.chdir(dir)
+    yield
+  ensure
+    Dir.chdir(cwd)
+  end
+end
+
 Nanoc::CLI.setup
+
+require 'nanoc/spec'
 
 RSpec.configure do |c|
   c.include(Nanoc::Spec::Helper)
@@ -28,20 +30,21 @@ RSpec.configure do |c|
   }
 
   c.around(:each) do |example|
-    Nanoc::CLI::ErrorHandler.disable
-    example.run
-    Nanoc::CLI::ErrorHandler.enable
-  end
-
-  c.around(:each) do |example|
     Dir.mktmpdir('nanoc-test') do |dir|
-      chdir(dir) { example.run }
+      safe_chdir(dir) { example.run }
     end
   end
 
   c.around(:each, chdir: false) do |example|
-    Dir.chdir(__dir__ + '/..')
+    safe_chdir(__dir__ + '/..') do
+      example.run
+    end
+  end
+
+  c.around(:each) do |example|
+    Nanoc::CLI::ErrorHandler.disable
     example.run
+    Nanoc::CLI::ErrorHandler.enable
   end
 
   c.before(:each) do

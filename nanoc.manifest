@@ -1,4 +1,4 @@
-.rspec
+.rspec-nanoc
 .rubocop.yml
 Appraisals
 CODE_OF_CONDUCT.md
@@ -171,7 +171,6 @@ lib/nanoc/cli/commands/compile_listeners/timing_recorder.rb
 lib/nanoc/cli/commands/compile.rb
 lib/nanoc/cli/commands/create-site.rb
 lib/nanoc/cli/commands/deploy.rb
-lib/nanoc/cli/commands/live.rb
 lib/nanoc/cli/commands/nanoc.rb
 lib/nanoc/cli/commands/prune.rb
 lib/nanoc/cli/commands/shell.rb
@@ -202,7 +201,6 @@ lib/nanoc/extra/core_ext/pathname.rb
 lib/nanoc/extra/core_ext/time.rb
 lib/nanoc/extra/jruby_nokogiri_warner.rb
 lib/nanoc/extra/link_collector.rb
-lib/nanoc/extra/live_recompiler.rb
 lib/nanoc/extra/parallel_collection.rb
 lib/nanoc/extra/piper.rb
 lib/nanoc/filters.rb
@@ -376,7 +374,6 @@ spec/nanoc/cli/stream_cleaners/utf8_spec.rb
 spec/nanoc/data_sources/filesystem_spec.rb
 spec/nanoc/deploying/fog_spec.rb
 spec/nanoc/deploying/git_spec.rb
-spec/nanoc/extra/live_recompiler_spec.rb
 spec/nanoc/extra/parallel_collection_spec.rb
 spec/nanoc/filters/asciidoctor_spec.rb
 spec/nanoc/filters/colorize_syntax/rouge_spec.rb
@@ -466,7 +463,8 @@ spec/nanoc/telemetry/stopwatch_spec.rb
 spec/nanoc/telemetry/summary_spec.rb
 spec/nanoc/telemetry/table_spec.rb
 spec/regression_filenames_spec.rb
-spec/spec_helper.rb
+spec/spec_helper_nanoc.rb
+spec/spec_helper_common.rb
 
 test/base/test_compiler.rb
 test/base/test_filter.rb

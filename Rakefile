@@ -5,9 +5,15 @@ require 'rspec/core/rake_task'
 require 'rake/testtask'
 require 'coveralls/rake/task'
 
-RuboCop::RakeTask.new(:rubocop)
+### coverage
 
 Coveralls::RakeTask.new
+
+### style
+
+RuboCop::RakeTask.new(:rubocop)
+
+### test
 
 Rake::TestTask.new(:test_all) do |t|
   t.test_files = Dir['test/**/test_*.rb']
@@ -15,11 +21,23 @@ Rake::TestTask.new(:test_all) do |t|
   t.verbose = false
 end
 
-RSpec::Core::RakeTask.new(:spec) do |t|
+### spec
+
+RSpec::Core::RakeTask.new(:spec_nanoc) do |t|
   t.verbose = false
+  t.rspec_opts = '--options .rspec.nanoc'
 end
 
-task test: %i[spec test_all rubocop]
+RSpec::Core::RakeTask.new(:spec_nanoc_live) do |t|
+  t.verbose = false
+  t.rspec_opts = '--options .rspec.nanoc-live'
+end
+
+task spec: %i[spec_nanoc spec_nanoc_live]
+
+###
+
+task test: %i[spec spec_nanoc_live test_all rubocop]
 task test_ci: %i[test coveralls:push]
 
 task default: :test

@@ -1,0 +1,4 @@
+--require ./spec/spec_helper_nanoc_live.rb
+--pattern spec/nanoc/live/**/*_spec.rb
+--format Fuubar
+--color
