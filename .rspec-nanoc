@@ -1,3 +1,0 @@
--r ./spec/spec_helper_nanoc.rb
---format Fuubar
---color

@@ -25,16 +25,12 @@ end
 
 RSpec::Core::RakeTask.new(:spec_nanoc) do |t|
   t.verbose = false
-  t.rspec_opts =
-    '--options .rspec-nanoc ' \
-    '--exclude-pattern spec/nanoc/live/**/*_spec.rb'
+  t.rspec_opts = '--options .rspec.nanoc'
 end
 
 RSpec::Core::RakeTask.new(:spec_nanoc_live) do |t|
   t.verbose = false
-  t.rspec_opts = \
-    '--options .rspec-nanoc-live ' \
-    '--pattern spec/nanoc/live/**/*_spec.rb'
+  t.rspec_opts = '--options .rspec.nanoc-live'
 end
 
 task spec: %i[spec_nanoc spec_nanoc_live]
