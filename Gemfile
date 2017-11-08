@@ -62,7 +62,7 @@ group :plugins do
   gem 'rdiscount', '~> 2.2', platforms: %i[ruby mswin]
   gem 'redcarpet', platforms: %i[ruby mswin]
   gem 'RedCloth', platforms: :ruby
-  gem 'rouge'
+  gem 'rouge', '~> 3.0'
   gem 'rubypants'
   gem 'sass'
   gem 'slim', '~> 3.0'

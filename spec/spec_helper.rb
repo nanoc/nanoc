@@ -73,12 +73,6 @@ RSpec.configure do |c|
 
     File.write('Rules', 'passthrough "/**/*"')
   end
-
-  # Set focus if any
-  if ENV.fetch('FOCUS', false)
-    $stdout.puts "Focusing spec on '#{ENV['FOCUS']}'"
-    c.filter_run_including ENV['FOCUS'].to_sym => true
-  end
 end
 
 RSpec::Matchers.define_negated_matcher :not_match, :match

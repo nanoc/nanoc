@@ -1,6 +1,5 @@
 .rspec
 .rubocop.yml
-Appraisals
 CODE_OF_CONDUCT.md
 LICENSE
 nanoc.gemspec

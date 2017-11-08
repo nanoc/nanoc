@@ -131,8 +131,7 @@ module Nanoc::Filters::ColorizeSyntax::Colorizers
     def process(code, language, params = {})
       require 'rouge'
 
-      if Rouge.version < '2' || params.fetch(:legacy, false)
-        # Rouge 1.x or Rouge 2.x legacy options
+      if params.fetch(:legacy, false)
         formatter_options = {
           css_class: params.fetch(:css_class, 'highlight'),
           inline_theme: params.fetch(:inline_theme, nil),
@@ -140,7 +139,7 @@ module Nanoc::Filters::ColorizeSyntax::Colorizers
           start_line: params.fetch(:start_line, 1),
           wrap: params.fetch(:wrap, false),
         }
-        formatter_cls = Rouge::Formatters.const_get(Rouge.version < '2' ? 'HTML' : 'HTMLLegacy')
+        formatter_cls = Rouge::Formatters::HTMLLegacy
         formatter = formatter_cls.new(formatter_options)
       else
         formatter = params.fetch(:formatter, Rouge::Formatters::HTML.new)
