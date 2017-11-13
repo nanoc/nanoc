@@ -42,7 +42,7 @@ describe Nanoc::Int::OutdatednessChecker do
   end
 
   let(:action_sequence_store) do
-    Nanoc::Int::ActionSequenceStore.new
+    Nanoc::Int::ActionSequenceStore.new(site: site)
   end
 
   let(:old_action_sequence_for_item_rep) do
@@ -74,7 +74,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: items.to_a + layouts.to_a) }
 
-    let(:config) { Nanoc::Int::Configuration.new }
+    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
     before do
       checksum_store.add(item)
@@ -182,7 +182,7 @@ describe Nanoc::Int::OutdatednessChecker do
     let(:other_item) { Nanoc::Int::Item.new('other stuff', {}, '/other.md') }
     let(:other_item_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
 
-    let(:config) { Nanoc::Int::Configuration.new }
+    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
     let(:items) { Nanoc::Int::ItemCollection.new(config, [item, other_item]) }
 

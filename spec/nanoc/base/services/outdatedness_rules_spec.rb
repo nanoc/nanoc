@@ -21,7 +21,7 @@ describe Nanoc::Int::OutdatednessRules do
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
     let(:item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
 
-    let(:config) { Nanoc::Int::Configuration.new }
+    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
     let(:code_snippets) { [] }
     let(:objects) { [config] + code_snippets + [item] }
 
@@ -36,7 +36,7 @@ describe Nanoc::Int::OutdatednessRules do
     let(:action_sequences) { {} }
     let(:reps) { Nanoc::Int::ItemRepRepo.new }
     let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
-    let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new }
+    let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new(site: site) }
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: objects) }
 
     let(:checksums) do
