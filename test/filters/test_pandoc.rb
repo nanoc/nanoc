@@ -38,9 +38,9 @@ class Nanoc::Filters::PandocTest < Nanoc::TestCase
       filter = ::Nanoc::Filters::Pandoc.new
 
       # Run filter
-      args = [:s, { f: :markdown, to: :html }, 'no-wrap', :toc]
+      args = [:s, { f: :markdown, to: :html }, 'wrap=none', :toc]
       result = filter.setup_and_run("# Heading\n", args: args)
-      assert_match '<div id="TOC">', result
+      assert_match '<nav id="TOC">', result
       assert_match(%r{<h1 id=\"heading\">Heading</h1>\s*}, result)
     end
   end

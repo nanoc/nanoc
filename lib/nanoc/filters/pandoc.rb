@@ -22,7 +22,7 @@ module Nanoc::Filters
     #
     # @example Passing arguments using `:arg`
     #
-    #     filter :pandoc, args: [:s, {:f => :markdown, :to => :html}, 'no-wrap', :toc]
+    #     filter :pandoc, args: [:s, {:f => :markdown, :to => :html}, 'wrap=none', :toc]
     #
     # @example Passing arguments not using `:arg`
     #
