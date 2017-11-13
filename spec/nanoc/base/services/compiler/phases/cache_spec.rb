@@ -10,7 +10,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
   end
 
   let(:compiled_content_cache) do
-    Nanoc::Int::CompiledContentCache.new(items: [item])
+    Nanoc::Int::CompiledContentCache.new(items: [item], site: site)
   end
 
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
@@ -31,6 +31,14 @@ describe Nanoc::Int::Compiler::Phases::Cache do
 
   let(:item) { Nanoc::Int::Item.new('item content', {}, '/donkey.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :latex) }
+
+  let(:site) do
+    Nanoc::Int::Site.new(
+      config: Nanoc::Int::Configuration.new.with_defaults,
+      code_snippets: [],
+      data_source: Nanoc::Int::InMemDataSource.new([item], []),
+    )
+  end
 
   describe '#run' do
     subject { phase.call(rep, is_outdated: is_outdated) }

@@ -23,7 +23,7 @@ describe Nanoc::PostCompileItemRepView do
 
   let(:reps) { double(:reps) }
   let(:items) { Nanoc::Int::ItemCollection.new(config) }
-  let(:config) { Nanoc::Int::Configuration.new }
+  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
   let(:compilation_context) { double(:compilation_context, compiled_content_cache: compiled_content_cache) }
   let(:snapshot_repo) { double(:snapshot_repo) }
@@ -36,8 +36,16 @@ describe Nanoc::PostCompileItemRepView do
     }
   end
 
+  let(:site) do
+    Nanoc::Int::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: Nanoc::Int::InMemDataSource.new(items, []),
+    )
+  end
+
   let(:compiled_content_cache) do
-    Nanoc::Int::CompiledContentCache.new(items: items).tap do |ccc|
+    Nanoc::Int::CompiledContentCache.new(items: items, site: site).tap do |ccc|
       ccc[item_rep] = snapshot_contents
     end
   end

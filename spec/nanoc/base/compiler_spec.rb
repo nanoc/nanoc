@@ -21,7 +21,12 @@ describe Nanoc::Int::Compiler do
   let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site) }
   let(:action_provider) { double(:action_provider) }
 
-  let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new(items: items) }
+  let(:compiled_content_cache) do
+    Nanoc::Int::CompiledContentCache.new(
+      site: site,
+      items: items,
+    )
+  end
 
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:item) { Nanoc::Int::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
