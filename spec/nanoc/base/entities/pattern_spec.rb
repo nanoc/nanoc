@@ -21,6 +21,12 @@ describe Nanoc::Int::Pattern do
       expect(pattern.match?('/foo/xyz/bar.html')).to eql(false)
     end
 
+    it 'converts from symbol' do
+      pattern = described_class.from(:'/foo/x[ab]z/bar.*')
+      expect(pattern.match?('/foo/xaz/bar.html')).to eql(true)
+      expect(pattern.match?('/foo/xyz/bar.html')).to eql(false)
+    end
+
     it 'errors on other inputs' do
       expect { described_class.from(123) }.to raise_error(ArgumentError)
     end

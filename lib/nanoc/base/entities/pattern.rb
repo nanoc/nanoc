@@ -14,6 +14,8 @@ module Nanoc::Int
         Nanoc::Int::StringPattern.new(obj)
       when Regexp
         Nanoc::Int::RegexpPattern.new(obj)
+      when Symbol
+        Nanoc::Int::StringPattern.new(obj.to_s)
       else
         raise ArgumentError, "Do not know how to convert `#{obj.inspect}` into a Nanoc::Pattern"
       end
