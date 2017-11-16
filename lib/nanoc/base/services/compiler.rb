@@ -199,7 +199,7 @@ module Nanoc::Int
     end
 
     def cleanup_stage
-      @_cleanup_stage ||= Stages::Cleanup.new(@site.config)
+      @_cleanup_stage ||= Stages::Cleanup.new(@site.config.output_dirs)
     end
 
     def forget_outdated_dependencies_stage

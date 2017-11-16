@@ -2,8 +2,8 @@
 
 module Nanoc::Int::Compiler::Stages
   class Cleanup
-    def initialize(config)
-      @config = config
+    def initialize(output_dirs)
+      @output_dirs = output_dirs
     end
 
     def run
@@ -20,7 +20,7 @@ module Nanoc::Int::Compiler::Stages
     end
 
     def cleanup_unused_stores
-      used_paths = @config.output_dirs.map { |d| Nanoc::Int::Store.tmp_path_prefix(d) }
+      used_paths = @output_dirs.map { |d| Nanoc::Int::Store.tmp_path_prefix(d) }
       all_paths = Dir.glob('tmp/nanoc/*')
       (all_paths - used_paths).each do |obsolete_path|
         FileUtils.rm_rf(obsolete_path)
