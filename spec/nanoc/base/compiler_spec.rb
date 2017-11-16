@@ -18,7 +18,7 @@ describe Nanoc::Int::Compiler do
 
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
 
-  let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site) }
+  let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(config: config) }
   let(:action_provider) { double(:action_provider) }
 
   let(:compiled_content_cache) do

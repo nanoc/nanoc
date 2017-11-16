@@ -5,9 +5,9 @@ module Nanoc::Int
   class OutdatednessStore < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
-    contract C::KeywordArgs[site: Nanoc::Int::Site] => C::Any
-    def initialize(site:)
-      super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'outdatedness'), 1)
+    contract C::KeywordArgs[config: Nanoc::Int::Configuration] => C::Any
+    def initialize(config:)
+      super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'outdatedness'), 1)
 
       @outdated_refs = Set.new
     end

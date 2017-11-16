@@ -18,15 +18,7 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
   end
 
   let(:outdatedness_store) do
-    Nanoc::Int::OutdatednessStore.new(site: site)
-  end
-
-  let(:site) do
-    Nanoc::Int::Site.new(
-      config: config,
-      code_snippets: code_snippets,
-      data_source: Nanoc::Int::InMemDataSource.new([], []),
-    )
+    Nanoc::Int::OutdatednessStore.new(config: config)
   end
 
   let(:config) { Nanoc::Int::Configuration.new.with_defaults }

@@ -28,7 +28,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new(items: items, config: config) }
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
-  let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(site: site) }
+  let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(config: config) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
 
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }

@@ -1,20 +1,10 @@
 # frozen_string_literal: true
 
 describe Nanoc::Int::OutdatednessStore do
-  subject(:store) { described_class.new(site: site) }
-
-  let(:site) { double(:site) }
+  subject(:store) { described_class.new(config: config) }
 
   let(:item) { Nanoc::Int::Item.new('foo', {}, '/foo.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
-
-  let(:site) do
-    Nanoc::Int::Site.new(
-      config: config,
-      code_snippets: code_snippets,
-      data_source: Nanoc::Int::InMemDataSource.new(items, layouts),
-    )
-  end
 
   let(:config) { Nanoc::Int::Configuration.new.with_defaults }
   let(:items) { [] }
