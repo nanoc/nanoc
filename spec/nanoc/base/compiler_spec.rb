@@ -13,7 +13,7 @@ describe Nanoc::Int::Compiler do
     )
   end
 
-  let(:checksum_store) { Nanoc::Int::ChecksumStore.new(site: site, objects: items) }
+  let(:checksum_store) { Nanoc::Int::ChecksumStore.new(config: config, objects: items) }
   let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new(config: config) }
 
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }

@@ -1,15 +1,9 @@
 # frozen_string_literal: true
 
 describe Nanoc::Int::ChecksumStore do
-  let(:store) { described_class.new(site: site, objects: objects) }
+  let(:store) { described_class.new(config: config, objects: objects) }
 
-  let(:site) do
-    Nanoc::Int::Site.new(
-      config: Nanoc::Int::Configuration.new.with_defaults,
-      code_snippets: [],
-      data_source: Nanoc::Int::InMemDataSource.new([], []),
-    )
-  end
+  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
   let(:objects) { [item, code_snippet] }
 
