@@ -420,6 +420,7 @@ spec/nanoc/regressions/gh_1145_spec.rb
 spec/nanoc/regressions/gh_1171_spec.rb
 spec/nanoc/regressions/gh_1185_spec.rb
 spec/nanoc/regressions/gh_1216_spec.rb
+spec/nanoc/regressions/gh_1248_spec.rb
 spec/nanoc/regressions/gh_761_spec.rb
 spec/nanoc/regressions/gh_767_spec.rb
 spec/nanoc/regressions/gh_769_spec.rb

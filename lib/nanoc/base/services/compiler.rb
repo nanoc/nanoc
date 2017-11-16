@@ -7,6 +7,9 @@ module Nanoc::Int
     def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, outdatedness_store:)
       @site = site
 
+      # Needed because configuration is mutable :(
+      @output_dirs = @site.config.output_dirs
+
       @compiled_content_cache = compiled_content_cache
       @checksum_store         = checksum_store
       @action_sequence_store  = action_sequence_store
@@ -199,7 +202,7 @@ module Nanoc::Int
     end
 
     def cleanup_stage
-      @_cleanup_stage ||= Stages::Cleanup.new(@site.config.output_dirs)
+      @_cleanup_stage ||= Stages::Cleanup.new(@output_dirs)
     end
 
     def forget_outdated_dependencies_stage
