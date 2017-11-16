@@ -23,7 +23,7 @@ describe Nanoc::Int::Compiler do
 
   let(:compiled_content_cache) do
     Nanoc::Int::CompiledContentCache.new(
-      site: site,
+      config: config,
       items: items,
     )
   end

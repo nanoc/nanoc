@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Int::CompiledContentCache do
-  let(:cache) { described_class.new(items: items, site: site) }
+  let(:cache) { described_class.new(items: items, config: config) }
 
   let(:items) { [item] }
 
@@ -13,13 +13,7 @@ describe Nanoc::Int::CompiledContentCache do
 
   let(:content) { Nanoc::Int::Content.create('omg') }
 
-  let(:site) do
-    Nanoc::Int::Site.new(
-      config: Nanoc::Int::Configuration.new.with_defaults,
-      code_snippets: [],
-      data_source: Nanoc::Int::InMemDataSource.new(items, []),
-    )
-  end
+  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
   it 'has no content by default' do
     expect(cache[item_rep]).to be_nil

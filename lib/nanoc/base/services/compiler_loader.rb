@@ -21,7 +21,7 @@ module Nanoc::Int
 
       compiled_content_cache =
         Nanoc::Int::CompiledContentCache.new(
-          site: site,
+          config: site.config,
           items: site.items,
         )
 

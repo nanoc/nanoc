@@ -36,16 +36,8 @@ describe Nanoc::PostCompileItemRepView do
     }
   end
 
-  let(:site) do
-    Nanoc::Int::Site.new(
-      config: config,
-      code_snippets: [],
-      data_source: Nanoc::Int::InMemDataSource.new(items, []),
-    )
-  end
-
   let(:compiled_content_cache) do
-    Nanoc::Int::CompiledContentCache.new(items: items, site: site).tap do |ccc|
+    Nanoc::Int::CompiledContentCache.new(items: items, config: config).tap do |ccc|
       ccc[item_rep] = snapshot_contents
     end
   end
