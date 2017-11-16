@@ -72,7 +72,7 @@ describe Nanoc::Int::OutdatednessChecker do
   describe 'basic outdatedness reasons' do
     subject { outdatedness_checker.send(:basic).outdatedness_status_for(obj).reasons.first }
 
-    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: items.to_a + layouts.to_a) }
+    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(site: site, objects: items.to_a + layouts.to_a) }
 
     let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
@@ -177,7 +177,7 @@ describe Nanoc::Int::OutdatednessChecker do
   describe '#outdated_due_to_dependencies?' do
     subject { outdatedness_checker.send(:outdated_due_to_dependencies?, item) }
 
-    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(objects: items.to_a + layouts.to_a) }
+    let(:checksum_store) { Nanoc::Int::ChecksumStore.new(site: site, objects: items.to_a + layouts.to_a) }
 
     let(:other_item) { Nanoc::Int::Item.new('other stuff', {}, '/other.md') }
     let(:other_item_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
