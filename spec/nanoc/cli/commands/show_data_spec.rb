@@ -27,7 +27,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:item_dog)   { Nanoc::Int::Item.new('About My Dog', {}, '/dog.md') }
     let(:item_other) { Nanoc::Int::Item.new('Raw Data', {}, '/other.dat') }
 
-    let(:config) { Nanoc::Int::Configuration.new }
+    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
     let(:dependency_store) do
       Nanoc::Int::DependencyStore.new(items, layouts, config)

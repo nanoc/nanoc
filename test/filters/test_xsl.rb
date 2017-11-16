@@ -88,7 +88,7 @@ EOS
   def setup
     super
 
-    config = Nanoc::Int::Configuration.new
+    config = Nanoc::Int::Configuration.new.with_defaults
     items = Nanoc::Int::ItemCollection.new(config)
     layouts = Nanoc::Int::LayoutCollection.new(config)
 
@@ -101,7 +101,7 @@ EOS
   end
 
   def new_view_context
-    config = Nanoc::Int::Configuration.new
+    config = Nanoc::Int::Configuration.new.with_defaults
 
     Nanoc::ViewContextForCompilation.new(
       reps:                Nanoc::Int::ItemRepRepo.new,

@@ -28,7 +28,7 @@ describe Nanoc::Int::Compiler::Stages::Preprocess do
   let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
   let(:dependency_store) do
-    Nanoc::Int::DependencyStore.new(items, layouts, config, site: site)
+    Nanoc::Int::DependencyStore.new(items, layouts, config)
   end
 
   let(:checksum_store) do

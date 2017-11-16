@@ -8,9 +8,9 @@ module Nanoc::Int
     attr_reader :items
     attr_reader :layouts
 
-    contract Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection, Nanoc::Int::Configuration, C::KeywordArgs[site: C::Optional[C::Maybe[Nanoc::Int::Site]]] => C::Any
-    def initialize(items, layouts, config, site: nil)
-      super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'dependencies'), 5)
+    contract Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection, Nanoc::Int::Configuration => C::Any
+    def initialize(items, layouts, config)
+      super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'dependencies'), 5)
 
       @items = items
       @layouts = layouts
