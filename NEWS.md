@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.8.12 (2017-11-16)
+
+Fixes:
+
+* Fixed issue where changing `:output_dir` during preprocessing would prevent Nanoc from performing incremental compilation (#1248, #1249)
+
+Enhancements:
+
+* Allowed creation of pattern from symbols, not just strings (#1247) [Gregory Pakosz]
+
 ## 4.8.11 (2017-10-28)
 
 Enhancements:
