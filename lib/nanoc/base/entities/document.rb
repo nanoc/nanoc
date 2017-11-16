@@ -94,6 +94,13 @@ module Nanoc
         @content_checksum_data = nil
       end
 
+      def set_attribute(key, value)
+        attributes[key] = value
+
+        @checksum_data = nil
+        @attributes_checksum_data = nil
+      end
+
       contract C::None => String
       def inspect
         "<#{self.class} identifier=\"#{identifier}\">"

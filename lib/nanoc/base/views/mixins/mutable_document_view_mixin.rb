@@ -25,10 +25,6 @@ module Nanoc
     #
     # @see Hash#[]=
     def []=(key, value)
-      # FIXME: clearing checksum data should be done in the document
-      unwrap.checksum_data = nil
-      unwrap.attributes_checksum_data = nil
-
       disallowed_value_classes = Set.new([
         Nanoc::Int::Item,
         Nanoc::Int::Layout,
@@ -39,7 +35,7 @@ module Nanoc
         raise DisallowedAttributeValueError.new(value)
       end
 
-      unwrap.attributes[key] = value
+      unwrap.set_attribute(key, value)
     end
 
     # Sets the identifier to the given argument.
@@ -55,11 +51,7 @@ module Nanoc
     #
     # @return [self]
     def update_attributes(hash)
-      # FIXME: clearing checksum data should be done in the document
-      unwrap.checksum_data = nil
-      unwrap.attributes_checksum_data = nil
-
-      hash.each { |k, v| unwrap.attributes[k] = v }
+      hash.each { |k, v| unwrap.set_attribute(k, v) }
       self
     end
   end
