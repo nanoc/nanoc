@@ -2,16 +2,8 @@
 
 describe Nanoc::Int::Store do
   describe '#tmp_path_for' do
-    context 'passing site' do
-      subject { described_class.tmp_path_for(site: site, store_name: 'giraffes') }
-
-      let(:site) do
-        Nanoc::Int::Site.new(
-          config: config,
-          code_snippets: code_snippets,
-          data_source: Nanoc::Int::InMemDataSource.new(items, layouts),
-        )
-      end
+    context 'passing config' do
+      subject { described_class.tmp_path_for(config: config, store_name: 'giraffes') }
 
       let(:code_snippets) { [] }
       let(:items) { [] }

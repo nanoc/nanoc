@@ -40,15 +40,9 @@ module Nanoc::Int
 
     # Logic for building tmp path from active environment and store name
     # @api private
-    contract C::KeywordArgs[
-      site: C::Optional[C::Maybe[Nanoc::Int::Site]],
-      config: C::Optional[C::Maybe[Nanoc::Int::Configuration]],
-      store_name: String] => String
-    def self.tmp_path_for(store_name:, site: nil, config: nil)
-      # FIXME: disallow site/config from being nil
-      config = [site&.config, config].compact.first
-      output_dir = config ? config.output_dir : ''
-      File.join(tmp_path_prefix(output_dir), store_name)
+    contract C::KeywordArgs[config: Nanoc::Int::Configuration, store_name: String] => String
+    def self.tmp_path_for(store_name:, config:)
+      File.join(tmp_path_prefix(config.output_dir), store_name)
     end
 
     def self.tmp_path_prefix(output_dir)
