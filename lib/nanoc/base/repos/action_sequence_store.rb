@@ -8,9 +8,9 @@ module Nanoc::Int
   class ActionSequenceStore < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
-    contract C::KeywordArgs[site: Nanoc::Int::Site] => C::Any
-    def initialize(site:)
-      super(Nanoc::Int::Store.tmp_path_for(site: site, store_name: 'rule_memory'), 1)
+    contract C::KeywordArgs[config: Nanoc::Int::Configuration] => C::Any
+    def initialize(config:)
+      super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'rule_memory'), 1)
 
       @action_sequences = {}
     end
