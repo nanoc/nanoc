@@ -16,10 +16,6 @@ module Nanoc
     end
 
     def raw_content=(arg)
-      # FIXME: clearing checksum data should be done in the document
-      unwrap.checksum_data = nil
-      unwrap.content_checksum_data = nil
-
       unwrap.content = Nanoc::Int::Content.create(arg)
     end
 

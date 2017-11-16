@@ -7,7 +7,7 @@ module Nanoc
       include Nanoc::Int::ContractsSupport
 
       # @return [Nanoc::Int::Content]
-      attr_accessor :content
+      attr_reader :content
 
       # @return [Hash]
       def attributes
@@ -84,6 +84,14 @@ module Nanoc
       contract C::Or[Nanoc::Identifier, String] => Nanoc::Identifier
       def identifier=(new_identifier)
         @identifier = Nanoc::Identifier.from(new_identifier)
+      end
+
+      contract Nanoc::Int::Content => C::Any
+      def content=(new_content)
+        @content = new_content
+
+        @checksum_data = nil
+        @content_checksum_data = nil
       end
 
       contract C::None => String

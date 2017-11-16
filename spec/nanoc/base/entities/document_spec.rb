@@ -255,4 +255,41 @@ shared_examples 'a document' do
       expect(document.identifier).to be_legacy
     end
   end
+
+  describe '#content=' do
+    let(:document) do
+      described_class.new(
+        content_arg,
+        attributes_arg,
+        '/foo.md',
+        checksum_data: 'ch3cksum_d4t4',
+        content_checksum_data: 'c0nt3nt_ch3cksum_d4t4',
+        attributes_checksum_data: '4ttr_ch3cksum_d4t4',
+      )
+    end
+
+    let(:content_arg) { 'Hallo' }
+    let(:attributes_arg) { { foo: { bar: 'asdf' } } }
+
+    subject { document.content = Nanoc::Int::TextualContent.new('New!') }
+
+    it 'clears checksum' do
+      expect { subject }
+        .to change { document.checksum_data }
+        .from('ch3cksum_d4t4')
+        .to(nil)
+    end
+
+    it 'clears content checksum' do
+      expect { subject }
+        .to change { document.content_checksum_data }
+        .from('c0nt3nt_ch3cksum_d4t4')
+        .to(nil)
+    end
+
+    it 'does not clear attributes checksum data' do
+      expect { subject }
+        .not_to change { document.attributes_checksum_data }
+    end
+  end
 end
