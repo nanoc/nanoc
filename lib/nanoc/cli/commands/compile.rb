@@ -5,13 +5,31 @@ summary 'compile items of this site'
 description <<~EOS
   Compile all items of the current site.
 EOS
+
 flag nil, :diff, 'generate diff'
+if Nanoc::Feature.enabled?(Nanoc::Feature::LIVE_CMD)
+  flag :w, :watch, 'watch for changes and recompile when needed'
+end
 
 module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
     attr_accessor :listener_classes
 
     def run
+      self.class.enter_site_dir
+
+      if options[:watch]
+        run_repeat
+      else
+        run_once
+      end
+    end
+
+    def run_repeat
+      Nanoc::Extra::LiveRecompiler.new(command_runner: self).run
+    end
+
+    def run_once
       time_before = Time.now
 
       @site = load_site
