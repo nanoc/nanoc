@@ -55,7 +55,7 @@ module Nanoc::CLI::Commands
       url = "http://#{options_for_rack[:Host]}:#{options_for_rack[:Port]}/"
       puts "View the site at #{url}"
 
-      # Run autocompiler
+      # Run server
       handler.run(app, options_for_rack)
     end
 
