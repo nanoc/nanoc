@@ -13,7 +13,7 @@ required :o, :host,    'specify the host to listen on (default: 127.0.0.1)'
 required :p, :port,    'specify the port to listen on (default: 3000)'
 
 if Nanoc::Feature.enabled?(Nanoc::Feature::LIVE_RELOAD)
-  flag :l, :'live-reload', 'reload on changes'
+  flag :r, :'live-reload', 'reload on changes'
 end
 
 require 'json'
