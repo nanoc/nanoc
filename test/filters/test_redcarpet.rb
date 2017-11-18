@@ -2,9 +2,6 @@
 
 require 'helper'
 
-# TODO: Remove this once Redcarpet 1.x support is dropped
-require 'redcarpet'
-
 class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
   def test_find
     refute Nanoc::Filter.named(:redcarpet).nil?
@@ -24,15 +21,9 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
     filter = ::Nanoc::Filters::Redcarpet.new
 
     # Run filter
-    if ::Redcarpet::VERSION > '2'
-      input           = 'this is ~~good~~ bad'
-      output_expected = /this is <del>good<\/del> bad/
-      output_actual   = filter.setup_and_run(input, options: { strikethrough: true })
-    else
-      input           = "The quotation 'marks' sure make this look sarcastic!"
-      output_expected = /The quotation &lsquo;marks&rsquo; sure make this look sarcastic!/
-      output_actual   = filter.setup_and_run(input, options: [:smart])
-    end
+    input           = 'this is ~~good~~ bad'
+    output_expected = /this is <del>good<\/del> bad/
+    output_actual   = filter.setup_and_run(input, options: { strikethrough: true })
     assert_match(output_expected, output_actual)
   end
 
@@ -54,20 +45,11 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
     # Run filter
     input           = "![Alt](/path/to/img 'Title')"
     output_expected = %r{<img src="/path/to/img" alt="Alt" title="Title"/>}
-    output_actual =
-      if ::Redcarpet::VERSION > '2'
-        filter.setup_and_run(input, renderer_options: { xhtml: true })
-      else
-        filter.setup_and_run(input, options: [:xhtml])
-      end
+    output_actual   = filter.setup_and_run(input, renderer_options: { xhtml: true })
     assert_match(output_expected, output_actual)
   end
 
   def test_html_toc
-    unless ::Redcarpet::VERSION > '2'
-      skip 'Requires Redcarpet >= 2'
-    end
-
     # Create filter
     filter = ::Nanoc::Filters::Redcarpet.new
 
@@ -86,13 +68,8 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
 
     # Run filter
     input = "A Title\n======"
-    if ::Redcarpet::VERSION > '2'
-      output_expected = %r{<ul>\n<li>\n<a href="#a-title">A Title</a>\n</li>\n</ul>\n<h1 id="a-title">A Title</h1>\n}
-      output_actual   = filter.setup_and_run(input, with_toc: true)
-    else
-      output_expected = %r{<h1>A Title</h1>\n}
-      output_actual   = filter.setup_and_run(input)
-    end
+    output_expected = %r{<ul>\n<li>\n<a href="#a-title">A Title</a>\n</li>\n</ul>\n<h1 id="a-title">A Title</h1>\n}
+    output_actual   = filter.setup_and_run(input, with_toc: true)
 
     # Test
     assert_match(output_expected, output_actual)

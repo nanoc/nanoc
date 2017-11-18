@@ -58,7 +58,7 @@ group :plugins do
   gem 'rack'
   gem 'rainpress'
   gem 'rdiscount', '~> 2.2', platforms: %i[ruby mswin]
-  gem 'redcarpet', platforms: %i[ruby mswin]
+  gem 'redcarpet', '~> 3.0', platforms: %i[ruby mswin]
   gem 'RedCloth', platforms: :ruby
   gem 'rouge', '~> 3.0'
   gem 'rubypants'
