@@ -7,7 +7,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
   CODERAY_POST = '</div></div>'
 
   def test_coderay_simple
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -22,7 +22,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
   end
 
   def test_coderay_with_comment
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -38,7 +38,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
   end
 
   def test_coderay_with_comment_in_middle
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -55,7 +55,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
   end
 
   def test_coderay_with_comment_and_class
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -72,7 +72,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
   end
 
   def test_coderay_with_more_classes
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -87,7 +87,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
   end
 
   def test_colorize_syntax_with_unknown_syntax
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -99,7 +99,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
   end
 
   def test_colorize_syntax_with_xml
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -114,7 +114,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
   end
 
   def test_colorize_syntax_with_xhtml
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -129,7 +129,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
   end
 
   def test_colorize_syntax_with_non_language_shebang_line
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -158,7 +158,7 @@ EOS
   end
 
   def test_colorize_syntax_with_non_language_shebang_line_and_language_line
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -186,7 +186,7 @@ EOS
   end
 
   def test_not_outside_pre
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -201,7 +201,7 @@ EOS
   end
 
   def test_outside_pre
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 
@@ -216,7 +216,7 @@ EOS
   end
 
   def test_strip
-    if_have 'coderay', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
 

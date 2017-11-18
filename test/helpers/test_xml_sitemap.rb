@@ -30,7 +30,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   end
 
   def test_xml_sitemap
-    if_have 'builder', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create items
       items = []
 
@@ -95,7 +95,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   end
 
   def test_sitemap_with_items_as_param
-    if_have 'builder', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create items
       items = []
       items << nil
@@ -134,7 +134,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   end
 
   def test_filter
-    if_have 'builder', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create items
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one'), @view_context)
       @items = Nanoc::Int::ItemCollection.new({}, [item])
@@ -165,7 +165,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   end
 
   def test_sorted
-    if_have 'builder', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create items
       items = []
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/george'), @view_context)
@@ -208,7 +208,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   end
 
   def test_url_escape
-    if_have 'builder', 'nokogiri' do
+    if_have 'nokogiri' do
       # Create items
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/george'), @view_context)
       @items = Nanoc::Int::ItemCollection.new({}, [item])
