@@ -7,7 +7,6 @@ gemspec
 group :devel do
   gem 'codecov', require: false
   gem 'contracts', '~> 0.14'
-  gem 'coveralls_reborn', '~> 0.10', require: false
   gem 'ddbuffer', '~> 1.0'
   gem 'fuubar'
   gem 'guard-rake'
@@ -23,7 +22,6 @@ group :devel do
   gem 'rspec-its', '~> 1.2'
   gem 'rspec-mocks'
   gem 'rubocop', '~> 0.49'
-  gem 'simplecov', '~> 0.15', require: false
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
