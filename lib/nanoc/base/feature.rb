@@ -6,7 +6,7 @@ module Nanoc
   # @example Defining a feature and checking its enabledness
   #
   #     Nanoc::Feature.define('environments', version: '4.3')
-  #     Nanoc::Feaure.enabled?(Nanoc::Feature::ENVIRONMENTS)
+  #     Nanoc::Feature.enabled?(Nanoc::Feature::ENVIRONMENTS)
   #
   module Feature
     # Defines a new feature with the given name, experimental in the given
