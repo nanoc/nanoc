@@ -31,6 +31,7 @@ end
 
 group :plugins do
   gem 'adsf'
+  gem 'adsf-live'
   gem 'asciidoctor'
   gem 'bluecloth', platforms: :ruby
   gem 'builder'
