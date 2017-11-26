@@ -2,17 +2,6 @@
 
 require_relative 'lib/nanoc/version'
 
-ignored_files = %w[
-  .github/CONTRIBUTING.md
-  .github/ISSUE_TEMPLATE.md
-  .github/PULL_REQUEST_TEMPLATE.md
-  .gitignore
-  .travis.yml
-  scripts/release
-  Gemfile
-  Guardfile
-]
-
 Gem::Specification.new do |s|
   s.name        = 'nanoc'
   s.version     = Nanoc::VERSION
@@ -24,7 +13,7 @@ Gem::Specification.new do |s|
   s.email   = 'denis@stoneship.org'
   s.license = 'MIT'
 
-  s.files = `git ls-files -z`.split("\x0") - ignored_files
+  s.files = Dir['*.md'] + ['LICENSE'] + Dir['bin/*'] + Dir['lib/**/*.rb']
   s.executables        = ['nanoc']
   s.require_paths      = ['lib']
 
