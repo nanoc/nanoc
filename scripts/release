@@ -37,8 +37,13 @@ end
 puts
 
 puts '=== Verifying presence of release date…'
-unless File.readlines('NEWS.md').drop(2).first =~ / \(\d{4}-\d{2}-\d{2}\)$/
+release_line = File.readlines('NEWS.md').drop(2).first
+unless release_line =~ / \(\d{4}-\d{2}-\d{2}\)$/
   $stderr.puts 'No proper release date found!'
+  exit 1
+end
+unless release_line.include?(Time.now.strftime('%Y-%m-%d'))
+  $stderr.puts 'The release date does not match today’s date!'
   exit 1
 end
 puts
