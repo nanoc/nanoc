@@ -1,5 +1,9 @@
 # Nanoc news
 
+## 4.8.14 (2017-11-27)
+
+Same as 4.8.13, but published with the proper release date.
+
 ## 4.8.13 (2017-11-27)
 
 Enhancements:
