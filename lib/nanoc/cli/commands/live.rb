@@ -11,10 +11,7 @@ EOS
 required :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
 required :o, :host,    'specify the host to listen on (default: 127.0.0.1)'
 required :p, :port,    'specify the port to listen on (default: 3000)'
-
-if Nanoc::Feature.enabled?(Nanoc::Feature::LIVE_RELOAD)
-  flag :r, :'live-reload', 'reload on changes'
-end
+flag :L, :'live-reload', 'reload on changes'
 
 module Nanoc::CLI::Commands
   class Live < ::Nanoc::CLI::CommandRunner
