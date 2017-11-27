@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.13 (2017-11-16)
+
+Enhancements:
+
+* Added `-L`/`--live-reload` option to `nanoc view` (#1251)
+
 ## 4.8.12 (2017-11-16)
 
 Fixes:
