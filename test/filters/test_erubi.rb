@@ -28,12 +28,22 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
     # Run filter
     raised = false
     begin
-      filter.setup_and_run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
+      filter.setup_and_run('<%= this isn\'t really ruby so it\'ll break during parsing %>')
     rescue SyntaxError => e
       assert_match 'syntax error', e.message
       raised = true
     end
     assert raised
+
+    raised = false
+    begin
+      filter.setup_and_run('<%= "almost valid" # breaks during run %>')
+    rescue SyntaxError => e
+      assert_match 'syntax error', e.message
+      raised = true
+    end
+    assert raised
+
   end
 
   def test_filter_with_yield
