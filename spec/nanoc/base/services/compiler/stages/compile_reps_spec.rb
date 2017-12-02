@@ -113,7 +113,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
       end
 
       context 'exception' do
-        let(:item) { Nanoc::Int::Item.new('<%= raise "lol" %>', {}, '/hi.md') }
+        let(:item) { Nanoc::Int::Item.new('<%= \'invalid_ruby %>', {}, '/hi.md') }
 
         it 'wraps exception' do
           expect { subject }.to raise_error(Nanoc::Int::Errors::CompilationError)
@@ -127,8 +127,8 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
 
         it 'contains the right wrapped exception' do
           expect { subject }.to raise_error do |err|
-            expect(err.unwrap).to be_a(RuntimeError)
-            expect(err.unwrap.message).to eq('lol')
+            expect(err.unwrap).to be_a(SyntaxError)
+            expect(err.unwrap.message).to start_with('item /hi.md (rep default):1: unterminated string meets end of file')
           end
         end
 

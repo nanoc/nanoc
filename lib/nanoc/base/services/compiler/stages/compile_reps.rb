@@ -26,7 +26,7 @@ module Nanoc::Int::Compiler::Stages
 
     def handle_errors_while(item_rep)
       yield
-    rescue => e
+    rescue Exception => e # rubocop:disable Lint/RescueException
       raise Nanoc::Int::Errors::CompilationError.new(e, item_rep)
     end
 
