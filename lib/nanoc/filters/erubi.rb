@@ -25,7 +25,7 @@ module Nanoc::Filters
       # Get result
       engine_opts = { bufvar: '_erbout', filename: filename }.merge(params)
       engine = ::Erubi::Engine.new(content, engine_opts)
-      eval(engine.src, assigns_binding)
+      eval(engine.src, assigns_binding, filename)
     end
   end
 end
