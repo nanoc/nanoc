@@ -12,8 +12,8 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
         begin
           Net::HTTP.get('127.0.0.1', '/', 50_385)
         rescue Errno::ECONNREFUSED, Errno::ECONNRESET
-          sleep(0.1 * 1.2**i)
-          retry
+          sleep(0.1 * 1.1**i)
+          next
         end
         break
       end
@@ -55,6 +55,13 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
     it 'does not serve other files as /' do
       File.write('output/index.html666', 'Hello there! Nanoc loves you! <3')
       run_nanoc_cmd(['view', '--port', '50385']) do
+        expect(Net::HTTP.get('127.0.0.1', '/', 50_385)).to eql("File not found: /\n")
+      end
+    end
+
+    it 'does not crash when output dir does not exist and --live-reload is given' do
+      FileUtils.rm_rf('output')
+      run_nanoc_cmd(['view', '--port', '50385', '--live-reload']) do
         expect(Net::HTTP.get('127.0.0.1', '/', 50_385)).to eql("File not found: /\n")
       end
     end
