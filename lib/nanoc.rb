@@ -24,6 +24,7 @@ require 'ddplugin'
 require 'hamster'
 require 'ref'
 require 'slow_enumerator_tools'
+require 'ddtelemetry'
 
 # Load general requirements
 require 'cgi'
@@ -50,7 +51,6 @@ require 'yaml'
 # Load Nanoc
 require 'nanoc/version'
 require 'nanoc/base'
-require 'nanoc/telemetry'
 require 'nanoc/checking'
 require 'nanoc/deploying'
 require 'nanoc/extra'

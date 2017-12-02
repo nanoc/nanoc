@@ -12,12 +12,12 @@ module Nanoc::CLI::Commands::CompileListeners
     # @param [Enumerable<Nanoc::Int::ItemRep>] reps
     def initialize(reps:)
       @reps = reps
-      @telemetry = Nanoc::Telemetry.new
+      @telemetry = DDTelemetry.new
     end
 
     # @see Listener#start
     def start
-      stage_stopwatch = Nanoc::Telemetry::Stopwatch.new
+      stage_stopwatch = DDTelemetry::Stopwatch.new
 
       on(:stage_started) do |_klass|
         stage_stopwatch.start
@@ -27,14 +27,14 @@ module Nanoc::CLI::Commands::CompileListeners
         stage_stopwatch.stop
         name = klass.to_s.sub(/.*::/, '')
         @telemetry.summary(:stages).observe(stage_stopwatch.duration, name)
-        stage_stopwatch = Nanoc::Telemetry::Stopwatch.new
+        stage_stopwatch = DDTelemetry::Stopwatch.new
       end
 
       outdatedness_rule_stopwatches = {}
 
       on(:outdatedness_rule_started) do |klass, obj|
         stopwatches = outdatedness_rule_stopwatches.fetch(klass) { outdatedness_rule_stopwatches[klass] = {} }
-        stopwatch = stopwatches.fetch(obj) { stopwatches[obj] = Nanoc::Telemetry::Stopwatch.new }
+        stopwatch = stopwatches.fetch(obj) { stopwatches[obj] = DDTelemetry::Stopwatch.new }
         stopwatch.start
       end
 
@@ -51,7 +51,7 @@ module Nanoc::CLI::Commands::CompileListeners
 
       on(:filtering_started) do |rep, _filter_name|
         stopwatch_stack = filter_stopwatches.fetch(rep) { filter_stopwatches[rep] = [] }
-        stopwatch_stack << Nanoc::Telemetry::Stopwatch.new
+        stopwatch_stack << DDTelemetry::Stopwatch.new
         stopwatch_stack.last.start
       end
 
@@ -74,7 +74,7 @@ module Nanoc::CLI::Commands::CompileListeners
 
       on(:phase_started) do |phase_name, rep|
         stopwatches = phase_stopwatches.fetch(rep) { phase_stopwatches[rep] = {} }
-        stopwatches[phase_name] = Nanoc::Telemetry::Stopwatch.new.tap(&:start)
+        stopwatches[phase_name] = DDTelemetry::Stopwatch.new.tap(&:start)
       end
 
       on(:phase_ended) do |phase_name, rep|
@@ -196,7 +196,7 @@ module Nanoc::CLI::Commands::CompileListeners
     end
 
     def print_table(rows)
-      puts Nanoc::Telemetry::Table.new(rows).to_s
+      puts DDTelemetry::Table.new(rows).to_s
     end
   end
 end
