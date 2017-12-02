@@ -80,6 +80,8 @@ module Nanoc
       present_files = []
       present_dirs = []
 
+      expanded_dir = File.expand_path(dir)
+
       Find.find(dir) do |f|
         basename = File.basename(f)
 
@@ -91,7 +93,7 @@ module Nanoc
         when 'directory'
           if exclude?(basename)
             Find.prune
-          else
+          elsif expanded_dir != File.expand_path(f)
             present_dirs << f
           end
         end
