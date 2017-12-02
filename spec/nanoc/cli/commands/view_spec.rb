@@ -59,6 +59,13 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
       end
     end
 
+    it 'does not crash when output dir does not exist and --live-reload is given' do
+      FileUtils.rm_rf('output')
+      run_nanoc_cmd(['view', '--port', '50385', '--live-reload']) do
+        expect(Net::HTTP.get('127.0.0.1', '/', 50_385)).to eql("File not found: /\n")
+      end
+    end
+
     it 'does not listen on non-local interfaces' do
       addresses = Socket.getifaddrs.map(&:addr).select(&:ipv4?).map(&:ip_address)
       non_local_addresses = addresses - ['127.0.0.1']
