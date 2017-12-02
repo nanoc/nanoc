@@ -62,7 +62,6 @@ describe Nanoc::Pruner do
 
       it 'returns all directories' do
         dirs = [
-          'output/',
           'output/projects',
           'output/.git',
         ]
@@ -84,7 +83,6 @@ describe Nanoc::Pruner do
 
       it 'returns all directories' do
         dirs = [
-          'output/',
           'output/projects',
         ]
         expect(subject[1]).to match_array(dirs)
@@ -105,7 +103,6 @@ describe Nanoc::Pruner do
 
       it 'returns all directories' do
         dirs = [
-          'output/',
           'output/projects',
           'output/.git',
         ]
