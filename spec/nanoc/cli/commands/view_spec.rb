@@ -12,8 +12,8 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
         begin
           Net::HTTP.get('127.0.0.1', '/', 50_385)
         rescue Errno::ECONNREFUSED, Errno::ECONNRESET
-          sleep(0.1 * 1.2**i)
-          retry
+          sleep(0.1 * 1.1**i)
+          next
         end
         break
       end
