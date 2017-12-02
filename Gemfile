@@ -7,7 +7,6 @@ gemspec
 group :devel do
   gem 'codecov', require: false
   gem 'contracts', '~> 0.14'
-  gem 'ddbuffer', '~> 1.0'
   gem 'fuubar'
   gem 'guard-rake'
   gem 'json', '~> 2.0'

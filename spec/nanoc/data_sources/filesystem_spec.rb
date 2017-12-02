@@ -90,7 +90,7 @@ describe Nanoc::DataSources::Filesystem do
     it 'contains one element after changing' do
       FileUtils.mkdir_p('content')
 
-      enum = DDBuffer.new(1).call(subject.to_enum)
+      enum = SlowEnumeratorTools.buffer(subject.to_enum, 1)
       q = SizedQueue.new(1)
       Thread.new { q << enum.take(1).first }
 
@@ -113,7 +113,7 @@ describe Nanoc::DataSources::Filesystem do
     it 'contains one element after changing' do
       FileUtils.mkdir_p('layouts')
 
-      enum = DDBuffer.new(1).call(subject.to_enum)
+      enum = SlowEnumeratorTools.buffer(subject.to_enum, 1)
       q = SizedQueue.new(1)
       Thread.new { q << enum.take(1).first }
 
