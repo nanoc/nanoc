@@ -95,7 +95,7 @@ Enhancements:
 
 * Various speed improvements
 
-## 4.8.0 (2017-07-17)
+## 4.8 (2017-07-17)
 
 Features:
 
