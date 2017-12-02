@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Extra::LiveRecompiler, site: true, stdio: true do
+describe Nanoc::Live::LiveRecompiler, site: true, stdio: true do
   it 'detects content changes' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)

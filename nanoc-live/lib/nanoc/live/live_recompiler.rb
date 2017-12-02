@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Nanoc::Extra
+module Nanoc::Live
   class LiveRecompiler
     def initialize(command_runner:)
       @command_runner = command_runner

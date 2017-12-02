@@ -196,7 +196,6 @@ lib/nanoc/extra/core_ext/pathname.rb
 lib/nanoc/extra/core_ext/time.rb
 lib/nanoc/extra/jruby_nokogiri_warner.rb
 lib/nanoc/extra/link_collector.rb
-lib/nanoc/extra/live_recompiler.rb
 lib/nanoc/extra/parallel_collection.rb
 lib/nanoc/extra/piper.rb
 lib/nanoc/filters.rb

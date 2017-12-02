@@ -26,7 +26,8 @@ module Nanoc::CLI::Commands
     end
 
     def run_repeat
-      Nanoc::Extra::LiveRecompiler.new(command_runner: self).run
+      require 'nanoc/live'
+      Nanoc::Live::LiveRecompiler.new(command_runner: self).run
     end
 
     def run_once

@@ -3,26 +3,11 @@
 
 require 'fileutils'
 require 'octokit'
+require 'shellwords'
 
 def run(*args)
-  puts 'I will execute the following:'
-  puts '    ' + args.map { |a| a =~ /\s/ ? a.inspect : a }.join(' ')
-  print 'Is this correct? [y/N] '
-  res = gets
-  unless res.strip.casecmp('y').zero?
-    $stderr.puts 'Answer was not Y; release aborted.'
-    exit 1
-  end
-
-  system('echo', *args)
+  puts('<exec> ' + args.map { |s| Shellwords.escape(s) }.join(' '))
   system(*args)
-
-  print 'Continue? [y/N] '
-  res = gets
-  unless res.strip.casecmp('y').zero?
-    $stderr.puts 'Answer was not Y; release aborted.'
-    exit 1
-  end
 end
 
 puts '=== Logging in to GitHub’s API…'
@@ -31,7 +16,7 @@ puts
 
 puts '=== Deleting old *.gem files…'
 Dir['*.gem'].each do |fn|
-  puts "  #{fn}…"
+  puts "deleting #{fn}…"
   FileUtils.rm_f(fn)
 end
 puts
@@ -48,13 +33,26 @@ unless release_line.include?(Time.now.strftime('%Y-%m-%d'))
 end
 puts
 
-puts '=== Building new gem…'
-run('gem', 'build', 'nanoc.gemspec')
-puts
-
 puts '=== Reading version…'
 require './lib/nanoc/version'
 puts "Version = #{Nanoc::VERSION}"
+puts
+
+puts '=== Building gems…'
+run('bundle', 'exec', 'rake', 'gem')
+puts
+
+puts '=== Verifying that gems were built properly…'
+gem_filenames = [
+  "nanoc-#{Nanoc::VERSION}.gem",
+  "nanoc-live/nanoc-live-#{Nanoc::Live::VERSION}.gem",
+]
+missing_gem_filenames = gem_filenames.reject { |g| File.file?(g) }
+if missing_gem_filenames.any?
+  $stderr.puts "Could not find some gems: #{gem_filenames.join(', ')}"
+  $stderr.puts 'ABORTED!'
+  exit 1
+end
 puts
 
 puts '=== Verifying that release does not yet exist…'
@@ -67,6 +65,14 @@ if release
 end
 puts
 
+puts '=== Reading release notes…'
+release_notes =
+  File.readlines('NEWS.md')
+      .drop(4)
+      .take_while { |l| l !~ /^## / }
+      .join
+puts
+
 puts '=== Creating Git tag…'
 run('git', 'tag', '--sign', '--annotate', Nanoc::VERSION, '--message', "Version #{Nanoc::VERSION}")
 puts
@@ -76,15 +82,9 @@ run('git', 'push', 'origin', '--tags')
 puts
 
 puts '=== Pushing gem…'
-run('gem', 'push', "nanoc-#{Nanoc::VERSION}.gem")
-puts
-
-puts '=== Reading release notes…'
-release_notes =
-  File.readlines('NEWS.md')
-      .drop(4)
-      .take_while { |l| l !~ /^## / }
-      .join
+gem_filenames.each do |fn|
+  run('gem', 'push', fn)
+end
 puts
 
 puts '=== Creating release on GitHub…'
