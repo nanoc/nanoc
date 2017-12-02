@@ -253,12 +253,4 @@ lib/nanoc/rule_dsl/rule.rb
 lib/nanoc/rule_dsl/rules_collection.rb
 lib/nanoc/rule_dsl/rules_loader.rb
 lib/nanoc/spec.rb
-lib/nanoc/telemetry.rb
-lib/nanoc/telemetry/counter.rb
-lib/nanoc/telemetry/labelled_counter.rb
-lib/nanoc/telemetry/labelled_summary.rb
-lib/nanoc/telemetry/registry.rb
-lib/nanoc/telemetry/stopwatch.rb
-lib/nanoc/telemetry/summary.rb
-lib/nanoc/telemetry/table.rb
 lib/nanoc/version.rb
