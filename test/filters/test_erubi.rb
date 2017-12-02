@@ -21,16 +21,36 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
     assert_equal('I was hiding in a cheap motel.', result)
   end
 
-  def test_filter_error
+  def test_filter_syntax_error
     # Create filter
-    filter = ::Nanoc::Filters::Erubi.new
+    item = Nanoc::Int::Item.new('asdf', {}, '/about.md')
+    item_rep = Nanoc::Int::ItemRep.new(item, :xml)
+    filter = ::Nanoc::Filters::Erubi.new(item: item, item_rep: item_rep)
 
     # Run filter
     raised = false
     begin
       filter.setup_and_run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
     rescue SyntaxError => e
+      assert_match('item /about.md (rep xml):1: syntax error, unexpected tIDENTIFIER', e.to_s)
       assert_match 'syntax error', e.message
+      raised = true
+    end
+    assert raised
+  end
+
+  def test_filter_regular_error
+    # Create filter
+    item = Nanoc::Int::Item.new('asdf', {}, '/about.md')
+    item_rep = Nanoc::Int::ItemRep.new(item, :xml)
+    filter = ::Nanoc::Filters::Erubi.new(item: item, item_rep: item_rep)
+
+    # Run filter
+    raised = false
+    begin
+      filter.setup_and_run('<%= undefined_method_2ff04e22 %>')
+    rescue => e
+      assert_match 'item /about.md (rep xml):1', e.backtrace.join("\n")
       raised = true
     end
     assert raised
