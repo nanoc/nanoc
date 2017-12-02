@@ -1,5 +1,17 @@
 # Nanoc news
 
+## 4.8.15 (2017-12-02)
+
+Fixes:
+
+* Made `nanoc` show item being compiled in crash logs of all errors, not just errors inheriting from `StandardError` (#1258)
+* Made Erubi stack traces include the filename of the item or layout that is being compiled (#1255, #1259)
+* Prevented `view --live-reload` from crashing when the output directory does not exist (#1254, #1261)
+
+Enhancements:
+
+* Made pruner not remove the output directory if it’s empty (#1260)
+
 ## 4.8.14 (2017-11-27)
 
 Same as 4.8.13, but published with the proper release date.
