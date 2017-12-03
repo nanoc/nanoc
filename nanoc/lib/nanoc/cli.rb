@@ -118,8 +118,6 @@ module Nanoc::CLI
 
       next if basename == 'nanoc'
 
-      next if basename == 'live' && !Nanoc::Feature.enabled?(Nanoc::Feature::LIVE_CMD)
-
       cmd = load_command_at(cmd_filename)
       add_command(cmd)
     end

@@ -13,7 +13,7 @@ required :o, :host,    'specify the host to listen on (default: 127.0.0.1)'
 required :p, :port,    'specify the port to listen on (default: 3000)'
 flag :L, :'live-reload', 'reload on changes'
 
-module Nanoc::CLI::Commands
+module Nanoc::Live::Commands
   class Live < ::Nanoc::CLI::CommandRunner
     def run
       self.class.enter_site_dir
@@ -28,4 +28,4 @@ module Nanoc::CLI::Commands
   end
 end
 
-runner Nanoc::CLI::Commands::Live
+runner Nanoc::Live::Commands::Live
