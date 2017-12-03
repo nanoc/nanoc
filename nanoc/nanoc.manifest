@@ -164,7 +164,6 @@ lib/nanoc/cli/commands/compile_listeners/timing_recorder.rb
 lib/nanoc/cli/commands/compile.rb
 lib/nanoc/cli/commands/create-site.rb
 lib/nanoc/cli/commands/deploy.rb
-lib/nanoc/cli/commands/live.rb
 lib/nanoc/cli/commands/nanoc.rb
 lib/nanoc/cli/commands/prune.rb
 lib/nanoc/cli/commands/shell.rb
