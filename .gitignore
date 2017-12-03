@@ -3,8 +3,8 @@
 *.gemfile.lock
 *~
 
+coverage/
 /.yardoc/
-/coverage/
 /Gemfile.lock
 /doc/yardoc/
 /.vscode/
