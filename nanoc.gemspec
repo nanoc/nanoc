@@ -17,8 +17,7 @@ Gem::Specification.new do |s|
   s.executables        = ['nanoc']
   s.require_paths      = ['lib']
 
-  s.rdoc_options     = ['--main', 'README.md']
-  s.extra_rdoc_files = ['LICENSE', 'README.md', 'NEWS.md']
+  s.has_rdoc = false
 
   s.required_ruby_version = '>= 2.3.0'
 
