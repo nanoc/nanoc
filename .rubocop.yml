@@ -8,6 +8,7 @@ AllCops:
 Naming/FileName:
   Exclude:
     - 'nanoc/lib/nanoc/cli/commands/*.rb'
+    - 'nanoc-external/lib/nanoc-external.rb'
 
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma

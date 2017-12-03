@@ -1,0 +1,7 @@
+NEWS.md
+README.md
+
+lib/nanoc-external.rb
+lib/nanoc/external.rb
+lib/nanoc/external/filter.rb
+lib/nanoc/external/version.rb
