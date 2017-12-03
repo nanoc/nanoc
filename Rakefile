@@ -17,6 +17,5 @@ RSpec::Core::RakeTask.new(:spec) do |t|
 end
 
 task test: %i[spec test_all rubocop]
-task test_ci: :test
 
 task default: :test
