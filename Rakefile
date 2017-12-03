@@ -14,11 +14,16 @@ namespace :nanoc do
   task(:gem) { sub_sh('nanoc', 'bundle exec rake gem') }
 end
 
+namespace :nanoc_external do
+  task(:test) { sub_sh('nanoc-external', 'bundle exec rake test') }
+  task(:gem) { sub_sh('nanoc-external', 'bundle exec rake gem') }
+end
+
 namespace :nanoc_live do
   task(:test) { sub_sh('nanoc-live', 'bundle exec rake test') }
   task(:gem) { sub_sh('nanoc-live', 'bundle exec rake gem') }
 end
 
-task test: %i[nanoc:test nanoc_live:test]
-task gem: %i[nanoc:gem nanoc_live:gem]
+task test: %i[nanoc:test nanoc_external:test nanoc_live:test]
+task gem: %i[nanoc:gem nanoc_external:gem nanoc_live:gem]
 task default: :test

@@ -23,6 +23,8 @@ version_constant =
     'Nanoc::VERSION'
   when 'nanoc-live'
     'Nanoc::Live::VERSION'
+  when 'nanoc-external'
+    'Nanoc::External::VERSION'
   else
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
     exit 1
@@ -33,6 +35,8 @@ gem_dir =
     'nanoc'
   when 'nanoc-live'
     'nanoc-live'
+  when 'nanoc-external'
+    'nanoc-external'
   else
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
     exit 1
@@ -43,6 +47,8 @@ gem_path =
     'nanoc'
   when 'nanoc-live'
     'nanoc/live'
+  when 'nanoc-external'
+    'nanoc/external'
   else
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
     exit 1
