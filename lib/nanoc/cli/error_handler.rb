@@ -190,6 +190,7 @@ module Nanoc::CLI
       'markaby'        => 'markaby',
       'maruku'         => 'maruku',
       'mime/types'     => 'mime-types',
+      'nanoc/live'     => 'nanoc-live',
       'nokogiri'       => 'nokogiri',
       'nokogumbo'      => 'nokogumbo',
       'pry'            => 'pry',
