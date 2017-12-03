@@ -2,13 +2,56 @@
 # frozen_string_literal: true
 
 require 'fileutils'
+require 'json'
 require 'octokit'
 require 'shellwords'
+require 'uri'
 
 def run(*args)
   puts('<exec> ' + args.map { |s| Shellwords.escape(s) }.join(' '))
   system(*args)
 end
+
+if ARGV.size != 1
+  $stderr.puts "usage: #{$PROGRAM_NAME} [gem-name]"
+  exit 1
+end
+gem_name = ARGV[0]
+version_constant =
+  case gem_name
+  when 'nanoc'
+    'Nanoc::VERSION'
+  when 'nanoc-live'
+    'Nanoc::Live::VERSION'
+  else
+    $stderr.puts "Error: Unknown gem name: #{gem_name}"
+    exit 1
+  end
+gem_dir =
+  case gem_name
+  when 'nanoc'
+    '.'
+  when 'nanoc-live'
+    'nanoc-live'
+  else
+    $stderr.puts "Error: Unknown gem name: #{gem_name}"
+    exit 1
+  end
+gem_path =
+  case gem_name
+  when 'nanoc'
+    'nanoc'
+  when 'nanoc-live'
+    'nanoc/live'
+  else
+    $stderr.puts "Error: Unknown gem name: #{gem_name}"
+    exit 1
+  end
+
+puts "=== Entering gem dir (#{gem_dir})…"
+Dir.chdir(gem_dir)
+puts Dir.getwd
+puts
 
 puts '=== Logging in to GitHub’s API…'
 client = Octokit::Client.new(netrc: true)
@@ -24,18 +67,19 @@ puts
 puts '=== Verifying presence of release date…'
 release_line = File.readlines('NEWS.md').drop(2).first
 unless release_line =~ / \(\d{4}-\d{2}-\d{2}\)$/
-  $stderr.puts 'No proper release date found!'
+  $stderr.puts 'Error: No proper release date found!'
   exit 1
 end
 unless release_line.include?(Time.now.strftime('%Y-%m-%d'))
-  $stderr.puts 'The release date does not match today’s date!'
+  $stderr.puts 'Error: The release date does not match today’s date!'
   exit 1
 end
 puts
 
 puts '=== Reading version…'
-require './lib/nanoc/version'
-puts "Version = #{Nanoc::VERSION}"
+require "./lib/#{gem_path}/version"
+version = eval(version_constant) # rubocop:disable Security/Eval
+puts "Version = #{version}"
 puts
 
 puts '=== Building gems…'
@@ -43,24 +87,37 @@ run('bundle', 'exec', 'rake', 'gem')
 puts
 
 puts '=== Verifying that gems were built properly…'
-gem_filenames = [
-  "nanoc-#{Nanoc::VERSION}.gem",
-  "nanoc-live/nanoc-live-#{Nanoc::Live::VERSION}.gem",
-]
-missing_gem_filenames = gem_filenames.reject { |g| File.file?(g) }
-if missing_gem_filenames.any?
-  $stderr.puts "Could not find some gems: #{gem_filenames.join(', ')}"
-  $stderr.puts 'ABORTED!'
+gem_filename = "#{gem_name}-#{version}.gem"
+unless File.file?(gem_filename)
+  $stderr.puts "Error: Could not find gem: #{gem_filename}"
+  exit 1
+end
+puts
+
+puts '=== Verifying that gem version does not yet exist…'
+url = URI.parse("https://rubygems.org/api/v1/versions/#{gem_name}.json")
+response = Net::HTTP.get_response(url)
+existing_versions =
+  case response.code
+  when '404'
+    []
+  when '200'
+    JSON.parse(response.body).map { |e| e.fetch('number') }
+  else
+    $stderr.puts "Error: Couldn’t fetch version information for #{gem_name} (status #{response.code})"
+    exit 1
+  end
+if existing_versions.include?(version)
+  $stderr.puts "Error: #{gem_name} v#{version} already exists"
   exit 1
 end
 puts
 
 puts '=== Verifying that release does not yet exist…'
 releases = client.releases('nanoc/nanoc')
-release = releases.find { |r| r.tag_name == Nanoc::VERSION }
+release = releases.find { |r| r.tag_name == version }
 if release
-  $stderr.puts 'Release already exists!'
-  $stderr.puts 'ABORTED!'
+  $stderr.puts 'Error: GitHub release already exists!'
   exit 1
 end
 puts
@@ -74,7 +131,13 @@ release_notes =
 puts
 
 puts '=== Creating Git tag…'
-run('git', 'tag', '--sign', '--annotate', Nanoc::VERSION, '--message', "Version #{Nanoc::VERSION}")
+annotation =
+  if gem_name == 'nanoc'
+    version
+  else
+    "#{gem_name}-v#{version}"
+  end
+run('git', 'tag', '--sign', '--annotate', annotation, '--message', "#{gem_name} v#{version}")
 puts
 
 puts '=== Pushing Git data…'
@@ -82,19 +145,19 @@ run('git', 'push', 'origin', '--tags')
 puts
 
 puts '=== Pushing gem…'
-gem_filenames.each do |fn|
-  run('gem', 'push', fn)
-end
+run('gem', 'push', gem_filename)
 puts
 
-puts '=== Creating release on GitHub…'
-sleep 3 # Give GitHub some time to detect the new tag
-is_prerelease = Nanoc::VERSION =~ /a|b|rc/ || Nanoc::VERSION =~ /^0/
-client.create_release(
-  'nanoc/nanoc', Nanoc::VERSION,
-  prerelease: !is_prerelease.nil?,
-  body: release_notes
-)
-puts
+if gem_name == 'nanoc'
+  puts '=== Creating release on GitHub…'
+  sleep 3 # Give GitHub some time to detect the new tag
+  is_prerelease = version =~ /a|b|rc/ || version =~ /^0/
+  client.create_release(
+    'nanoc/nanoc', version,
+    prerelease: !is_prerelease.nil?,
+    body: release_notes
+  )
+  puts
+end
 
 puts 'DONE!'
