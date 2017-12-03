@@ -2,7 +2,7 @@
 
 describe 'list of contributors in README', chdir: false do
   let(:contributors_in_readme) do
-    File.readlines('README.md').last.chomp("\n").split(', ')
+    File.readlines('../README.md').last.chomp("\n").split(', ')
   end
 
   let(:contributors_in_release_notes) do

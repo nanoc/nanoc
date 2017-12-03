@@ -30,7 +30,7 @@ version_constant =
 gem_dir =
   case gem_name
   when 'nanoc'
-    '.'
+    'nanoc'
   when 'nanoc-live'
     'nanoc-live'
   else

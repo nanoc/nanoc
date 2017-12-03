@@ -54,7 +54,7 @@ describe Nanoc::Int::DirectedGraph do
   it 'has correct examples' do
     expect('Nanoc::Int::DirectedGraph')
       .to have_correct_yard_examples
-      .in_file('lib/nanoc/base/entities/directed_graph.rb')
+      .in_file('nanoc/lib/nanoc/base/entities/directed_graph.rb')
   end
 
   describe '#vertices' do
