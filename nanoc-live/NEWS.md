@@ -1,3 +1,5 @@
 # Release notes for nanoc-live
 
-The release notes for nanoc-live are part of nanoc.
+## 1.0.0a1 (???)
+
+Initial release.
