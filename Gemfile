@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gemspec path: '.'
+gemspec path: 'nanoc'
 gemspec path: 'nanoc-live'
 
 group :devel do

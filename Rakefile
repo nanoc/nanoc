@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'rubocop/rake_task'
-require 'rspec/core/rake_task'
-require 'rake/testtask'
-
 def sub_sh(dir, cmd)
   Bundler.with_clean_env do
     Dir.chdir(dir) do
@@ -14,23 +10,8 @@ def sub_sh(dir, cmd)
 end
 
 namespace :nanoc do
-  RuboCop::RakeTask.new(:rubocop)
-
-  Rake::TestTask.new(:test_all) do |t|
-    t.test_files = Dir['test/**/test_*.rb']
-    t.libs << 'test'
-    t.verbose = false
-  end
-
-  RSpec::Core::RakeTask.new(:spec) do |t|
-    t.verbose = false
-  end
-
-  task test: %i[spec test_all rubocop]
-
-  task :gem do
-    sh('gem build *.gemspec')
-  end
+  task(:test) { sub_sh('nanoc', 'bundle exec rake test') }
+  task(:gem) { sub_sh('nanoc', 'bundle exec rake gem') }
 end
 
 namespace :nanoc_live do

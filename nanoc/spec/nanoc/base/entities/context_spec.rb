@@ -21,6 +21,6 @@ describe Nanoc::Int::Context do
   it 'has correct examples' do
     expect('Nanoc::Int::Context#initialize')
       .to have_correct_yard_examples
-      .in_file('lib/nanoc/base/entities/context.rb')
+      .in_file('nanoc/lib/nanoc/base/entities/context.rb')
   end
 end
