@@ -98,8 +98,6 @@ module Nanoc::Live
     end
 
     def gen_lib_changes
-      require 'listen'
-
       Nanoc::ChangesStream.new do |cl|
         opts = {
           latency: 0.0,
@@ -113,8 +111,6 @@ module Nanoc::Live
     end
 
     def gen_config_and_rules_changes
-      require 'listen'
-
       Nanoc::ChangesStream.new do |cl|
         opts = {
           only: /(\/|\A)(nanoc\.yaml|config\.yaml|rules|Rules|rules\.rb|Rules\.rb)\z/,

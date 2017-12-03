@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'adsf/live'
+require 'listen'
 require 'nanoc'
 require 'nanoc/cli'
 
