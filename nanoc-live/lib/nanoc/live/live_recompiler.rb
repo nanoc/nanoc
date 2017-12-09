@@ -79,6 +79,12 @@ module Nanoc::Live
     end
 
     def handle_changes(site, command_runner)
+      Nanoc::CLI::ErrorHandler.handle_while(exit_on_error: false) do
+        unsafe_handle_changes(site, command_runner)
+      end
+    end
+
+    def unsafe_handle_changes(site, command_runner)
       time_before = Time.now
 
       puts 'Compiling site…'
