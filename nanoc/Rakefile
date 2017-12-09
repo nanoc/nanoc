@@ -21,3 +21,5 @@ task test: %i[spec test_all rubocop]
 task :gem do
   sh('gem build *.gemspec')
 end
+
+task default: :test
