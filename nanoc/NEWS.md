@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.16 (2017-12-09)
+
+Fixes:
+
+* Made `adsf-live` not be required for `nanoc view`, unless running with `--live-reload`
+
 ## 4.8.15 (2017-12-02)
 
 Fixes:
