@@ -5,23 +5,14 @@ module Nanoc::CLI
   #
   # @api private
   class ErrorHandler
-    # @param [Nanoc::CLI::Command, nil] command The command that is
-    #   currently being executed, or nil if there is none
-    def initialize(command: nil)
-      @command = command
-    end
-
     # Enables error handling in the given block.
     #
-    # @param [Nanoc::CLI::Command, nil] command The command that is
-    #   currently being executed, or nil if there is none
-    #
     # @return [void]
-    def self.handle_while(command: nil, &block)
+    def self.handle_while
       if @disabled
         yield
       else
-        new(command: command).handle_while(&block)
+        new.handle_while { yield }
       end
     end
 
@@ -42,7 +33,7 @@ module Nanoc::CLI
     # called directly; use {Nanoc::CLI::ErrorHandler.handle_while} instead.
     #
     # @return [void]
-    def handle_while(&_block)
+    def handle_while
       # Set exit handler
       %w[INT TERM].each do |signal|
         Signal.trap(signal) do
