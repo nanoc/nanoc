@@ -19,7 +19,6 @@ module Nanoc::CLI::Commands
 
     def run
       load_adsf
-      require 'adsf/live'
 
       config = Nanoc::Int::ConfigLoader.new.new_from_cwd
 
