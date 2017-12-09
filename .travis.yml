@@ -1,15 +1,19 @@
 language: ruby
+
 rvm:
   - "2.3"
   - "2.4"
+
 branches:
   only:
     - "master"
+
 env:
   global:
     -
       LC_ALL=en_US.UTF_8
       LANG=en_US.UTF_8
+
 matrix:
   fast_finish: true
   include:
@@ -20,9 +24,13 @@ matrix:
     - rvm: ruby-head
     - rvm: jruby-9.1.9.0
       env: DISABLE_NOKOGIRI=1
+
 script:
   - bundle exec rake test
+
 cache: bundler
+
 sudo: false
+
 git:
   depth: 10
