@@ -92,7 +92,7 @@ describe Nanoc::Live::LiveRecompiler, site: true, stdio: true do
     Process.waitpid(pid)
   end
 
-  it 'detects config changes' do
+  it 'detects lib changes' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
     live_recompiler = described_class.new(command_runner: command_runner)
