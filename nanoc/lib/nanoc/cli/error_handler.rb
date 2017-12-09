@@ -8,11 +8,11 @@ module Nanoc::CLI
     # Enables error handling in the given block.
     #
     # @return [void]
-    def self.handle_while
+    def self.handle_while(exit_on_error: true)
       if @disabled
         yield
       else
-        new.handle_while { yield }
+        new.handle_while(exit_on_error: exit_on_error) { yield }
       end
     end
 
@@ -33,7 +33,7 @@ module Nanoc::CLI
     # called directly; use {Nanoc::CLI::ErrorHandler.handle_while} instead.
     #
     # @return [void]
-    def handle_while
+    def handle_while(exit_on_error:)
       # Set exit handler
       %w[INT TERM].each do |signal|
         Signal.trap(signal) do
@@ -65,7 +65,7 @@ module Nanoc::CLI
       else
         print_error(e)
       end
-      exit(1)
+      exit(1) if exit_on_error
     end
 
     # Prints the given error to stderr. Includes message, possible resolution

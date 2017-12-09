@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 describe Nanoc::Live::LiveRecompiler, site: true, stdio: true do
+  before do
+    Nanoc::CLI::ErrorHandler.enable
+  end
+
   it 'detects content changes' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
@@ -58,7 +62,7 @@ describe Nanoc::Live::LiveRecompiler, site: true, stdio: true do
     Process.waitpid(pid)
   end
 
-  it 'detects config changes' do
+  it 'detects lib changes' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
     live_recompiler = described_class.new(command_runner: command_runner)
@@ -125,5 +129,46 @@ describe Nanoc::Live::LiveRecompiler, site: true, stdio: true do
     # Stop
     Process.kill('INT', pid)
     Process.waitpid(pid)
+  end
+
+  it 'prints errors' do
+    File.write('content/lol.html', '<%= __invalid_code_omg %>')
+
+    stdout_r, stdout_w = *IO.pipe
+    stderr_r, stderr_w = *IO.pipe
+    pid = fork do
+      stdout_r.close
+      stderr_r.close
+      trap(:INT) { exit(0) }
+      $stdout = stdout_w
+      $stderr = stderr_w
+
+      command = nil
+      command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
+      live_recompiler = described_class.new(command_runner: command_runner)
+
+      live_recompiler.run
+    end
+    stdout_w.close
+    stderr_w.close
+
+    # FIXME: wait is ugly
+    sleep 0.5
+
+    File.write('Rules', <<~RULES)
+      compile '/**/*' do
+        filter :erb
+        write item.identifier
+      end
+    RULES
+
+    # FIXME: wait is ugly
+    sleep 0.5
+
+    # Stop
+    Process.kill('INT', pid)
+    Process.waitpid(pid)
+
+    expect(stderr_r.read).to include('Captain! We’ve been hit!')
   end
 end
