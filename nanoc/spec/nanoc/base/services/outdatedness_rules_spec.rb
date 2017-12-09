@@ -20,6 +20,7 @@ describe Nanoc::Int::OutdatednessRules do
 
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
     let(:item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
+    let(:layout) { Nanoc::Int::Layout.new('layoutz', {}, '/page.erb') }
 
     let(:config) { Nanoc::Int::Configuration.new.with_defaults }
     let(:code_snippets) { [] }
@@ -49,7 +50,7 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     let(:items) { Nanoc::Int::ItemCollection.new(config, [item]) }
-    let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
+    let(:layouts) { Nanoc::Int::LayoutCollection.new(config, [layout]) }
 
     before do
       allow(site).to receive(:code_snippets).and_return(code_snippets)
@@ -486,6 +487,50 @@ describe Nanoc::Int::OutdatednessRules do
             b.add_snapshot(:donkey, '/foo.md')
             b.add_filter(:xsl, {})
           end
+        end
+
+        it { is_expected.to be }
+      end
+    end
+
+    describe 'ItemCollectionExtended' do
+      let(:rule_class) { Nanoc::Int::OutdatednessRules::ItemCollectionExtended }
+
+      let(:obj) { items }
+
+      context 'no new item added' do
+        before do
+          expect(dependency_store).to receive(:new_items).and_return([])
+        end
+
+        it { is_expected.not_to be }
+      end
+
+      context 'new item added' do
+        before do
+          expect(dependency_store).to receive(:new_items).and_return([item])
+        end
+
+        it { is_expected.to be }
+      end
+    end
+
+    describe 'LayoutCollectionExtended' do
+      let(:rule_class) { Nanoc::Int::OutdatednessRules::LayoutCollectionExtended }
+
+      let(:obj) { layouts }
+
+      context 'no new layout added' do
+        before do
+          expect(dependency_store).to receive(:new_layouts).and_return([])
+        end
+
+        it { is_expected.not_to be }
+      end
+
+      context 'new layout added' do
+        before do
+          expect(dependency_store).to receive(:new_layouts).and_return([layout])
         end
 
         it { is_expected.to be }
