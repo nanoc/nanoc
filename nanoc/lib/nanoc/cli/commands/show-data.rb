@@ -108,6 +108,15 @@ module Nanoc::CLI::Commands
               pred.identifier.to_s
             when Nanoc::Int::Configuration
               nil
+            when Nanoc::Int::IdentifiableCollection
+              case dep.props.raw_content
+              when true
+                'matching any'
+              else
+                "matching any of #{dep.props.raw_content.sort.join(', ')}"
+              end
+            else
+              raise Nanoc::Int::Errors::InternalInconsistency, "unexpected pred type #{pred}"
             end
 
           if pred
