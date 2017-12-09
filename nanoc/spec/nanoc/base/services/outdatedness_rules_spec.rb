@@ -56,7 +56,7 @@ describe Nanoc::Int::OutdatednessRules do
       allow(site).to receive(:config).and_return(config)
     end
 
-    context 'CodeSnippetsModified' do
+    describe 'CodeSnippetsModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::CodeSnippetsModified }
 
       context 'no snippets' do
@@ -84,7 +84,7 @@ describe Nanoc::Int::OutdatednessRules do
       end
     end
 
-    context 'NotWritten' do
+    describe 'NotWritten' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::NotWritten }
 
       context 'no path' do
@@ -124,7 +124,7 @@ describe Nanoc::Int::OutdatednessRules do
       end
     end
 
-    context 'ContentModified' do
+    describe 'ContentModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::ContentModified }
 
       context 'item' do
@@ -180,7 +180,7 @@ describe Nanoc::Int::OutdatednessRules do
       end
     end
 
-    context 'AttributesModified' do
+    describe 'AttributesModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::AttributesModified }
 
       context 'item' do
@@ -296,7 +296,7 @@ describe Nanoc::Int::OutdatednessRules do
       end
     end
 
-    context 'RulesModified' do
+    describe 'RulesModified' do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::RulesModified }
 
       let(:old_mem) do
@@ -328,7 +328,7 @@ describe Nanoc::Int::OutdatednessRules do
       end
     end
 
-    describe '#ContentModified, #AttributesModified' do
+    describe 'ContentModified, AttributesModified' do
       subject do
         [
           Nanoc::Int::OutdatednessRules::ContentModified,
