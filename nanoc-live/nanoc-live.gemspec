@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '~> 2.3'
 
+  s.add_runtime_dependency('adsf-live', '~> 1.4')
   s.add_runtime_dependency('listen', '~> 3.0')
   s.add_runtime_dependency('nanoc', '~> 4.8')
 end
