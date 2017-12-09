@@ -3,7 +3,6 @@
 [![Build status](http://img.shields.io/travis/nanoc/nanoc.svg)](https://travis-ci.org/nanoc/nanoc)
 [![Code Climate](http://img.shields.io/codeclimate/github/nanoc/nanoc.svg)](https://codeclimate.com/github/nanoc/nanoc)
 [![Code Coverage](https://img.shields.io/codecov/c/github/nanoc/nanoc.svg)](https://codecov.io/gh/nanoc/nanoc)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fnanoc%2Fnanoc.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fnanoc%2Fnanoc?ref=badge_shield)
 
 ![Nanoc logo](https://avatars1.githubusercontent.com/u/3260163?s=140)
 
