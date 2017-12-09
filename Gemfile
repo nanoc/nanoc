@@ -17,7 +17,7 @@ group :devel do
   gem 'mocha'
   gem 'pry'
   gem 'rake'
-  gem 'rdoc', '~> 5.0'
+  gem 'rdoc', '~> 6.0'
   gem 'rspec'
   gem 'rspec-its', '~> 1.2'
   gem 'rspec-mocks'
