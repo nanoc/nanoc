@@ -150,6 +150,37 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
         expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   item \] \(ra__\) /about.md$}m).to_stdout
       end
     end
+
+    context 'dependency onto all items' do
+      before do
+        dependency_store.record_dependency(item_dog, items, raw_content: true)
+      end
+
+      it 'outputs dependencies for /dog.md' do
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[  items \] \(r___\) matching any$}m).to_stdout
+      end
+    end
+
+    context 'dependency onto one specific item' do
+      before do
+        dependency_store.record_dependency(item_dog, items, raw_content: ['/about.*'])
+      end
+
+      it 'outputs dependencies for /dog.md' do
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[  items \] \(r___\) matching any of /about\.\*$}m).to_stdout
+      end
+    end
+
+    context 'dependency onto multiple specific items' do
+      before do
+        dependency_store.record_dependency(item_dog, items, raw_content: ['/about.*'])
+        dependency_store.record_dependency(item_dog, items, raw_content: ['/giraffe.*'])
+      end
+
+      it 'outputs dependencies for /dog.md' do
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[  items \] \(r___\) matching any of /about\.\*, /giraffe\.\*$}m).to_stdout
+      end
+    end
   end
 
   describe '#print_item_rep_outdatedness' do
