@@ -49,6 +49,16 @@ module Nanoc::Int
       end
     end
 
+    contract C::None => String
+    def to_s
+      (+'').tap do |s|
+        s << (raw_content? ? 'r' : '_')
+        s << (attributes? ? 'a' : '_')
+        s << (compiled_content? ? 'c' : '_')
+        s << (path? ? 'p' : '_')
+      end
+    end
+
     contract C::None => C::Bool
     def raw_content?
       case @raw_content

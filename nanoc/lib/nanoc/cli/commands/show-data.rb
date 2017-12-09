@@ -110,14 +110,8 @@ module Nanoc::CLI::Commands
               nil
             end
 
-          props = +''
-          props << (dep.props.raw_content? ? 'r' : '_')
-          props << (dep.props.attributes? ? 'a' : '_')
-          props << (dep.props.compiled_content? ? 'c' : '_')
-          props << (dep.props.path? ? 'p' : '_')
-
           if pred
-            puts "  [ #{format '%6s', type} ] (#{props}) #{pred_identifier}"
+            puts "  [ #{format '%6s', type} ] (#{dep.props}) #{pred_identifier}"
           else
             puts '  ( removed item )'
           end

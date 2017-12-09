@@ -30,6 +30,29 @@ describe Nanoc::Int::Props do
     end
   end
 
+  describe '#to_s' do
+    subject { props.to_s }
+
+    context 'nothing active' do
+      it { is_expected.to eql('____') }
+    end
+
+    context 'attributes active' do
+      let(:props) { described_class.new(attributes: true) }
+      it { is_expected.to eql('_a__') }
+    end
+
+    context 'attributes and compiled_content active' do
+      let(:props) { described_class.new(attributes: true, compiled_content: true) }
+      it { is_expected.to eql('_ac_') }
+    end
+
+    context 'compiled_content active' do
+      let(:props) { described_class.new(compiled_content: true) }
+      it { is_expected.to eql('__c_') }
+    end
+  end
+
   describe '#raw_content?' do
     subject { props.raw_content? }
 
