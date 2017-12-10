@@ -6,7 +6,7 @@ module Nanoc::Int
   # @api private
   class OutdatednessChecker
     class Basic
-      extend Nanoc::Int::Memoization
+      DDMemoize.activate(self, telemetry: Nanoc::MEMOIZATION_TELEMETRY)
 
       include Nanoc::Int::ContractsSupport
 
@@ -97,7 +97,7 @@ module Nanoc::Int
       end
     end
 
-    extend Nanoc::Int::Memoization
+    DDMemoize.activate(self, telemetry: Nanoc::MEMOIZATION_TELEMETRY)
 
     include Nanoc::Int::ContractsSupport
 

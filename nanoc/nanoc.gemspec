@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('addressable', '~> 2.5')
   s.add_runtime_dependency('cri', '~> 2.8')
+  s.add_runtime_dependency('ddmemoize', '= 1.0.0a2') # TODO: upgrade
   s.add_runtime_dependency('ddplugin', '~> 1.0')
   s.add_runtime_dependency('ddtelemetry', '= 1.0.0a1') # TODO: upgrade
   s.add_runtime_dependency('hamster', '~> 3.0')

@@ -3,10 +3,11 @@
 module Nanoc::Int
   # @api private
   class IdentifiableCollection
+    DDMemoize.activate(self, telemetry: Nanoc::MEMOIZATION_TELEMETRY)
+
     include Nanoc::Int::ContractsSupport
     include Enumerable
 
-    extend Nanoc::Int::Memoization
     extend Forwardable
 
     def_delegator :@objects, :each

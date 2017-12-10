@@ -6,7 +6,7 @@ module Nanoc::RuleDSL
   #
   # @api private
   class ActionSequenceCalculator
-    extend Nanoc::Int::Memoization
+    DDMemoize.activate(self, telemetry: Nanoc::MEMOIZATION_TELEMETRY)
 
     class UnsupportedObjectTypeException < ::Nanoc::Error
       def initialize(obj)

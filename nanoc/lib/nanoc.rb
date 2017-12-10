@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+# Load external dependencies
+require 'addressable'
+require 'ddplugin'
+require 'hamster'
+require 'ref'
+require 'slow_enumerator_tools'
+require 'ddmemoize'
+require 'ddtelemetry'
+
 module Nanoc
   # @return [String] A string containing information about this Nanoc version
   #   and its environment (Ruby engine and version, Rubygems version if any).
@@ -16,15 +25,9 @@ module Nanoc
   def self.on_windows?
     RUBY_PLATFORM =~ /windows|bccwin|cygwin|djgpp|mingw|mswin|wince/i
   end
-end
 
-# Load external dependencies
-require 'addressable'
-require 'ddplugin'
-require 'hamster'
-require 'ref'
-require 'slow_enumerator_tools'
-require 'ddtelemetry'
+  MEMOIZATION_TELEMETRY = DDTelemetry.new
+end
 
 # Load general requirements
 require 'cgi'

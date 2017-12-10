@@ -3,7 +3,6 @@
 module Nanoc::Int
   class ChecksumCollection
     include Nanoc::Int::ContractsSupport
-    extend Nanoc::Int::Memoization
 
     c_obj = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet]
 

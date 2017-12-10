@@ -4,7 +4,7 @@ module Nanoc::Int
   class ActionSequence
     include Nanoc::Int::ContractsSupport
     include Enumerable
-    extend Nanoc::Int::Memoization
+    DDMemoize.activate(self, telemetry: Nanoc::MEMOIZATION_TELEMETRY)
 
     attr_reader :item_rep
     attr_reader :actions
