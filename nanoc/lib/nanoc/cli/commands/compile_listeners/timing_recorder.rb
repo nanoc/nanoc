@@ -100,14 +100,6 @@ module Nanoc::CLI::Commands::CompileListeners
 
         @telemetry.summary(:phases).observe(stopwatch.duration, phase_name)
       end
-
-      on(:memoization_miss) do |label|
-        @telemetry.counter(:memoization).increment([label, :miss])
-      end
-
-      on(:memoization_hit) do |label|
-        @telemetry.counter(:memoization).increment([label, :hit])
-      end
     end
 
     # @see Listener#stop
@@ -146,32 +138,12 @@ module Nanoc::CLI::Commands::CompileListeners
       [headers] + rows
     end
 
-    def table_for_memoization
-      headers = %w[memoization hit miss %]
-
-      rows_raw = @telemetry.counter(:memoization).map do |(name, type), counter|
-        { name: name, type: type, count: counter.value }
-      end
-
-      rows = rows_raw.group_by { |r| r[:name] }.map do |name, rows_for_name|
-        rows_by_type = rows_for_name.group_by { |r| r[:type] }
-
-        num_hit = rows_by_type.fetch(:hit, []).fetch(0, {}).fetch(:count, 0)
-        num_miss = rows_by_type.fetch(:miss, []).fetch(0, {}).fetch(:count, 0)
-        pct = num_hit.to_f / (num_hit + num_miss).to_f
-
-        [name, num_hit.to_s, num_miss.to_s, "#{format('%3.1f', pct * 100)}%"]
-      end
-
-      [headers] + rows
-    end
-
     def print_profiling_feedback
       print_table_for_summary(:filters)
       print_table_for_summary(:phases) if Nanoc::CLI.verbosity >= 2
       print_table_for_summary_duration(:stages) if Nanoc::CLI.verbosity >= 2
       print_table_for_summary(:outdatedness_rules) if Nanoc::CLI.verbosity >= 2
-      print_table_for_memoization if Nanoc::CLI.verbosity >= 2
+      DDMemoize.print_telemetry(Nanoc::MEMOIZATION_TELEMETRY) if Nanoc::CLI.verbosity >= 2
     end
 
     def print_table_for_summary(name)
@@ -186,13 +158,6 @@ module Nanoc::CLI::Commands::CompileListeners
 
       puts
       print_table(table_for_summary_durations(name))
-    end
-
-    def print_table_for_memoization
-      return if @telemetry.counter(:memoization).empty?
-
-      puts
-      print_table(table_for_memoization)
     end
 
     def print_table(rows)
