@@ -40,4 +40,68 @@ describe Nanoc::CLI::ErrorHandler do
       end
     end
   end
+
+  describe '#trivial?' do
+    subject { error_handler.trivial?(error) }
+
+    context 'LoadError of known gem' do
+      let(:error) do
+        begin
+          raise LoadError, 'cannot load such file -- nokogiri'
+        rescue LoadError => e
+          return e
+        end
+      end
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'LoadError of unknown gem' do
+      let(:error) do
+        begin
+          raise LoadError, 'cannot load such file -- whatever'
+        rescue LoadError => e
+          return e
+        end
+      end
+
+      it { is_expected.to be(false) }
+    end
+
+    context 'random error' do
+      let(:error) do
+        begin
+          raise 'stuff'
+        rescue => e
+          return e
+        end
+      end
+
+      it { is_expected.to be(false) }
+    end
+
+    context 'Errno::EADDRINUSE' do
+      let(:error) do
+        begin
+          raise Errno::EADDRINUSE
+        rescue => e
+          return e
+        end
+      end
+
+      it { is_expected.to be(true) }
+    end
+
+    context 'GenericTrivial' do
+      let(:error) do
+        begin
+          raise Nanoc::Int::Errors::GenericTrivial, 'oh just a tiny thing'
+        rescue => e
+          return e
+        end
+      end
+
+      it { is_expected.to be(true) }
+    end
+  end
 end
