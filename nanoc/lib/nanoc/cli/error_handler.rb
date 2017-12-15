@@ -58,12 +58,16 @@ module Nanoc::CLI
     rescue Interrupt
       exit(1)
     rescue StandardError, ScriptError => e
-      if trivial?(e)
-        $stderr.puts "Error: #{e.message}"
-        resolution = resolution_for(e)
+      handle_error(e, exit_on_error: exit_on_error)
+    end
+
+    def handle_error(error, exit_on_error:)
+      if trivial?(error)
+        $stderr.puts "Error: #{error.message}"
+        resolution = resolution_for(error)
         $stderr.puts resolution if resolution
       else
-        print_error(e)
+        print_error(error)
       end
       exit(1) if exit_on_error
     end
@@ -148,6 +152,18 @@ module Nanoc::CLI
       feature_enabled || ruby_2_5_used
     end
 
+    # @api private
+    def trivial?(error)
+      case error
+      when Nanoc::Int::Errors::GenericTrivial, Errno::EADDRINUSE
+        true
+      when LoadError
+        GEM_NAMES.keys.include?(gem_name_from_load_error(error))
+      else
+        false
+      end
+    end
+
     protected
 
     # @return [Hash<String, Array>] A hash containing the gem names as keys and gem versions as value
@@ -196,15 +212,6 @@ module Nanoc::CLI
       'w3c_validators' => 'w3c_validators',
     }.freeze
 
-    def trivial?(error)
-      case error
-      when Nanoc::Int::Errors::GenericTrivial, Errno::EADDRINUSE
-        true
-      else
-        false
-      end
-    end
-
     # Attempts to find a resolution for the given error, or nil if no
     # resolution can be automatically obtained.
     #
@@ -216,12 +223,8 @@ module Nanoc::CLI
 
       case error
       when LoadError
-        # Get gem name
-        matches = error.message.match(/(no such file to load|cannot load such file) -- ([^\s]+)/)
-        return nil if matches.nil?
-        gem_name = GEM_NAMES[matches[2]]
+        gem_name = gem_name_from_load_error(error)
 
-        # Build message
         if gem_name
           if using_bundler?
             'Make sure the gem is added to Gemfile and run `bundle install`.'
@@ -239,6 +242,12 @@ module Nanoc::CLI
         'There already is a server running. Either shut down that one, or ' \
         'specify a different port to run this server on.'
       end
+    end
+
+    def gem_name_from_load_error(error)
+      matches = error.message.match(/(no such file to load|cannot load such file) -- ([^\s]+)/)
+      return nil if matches.nil?
+      GEM_NAMES[matches[2]]
     end
 
     def using_bundler?
