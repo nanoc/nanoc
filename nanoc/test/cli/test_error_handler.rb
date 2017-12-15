@@ -26,7 +26,7 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
       true
     end
     error = LoadError.new('no such file to load -- kramdown')
-    assert_match(/^Make sure the gem is added to Gemfile/, @handler.send(:resolution_for, error))
+    assert_match(/^1\. Add.*to your Gemfile/, @handler.send(:resolution_for, error))
   end
 
   def test_resolution_for_with_not_load_error
@@ -73,7 +73,7 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
       true
     end
     error = new_wrapped_error(LoadError.new('no such file to load -- kramdown'))
-    assert_match(/^Make sure the gem is added to Gemfile/, @handler.send(:resolution_for, error))
+    assert_match(/^1\. Add.*to your Gemfile/, @handler.send(:resolution_for, error))
   end
 
   def new_wrapped_error(wrapped)
