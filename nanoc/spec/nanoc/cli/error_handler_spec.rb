@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::CLI::ErrorHandler do
+describe Nanoc::CLI::ErrorHandler, stdio: true do
   subject(:error_handler) { described_class.new }
 
   describe '#forwards_stack_trace?' do
@@ -102,6 +102,76 @@ describe Nanoc::CLI::ErrorHandler do
       end
 
       it { is_expected.to be(true) }
+    end
+  end
+
+  describe '#handle_error' do
+    subject { error_handler.handle_error(error, exit_on_error: exit_on_error) }
+
+    let(:error) do
+      begin
+        raise 'Bewm'
+      rescue => e
+        return e
+      end
+    end
+
+    let(:exit_on_error) { false }
+
+    describe 'exit behavior' do
+      context 'exit on error' do
+        let(:exit_on_error) { true }
+
+        it 'exits on error' do
+          expect { subject }.to raise_error(SystemExit)
+        end
+      end
+
+      context 'no exit on error' do
+        let(:exit_on_error) { false }
+
+        it 'does not exit on error' do
+          expect { subject }.not_to raise_error
+        end
+      end
+    end
+
+    describe 'printing behavior' do
+      context 'trivial error with no resolution' do
+        let(:error) do
+          begin
+            raise Nanoc::Int::Errors::GenericTrivial, 'asdf'
+          rescue => e
+            return e
+          end
+        end
+
+        it 'prints summary' do
+          expect { subject }.to output("Error: asdf\n").to_stderr
+        end
+      end
+
+      context 'trivial error with resolution' do
+        let(:error) do
+          begin
+            raise LoadError, 'cannot load such file -- nokogiri'
+          rescue LoadError => e
+            return e
+          end
+        end
+
+        it 'prints summary' do
+          expected_output = <<~OUT
+            Error: cannot load such file -- nokogiri
+            Make sure the gem is added to Gemfile and run `bundle install`.
+          OUT
+          expect { subject }.to output(expected_output).to_stderr
+        end
+      end
+
+      context 'non-trivial error' do
+        # …
+      end
     end
   end
 end

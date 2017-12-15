@@ -58,12 +58,16 @@ module Nanoc::CLI
     rescue Interrupt
       exit(1)
     rescue StandardError, ScriptError => e
-      if trivial?(e)
-        $stderr.puts "Error: #{e.message}"
-        resolution = resolution_for(e)
+      handle_error(e, exit_on_error: exit_on_error)
+    end
+
+    def handle_error(error, exit_on_error:)
+      if trivial?(error)
+        $stderr.puts "Error: #{error.message}"
+        resolution = resolution_for(error)
         $stderr.puts resolution if resolution
       else
-        print_error(e)
+        print_error(error)
       end
       exit(1) if exit_on_error
     end
