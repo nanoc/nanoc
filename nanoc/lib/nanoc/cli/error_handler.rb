@@ -63,9 +63,13 @@ module Nanoc::CLI
 
     def handle_error(error, exit_on_error:)
       if trivial?(error)
+        $stderr.puts
         $stderr.puts "Error: #{error.message}"
         resolution = resolution_for(error)
-        $stderr.puts resolution if resolution
+        if resolution
+          $stderr.puts
+          $stderr.puts resolution
+        end
       else
         print_error(error)
       end
@@ -227,7 +231,11 @@ module Nanoc::CLI
 
         if gem_name
           if using_bundler?
-            'Make sure the gem is added to Gemfile and run `bundle install`.'
+            <<~RES
+              1. Add `gem '#{gem_name}'` to your Gemfile
+              2. Run `bundle install`
+              3. Re-run this command
+            RES
           else
             "Install the '#{gem_name}' gem using `gem install #{gem_name}`."
           end

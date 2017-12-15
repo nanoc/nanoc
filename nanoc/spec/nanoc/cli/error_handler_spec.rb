@@ -147,11 +147,11 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
         end
 
         it 'prints summary' do
-          expect { subject }.to output("Error: asdf\n").to_stderr
+          expect { subject }.to output("\nError: asdf\n").to_stderr
         end
       end
 
-      context 'trivial error with resolution' do
+      context 'LoadError' do
         let(:error) do
           begin
             raise LoadError, 'cannot load such file -- nokogiri'
@@ -161,9 +161,12 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
         end
 
         it 'prints summary' do
-          expected_output = <<~OUT
+          expected_output = "\n" + <<~OUT
             Error: cannot load such file -- nokogiri
-            Make sure the gem is added to Gemfile and run `bundle install`.
+
+            1. Add `gem 'nokogiri'` to your Gemfile
+            2. Run `bundle install`
+            3. Re-run this command
           OUT
           expect { subject }.to output(expected_output).to_stderr
         end
