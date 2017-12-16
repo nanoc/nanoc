@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.17 (2017-12-16)
+
+Enhancements:
+
+* Made `LoadError` be printed more nicely (#1273, #1274, #1275)
+
 ## 4.8.16 (2017-12-09)
 
 Fixes:
