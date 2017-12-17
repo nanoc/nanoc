@@ -9,6 +9,8 @@ require 'slow_enumerator_tools'
 require 'ddmemoize'
 require 'ddtelemetry'
 
+DDMemoize.enable_telemetry
+
 module Nanoc
   # @return [String] A string containing information about this Nanoc version
   #   and its environment (Ruby engine and version, Rubygems version if any).
@@ -25,8 +27,6 @@ module Nanoc
   def self.on_windows?
     RUBY_PLATFORM =~ /windows|bccwin|cygwin|djgpp|mingw|mswin|wince/i
   end
-
-  MEMOIZATION_TELEMETRY = DDTelemetry.new
 end
 
 # Load general requirements

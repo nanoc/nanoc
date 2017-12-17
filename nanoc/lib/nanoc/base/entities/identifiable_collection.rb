@@ -3,7 +3,7 @@
 module Nanoc::Int
   # @api private
   class IdentifiableCollection
-    DDMemoize.activate(self, telemetry: Nanoc::MEMOIZATION_TELEMETRY)
+    DDMemoize.activate(self)
 
     include Nanoc::Int::ContractsSupport
     include Enumerable
