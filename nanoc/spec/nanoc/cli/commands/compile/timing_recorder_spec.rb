@@ -51,11 +51,11 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
-    expect(listener.telemetry.summary(:filters).get('erb').min).to eq(1.00)
-    expect(listener.telemetry.summary(:filters).get('erb').avg).to eq(1.00)
-    expect(listener.telemetry.summary(:filters).get('erb').max).to eq(1.00)
-    expect(listener.telemetry.summary(:filters).get('erb').sum).to eq(1.00)
-    expect(listener.telemetry.summary(:filters).get('erb').count).to eq(1.00)
+    expect(listener.filters_summary.get('erb').min).to eq(1.00)
+    expect(listener.filters_summary.get('erb').avg).to eq(1.00)
+    expect(listener.filters_summary.get('erb').max).to eq(1.00)
+    expect(listener.filters_summary.get('erb').sum).to eq(1.00)
+    expect(listener.filters_summary.get('erb').count).to eq(1.00)
   end
 
   it 'records multiple from filtering_started to filtering_ended' do
@@ -68,11 +68,11 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 14, 3))
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
-    expect(listener.telemetry.summary(:filters).get('erb').min).to eq(1.00)
-    expect(listener.telemetry.summary(:filters).get('erb').avg).to eq(1.50)
-    expect(listener.telemetry.summary(:filters).get('erb').max).to eq(2.00)
-    expect(listener.telemetry.summary(:filters).get('erb').sum).to eq(3.00)
-    expect(listener.telemetry.summary(:filters).get('erb').count).to eq(2.00)
+    expect(listener.filters_summary.get('erb').min).to eq(1.00)
+    expect(listener.filters_summary.get('erb').avg).to eq(1.50)
+    expect(listener.filters_summary.get('erb').max).to eq(2.00)
+    expect(listener.filters_summary.get('erb').sum).to eq(3.00)
+    expect(listener.filters_summary.get('erb').count).to eq(2.00)
   end
 
   it 'records filters in nested filtering_started/filtering_ended' do
@@ -85,17 +85,17 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer)
 
-    expect(listener.telemetry.summary(:filters).get('inner').min).to eq(2.00)
-    expect(listener.telemetry.summary(:filters).get('inner').avg).to eq(2.00)
-    expect(listener.telemetry.summary(:filters).get('inner').max).to eq(2.00)
-    expect(listener.telemetry.summary(:filters).get('inner').sum).to eq(2.00)
-    expect(listener.telemetry.summary(:filters).get('inner').count).to eq(1.00)
+    expect(listener.filters_summary.get('inner').min).to eq(2.00)
+    expect(listener.filters_summary.get('inner').avg).to eq(2.00)
+    expect(listener.filters_summary.get('inner').max).to eq(2.00)
+    expect(listener.filters_summary.get('inner').sum).to eq(2.00)
+    expect(listener.filters_summary.get('inner').count).to eq(1.00)
 
-    expect(listener.telemetry.summary(:filters).get('outer').min).to eq(6.00)
-    expect(listener.telemetry.summary(:filters).get('outer').avg).to eq(6.00)
-    expect(listener.telemetry.summary(:filters).get('outer').max).to eq(6.00)
-    expect(listener.telemetry.summary(:filters).get('outer').sum).to eq(6.00)
-    expect(listener.telemetry.summary(:filters).get('outer').count).to eq(1.00)
+    expect(listener.filters_summary.get('outer').min).to eq(6.00)
+    expect(listener.filters_summary.get('outer').avg).to eq(6.00)
+    expect(listener.filters_summary.get('outer').max).to eq(6.00)
+    expect(listener.filters_summary.get('outer').sum).to eq(6.00)
+    expect(listener.filters_summary.get('outer').count).to eq(1.00)
   end
 
   it 'pauses outer stopwatch when suspended' do
@@ -112,11 +112,11 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :inner)
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer)
 
-    expect(listener.telemetry.summary(:filters).get('outer').min).to eq(7.00)
-    expect(listener.telemetry.summary(:filters).get('outer').avg).to eq(7.00)
-    expect(listener.telemetry.summary(:filters).get('outer').max).to eq(7.00)
-    expect(listener.telemetry.summary(:filters).get('outer').sum).to eq(7.00)
-    expect(listener.telemetry.summary(:filters).get('outer').count).to eq(1.00)
+    expect(listener.filters_summary.get('outer').min).to eq(7.00)
+    expect(listener.filters_summary.get('outer').avg).to eq(7.00)
+    expect(listener.filters_summary.get('outer').max).to eq(7.00)
+    expect(listener.filters_summary.get('outer').sum).to eq(7.00)
+    expect(listener.filters_summary.get('outer').count).to eq(1.00)
   end
 
   it 'records single from filtering_started over compilation_{suspended,started} to filtering_ended' do
@@ -130,11 +130,11 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 7))
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
-    expect(listener.telemetry.summary(:filters).get('erb').min).to eq(5.00)
-    expect(listener.telemetry.summary(:filters).get('erb').avg).to eq(5.00)
-    expect(listener.telemetry.summary(:filters).get('erb').max).to eq(5.00)
-    expect(listener.telemetry.summary(:filters).get('erb').sum).to eq(5.00)
-    expect(listener.telemetry.summary(:filters).get('erb').count).to eq(1.00)
+    expect(listener.filters_summary.get('erb').min).to eq(5.00)
+    expect(listener.filters_summary.get('erb').avg).to eq(5.00)
+    expect(listener.filters_summary.get('erb').max).to eq(5.00)
+    expect(listener.filters_summary.get('erb').sum).to eq(5.00)
+    expect(listener.filters_summary.get('erb').count).to eq(1.00)
   end
 
   it 'records single phase start+stop' do
@@ -143,11 +143,11 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
     Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
 
-    expect(listener.telemetry.summary(:phases).get('donkey').min).to eq(1.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').avg).to eq(1.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').max).to eq(1.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').sum).to eq(1.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').count).to eq(1.00)
+    expect(listener.phases_summary.get('donkey').min).to eq(1.00)
+    expect(listener.phases_summary.get('donkey').avg).to eq(1.00)
+    expect(listener.phases_summary.get('donkey').max).to eq(1.00)
+    expect(listener.phases_summary.get('donkey').sum).to eq(1.00)
+    expect(listener.phases_summary.get('donkey').count).to eq(1.00)
   end
 
   it 'records multiple phase start+stop' do
@@ -160,11 +160,11 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 2))
     Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
 
-    expect(listener.telemetry.summary(:phases).get('donkey').min).to eq(1.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').avg).to eq(1.50)
-    expect(listener.telemetry.summary(:phases).get('donkey').max).to eq(2.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').sum).to eq(3.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').count).to eq(2.00)
+    expect(listener.phases_summary.get('donkey').min).to eq(1.00)
+    expect(listener.phases_summary.get('donkey').avg).to eq(1.50)
+    expect(listener.phases_summary.get('donkey').max).to eq(2.00)
+    expect(listener.phases_summary.get('donkey').sum).to eq(3.00)
+    expect(listener.phases_summary.get('donkey').count).to eq(2.00)
   end
 
   it 'records single phase start+yield+resume+stop' do
@@ -177,11 +177,11 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 2))
     Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
 
-    expect(listener.telemetry.summary(:phases).get('donkey').min).to eq(3.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').avg).to eq(3.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').max).to eq(3.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').sum).to eq(3.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').count).to eq(1.00)
+    expect(listener.phases_summary.get('donkey').min).to eq(3.00)
+    expect(listener.phases_summary.get('donkey').avg).to eq(3.00)
+    expect(listener.phases_summary.get('donkey').max).to eq(3.00)
+    expect(listener.phases_summary.get('donkey').sum).to eq(3.00)
+    expect(listener.phases_summary.get('donkey').count).to eq(1.00)
   end
 
   it 'records single phase start+yield+abort+start+stop' do
@@ -196,11 +196,11 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 12, 7, 5))
     Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
 
-    expect(listener.telemetry.summary(:phases).get('donkey').min).to eq(1.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').avg).to eq(2.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').max).to eq(3.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').sum).to eq(4.00)
-    expect(listener.telemetry.summary(:phases).get('donkey').count).to eq(2.00)
+    expect(listener.phases_summary.get('donkey').min).to eq(1.00)
+    expect(listener.phases_summary.get('donkey').avg).to eq(2.00)
+    expect(listener.phases_summary.get('donkey').max).to eq(3.00)
+    expect(listener.phases_summary.get('donkey').sum).to eq(4.00)
+    expect(listener.phases_summary.get('donkey').count).to eq(2.00)
   end
 
   it 'records stage duration' do
@@ -209,8 +209,8 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
     Nanoc::Int::NotificationCenter.post(:stage_ended, 'donkey', rep)
 
-    expect(listener.telemetry.summary(:stages).get('donkey').sum).to eq(1.00)
-    expect(listener.telemetry.summary(:stages).get('donkey').count).to eq(1.00)
+    expect(listener.stages_summary.get('donkey').sum).to eq(1.00)
+    expect(listener.stages_summary.get('donkey').count).to eq(1.00)
   end
 
   it 'prints stage durations' do
@@ -239,11 +239,11 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
     Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ended, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
 
-    expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').min).to eq(1.00)
-    expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').avg).to eq(1.00)
-    expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').max).to eq(1.00)
-    expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').sum).to eq(1.00)
-    expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').count).to eq(1.00)
+    expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').min).to eq(1.00)
+    expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').avg).to eq(1.00)
+    expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').max).to eq(1.00)
+    expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').sum).to eq(1.00)
+    expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').count).to eq(1.00)
   end
 
   it 'records multiple outdatedness rule duration' do
@@ -256,10 +256,15 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 6, 3))
     Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ended, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, other_rep)
 
-    expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').min).to eq(1.00)
-    expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').avg).to eq(2.00)
-    expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').max).to eq(3.00)
-    expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').sum).to eq(4.00)
-    expect(listener.telemetry.summary(:outdatedness_rules).get('CodeSnippetsModified').count).to eq(2.00)
+    expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').min).to eq(1.00)
+    expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').avg).to eq(2.00)
+    expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').max).to eq(3.00)
+    expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').sum).to eq(4.00)
+    expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').count).to eq(2.00)
+  end
+
+  it 'skips printing empty metrics' do
+    expect { listener.stop }
+      .not_to output(/filters|phases|stages/).to_stdout
   end
 end

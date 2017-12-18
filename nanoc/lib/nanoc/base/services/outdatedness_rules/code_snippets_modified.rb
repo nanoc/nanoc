@@ -2,7 +2,7 @@
 
 module Nanoc::Int::OutdatednessRules
   class CodeSnippetsModified < Nanoc::Int::OutdatednessRule
-    DDMemoize.activate(self, telemetry: Nanoc::MEMOIZATION_TELEMETRY)
+    DDMemoize.activate(self)
 
     include Nanoc::Int::ContractsSupport
 

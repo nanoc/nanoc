@@ -2,7 +2,10 @@
 
 module Nanoc::CLI::Commands::CompileListeners
   class TimingRecorder < Abstract
-    attr_reader :telemetry
+    attr_reader :stages_summary
+    attr_reader :phases_summary
+    attr_reader :outdatedness_rules_summary
+    attr_reader :filters_summary
 
     # @see Listener#enable_for?
     def self.enable_for?(_command_runner, _site)
@@ -12,7 +15,11 @@ module Nanoc::CLI::Commands::CompileListeners
     # @param [Enumerable<Nanoc::Int::ItemRep>] reps
     def initialize(reps:)
       @reps = reps
-      @telemetry = DDTelemetry.new
+
+      @stages_summary = DDTelemetry::Summary.new
+      @phases_summary = DDTelemetry::Summary.new
+      @outdatedness_rules_summary = DDTelemetry::Summary.new
+      @filters_summary = DDTelemetry::Summary.new
     end
 
     # @see Listener#start
@@ -26,7 +33,7 @@ module Nanoc::CLI::Commands::CompileListeners
       on(:stage_ended) do |klass|
         stage_stopwatch.stop
         name = klass.to_s.sub(/.*::/, '')
-        @telemetry.summary(:stages).observe(stage_stopwatch.duration, name)
+        @stages_summary.observe(stage_stopwatch.duration, name)
         stage_stopwatch = DDTelemetry::Stopwatch.new
       end
 
@@ -44,7 +51,7 @@ module Nanoc::CLI::Commands::CompileListeners
         stopwatch.stop
 
         name = klass.to_s.sub(/.*::/, '')
-        @telemetry.summary(:outdatedness_rules).observe(stopwatch.duration, name)
+        @outdatedness_rules_summary.observe(stopwatch.duration, name)
       end
 
       filter_stopwatches = {}
@@ -59,7 +66,7 @@ module Nanoc::CLI::Commands::CompileListeners
         stopwatch = filter_stopwatches.fetch(rep).pop
         stopwatch.stop
 
-        @telemetry.summary(:filters).observe(stopwatch.duration, filter_name.to_s)
+        @filters_summary.observe(stopwatch.duration, filter_name.to_s)
       end
 
       on(:compilation_suspended) do |rep, _exception|
@@ -81,7 +88,7 @@ module Nanoc::CLI::Commands::CompileListeners
         stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
         stopwatch.stop
 
-        @telemetry.summary(:phases).observe(stopwatch.duration, phase_name)
+        @phases_summary.observe(stopwatch.duration, phase_name)
       end
 
       on(:phase_yielded) do |phase_name, rep|
@@ -98,7 +105,7 @@ module Nanoc::CLI::Commands::CompileListeners
         stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
         stopwatch.stop if stopwatch.running?
 
-        @telemetry.summary(:phases).observe(stopwatch.duration, phase_name)
+        @phases_summary.observe(stopwatch.duration, phase_name)
       end
     end
 
@@ -110,17 +117,17 @@ module Nanoc::CLI::Commands::CompileListeners
 
     protected
 
-    def table_for_summary(name)
+    def table_for_summary(name, summary)
       headers = [name.to_s, 'count', 'min', '.50', '.90', '.95', 'max', 'tot']
 
-      rows = @telemetry.summary(name).map do |filter_name, summary|
-        count = summary.count
-        min   = summary.min
-        p50   = summary.quantile(0.50)
-        p90   = summary.quantile(0.90)
-        p95   = summary.quantile(0.95)
-        tot   = summary.sum
-        max   = summary.max
+      rows = summary.map do |filter_name, stats|
+        count = stats.count
+        min   = stats.min
+        p50   = stats.quantile(0.50)
+        p90   = stats.quantile(0.90)
+        p95   = stats.quantile(0.95)
+        tot   = stats.sum
+        max   = stats.max
 
         [filter_name, count.to_s] + [min, p50, p90, p95, max, tot].map { |r| "#{format('%4.2f', r)}s" }
       end
@@ -128,36 +135,36 @@ module Nanoc::CLI::Commands::CompileListeners
       [headers] + rows
     end
 
-    def table_for_summary_durations(name)
+    def table_for_summary_durations(name, summary)
       headers = [name.to_s, 'tot']
 
-      rows = @telemetry.summary(:stages).map do |stage_name, summary|
-        [stage_name, "#{format('%4.2f', summary.sum)}s"]
+      rows = summary.map do |stage_name, stats|
+        [stage_name, "#{format('%4.2f', stats.sum)}s"]
       end
 
       [headers] + rows
     end
 
     def print_profiling_feedback
-      print_table_for_summary(:filters)
-      print_table_for_summary(:phases) if Nanoc::CLI.verbosity >= 2
-      print_table_for_summary_duration(:stages) if Nanoc::CLI.verbosity >= 2
-      print_table_for_summary(:outdatedness_rules) if Nanoc::CLI.verbosity >= 2
-      DDMemoize.print_telemetry(Nanoc::MEMOIZATION_TELEMETRY) if Nanoc::CLI.verbosity >= 2
+      print_table_for_summary(:filters, @filters_summary)
+      print_table_for_summary(:phases, @phases_summary) if Nanoc::CLI.verbosity >= 2
+      print_table_for_summary_duration(:stages, @stages_summary) if Nanoc::CLI.verbosity >= 2
+      print_table_for_summary(:outdatedness_rules, @outdatedness_rules_summary) if Nanoc::CLI.verbosity >= 2
+      DDMemoize.print_telemetry if Nanoc::CLI.verbosity >= 2
     end
 
-    def print_table_for_summary(name)
-      return if @telemetry.summary(name).empty?
+    def print_table_for_summary(name, summary)
+      return unless summary.any?
 
       puts
-      print_table(table_for_summary(name))
+      print_table(table_for_summary(name, summary))
     end
 
-    def print_table_for_summary_duration(name)
-      return if @telemetry.summary(name).empty?
+    def print_table_for_summary_duration(name, summary)
+      return unless summary.any?
 
       puts
-      print_table(table_for_summary_durations(name))
+      print_table(table_for_summary_durations(name, summary))
     end
 
     def print_table(rows)
