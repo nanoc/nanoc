@@ -130,6 +130,52 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true do
           expect(subject).to eql([ctx.items['/index.md'], nil, ctx.items['/foo/index.md']])
         end
       end
+
+      context 'item with version number component in path' do
+        before do
+          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/1.5/stuff.md'))
+          ctx.create_item('child0', {}, Nanoc::Identifier.new('/1.4.md'))
+          ctx.create_item('child1', {}, Nanoc::Identifier.new('/1.5.md'))
+          ctx.create_item('child2', {}, Nanoc::Identifier.new('/1.6.md'))
+          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+
+          ctx.item = ctx.items['/1.5/stuff.md']
+        end
+
+        it 'picks the closest parent' do
+          expect(subject)
+            .to eql(
+              [
+                ctx.items['/index.md'],
+                ctx.items['/1.5.md'],
+                ctx.items['/1.5/stuff.md'],
+              ],
+            )
+        end
+      end
+
+      context 'item with multiple extensions in path' do
+        before do
+          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/foo/stuff.md'))
+          ctx.create_item('child0', {}, Nanoc::Identifier.new('/foo.md.erb'))
+          ctx.create_item('child1', {}, Nanoc::Identifier.new('/foo.md'))
+          ctx.create_item('child2', {}, Nanoc::Identifier.new('/foo.erb'))
+          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+
+          ctx.item = ctx.items['/foo/stuff.md']
+        end
+
+        it 'picks the closest parent' do
+          expect(subject)
+            .to eql(
+              [
+                ctx.items['/index.md'],
+                ctx.items['/foo.md.erb'],
+                ctx.items['/foo/stuff.md'],
+              ],
+            )
+        end
+      end
     end
   end
 end
