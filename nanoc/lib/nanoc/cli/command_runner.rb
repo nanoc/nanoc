@@ -20,7 +20,6 @@ module Nanoc::CLI
     def in_site_dir?
       Nanoc::Int::SiteLoader.cwd_is_nanoc_site?
     end
-    alias is_in_site_dir? in_site_dir?
 
     def self.find_site_dir
       start_here = Dir.pwd
