@@ -4,7 +4,9 @@ require 'simplecov'
 SimpleCov.start
 
 require 'codecov'
-SimpleCov.formatter = SimpleCov::Formatter::Codecov
+if ENV['CI'] == 'true'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
 
 require 'timecop'
 require 'rspec/its'
