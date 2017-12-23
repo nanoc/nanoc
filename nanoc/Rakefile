@@ -16,10 +16,10 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.verbose = false
 end
 
-task test: %i[spec test_all rubocop]
+task test: %i[spec test_all]
 
 task :gem do
   sh('gem build *.gemspec')
 end
 
-task default: :test
+task default: %i[test rubocop]
