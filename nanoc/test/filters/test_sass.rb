@@ -218,15 +218,8 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
   end
 
   def test_recompile_includes_with_relative_path
-    if_have 'sass', 'compass' do
+    if_have 'sass' do
       with_site do |_site|
-        # Write compass config
-        FileUtils.mkdir_p('compass')
-        File.open('compass/config.rb', 'w') do |io|
-          io << "project_path = \".\"\n"
-          io << "sass_path = \"content/style\"\n"
-        end
-
         # Create two Sass files
         Dir['content/*'].each { |i| FileUtils.rm(i) }
         FileUtils.mkdir_p('content/style/super')
@@ -240,11 +233,8 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
 
         # Update rules
         File.open('Rules', 'w') do |io|
-          io.write "require 'compass'\n"
-          io.write "Compass.add_project_configuration 'compass/config.rb'\n"
-          io.write "\n"
           io.write "compile '*' do\n"
-          io.write "  filter :sass, Compass.sass_engine_options\n"
+          io.write "  filter :sass, load_paths: ['content/style']\n"
           io.write "end\n"
           io.write "\n"
           io.write "route '/style/super/main/' do\n"

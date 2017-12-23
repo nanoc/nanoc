@@ -37,7 +37,6 @@ group :plugins do
   gem 'builder'
   gem 'coderay'
   gem 'coffee-script'
-  gem 'compass'
   gem 'erubi'
   gem 'erubis'
   gem 'fog-aws'
