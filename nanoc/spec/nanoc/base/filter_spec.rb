@@ -39,6 +39,86 @@ describe Nanoc::Filter do
     end
   end
 
+  describe '.named!' do
+    it 'returns filter if exists' do
+      expect(Nanoc::Filter.named!(:erb)).not_to be_nil
+      expect(Nanoc::Filter.named!(:erb).identifier).to eq(:erb)
+    end
+
+    it 'raises if non-existent' do
+      expect { Nanoc::Filter.named!(:ajklsdfklasjflkd) }
+        .to raise_error(
+          Nanoc::Int::Errors::UnknownFilter,
+          'The requested filter, “ajklsdfklasjflkd”, does not exist.',
+        )
+    end
+  end
+
+  describe 'assigns' do
+    context 'no assigns given' do
+      subject { described_class.new }
+
+      it 'has empty assigns' do
+        expect(subject.instance_eval { @assigns }).to eq({})
+      end
+    end
+
+    context 'assigns given' do
+      subject { described_class.new(foo: 'bar') }
+
+      it 'has assigns' do
+        expect(subject.instance_eval { @assigns }).to eq({ foo: 'bar' })
+      end
+
+      it 'can access assigns with @' do
+        expect(subject.instance_eval { @foo }).to eq('bar')
+      end
+
+      it 'can access assigns without @' do
+        expect(subject.instance_eval { foo }).to eq('bar')
+      end
+    end
+  end
+
+  describe '#run' do
+    context 'no subclass' do
+      subject { described_class.new.run('stuff') }
+
+      it 'errors' do
+        expect { subject }.to raise_error(NotImplementedError)
+      end
+    end
+
+    context 'subclass' do
+      # TODO
+    end
+  end
+
+  describe '#filename' do
+    subject { described_class.new(assigns).filename }
+
+    context 'assigns contains item + item rep' do
+      let(:item) { Nanoc::Int::Item.new('asdf', {}, '/donkey.md') }
+      let(:item_rep) { Nanoc::Int::ItemRep.new(item, :animal) }
+      let(:assigns) { { item: item, item_rep: item_rep } }
+
+      it { is_expected.to eq('item /donkey.md (rep animal)') }
+    end
+
+    context 'assigns contains layout' do
+      let(:layout) { Nanoc::Int::Layout.new('asdf', {}, '/donkey.md') }
+      let(:assigns) { { layout: layout } }
+
+      it { is_expected.to eq('layout /donkey.md') }
+    end
+
+    context 'assigns contains neither' do
+      let(:assigns) { {} }
+
+      it { is_expected.to eq('?') }
+    end
+  end
+
   describe '.always_outdated? + .always_outdated' do
     context 'not always outdated' do
       let(:filter_class) do
