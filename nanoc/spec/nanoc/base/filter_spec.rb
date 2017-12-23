@@ -67,7 +67,7 @@ describe Nanoc::Filter do
       subject { described_class.new(foo: 'bar') }
 
       it 'has assigns' do
-        expect(subject.instance_eval { @assigns }).to eq({ foo: 'bar' })
+        expect(subject.instance_eval { @assigns }).to eq(foo: 'bar')
       end
 
       it 'can access assigns with @' do
