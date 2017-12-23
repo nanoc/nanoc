@@ -11,6 +11,19 @@ module Nanoc
       ensure
         Dir.chdir(here)
       end
+
+      def on_windows?
+        Nanoc.on_windows?
+      end
+
+      def command?(cmd)
+        which, null = on_windows? ? %w[where NUL] : ['which', '/dev/null']
+        system("#{which} #{cmd} > #{null} 2>&1")
+      end
+
+      def skip_unless_have_command(cmd)
+        skip "Could not find external command \"#{cmd}\"" unless command?(cmd)
+      end
     end
 
     class HelperContext
