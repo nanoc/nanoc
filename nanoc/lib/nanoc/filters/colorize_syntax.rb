@@ -5,7 +5,7 @@ module Nanoc::Filters
   class ColorizeSyntax < Nanoc::Filter
     identifier :colorize_syntax
 
-    requires 'nokogiri', 'stringio', 'open3'
+    requires 'nokogiri'
 
     DEFAULT_COLORIZER = :coderay
 

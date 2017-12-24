@@ -184,9 +184,11 @@ module Nanoc::CLI
     # `#require` fails, the gem name is looked up in this hash.
     GEM_NAMES = {
       'adsf'           => 'adsf',
+      'asciidoctor'    => 'asciidoctor',
       'bluecloth'      => 'bluecloth',
       'builder'        => 'builder',
       'coderay'        => 'coderay',
+      'coffee-script'  => 'coffee-script',
       'cri'            => 'cri',
       'erubi'          => 'erubi',
       'erubis'         => 'erubis',
@@ -201,9 +203,11 @@ module Nanoc::CLI
       'markaby'        => 'markaby',
       'maruku'         => 'maruku',
       'mime/types'     => 'mime-types',
+      'mustache'       => 'mustache',
       'nanoc/live'     => 'nanoc-live',
       'nokogiri'       => 'nokogiri',
       'nokogumbo'      => 'nokogumbo',
+      'pandoc-ruby'    => 'pandoc-ruby',
       'pry'            => 'pry',
       'rack'           => 'rack',
       'rack/cache'     => 'rack-cache',
@@ -213,7 +217,11 @@ module Nanoc::CLI
       'redcloth'       => 'RedCloth',
       'rubypants'      => 'rubypants',
       'sass'           => 'sass',
+      'slim'           => 'slim',
+      'typogruby'      => 'typogruby',
+      'uglifier'       => 'uglifier',
       'w3c_validators' => 'w3c_validators',
+      'yuicompressor'  => 'yuicompressor',
     }.freeze
 
     # Attempts to find a resolution for the given error, or nil if no
