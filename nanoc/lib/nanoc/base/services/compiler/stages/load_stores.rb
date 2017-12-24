@@ -23,10 +23,9 @@ module Nanoc::Int::Compiler::Stages
 
     contract Nanoc::Int::Store => C::Any
     def load_store(store)
-      Nanoc::Int::NotificationCenter.post(:load_store_started, store.class)
-      store.load
-    ensure
-      Nanoc::Int::NotificationCenter.post(:load_store_ended, store.class)
+      Nanoc::Int::Instrumentor.call(:store_loaded, store.class) do
+        store.load
+      end
     end
   end
 end

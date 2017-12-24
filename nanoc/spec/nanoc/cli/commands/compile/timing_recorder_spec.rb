@@ -252,13 +252,10 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'prints load store durations' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:load_store_started, Nanoc::Int::ChecksumStore)
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:load_store_ended, Nanoc::Int::ChecksumStore)
+    Nanoc::Int::NotificationCenter.post(:store_loaded, 1.23, Nanoc::Int::ChecksumStore)
 
     expect { listener.stop }
-      .to output(/^\s*Nanoc::Int::ChecksumStore │ 1\.00s$/).to_stdout
+      .to output(/^\s*Nanoc::Int::ChecksumStore │ 1\.23s$/).to_stdout
   end
 
   it 'skips printing empty metrics' do

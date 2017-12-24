@@ -57,19 +57,8 @@ module Nanoc::CLI::Commands::CompileListeners
         @filters_summary.observe(stopwatch.duration, filter_name.to_s)
       end
 
-      load_store_stopwatches = {}
-
-      on(:load_store_started) do |klass|
-        stopwatch_stack = load_store_stopwatches.fetch(klass) { load_store_stopwatches[klass] = [] }
-        stopwatch_stack << DDTelemetry::Stopwatch.new
-        stopwatch_stack.last.start
-      end
-
-      on(:load_store_ended) do |klass|
-        stopwatch = load_store_stopwatches.fetch(klass).pop
-        stopwatch.stop
-
-        @load_stores_summary.observe(stopwatch.duration, klass.to_s)
+      on(:store_loaded) do |duration, klass|
+        @load_stores_summary.observe(duration, klass.to_s)
       end
 
       on(:compilation_suspended) do |rep, _exception|
