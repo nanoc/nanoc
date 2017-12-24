@@ -25,17 +25,8 @@ module Nanoc::CLI::Commands::CompileListeners
 
     # @see Listener#start
     def start
-      stage_stopwatch = DDTelemetry::Stopwatch.new
-
-      on(:stage_started) do |_klass|
-        stage_stopwatch.start
-      end
-
-      on(:stage_ended) do |klass|
-        stage_stopwatch.stop
-        name = klass.to_s.sub(/.*::/, '')
-        @stages_summary.observe(stage_stopwatch.duration, name)
-        stage_stopwatch = DDTelemetry::Stopwatch.new
+      on(:stage_ran) do |duration, klass|
+        @stages_summary.observe(duration, klass.to_s.sub(/.*::/, ''))
       end
 
       on(:outdatedness_rule_ran) do |duration, klass|

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Int::Compiler::Stages
-  class BuildReps
+  class BuildReps < Nanoc::Int::Compiler::Stage
     def initialize(site:, action_provider:)
       @site = site
       @action_provider = action_provider

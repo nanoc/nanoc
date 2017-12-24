@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Int::Compiler::Stages
-  class Preprocess
+  class Preprocess < Nanoc::Int::Compiler::Stage
     def initialize(action_provider:, site:, dependency_store:, checksum_store:)
       @action_provider = action_provider
       @site = site

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Int::Compiler::Stages
-  class StorePreCompilationState
+  class StorePreCompilationState < Nanoc::Int::Compiler::Stage
     include Nanoc::Int::ContractsSupport
 
     def initialize(reps:, layouts:, checksum_store:, action_sequence_store:, action_sequences:)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Int::Compiler::Stages
-  class Cleanup
+  class Cleanup < Nanoc::Int::Compiler::Stage
     def initialize(output_dirs)
       @output_dirs = output_dirs
     end

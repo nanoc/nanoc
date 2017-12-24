@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Int::Compiler::Stages
-  class LoadStores
+  class LoadStores < Nanoc::Int::Compiler::Stage
     include Nanoc::Int::ContractsSupport
 
     def initialize(checksum_store:, compiled_content_cache:, dependency_store:, action_sequence_store:, outdatedness_store:)
