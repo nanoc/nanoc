@@ -38,21 +38,8 @@ module Nanoc::CLI::Commands::CompileListeners
         stage_stopwatch = DDTelemetry::Stopwatch.new
       end
 
-      outdatedness_rule_stopwatches = {}
-
-      on(:outdatedness_rule_started) do |klass, obj|
-        stopwatches = outdatedness_rule_stopwatches.fetch(klass) { outdatedness_rule_stopwatches[klass] = {} }
-        stopwatch = stopwatches.fetch(obj) { stopwatches[obj] = DDTelemetry::Stopwatch.new }
-        stopwatch.start
-      end
-
-      on(:outdatedness_rule_ended) do |klass, obj|
-        stopwatches = outdatedness_rule_stopwatches.fetch(klass)
-        stopwatch = stopwatches.fetch(obj)
-        stopwatch.stop
-
-        name = klass.to_s.sub(/.*::/, '')
-        @outdatedness_rules_summary.observe(stopwatch.duration, name)
+      on(:outdatedness_rule_ran) do |duration, klass|
+        @outdatedness_rules_summary.observe(duration, klass.to_s.sub(/.*::/, ''))
       end
 
       filter_stopwatches = {}
