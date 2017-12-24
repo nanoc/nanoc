@@ -3,6 +3,8 @@
 module Nanoc::Int::Compiler::Stages
 end
 
+require_relative 'stage'
+
 require_relative 'stages/calculate_checksums'
 require_relative 'stages/cleanup'
 require_relative 'stages/compile_reps'

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Int::Compiler::Stages
-  class DetermineOutdatedness
+  class DetermineOutdatedness < Nanoc::Int::Compiler::Stage
     include Nanoc::Int::ContractsSupport
 
     def initialize(reps:, outdatedness_checker:, outdatedness_store:)

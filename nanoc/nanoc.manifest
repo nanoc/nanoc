@@ -73,6 +73,7 @@ lib/nanoc/base/services/compiler/phases/mark_done.rb
 lib/nanoc/base/services/compiler/phases/recalculate.rb
 lib/nanoc/base/services/compiler/phases/resume.rb
 lib/nanoc/base/services/compiler/phases/write.rb
+lib/nanoc/base/services/compiler/stage.rb
 lib/nanoc/base/services/compiler/stages.rb
 lib/nanoc/base/services/compiler/stages/build_reps.rb
 lib/nanoc/base/services/compiler/stages/calculate_checksums.rb
@@ -89,6 +90,7 @@ lib/nanoc/base/services/compiler/stages/store_pre_compilation_state.rb
 lib/nanoc/base/services/dependency_tracker.rb
 lib/nanoc/base/services/executor.rb
 lib/nanoc/base/services/filter.rb
+lib/nanoc/base/services/instrumentor.rb
 lib/nanoc/base/services/item_rep_builder.rb
 lib/nanoc/base/services/item_rep_router.rb
 lib/nanoc/base/services/item_rep_selector.rb

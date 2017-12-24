@@ -204,40 +204,28 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records stage duration' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:stage_started, 'donkey', rep)
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:stage_ended, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage')
 
-    expect(listener.stages_summary.get('donkey').sum).to eq(1.00)
-    expect(listener.stages_summary.get('donkey').count).to eq(1.00)
+    expect(listener.stages_summary.get('donkey_stage').sum).to eq(1.23)
+    expect(listener.stages_summary.get('donkey_stage').count).to eq(1)
   end
 
   it 'prints stage durations' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:stage_started, 'donkey', rep)
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:stage_ended, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage')
 
     expect { listener.stop }
-      .to output(/^\s*donkey │ 1\.00s$/).to_stdout
+      .to output(/^\s*donkey_stage │ 1\.23s$/).to_stdout
   end
 
   it 'prints out outdatedness rule durations' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_started, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ended, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified)
 
     expect { listener.stop }
       .to output(/^\s*CodeSnippetsModified │     1   1\.00s   1\.00s   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
   end
 
   it 'records single outdatedness rule duration' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_started, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ended, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified)
 
     expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').min).to eq(1.00)
     expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').avg).to eq(1.00)
@@ -247,14 +235,8 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records multiple outdatedness rule duration' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_started, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ended, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, rep)
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 6, 0))
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_started, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, other_rep)
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 6, 3))
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ended, Nanoc::Int::OutdatednessRules::CodeSnippetsModified, other_rep)
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified)
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 3.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified)
 
     expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').min).to eq(1.00)
     expect(listener.outdatedness_rules_summary.get('CodeSnippetsModified').avg).to eq(2.00)
@@ -264,13 +246,10 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'prints load store durations' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:load_store_started, Nanoc::Int::ChecksumStore)
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:load_store_ended, Nanoc::Int::ChecksumStore)
+    Nanoc::Int::NotificationCenter.post(:store_loaded, 1.23, Nanoc::Int::ChecksumStore)
 
     expect { listener.stop }
-      .to output(/^\s*Nanoc::Int::ChecksumStore │ 1\.00s$/).to_stdout
+      .to output(/^\s*Nanoc::Int::ChecksumStore │ 1\.23s$/).to_stdout
   end
 
   it 'skips printing empty metrics' do

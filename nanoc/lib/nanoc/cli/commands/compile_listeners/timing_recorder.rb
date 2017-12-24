@@ -25,34 +25,12 @@ module Nanoc::CLI::Commands::CompileListeners
 
     # @see Listener#start
     def start
-      stage_stopwatch = DDTelemetry::Stopwatch.new
-
-      on(:stage_started) do |_klass|
-        stage_stopwatch.start
+      on(:stage_ran) do |duration, klass|
+        @stages_summary.observe(duration, klass.to_s.sub(/.*::/, ''))
       end
 
-      on(:stage_ended) do |klass|
-        stage_stopwatch.stop
-        name = klass.to_s.sub(/.*::/, '')
-        @stages_summary.observe(stage_stopwatch.duration, name)
-        stage_stopwatch = DDTelemetry::Stopwatch.new
-      end
-
-      outdatedness_rule_stopwatches = {}
-
-      on(:outdatedness_rule_started) do |klass, obj|
-        stopwatches = outdatedness_rule_stopwatches.fetch(klass) { outdatedness_rule_stopwatches[klass] = {} }
-        stopwatch = stopwatches.fetch(obj) { stopwatches[obj] = DDTelemetry::Stopwatch.new }
-        stopwatch.start
-      end
-
-      on(:outdatedness_rule_ended) do |klass, obj|
-        stopwatches = outdatedness_rule_stopwatches.fetch(klass)
-        stopwatch = stopwatches.fetch(obj)
-        stopwatch.stop
-
-        name = klass.to_s.sub(/.*::/, '')
-        @outdatedness_rules_summary.observe(stopwatch.duration, name)
+      on(:outdatedness_rule_ran) do |duration, klass|
+        @outdatedness_rules_summary.observe(duration, klass.to_s.sub(/.*::/, ''))
       end
 
       filter_stopwatches = {}
@@ -70,19 +48,8 @@ module Nanoc::CLI::Commands::CompileListeners
         @filters_summary.observe(stopwatch.duration, filter_name.to_s)
       end
 
-      load_store_stopwatches = {}
-
-      on(:load_store_started) do |klass|
-        stopwatch_stack = load_store_stopwatches.fetch(klass) { load_store_stopwatches[klass] = [] }
-        stopwatch_stack << DDTelemetry::Stopwatch.new
-        stopwatch_stack.last.start
-      end
-
-      on(:load_store_ended) do |klass|
-        stopwatch = load_store_stopwatches.fetch(klass).pop
-        stopwatch.stop
-
-        @load_stores_summary.observe(stopwatch.duration, klass.to_s)
+      on(:store_loaded) do |duration, klass|
+        @load_stores_summary.observe(duration, klass.to_s)
       end
 
       on(:compilation_suspended) do |rep, _exception|

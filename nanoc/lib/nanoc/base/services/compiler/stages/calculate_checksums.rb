@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Int::Compiler::Stages
-  class CalculateChecksums
+  class CalculateChecksums < Nanoc::Int::Compiler::Stage
     def initialize(items:, layouts:, code_snippets:, config:)
       @items = items
       @layouts = layouts

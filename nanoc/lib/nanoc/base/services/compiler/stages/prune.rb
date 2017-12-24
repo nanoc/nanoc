@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Int::Compiler::Stages
-  class Prune
+  class Prune < Nanoc::Int::Compiler::Stage
     def initialize(config:, reps:)
       @config = config
       @reps = reps

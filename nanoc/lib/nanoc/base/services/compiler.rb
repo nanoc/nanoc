@@ -27,7 +27,7 @@ module Nanoc::Int
 
     def run_until_preprocessed
       @_res_preprocessed ||= begin
-        run_stage(preprocess_stage)
+        preprocess_stage.call
         {}
       end
     end
@@ -36,7 +36,7 @@ module Nanoc::Int
       @_res_reps_built ||= begin
         prev = run_until_preprocessed
 
-        res = run_stage(build_reps_stage)
+        res = build_reps_stage.call
 
         prev.merge(
           reps: res.fetch(:reps),
@@ -51,14 +51,14 @@ module Nanoc::Int
         action_sequences = prev.fetch(:action_sequences)
         reps = prev.fetch(:reps)
 
-        run_stage(load_stores_stage)
-        checksums = run_stage(calculate_checksums_stage)
+        load_stores_stage.call
+        checksums = calculate_checksums_stage.call
         outdatedness_checker = create_outdatedness_checker(
           checksums: checksums,
           action_sequences: action_sequences,
           reps: reps,
         )
-        outdated_items = run_stage(determine_outdatedness_stage(outdatedness_checker, reps))
+        outdated_items = determine_outdatedness_stage(outdatedness_checker, reps).call
 
         prev.merge(
           checksums: checksums,
@@ -76,14 +76,14 @@ module Nanoc::Int
       checksums = res.fetch(:checksums)
       outdated_items = res.fetch(:outdated_items)
 
-      run_stage(forget_outdated_dependencies_stage, outdated_items)
-      run_stage(store_pre_compilation_state_stage(action_sequences, reps), checksums)
-      run_stage(prune_stage(reps))
-      run_stage(compile_reps_stage(action_sequences, reps))
-      run_stage(store_post_compilation_state_stage)
-      run_stage(postprocess_stage, self)
+      forget_outdated_dependencies_stage.call(outdated_items)
+      store_pre_compilation_state_stage(action_sequences, reps).call(checksums)
+      prune_stage(reps).call
+      compile_reps_stage(action_sequences, reps).call
+      store_post_compilation_state_stage.call
+      postprocess_stage.call(self)
     ensure
-      run_stage(cleanup_stage)
+      cleanup_stage.call
     end
 
     def compilation_context(reps:)
@@ -97,13 +97,6 @@ module Nanoc::Int
     end
 
     private
-
-    def run_stage(stage, *args)
-      Nanoc::Int::NotificationCenter.post(:stage_started, stage.class)
-      stage.run(*args)
-    ensure
-      Nanoc::Int::NotificationCenter.post(:stage_ended, stage.class)
-    end
 
     def create_outdatedness_checker(checksums:, action_sequences:, reps:)
       Nanoc::Int::OutdatednessChecker.new(
