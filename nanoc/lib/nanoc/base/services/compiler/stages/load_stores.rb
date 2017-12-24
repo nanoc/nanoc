@@ -14,11 +14,19 @@ module Nanoc::Int::Compiler::Stages
 
     contract C::None => C::Any
     def run
-      @checksum_store.load
-      @compiled_content_cache.load
-      @dependency_store.load
-      @action_sequence_store.load
-      @outdatedness_store.load
+      load_store(@checksum_store)
+      load_store(@compiled_content_cache)
+      load_store(@dependency_store)
+      load_store(@action_sequence_store)
+      load_store(@outdatedness_store)
+    end
+
+    contract Nanoc::Int::Store => C::Any
+    def load_store(store)
+      Nanoc::Int::NotificationCenter.post(:load_store_started, store.class)
+      store.load
+    ensure
+      Nanoc::Int::NotificationCenter.post(:load_store_ended, store.class)
     end
   end
 end
