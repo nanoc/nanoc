@@ -3,10 +3,6 @@
 # These cops report false positive, and should be re-enabled in a future version
 # of Rubocop.
 
-# See #4731, #4745
-Style/SafeNavigation:
-  Enabled: false
-
 # See #5274, #5231
 Layout/EmptyLinesAroundArguments:
   Enabled: false
