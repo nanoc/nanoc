@@ -1,3 +1,22 @@
+# ----- BROKEN -----
+
+# These cops report false positive, and should be re-enabled in a future version
+# of Rubocop.
+
+# See #4731, #4745
+Style/SafeNavigation:
+  Enabled: false
+
+# See #5274, #5231
+Layout/EmptyLinesAroundArguments:
+  Enabled: false
+
+# See #5277, #5221, #5263
+Layout/SpaceBeforeBlockBraces:
+  Enabled: false
+
+
+
 # ----- CONFIGURED -----
 
 AllCops:
@@ -66,11 +85,13 @@ Style/EmptyElse:
 Style/Next:
   Enabled: false
 
-# This cop is broken (#4731, #4745)
-Style/SafeNavigation:
+Naming/HeredocDelimiterNaming:
   Enabled: false
 
-Naming/HeredocDelimiterNaming:
+Style/EvalWithLocation:
+  Enabled: false
+
+Style/FormatStringToken:
   Enabled: false
 
 
@@ -165,7 +186,7 @@ Style/GuardClause:
   Enabled: false
 
 # Used for “undo work, whatever error happens”
-Lint/RescueWithoutErrorClass:
+Style/RescueStandardError:
   Enabled: false
 
 # For the sake of consistency, it makes the most sense to retain $stderr.puts

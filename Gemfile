@@ -21,7 +21,7 @@ group :devel do
   gem 'rspec'
   gem 'rspec-its', '~> 1.2'
   gem 'rspec-mocks'
-  gem 'rubocop', '~> 0.51', '< 0.52' # TODO: upgrade
+  gem 'rubocop'
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
