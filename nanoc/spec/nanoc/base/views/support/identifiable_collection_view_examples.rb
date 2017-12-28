@@ -238,10 +238,8 @@ shared_examples 'an identifiable collection view' do
       )
     end
 
-    subject { view.find_all(arg) }
-
     context 'with string' do
-      let(:arg) { '/*.css' }
+      subject { view.find_all('/*.css') }
 
       it 'creates dependency' do
         expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/*.css'])
@@ -258,10 +256,27 @@ shared_examples 'an identifiable collection view' do
     end
 
     context 'with regex' do
-      let(:arg) { %r{\.css\z} }
+      subject { view.find_all(%r{\.css\z}) }
 
       it 'creates dependency' do
         expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: [%r{\.css\z}])
+        subject
+      end
+
+      it 'contains views' do
+        expect(subject.size).to eql(2)
+        about_css = subject.find { |iv| iv.identifier == '/about.css' }
+        style_css = subject.find { |iv| iv.identifier == '/style.css' }
+        expect(about_css.class).to equal(view_class)
+        expect(style_css.class).to equal(view_class)
+      end
+    end
+
+    context 'with block' do
+      subject { view.find_all { |iv| iv.identifier =~ /css/ } }
+
+      it 'creates dependency' do
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
         subject
       end
 
