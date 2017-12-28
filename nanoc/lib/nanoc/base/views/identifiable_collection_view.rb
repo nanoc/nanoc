@@ -4,6 +4,8 @@ module Nanoc
   class IdentifiableCollectionView < ::Nanoc::View
     include Enumerable
 
+    NOTHING = Object.new
+
     # @api private
     def initialize(objects, context)
       super(context)
@@ -46,7 +48,12 @@ module Nanoc
     # @param [String, Regex] arg
     #
     # @return [Enumerable]
-    def find_all(arg)
+    def find_all(arg = NOTHING, &block)
+      if NOTHING.equal?(arg)
+        @context.dependency_tracker.bounce(unwrap, raw_content: true)
+        return @objects.select(&block).map { |i| view_class.new(i, @context) }
+      end
+
       prop_attribute =
         case arg
         when String, Nanoc::Identifier
