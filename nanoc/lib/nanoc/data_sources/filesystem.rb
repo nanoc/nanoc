@@ -390,8 +390,8 @@ module Nanoc::DataSources
 
     # @return [ParseResult]
     def parse_with_separate_meta_filename(content_filename, meta_filename)
-      content = content_filename ? read(content_filename) : ''
-      meta_raw = read(meta_filename)
+      content = content_filename ? Tools.read_file(content_filename, config: @config) : ''
+      meta_raw = Tools.read_file(meta_filename, config: @config)
       meta = parse_metadata(meta_raw, meta_filename)
       ParseResult.new(content: content, attributes: meta, attributes_data: meta_raw)
     end
@@ -400,7 +400,7 @@ module Nanoc::DataSources
 
     # @return [ParseResult]
     def parse_with_frontmatter(content_filename)
-      data = read(content_filename)
+      data = Tools.read_file(content_filename, config: @config)
 
       if data !~ /\A#{SEPARATOR}\s*$/
         return ParseResult.new(content: data, attributes: {}, attributes_data: '')
@@ -446,44 +446,6 @@ module Nanoc::DataSources
       return if meta.is_a?(Hash)
 
       raise Errors::InvalidMetadata.new(filename, meta.class)
-    end
-
-    # Reads the content of the file with the given name and returns a string
-    # in UTF-8 encoding. The original encoding of the string is derived from
-    # the default external encoding, but this can be overridden by the
-    # “encoding” configuration attribute in the data source configuration.
-    def read(filename)
-      # Read
-      begin
-        data = File.read(filename)
-      rescue => e
-        raise Errors::FileUnreadable.new(filename, e)
-      end
-
-      # Set original encoding, if any
-      if @config && @config[:encoding]
-        original_encoding = Encoding.find(@config[:encoding])
-        data.force_encoding(@config[:encoding])
-      else
-        original_encoding = data.encoding
-      end
-
-      # Set encoding to UTF-8
-      begin
-        data.encode!('UTF-8')
-      rescue
-        raise Errors::InvalidEncoding.new(filename, original_encoding)
-      end
-
-      # Verify
-      unless data.valid_encoding?
-        raise Errors::InvalidEncoding.new(filename, original_encoding)
-      end
-
-      # Remove UTF-8 BOM (ugly)
-      data.delete!("\xEF\xBB\xBF")
-
-      data
     end
   end
 end

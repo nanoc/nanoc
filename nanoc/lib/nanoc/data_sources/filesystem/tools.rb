@@ -148,5 +148,44 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
       end
     end
     module_function :resolve_symlink
+
+    # Reads the content of the file with the given name and returns a string
+    # in UTF-8 encoding. The original encoding of the string is derived from
+    # the default external encoding, but this can be overridden by the
+    # “encoding” configuration attribute in the data source configuration.
+    def read_file(filename, config:)
+      # Read
+      begin
+        data = File.read(filename)
+      rescue => e
+        raise Errors::FileUnreadable.new(filename, e)
+      end
+
+      # Set original encoding, if any
+      if config && config[:encoding]
+        original_encoding = Encoding.find(config[:encoding])
+        data.force_encoding(config[:encoding])
+      else
+        original_encoding = data.encoding
+      end
+
+      # Set encoding to UTF-8
+      begin
+        data.encode!('UTF-8')
+      rescue
+        raise Errors::InvalidEncoding.new(filename, original_encoding)
+      end
+
+      # Verify
+      unless data.valid_encoding?
+        raise Errors::InvalidEncoding.new(filename, original_encoding)
+      end
+
+      # Remove UTF-8 BOM (ugly)
+      data.delete!("\xEF\xBB\xBF")
+
+      data
+    end
+    module_function :read_file
   end
 end
