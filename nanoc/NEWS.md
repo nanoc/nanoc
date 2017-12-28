@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.8.18 (2017-12-28)
+
+Enhancements:
+
+* Added `.tex` to the default list of text extensions (#1280) [Rien Maertens]
+
+Fixes:
+
+* Made `#breadcrumbs_trail` smarter about picking the right parent when there is ambiguity (#1278, #1279)
+* Made `#find_all` be callable with block instead of an argument (like `Enumerable#find_all`) (#1284, #1285)
+
 ## 4.8.17 (2017-12-16)
 
 Enhancements:
