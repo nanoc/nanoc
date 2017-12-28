@@ -1,7 +1,10 @@
 NEWS.md
 README.md
 
+assets/nanoc.png
+
 lib/nanoc/live.rb
 lib/nanoc/live/commands/live.rb
 lib/nanoc/live/live_recompiler.rb
+lib/nanoc/live/notifier.rb
 lib/nanoc/live/version.rb
