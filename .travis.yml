@@ -32,6 +32,10 @@ matrix:
     - rvm: jruby-9.1.9.0
       env: DISABLE_NOKOGIRI=1
 
+before_install:
+  - gem update --system
+  - gem update bundler
+
 script:
   - bundle exec rake test
 
