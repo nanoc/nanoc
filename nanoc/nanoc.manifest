@@ -183,6 +183,7 @@ lib/nanoc/data_sources.rb
 lib/nanoc/data_sources/filesystem.rb
 lib/nanoc/data_sources/filesystem/errors.rb
 lib/nanoc/data_sources/filesystem/tools.rb
+lib/nanoc/data_sources/filesystem/parser.rb
 lib/nanoc/deploying.rb
 lib/nanoc/deploying/deployer.rb
 lib/nanoc/deploying/deployers.rb

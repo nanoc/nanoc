@@ -379,76 +379,13 @@ module Nanoc::DataSources
       end
     end
 
-    # @return [ParseResult]
     def parse(content_filename, meta_filename)
-      if meta_filename
-        parse_with_separate_meta_filename(content_filename, meta_filename)
-      else
-        parse_with_frontmatter(content_filename)
-      end
-    end
-
-    # @return [ParseResult]
-    def parse_with_separate_meta_filename(content_filename, meta_filename)
-      content = content_filename ? Tools.read_file(content_filename, config: @config) : ''
-      meta_raw = Tools.read_file(meta_filename, config: @config)
-      meta = parse_metadata(meta_raw, meta_filename)
-      ParseResult.new(content: content, attributes: meta, attributes_data: meta_raw)
-    end
-
-    SEPARATOR = /(-{5}|-{3})/.source
-
-    # @return [ParseResult]
-    def parse_with_frontmatter(content_filename)
-      data = Tools.read_file(content_filename, config: @config)
-
-      if data !~ /\A#{SEPARATOR}\s*$/
-        return ParseResult.new(content: data, attributes: {}, attributes_data: '')
-      end
-
-      pieces = data.split(/^#{SEPARATOR}[ \t]*\r?\n?/, 3)
-      if pieces.size < 4
-        raise Errors::InvalidFormat.new(content_filename)
-      end
-
-      meta = parse_metadata(pieces[2], content_filename)
-      content = pieces[4]
-
-      ParseResult.new(content: content, attributes: meta, attributes_data: pieces[2])
-    end
-
-    # @return [Hash]
-    def parse_metadata(data, filename)
-      begin
-        meta = YAML.load(data) || {}
-      rescue => e
-        raise Errors::UnparseableMetadata.new(filename, e)
-      end
-
-      verify_meta(meta, filename)
-
-      meta
-    end
-
-    class ParseResult
-      attr_reader :content
-      attr_reader :attributes
-      attr_reader :attributes_data
-
-      def initialize(content:, attributes:, attributes_data:)
-        @content = content
-        @attributes = attributes
-        @attributes_data = attributes_data
-      end
-    end
-
-    def verify_meta(meta, filename)
-      return if meta.is_a?(Hash)
-
-      raise Errors::InvalidMetadata.new(filename, meta.class)
+      parser = Parser.new(config: @config)
+      parser.call(content_filename, meta_filename)
     end
   end
 end
 
 require_relative 'filesystem/tools'
 require_relative 'filesystem/errors'
+require_relative 'filesystem/parser'
