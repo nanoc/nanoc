@@ -48,13 +48,8 @@ module Nanoc::RuleDSL
       view_context: Nanoc::ViewContextForPreCompilation,
     ] => C::Any
     def apply_to(rep, site:, view_context:)
-      context = Nanoc::Int::Context.new(
-        item: Nanoc::BasicItemView.new(rep.item, view_context),
-        rep: Nanoc::BasicItemRepView.new(rep, view_context),
-        item_rep: Nanoc::BasicItemRepView.new(rep, view_context),
-        items: Nanoc::ItemCollectionWithoutRepsView.new(site.items, view_context),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
-        config: Nanoc::ConfigView.new(site.config, view_context),
+      context = Nanoc::RuleDSL::RoutingRuleContext.new(
+        rep: rep, site: site, view_context: view_context,
       )
 
       context.instance_exec(matches(rep.item.identifier), &@block)

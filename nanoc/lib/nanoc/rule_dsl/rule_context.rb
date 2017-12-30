@@ -7,6 +7,9 @@ module Nanoc::RuleDSL
   #
   # @api private
   class RuleContext < Nanoc::Int::Context
+    # TODO: rename to CompilationRuleContext
+    # TODO: extract RuleContext superclass
+
     # @param [Nanoc::Int::ItemRep] rep
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::RuleDSL::ActionRecorder] recorder
