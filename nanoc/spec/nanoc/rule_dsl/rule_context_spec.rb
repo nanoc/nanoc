@@ -176,7 +176,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
   end
 
   describe '#write' do
-    context 'with path' do
+    context 'with string' do
       context 'calling once' do
         subject { rule_context.write('/foo.html') }
 
@@ -191,6 +191,34 @@ describe(Nanoc::RuleDSL::RuleContext) do
           rule_context.write('/foo.html')
           rule_context.write('/bar.html')
         end
+
+        it 'makes two requests to the executor with unique snapshot names' do
+          expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
+          expect(executor).to receive(:snapshot).with(:_1, path: '/bar.html')
+          subject
+        end
+      end
+    end
+
+    context 'with identifier' do
+      context 'calling once' do
+        subject { rule_context.write(identifier) }
+        let(:identifier) { Nanoc::Identifier.new('/foo.html') }
+
+        it 'makes a request to the executor' do
+          expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
+          subject
+        end
+      end
+
+      context 'calling twice' do
+        subject do
+          rule_context.write(identifier_a)
+          rule_context.write(identifier_b)
+        end
+
+        let(:identifier_a) { Nanoc::Identifier.new('/foo.html') }
+        let(:identifier_b) { Nanoc::Identifier.new('/bar.html') }
 
         it 'makes two requests to the executor with unique snapshot names' do
           expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
