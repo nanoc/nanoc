@@ -9,10 +9,10 @@ module Nanoc::RuleDSL
   class RuleContext < Nanoc::Int::Context
     # @param [Nanoc::Int::ItemRep] rep
     # @param [Nanoc::Int::Site] site
-    # @param [Nanoc::Int::Executor, Nanoc::RuleDSL::ActionRecorder] executor
+    # @param [Nanoc::RuleDSL::ActionRecorder] recorder
     # @param [Nanoc::ViewContextForCompilation] view_context
-    def initialize(rep:, site:, executor:, view_context:)
-      @_executor = executor
+    def initialize(rep:, site:, recorder:, view_context:)
+      @_recorder = recorder
 
       super({
         item: Nanoc::BasicItemView.new(rep.item, view_context),
@@ -37,7 +37,7 @@ module Nanoc::RuleDSL
     #
     # @return [void]
     def filter(filter_name, filter_args = {})
-      @_executor.filter(filter_name, filter_args)
+      @_recorder.filter(filter_name, filter_args)
     end
 
     # Layouts the current representation (calls {Nanoc::Int::ItemRep#layout} with
@@ -50,7 +50,7 @@ module Nanoc::RuleDSL
     #
     # @return [void]
     def layout(layout_identifier, extra_filter_args = nil)
-      @_executor.layout(layout_identifier, extra_filter_args)
+      @_recorder.layout(layout_identifier, extra_filter_args)
     end
 
     # Creates a snapshot of the current compiled item content. Calls
@@ -64,7 +64,7 @@ module Nanoc::RuleDSL
     #
     # @return [void]
     def snapshot(snapshot_name, path: nil)
-      @_executor.snapshot(snapshot_name, path: path)
+      @_recorder.snapshot(snapshot_name, path: path)
     end
 
     # Creates a snapshot named :last the current compiled item content, with

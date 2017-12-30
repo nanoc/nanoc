@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 describe Nanoc::RuleDSL::ActionRecorder do
-  let(:executor) { described_class.new(rep) }
+  let(:recorder) { described_class.new(rep) }
 
-  let(:action_sequence) { executor.action_sequence }
+  let(:action_sequence) { recorder.action_sequence }
   let(:item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
   describe '#filter' do
     it 'records filter call without arguments' do
-      executor.filter(:erb)
+      recorder.filter(:erb)
 
       expect(action_sequence.size).to eql(1)
       expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
@@ -18,7 +18,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
     end
 
     it 'records filter call with arguments' do
-      executor.filter(:erb, x: 123)
+      recorder.filter(:erb, x: 123)
 
       expect(action_sequence.size).to eql(1)
       expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
@@ -29,7 +29,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
   describe '#layout' do
     it 'records layout call without arguments' do
-      executor.layout('/default.*')
+      recorder.layout('/default.*')
 
       expect(action_sequence.size).to eql(2)
 
@@ -43,7 +43,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
     end
 
     it 'records layout call with arguments' do
-      executor.layout('/default.*', donkey: 123)
+      recorder.layout('/default.*', donkey: 123)
 
       expect(action_sequence.size).to eql(2)
 
@@ -57,24 +57,24 @@ describe Nanoc::RuleDSL::ActionRecorder do
     end
 
     it 'fails when passed a symbol' do
-      expect { executor.layout(:default, donkey: 123) }.to raise_error(ArgumentError)
+      expect { recorder.layout(:default, donkey: 123) }.to raise_error(ArgumentError)
     end
   end
 
   describe '#snapshot' do
     context 'snapshot already exists' do
       before do
-        executor.snapshot(:foo)
+        recorder.snapshot(:foo)
       end
 
       it 'raises when creating same snapshot' do
-        expect { executor.snapshot(:foo) }
+        expect { recorder.snapshot(:foo) }
           .to raise_error(Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName)
       end
     end
 
     context 'no arguments' do
-      subject { executor.snapshot(:foo) }
+      subject { recorder.snapshot(:foo) }
 
       it 'records' do
         subject
@@ -86,7 +86,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
     end
 
     context 'final argument' do
-      subject { executor.snapshot(:foo, path: path) }
+      subject { recorder.snapshot(:foo, path: path) }
       let(:path) { nil }
 
       context 'routing rule does not exist' do
@@ -127,13 +127,13 @@ describe Nanoc::RuleDSL::ActionRecorder do
     end
 
     it 'raises when given unknown arguments' do
-      expect { executor.snapshot(:foo, animal: 'giraffe') }
+      expect { recorder.snapshot(:foo, animal: 'giraffe') }
         .to raise_error(ArgumentError)
     end
 
     it 'can create multiple snapshots with different names' do
-      executor.snapshot(:foo)
-      executor.snapshot(:bar)
+      recorder.snapshot(:foo)
+      recorder.snapshot(:bar)
 
       expect(action_sequence.size).to eql(2)
       expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)

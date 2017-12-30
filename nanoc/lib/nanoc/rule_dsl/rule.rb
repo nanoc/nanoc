@@ -48,15 +48,15 @@ module Nanoc::RuleDSL
 
     contract Nanoc::Int::ItemRep, C::KeywordArgs[
       site: Nanoc::Int::Site,
-      executor: C::Or[nil, Nanoc::Int::Executor, Nanoc::RuleDSL::ActionRecorder],
+      recorder: C::Or[nil, Nanoc::RuleDSL::ActionRecorder],
       view_context: Nanoc::ViewContextForPreCompilation,
     ] => C::Any
-    def apply_to(rep, site:, executor:, view_context:)
-      # FIXME: allowing executor to be nil is ugly
+    def apply_to(rep, site:, recorder:, view_context:)
+      # FIXME: allowing recorder to be nil is ugly
 
       context = Nanoc::RuleDSL::RuleContext.new(
         rep: rep,
-        executor: executor,
+        recorder: recorder,
         site: site,
         view_context: view_context,
       )

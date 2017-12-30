@@ -2,7 +2,7 @@
 
 describe(Nanoc::RuleDSL::RuleContext) do
   subject(:rule_context) do
-    described_class.new(rep: rep, site: site, executor: executor, view_context: view_context)
+    described_class.new(rep: rep, site: site, recorder: recorder, view_context: view_context)
   end
 
   let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
@@ -13,7 +13,7 @@ describe(Nanoc::RuleDSL::RuleContext) do
 
   let(:rep) { double(:rep, item: item) }
   let(:site) { double(:site, items: items, layouts: layouts, config: config) }
-  let(:executor) { double(:executor) }
+  let(:recorder) { double(:recorder) }
   let(:reps) { double(:reps) }
   let(:compilation_context) { double(:compilation_context) }
 
@@ -145,8 +145,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
     let(:filter_name) { :donkey }
     let(:filter_args) { { color: 'grey' } }
 
-    it 'makes a request to the executor' do
-      expect(executor).to receive(:filter).with(filter_name, filter_args)
+    it 'makes a request to the recorder' do
+      expect(recorder).to receive(:filter).with(filter_name, filter_args)
       subject
     end
   end
@@ -157,8 +157,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
     let(:layout_identifier) { '/default.*' }
     let(:extra_filter_args) { { color: 'grey' } }
 
-    it 'makes a request to the executor' do
-      expect(executor).to receive(:layout).with(layout_identifier, extra_filter_args)
+    it 'makes a request to the recorder' do
+      expect(recorder).to receive(:layout).with(layout_identifier, extra_filter_args)
       subject
     end
   end
@@ -169,8 +169,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
     let(:snapshot_name) { :for_snippet }
     let(:path) { '/foo.html' }
 
-    it 'makes a request to the executor' do
-      expect(executor).to receive(:snapshot).with(:for_snippet, path: '/foo.html')
+    it 'makes a request to the recorder' do
+      expect(recorder).to receive(:snapshot).with(:for_snippet, path: '/foo.html')
       subject
     end
   end
@@ -180,8 +180,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
       context 'calling once' do
         subject { rule_context.write('/foo.html') }
 
-        it 'makes a request to the executor' do
-          expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
+        it 'makes a request to the recorder' do
+          expect(recorder).to receive(:snapshot).with(:_0, path: '/foo.html')
           subject
         end
       end
@@ -192,9 +192,9 @@ describe(Nanoc::RuleDSL::RuleContext) do
           rule_context.write('/bar.html')
         end
 
-        it 'makes two requests to the executor with unique snapshot names' do
-          expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
-          expect(executor).to receive(:snapshot).with(:_1, path: '/bar.html')
+        it 'makes two requests to the recorder with unique snapshot names' do
+          expect(recorder).to receive(:snapshot).with(:_0, path: '/foo.html')
+          expect(recorder).to receive(:snapshot).with(:_1, path: '/bar.html')
           subject
         end
       end
@@ -205,8 +205,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
         subject { rule_context.write(identifier) }
         let(:identifier) { Nanoc::Identifier.new('/foo.html') }
 
-        it 'makes a request to the executor' do
-          expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
+        it 'makes a request to the recorder' do
+          expect(recorder).to receive(:snapshot).with(:_0, path: '/foo.html')
           subject
         end
       end
@@ -220,9 +220,9 @@ describe(Nanoc::RuleDSL::RuleContext) do
         let(:identifier_a) { Nanoc::Identifier.new('/foo.html') }
         let(:identifier_b) { Nanoc::Identifier.new('/bar.html') }
 
-        it 'makes two requests to the executor with unique snapshot names' do
-          expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
-          expect(executor).to receive(:snapshot).with(:_1, path: '/bar.html')
+        it 'makes two requests to the recorder with unique snapshot names' do
+          expect(recorder).to receive(:snapshot).with(:_0, path: '/foo.html')
+          expect(recorder).to receive(:snapshot).with(:_1, path: '/bar.html')
           subject
         end
       end
@@ -232,8 +232,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
       context 'calling once' do
         subject { rule_context.write(ext: 'html') }
 
-        it 'makes a request to the executor' do
-          expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
+        it 'makes a request to the recorder' do
+          expect(recorder).to receive(:snapshot).with(:_0, path: '/foo.html')
           subject
         end
       end
@@ -244,9 +244,9 @@ describe(Nanoc::RuleDSL::RuleContext) do
           rule_context.write(ext: 'htm')
         end
 
-        it 'makes a request to the executor' do
-          expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
-          expect(executor).to receive(:snapshot).with(:_1, path: '/foo.htm')
+        it 'makes a request to the recorder' do
+          expect(recorder).to receive(:snapshot).with(:_0, path: '/foo.html')
+          expect(recorder).to receive(:snapshot).with(:_1, path: '/foo.htm')
           subject
         end
       end
@@ -256,8 +256,8 @@ describe(Nanoc::RuleDSL::RuleContext) do
       context 'calling once' do
         subject { rule_context.write(ext: '.html') }
 
-        it 'makes a request to the executor' do
-          expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
+        it 'makes a request to the recorder' do
+          expect(recorder).to receive(:snapshot).with(:_0, path: '/foo.html')
           subject
         end
       end
@@ -268,9 +268,9 @@ describe(Nanoc::RuleDSL::RuleContext) do
           rule_context.write(ext: '.htm')
         end
 
-        it 'makes a request to the executor' do
-          expect(executor).to receive(:snapshot).with(:_0, path: '/foo.html')
-          expect(executor).to receive(:snapshot).with(:_1, path: '/foo.htm')
+        it 'makes a request to the recorder' do
+          expect(recorder).to receive(:snapshot).with(:_0, path: '/foo.html')
+          expect(recorder).to receive(:snapshot).with(:_1, path: '/foo.htm')
           subject
         end
       end

@@ -60,20 +60,20 @@ module Nanoc::RuleDSL
       view_context =
         Nanoc::ViewContextForPreCompilation.new(items: @site.items)
 
-      executor = Nanoc::RuleDSL::ActionRecorder.new(rep)
+      recorder = Nanoc::RuleDSL::ActionRecorder.new(rep)
       rule = @rules_collection.compilation_rule_for(rep)
 
       unless rule
         raise NoActionSequenceForItemRepException.new(rep)
       end
 
-      executor.snapshot(:raw)
-      rule.apply_to(rep, executor: executor, site: @site, view_context: view_context)
-      executor.snapshot(:post) if executor.any_layouts?
-      executor.snapshot(:last) unless executor.last_snapshot?
-      executor.snapshot(:pre) unless executor.pre_snapshot?
+      recorder.snapshot(:raw)
+      rule.apply_to(rep, recorder: recorder, site: @site, view_context: view_context)
+      recorder.snapshot(:post) if recorder.any_layouts?
+      recorder.snapshot(:last) unless recorder.last_snapshot?
+      recorder.snapshot(:pre) unless recorder.pre_snapshot?
 
-      copy_paths_from_routing_rules(compact_snapshots(executor.action_sequence), rep: rep)
+      copy_paths_from_routing_rules(compact_snapshots(recorder.action_sequence), rep: rep)
     end
 
     # @param [Nanoc::Int::Layout] layout
@@ -138,7 +138,7 @@ module Nanoc::RuleDSL
       basic_path =
         routing_rule.apply_to(
           rep,
-          executor: nil,
+          recorder: nil,
           site: @site,
           view_context: view_context,
         )

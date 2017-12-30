@@ -338,7 +338,7 @@ describe Nanoc::Int::Checksummer do
   end
 
   context 'Nanoc::RuleDSL::RuleContext' do
-    let(:obj) { Nanoc::RuleDSL::RuleContext.new(rep: rep, site: site, executor: executor, view_context: view_context) }
+    let(:obj) { Nanoc::RuleDSL::RuleContext.new(rep: rep, site: site, recorder: recorder, view_context: view_context) }
 
     let(:rep) { Nanoc::Int::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Int::Item.new('stuff', {}, '/stuff.md') }
@@ -356,7 +356,7 @@ describe Nanoc::Int::Checksummer do
     let(:items) { [item] }
     let(:layouts) { [Nanoc::Int::Layout.new('asdf', {}, '/foo.md')] }
 
-    let(:executor) { :_unused_ }
+    let(:recorder) { :_unused_ }
     let(:view_context) { :_unused_ }
 
     let(:expected_item_checksum) { 'Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<stuff>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</stuff.md>>>' }
