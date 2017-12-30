@@ -16,9 +16,7 @@ module Nanoc::RuleDSL
 
     attr_reader :pattern
 
-    # Creates a new item compilation rule with the given identifier regex,
-    # compiler and block. The block will be called during compilation with the
-    # item rep as its argument.
+    # Creates a new item routing rule.
     #
     # @param [Nanoc::Int::Pattern] pattern
     #

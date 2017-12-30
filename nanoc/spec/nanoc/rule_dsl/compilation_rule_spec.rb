@@ -23,21 +23,10 @@ describe Nanoc::RuleDSL::CompilationRule do
   end
 
   describe '#initialize' do
-    context 'with snapshot_name' do
-      subject { described_class.new(pattern, :xml, proc {}, snapshot_name: :donkey) }
+    subject { described_class.new(pattern, :xml, proc {}) }
 
-      its(:rep_name) { is_expected.to eql(:xml) }
-      its(:pattern) { is_expected.to eql(pattern) }
-      its(:snapshot_name) { is_expected.to eql(:donkey) }
-    end
-
-    context 'without snapshot_name' do
-      subject { described_class.new(pattern, :xml, proc {}) }
-
-      its(:rep_name) { is_expected.to eql(:xml) }
-      its(:pattern) { is_expected.to eql(pattern) }
-      its(:snapshot_name) { is_expected.to be_nil }
-    end
+    its(:rep_name) { is_expected.to eql(:xml) }
+    its(:pattern) { is_expected.to eql(pattern) }
   end
 
   describe '#applicable_to?' do

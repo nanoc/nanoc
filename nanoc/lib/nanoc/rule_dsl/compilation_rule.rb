@@ -11,16 +11,9 @@ module Nanoc::RuleDSL
     #   using this rule
     attr_reader :rep_name
 
-    # @return [Symbol] The name of the snapshot this rule will apply to.
-    #   Ignored for compilation rules, but used for routing rules.
-    attr_reader :snapshot_name
-    # TODO: remove snapshot_name
-
     attr_reader :pattern
 
-    # Creates a new item compilation rule with the given identifier regex,
-    # compiler and block. The block will be called during compilation with the
-    # item rep as its argument.
+    # Creates a new item compilation rule.
     #
     # @param [Nanoc::Int::Pattern] pattern
     #
@@ -29,13 +22,9 @@ module Nanoc::RuleDSL
     #
     # @param [Proc] block A block that will be called when matching items are
     #   compiled
-    #
-    # @param [Symbol, nil] snapshot_name The name of the snapshot this rule will
-    #   apply to. Ignored for compilation rules, but used for routing rules.
-    def initialize(pattern, rep_name, block, snapshot_name: nil)
+    def initialize(pattern, rep_name, block)
       @pattern = pattern
       @rep_name = rep_name.to_sym
-      @snapshot_name = snapshot_name
       @block = block
     end
 
