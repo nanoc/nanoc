@@ -1,14 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::RuleDSL
-  # Provides a context in which compilation and routing rules can be executed.
-  # It provides access to the item representation that is being compiled or
-  # routed.
-  #
-  # @api private
-  class CompilationRuleContext < Nanoc::Int::Context
-    # TODO: extract RuleContext superclass
-
+  class CompilationRuleContext < RuleContext
     # @param [Nanoc::Int::ItemRep] rep
     # @param [Nanoc::Int::Site] site
     # @param [Nanoc::RuleDSL::ActionRecorder] recorder
@@ -16,14 +9,7 @@ module Nanoc::RuleDSL
     def initialize(rep:, site:, recorder:, view_context:)
       @_recorder = recorder
 
-      super({
-        item: Nanoc::BasicItemView.new(rep.item, view_context),
-        rep: Nanoc::BasicItemRepView.new(rep, view_context),
-        item_rep: Nanoc::BasicItemRepView.new(rep, view_context),
-        items: Nanoc::ItemCollectionWithoutRepsView.new(site.items, view_context),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
-        config: Nanoc::ConfigView.new(site.config, view_context),
-      })
+      super(rep: rep, site: site, view_context: view_context)
     end
 
     # Filters the current representation (calls {Nanoc::Int::ItemRep#filter} with

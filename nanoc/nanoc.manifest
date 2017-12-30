@@ -251,6 +251,7 @@ lib/nanoc/rule_dsl/compilation_rule_context.rb
 lib/nanoc/rule_dsl/compilation_rule.rb
 lib/nanoc/rule_dsl/routing_rule_context.rb
 lib/nanoc/rule_dsl/routing_rule.rb
+lib/nanoc/rule_dsl/rule_context.rb
 lib/nanoc/rule_dsl/rules_collection.rb
 lib/nanoc/rule_dsl/rules_loader.rb
 lib/nanoc/spec.rb
