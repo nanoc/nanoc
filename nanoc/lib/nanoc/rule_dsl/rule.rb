@@ -48,7 +48,7 @@ module Nanoc::RuleDSL
 
     contract Nanoc::Int::ItemRep, C::KeywordArgs[
       site: Nanoc::Int::Site,
-      executor: C::Or[nil, Nanoc::Int::Executor, Nanoc::RuleDSL::RecordingExecutor],
+      executor: C::Or[nil, Nanoc::Int::Executor, Nanoc::RuleDSL::ActionRecorder],
       view_context: Nanoc::ViewContextForPreCompilation,
     ] => C::Any
     def apply_to(rep, site:, executor:, view_context:)

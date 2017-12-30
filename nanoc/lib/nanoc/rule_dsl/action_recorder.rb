@@ -2,7 +2,7 @@
 
 module Nanoc
   module RuleDSL
-    class RecordingExecutor
+    class ActionRecorder
       include Nanoc::Int::ContractsSupport
 
       contract Nanoc::Int::ItemRep => C::Any

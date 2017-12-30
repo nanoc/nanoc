@@ -60,7 +60,7 @@ module Nanoc::RuleDSL
       view_context =
         Nanoc::ViewContextForPreCompilation.new(items: @site.items)
 
-      executor = Nanoc::RuleDSL::RecordingExecutor.new(rep)
+      executor = Nanoc::RuleDSL::ActionRecorder.new(rep)
       rule = @rules_collection.compilation_rule_for(rep)
 
       unless rule

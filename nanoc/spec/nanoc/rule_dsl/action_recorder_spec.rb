@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::RuleDSL::RecordingExecutor do
+describe Nanoc::RuleDSL::ActionRecorder do
   let(:executor) { described_class.new(rep) }
 
   let(:action_sequence) { executor.action_sequence }
