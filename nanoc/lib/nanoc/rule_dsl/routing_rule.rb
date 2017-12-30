@@ -47,21 +47,17 @@ module Nanoc::RuleDSL
 
     contract Nanoc::Int::ItemRep, C::KeywordArgs[
       site: Nanoc::Int::Site,
-      recorder: C::Or[nil, Nanoc::RuleDSL::ActionRecorder],
       view_context: Nanoc::ViewContextForPreCompilation,
     ] => C::Any
-    def apply_to(rep, site:, recorder:, view_context:)
-      # FIXME: allowing recorder to be nil is ugly
-      # NOTE: recorder is OK to be nil for routing rules only
-
-      context = Nanoc::Int::Context.new({
+    def apply_to(rep, site:, view_context:)
+      context = Nanoc::Int::Context.new(
         item: Nanoc::BasicItemView.new(rep.item, view_context),
         rep: Nanoc::BasicItemRepView.new(rep, view_context),
         item_rep: Nanoc::BasicItemRepView.new(rep, view_context),
         items: Nanoc::ItemCollectionWithoutRepsView.new(site.items, view_context),
         layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
         config: Nanoc::ConfigView.new(site.config, view_context),
-      })
+      )
 
       context.instance_exec(matches(rep.item.identifier), &@block)
     end

@@ -138,7 +138,6 @@ module Nanoc::RuleDSL
       basic_path =
         routing_rule.apply_to(
           rep,
-          recorder: nil,
           site: @site,
           view_context: view_context,
         )
