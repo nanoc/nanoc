@@ -74,7 +74,7 @@ module Nanoc::RuleDSL
     def compile(identifier, rep: :default, &block)
       raise ArgumentError.new('#compile requires a block') unless block_given?
 
-      rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, block)
+      rule = Nanoc::RuleDSL::CompilationRule.new(create_pattern(identifier), rep, block)
       @rules_collection.add_item_compilation_rule(rule)
     end
 
@@ -173,7 +173,7 @@ module Nanoc::RuleDSL
       raise ArgumentError.new('#passthrough does not require a block') if block_given?
 
       compilation_block = proc {}
-      compilation_rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, compilation_block)
+      compilation_rule = Nanoc::RuleDSL::CompilationRule.new(create_pattern(identifier), rep, compilation_block)
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
       # Create routing rule
@@ -213,7 +213,7 @@ module Nanoc::RuleDSL
     def ignore(identifier, rep: :default)
       raise ArgumentError.new('#ignore does not require a block') if block_given?
 
-      compilation_rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, proc {})
+      compilation_rule = Nanoc::RuleDSL::CompilationRule.new(create_pattern(identifier), rep, proc {})
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
       routing_rule = Nanoc::RuleDSL::RoutingRule.new(create_pattern(identifier), rep, proc {}, snapshot_name: :last)

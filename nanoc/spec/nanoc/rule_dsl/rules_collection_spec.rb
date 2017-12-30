@@ -37,7 +37,7 @@ describe Nanoc::RuleDSL::RulesCollection do
       end
 
       let(:rule) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/bar.*'), :default, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/bar.*'), :default, proc {})
       end
 
       it 'is nil' do
@@ -52,11 +52,11 @@ describe Nanoc::RuleDSL::RulesCollection do
       end
 
       let(:rule_a) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/foo.*'), :default, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/foo.*'), :default, proc {})
       end
 
       let(:rule_b) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/bar.*'), :default, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/bar.*'), :default, proc {})
       end
 
       context 'rep name does not match' do
@@ -82,15 +82,15 @@ describe Nanoc::RuleDSL::RulesCollection do
       end
 
       let(:rule_a) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/foo.*'), :default, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/foo.*'), :default, proc {})
       end
 
       let(:rule_b) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/*.*'), :default, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/*.*'), :default, proc {})
       end
 
       let(:rule_c) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/*.*'), :foo, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/*.*'), :foo, proc {})
       end
 
       context 'no rep name matches' do
@@ -134,7 +134,7 @@ describe Nanoc::RuleDSL::RulesCollection do
       end
 
       let(:rule) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/bar.*'), :default, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/bar.*'), :default, proc {})
       end
 
       it 'is none' do
@@ -149,11 +149,11 @@ describe Nanoc::RuleDSL::RulesCollection do
       end
 
       let(:rule_a) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/foo.*'), :default, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/foo.*'), :default, proc {})
       end
 
       let(:rule_b) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/bar.*'), :default, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/bar.*'), :default, proc {})
       end
 
       it 'is the single rule' do
@@ -168,11 +168,11 @@ describe Nanoc::RuleDSL::RulesCollection do
       end
 
       let(:rule_a) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/foo.*'), :default, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/foo.*'), :default, proc {})
       end
 
       let(:rule_b) do
-        Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/*.*'), :default, proc {})
+        Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/*.*'), :default, proc {})
       end
 
       it 'is all matching rule' do
@@ -191,42 +191,42 @@ describe Nanoc::RuleDSL::RulesCollection do
     let(:rules) do
       [
         # Matching item, matching rep
-        Nanoc::RuleDSL::Rule.new(
+        Nanoc::RuleDSL::CompilationRule.new(
           Nanoc::Int::Pattern.from('/foo.*'), :default, proc {}, snapshot_name: :a
         ),
-        Nanoc::RuleDSL::Rule.new(
+        Nanoc::RuleDSL::CompilationRule.new(
           Nanoc::Int::Pattern.from('/foo.*'), :default, proc {}, snapshot_name: :b
         ),
 
         # Matching item, non-matching rep
-        Nanoc::RuleDSL::Rule.new(
+        Nanoc::RuleDSL::CompilationRule.new(
           Nanoc::Int::Pattern.from('/foo.*'), :raw, proc {}, snapshot_name: :a
         ),
-        Nanoc::RuleDSL::Rule.new(
+        Nanoc::RuleDSL::CompilationRule.new(
           Nanoc::Int::Pattern.from('/foo.*'), :raw, proc {}, snapshot_name: :b
         ),
 
         # Non-matching item, matching rep
-        Nanoc::RuleDSL::Rule.new(
+        Nanoc::RuleDSL::CompilationRule.new(
           Nanoc::Int::Pattern.from('/bar.*'), :default, proc {}, snapshot_name: :a
         ),
-        Nanoc::RuleDSL::Rule.new(
+        Nanoc::RuleDSL::CompilationRule.new(
           Nanoc::Int::Pattern.from('/bar.*'), :default, proc {}, snapshot_name: :b
         ),
 
         # Non-matching item, non-matching rep
-        Nanoc::RuleDSL::Rule.new(
+        Nanoc::RuleDSL::CompilationRule.new(
           Nanoc::Int::Pattern.from('/bar.*'), :raw, proc {}, snapshot_name: :a
         ),
-        Nanoc::RuleDSL::Rule.new(
+        Nanoc::RuleDSL::CompilationRule.new(
           Nanoc::Int::Pattern.from('/bar.*'), :raw, proc {}, snapshot_name: :b
         ),
 
         # Matching item, matching rep, but not the first
-        Nanoc::RuleDSL::Rule.new(
+        Nanoc::RuleDSL::CompilationRule.new(
           Nanoc::Int::Pattern.from('/*.*'), :default, proc {}, snapshot_name: :a
         ),
-        Nanoc::RuleDSL::Rule.new(
+        Nanoc::RuleDSL::CompilationRule.new(
           Nanoc::Int::Pattern.from('/*.*'), :default, proc {}, snapshot_name: :b
         ),
       ]

@@ -54,7 +54,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
             layout '/default.*'
             filter :typohero
           end
-          rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
+          rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
           rules_collection.add_item_compilation_rule(rule)
         end
 
@@ -92,7 +92,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
       context 'no routing rule exists' do
         before do
           # Add compilation rule
-          compilation_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
+          compilation_rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
           rules_collection.add_item_compilation_rule(compilation_rule)
         end
 
@@ -110,7 +110,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
       context 'routing rule exists' do
         before do
           # Add compilation rule
-          compilation_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
+          compilation_rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
           rules_collection.add_item_compilation_rule(compilation_rule)
 
           # Add routing rule
@@ -132,7 +132,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
       context 'routing rule for other rep exists' do
         before do
           # Add compilation rule
-          compilation_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
+          compilation_rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
           rules_collection.add_item_compilation_rule(compilation_rule)
 
           # Add routing rule

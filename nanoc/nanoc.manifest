@@ -247,9 +247,9 @@ lib/nanoc/rule_dsl/action_provider.rb
 lib/nanoc/rule_dsl/action_recorder.rb
 lib/nanoc/rule_dsl/action_sequence_calculator.rb
 lib/nanoc/rule_dsl/compiler_dsl.rb
+lib/nanoc/rule_dsl/compilation_rule.rb
 lib/nanoc/rule_dsl/rule_context.rb
 lib/nanoc/rule_dsl/routing_rule.rb
-lib/nanoc/rule_dsl/rule.rb
 lib/nanoc/rule_dsl/rules_collection.rb
 lib/nanoc/rule_dsl/rules_loader.rb
 lib/nanoc/spec.rb

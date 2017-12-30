@@ -4,7 +4,7 @@ module Nanoc::RuleDSL
   # Contains the processing information for a item.
   #
   # @api private
-  class Rule
+  class CompilationRule
     include Nanoc::Int::ContractsSupport
 
     # @return [Symbol] The name of the representation that will be compiled
@@ -14,6 +14,7 @@ module Nanoc::RuleDSL
     # @return [Symbol] The name of the snapshot this rule will apply to.
     #   Ignored for compilation rules, but used for routing rules.
     attr_reader :snapshot_name
+    # TODO: remove snapshot_name
 
     attr_reader :pattern
 

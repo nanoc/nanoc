@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Nanoc::RuleDSL::Rule do
+describe Nanoc::RuleDSL::CompilationRule do
   subject(:rule) do
-    Nanoc::RuleDSL::Rule.new(pattern, :xml, block)
+    described_class.new(pattern, :xml, block)
   end
 
   let(:pattern) { Nanoc::Int::Pattern.from(%r{/(.*)/(.*)/}) }
@@ -24,7 +24,7 @@ describe Nanoc::RuleDSL::Rule do
 
   describe '#initialize' do
     context 'with snapshot_name' do
-      subject { Nanoc::RuleDSL::Rule.new(pattern, :xml, proc {}, snapshot_name: :donkey) }
+      subject { described_class.new(pattern, :xml, proc {}, snapshot_name: :donkey) }
 
       its(:rep_name) { is_expected.to eql(:xml) }
       its(:pattern) { is_expected.to eql(pattern) }
@@ -32,7 +32,7 @@ describe Nanoc::RuleDSL::Rule do
     end
 
     context 'without snapshot_name' do
-      subject { Nanoc::RuleDSL::Rule.new(pattern, :xml, proc {}) }
+      subject { described_class.new(pattern, :xml, proc {}) }
 
       its(:rep_name) { is_expected.to eql(:xml) }
       its(:pattern) { is_expected.to eql(pattern) }
