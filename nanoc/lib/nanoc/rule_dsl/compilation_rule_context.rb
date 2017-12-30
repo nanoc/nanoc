@@ -6,8 +6,7 @@ module Nanoc::RuleDSL
   # routed.
   #
   # @api private
-  class RuleContext < Nanoc::Int::Context
-    # TODO: rename to CompilationRuleContext
+  class CompilationRuleContext < Nanoc::Int::Context
     # TODO: extract RuleContext superclass
 
     # @param [Nanoc::Int::ItemRep] rep

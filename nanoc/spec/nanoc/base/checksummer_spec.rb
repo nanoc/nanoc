@@ -337,8 +337,8 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::ItemCollectionWithoutRepsView<Nanoc::Int::ItemCollection<Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</foo.md>>>,>>') }
   end
 
-  context 'Nanoc::RuleDSL::RuleContext' do
-    let(:obj) { Nanoc::RuleDSL::RuleContext.new(rep: rep, site: site, recorder: recorder, view_context: view_context) }
+  context 'Nanoc::RuleDSL::CompilationRuleContext' do
+    let(:obj) { Nanoc::RuleDSL::CompilationRuleContext.new(rep: rep, site: site, recorder: recorder, view_context: view_context) }
 
     let(:rep) { Nanoc::Int::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Int::Item.new('stuff', {}, '/stuff.md') }
@@ -366,7 +366,7 @@ describe Nanoc::Int::Checksummer do
 
     let(:expected_checksum) do
       [
-        'Nanoc::RuleDSL::RuleContext<',
+        'Nanoc::RuleDSL::CompilationRuleContext<',
         'item=',
         'Nanoc::BasicItemView<' + expected_item_checksum + '>',
         ',rep=',

@@ -98,7 +98,7 @@ module Nanoc::Int
           StringUpdateBehavior
         when Nanoc::View
           UnwrapUpdateBehavior
-        when Nanoc::RuleDSL::RuleContext
+        when Nanoc::RuleDSL::CompilationRuleContext
           RuleContextUpdateBehavior
         when Nanoc::Int::Context
           ContextUpdateBehavior

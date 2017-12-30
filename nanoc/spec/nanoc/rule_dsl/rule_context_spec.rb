@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe(Nanoc::RuleDSL::RuleContext) do
+describe(Nanoc::RuleDSL::CompilationRuleContext) do
   subject(:rule_context) do
     described_class.new(rep: rep, site: site, recorder: recorder, view_context: view_context)
   end

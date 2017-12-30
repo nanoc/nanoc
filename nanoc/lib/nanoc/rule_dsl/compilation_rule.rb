@@ -42,7 +42,7 @@ module Nanoc::RuleDSL
       view_context: Nanoc::ViewContextForPreCompilation,
     ] => C::Any
     def apply_to(rep, site:, recorder:, view_context:)
-      context = Nanoc::RuleDSL::RuleContext.new(
+      context = Nanoc::RuleDSL::CompilationRuleContext.new(
         rep: rep,
         recorder: recorder,
         site: site,
