@@ -69,7 +69,7 @@ describe Nanoc::RuleDSL::Rule do
     let(:site) { Nanoc::Int::Site.new(config: config, data_source: data_source, code_snippets: []) }
     let(:data_source) { Nanoc::Int::InMemDataSource.new(items, layouts) }
     let(:config) { Nanoc::Int::Configuration.new }
-    let(:recorder) { nil }
+    let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
     let(:view_context) { Nanoc::ViewContextForPreCompilation.new(items: items) }
     let(:items) { Nanoc::Int::ItemCollection.new(config, []) }
     let(:layouts) { Nanoc::Int::LayoutCollection.new(config, []) }

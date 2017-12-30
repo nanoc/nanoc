@@ -48,13 +48,10 @@ module Nanoc::RuleDSL
 
     contract Nanoc::Int::ItemRep, C::KeywordArgs[
       site: Nanoc::Int::Site,
-      recorder: C::Or[nil, Nanoc::RuleDSL::ActionRecorder],
+      recorder: Nanoc::RuleDSL::ActionRecorder,
       view_context: Nanoc::ViewContextForPreCompilation,
     ] => C::Any
     def apply_to(rep, site:, recorder:, view_context:)
-      # FIXME: allowing recorder to be nil is ugly
-      # NOTE: recorder is OK to be nil for routing rules only
-
       context = Nanoc::RuleDSL::RuleContext.new(
         rep: rep,
         recorder: recorder,
