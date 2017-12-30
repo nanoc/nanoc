@@ -114,7 +114,7 @@ module Nanoc::RuleDSL
     def route(identifier, rep: :default, snapshot: :last, &block)
       raise ArgumentError.new('#route requires a block') unless block_given?
 
-      rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, block, snapshot_name: snapshot)
+      rule = Nanoc::RuleDSL::RoutingRule.new(create_pattern(identifier), rep, block, snapshot_name: snapshot)
       @rules_collection.add_item_routing_rule(rule)
     end
 
@@ -188,7 +188,7 @@ module Nanoc::RuleDSL
           item[:extension].nil? || (item[:content_filename].nil? && item.identifier =~ %r{#{item[:extension]}/$}) ? item.identifier.chop : item.identifier.chop + '.' + item[:extension]
         end
       end
-      routing_rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, routing_block, snapshot_name: :last)
+      routing_rule = Nanoc::RuleDSL::RoutingRule.new(create_pattern(identifier), rep, routing_block, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 
@@ -216,7 +216,7 @@ module Nanoc::RuleDSL
       compilation_rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, proc {})
       @rules_collection.add_item_compilation_rule(compilation_rule)
 
-      routing_rule = Nanoc::RuleDSL::Rule.new(create_pattern(identifier), rep, proc {}, snapshot_name: :last)
+      routing_rule = Nanoc::RuleDSL::RoutingRule.new(create_pattern(identifier), rep, proc {}, snapshot_name: :last)
       @rules_collection.add_item_routing_rule(routing_rule)
     end
 

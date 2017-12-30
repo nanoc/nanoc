@@ -114,7 +114,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
           rules_collection.add_item_compilation_rule(compilation_rule)
 
           # Add routing rule
-          routing_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc { '/foo.md' }, snapshot_name: :last)
+          routing_rule = Nanoc::RuleDSL::RoutingRule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc { '/foo.md' }, snapshot_name: :last)
           rules_collection.add_item_routing_rule(routing_rule)
         end
 
@@ -136,7 +136,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
           rules_collection.add_item_compilation_rule(compilation_rule)
 
           # Add routing rule
-          routing_rule = Nanoc::RuleDSL::Rule.new(Nanoc::Int::Pattern.from('/list.*'), :abc, proc { '/foo.md' }, snapshot_name: :last)
+          routing_rule = Nanoc::RuleDSL::RoutingRule.new(Nanoc::Int::Pattern.from('/list.*'), :abc, proc { '/foo.md' }, snapshot_name: :last)
           rules_collection.add_item_routing_rule(routing_rule)
         end
 

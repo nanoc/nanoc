@@ -4,7 +4,7 @@ module Nanoc::RuleDSL
   # Contains the processing information for a item.
   #
   # @api private
-  class Rule
+  class RoutingRule
     include Nanoc::Int::ContractsSupport
 
     # @return [Symbol] The name of the representation that will be compiled
@@ -12,7 +12,6 @@ module Nanoc::RuleDSL
     attr_reader :rep_name
 
     # @return [Symbol] The name of the snapshot this rule will apply to.
-    #   Ignored for compilation rules, but used for routing rules.
     attr_reader :snapshot_name
 
     attr_reader :pattern
@@ -30,7 +29,7 @@ module Nanoc::RuleDSL
     #   compiled
     #
     # @param [Symbol, nil] snapshot_name The name of the snapshot this rule will
-    #   apply to. Ignored for compilation rules, but used for routing rules.
+    #   apply to.
     def initialize(pattern, rep_name, block, snapshot_name: nil)
       @pattern = pattern
       @rep_name = rep_name.to_sym
@@ -55,12 +54,14 @@ module Nanoc::RuleDSL
       # FIXME: allowing recorder to be nil is ugly
       # NOTE: recorder is OK to be nil for routing rules only
 
-      context = Nanoc::RuleDSL::RuleContext.new(
-        rep: rep,
-        recorder: recorder,
-        site: site,
-        view_context: view_context,
-      )
+      context = Nanoc::Int::Context.new({
+        item: Nanoc::BasicItemView.new(rep.item, view_context),
+        rep: Nanoc::BasicItemRepView.new(rep, view_context),
+        item_rep: Nanoc::BasicItemRepView.new(rep, view_context),
+        items: Nanoc::ItemCollectionWithoutRepsView.new(site.items, view_context),
+        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
+        config: Nanoc::ConfigView.new(site.config, view_context),
+      })
 
       context.instance_exec(matches(rep.item.identifier), &@block)
     end
