@@ -58,12 +58,12 @@ describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
       sleep 0.5
 
       File.write('content/lol.html', 'hej')
-      sleep 0.1 until File.file?('output/lol.html')
+      sleep_until { File.file?('output/lol.html') }
       expect(File.read('output/lol.html')).to eq('hej')
 
       sleep 1.0 # HFS+ mtime resolution is 1s
       File.write('content/lol.html', 'bye')
-      sleep 0.1 until File.read('output/lol.html') == 'bye'
+      sleep_until { File.read('output/lol.html') == 'bye' }
 
       # Stop
       Process.kill('INT', pid)

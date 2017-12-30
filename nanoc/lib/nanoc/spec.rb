@@ -24,6 +24,20 @@ module Nanoc
       def skip_unless_have_command(cmd)
         skip "Could not find external command \"#{cmd}\"" unless command?(cmd)
       end
+
+      def sleep_until(max: 3.0)
+        start = Time.now
+        loop do
+          diff = (Time.now - start).to_f
+          if diff > max
+            raise "Waited for #{diff}s for condition to become true, but it never did"
+          end
+
+          break if yield
+
+          sleep 0.1
+        end
+      end
     end
 
     class HelperContext
