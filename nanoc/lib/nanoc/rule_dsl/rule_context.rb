@@ -4,7 +4,11 @@ module Nanoc::RuleDSL
   class RuleContext < Nanoc::Int::Context
     include Nanoc::Int::ContractsSupport
 
-    contract C::KeywordArgs[rep: Nanoc::Int::ItemRep, site: Nanoc::Int::Site, view_context: Nanoc::ViewContextForPreCompilation] => C::Any
+    contract C::KeywordArgs[
+      rep: Nanoc::Int::ItemRep,
+      site: Nanoc::Int::Site,
+      view_context: Nanoc::ViewContextForPreCompilation,
+    ] => C::Any
     def initialize(rep:, site:, view_context:)
       super({
         item: Nanoc::BasicItemView.new(rep.item, view_context),

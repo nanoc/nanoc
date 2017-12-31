@@ -356,7 +356,7 @@ describe Nanoc::Int::Checksummer do
     let(:items) { Nanoc::Int::ItemCollection.new(config, [item]) }
     let(:layouts) { [Nanoc::Int::Layout.new('asdf', {}, '/foo.md')] }
 
-    let(:recorder) { :_unused_ }
+    let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
     let(:view_context) { Nanoc::ViewContextForPreCompilation.new(items: items) }
 
     let(:expected_item_checksum) { 'Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<stuff>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</stuff.md>>>' }

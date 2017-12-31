@@ -2,10 +2,14 @@
 
 module Nanoc::RuleDSL
   class CompilationRuleContext < RuleContext
-    # @param [Nanoc::Int::ItemRep] rep
-    # @param [Nanoc::Int::Site] site
-    # @param [Nanoc::RuleDSL::ActionRecorder] recorder
-    # @param [Nanoc::ViewContextForCompilation] view_context
+    include Nanoc::Int::ContractsSupport
+
+    contract C::KeywordArgs[
+      rep: Nanoc::Int::ItemRep,
+      site: Nanoc::Int::Site,
+      recorder: Nanoc::RuleDSL::ActionRecorder,
+      view_context: Nanoc::ViewContextForPreCompilation,
+    ] => C::Any
     def initialize(rep:, site:, recorder:, view_context:)
       @_recorder = recorder
 

@@ -24,7 +24,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   end
 
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
-  let(:recorder) { double(:recorder) }
+  let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
   let(:reps) { double(:reps) }
   let(:compilation_context) { double(:compilation_context) }
 
