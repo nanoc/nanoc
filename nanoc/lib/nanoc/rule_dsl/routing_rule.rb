@@ -4,7 +4,7 @@ module Nanoc::RuleDSL
   class RoutingRule < Rule
     include Nanoc::Int::ContractsSupport
 
-    # contract C::None => C::Maybe[Symbol]
+    contract C::None => C::Maybe[Symbol]
     attr_reader :snapshot_name
 
     contract Nanoc::Int::Pattern, Symbol, Proc, C::KeywordArgs[snapshot_name: C::Optional[Symbol]] => C::Any
