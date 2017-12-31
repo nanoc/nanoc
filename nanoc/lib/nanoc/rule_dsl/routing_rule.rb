@@ -55,8 +55,6 @@ module Nanoc::RuleDSL
       context.instance_exec(matches(rep.item.identifier), &@block)
     end
 
-    protected
-
     # Matches the rule regexp against items identifier and gives back group
     # captures if any
     #

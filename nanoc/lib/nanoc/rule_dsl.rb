@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+module Nanoc
+  # @api private
+  module RuleDSL
+  end
+end
+
 require_relative 'rule_dsl/compiler_dsl'
 require_relative 'rule_dsl/action_provider'
 require_relative 'rule_dsl/action_recorder'

@@ -1,37 +1,23 @@
 # frozen_string_literal: true
 
 module Nanoc::RuleDSL
-  # Contains the processing information for a item.
-  #
-  # @api private
   class CompilationRule
     include Nanoc::Int::ContractsSupport
 
-    # @return [Symbol] The name of the representation that will be compiled
-    #   using this rule
+    contract C::None => Symbol
     attr_reader :rep_name
 
+    contract C::None => Nanoc::Int::Pattern
     attr_reader :pattern
 
-    # Creates a new item compilation rule.
-    #
-    # @param [Nanoc::Int::Pattern] pattern
-    #
-    # @param [String, Symbol] rep_name The name of the item representation
-    #   where this rule can be applied to
-    #
-    # @param [Proc] block A block that will be called when matching items are
-    #   compiled
+    contract Nanoc::Int::Pattern, Symbol, Proc => C::Any
     def initialize(pattern, rep_name, block)
       @pattern = pattern
       @rep_name = rep_name.to_sym
       @block = block
     end
 
-    # @param [Nanoc::Int::Item] item The item to check
-    #
-    # @return [Boolean] true if this rule can be applied to the given item
-    #   rep, false otherwise
+    contract Nanoc::Int::Item => C::Bool
     def applicable_to?(item)
       @pattern.match?(item.identifier)
     end
@@ -52,14 +38,8 @@ module Nanoc::RuleDSL
       context.instance_exec(matches(rep.item.identifier), &@block)
     end
 
-    protected
-
-    # Matches the rule regexp against items identifier and gives back group
-    # captures if any
-    #
-    # @param [String] identifier Identifier to capture groups for
-    #
-    # @return [nil, Array] Captured groups, if any
+    # @api private
+    contract Nanoc::Identifier => C::Or[nil, C::ArrayOf[String]]
     def matches(identifier)
       @pattern.captures(identifier)
     end

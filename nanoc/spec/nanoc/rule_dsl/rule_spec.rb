@@ -9,16 +9,16 @@ shared_examples 'a generic rule' do
   let(:block) { proc {} }
 
   describe '#matches' do
-    subject { rule.send(:matches, identifier) }
+    subject { rule.matches(identifier) }
 
     context 'does not match' do
-      let(:identifier) { '/moo/' }
+      let(:identifier) { Nanoc::Identifier.new('/moo/', type: :legacy) }
       it { is_expected.to be_nil }
     end
 
     context 'matches' do
-      let(:identifier) { '/anything/else/' }
-      it { is_expected.to eql(%w[anything else]) }
+      let(:identifier) { Nanoc::Identifier.new('/foo/bar/', type: :legacy) }
+      it { is_expected.to eql(%w[foo bar]) }
     end
   end
 
