@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Nanoc::RuleDSL
-  # @api private
   class RulesLoader
     def initialize(config, rules_collection)
       @dsl = Nanoc::RuleDSL::CompilerDSL.new(rules_collection, config)
