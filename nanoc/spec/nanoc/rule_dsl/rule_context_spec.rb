@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-describe(Nanoc::RuleDSL::CompilationRuleContext) do
-  subject(:rule_context) do
-    described_class.new(rep: rep, site: site, recorder: recorder, view_context: view_context)
-  end
-
+shared_examples 'a rule context' do
   let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
   let(:config) { Nanoc::Int::Configuration.new }
@@ -24,7 +20,6 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   end
 
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
-  let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
   let(:reps) { double(:reps) }
   let(:compilation_context) { double(:compilation_context) }
 
@@ -33,7 +28,6 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   end
 
   let(:dependency_tracker) { double(:dependency_tracker) }
-  let(:snapshot_repo) { double(:snapshot_repo) }
 
   describe '#initialize' do
     it 'wraps objects in view classes' do
@@ -143,6 +137,67 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
       expect(subject['/foo/bar/']).not_to respond_to(:reps)
     end
   end
+end
+
+describe(Nanoc::RuleDSL::RoutingRuleContext) do
+  subject(:rule_context) do
+    described_class.new(rep: rep, site: site, view_context: view_context)
+  end
+
+  let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
+  let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
+  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:config) { Nanoc::Int::Configuration.new }
+  let(:items) { Nanoc::Int::ItemCollection.new(config) }
+
+  let(:site) do
+    Nanoc::Int::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: data_source,
+    )
+  end
+
+  let(:view_context) do
+    Nanoc::ViewContextForPreCompilation.new(items: items)
+  end
+
+  it_behaves_like 'a rule context'
+end
+
+describe(Nanoc::RuleDSL::CompilationRuleContext) do
+  subject(:rule_context) do
+    described_class.new(rep: rep, site: site, recorder: recorder, view_context: view_context)
+  end
+
+  let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
+  let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
+  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:config) { Nanoc::Int::Configuration.new }
+  let(:items) { Nanoc::Int::ItemCollection.new(config) }
+  let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
+
+  let(:site) do
+    Nanoc::Int::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: data_source,
+    )
+  end
+
+  let(:data_source) do
+    Nanoc::Int::InMemDataSource.new(items, layouts)
+  end
+
+  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+
+  let(:view_context) do
+    Nanoc::ViewContextForPreCompilation.new(items: items)
+  end
+
+  let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
+
+  it_behaves_like 'a rule context'
 
   describe '#filter' do
     subject { rule_context.filter(filter_name, filter_args) }
