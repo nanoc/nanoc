@@ -11,20 +11,25 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   let(:items) { Nanoc::Int::ItemCollection.new(config) }
   let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
-  let(:rep) { double(:rep, item: item) }
-  let(:site) { double(:site, items: items, layouts: layouts, config: config) }
+  let(:site) do
+    Nanoc::Int::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: data_source,
+    )
+  end
+
+  let(:data_source) do
+    Nanoc::Int::InMemDataSource.new(items, layouts)
+  end
+
+  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:recorder) { double(:recorder) }
   let(:reps) { double(:reps) }
   let(:compilation_context) { double(:compilation_context) }
 
   let(:view_context) do
-    Nanoc::ViewContextForCompilation.new(
-      reps:                Nanoc::Int::ItemRepRepo.new,
-      items:               items,
-      dependency_tracker:  dependency_tracker,
-      compilation_context: compilation_context,
-      snapshot_repo:       snapshot_repo,
-    )
+    Nanoc::ViewContextForPreCompilation.new(items: items)
   end
 
   let(:dependency_tracker) { double(:dependency_tracker) }

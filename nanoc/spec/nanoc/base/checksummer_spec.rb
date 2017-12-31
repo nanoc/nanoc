@@ -353,11 +353,11 @@ describe Nanoc::Int::Checksummer do
 
     let(:config) { Nanoc::Int::Configuration.new(hash: { 'foo' => 'bar' }) }
     let(:code_snippets) { [Nanoc::Int::CodeSnippet.new('asdf', '/bob.rb')] }
-    let(:items) { [item] }
+    let(:items) { Nanoc::Int::ItemCollection.new(config, [item]) }
     let(:layouts) { [Nanoc::Int::Layout.new('asdf', {}, '/foo.md')] }
 
     let(:recorder) { :_unused_ }
-    let(:view_context) { :_unused_ }
+    let(:view_context) { Nanoc::ViewContextForPreCompilation.new(items: items) }
 
     let(:expected_item_checksum) { 'Nanoc::Int::Item<content=Nanoc::Int::TextualContent<String<stuff>>,attributes=Hash<>,identifier=Nanoc::Identifier<String</stuff.md>>>' }
     let(:expected_item_rep_checksum) { 'Nanoc::Int::ItemRep<item=' + expected_item_checksum + ',name=Symbol<pdf>>' }
@@ -372,7 +372,7 @@ describe Nanoc::Int::Checksummer do
         ',rep=',
         'Nanoc::BasicItemRepView<' + expected_item_rep_checksum + '>',
         ',items=',
-        'Nanoc::ItemCollectionWithoutRepsView<Array<' + expected_item_checksum + ',>>',
+        'Nanoc::ItemCollectionWithoutRepsView<Nanoc::Int::ItemCollection<' + expected_item_checksum + ',>>',
         ',layouts=',
         'Nanoc::LayoutCollectionView<Array<' + expected_layout_checksum + ',>>',
         ',config=',

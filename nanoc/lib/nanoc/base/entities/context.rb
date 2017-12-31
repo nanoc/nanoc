@@ -51,7 +51,15 @@ module Nanoc::Int
 
     def respond_to_missing?(method, include_all)
       ivar_name = '@' + method.to_s
-      instance_variable_defined?(ivar_name) || super
+
+      valid_ivar_name =
+        if defined?(Contracts)
+          ivar_name.match?(/\A@[A-Za-z_]+\z/)
+        else
+          true # probably good enough
+        end
+
+      (valid_ivar_name && instance_variable_defined?(ivar_name)) || super
     end
 
     def include(mod)

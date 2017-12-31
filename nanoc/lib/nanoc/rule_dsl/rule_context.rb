@@ -7,9 +7,9 @@ module Nanoc::RuleDSL
   #
   # @api private
   class RuleContext < Nanoc::Int::Context
-    # @param [Nanoc::Int::ItemRep] rep
-    # @param [Nanoc::Int::Site] site
-    # @param [Nanoc::ViewContextForCompilation] view_context
+    include Nanoc::Int::ContractsSupport
+
+    contract C::KeywordArgs[rep: Nanoc::Int::ItemRep, site: Nanoc::Int::Site, view_context: Nanoc::ViewContextForPreCompilation] => C::Any
     def initialize(rep:, site:, view_context:)
       super({
         item: Nanoc::BasicItemView.new(rep.item, view_context),
