@@ -54,7 +54,7 @@ module Nanoc::Int
 
       valid_ivar_name =
         if defined?(Contracts)
-          ivar_name.match?(/\A@[A-Za-z_]+\z/)
+          ivar_name =~ /\A@[A-Za-z_]+\z/
         else
           true # probably good enough
         end
