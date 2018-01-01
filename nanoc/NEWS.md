@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.8.19 (2018-01-01)
+
+Enhancements:
+
+* Made `write nil` skip routing rule (#1286)
+
 ## 4.8.18 (2017-12-28)
 
 Enhancements:
