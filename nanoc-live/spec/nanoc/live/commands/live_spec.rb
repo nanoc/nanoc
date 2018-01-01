@@ -42,7 +42,10 @@ describe Nanoc::Live::Commands::Live, site: true, stdio: true do
     end
   end
 
-  it 'receives websocket connections' do
-    # TODO
+  it 'listens for websocket connections' do
+    run_cmd do
+      socket = TCPSocket.new('localhost', 35_729)
+      expect(socket).not_to be_closed
+    end
   end
 end
