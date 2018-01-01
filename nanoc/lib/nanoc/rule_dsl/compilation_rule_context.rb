@@ -55,7 +55,7 @@ module Nanoc::RuleDSL
     # @param [String, nil] path
     #
     # @return [void]
-    def snapshot(snapshot_name, path: nil)
+    def snapshot(snapshot_name, path: Nanoc::UNDEFINED)
       @_recorder.snapshot(snapshot_name, path: path)
     end
 
@@ -73,7 +73,7 @@ module Nanoc::RuleDSL
       @_write_snapshot_counter += 1
 
       case arg
-      when String, Nanoc::Identifier
+      when String, Nanoc::Identifier, nil
         snapshot(snapshot_name, path: arg)
       when Hash
         if arg.key?(:ext)

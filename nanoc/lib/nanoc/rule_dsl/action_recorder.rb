@@ -12,6 +12,7 @@ module Nanoc
         @any_layouts = false
         @last_snapshot = false
         @pre_snapshot = false
+        @skip_routing_rule = false
       end
 
       def inspect
@@ -36,10 +37,19 @@ module Nanoc
         @any_layouts = true
       end
 
-      Pathlike = C::Maybe[C::Or[String, Nanoc::Identifier]]
-      contract Symbol, C::KeywordArgs[path: C::Optional[Pathlike]] => nil
-      def snapshot(snapshot_name, path: nil)
-        @action_sequence_builder.add_snapshot(snapshot_name, path&.to_s)
+      MaybePathlike = C::Or[nil, Nanoc::UNDEFINED, String, Nanoc::Identifier]
+      contract Symbol, C::KeywordArgs[path: C::Optional[MaybePathlike]] => nil
+      def snapshot(snapshot_name, path: Nanoc::UNDEFINED)
+        @skip_routing_rule = path.nil?
+
+        path =
+          if Nanoc::UNDEFINED.equal?(path) || path.nil?
+            nil
+          else
+            path.to_s
+          end
+
+        @action_sequence_builder.add_snapshot(snapshot_name, path)
         case snapshot_name
         when :last
           @last_snapshot = true
@@ -57,6 +67,11 @@ module Nanoc
       contract C::None => C::Bool
       def any_layouts?
         @any_layouts
+      end
+
+      contract C::None => C::Bool
+      def skip_routing_rule?
+        @skip_routing_rule
       end
 
       contract C::None => C::Bool

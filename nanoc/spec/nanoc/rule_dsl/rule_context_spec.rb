@@ -335,5 +335,14 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
         end
       end
     end
+
+    context 'with nil' do
+      subject { rule_context.write(nil) }
+
+      it 'makes a request to the recorder' do
+        expect(recorder).to receive(:snapshot).with(:_0, path: nil)
+        subject
+      end
+    end
   end
 end
