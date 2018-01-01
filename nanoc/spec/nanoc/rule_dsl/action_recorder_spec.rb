@@ -86,11 +86,13 @@ describe Nanoc::RuleDSL::ActionRecorder do
     end
 
     context 'final argument' do
-      subject { recorder.snapshot(:foo, path: path) }
-      let(:path) { nil }
+      subject { recorder.snapshot(:foo, subject_params) }
+      let(:subject_params) { {} }
 
       context 'routing rule does not exist' do
         context 'no explicit path given' do
+          subject { recorder.snapshot(:foo, subject_params) }
+
           it 'records' do
             subject
             expect(action_sequence.size).to eql(1)
@@ -98,10 +100,14 @@ describe Nanoc::RuleDSL::ActionRecorder do
             expect(action_sequence[0].snapshot_names).to eql([:foo])
             expect(action_sequence[0].paths).to be_empty
           end
+
+          it 'keeps skip_routing_rule' do
+            expect { subject }.not_to change { recorder.skip_routing_rule? }
+          end
         end
 
         context 'explicit path given as string' do
-          let(:path) { '/routed-foo.html' }
+          let(:subject_params) { { path: '/routed-foo.html' } }
 
           it 'records' do
             subject
@@ -110,10 +116,14 @@ describe Nanoc::RuleDSL::ActionRecorder do
             expect(action_sequence[0].snapshot_names).to eql([:foo])
             expect(action_sequence[0].paths).to eql(['/routed-foo.html'])
           end
+
+          it 'keeps skip_routing_rule' do
+            expect { subject }.not_to change { recorder.skip_routing_rule? }
+          end
         end
 
         context 'explicit path given as identifier' do
-          let(:path) { Nanoc::Identifier.from('/routed-foo.html') }
+          let(:subject_params) { { path: Nanoc::Identifier.from('/routed-foo.html') } }
 
           it 'records' do
             subject
@@ -121,6 +131,29 @@ describe Nanoc::RuleDSL::ActionRecorder do
             expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
             expect(action_sequence[0].snapshot_names).to eql([:foo])
             expect(action_sequence[0].paths).to eql(['/routed-foo.html'])
+          end
+
+          it 'keeps skip_routing_rule' do
+            expect { subject }.not_to change { recorder.skip_routing_rule? }
+          end
+        end
+
+        context 'explicit path given as nil' do
+          let(:subject_params) { { path: nil } }
+
+          it 'records' do
+            subject
+            expect(action_sequence.size).to eql(1)
+            expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+            expect(action_sequence[0].snapshot_names).to eql([:foo])
+            expect(action_sequence[0].paths).to be_empty
+          end
+
+          it 'sets skip_routing_rule' do
+            expect { subject }
+              .to change { recorder.skip_routing_rule? }
+              .from(false)
+              .to(true)
           end
         end
       end

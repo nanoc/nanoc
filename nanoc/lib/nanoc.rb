@@ -27,6 +27,11 @@ module Nanoc
   def self.on_windows?
     RUBY_PLATFORM =~ /windows|bccwin|cygwin|djgpp|mingw|mswin|wince/i
   end
+
+  # Similar to `nil` except that it can only be compared against using
+  # `UNDEFINED.equal?(x)`. Used in places where `nil` already has meaning, and
+  # thus cannot be used to mean the presence of nothing.
+  UNDEFINED = Object.new
 end
 
 # Load general requirements
