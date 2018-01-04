@@ -4,7 +4,7 @@ module Nanoc::Int
   # @api private
   class Instrumentor
     def self.call(key, *args)
-      stopwatch = DDTelemetry::Stopwatch.new
+      stopwatch = DDMetrics::Stopwatch.new
       stopwatch.start
       yield
     ensure
