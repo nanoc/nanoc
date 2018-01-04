@@ -7,9 +7,9 @@ require 'hamster'
 require 'ref'
 require 'slow_enumerator_tools'
 require 'ddmemoize'
-require 'ddtelemetry'
+require 'ddmetrics'
 
-DDMemoize.enable_telemetry
+DDMemoize.enable_metrics
 
 module Nanoc
   # @return [String] A string containing information about this Nanoc version

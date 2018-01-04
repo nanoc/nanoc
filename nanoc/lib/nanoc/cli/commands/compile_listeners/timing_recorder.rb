@@ -16,28 +16,28 @@ module Nanoc::CLI::Commands::CompileListeners
     def initialize(reps:)
       @reps = reps
 
-      @stages_summary = DDTelemetry::Summary.new
-      @phases_summary = DDTelemetry::Summary.new
-      @outdatedness_rules_summary = DDTelemetry::Summary.new
-      @filters_summary = DDTelemetry::Summary.new
-      @load_stores_summary = DDTelemetry::Summary.new
+      @stages_summary = DDMetrics::Summary.new
+      @phases_summary = DDMetrics::Summary.new
+      @outdatedness_rules_summary = DDMetrics::Summary.new
+      @filters_summary = DDMetrics::Summary.new
+      @load_stores_summary = DDMetrics::Summary.new
     end
 
     # @see Listener#start
     def start
       on(:stage_ran) do |duration, klass|
-        @stages_summary.observe(duration, klass.to_s.sub(/.*::/, ''))
+        @stages_summary.observe(duration, name: klass.to_s.sub(/.*::/, ''))
       end
 
       on(:outdatedness_rule_ran) do |duration, klass|
-        @outdatedness_rules_summary.observe(duration, klass.to_s.sub(/.*::/, ''))
+        @outdatedness_rules_summary.observe(duration, name: klass.to_s.sub(/.*::/, ''))
       end
 
       filter_stopwatches = {}
 
       on(:filtering_started) do |rep, _filter_name|
         stopwatch_stack = filter_stopwatches.fetch(rep) { filter_stopwatches[rep] = [] }
-        stopwatch_stack << DDTelemetry::Stopwatch.new
+        stopwatch_stack << DDMetrics::Stopwatch.new
         stopwatch_stack.last.start
       end
 
@@ -45,11 +45,11 @@ module Nanoc::CLI::Commands::CompileListeners
         stopwatch = filter_stopwatches.fetch(rep).pop
         stopwatch.stop
 
-        @filters_summary.observe(stopwatch.duration, filter_name.to_s)
+        @filters_summary.observe(stopwatch.duration, name: filter_name.to_s)
       end
 
       on(:store_loaded) do |duration, klass|
-        @load_stores_summary.observe(duration, klass.to_s)
+        @load_stores_summary.observe(duration, name: klass.to_s)
       end
 
       on(:compilation_suspended) do |rep, _exception|
@@ -64,14 +64,14 @@ module Nanoc::CLI::Commands::CompileListeners
 
       on(:phase_started) do |phase_name, rep|
         stopwatches = phase_stopwatches.fetch(rep) { phase_stopwatches[rep] = {} }
-        stopwatches[phase_name] = DDTelemetry::Stopwatch.new.tap(&:start)
+        stopwatches[phase_name] = DDMetrics::Stopwatch.new.tap(&:start)
       end
 
       on(:phase_ended) do |phase_name, rep|
         stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
         stopwatch.stop
 
-        @phases_summary.observe(stopwatch.duration, phase_name)
+        @phases_summary.observe(stopwatch.duration, name: phase_name)
       end
 
       on(:phase_yielded) do |phase_name, rep|
@@ -88,7 +88,7 @@ module Nanoc::CLI::Commands::CompileListeners
         stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
         stopwatch.stop if stopwatch.running?
 
-        @phases_summary.observe(stopwatch.duration, phase_name)
+        @phases_summary.observe(stopwatch.duration, name: phase_name)
       end
     end
 
@@ -103,7 +103,9 @@ module Nanoc::CLI::Commands::CompileListeners
     def table_for_summary(name, summary)
       headers = [name.to_s, 'count', 'min', '.50', '.90', '.95', 'max', 'tot']
 
-      rows = summary.map do |filter_name, stats|
+      rows = summary.map do |label, stats|
+        name = label.fetch(:name)
+
         count = stats.count
         min   = stats.min
         p50   = stats.quantile(0.50)
@@ -112,7 +114,7 @@ module Nanoc::CLI::Commands::CompileListeners
         tot   = stats.sum
         max   = stats.max
 
-        [filter_name, count.to_s] + [min, p50, p90, p95, max, tot].map { |r| "#{format('%4.2f', r)}s" }
+        [name, count.to_s] + [min, p50, p90, p95, max, tot].map { |r| "#{format('%4.2f', r)}s" }
       end
 
       [headers] + rows
@@ -121,8 +123,9 @@ module Nanoc::CLI::Commands::CompileListeners
     def table_for_summary_durations(name, summary)
       headers = [name.to_s, 'tot']
 
-      rows = summary.map do |stage_name, stats|
-        [stage_name, "#{format('%4.2f', stats.sum)}s"]
+      rows = summary.map do |label, stats|
+        name = label.fetch(:name)
+        [name, "#{format('%4.2f', stats.sum)}s"]
       end
 
       [headers] + rows
@@ -134,7 +137,7 @@ module Nanoc::CLI::Commands::CompileListeners
       print_table_for_summary_duration(:stages, @stages_summary) if Nanoc::CLI.verbosity >= 2
       print_table_for_summary(:outdatedness_rules, @outdatedness_rules_summary) if Nanoc::CLI.verbosity >= 2
       print_table_for_summary_duration(:load_stores, @load_stores_summary) if Nanoc::CLI.verbosity >= 2
-      DDMemoize.print_telemetry if Nanoc::CLI.verbosity >= 2
+      DDMemoize.print_metrics if Nanoc::CLI.verbosity >= 2
     end
 
     def print_table_for_summary(name, summary)
@@ -152,7 +155,7 @@ module Nanoc::CLI::Commands::CompileListeners
     end
 
     def print_table(rows)
-      puts DDTelemetry::Table.new(rows).to_s
+      puts DDMetrics::Table.new(rows).to_s
     end
   end
 end
