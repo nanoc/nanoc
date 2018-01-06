@@ -42,7 +42,7 @@ module Nanoc::Int::Compiler::Phases
       end
     end
 
-    QUEUE_SIZE = 1000
+    QUEUE_SIZE = 40
     WORKER_POOL_SIZE = 5
 
     def initialize(snapshot_repo:, wrapped:)
