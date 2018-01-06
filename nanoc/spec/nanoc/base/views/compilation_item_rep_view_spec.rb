@@ -72,22 +72,35 @@ describe Nanoc::CompilationItemRepView do
     context 'rep is compiled' do
       before { rep.compiled = true }
 
-      it 'creates a dependency' do
-        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      context 'file does not exist' do
+        it 'raises' do
+          expect { subject }.to raise_error(Nanoc::Int::Errors::InternalInconsistency)
+        end
       end
 
-      it 'creates a dependency with the right props' do
-        subject
-        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+      context 'file exists' do
+        before do
+          FileUtils.mkdir_p('output/about')
+          File.write('output/about/index.html', 'hi!')
+        end
 
-        expect(dep.props.compiled_content?).to eq(true)
+        it 'creates a dependency' do
+          expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+        end
 
-        expect(dep.props.raw_content?).to eq(false)
-        expect(dep.props.attributes?).to eq(false)
-        expect(dep.props.path?).to eq(false)
+        it 'creates a dependency with the right props' do
+          subject
+          dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+          expect(dep.props.compiled_content?).to eq(true)
+
+          expect(dep.props.raw_content?).to eq(false)
+          expect(dep.props.attributes?).to eq(false)
+          expect(dep.props.path?).to eq(false)
+        end
+
+        it { should eq('output/about/index.html') }
       end
-
-      it { should eq('output/about/index.html') }
     end
   end
 

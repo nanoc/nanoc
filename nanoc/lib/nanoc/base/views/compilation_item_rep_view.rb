@@ -23,6 +23,13 @@ module Nanoc
         Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(@item_rep))
       end
 
+      # Wait for file to exist
+      if res
+        start = Time.now
+        sleep 0.05 until File.file?(res) || Time.now - start > 1.0
+        raise Nanoc::Int::Errors::InternalInconsistency, "File did not apear in time: #{res}" unless File.file?(res)
+      end
+
       res
     end
 
