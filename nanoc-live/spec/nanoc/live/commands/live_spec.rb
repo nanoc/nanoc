@@ -4,13 +4,7 @@ describe Nanoc::Live::Commands::Live, site: true, stdio: true do
   def run_cmd
     pid = fork do
       trap(:INT) { exit(0) }
-
-      # TODO: Use Nanoc::CLI.run instead (when --watch is no longer experimental)
-      options = { watch: true }
-      arguments = []
-      cmd = nil
-      cmd_runner = described_class.new(options, arguments, cmd)
-      cmd_runner.run
+      Nanoc::CLI.run(['live'])
     end
 
     # FIXME: wait is ugly
