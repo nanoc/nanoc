@@ -33,7 +33,7 @@ module Nanoc::Int
 
       # Notify
       Nanoc::Int::NotificationCenter.post(
-        :will_write_rep, item_rep, raw_path
+        :rep_write_started, item_rep, raw_path
       )
 
       content = snapshot_repo.get(item_rep, snapshot_name)
@@ -54,7 +54,7 @@ module Nanoc::Int
 
       # Notify
       Nanoc::Int::NotificationCenter.post(
-        :rep_written, item_rep, content.binary?, raw_path, is_created, is_modified
+        :rep_write_ended, item_rep, content.binary?, raw_path, is_created, is_modified
       )
     end
 

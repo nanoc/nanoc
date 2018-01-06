@@ -56,9 +56,9 @@ describe Nanoc::Int::ItemRepWriter do
 
       it 'copies' do
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:will_write_rep, item_rep, 'output/blah.dat')
+          .with(:rep_write_started, item_rep, 'output/blah.dat')
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:rep_written, item_rep, true, 'output/blah.dat', true, true)
+          .with(:rep_write_ended, item_rep, true, 'output/blah.dat', true, true)
 
         subject
 
@@ -99,9 +99,9 @@ describe Nanoc::Int::ItemRepWriter do
 
       it 'writes' do
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:will_write_rep, item_rep, 'output/blah.dat')
+          .with(:rep_write_started, item_rep, 'output/blah.dat')
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
-          .with(:rep_written, item_rep, false, 'output/blah.dat', true, true)
+          .with(:rep_write_ended, item_rep, false, 'output/blah.dat', true, true)
 
         subject
 

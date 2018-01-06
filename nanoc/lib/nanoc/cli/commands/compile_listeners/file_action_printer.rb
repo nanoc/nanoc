@@ -25,7 +25,7 @@ module Nanoc::CLI::Commands::CompileListeners
         cached_reps << rep
       end
 
-      Nanoc::Int::NotificationCenter.on(:rep_written, self) do |rep, _binary, path, is_created, is_modified|
+      Nanoc::Int::NotificationCenter.on(:rep_write_ended, self) do |rep, _binary, path, is_created, is_modified|
         @acc_durations[rep] += Time.now - @start_times[rep]
         duration = @acc_durations[rep]
 
@@ -50,7 +50,7 @@ module Nanoc::CLI::Commands::CompileListeners
 
       Nanoc::Int::NotificationCenter.remove(:compilation_started, self)
       Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
-      Nanoc::Int::NotificationCenter.remove(:rep_written, self)
+      Nanoc::Int::NotificationCenter.remove(:rep_write_ended, self)
 
       @reps.reject(&:compiled?).each do |rep|
         raw_paths = rep.raw_paths.values.flatten.uniq

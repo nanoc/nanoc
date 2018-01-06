@@ -11,10 +11,10 @@ module Nanoc::CLI::Commands::CompileListeners
     def start
       setup_diffs
       old_contents = {}
-      Nanoc::Int::NotificationCenter.on(:will_write_rep, self) do |rep, path|
+      Nanoc::Int::NotificationCenter.on(:rep_write_started, self) do |rep, path|
         old_contents[rep] = File.file?(path) ? File.read(path) : nil
       end
-      Nanoc::Int::NotificationCenter.on(:rep_written, self) do |rep, binary, path, _is_created, _is_modified|
+      Nanoc::Int::NotificationCenter.on(:rep_write_ended, self) do |rep, binary, path, _is_created, _is_modified|
         unless binary
           new_contents = File.file?(path) ? File.read(path) : nil
           if old_contents[rep] && new_contents
@@ -29,8 +29,8 @@ module Nanoc::CLI::Commands::CompileListeners
     def stop
       super
 
-      Nanoc::Int::NotificationCenter.remove(:will_write_rep, self)
-      Nanoc::Int::NotificationCenter.remove(:rep_written, self)
+      Nanoc::Int::NotificationCenter.remove(:rep_write_started, self)
+      Nanoc::Int::NotificationCenter.remove(:rep_write_ended, self)
 
       teardown_diffs
     end
