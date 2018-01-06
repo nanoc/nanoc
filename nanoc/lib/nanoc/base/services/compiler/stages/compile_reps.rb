@@ -12,12 +12,13 @@ module Nanoc::Int::Compiler::Stages
     end
 
     def run
-      phase_stack = build_phase_stack
       outdated_reps = @reps.select { |r| @outdatedness_store.include?(r) }
       selector = Nanoc::Int::ItemRepSelector.new(outdated_reps)
-      selector.each do |rep|
-        handle_errors_while(rep) do
-          compile_rep(rep, phase_stack: phase_stack, is_outdated: @outdatedness_store.include?(rep))
+      run_phase_stack do |phase_stack|
+        selector.each do |rep|
+          handle_errors_while(rep) do
+            compile_rep(rep, phase_stack: phase_stack, is_outdated: @outdatedness_store.include?(rep))
+          end
         end
       end
     ensure
@@ -35,6 +36,14 @@ module Nanoc::Int::Compiler::Stages
 
     def compile_rep(rep, phase_stack:, is_outdated:)
       phase_stack.call(rep, is_outdated: is_outdated)
+    end
+
+    def run_phase_stack
+      phase_stack = build_phase_stack
+      phase_stack.start
+      yield(phase_stack)
+    ensure
+      phase_stack.stop
     end
 
     def build_phase_stack

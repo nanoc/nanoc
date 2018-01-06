@@ -8,6 +8,14 @@ module Nanoc::Int::Compiler::Phases
       @wrapped = wrapped
     end
 
+    def start
+      @wrapped&.start
+    end
+
+    def stop
+      @wrapped&.stop
+    end
+
     def call(rep, is_outdated:)
       notify(:phase_started, rep)
       run(rep, is_outdated: is_outdated) do
