@@ -37,7 +37,10 @@ module Nanoc::Int::Compiler::Phases
     contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
     def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
       yield
+
       @queue_to_write << rep
+
+      Nanoc::Int::NotificationCenter.post(:rep_write_enqueued, rep)
     end
   end
 end
