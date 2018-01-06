@@ -74,9 +74,10 @@ describe Nanoc::Int::Compiler do
   describe '#compile_rep' do
     let(:stage) { compiler.send(:compile_reps_stage, action_sequences, reps) }
 
-    subject { stage.send(:compile_rep, rep, is_outdated: is_outdated) }
+    subject { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: is_outdated) }
 
     let(:is_outdated) { true }
+    let(:phase_stack) { stage.send(:build_phase_stack) }
 
     let(:reps) do
       Nanoc::Int::ItemRepRepo.new.tap do |rs|
@@ -113,10 +114,10 @@ describe Nanoc::Int::Compiler do
         reps = Nanoc::Int::ItemRepRepo.new
         expect(compiler.compilation_context(reps: reps).snapshot_repo.get(rep, :last)).to be_nil
 
-        expect { stage.send(:compile_rep, rep, is_outdated: true) }
+        expect { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true) }
           .to raise_error(Nanoc::Int::Errors::UnmetDependency)
-        stage.send(:compile_rep, other_rep, is_outdated: true)
-        stage.send(:compile_rep, rep, is_outdated: true)
+        stage.send(:compile_rep, other_rep, phase_stack: phase_stack, is_outdated: true)
+        stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true)
 
         expect(compiler.compilation_context(reps: reps).snapshot_repo.get(rep, :last).string).to eql('other=other content')
       end
@@ -139,10 +140,10 @@ describe Nanoc::Int::Compiler do
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
 
-        expect { stage.send(:compile_rep, rep, is_outdated: true) }
+        expect { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true) }
           .to raise_error(Nanoc::Int::Errors::UnmetDependency)
-        stage.send(:compile_rep, other_rep, is_outdated: true)
-        stage.send(:compile_rep, rep, is_outdated: true)
+        stage.send(:compile_rep, other_rep, phase_stack: phase_stack, is_outdated: true)
+        stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true)
       end
     end
   end

@@ -12,10 +12,13 @@ module Nanoc::Int::Compiler::Stages
     end
 
     def run
+      phase_stack = build_phase_stack
       outdated_reps = @reps.select { |r| @outdatedness_store.include?(r) }
       selector = Nanoc::Int::ItemRepSelector.new(outdated_reps)
       selector.each do |rep|
-        handle_errors_while(rep) { compile_rep(rep, is_outdated: @outdatedness_store.include?(rep)) }
+        handle_errors_while(rep) do
+          compile_rep(rep, phase_stack: phase_stack, is_outdated: @outdatedness_store.include?(rep))
+        end
       end
     ensure
       @outdatedness_store.store
@@ -30,40 +33,38 @@ module Nanoc::Int::Compiler::Stages
       raise Nanoc::Int::Errors::CompilationError.new(e, item_rep)
     end
 
-    def compile_rep(rep, is_outdated:)
-      item_rep_compiler.call(rep, is_outdated: is_outdated)
+    def compile_rep(rep, phase_stack:, is_outdated:)
+      phase_stack.call(rep, is_outdated: is_outdated)
     end
 
-    def item_rep_compiler
-      @_item_rep_compiler ||= begin
-        recalculate_phase = Nanoc::Int::Compiler::Phases::Recalculate.new(
-          action_sequences: @action_sequences,
-          dependency_store: @dependency_store,
-          compilation_context: @compilation_context,
-        )
+    def build_phase_stack
+      recalculate_phase = Nanoc::Int::Compiler::Phases::Recalculate.new(
+        action_sequences: @action_sequences,
+        dependency_store: @dependency_store,
+        compilation_context: @compilation_context,
+      )
 
-        cache_phase = Nanoc::Int::Compiler::Phases::Cache.new(
-          compiled_content_cache: @compiled_content_cache,
-          snapshot_repo: @compilation_context.snapshot_repo,
-          wrapped: recalculate_phase,
-        )
+      cache_phase = Nanoc::Int::Compiler::Phases::Cache.new(
+        compiled_content_cache: @compiled_content_cache,
+        snapshot_repo: @compilation_context.snapshot_repo,
+        wrapped: recalculate_phase,
+      )
 
-        resume_phase = Nanoc::Int::Compiler::Phases::Resume.new(
-          wrapped: cache_phase,
-        )
+      resume_phase = Nanoc::Int::Compiler::Phases::Resume.new(
+        wrapped: cache_phase,
+      )
 
-        write_phase = Nanoc::Int::Compiler::Phases::Write.new(
-          snapshot_repo: @compilation_context.snapshot_repo,
-          wrapped: resume_phase,
-        )
+      write_phase = Nanoc::Int::Compiler::Phases::Write.new(
+        snapshot_repo: @compilation_context.snapshot_repo,
+        wrapped: resume_phase,
+      )
 
-        mark_done_phase = Nanoc::Int::Compiler::Phases::MarkDone.new(
-          wrapped: write_phase,
-          outdatedness_store: @outdatedness_store,
-        )
+      mark_done_phase = Nanoc::Int::Compiler::Phases::MarkDone.new(
+        wrapped: write_phase,
+        outdatedness_store: @outdatedness_store,
+      )
 
-        mark_done_phase
-      end
+      mark_done_phase
     end
   end
 end
