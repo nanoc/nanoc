@@ -7,10 +7,6 @@
 Layout/EmptyLinesAroundArguments:
   Enabled: false
 
-# See #5277, #5221, #5263
-Layout/SpaceBeforeBlockBraces:
-  Enabled: false
-
 
 
 # ----- CONFIGURED -----
