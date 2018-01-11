@@ -136,8 +136,8 @@ module Nanoc::Filters
       node.replace(Nokogiri::XML::Comment.new(doc, content))
     end
 
-    def path_is_relativizable?(s)
-      s.start_with?('/')
+    def path_is_relativizable?(path)
+      path.start_with?('/')
     end
   end
 end

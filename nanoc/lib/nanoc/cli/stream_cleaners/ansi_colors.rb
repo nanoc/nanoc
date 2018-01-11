@@ -6,8 +6,8 @@ module Nanoc::CLI::StreamCleaners
   # @api private
   class ANSIColors < Abstract
     # @see Nanoc::CLI::StreamCleaners::Abstract#clean
-    def clean(s)
-      s.gsub(/\e\[.+?m/, '')
+    def clean(str)
+      str.gsub(/\e\[.+?m/, '')
     end
   end
 end

@@ -15,14 +15,14 @@ module Nanoc::CLI
       blue: "\e[34m",
     }.freeze
 
-    # @param [String] s The string to colorize
+    # @param [String] str The string to colorize
     #
-    # @param [Array] as An array of attributes from `MAPPING` to colorize the
+    # @param [Array] attrs An array of attributes from `MAPPING` to colorize the
     #   string with
     #
     # @return [String] A string colorized using the given attributes
-    def self.c(s, *as)
-      as.map { |a| MAPPING[a] }.join('') + s + "\e[0m"
+    def self.c(str, *attrs)
+      attrs.map { |a| MAPPING[a] }.join('') + str + "\e[0m"
     end
   end
 end

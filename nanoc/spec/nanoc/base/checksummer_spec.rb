@@ -403,8 +403,8 @@ describe Nanoc::Int::Checksummer do
 
     let(:klass) do
       Class.new do
-        def initialize(a)
-          @a = a
+        def initialize(arg)
+          @arg = arg
         end
       end
     end

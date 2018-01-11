@@ -132,8 +132,8 @@ module Nanoc::Checking
       issues
     end
 
-    def subject_to_s(s)
-      s || '(global)'
+    def subject_to_s(str)
+      str || '(global)'
     end
 
     def print_issues(issues)

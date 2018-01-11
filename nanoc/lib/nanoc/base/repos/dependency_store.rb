@@ -120,8 +120,8 @@ module Nanoc::Int
       @graph.add_edge(dst_ref, src_ref, props: props.to_h)
     end
 
-    def add_vertex_for(o)
-      @refs2objs[obj2ref(o)] = o
+    def add_vertex_for(obj)
+      @refs2objs[obj2ref(obj)] = obj
     end
 
     # Empties the list of dependencies for the given object. This is necessary
@@ -159,8 +159,8 @@ module Nanoc::Int
       refs.map { |r| ref2obj(r) }
     end
 
-    def props_for(a, b)
-      props = @graph.props_for(obj2ref(a), obj2ref(b)) || {}
+    def props_for(from, to)
+      props = @graph.props_for(obj2ref(from), obj2ref(to)) || {}
 
       if props.values.any? { |v| v }
         props

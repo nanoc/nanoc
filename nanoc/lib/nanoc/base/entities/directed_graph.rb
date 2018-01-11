@@ -88,13 +88,13 @@ module Nanoc::Int
 
     # Adds the given vertex to the graph.
     #
-    # @param v The vertex to add to the graph
+    # @param vertex The vertex to add to the graph
     #
     # @return [void]
-    def add_vertex(v)
-      return if @vertices.key?(v)
+    def add_vertex(vertex)
+      return if @vertices.key?(vertex)
 
-      @vertices[v] = @next_vertex_idx.tap { @next_vertex_idx += 1 }
+      @vertices[vertex] = @next_vertex_idx.tap { @next_vertex_idx += 1 }
     end
 
     # Deletes all edges going to the given vertex.

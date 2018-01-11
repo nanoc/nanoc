@@ -137,25 +137,25 @@ module Nanoc::Helpers
         end
       end
 
-      def build_for_article(a, xml)
+      def build_for_article(article, xml)
         # Get URL
-        url = url_for(a)
+        url = url_for(article)
         return if url.nil?
 
         xml.entry do
           # Add primary attributes
-          xml.id atom_tag_for(a)
-          xml.title a[:title], type: 'html'
+          xml.id atom_tag_for(article)
+          xml.title article[:title], type: 'html'
 
           # Add dates
-          xml.published attribute_to_time(a[:created_at]).__nanoc_to_iso8601_time
-          xml.updated attribute_to_time(a[:updated_at] || a[:created_at]).__nanoc_to_iso8601_time
+          xml.published attribute_to_time(article[:created_at]).__nanoc_to_iso8601_time
+          xml.updated attribute_to_time(article[:updated_at] || article[:created_at]).__nanoc_to_iso8601_time
 
           # Add specific author information
-          if a[:author_name] || a[:author_uri]
+          if article[:author_name] || article[:author_uri]
             xml.author do
-              xml.name a[:author_name] || author_name
-              xml.uri a[:author_uri] || author_uri
+              xml.name article[:author_name] || author_name
+              xml.uri article[:author_uri] || author_uri
             end
           end
 
@@ -163,8 +163,8 @@ module Nanoc::Helpers
           xml.link(rel: 'alternate', href: url)
 
           # Add content
-          summary = excerpt_proc.call(a)
-          xml.content content_proc.call(a), type: 'html'
+          summary = excerpt_proc.call(article)
+          xml.content content_proc.call(article), type: 'html'
           xml.summary summary, type: 'html' unless summary.nil?
         end
       end

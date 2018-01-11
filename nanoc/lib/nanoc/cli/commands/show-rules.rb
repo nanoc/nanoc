@@ -54,8 +54,8 @@ module Nanoc::CLI::Commands
       puts
     end
 
-    def fmt_heading(s)
-      Nanoc::CLI::ANSIStringColorizer.c(s, :bold, :yellow)
+    def fmt_heading(str)
+      Nanoc::CLI::ANSIStringColorizer.c(str, :bold, :yellow)
     end
   end
 end

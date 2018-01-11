@@ -128,8 +128,8 @@ module Nanoc::Filters
     protected
 
     # Removes the first blank lines and any whitespace at the end.
-    def strip(s)
-      s.lines.drop_while { |line| line.strip.empty? }.join.rstrip
+    def strip(str)
+      str.lines.drop_while { |line| line.strip.empty? }.join.rstrip
     end
 
     def colorizer_name_for(language)

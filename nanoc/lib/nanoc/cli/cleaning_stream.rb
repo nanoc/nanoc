@@ -40,16 +40,16 @@ module Nanoc::CLI
     # @group IO proxy methods
 
     # @see IO#write
-    def write(s)
+    def write(str)
       _nanoc_swallow_broken_pipe_errors_while do
-        @stream.write(_nanoc_clean(s))
+        @stream.write(_nanoc_clean(str))
       end
     end
 
     # @see IO#<<
-    def <<(s)
+    def <<(str)
       _nanoc_swallow_broken_pipe_errors_while do
-        @stream.<<(_nanoc_clean(s))
+        @stream.<<(_nanoc_clean(str))
       end
     end
 
@@ -76,16 +76,16 @@ module Nanoc::CLI
     end
 
     # @see IO#print
-    def print(s)
+    def print(str)
       _nanoc_swallow_broken_pipe_errors_while do
-        @stream.print(_nanoc_clean(s))
+        @stream.print(_nanoc_clean(str))
       end
     end
 
     # @see IO#puts
-    def puts(*s)
+    def puts(*str)
       _nanoc_swallow_broken_pipe_errors_while do
-        @stream.puts(*s.map { |ss| _nanoc_clean(ss) })
+        @stream.puts(*str.map { |ss| _nanoc_clean(ss) })
       end
     end
 
@@ -95,8 +95,8 @@ module Nanoc::CLI
     end
 
     # @see IO#reopen
-    def reopen(*a)
-      @stream.reopen(*a)
+    def reopen(*args)
+      @stream.reopen(*args)
     end
 
     # @see IO#close
@@ -148,8 +148,8 @@ module Nanoc::CLI
 
     protected
 
-    def _nanoc_clean(s)
-      @stream_cleaners.reduce(s.to_s.scrub) { |acc, elem| elem.clean(acc) }
+    def _nanoc_clean(str)
+      @stream_cleaners.reduce(str.to_s.scrub) { |acc, elem| elem.clean(acc) }
     end
 
     def _nanoc_swallow_broken_pipe_errors_while

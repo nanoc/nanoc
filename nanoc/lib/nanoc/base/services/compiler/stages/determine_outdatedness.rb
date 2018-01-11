@@ -38,8 +38,8 @@ module Nanoc::Int::Compiler::Stages
       Set.new(items.flat_map { |i| @reps[i] })
     end
 
-    def outdated?(r)
-      @outdatedness_store.include?(r) || @outdatedness_checker.outdated?(r)
+    def outdated?(rep)
+      @outdatedness_store.include?(rep) || @outdatedness_checker.outdated?(rep)
     end
   end
 end

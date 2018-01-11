@@ -64,7 +64,7 @@ module Nanoc::RuleDSL
     #
     # @see #snapshot
     #
-    # @param [String] path
+    # @param [String] arg
     #
     # @return [void]
     def write(arg)

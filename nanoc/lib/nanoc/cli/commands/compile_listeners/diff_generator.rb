@@ -63,14 +63,14 @@ module Nanoc::CLI::Commands::CompileListeners
       end
     end
 
-    def diff_strings(a, b)
+    def diff_strings(str_a, str_b)
       # Create files
       Tempfile.open('old') do |old_file|
         Tempfile.open('new') do |new_file|
           # Write files
-          old_file.write(a)
+          old_file.write(str_a)
           old_file.flush
-          new_file.write(b)
+          new_file.write(str_b)
           new_file.flush
 
           # Diff

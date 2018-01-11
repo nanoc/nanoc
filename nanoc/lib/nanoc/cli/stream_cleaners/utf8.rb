@@ -6,9 +6,9 @@ module Nanoc::CLI::StreamCleaners
   # @api private
   class UTF8 < Abstract
     # @see Nanoc::CLI::StreamCleaners::Abstract#clean
-    def clean(s)
+    def clean(str)
       # FIXME: this decomposition is not generally usable
-      s
+      str
         .unicode_normalize(:nfkd)
         .tr('─┼“”‘’', '-+""\'\'')
         .gsub('©', '(c)')

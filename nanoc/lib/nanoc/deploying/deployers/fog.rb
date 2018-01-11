@@ -71,11 +71,11 @@ module Nanoc::Deploying::Deployers
         @is_dry_run
       end
 
-      def log_effectful(s)
+      def log_effectful(str)
         if @is_dry_run
-          puts "[dry run] #{s}"
+          puts "[dry run] #{str}"
         else
-          puts s
+          puts str
         end
       end
     end
