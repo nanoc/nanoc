@@ -81,7 +81,7 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
     item_rep = Nanoc::Int::ItemRep.new(item, :latex)
     raise Nanoc::Int::Errors::CompilationError.new(wrapped, item_rep)
   rescue => e
-    return e
+    e
   end
 
   def new_error(amount_factor = 1)

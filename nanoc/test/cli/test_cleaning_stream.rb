@@ -67,7 +67,7 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
 
   def test_broken_pipe
     stream = StringIO.new
-    def stream.write(_s)
+    def stream.write(_str)
       raise Errno::EPIPE.new
     end
 

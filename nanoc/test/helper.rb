@@ -221,9 +221,9 @@ EOS
   def symlinks_supported?
     File.symlink nil, nil
   rescue NotImplementedError
-    return false
+    false
   rescue
-    return true
+    true
   end
 
   def skip_unless_have_command(cmd)
