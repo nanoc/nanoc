@@ -920,6 +920,42 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Parse it
     result = data_source.instance_eval { parse('test.html', nil) }
     assert_equal({}, result.attributes)
+    assert_equal("blah blah\n-----", result.content)
+  end
+
+  def test_parse_with_one_blank_line_after_metadata
+    # Create a file
+    File.open('test.html', 'w') do |io|
+      io.write "-----\n"
+      io.write "-----\n"
+      io.write "\nblah blah\n"
+      io.write '-----'
+    end
+
+    # Create data source
+    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', nil) }
+    assert_equal({}, result.attributes)
+    assert_equal("blah blah\n-----", result.content)
+  end
+
+  def test_parse_with_two_blank_lines_after_metadata
+    # Create a file
+    File.open('test.html', 'w') do |io|
+      io.write "-----\n"
+      io.write "-----\n"
+      io.write "\n\nblah blah\n"
+      io.write '-----'
+    end
+
+    # Create data source
+    data_source = Nanoc::DataSources::Filesystem.new(nil, nil, nil, nil)
+
+    # Parse it
+    result = data_source.instance_eval { parse('test.html', nil) }
+    assert_equal({}, result.attributes)
     assert_equal("\nblah blah\n-----", result.content)
   end
 

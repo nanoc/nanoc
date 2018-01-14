@@ -52,7 +52,7 @@ class Nanoc::DataSources::Filesystem
       end
 
       meta = parse_metadata(pieces[2], content_filename)
-      content = pieces[4]
+      content = pieces[4].sub(/\A\n/n, '')
 
       ParseResult.new(content: content, attributes: meta, attributes_data: pieces[2])
     end
