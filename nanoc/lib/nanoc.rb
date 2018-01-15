@@ -6,6 +6,7 @@ require 'ddmemoize'
 require 'ddmetrics'
 require 'ddplugin'
 require 'hamster'
+require 'parallel'
 require 'ref'
 require 'slow_enumerator_tools'
 
