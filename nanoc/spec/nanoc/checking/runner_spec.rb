@@ -5,14 +5,14 @@ describe Nanoc::Checking::Runner, site: true do
 
   let(:site) { Nanoc::Int::SiteLoader.new.new_from_cwd }
 
-  describe "#any_deploy_checks?" do
+  describe '#any_deploy_checks?' do
     subject { runner.any_deploy_checks? }
 
-    context "no DSL" do
+    context 'no DSL' do
       it { is_expected.to be(false) }
     end
 
-    context "DSL defined, but no deploy checks" do
+    context 'DSL defined, but no deploy checks' do
       before do
         File.write('Checks', '')
       end
@@ -20,7 +20,7 @@ describe Nanoc::Checking::Runner, site: true do
       it { is_expected.to be(false) }
     end
 
-    context "DSL defined, with deploy checks" do
+    context 'DSL defined, with deploy checks' do
       before do
         File.write('Checks', 'deploy_check :ilinks')
       end
