@@ -61,25 +61,20 @@ module Nanoc::Checking
     end
 
     def load_all
-      @dsl_loaded ||= false
-      unless @dsl_loaded
-        @dsl =
-          if dsl_present?
-            Nanoc::Checking::DSL.from_file(checks_filename)
-          else
-            nil
-          end
-        @dsl_loaded = true
-      end
+      dsl
     end
 
     def deploy_checks
-      load_all
-      dsl ? dsl.deploy_checks : []
+      dsl.deploy_checks
     end
 
     def dsl
-      @dsl
+      @dsl ||=
+        if dsl_present?
+          Nanoc::Checking::DSL.from_file(checks_filename)
+        else
+          Nanoc::Checking::DSL.new
+        end
     end
 
     def run_check_classes(classes)
