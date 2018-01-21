@@ -2,12 +2,12 @@
 
 # Load external dependencies
 require 'addressable'
+require 'ddmemoize'
+require 'ddmetrics'
 require 'ddplugin'
 require 'hamster'
 require 'ref'
 require 'slow_enumerator_tools'
-require 'ddmemoize'
-require 'ddmetrics'
 
 DDMemoize.enable_metrics
 
