@@ -12,9 +12,9 @@ module Nanoc::Checking
       @site = site
     end
 
-    # @return [Boolean] true if a Checks file exists, false otherwise
-    def dsl_present?
-      checks_filename && File.file?(checks_filename)
+    def any_deploy_checks?
+      load_dsl_if_available
+      !dsl.nil? && dsl.deploy_checks.any?
     end
 
     # Lists all available checks on stdout.
@@ -59,6 +59,11 @@ module Nanoc::Checking
     end
 
     private
+
+    # @return [Boolean] true if a Checks file exists, false otherwise
+    def dsl_present?
+      checks_filename && File.file?(checks_filename)
+    end
 
     def load_dsl_if_available
       @dsl_loaded ||= false

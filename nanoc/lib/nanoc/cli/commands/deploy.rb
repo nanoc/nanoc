@@ -89,7 +89,7 @@ module Nanoc::CLI::Commands
 
     def check
       runner = Nanoc::Checking::Runner.new(@site)
-      if runner.dsl_present?
+      if runner.any_deploy_checks?
         puts 'Running issue checks…'
         is_success = runner.run_for_deploy
         if is_success
