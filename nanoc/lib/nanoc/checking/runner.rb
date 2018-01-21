@@ -54,7 +54,7 @@ module Nanoc::Checking
     private
 
     def loader
-      @loader ||= Nanoc::Checking::Loader.new
+      @loader ||= Nanoc::Checking::Loader.new(config: @site.config)
     end
 
     def load_all

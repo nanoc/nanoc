@@ -9,23 +9,107 @@ describe Nanoc::Checking::Runner, site: true do
     subject { runner.any_deploy_checks? }
 
     context 'no DSL' do
-      it { is_expected.to be(false) }
+      context 'no deploy checks defined in config' do
+        it { is_expected.to be(false) }
+      end
+
+      context 'deploy checks defined in config' do
+        before do
+          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+        end
+
+        it { is_expected.to be(true) }
+      end
     end
 
-    context 'DSL defined, but no deploy checks' do
+    context 'DSL without deploy checks defined' do
       before do
         File.write('Checks', '')
       end
 
-      it { is_expected.to be(false) }
+      context 'no deploy checks defined in config' do
+        it { is_expected.to be(false) }
+      end
+
+      context 'deploy checks defined in config' do
+        before do
+          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+        end
+
+        it { is_expected.to be(true) }
+      end
     end
 
-    context 'DSL defined, with deploy checks' do
+    context 'DSL with deploy checks defined' do
       before do
         File.write('Checks', 'deploy_check :ilinks')
       end
 
-      it { is_expected.to be(true) }
+      context 'no deploy checks defined in config' do
+        it { is_expected.to be(true) }
+      end
+
+      context 'deploy checks defined in config' do
+        before do
+          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+        end
+
+        it { is_expected.to be(true) }
+      end
+    end
+  end
+
+  describe '#deploy_checks' do
+    subject { runner.send(:deploy_checks) }
+
+    context 'no DSL' do
+      context 'no deploy checks defined in config' do
+        it { is_expected.to be_empty }
+      end
+
+      context 'deploy checks defined in config' do
+        before do
+          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+        end
+
+        it { is_expected.to match_array([:elinks]) }
+      end
+    end
+
+    context 'DSL without deploy checks defined' do
+      before do
+        File.write('Checks', '')
+      end
+
+      context 'no deploy checks defined in config' do
+        it { is_expected.to be_empty }
+      end
+
+      context 'deploy checks defined in config' do
+        before do
+          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+        end
+
+        it { is_expected.to match_array([:elinks]) }
+      end
+    end
+
+    context 'DSL with deploy checks defined' do
+      before do
+        File.write('Checks', 'deploy_check :ilinks')
+      end
+
+      context 'no deploy checks defined in config' do
+        it { is_expected.to match_array([:ilinks]) }
+      end
+
+      context 'deploy checks defined in config' do
+        before do
+          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+        end
+
+        it { is_expected.to match_array(%i[ilinks elinks]) }
+      end
     end
   end
 
