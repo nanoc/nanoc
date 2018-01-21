@@ -55,26 +55,16 @@ module Nanoc::Checking
 
     private
 
-    # @return [Boolean] true if a Checks file exists, false otherwise
-    def dsl_present?
-      checks_filename && File.file?(checks_filename)
+    def loader
+      @loader ||= Nanoc::Checking::Loader.new
     end
 
     def load_all
-      dsl
+      loader.run
     end
 
     def deploy_checks
-      dsl.deploy_checks
-    end
-
-    def dsl
-      @dsl ||=
-        if dsl_present?
-          Nanoc::Checking::DSL.from_file(checks_filename)
-        else
-          Nanoc::Checking::DSL.new
-        end
+      loader.deploy_checks
     end
 
     def run_check_classes(classes)

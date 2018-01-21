@@ -150,6 +150,7 @@ lib/nanoc/checking/checks/stale.rb
 lib/nanoc/checking/checks/w3c_validator.rb
 lib/nanoc/checking/dsl.rb
 lib/nanoc/checking/issue.rb
+lib/nanoc/checking/loader.rb
 lib/nanoc/checking/runner.rb
 lib/nanoc/cli.rb
 lib/nanoc/cli/ansi_string_colorizer.rb
