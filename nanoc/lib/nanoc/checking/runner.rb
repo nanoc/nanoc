@@ -5,8 +5,6 @@ module Nanoc::Checking
   #
   # @api private
   class Runner
-    CHECKS_FILENAMES = ['Checks', 'Checks.rb', 'checks', 'checks.rb'].freeze
-
     # @param [Nanoc::Int::Site] site The Nanoc site this runner is for
     def initialize(site)
       @site = site
@@ -130,11 +128,6 @@ module Nanoc::Checking
           puts "    [ #{'ERROR'.red} ] #{i.check_class.identifier} - #{i.description}"
         end
       end
-    end
-
-    # @return [String] The name of the Checks file
-    def checks_filename
-      @_checks_filename ||= CHECKS_FILENAMES.find { |f| File.file?(f) }
     end
   end
 end
