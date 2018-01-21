@@ -10,12 +10,6 @@ describe Nanoc::DataSources::Filesystem::Parser do
   describe '#call' do
     subject { parser.call(content_filename, meta_filename) }
 
-    # common:
-    #   utf-8 bom
-    #   \r\n
-    #   metadata is empty
-    #   metadata is not hash
-
     let(:content_filename) { nil }
     let(:meta_filename) { nil }
 
@@ -369,22 +363,4 @@ describe Nanoc::DataSources::Filesystem::Parser do
       end
     end
   end
-
-  # test_parse_embedded_diff
-  # test_parse_embedded_empty_meta
-  # test_parse_embedded_full_meta
-  # test_parse_embedded_invalid_2
-  # test_parse_embedded_meta_only_1
-  # test_parse_embedded_meta_only_2
-  # test_parse_embedded_meta_only_3
-  # test_parse_embedded_no_meta
-  # test_parse_embedded_separators_but_not_metadata
-  # test_parse_embedded_with_extra_spaces
-  # test_parse_external
-  # test_parse_external_bad_metadata
-  # test_parse_internal_bad_metadata
-  # test_parse_internal_four_dashes
-  # test_parse_utf8_bom
-  # test_parse_with_one_blank_line_after_metadata
-  # test_parse_with_two_blank_lines_after_metadata
 end
