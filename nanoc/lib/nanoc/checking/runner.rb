@@ -21,7 +21,6 @@ module Nanoc::Checking
     def dsl_present?
       checks_filename && File.file?(checks_filename)
     end
-    alias has_dsl? dsl_present?
 
     # Lists all available checks on stdout.
     #
