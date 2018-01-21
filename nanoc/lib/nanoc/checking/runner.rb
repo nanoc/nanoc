@@ -13,8 +13,7 @@ module Nanoc::Checking
     end
 
     def any_deploy_checks?
-      load_all
-      !dsl.nil? && dsl.deploy_checks.any?
+      deploy_checks.any?
     end
 
     # Lists all available checks on stdout.
@@ -33,7 +32,6 @@ module Nanoc::Checking
     # @return [Boolean] true if successful, false otherwise
     def run_all
       load_all
-
       run_check_classes(all_check_classes)
     end
 
@@ -41,10 +39,8 @@ module Nanoc::Checking
     #
     # @return [Boolean] true if successful, false otherwise
     def run_for_deploy
-      require_dsl
-
-      return true if dsl.nil?
-      run_check_classes(check_classes_named(dsl.deploy_checks))
+      load_all
+      run_check_classes(check_classes_named(deploy_checks))
     end
 
     # Runs the checks with the given names.
@@ -54,7 +50,6 @@ module Nanoc::Checking
     # @return [Boolean] true if successful, false otherwise
     def run_specific(check_class_names)
       load_all
-
       run_check_classes(check_classes_named(check_class_names))
     end
 
@@ -78,11 +73,9 @@ module Nanoc::Checking
       end
     end
 
-    def require_dsl
+    def deploy_checks
       load_all
-      if dsl.nil?
-        raise Nanoc::Int::Errors::GenericTrivial, "No checks defined (no #{CHECKS_FILENAMES.first} file present)"
-      end
+      dsl ? dsl.deploy_checks : []
     end
 
     def dsl
