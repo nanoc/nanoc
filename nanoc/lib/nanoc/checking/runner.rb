@@ -12,11 +12,6 @@ module Nanoc::Checking
       @site = site
     end
 
-    # @return [String] The name of the Checks file
-    def checks_filename
-      @_checks_filename ||= CHECKS_FILENAMES.find { |f| File.file?(f) }
-    end
-
     # @return [Boolean] true if a Checks file exists, false otherwise
     def dsl_present?
       checks_filename && File.file?(checks_filename)
@@ -62,6 +57,8 @@ module Nanoc::Checking
 
       run_check_classes(check_classes_named(check_class_names))
     end
+
+    private
 
     def load_dsl_if_available
       @dsl_loaded ||= false
@@ -150,6 +147,11 @@ module Nanoc::Checking
           puts "    [ #{'ERROR'.red} ] #{i.check_class.identifier} - #{i.description}"
         end
       end
+    end
+
+    # @return [String] The name of the Checks file
+    def checks_filename
+      @_checks_filename ||= CHECKS_FILENAMES.find { |f| File.file?(f) }
     end
   end
 end

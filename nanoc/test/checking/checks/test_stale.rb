@@ -10,7 +10,7 @@ class Nanoc::Checking::Checks::StaleTest < Nanoc::TestCase
   def calc_issues
     site = Nanoc::Int::SiteLoader.new.new_from_cwd
     runner = Nanoc::Checking::Runner.new(site)
-    runner.run_checks([check_class])
+    runner.send(:run_checks, [check_class])
   end
 
   def test_run_ok

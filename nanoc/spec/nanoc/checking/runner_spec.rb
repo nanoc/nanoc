@@ -6,7 +6,7 @@ describe Nanoc::Checking::Runner do
   let(:site) { double(:site) }
 
   describe '#check_classes_named' do
-    subject { runner.check_classes_named(names) }
+    subject { runner.send(:check_classes_named, names) }
 
     context 'given one full name' do
       let(:names) { %w[internal_links] }
