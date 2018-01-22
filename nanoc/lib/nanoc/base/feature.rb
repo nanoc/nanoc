@@ -92,4 +92,3 @@ module Nanoc
 end
 
 Nanoc::Feature.define('live_cmd', version: '4.8')
-Nanoc::Feature.define('sensible_stack_traces', version: '4.8')

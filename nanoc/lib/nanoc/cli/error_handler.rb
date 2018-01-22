@@ -150,10 +150,7 @@ module Nanoc::CLI
 
     # @api private
     def forwards_stack_trace?
-      feature_enabled = Nanoc::Feature.enabled?(Nanoc::Feature::SENSIBLE_STACK_TRACES)
-      ruby_2_5_used = ruby_version.start_with?('2.5')
-
-      feature_enabled || ruby_2_5_used
+      ruby_version.start_with?('2.5')
     end
 
     # @api private
