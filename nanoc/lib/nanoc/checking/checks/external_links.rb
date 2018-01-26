@@ -74,15 +74,8 @@ module ::Nanoc::Checking::Checks
             return Result.new(href, 'too many redirects')
           end
 
-          # Find proper location
-          location = res['Location']
-          if location !~ /^https?:\/\//
-            base_url = url.dup
-            base_url.path = (location =~ /^\// ? '' : '/')
-            base_url.query = nil
-            base_url.fragment = nil
-            location = base_url.to_s + location
-          end
+          location = extract_location(res, url)
+          return Result.new(href, 'redirection without a target location') if location.nil?
 
           url = URI.parse(location)
         elsif res.code == '200'
@@ -95,6 +88,23 @@ module ::Nanoc::Checking::Checks
         return Result.new(href, last_err.message)
       else
         raise Nanoc::Int::Errors::InternalInconsistency, 'last_err cannot be nil'
+      end
+    end
+
+    def extract_location(res, url)
+      location = res['Location']
+
+      case location
+      when nil
+        nil
+      when /^https?:\/\//
+        location
+      else
+        base_url = url.dup
+        base_url.path = (location =~ /^\// ? '' : '/')
+        base_url.query = nil
+        base_url.fragment = nil
+        base_url.to_s + location
       end
     end
 
