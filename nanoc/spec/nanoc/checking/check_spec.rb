@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+describe Nanoc::Check do
+  it 'is an alias' do
+    expect(described_class).to equal(Nanoc::Checking::Check)
+  end
+end
+
 describe Nanoc::Checking::Check do
   describe '.define' do
     before do
