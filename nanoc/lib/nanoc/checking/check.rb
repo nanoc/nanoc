@@ -14,6 +14,13 @@ module Nanoc::Checking
 
     attr_reader :issues
 
+    def self.define(ident, &block)
+      klass = Class.new(::Nanoc::Checking::Check) { identifier(ident) }
+      klass.send(:define_method, :run) do
+        instance_exec(&block)
+      end
+    end
+
     def self.create(site)
       output_dir = site.config[:output_dir]
       unless File.exist?(output_dir)
