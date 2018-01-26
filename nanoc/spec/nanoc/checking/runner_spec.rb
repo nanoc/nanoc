@@ -5,8 +5,8 @@ describe Nanoc::Checking::Runner, site: true do
 
   let(:site) { Nanoc::Int::SiteLoader.new.new_from_cwd }
 
-  describe '#any_deploy_checks?' do
-    subject { runner.any_deploy_checks? }
+  describe '#any_enabled_checks?' do
+    subject { runner.any_enabled_checks? }
 
     context 'no DSL' do
       context 'no deploy checks defined in config' do
@@ -15,7 +15,7 @@ describe Nanoc::Checking::Runner, site: true do
 
       context 'deploy checks defined in config' do
         before do
-          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+          File.write('nanoc.yaml', "checking:\n  enabled_checks:\n    - elinks")
         end
 
         it { is_expected.to be(true) }
@@ -33,7 +33,7 @@ describe Nanoc::Checking::Runner, site: true do
 
       context 'deploy checks defined in config' do
         before do
-          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+          File.write('nanoc.yaml', "checking:\n  enabled_checks:\n    - elinks")
         end
 
         it { is_expected.to be(true) }
@@ -51,7 +51,7 @@ describe Nanoc::Checking::Runner, site: true do
 
       context 'deploy checks defined in config' do
         before do
-          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+          File.write('nanoc.yaml', "checking:\n  enabled_checks:\n    - elinks")
         end
 
         it { is_expected.to be(true) }
@@ -59,8 +59,8 @@ describe Nanoc::Checking::Runner, site: true do
     end
   end
 
-  describe '#deploy_checks' do
-    subject { runner.send(:deploy_checks) }
+  describe '#enabled_checks' do
+    subject { runner.send(:enabled_checks) }
 
     context 'no DSL' do
       context 'no deploy checks defined in config' do
@@ -69,7 +69,7 @@ describe Nanoc::Checking::Runner, site: true do
 
       context 'deploy checks defined in config' do
         before do
-          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+          File.write('nanoc.yaml', "checking:\n  enabled_checks:\n    - elinks")
         end
 
         it { is_expected.to match_array([:elinks]) }
@@ -87,7 +87,7 @@ describe Nanoc::Checking::Runner, site: true do
 
       context 'deploy checks defined in config' do
         before do
-          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+          File.write('nanoc.yaml', "checking:\n  enabled_checks:\n    - elinks")
         end
 
         it { is_expected.to match_array([:elinks]) }
@@ -105,7 +105,7 @@ describe Nanoc::Checking::Runner, site: true do
 
       context 'deploy checks defined in config' do
         before do
-          File.write('nanoc.yaml', "checking:\n  deploy_checks:\n    - elinks")
+          File.write('nanoc.yaml', "checking:\n  enabled_checks:\n    - elinks")
         end
 
         it { is_expected.to match_array(%i[ilinks elinks]) }

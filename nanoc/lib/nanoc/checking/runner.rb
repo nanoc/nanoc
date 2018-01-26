@@ -10,8 +10,8 @@ module Nanoc::Checking
       @site = site
     end
 
-    def any_deploy_checks?
-      deploy_checks.any?
+    def any_enabled_checks?
+      enabled_checks.any?
     end
 
     # Lists all available checks on stdout.
@@ -37,8 +37,9 @@ module Nanoc::Checking
     #
     # @return [Boolean] true if successful, false otherwise
     def run_for_deploy
+      # TODO: rename to #run_enabled
       load_all
-      run_check_classes(check_classes_named(deploy_checks))
+      run_check_classes(check_classes_named(enabled_checks))
     end
 
     # Runs the checks with the given names.
@@ -61,8 +62,8 @@ module Nanoc::Checking
       loader.run
     end
 
-    def deploy_checks
-      loader.deploy_checks
+    def enabled_checks
+      loader.enabled_checks
     end
 
     def run_check_classes(classes)

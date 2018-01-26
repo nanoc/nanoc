@@ -8,11 +8,9 @@ class Nanoc::Checking::DSLTest < Nanoc::TestCase
       File.open('Checks', 'w') { |io| io.write("check :foo do\n\nend\ndeploy_check :bar\n") }
       dsl = Nanoc::Checking::DSL.from_file('Checks')
 
-      # One new check
       refute Nanoc::Checking::Check.named(:foo).nil?
 
-      # One check marked for deployment
-      assert_equal [:bar], dsl.deploy_checks
+      assert_equal [:bar], dsl.enabled_checks
     end
   end
 

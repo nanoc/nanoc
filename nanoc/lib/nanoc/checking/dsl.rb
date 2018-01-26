@@ -3,7 +3,8 @@
 module Nanoc::Checking
   # @api private
   class DSL
-    attr_reader :deploy_checks
+    # FIXME: do not expose @enabled_checks
+    attr_reader :enabled_checks
 
     def self.from_file(filename)
       dsl = new
@@ -13,7 +14,7 @@ module Nanoc::Checking
     end
 
     def initialize
-      @deploy_checks = []
+      @enabled_checks = []
     end
 
     def check(identifier, &block)
@@ -23,7 +24,7 @@ module Nanoc::Checking
     end
 
     def deploy_check(*identifiers)
-      identifiers.each { |i| @deploy_checks << i }
+      identifiers.each { |i| @enabled_checks << i }
     end
   end
 end
