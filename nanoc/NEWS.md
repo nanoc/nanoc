@@ -1,5 +1,26 @@
 # Nanoc news
 
+## 4.9.0 (2018-01-31)
+
+Features:
+
+* Added `Identifier#match?` (#1305)
+* Added `Nanoc::Check.define`
+* Made Nanoc read checks configuration from `nanoc.yaml` (#1296)
+
+Enhancements:
+
+* Made Nanoc write out files asynchronously (#1288)
+* Made the filesystem data source ignore an initial blank line after the frontmatter (#1292, #1293)
+* Made the `check` command run deploy checks by default (#1304)
+* Made Nanoc honor the `NO_COLOR` environment variable (#1306)
+
+Bugs:
+
+* Fixed a potential deadlock in the `external_links` check (#1294, #1295)
+* Fixed the `external_links` check’s handling of redirects without a `Location` header (#1297, #1302)
+* Fixed the `external_links` check’s handling of URLs with invalid components (#1303)
+
 ## 4.8.19 (2018-01-01)
 
 Enhancements:
