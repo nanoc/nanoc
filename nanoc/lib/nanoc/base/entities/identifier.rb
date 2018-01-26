@@ -101,6 +101,11 @@ module Nanoc
       Nanoc::Int::Pattern.from(other).match?(to_s) ? 0 : nil
     end
 
+    contract C::Any => C::Bool
+    def match?(other)
+      Nanoc::Int::Pattern.from(other).match?(to_s)
+    end
+
     contract C::Any => C::Num
     def <=>(other)
       to_s <=> other.to_s

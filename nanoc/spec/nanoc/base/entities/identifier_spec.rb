@@ -249,6 +249,40 @@ describe Nanoc::Identifier do
     end
   end
 
+  describe '#match?' do
+    let(:identifier) { described_class.new('/foo/bar') }
+
+    subject { identifier.match?(pat) }
+
+    context 'given a regex' do
+      context 'matching regex' do
+        let(:pat) { %r{\A/foo/bar} }
+        it { is_expected.to be(true) }
+        example { expect { subject }.not_to change { Regexp.last_match } }
+      end
+
+      context 'non-matching regex' do
+        let(:pat) { %r{\A/qux/monkey} }
+        it { is_expected.to be(false) }
+        example { expect { subject }.not_to change { Regexp.last_match } }
+      end
+    end
+
+    context 'given a string' do
+      context 'matching string' do
+        let(:pat) { '/foo/*' }
+        it { is_expected.to be(true) }
+        example { expect { subject }.not_to change { Regexp.last_match } }
+      end
+
+      context 'non-matching string' do
+        let(:pat) { '/qux/*' }
+        it { is_expected.to be(false) }
+        example { expect { subject }.not_to change { Regexp.last_match } }
+      end
+    end
+  end
+
   describe '#<=>' do
     let(:identifier) { described_class.new('/foo/bar') }
 
