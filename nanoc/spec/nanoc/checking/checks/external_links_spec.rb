@@ -98,4 +98,21 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
         .to eq('broken reference to http://example.com/x: redirection without a target location')
     end
   end
+
+  context 'invalid URL component' do
+    let(:check) do
+      Nanoc::Checking::Checks::ExternalLinks.create(site)
+    end
+
+    before do
+      File.write('output/hi.html', '<a href="mailto:lol">stuff</a>')
+    end
+
+    it 'has issues' do
+      check.run
+      expect(check.issues.size).to eq(1)
+      expect(check.issues.first.description)
+        .to eq('broken reference to mailto:lol: invalid URI')
+    end
+  end
 end

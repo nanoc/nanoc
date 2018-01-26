@@ -45,7 +45,7 @@ module ::Nanoc::Checking::Checks
       url = nil
       begin
         url = URI.parse(href)
-      rescue URI::InvalidURIError
+      rescue URI::Error
         return Result.new(href, 'invalid URI')
       end
 
