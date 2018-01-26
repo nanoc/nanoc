@@ -3,17 +3,16 @@
 usage 'check [options] [names]'
 summary 'run issue checks'
 description "
-Run issue checks on the current site. If the `--all` option is passed, all available issue checks will be run. If the `--deploy` option is passed, the issue checks marked for deployment will be run.
+Run issue checks on the current site. If the `--all` option is passed, all available issue checks will be run. By default, the issue checks marked for deployment will be run.
 "
 
 flag :a, :all,    'run all checks'
 flag :L, :list,   'list all checks'
-flag :d, :deploy, 'run checks for deployment'
+flag :d, :deploy, '(deprecated)'
 
 module Nanoc::CLI::Commands
   class Check < ::Nanoc::CLI::CommandRunner
     def run
-      validate_options_and_arguments
       site = load_site
 
       runner = Nanoc::Checking::Runner.new(site)
@@ -28,23 +27,14 @@ module Nanoc::CLI::Commands
           runner.run_all
         elsif options[:deploy]
           runner.run_for_deploy
-        else
+        elsif arguments.any?
           runner.run_specific(arguments)
+        else
+          runner.run_for_deploy
         end
 
       unless success
         raise Nanoc::Int::Errors::GenericTrivial, 'One or more checks failed'
-      end
-    end
-
-    protected
-
-    def validate_options_and_arguments
-      if arguments.empty? && !options[:all] && !options[:deploy] && !options[:list]
-        raise(
-          Nanoc::Int::Errors::GenericTrivial,
-          'nothing to do (pass either --all, --deploy or --list or a list of checks)',
-        )
       end
     end
   end
