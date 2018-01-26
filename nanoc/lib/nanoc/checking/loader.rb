@@ -24,7 +24,8 @@ module Nanoc::Checking
     end
 
     def enabled_checks_from_dsl
-      dsl.enabled_checks
+      dsl
+      @enabled_checks_from_dsl
     end
 
     def enabled_checks_from_config
@@ -32,11 +33,13 @@ module Nanoc::Checking
     end
 
     def dsl
+      @enabled_checks_from_dsl ||= []
+
       @dsl ||=
         if dsl_present?
-          Nanoc::Checking::DSL.from_file(checks_filename)
+          Nanoc::Checking::DSL.from_file(checks_filename, enabled_checks: @enabled_checks_from_dsl)
         else
-          Nanoc::Checking::DSL.new
+          Nanoc::Checking::DSL.new(enabled_checks: @enabled_checks_from_dsl)
         end
     end
 

@@ -3,18 +3,15 @@
 module Nanoc::Checking
   # @api private
   class DSL
-    # FIXME: do not expose @enabled_checks
-    attr_reader :enabled_checks
-
-    def self.from_file(filename)
-      dsl = new
+    def self.from_file(filename, enabled_checks:)
+      dsl = new(enabled_checks: enabled_checks)
       absolute_filename = File.expand_path(filename)
       dsl.instance_eval(File.read(filename), absolute_filename)
       dsl
     end
 
-    def initialize
-      @enabled_checks = []
+    def initialize(enabled_checks:)
+      @enabled_checks = enabled_checks
     end
 
     def check(identifier, &block)
