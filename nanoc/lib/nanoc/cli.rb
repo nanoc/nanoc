@@ -230,7 +230,7 @@ module Nanoc::CLI
 
   # @return [Boolean] true if color support is present, false if not
   def self.enable_ansi_colors?(io)
-    io.tty?
+    io.tty? && !ENV.key?('NO_COLOR')
   end
 
   def self.after_setup_procs
