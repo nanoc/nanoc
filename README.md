@@ -3,6 +3,7 @@
 [![Build status](http://img.shields.io/travis/nanoc/nanoc.svg)](https://travis-ci.org/nanoc/nanoc)
 [![Code Climate](http://img.shields.io/codeclimate/github/nanoc/nanoc.svg)](https://codeclimate.com/github/nanoc/nanoc)
 [![Code Coverage](https://img.shields.io/codecov/c/github/nanoc/nanoc.svg)](https://codecov.io/gh/nanoc/nanoc)
+![Contributors](https://img.shields.io/github/contributors/nanoc/nanoc.svg)
 
 ![Nanoc logo](https://avatars1.githubusercontent.com/u/3260163?s=140)
 
