@@ -2,7 +2,7 @@
 
 usage 'shell'
 summary 'open a shell on the Nanoc environment'
-aliases 'console'
+aliases 'console', 'sh'
 description "
 Open an IRB shell on a context that contains @items, @layouts, and @config.
 "
