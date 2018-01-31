@@ -91,4 +91,4 @@ module Nanoc
   end
 end
 
-Nanoc::Feature.define('live_cmd', version: '4.8')
+Nanoc::Feature.define('live_cmd', version: '4.9')
