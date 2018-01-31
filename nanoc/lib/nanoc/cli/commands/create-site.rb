@@ -34,8 +34,14 @@ EOS
     DEFAULT_RULES = <<~EOS unless defined? DEFAULT_RULES
       #!/usr/bin/env ruby
 
+      compile '/index.html' do
+        layout '/default.*'
+        write '/index.html'
+      end
+
       compile '/**/*.html' do
         layout '/default.*'
+        write item.identifier.without_ext + '/index.html'
       end
 
       # This is an example rule that matches Markdown (.md) files, and filters them
@@ -45,15 +51,8 @@ EOS
       #compile '/**/*.md' do
       #  filter :kramdown
       #  layout '/default.*'
+      #  write item.identifier.without_ext + '/index.html'
       #end
-
-      route '/**/*.{html,md}' do
-        if item.identifier =~ '/index.*'
-          '/index.html'
-        else
-          item.identifier.without_ext + '/index.html'
-        end
-      end
 
       compile '/**/*' do
         write item.identifier.to_s
