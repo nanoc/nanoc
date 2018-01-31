@@ -34,6 +34,7 @@ module Nanoc::RuleDSL
       matching_rules.map(&:rep_name).uniq
     end
 
+    # FIXME: rep -> rep or layout
     def action_sequence_for(rep)
       @action_sequence_calculator[rep]
     end
