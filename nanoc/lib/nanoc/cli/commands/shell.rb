@@ -25,7 +25,7 @@ module Nanoc::CLI::Commands
 
     def self.reps_for(site)
       Nanoc::Int::ItemRepRepo.new.tap do |reps|
-        action_provider = Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
+        action_provider = Nanoc::Int::ActionProvider.named(site.config.action_provider).for(site)
         builder = Nanoc::Int::ItemRepBuilder.new(site, action_provider, reps)
         builder.run
       end

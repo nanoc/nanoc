@@ -33,6 +33,7 @@ module Nanoc::Int
       enable_output_diff: false,
       prune: { auto_prune: false, exclude: ['.git', '.hg', '.svn', 'CVS'] },
       string_pattern_type: 'glob',
+      action_provider: 'rule_dsl',
     }.freeze
 
     # @return [String, nil] The active environment for the configuration
@@ -156,6 +157,11 @@ module Nanoc::Int
     contract C::None => String
     def output_dir
       self[:output_dir]
+    end
+
+    contract C::None => Symbol
+    def action_provider
+      self[:action_provider].to_sym
     end
 
     contract C::None => C::IterOf[String]

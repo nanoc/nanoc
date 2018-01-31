@@ -14,7 +14,7 @@ module Nanoc::Int
       checksum_store =
         Nanoc::Int::ChecksumStore.new(config: site.config, objects: objects)
 
-      action_provider ||= Nanoc::Int::ActionProvider.named(:rule_dsl).for(site)
+      action_provider ||= Nanoc::Int::ActionProvider.named(site.config.action_provider).for(site)
 
       outdatedness_store =
         Nanoc::Int::OutdatednessStore.new(config: site.config)
