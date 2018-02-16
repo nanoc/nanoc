@@ -4,6 +4,7 @@
 [![Code Climate](https://img.shields.io/codeclimate/github/nanoc/nanoc.svg)](https://codeclimate.com/github/nanoc/nanoc)
 [![Code Coverage](https://img.shields.io/codecov/c/github/nanoc/nanoc.svg)](https://codecov.io/gh/nanoc/nanoc)
 ![Contributors](https://img.shields.io/github/contributors/nanoc/nanoc.svg)
+[![Open Source Helpers](https://www.codetriage.com/nanoc/nanoc/badges/users.svg)](https://www.codetriage.com/nanoc/nanoc)
 
 ![Nanoc logo](https://avatars1.githubusercontent.com/u/3260163?s=140)
 
