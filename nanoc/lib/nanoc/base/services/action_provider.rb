@@ -13,7 +13,7 @@ module Nanoc::Int
       raise NotImplementedError
     end
 
-    def action_sequence_for(_rep)
+    def action_sequence_for(_obj)
       raise NotImplementedError
     end
 

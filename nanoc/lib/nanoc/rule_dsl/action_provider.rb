@@ -34,8 +34,8 @@ module Nanoc::RuleDSL
       matching_rules.map(&:rep_name).uniq
     end
 
-    def action_sequence_for(rep)
-      @action_sequence_calculator[rep]
+    def action_sequence_for(obj)
+      @action_sequence_calculator[obj]
     end
 
     def need_preprocessing?
