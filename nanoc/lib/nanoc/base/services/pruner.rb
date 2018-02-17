@@ -43,8 +43,16 @@ module Nanoc
     #
     # @return [Boolean] true if the given file is excluded, false otherwise
     def filename_excluded?(filename)
-      pathname = Pathname.new(filename)
+      pathname = Pathname.new(strip_output_dir(filename))
       @exclude.any? { |e| pathname_components(pathname).include?(e) }
+    end
+
+    def strip_output_dir(filename)
+      if filename.start_with?(@config[:output_dir])
+        filename[@config[:output_dir].size..-1]
+      else
+        filename
+      end
     end
 
     def pathname_components(pathname)

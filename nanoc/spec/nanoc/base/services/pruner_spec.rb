@@ -3,7 +3,7 @@
 describe Nanoc::Pruner do
   subject(:pruner) { described_class.new(config, reps, dry_run: dry_run, exclude: exclude) }
 
-  let(:config) { Nanoc::Int::Configuration.new({}) }
+  let(:config) { Nanoc::Int::Configuration.new({}).with_defaults }
   let(:dry_run) { false }
   let(:exclude) { [] }
 
@@ -23,6 +23,31 @@ describe Nanoc::Pruner do
 
   it 'is accessible through Nanoc::Extra::Pruner' do
     expect(Nanoc::Extra::Pruner).to equal(Nanoc::Pruner)
+  end
+
+  describe '#filename_excluded?' do
+    subject { pruner.filename_excluded?(filename) }
+
+    let(:filename) { 'output/foo/bar.html' }
+
+    context 'nothing excluded' do
+      it { is_expected.to be(false) }
+    end
+
+    context 'matching identifier component excluded' do
+      let(:exclude) { ['foo'] }
+      it { is_expected.to be(true) }
+    end
+
+    context 'non-matching identifier component excluded' do
+      let(:exclude) { ['xyz'] }
+      it { is_expected.to be(false) }
+    end
+
+    context 'output dir excluded' do
+      let(:exclude) { ['output'] }
+      it { is_expected.to be(false) }
+    end
   end
 
   describe '#pathname_components' do
