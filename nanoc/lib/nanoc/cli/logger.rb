@@ -28,6 +28,7 @@ module Nanoc::CLI
 
     def initialize
       @level = :high
+      @mutex = Mutex.new
     end
 
     # Logs a file-related action.
@@ -63,11 +64,12 @@ module Nanoc::CLI
     #
     # @return [void]
     def log(level, message, io = $stdout)
-      # Don't log when logging is disabled
       return if @level == :off
+      return if @level != :low && @level != level
 
-      # Log when level permits it
-      io.puts(message) if @level == :low || @level == level
+      @mutex.synchronize do
+        io.puts(message)
+      end
     end
   end
 end
