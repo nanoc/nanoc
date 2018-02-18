@@ -64,44 +64,90 @@ describe Nanoc::Int::LazyValue do
 
     subject { described_class.new(value_arg) }
 
-    before do
-      subject.freeze
-    end
-
-    context 'object' do
-      it 'returns value' do
-        expect(subject.value).to equal(value_arg)
-      end
-
-      it 'freezes value' do
-        expect(subject.value).to be_frozen
-      end
-    end
-
-    context 'proc' do
-      call_count = 0
-      let(:value_arg) do
-        proc do
-          call_count += 1
-          'Hello proc'
-        end
-      end
-
+    context 'freeze before calling #value' do
       before do
-        call_count = 0
         subject.freeze
       end
 
-      it 'does not call the proc immediately' do
-        expect(call_count).to eql(0)
+      context 'object' do
+        it 'returns value' do
+          expect(subject.value).to equal(value_arg)
+        end
+
+        it 'freezes value' do
+          expect(subject.value).to be_frozen
+        end
       end
 
-      it 'returns proc return value' do
-        expect(subject.value).to eq('Hello proc')
+      context 'proc' do
+        call_count = 0
+        let(:value_arg) do
+          proc do
+            call_count += 1
+            'Hello proc'
+          end
+        end
+
+        before do
+          call_count = 0
+          subject.freeze
+        end
+
+        it 'does not call the proc immediately' do
+          expect(call_count).to eql(0)
+        end
+
+        it 'returns proc return value' do
+          expect(subject.value).to eq('Hello proc')
+        end
+
+        it 'freezes upon access' do
+          expect(subject.value).to be_frozen
+        end
+      end
+    end
+
+    context 'freeze after calling #value' do
+      before do
+        subject.value
+        subject.freeze
       end
 
-      it 'freezes upon access' do
-        expect(subject.value).to be_frozen
+      context 'object' do
+        it 'returns value' do
+          expect(subject.value).to equal(value_arg)
+        end
+
+        it 'freezes value' do
+          expect(subject.value).to be_frozen
+        end
+      end
+
+      context 'proc' do
+        call_count = 0
+        let(:value_arg) do
+          proc do
+            call_count += 1
+            'Hello proc'
+          end
+        end
+
+        before do
+          call_count = 0
+          subject.freeze
+        end
+
+        it 'does not call the proc immediately' do
+          expect(call_count).to eql(0)
+        end
+
+        it 'returns proc return value' do
+          expect(subject.value).to eq('Hello proc')
+        end
+
+        it 'freezes upon access' do
+          expect(subject.value).to be_frozen
+        end
       end
     end
   end
