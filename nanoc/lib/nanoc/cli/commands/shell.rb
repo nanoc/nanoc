@@ -13,6 +13,9 @@ module Nanoc::CLI::Commands
     def run
       require 'pry'
 
+      # Needed to make pry behave properly sometimes -- see nanoc/nanoc#1309
+      Signal.trap('SIGINT') { raise Interrupt }
+
       @site = load_site
       Nanoc::Int::Compiler.new_for(@site).run_until_preprocessed if options[:preprocess]
 
