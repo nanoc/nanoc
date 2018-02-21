@@ -10,6 +10,8 @@ module Nanoc::Filters
 
     SELECTORS = ['*/@href', '*/@src', 'object/@data', 'param[@name="movie"]/@content', 'form/@action', 'comment()'].freeze
 
+    GCSE_SEARCH_WORKAROUND = 'nanoc__gcse_search__f7ac3462f628a053f86fe6563c0ec98f1fe45cee'
+
     # Relativizes all paths in the given content, which can be HTML, XHTML, XML
     # or CSS. This filter is quite useful if a site needs to be hosted in a
     # subdirectory instead of a subdomain. In HTML, all `href` and `src`
@@ -106,6 +108,8 @@ module Nanoc::Filters
       # Ensure that all prefixes are strings
       namespaces = namespaces.reduce({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
 
+      content = apply_gcse_search_workaround(content)
+
       doc = content =~ /<html[\s>]/ ? klass.parse(content) : klass.fragment(content)
       selector = selectors.map { |sel| "descendant-or-self::#{sel}" }.join('|')
       doc.xpath(selector, namespaces).each do |node|
@@ -116,12 +120,23 @@ module Nanoc::Filters
         end
       end
 
-      case type
-      when :html5
-        doc.to_html(save_with: nokogiri_save_options)
-      else
-        doc.send("to_#{type}", save_with: nokogiri_save_options)
-      end
+      output =
+        case type
+        when :html5
+          doc.to_html(save_with: nokogiri_save_options)
+        else
+          doc.send("to_#{type}", save_with: nokogiri_save_options)
+        end
+
+      revert_gcse_search_workaround(output)
+    end
+
+    def apply_gcse_search_workaround(content)
+      content.gsub('gcse:search', GCSE_SEARCH_WORKAROUND)
+    end
+
+    def revert_gcse_search_workaround(content)
+      content.gsub(GCSE_SEARCH_WORKAROUND, 'gcse:search')
     end
 
     def nokogiri_process_comment(node, doc, selectors, namespaces, klass, type)
