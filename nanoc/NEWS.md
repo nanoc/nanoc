@@ -1,5 +1,21 @@
 # Nanoc news
 
+## 4.9.1 (2018-02-22)
+
+Fixes:
+
+* Fixed issue which could cause terminal output to be jumbled up (#1312, #1316)
+* Made pruner ignore `output_dir` configuration attribute when checking for excludes (#1313, #1317)
+* Fixed handling of interrupts (SIGINT) in the `shell` command (#1309, #1318)
+* Added workaround for `relativize_paths` mangling `gcse:search` elements (#1319, #1320)
+
+Enhancements:
+
+* Allowed overriding `<id>` and `<link rel="alternate">` elements in Atom feed generator (#1301) [Ian Young]
+* Made `sh` an alias for the `shell` command (#1308)
+* Simplified the default configuration (#1311)
+* Removed routing rules from newly-created sites (#1310)
+
 ## 4.9.0 (2018-01-31)
 
 Features:
