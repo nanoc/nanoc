@@ -12,7 +12,7 @@ module Nanoc
     end
 
     # @api private
-    def unwrap
+    def _unwrap
       @document
     end
 
@@ -33,28 +33,28 @@ module Nanoc
 
     # @return [Nanoc::Identifier]
     def identifier
-      unwrap.identifier
+      _unwrap.identifier
     end
 
     # @see Hash#[]
     def [](key)
-      @context.dependency_tracker.bounce(unwrap, attributes: [key])
-      unwrap.attributes[key]
+      @context.dependency_tracker.bounce(_unwrap, attributes: [key])
+      _unwrap.attributes[key]
     end
 
     # @return [Hash]
     def attributes
       # TODO: Refine dependencies
-      @context.dependency_tracker.bounce(unwrap, attributes: true)
-      unwrap.attributes
+      @context.dependency_tracker.bounce(_unwrap, attributes: true)
+      _unwrap.attributes
     end
 
     # @see Hash#fetch
     def fetch(key, fallback = NONE, &_block)
-      @context.dependency_tracker.bounce(unwrap, attributes: [key])
+      @context.dependency_tracker.bounce(_unwrap, attributes: [key])
 
-      if unwrap.attributes.key?(key)
-        unwrap.attributes[key]
+      if _unwrap.attributes.key?(key)
+        _unwrap.attributes[key]
       elsif !fallback.equal?(NONE)
         fallback
       elsif block_given?
@@ -66,23 +66,23 @@ module Nanoc
 
     # @see Hash#key?
     def key?(key)
-      @context.dependency_tracker.bounce(unwrap, attributes: [key])
-      unwrap.attributes.key?(key)
+      @context.dependency_tracker.bounce(_unwrap, attributes: [key])
+      _unwrap.attributes.key?(key)
     end
 
     # @api private
     def reference
-      unwrap.reference
+      _unwrap.reference
     end
 
     # @api private
     def raw_content
-      @context.dependency_tracker.bounce(unwrap, raw_content: true)
-      unwrap.content.string
+      @context.dependency_tracker.bounce(_unwrap, raw_content: true)
+      _unwrap.content.string
     end
 
     def inspect
-      "<#{self.class} identifier=#{unwrap.identifier}>"
+      "<#{self.class} identifier=#{_unwrap.identifier}>"
     end
   end
 end

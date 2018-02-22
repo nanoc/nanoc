@@ -49,7 +49,7 @@ shared_examples 'an identifiable collection view' do
     end
   end
 
-  describe '#unwrap' do
+  describe '#_unwrap' do
     let(:wrapped) do
       collection_class.new(
         config,
@@ -61,7 +61,7 @@ shared_examples 'an identifiable collection view' do
       )
     end
 
-    subject { view.unwrap }
+    subject { view._unwrap }
 
     it { should equal(wrapped) }
 
@@ -160,7 +160,7 @@ shared_examples 'an identifiable collection view' do
 
       it 'returns wrapped object' do
         expect(subject.class).to equal(view_class)
-        expect(subject.unwrap).to equal(home_object)
+        expect(subject._unwrap).to equal(home_object)
       end
 
       it 'returns objects with right context' do
@@ -178,7 +178,7 @@ shared_examples 'an identifiable collection view' do
 
       it 'returns wrapped object' do
         expect(subject.class).to equal(view_class)
-        expect(subject.unwrap).to equal(home_object)
+        expect(subject._unwrap).to equal(home_object)
       end
     end
 
@@ -206,7 +206,7 @@ shared_examples 'an identifiable collection view' do
 
         it 'returns wrapped object' do
           expect(subject.class).to equal(view_class)
-          expect(subject.unwrap).to equal(home_object)
+          expect(subject._unwrap).to equal(home_object)
         end
       end
     end
@@ -221,7 +221,7 @@ shared_examples 'an identifiable collection view' do
 
       it 'returns wrapped object' do
         expect(subject.class).to equal(view_class)
-        expect(subject.unwrap).to equal(home_object)
+        expect(subject._unwrap).to equal(home_object)
       end
     end
   end

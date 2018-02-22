@@ -24,7 +24,7 @@ module Nanoc::Checking::Checks
         Set.new(
           @items
             .flat_map(&:reps)
-            .map(&:unwrap)
+            .map(&:_unwrap)
             .flat_map(&:raw_paths)
             .flat_map(&:values)
             .flatten,

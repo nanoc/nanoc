@@ -21,7 +21,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
     it 'can be invoked' do
       expect_any_instance_of(Nanoc::Int::Context).to receive(:pry) do |ctx|
         expect(ctx.items.size).to eq(1)
-        expect(ctx.items.to_a[0].unwrap.content.string).to eq('Hello!')
+        expect(ctx.items.to_a[0]._unwrap.content.string).to eq('Hello!')
       end
 
       Nanoc::CLI.run(['shell'])
@@ -30,7 +30,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
     it 'can be invoked as sh' do
       expect_any_instance_of(Nanoc::Int::Context).to receive(:pry) do |ctx|
         expect(ctx.items.size).to eq(1)
-        expect(ctx.items.to_a[0].unwrap.content.string).to eq('Hello!')
+        expect(ctx.items.to_a[0]._unwrap.content.string).to eq('Hello!')
       end
 
       Nanoc::CLI.run(['sh'])
@@ -39,7 +39,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
     it 'can be invoked as console' do
       expect_any_instance_of(Nanoc::Int::Context).to receive(:pry) do |ctx|
         expect(ctx.items.size).to eq(1)
-        expect(ctx.items.to_a[0].unwrap.content.string).to eq('Hello!')
+        expect(ctx.items.to_a[0]._unwrap.content.string).to eq('Hello!')
       end
 
       Nanoc::CLI.run(['console'])
@@ -48,7 +48,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
     it 'will preprocess if requested' do
       expect_any_instance_of(Nanoc::Int::Context).to receive(:pry) do |ctx|
         expect(ctx.items.size).to eq(1)
-        expect(ctx.items.to_a[0].unwrap.content.string).to eq('Better hello!')
+        expect(ctx.items.to_a[0]._unwrap.content.string).to eq('Better hello!')
       end
 
       Nanoc::CLI.run(['shell', '--preprocess'])

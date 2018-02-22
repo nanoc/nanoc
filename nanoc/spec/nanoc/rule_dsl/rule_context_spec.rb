@@ -39,11 +39,11 @@ shared_examples 'a rule context' do
     end
 
     it 'contains the right objects' do
-      expect(rule_context.rep.unwrap).to eql(rep)
-      expect(rule_context.item.unwrap).to eql(item)
-      expect(rule_context.config.unwrap).to eql(config)
-      expect(rule_context.layouts.unwrap).to eql(layouts)
-      expect(rule_context.items.unwrap).to eql(items)
+      expect(rule_context.rep._unwrap).to eql(rep)
+      expect(rule_context.item._unwrap).to eql(item)
+      expect(rule_context.config._unwrap).to eql(config)
+      expect(rule_context.layouts._unwrap).to eql(layouts)
+      expect(rule_context.items._unwrap).to eql(items)
     end
   end
 
@@ -55,7 +55,7 @@ shared_examples 'a rule context' do
     end
 
     it 'contains the right item' do
-      expect(subject.unwrap).to eql(item)
+      expect(subject._unwrap).to eql(item)
     end
 
     context 'with legacy identifier and children/parent' do
@@ -72,7 +72,7 @@ shared_examples 'a rule context' do
       end
 
       it 'has a parent' do
-        expect(subject.parent.unwrap).to eql(parent)
+        expect(subject.parent._unwrap).to eql(parent)
       end
 
       it 'wraps the parent in a view without reps access' do
@@ -83,7 +83,7 @@ shared_examples 'a rule context' do
       end
 
       it 'has children' do
-        expect(subject.children.map(&:unwrap)).to eql([child])
+        expect(subject.children.map(&:_unwrap)).to eql([child])
       end
 
       it 'wraps the children in a view without reps access' do
@@ -115,7 +115,7 @@ shared_examples 'a rule context' do
     end
 
     it 'contains all items' do
-      expect(subject.unwrap).to match_array([item, parent, child])
+      expect(subject._unwrap).to match_array([item, parent, child])
     end
 
     it 'provides no rep access' do

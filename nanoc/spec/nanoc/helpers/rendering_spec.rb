@@ -9,7 +9,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
     end
 
     let(:layout_view) { ctx.layouts[layout_identifier] }
-    let(:layout) { layout_view.unwrap }
+    let(:layout) { layout_view._unwrap }
 
     before do
       ctx.create_layout(layout_content, {}, layout_identifier)
@@ -79,7 +79,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
       end
 
       context 'printing unwrapped layout class' do
-        let(:layout_content) { 'blah <%= @layout.unwrap.class %>' }
+        let(:layout_content) { 'blah <%= @layout._unwrap.class %>' }
         it { is_expected.to eql('blah Nanoc::Int::Layout') }
       end
 

@@ -13,7 +13,7 @@ module Nanoc
     end
 
     # @api private
-    def unwrap
+    def _unwrap
       raise NotImplementedError
     end
 
@@ -23,7 +23,7 @@ module Nanoc
     #
     # @see Object#frozen?
     def frozen?
-      unwrap.frozen?
+      _unwrap.frozen?
     end
 
     def inspect

@@ -21,7 +21,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
           it 'stores snapshot content' do
             subject
-            expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foo')
+            expect(ctx.snapshot_repo.get(ctx.item.reps[:default]._unwrap, :__capture_foo).string).to eql('foo')
           end
         end
 
@@ -44,7 +44,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
             it 'overwrites' do
               subject_proc_with_params.call
               subject_proc_with_params.call
-              expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('bar')
+              expect(ctx.snapshot_repo.get(ctx.item.reps[:default]._unwrap, :__capture_foo).string).to eql('bar')
             end
           end
 
@@ -54,7 +54,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
             it 'appends' do
               subject_proc_with_params.call
               subject_proc_with_params.call
-              expect(ctx.snapshot_repo.get(ctx.item.reps[:default].unwrap, :__capture_foo).string).to eql('foobar')
+              expect(ctx.snapshot_repo.get(ctx.item.reps[:default]._unwrap, :__capture_foo).string).to eql('foobar')
             end
           end
 
@@ -157,19 +157,19 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
         context 'other item is not yet compiled' do
           it 'raises an unmet dependency error' do
-            expect(ctx.dependency_tracker).to receive(:bounce).with(item.unwrap, compiled_content: true)
+            expect(ctx.dependency_tracker).to receive(:bounce).with(item._unwrap, compiled_content: true)
             expect { subject }.to raise_error(FiberError)
           end
 
           it 're-runs when fiber is resumed' do
-            expect(ctx.dependency_tracker).to receive(:bounce).with(item.unwrap, compiled_content: true).twice
+            expect(ctx.dependency_tracker).to receive(:bounce).with(item._unwrap, compiled_content: true).twice
 
             fiber = Fiber.new { subject }
             expect(fiber.resume).to be_a(Nanoc::Int::Errors::UnmetDependency)
 
-            item.reps[:default].unwrap.compiled = true
+            item.reps[:default]._unwrap.compiled = true
             ctx.snapshot_repo.set(
-              item.reps[:default].unwrap,
+              item.reps[:default]._unwrap,
               :__capture_foo,
               Nanoc::Int::TextualContent.new('content after compilation'),
             )
@@ -179,16 +179,16 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
         context 'other item is compiled' do
           before do
-            item.reps[:default].unwrap.compiled = true
+            item.reps[:default]._unwrap.compiled = true
             ctx.snapshot_repo.set(
-              item.reps[:default].unwrap,
+              item.reps[:default]._unwrap,
               :__capture_foo,
               Nanoc::Int::TextualContent.new('other captured foo'),
             )
           end
 
           it 'returns the captured content' do
-            expect(ctx.dependency_tracker).to receive(:bounce).with(item.unwrap, compiled_content: true)
+            expect(ctx.dependency_tracker).to receive(:bounce).with(item._unwrap, compiled_content: true)
             expect(subject).to eql('other captured foo')
           end
         end

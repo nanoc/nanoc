@@ -3,7 +3,7 @@
 module Nanoc
   class PostCompileItemView < Nanoc::CompilationItemView
     def reps
-      Nanoc::PostCompileItemRepCollectionView.new(@context.reps[unwrap], @context)
+      Nanoc::PostCompileItemRepCollectionView.new(@context.reps[_unwrap], @context)
     end
 
     # @deprecated Use {#modified_reps} instead
@@ -12,7 +12,7 @@ module Nanoc
     end
 
     def modified_reps
-      reps.select { |rep| rep.unwrap.modified? }
+      reps.select { |rep| rep._unwrap.modified? }
     end
   end
 end

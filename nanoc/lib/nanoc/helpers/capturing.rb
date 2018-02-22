@@ -21,7 +21,7 @@ module Nanoc::Helpers
 
         # Get existing contents and prep for store
         snapshot_repo = @item._context.snapshot_repo
-        rep = @item.reps[:default].unwrap
+        rep = @item.reps[:default]._unwrap
         capture_name = "__capture_#{@name}".to_sym
         old_content_string =
           case existing_behavior
@@ -59,12 +59,12 @@ module Nanoc::Helpers
       end
 
       def run
-        rep = @requested_item.reps[:default].unwrap
+        rep = @requested_item.reps[:default]._unwrap
 
         # Create dependency
-        if @item.nil? || @requested_item != @item.unwrap
+        if @item.nil? || @requested_item != @item._unwrap
           dependency_tracker = @config._context.dependency_tracker
-          dependency_tracker.bounce(@requested_item.unwrap, compiled_content: true)
+          dependency_tracker.bounce(@requested_item._unwrap, compiled_content: true)
 
           unless rep.compiled?
             Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep))

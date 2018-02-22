@@ -98,7 +98,7 @@ module Nanoc
       # @param [String] path The path of the `:last` snapshot of this item representation
       # @param [Symbol] rep The rep name to create
       def create_rep(item, path, rep = :default)
-        rep = Nanoc::Int::ItemRep.new(item.unwrap, rep)
+        rep = Nanoc::Int::ItemRep.new(item._unwrap, rep)
         rep.paths[:last] = [path]
         @reps << rep
         self
@@ -112,11 +112,11 @@ module Nanoc
       end
 
       def item=(item)
-        @item = item ? item.unwrap : nil
+        @item = item ? item._unwrap : nil
       end
 
       def item_rep=(item_rep)
-        @item_rep = item_rep ? item_rep.unwrap : nil
+        @item_rep = item_rep ? item_rep._unwrap : nil
       end
 
       # @return [Nanoc::MutableConfigView]

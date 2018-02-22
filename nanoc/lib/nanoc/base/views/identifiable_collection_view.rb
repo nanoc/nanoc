@@ -13,7 +13,7 @@ module Nanoc
     end
 
     # @api private
-    def unwrap
+    def _unwrap
       @objects
     end
 
@@ -32,14 +32,14 @@ module Nanoc
     #
     # @return [self]
     def each
-      @context.dependency_tracker.bounce(unwrap, raw_content: true)
+      @context.dependency_tracker.bounce(_unwrap, raw_content: true)
       @objects.each { |i| yield view_class.new(i, @context) }
       self
     end
 
     # @return [Integer]
     def size
-      @context.dependency_tracker.bounce(unwrap, raw_content: true)
+      @context.dependency_tracker.bounce(_unwrap, raw_content: true)
       @objects.size
     end
 
@@ -50,7 +50,7 @@ module Nanoc
     # @return [Enumerable]
     def find_all(arg = NOTHING, &block)
       if NOTHING.equal?(arg)
-        @context.dependency_tracker.bounce(unwrap, raw_content: true)
+        @context.dependency_tracker.bounce(_unwrap, raw_content: true)
         return @objects.select(&block).map { |i| view_class.new(i, @context) }
       end
 
@@ -64,7 +64,7 @@ module Nanoc
           true
         end
 
-      @context.dependency_tracker.bounce(unwrap, raw_content: prop_attribute)
+      @context.dependency_tracker.bounce(_unwrap, raw_content: prop_attribute)
       @objects.find_all(arg).map { |i| view_class.new(i, @context) }
     end
 
@@ -101,7 +101,7 @@ module Nanoc
           true
         end
 
-      @context.dependency_tracker.bounce(unwrap, raw_content: prop_attribute)
+      @context.dependency_tracker.bounce(_unwrap, raw_content: prop_attribute)
       res = @objects[arg]
       res && view_class.new(res, @context)
     end

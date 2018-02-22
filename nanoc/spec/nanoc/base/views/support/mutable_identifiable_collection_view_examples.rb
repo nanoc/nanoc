@@ -19,7 +19,7 @@ shared_examples 'a mutable identifiable collection view' do
 
     it 'deletes matching' do
       view.delete_if { |i| i.identifier == '/asdf' }
-      expect(view.unwrap).to be_empty
+      expect(view._unwrap).to be_empty
     end
 
     it 'does not mutate' do

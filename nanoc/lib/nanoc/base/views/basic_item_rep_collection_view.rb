@@ -17,7 +17,7 @@ module Nanoc
     end
 
     # @api private
-    def unwrap
+    def _unwrap
       @item_reps
     end
 

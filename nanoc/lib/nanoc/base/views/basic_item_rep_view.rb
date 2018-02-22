@@ -14,7 +14,7 @@ module Nanoc
     end
 
     # @api private
-    def unwrap
+    def _unwrap
       @item_rep
     end
 
@@ -41,7 +41,7 @@ module Nanoc
     end
 
     def snapshot?(name)
-      @context.dependency_tracker.bounce(unwrap.item, compiled_content: true)
+      @context.dependency_tracker.bounce(_unwrap.item, compiled_content: true)
       @item_rep.snapshot?(name)
     end
 
@@ -55,7 +55,7 @@ module Nanoc
     #
     # @return [String] The item rep’s path.
     def path(snapshot: :last)
-      @context.dependency_tracker.bounce(unwrap.item, path: true)
+      @context.dependency_tracker.bounce(_unwrap.item, path: true)
       @item_rep.path(snapshot: snapshot)
     end
 
@@ -68,8 +68,8 @@ module Nanoc
 
     # @api private
     def binary?
-      snapshot_def = unwrap.snapshot_defs.find { |sd| sd.name == :last }
-      raise Nanoc::Int::Errors::NoSuchSnapshot.new(unwrap, :last) if snapshot_def.nil?
+      snapshot_def = _unwrap.snapshot_defs.find { |sd| sd.name == :last }
+      raise Nanoc::Int::Errors::NoSuchSnapshot.new(_unwrap, :last) if snapshot_def.nil?
       snapshot_def.binary?
     end
 

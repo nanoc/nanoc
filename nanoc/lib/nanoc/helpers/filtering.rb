@@ -30,9 +30,9 @@ module Nanoc::Helpers
       filter = klass.new(assigns)
 
       # Filter captured data
-      Nanoc::Int::NotificationCenter.post(:filtering_started, @item_rep.unwrap, filter_name)
+      Nanoc::Int::NotificationCenter.post(:filtering_started, @item_rep._unwrap, filter_name)
       filtered_data = filter.setup_and_run(data, arguments)
-      Nanoc::Int::NotificationCenter.post(:filtering_ended, @item_rep.unwrap, filter_name)
+      Nanoc::Int::NotificationCenter.post(:filtering_ended, @item_rep._unwrap, filter_name)
 
       # Append filtered data to buffer
       buffer = eval('_erbout', block.binding)

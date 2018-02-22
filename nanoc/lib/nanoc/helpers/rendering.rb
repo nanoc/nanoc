@@ -18,7 +18,7 @@ module Nanoc::Helpers
       layout_view = @layouts[identifier]
       layout_view ||= @layouts[identifier.__nanoc_cleaned_identifier]
       raise Nanoc::Int::Errors::UnknownLayout.new(identifier) if layout_view.nil?
-      layout = layout_view.unwrap
+      layout = layout_view._unwrap
 
       # Visit
       dependency_tracker = @config._context.dependency_tracker

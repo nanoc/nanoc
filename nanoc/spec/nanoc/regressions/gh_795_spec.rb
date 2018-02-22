@@ -2,7 +2,7 @@
 
 describe 'GH-795', site: true, stdio: true do
   before do
-    File.write('content/items.md', 'Frozen? <%= @items.unwrap.frozen? %>!')
+    File.write('content/items.md', 'Frozen? <%= @items._unwrap.frozen? %>!')
     File.write('content/items-view.md', 'Frozen? <%= @items.frozen? %>!')
     File.write('Rules', <<EOS)
   compile '/**/*' do

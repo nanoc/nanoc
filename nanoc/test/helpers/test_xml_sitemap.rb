@@ -37,8 +37,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Create item 1
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one'), @view_context)
       items << item
-      create_item_rep(item.unwrap, :one_a, '/item-one/a/')
-      create_item_rep(item.unwrap, :one_b, '/item-one/b/')
+      create_item_rep(item._unwrap, :one_a, '/item-one/a/')
+      create_item_rep(item._unwrap, :one_b, '/item-one/b/')
 
       # Create item 2
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 2', { is_hidden: true }, '/item-two'), @view_context)
@@ -48,13 +48,13 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       attrs = { mtime: Time.parse('2004-07-12 00:00:00 +02:00'), changefreq: 'daily', priority: 0.5 }
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 3', attrs, '/item-three'), @view_context)
       items << item
-      create_item_rep(item.unwrap, :three_a, '/item-three/a/')
-      create_item_rep(item.unwrap, :three_b, '/item-three/b/')
+      create_item_rep(item._unwrap, :three_a, '/item-three/a/')
+      create_item_rep(item._unwrap, :three_b, '/item-three/b/')
 
       # Create item 4
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 4', {}, '/item-four'), @view_context)
       items << item
-      create_item_rep(item.unwrap, :four_a, nil)
+      create_item_rep(item._unwrap, :four_a, nil)
 
       # Create items
       @items = Nanoc::Int::ItemCollection.new({}, items)
@@ -101,8 +101,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       items << nil
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one'), @view_context)
       items << item
-      create_item_rep(item.unwrap, :one_a, '/item-one/a/')
-      create_item_rep(item.unwrap, :one_b, '/item-one/b/')
+      create_item_rep(item._unwrap, :one_a, '/item-one/a/')
+      create_item_rep(item._unwrap, :one_b, '/item-one/b/')
       items << nil
       @items = Nanoc::Int::ItemCollection.new({})
 
@@ -138,8 +138,8 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Create items
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/item-one'), @view_context)
       @items = Nanoc::Int::ItemCollection.new({}, [item])
-      create_item_rep(item.unwrap, :one_a, '/item-one/a/')
-      create_item_rep(item.unwrap, :one_b, '/item-one/b/')
+      create_item_rep(item._unwrap, :one_a, '/item-one/a/')
+      create_item_rep(item._unwrap, :one_b, '/item-one/b/')
 
       # Create sitemap item
       @item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap'), @view_context)
@@ -170,16 +170,16 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       items = []
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/george'), @view_context)
       items << item
-      create_item_rep(item.unwrap, :a_alice,   '/george/alice/')
-      create_item_rep(item.unwrap, :b_zoey,    '/george/zoey/')
+      create_item_rep(item._unwrap, :a_alice,   '/george/alice/')
+      create_item_rep(item._unwrap, :b_zoey,    '/george/zoey/')
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/walton'), @view_context)
       items << item
-      create_item_rep(item.unwrap, :a_eve,     '/walton/eve/')
-      create_item_rep(item.unwrap, :b_bob,     '/walton/bob/')
+      create_item_rep(item._unwrap, :a_eve,     '/walton/eve/')
+      create_item_rep(item._unwrap, :b_bob,     '/walton/bob/')
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/lucas'), @view_context)
       items << item
-      create_item_rep(item.unwrap, :a_trudy,   '/lucas/trudy/')
-      create_item_rep(item.unwrap, :b_mallory, '/lucas/mallory/')
+      create_item_rep(item._unwrap, :a_trudy,   '/lucas/trudy/')
+      create_item_rep(item._unwrap, :b_mallory, '/lucas/mallory/')
       @items = Nanoc::Int::ItemCollection.new({}, items)
 
       # Create sitemap item
@@ -212,7 +212,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Create items
       item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('some content 1', {}, '/george'), @view_context)
       @items = Nanoc::Int::ItemCollection.new({}, [item])
-      create_item_rep(item.unwrap, :default, '/cool projects/проверка')
+      create_item_rep(item._unwrap, :default, '/cool projects/проверка')
 
       # Create sitemap item
       @item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('sitemap content', {}, '/sitemap'), @view_context)

@@ -176,7 +176,7 @@ module Nanoc::Int
 
     class UnwrapUpdateBehavior < UpdateBehavior
       def self.update(obj, _digest)
-        yield(obj.unwrap)
+        yield(obj._unwrap)
       end
     end
 

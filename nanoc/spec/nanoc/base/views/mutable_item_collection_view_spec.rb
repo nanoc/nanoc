@@ -27,8 +27,8 @@ describe Nanoc::MutableItemCollectionView do
     it 'creates an object' do
       view.create('new content', { title: 'New Page' }, '/new')
 
-      expect(view.unwrap.size).to eq(2)
-      expect(view.unwrap['/new'].content.string).to eq('new content')
+      expect(view._unwrap.size).to eq(2)
+      expect(view._unwrap['/new'].content.string).to eq('new content')
     end
 
     it 'does not update wrapped' do

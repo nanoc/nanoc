@@ -80,7 +80,7 @@ describe Nanoc::CompilationItemView do
 
         it 'returns a view for the parent' do
           expect(subject.class).to eql(Nanoc::CompilationItemView)
-          expect(subject.unwrap).to eql(parent_item)
+          expect(subject._unwrap).to eql(parent_item)
         end
 
         it 'returns a view with the right context' do
@@ -103,7 +103,7 @@ describe Nanoc::CompilationItemView do
 
           it 'returns a view for the parent' do
             expect(subject.class).to eql(Nanoc::CompilationItemView)
-            expect(subject.unwrap).to eql(parent_item)
+            expect(subject._unwrap).to eql(parent_item)
           end
         end
       end
@@ -180,7 +180,7 @@ describe Nanoc::CompilationItemView do
       it 'returns views for the children' do
         expect(subject.size).to eql(1)
         expect(subject[0].class).to eql(Nanoc::CompilationItemView)
-        expect(subject[0].unwrap).to eql(children[0])
+        expect(subject[0]._unwrap).to eql(children[0])
       end
 
       it { is_expected.to be_frozen }

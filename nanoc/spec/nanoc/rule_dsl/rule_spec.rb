@@ -62,33 +62,33 @@ shared_examples 'Rule#apply_to' do
   let(:layouts) { Nanoc::Int::LayoutCollection.new(config, []) }
 
   it 'makes rep accessible' do
-    expect(subject.instance_eval { rep }.unwrap).to eql(rep)
-    expect(subject.instance_eval { @rep }.unwrap).to eql(rep)
+    expect(subject.instance_eval { rep }._unwrap).to eql(rep)
+    expect(subject.instance_eval { @rep }._unwrap).to eql(rep)
   end
 
   it 'makes item_rep accessible' do
-    expect(subject.instance_eval { item_rep }.unwrap).to eql(rep)
-    expect(subject.instance_eval { @item_rep }.unwrap).to eql(rep)
+    expect(subject.instance_eval { item_rep }._unwrap).to eql(rep)
+    expect(subject.instance_eval { @item_rep }._unwrap).to eql(rep)
   end
 
   it 'makes item accessible' do
-    expect(subject.instance_eval { item }.unwrap).to eql(item)
-    expect(subject.instance_eval { @item }.unwrap).to eql(item)
+    expect(subject.instance_eval { item }._unwrap).to eql(item)
+    expect(subject.instance_eval { @item }._unwrap).to eql(item)
   end
 
   it 'makes items accessible' do
-    expect(subject.instance_eval { items }.unwrap).to eql(items)
-    expect(subject.instance_eval { @items }.unwrap).to eql(items)
+    expect(subject.instance_eval { items }._unwrap).to eql(items)
+    expect(subject.instance_eval { @items }._unwrap).to eql(items)
   end
 
   it 'makes layouts accessible' do
-    expect(subject.instance_eval { layouts }.unwrap).to eql(layouts)
-    expect(subject.instance_eval { @layouts }.unwrap).to eql(layouts)
+    expect(subject.instance_eval { layouts }._unwrap).to eql(layouts)
+    expect(subject.instance_eval { @layouts }._unwrap).to eql(layouts)
   end
 
   it 'makes config accessible' do
-    expect(subject.instance_eval { config }.unwrap).to eql(config)
-    expect(subject.instance_eval { @config }.unwrap).to eql(config)
+    expect(subject.instance_eval { config }._unwrap).to eql(config)
+    expect(subject.instance_eval { @config }._unwrap).to eql(config)
   end
 end
 

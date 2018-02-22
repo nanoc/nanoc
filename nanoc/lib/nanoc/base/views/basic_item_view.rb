@@ -9,11 +9,11 @@ module Nanoc
     #
     # @return [Enumerable<Nanoc::CompilationItemView>]
     def children
-      unless unwrap.identifier.legacy?
-        raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(unwrap.identifier)
+      unless _unwrap.identifier.legacy?
+        raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(_unwrap.identifier)
       end
 
-      children_pattern = Nanoc::Int::Pattern.from(unwrap.identifier.to_s + '*/')
+      children_pattern = Nanoc::Int::Pattern.from(_unwrap.identifier.to_s + '*/')
       children = @context.items.select { |i| children_pattern.match?(i.identifier) }
 
       children.map { |i| self.class.new(i, @context) }.freeze
@@ -26,11 +26,11 @@ module Nanoc
     #
     # @return [nil] if the item has no parent
     def parent
-      unless unwrap.identifier.legacy?
-        raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(unwrap.identifier)
+      unless _unwrap.identifier.legacy?
+        raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(_unwrap.identifier)
       end
 
-      parent_identifier = '/' + unwrap.identifier.components[0..-2].join('/') + '/'
+      parent_identifier = '/' + _unwrap.identifier.components[0..-2].join('/') + '/'
       parent_identifier = '/' if parent_identifier == '//'
 
       parent = @context.items[parent_identifier]
@@ -40,12 +40,12 @@ module Nanoc
 
     # @return [Boolean] True if the item is binary, false otherwise
     def binary?
-      unwrap.content.binary?
+      _unwrap.content.binary?
     end
 
     # @api private
     def raw_filename
-      unwrap.content.filename
+      _unwrap.content.filename
     end
   end
 end

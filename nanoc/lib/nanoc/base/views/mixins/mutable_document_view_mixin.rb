@@ -16,7 +16,7 @@ module Nanoc
     end
 
     def raw_content=(arg)
-      unwrap.content = Nanoc::Int::Content.create(arg)
+      _unwrap.content = Nanoc::Int::Content.create(arg)
     end
 
     # Sets the value for the given attribute.
@@ -35,14 +35,14 @@ module Nanoc
         raise DisallowedAttributeValueError.new(value)
       end
 
-      unwrap.set_attribute(key, value)
+      _unwrap.set_attribute(key, value)
     end
 
     # Sets the identifier to the given argument.
     #
     # @param [String, Nanoc::Identifier] arg
     def identifier=(arg)
-      unwrap.identifier = Nanoc::Identifier.from(arg)
+      _unwrap.identifier = Nanoc::Identifier.from(arg)
     end
 
     # Updates the attributes based on the given hash.
@@ -51,7 +51,7 @@ module Nanoc
     #
     # @return [self]
     def update_attributes(hash)
-      hash.each { |k, v| unwrap.set_attribute(k, v) }
+      hash.each { |k, v| _unwrap.set_attribute(k, v) }
       self
     end
   end

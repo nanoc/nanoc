@@ -13,8 +13,8 @@ shared_examples 'an item rep collection view' do
     ]
   end
 
-  describe '#unwrap' do
-    subject { view.unwrap }
+  describe '#_unwrap' do
+    subject { view._unwrap }
 
     it { should equal(wrapped) }
   end
