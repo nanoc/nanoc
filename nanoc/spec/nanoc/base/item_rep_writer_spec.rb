@@ -54,7 +54,7 @@ describe Nanoc::Int::ItemRepWriter do
         File.write(snapshot_contents[:donkey].filename, 'binary donkey stuff')
       end
 
-      it 'copies' do
+      it 'copies contents' do
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
           .with(:rep_write_started, item_rep, 'output/blah.dat')
         expect(Nanoc::Int::NotificationCenter).to receive(:post)
@@ -63,6 +63,15 @@ describe Nanoc::Int::ItemRepWriter do
         subject
 
         expect(File.read('output/blah.dat')).to eql('binary donkey stuff')
+      end
+
+      it 'uses hard links' do
+        subject
+
+        input = File.stat(snapshot_contents[:donkey].filename)
+        output = File.stat('output/blah.dat')
+
+        expect(input.ino).to eq(output.ino)
       end
 
       context 'output file already exists' do
