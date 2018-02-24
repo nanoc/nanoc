@@ -637,102 +637,110 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
   end
 
   def test_atom_feed_without_id
-    # Create items
-    @items = [mock_article]
-    @items[0].stubs(:path).returns(nil)
+    if_have 'nokogiri' do
+      # Create items
+      @items = [mock_article]
+      @items[0].stubs(:path).returns(nil)
 
-    # Mock site
-    config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
-    @config = Nanoc::ConfigView.new(config, @view_context)
+      # Mock site
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
-    # Create feed item
-    @item = mock
-    @item.stubs(:identifier).returns('/feed/')
-    @item.stubs(:[]).with(:title).returns('My Cool Blog')
-    @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
-    @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
-    @item.stubs(:[]).with(:feed_url).returns(nil)
-    @item.stubs(:path).returns('/journal/feed/')
+      # Create feed item
+      @item = mock
+      @item.stubs(:identifier).returns('/feed/')
+      @item.stubs(:[]).with(:title).returns('My Cool Blog')
+      @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
+      @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
+      @item.stubs(:[]).with(:feed_url).returns(nil)
+      @item.stubs(:path).returns('/journal/feed/')
 
-    # Check
-    doc = Nokogiri::XML(atom_feed)
-    id_elements = doc.xpath('/atom:feed/atom:id', atom: 'http://www.w3.org/2005/Atom')
-    assert_equal 1, id_elements.size
-    assert_equal 'http://example.com/', id_elements[0].inner_text
+      # Check
+      doc = Nokogiri::XML(atom_feed)
+      id_elements = doc.xpath('/atom:feed/atom:id', atom: 'http://www.w3.org/2005/Atom')
+      assert_equal 1, id_elements.size
+      assert_equal 'http://example.com/', id_elements[0].inner_text
+    end
   end
 
   def test_atom_feed_with_id
-    # Create items
-    @items = [mock_article]
-    @items[0].stubs(:path).returns(nil)
+    if_have 'nokogiri' do
+      # Create items
+      @items = [mock_article]
+      @items[0].stubs(:path).returns(nil)
 
-    # Mock site
-    config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
-    @config = Nanoc::ConfigView.new(config, @view_context)
+      # Mock site
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
-    # Create feed item
-    @item = mock
-    @item.stubs(:identifier).returns('/feed/')
-    @item.stubs(:[]).with(:title).returns('My Cool Blog')
-    @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
-    @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
-    @item.stubs(:[]).with(:feed_url).returns(nil)
-    @item.stubs(:path).returns('/journal/feed/')
+      # Create feed item
+      @item = mock
+      @item.stubs(:identifier).returns('/feed/')
+      @item.stubs(:[]).with(:title).returns('My Cool Blog')
+      @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
+      @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
+      @item.stubs(:[]).with(:feed_url).returns(nil)
+      @item.stubs(:path).returns('/journal/feed/')
 
-    # Check
-    doc = Nokogiri::XML(atom_feed(id: 'tag:foo,bar'))
-    id_elements = doc.xpath('/atom:feed/atom:id', atom: 'http://www.w3.org/2005/Atom')
-    assert_equal 1, id_elements.size
-    assert_equal 'tag:foo,bar', id_elements[0].inner_text
+      # Check
+      doc = Nokogiri::XML(atom_feed(id: 'tag:foo,bar'))
+      id_elements = doc.xpath('/atom:feed/atom:id', atom: 'http://www.w3.org/2005/Atom')
+      assert_equal 1, id_elements.size
+      assert_equal 'tag:foo,bar', id_elements[0].inner_text
+    end
   end
 
   def test_atom_feed_without_alt_link
-    # Create items
-    @items = [mock_article]
-    @items[0].stubs(:path).returns(nil)
+    if_have 'nokogiri' do
+      # Create items
+      @items = [mock_article]
+      @items[0].stubs(:path).returns(nil)
 
-    # Mock site
-    config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
-    @config = Nanoc::ConfigView.new(config, @view_context)
+      # Mock site
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
-    # Create feed item
-    @item = mock
-    @item.stubs(:identifier).returns('/feed/')
-    @item.stubs(:[]).with(:title).returns('My Cool Blog')
-    @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
-    @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
-    @item.stubs(:[]).with(:feed_url).returns(nil)
-    @item.stubs(:path).returns('/journal/feed/')
+      # Create feed item
+      @item = mock
+      @item.stubs(:identifier).returns('/feed/')
+      @item.stubs(:[]).with(:title).returns('My Cool Blog')
+      @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
+      @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
+      @item.stubs(:[]).with(:feed_url).returns(nil)
+      @item.stubs(:path).returns('/journal/feed/')
 
-    # Check
-    doc = Nokogiri::XML(atom_feed)
-    elements = doc.xpath('/atom:feed/atom:link[@rel=\'alternate\']', atom: 'http://www.w3.org/2005/Atom')
-    assert_equal 1, elements.size
-    assert_equal 'http://example.com/', elements[0].attribute('href').inner_text
+      # Check
+      doc = Nokogiri::XML(atom_feed)
+      elements = doc.xpath('/atom:feed/atom:link[@rel=\'alternate\']', atom: 'http://www.w3.org/2005/Atom')
+      assert_equal 1, elements.size
+      assert_equal 'http://example.com/', elements[0].attribute('href').inner_text
+    end
   end
 
   def test_atom_feed_with_alt_link
-    # Create items
-    @items = [mock_article]
-    @items[0].stubs(:path).returns(nil)
+    if_have 'nokogiri' do
+      # Create items
+      @items = [mock_article]
+      @items[0].stubs(:path).returns(nil)
 
-    # Mock site
-    config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
-    @config = Nanoc::ConfigView.new(config, @view_context)
+      # Mock site
+      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' })
+      @config = Nanoc::ConfigView.new(config, @view_context)
 
-    # Create feed item
-    @item = mock
-    @item.stubs(:identifier).returns('/feed/')
-    @item.stubs(:[]).with(:title).returns('My Cool Blog')
-    @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
-    @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
-    @item.stubs(:[]).with(:feed_url).returns(nil)
-    @item.stubs(:path).returns('/journal/feed/')
+      # Create feed item
+      @item = mock
+      @item.stubs(:identifier).returns('/feed/')
+      @item.stubs(:[]).with(:title).returns('My Cool Blog')
+      @item.stubs(:[]).with(:author_name).returns('Denis Defreyne')
+      @item.stubs(:[]).with(:author_uri).returns('http://stoneship.org/')
+      @item.stubs(:[]).with(:feed_url).returns(nil)
+      @item.stubs(:path).returns('/journal/feed/')
 
-    # Check
-    doc = Nokogiri::XML(atom_feed(alt_link: '/blog/'))
-    elements = doc.xpath('/atom:feed/atom:link[@rel=\'alternate\']', atom: 'http://www.w3.org/2005/Atom')
-    assert_equal 1, elements.size
-    assert_equal '/blog/', elements[0].attribute('href').inner_text
+      # Check
+      doc = Nokogiri::XML(atom_feed(alt_link: '/blog/'))
+      elements = doc.xpath('/atom:feed/atom:link[@rel=\'alternate\']', atom: 'http://www.w3.org/2005/Atom')
+      assert_equal 1, elements.size
+      assert_equal '/blog/', elements[0].attribute('href').inner_text
+    end
   end
 end
