@@ -11,11 +11,13 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true do
       20.times do |i|
         begin
           Net::HTTP.get('127.0.0.1', '/', 50_385)
+          break
         rescue Errno::ECONNREFUSED, Errno::ECONNRESET
           sleep(0.1 * 1.1**i)
           next
         end
-        break
+
+        raise 'Server did not start up in time'
       end
 
       yield

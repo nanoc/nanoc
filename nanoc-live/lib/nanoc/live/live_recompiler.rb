@@ -37,6 +37,7 @@ module Nanoc::Live
         y << quit
       end
 
+      puts 'Listening for site changes…'
       SlowEnumeratorTools.merge([parent_enum, changes_enum]).each do |e|
         break if quit.equal?(e)
 
@@ -64,7 +65,9 @@ module Nanoc::Live
       fork { run_child(pipe_write, pipe_read) { |s| yield(s) } }
       pipe_read.close
 
-      gen_lib_changes.each do |_e|
+      changes = gen_lib_changes
+      puts 'Listening for lib/ changes…'
+      changes.each do |_e|
         # stop child
         pipe_write.write('q')
         pipe_write.close
