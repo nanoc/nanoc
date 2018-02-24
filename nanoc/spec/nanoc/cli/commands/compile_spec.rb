@@ -43,8 +43,12 @@ describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
     end
 
     it 'watches with --watch' do
+      pipe_stdout_read, pipe_stdout_write = IO.pipe
       pid = fork do
         trap(:INT) { exit(0) }
+
+        pipe_stdout_read.close
+        $stdout = pipe_stdout_write
 
         # TODO: Use Nanoc::CLI.run instead (when --watch is no longer experimental)
         options = { watch: true }
@@ -53,9 +57,18 @@ describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
         cmd_runner = Nanoc::CLI::Commands::Compile.new(options, arguments, cmd)
         cmd_runner.run
       end
+      pipe_stdout_write.close
 
-      # FIXME: wait is ugly
-      sleep 0.5
+      # Wait until ready
+      Timeout.timeout(5) do
+        progress = 0
+        pipe_stdout_read.each_line do |line|
+          progress += 1 if line.start_with?('Listening for lib/ changes')
+          progress += 1 if line.start_with?('Listening for site changes')
+          break if progress == 2
+        end
+      end
+      sleep 0.5 # Still needs time to warm up…
 
       File.write('content/lol.html', 'hej')
       sleep_until { File.file?('output/lol.html') }
