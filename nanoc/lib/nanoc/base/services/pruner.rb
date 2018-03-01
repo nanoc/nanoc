@@ -6,6 +6,8 @@ module Nanoc
   #
   # @api private
   class Pruner
+    include Nanoc::Int::ContractsSupport
+
     # @param [Nanoc::Int::Configuration] config
     #
     # @param [Nanoc::Int::ItemRepRepo] reps
@@ -22,9 +24,6 @@ module Nanoc
       @exclude = Set.new(exclude)
     end
 
-    # Prunes all output files not managed by Nanoc.
-    #
-    # @return [void]
     def run
       return unless File.directory?(@config[:output_dir])
 
@@ -35,18 +34,13 @@ module Nanoc
       remove_empty_directories(present_dirs)
     end
 
-    def exclude?(component)
-      @exclude.include?(component)
-    end
-
-    # @param [String] filename The filename to check
-    #
-    # @return [Boolean] true if the given file is excluded, false otherwise
+    contract String => C::Bool
     def filename_excluded?(filename)
       pathname = Pathname.new(strip_output_dir(filename))
       @exclude.any? { |e| pathname_components(pathname).include?(e) }
     end
 
+    contract String => String
     def strip_output_dir(filename)
       if filename.start_with?(@config[:output_dir])
         filename[@config[:output_dir].size..-1]
@@ -55,6 +49,7 @@ module Nanoc
       end
     end
 
+    contract Pathname => C::ArrayOf[String]
     def pathname_components(pathname)
       components = []
       tmp = pathname
@@ -67,22 +62,27 @@ module Nanoc
       components.reverse
     end
 
+    contract C::ArrayOf[String], C::ArrayOf[String] => self
     # @api private
     def remove_stray_files(present_files, compiled_files)
       (present_files - compiled_files).each do |f|
-        delete_file(f) unless exclude?(f)
+        delete_file(f) unless filename_excluded?(f)
       end
+      self
     end
 
+    contract C::ArrayOf[String] => self
     # @api private
     def remove_empty_directories(present_dirs)
       present_dirs.reverse_each do |dir|
         next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
-        next if exclude?(dir)
+        next if filename_excluded?(dir)
         delete_dir(dir)
       end
+      self
     end
 
+    contract String => C::ArrayOf[C::ArrayOf[String]]
     # @api private
     def files_and_dirs_in(dir)
       present_files = []
@@ -91,15 +91,13 @@ module Nanoc
       expanded_dir = File.expand_path(dir)
 
       Find.find(dir) do |f|
-        basename = File.basename(f)
-
         case File.ftype(f)
         when 'file'
-          unless exclude?(basename)
+          unless filename_excluded?(f)
             present_files << f
           end
         when 'directory'
-          if exclude?(basename)
+          if filename_excluded?(f)
             Find.prune
           elsif expanded_dir != File.expand_path(f)
             present_dirs << f

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Pruner do
+describe Nanoc::Pruner, stdio: true do
   subject(:pruner) { described_class.new(config, reps, dry_run: dry_run, exclude: exclude) }
 
   let(:config) { Nanoc::Int::Configuration.new({}).with_defaults }
@@ -47,6 +47,268 @@ describe Nanoc::Pruner do
     context 'output dir excluded' do
       let(:exclude) { ['output'] }
       it { is_expected.to be(false) }
+    end
+  end
+
+  describe '#run' do
+    subject { pruner.run }
+
+    describe 'it removes stray files' do
+      let(:present_files) do
+        [
+          'output/foo.html',
+          'output/foo.txt',
+          'output/bar.html',
+          'output/foo/bar.html',
+          'output/foo/bar.txt',
+          'output/output/asdf.txt',
+        ]
+      end
+
+      let(:reps) do
+        Nanoc::Int::ItemRepRepo.new.tap do |reps|
+          reps << Nanoc::Int::ItemRep.new(item, :a).tap do |rep|
+            rep.raw_paths = { last: ['output/foo.html'] }
+          end
+
+          reps << Nanoc::Int::ItemRep.new(item, :b).tap do |rep|
+            rep.raw_paths = { last: ['output/bar.html'] }
+          end
+
+          reps << Nanoc::Int::ItemRep.new(item, :c).tap do |rep|
+            rep.raw_paths = { last: ['output/foo/bar.html'] }
+          end
+        end
+      end
+
+      before do
+        present_files.each do |fn|
+          FileUtils.mkdir_p(File.dirname(fn))
+          File.write(fn, 'asdf')
+        end
+      end
+
+      context 'nothing excluded' do
+        it 'removes /foo.txt' do
+          expect { subject }
+            .to change { File.file?('output/foo.txt') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /foo/bar.txt' do
+          expect { subject }
+            .to change { File.file?('output/foo/bar.txt') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /output/asdf.txt' do
+          expect { subject }
+            .to change { File.file?('output/output/asdf.txt') }
+            .from(true)
+            .to(false)
+        end
+      end
+
+      context 'foo excluded' do
+        let(:exclude) { ['foo'] }
+
+        it 'removes /foo.txt' do
+          expect { subject }
+            .to change { File.file?('output/foo.txt') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'keeps /foo/bar.txt' do
+          expect { subject }
+            .not_to change { File.file?('output/foo/bar.txt') }
+            .from(true)
+        end
+
+        it 'removes /output/asdf.txt' do
+          expect { subject }
+            .to change { File.file?('output/output/asdf.txt') }
+            .from(true)
+            .to(false)
+        end
+      end
+
+      context 'output excluded' do
+        let(:exclude) { ['output'] }
+
+        it 'removes /foo.txt' do
+          expect { subject }
+            .to change { File.file?('output/foo.txt') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /foo/bar.txt' do
+          expect { subject }
+            .to change { File.file?('output/foo/bar.txt') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'keeps /output/asdf.txt' do
+          expect { subject }
+            .not_to change { File.file?('output/output/asdf.txt') }
+            .from(true)
+        end
+      end
+    end
+
+    describe 'it removes empty directories' do
+      let(:present_dirs) do
+        [
+          'output/.foo',
+          'output/foo',
+          'output/foo/bar',
+          'output/bar',
+          'output/output',
+          'output/output/asdf',
+        ]
+      end
+
+      before do
+        present_dirs.each do |fn|
+          FileUtils.mkdir_p(fn)
+        end
+      end
+
+      context 'nothing excluded' do
+        it 'removes /.foo' do
+          expect { subject }
+            .to change { File.directory?('output/.foo') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /foo' do
+          expect { subject }
+            .to change { File.directory?('output/foo') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /foo/bar' do
+          expect { subject }
+            .to change { File.directory?('output/foo/bar') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /bar' do
+          expect { subject }
+            .to change { File.directory?('output/bar') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /output' do
+          expect { subject }
+            .to change { File.directory?('output/output') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /output/asdf' do
+          expect { subject }
+            .to change { File.directory?('output/output/asdf') }
+            .from(true)
+            .to(false)
+        end
+      end
+
+      context 'foo excluded' do
+        let(:exclude) { ['foo'] }
+
+        it 'removes /.foo' do
+          expect { subject }
+            .to change { File.directory?('output/.foo') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /bar' do
+          expect { subject }
+            .to change { File.directory?('output/bar') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'keeps /foo' do
+          expect { subject }
+            .not_to change { File.directory?('output/foo') }
+            .from(true)
+        end
+
+        it 'keeps /foo/bar' do
+          expect { subject }
+            .not_to change { File.directory?('output/foo/bar') }
+            .from(true)
+        end
+
+        it 'removes /output' do
+          expect { subject }
+            .to change { File.directory?('output/output') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /output/asdf' do
+          expect { subject }
+            .to change { File.directory?('output/output/asdf') }
+            .from(true)
+            .to(false)
+        end
+      end
+
+      context 'output excluded' do
+        let(:exclude) { ['output'] }
+
+        it 'removes /.foo' do
+          expect { subject }
+            .to change { File.directory?('output/.foo') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /bar' do
+          expect { subject }
+            .to change { File.directory?('output/bar') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /foo' do
+          expect { subject }
+            .to change { File.directory?('output/foo') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'removes /foo/bar' do
+          expect { subject }
+            .to change { File.directory?('output/foo/bar') }
+            .from(true)
+            .to(false)
+        end
+
+        it 'keeps /output' do
+          expect { subject }
+            .not_to change { File.directory?('output/output') }
+            .from(true)
+        end
+
+        it 'keeps /output/asdf' do
+          expect { subject }
+            .not_to change { File.directory?('output/output/asdf') }
+            .from(true)
+        end
+      end
     end
   end
 
