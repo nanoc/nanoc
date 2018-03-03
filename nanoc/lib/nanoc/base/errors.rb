@@ -224,6 +224,18 @@ module Nanoc::Int
       end
     end
 
+    class OutputNotWrittenError < ::Nanoc::Error
+      def initialize(filter_name, output_filename)
+        super("The #{filter_name.inspect} filter did not write anything to the required output file, #{output_filename}.")
+      end
+    end
+
+    class FilterReturnedNil < ::Nanoc::Error
+      def initialize(filter_name)
+        super("The #{filter_name.inspect} filter returned nil, but is required to return a String.")
+      end
+    end
+
     class InternalInconsistency < Generic
     end
   end

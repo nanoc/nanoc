@@ -3,12 +3,6 @@
 module Nanoc
   module Int
     class Executor
-      class OutputNotWrittenError < ::Nanoc::Error
-        def initialize(filter_name, output_filename)
-          super("The #{filter_name.inspect} filter did not write anything to the required output file, #{output_filename}.")
-        end
-      end
-
       def initialize(rep, compilation_context, dependency_tracker)
         @rep = rep
         @compilation_context = compilation_context
@@ -35,11 +29,6 @@ module Nanoc
 
           # Store
           @compilation_context.snapshot_repo.set(@rep, :last, last)
-
-          # Check whether file was written
-          if filter.class.to_binary? && !File.file?(filter.output_filename)
-            raise OutputNotWrittenError.new(filter_name, filter.output_filename)
-          end
         ensure
           Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end

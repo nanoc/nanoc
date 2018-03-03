@@ -87,6 +87,11 @@ module Nanoc
         (@to || :text) == :binary
       end
 
+      # @api private
+      def to_text?
+        (@to || :text) == :text
+      end
+
       # @return [Boolean]
       #
       # @api private
@@ -149,7 +154,7 @@ module Nanoc
     # @api private
     def setup_and_run(*args)
       self.class.setup
-      run(*args)
+      run(*args).tap { |res| verify(res) }
     end
 
     # Runs the filter on the given content or filename.
@@ -168,6 +173,18 @@ module Nanoc
     #   value will be the filtered content.
     def run(content_or_filename, params = {}) # rubocop:disable Lint/UnusedMethodArgument
       raise NotImplementedError.new('Nanoc::Filter subclasses must implement #run')
+    end
+
+    def verify(res)
+      if self.class.to_binary?
+        unless File.file?(output_filename)
+          raise Nanoc::Int::Errors::OutputNotWrittenError.new(self.class.identifier, output_filename)
+        end
+      elsif self.class.to_text?
+        unless res
+          raise Nanoc::Int::Errors::FilterReturnedNil.new(self.class.identifier)
+        end
+      end
     end
 
     # Returns a filename that is used to write data to. This method is only
