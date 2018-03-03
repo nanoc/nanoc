@@ -83,6 +83,12 @@ describe Nanoc::DataSources::Filesystem do
   describe '#item_changes' do
     subject { data_source.item_changes }
 
+    before do
+      if Nanoc.on_windows?
+        skip 'nanoc-live is not currently supported on Windows'
+      end
+    end
+
     it 'returns a stream' do
       expect(subject).to be_a(Nanoc::ChangesStream)
     end
@@ -105,6 +111,12 @@ describe Nanoc::DataSources::Filesystem do
 
   describe '#layout_changes' do
     subject { data_source.layout_changes }
+
+    before do
+      if Nanoc.on_windows?
+        skip 'nanoc-live is not currently supported on Windows'
+      end
+    end
 
     it 'returns a stream' do
       expect(subject).to be_a(Nanoc::ChangesStream)

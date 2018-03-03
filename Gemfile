@@ -40,7 +40,7 @@ group :plugins do
   gem 'erubi'
   gem 'erubis'
   gem 'fog-aws'
-  gem 'fog-local'
+  gem 'fog-local', github: 'fog/fog-local'
   gem 'haml'
   gem 'handlebars', platforms: :ruby
   gem 'kramdown'
@@ -68,5 +68,6 @@ group :plugins do
   gem 'typogruby'
   gem 'uglifier'
   gem 'w3c_validators'
+  gem 'wdm', '>= 0.1.0' if Gem.win_platform?
   gem 'yuicompressor'
 end

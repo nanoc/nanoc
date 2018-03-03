@@ -1,0 +1,34 @@
+cache:
+  - vendor/bundle
+
+version: "{build}"
+
+branches:
+  only:
+    - master
+
+skip_tags: true
+
+shallow_clone: true
+clone_depth: 5
+
+environment:
+  matrix:
+    - RUBY_VERSION: 23
+    - RUBY_VERSION: 24
+    - RUBY_VERSION: 25
+
+install:
+  - set PATH=C:\Ruby%RUBY_VERSION%\bin;%PATH%
+  - bundle install --path=vendor/bundle
+
+build: off
+
+before_test:
+  - ruby -v
+  - gem -v
+  - bundle -v
+
+test_script:
+  - chcp 65001
+  - bundle exec rake test
