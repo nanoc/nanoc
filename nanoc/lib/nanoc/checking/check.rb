@@ -61,7 +61,7 @@ module Nanoc::Checking
 
     # @private
     def output_html_filenames
-      output_filenames.select { |f| File.extname(f) == '.html' }
+      output_filenames.select { |f| File.extname(f) =~ /\A\.x?html?\z/ }
     end
   end
 end
