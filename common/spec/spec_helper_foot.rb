@@ -60,6 +60,10 @@ RSpec.configure do |c|
 
     File.write('Rules', 'passthrough "/**/*"')
   end
+
+  c.before(:each, fork: true) do
+    skip 'fork() is not supported on Windows' if Nanoc.on_windows?
+  end
 end
 
 RSpec::Matchers.define_negated_matcher :not_match, :match
