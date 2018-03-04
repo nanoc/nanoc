@@ -396,5 +396,36 @@ describe Nanoc::Pruner, stdio: true do
         expect(subject[1]).to match_array(dirs)
       end
     end
+
+    context 'output dir is a symlink' do
+      before do
+        FileUtils.mv('output', 'output-real')
+        File.symlink('output-real', 'output')
+      end
+
+      before do
+        if Nanoc.on_windows?
+          skip 'Symlinks to output dirs are currently not supported on Windows.'
+        end
+      end
+
+      it 'returns all files' do
+        files = [
+          'output/asdf.html',
+          'output/.htaccess',
+          'output/projects/nanoc.html',
+          'output/.git/HEAD',
+        ]
+        expect(subject[0]).to match_array(files)
+      end
+
+      it 'returns all directories' do
+        dirs = [
+          'output/projects',
+          'output/.git',
+        ]
+        expect(subject[1]).to match_array(dirs)
+      end
+    end
   end
 end
