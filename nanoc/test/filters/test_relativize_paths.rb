@@ -120,6 +120,8 @@ EOS
   end
 
   def test_filter_html5_with_boilerplate
+    skip_unless_have 'nokogumbo'
+
     # Create filter with mock item
     filter = Nanoc::Filters::RelativizePaths.new
 

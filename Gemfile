@@ -54,11 +54,11 @@ group :plugins do
   gem 'nokogiri', '~> 1.6'
   gem 'nokogumbo', '~> 1.4', platforms: :ruby
   gem 'pandoc-ruby'
-  gem 'pygments.rb', '~> 1.1', '>= 1.1.1', platforms: %i[ruby mswin]
+  gem 'pygments.rb', '~> 1.1', '>= 1.1.1', platforms: :ruby
   gem 'rack'
   gem 'rainpress'
-  gem 'rdiscount', '~> 2.2', platforms: %i[ruby mswin]
-  gem 'redcarpet', '~> 3.0', platforms: %i[ruby mswin]
+  gem 'rdiscount', '~> 2.2', platforms: :ruby
+  gem 'redcarpet', '~> 3.0', platforms: :ruby
   gem 'RedCloth', platforms: :ruby
   gem 'rouge', '~> 3.0'
   gem 'rubypants'

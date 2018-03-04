@@ -127,7 +127,7 @@ describe Nanoc::Int::Executor do
         expect { subject }
           .to change { snapshot_repo.get(rep, :last) }
           .from(some_binary_content('Foo Data'))
-          .to(some_binary_content(/\ACompiled data for \/.*\/foo.dat\z/))
+          .to(some_binary_content(/\ACompiled data for (C:)?\/.*\/foo.dat\z/))
       end
 
       it 'does not set :pre in repo' do
@@ -144,7 +144,7 @@ describe Nanoc::Int::Executor do
         expect { subject }
           .to change { File.read(snapshot_repo.get(rep, :last).filename) }
           .from('Foo Data')
-          .to(/\ACompiled data for \/.*\/foo.dat\z/)
+          .to(/\ACompiled data for (C:)?\/.*\/foo.dat\z/)
       end
 
       it 'returns frozen data' do
@@ -194,7 +194,7 @@ describe Nanoc::Int::Executor do
         expect { subject }
           .to change { snapshot_repo.get(rep, :last) }
           .from(some_binary_content('Foo Data'))
-          .to(some_textual_content(/\ACompiled data for \/.*\/foo.dat\z/))
+          .to(some_textual_content(/\ACompiled data for (C:)?\/.*\/foo.dat\z/))
       end
 
       it 'does not set :pre in repo' do
@@ -211,7 +211,7 @@ describe Nanoc::Int::Executor do
         expect { subject }
           .to change { snapshot_repo.get(rep, :last) }
           .from(some_binary_content('Foo Data'))
-          .to(some_textual_content(/\ACompiled data for \/.*\/foo.dat\z/))
+          .to(some_textual_content(/\ACompiled data for (C:)?\/.*\/foo.dat\z/))
       end
     end
 

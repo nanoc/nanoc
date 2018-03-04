@@ -2,8 +2,12 @@
 
 require 'helper'
 
-require 'redcarpet'
 class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
+  def setup
+    super
+    skip_unless_have 'redcarpet'
+  end
+
   def test_find
     refute Nanoc::Filter.named(:redcarpet).nil?
   end

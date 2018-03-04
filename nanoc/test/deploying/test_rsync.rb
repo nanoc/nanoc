@@ -3,6 +3,11 @@
 require 'helper'
 
 class Nanoc::Deploying::Deployers::RsyncTest < Nanoc::TestCase
+  def setup
+    super
+    skip_unless_have_command 'rsync'
+  end
+
   def test_run_without_dst
     # Create deployer
     rsync = Nanoc::Deploying::Deployers::Rsync.new(

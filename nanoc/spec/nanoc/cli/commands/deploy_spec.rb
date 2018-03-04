@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
+  before do
+    skip_unless_have_command 'rsync'
+  end
+
   describe '#run' do
     let(:config) { {} }
 

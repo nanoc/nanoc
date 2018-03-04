@@ -25,6 +25,12 @@ module Nanoc
         skip "Could not find external command \"#{cmd}\"" unless command?(cmd)
       end
 
+      def skip_unless_gem_available(gem)
+        require gem
+      rescue LoadError
+        skip "Could not load gem \"#{gem}\""
+      end
+
       def sleep_until(max: 3.0)
         start = Time.now
         loop do

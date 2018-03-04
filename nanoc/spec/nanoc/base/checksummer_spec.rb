@@ -395,7 +395,7 @@ describe Nanoc::Int::Checksummer do
 
     before { require 'sass' }
 
-    it { is_expected.to eql('Sass::Importers::Filesystem<root=/foo>') }
+    it { is_expected.to match(%r{\ASass::Importers::Filesystem<root=(C:)?/foo>\z}) }
   end
 
   context 'other marshal-able classes' do
