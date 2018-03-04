@@ -53,4 +53,31 @@ describe Nanoc::Checking::Check do
       expect(described_class.named(:asdfaskjlfdalhsgdjf)).to be_nil
     end
   end
+
+  describe '#output_html_filenames' do
+    let(:check) do
+      described_class.new(output_filenames: output_filenames)
+    end
+
+    let(:output_filenames) do
+      [
+        'output/foo.html',
+        'output/foo.htm',
+        'output/foo.xhtml',
+        'output/foo.txt',
+        'output/foo.htmlx',
+        'output/foo.yhtml',
+      ]
+    end
+
+    subject { check.output_html_filenames }
+
+    it { is_expected.to include('output/foo.html') }
+    it { is_expected.to include('output/foo.htm') }
+    it { is_expected.to include('output/foo.xhtml') }
+
+    it { is_expected.not_to include('output/foo.txt') }
+    it { is_expected.not_to include('output/foo.htmlx') }
+    it { is_expected.not_to include('output/foo.yhtml') }
+  end
 end

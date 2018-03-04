@@ -11,7 +11,7 @@ module Nanoc::Checking::Checks
     PROTOCOL_PATTERN = /^(\w+):\/\//
 
     def run
-      filenames = output_filenames.select { |f| File.extname(f) == '.html' }
+      filenames = output_html_filenames
       resource_uris_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames).filenames_per_resource_uri
 
       resource_uris_with_filenames.each_pair do |uri, fns|
