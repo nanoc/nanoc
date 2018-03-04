@@ -8,12 +8,12 @@ gemspec path: 'nanoc-live'
 
 group :devel do
   gem 'codecov', require: false
-  gem 'contracts', '~> 0.14'
+  gem 'contracts', '~> 0.16'
   gem 'fuubar'
   gem 'guard-rake'
-  gem 'json', '~> 2.0'
+  gem 'json', '~> 2.1'
   gem 'm', '~> 1.5'
-  gem 'minitest', '~> 5.0'
+  gem 'minitest', '~> 5.11'
   gem 'mocha'
   gem 'pry'
   gem 'rake'
@@ -44,23 +44,23 @@ group :plugins do
   gem 'haml'
   gem 'handlebars', platforms: :ruby
   gem 'kramdown'
-  gem 'less', '~> 2.0', platforms: :ruby
+  gem 'less', '~> 2.6', platforms: :ruby
   gem 'libv8', platforms: :ruby
-  gem 'listen', '~> 3.0'
+  gem 'listen', '~> 3.1'
   gem 'markaby'
   gem 'maruku'
   gem 'mime-types'
   gem 'mustache', '~> 1.0'
-  gem 'nokogiri', '~> 1.6'
-  gem 'nokogumbo', '~> 1.4', platforms: :ruby
+  gem 'nokogiri', '~> 1.8'
+  gem 'nokogumbo', '~> 1.5', platforms: :ruby
   gem 'pandoc-ruby'
-  gem 'pygments.rb', '~> 1.1', '>= 1.1.1', platforms: :ruby
+  gem 'pygments.rb', '~> 1.2', platforms: :ruby
   gem 'rack'
   gem 'rainpress'
   gem 'rdiscount', '~> 2.2', platforms: :ruby
-  gem 'redcarpet', '~> 3.0', platforms: :ruby
+  gem 'redcarpet', '~> 3.4', platforms: :ruby
   gem 'RedCloth', platforms: :ruby
-  gem 'rouge', '~> 3.0'
+  gem 'rouge', '~> 3.1'
   gem 'rubypants'
   gem 'sass'
   gem 'slim', '~> 3.0'
