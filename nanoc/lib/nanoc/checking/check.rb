@@ -58,5 +58,10 @@ module Nanoc::Checking
     def add_issue(desc, subject: nil)
       @issues << Issue.new(desc, subject, self.class)
     end
+
+    # @private
+    def output_html_filenames
+      output_filenames.select { |f| File.extname(f) == '.html' }
+    end
   end
 end

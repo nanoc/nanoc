@@ -15,7 +15,7 @@ module Nanoc::Checking::Checks
     # @return [void]
     def run
       # TODO: de-duplicate this (duplicated in external links check)
-      filenames = output_filenames.select { |f| File.extname(f) == '.html' }
+      filenames = output_html_filenames
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
       resource_uris_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_resource_uri
 
