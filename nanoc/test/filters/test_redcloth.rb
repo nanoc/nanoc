@@ -3,6 +3,11 @@
 require 'helper'
 
 class Nanoc::Filters::RedClothTest < Nanoc::TestCase
+  def setup
+    super
+    skip_unless_have 'redcloth'
+  end
+
   def test_filter
     # Get filter
     filter = ::Nanoc::Filters::RedCloth.new

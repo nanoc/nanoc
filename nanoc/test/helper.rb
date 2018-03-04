@@ -234,6 +234,10 @@ EOS
     skip 'Symlinks are not supported by Ruby on Windows' unless symlinks_supported?
   end
 
+  def skip_unless_have(*libs)
+    if_have(*libs) {}
+  end
+
   def root_dir
     File.absolute_path(__dir__ + '/..')
   end

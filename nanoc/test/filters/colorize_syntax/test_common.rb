@@ -54,6 +54,8 @@ EOS
   end
 
   def test_full_page_html5
+    skip_unless_have 'nokogumbo'
+
     # Create filter
     filter = ::Nanoc::Filters::ColorizeSyntax.new
 
