@@ -28,7 +28,7 @@ class Nanoc::Checking::DSLTest < Nanoc::TestCase
     with_site do |_site|
       File.write('Checks', '$stuff = __FILE__')
       Nanoc::Checking::DSL.from_file('Checks', enabled_checks: [])
-      assert($stuff.start_with?('/'))
+      assert(Pathname.new($stuff).absolute?)
     end
   end
 end
