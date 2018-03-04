@@ -110,8 +110,13 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
 
   def test_run_with_symlink_to_output_dir
     skip_unless_symlinks_supported
+
     if defined?(JRUBY_VERSION)
       skip 'JRuby has buggy File.find behavior (see https://github.com/jruby/jruby/issues/1647)'
+    end
+
+    if Nanoc.on_windows?
+      skip 'Symlinks to output dirs are currently not supported on Windows.'
     end
 
     with_site do |_site|
