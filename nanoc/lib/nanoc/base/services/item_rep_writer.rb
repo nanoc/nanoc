@@ -48,7 +48,13 @@ module Nanoc::Int
       is_modified = is_created || !FileUtils.identical?(raw_path, temp_path)
 
       # Write
-      FileUtils.cp(temp_path, raw_path) if is_modified
+      if is_modified
+        begin
+          FileUtils.ln(temp_path, raw_path, force: true)
+        rescue Errno::EXDEV
+          FileUtils.cp(temp_path, raw_path)
+        end
+      end
 
       item_rep.modified = is_modified
 
