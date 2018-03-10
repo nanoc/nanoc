@@ -205,11 +205,7 @@ describe Nanoc::Filter do
 
         it 'creates dependency' do
           expect { subject }
-            .to create_dependency(
-              tracker: dependency_tracker,
-              store: dependency_store,
-              onto: item_view,
-            )
+            .to create_dependency_on(item_view)
         end
       end
 
@@ -259,11 +255,7 @@ describe Nanoc::Filter do
       context 'textual' do
         it 'creates dependency' do
           expect { subject }
-            .to create_dependency(
-              tracker: dependency_tracker,
-              store: dependency_store,
-              onto: item_view,
-            )
+            .to create_dependency_on(item_view)
         end
       end
 
@@ -275,11 +267,7 @@ describe Nanoc::Filter do
 
         it 'creates dependency' do
           expect { subject }
-            .to create_dependency(
-              tracker: dependency_tracker,
-              store: dependency_store,
-              onto: item_view,
-            )
+            .to create_dependency_on(item_view)
         end
       end
     end

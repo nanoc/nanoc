@@ -322,15 +322,15 @@ RSpec::Matchers.define :have_correct_yard_examples do |_name, *_expected_args|
   end
 end
 
-RSpec::Matchers.define :create_dependency do |expected|
+RSpec::Matchers.define :create_dependency_on do |expected|
   supports_block_expectations
 
   include RSpec::Matchers::Composable
 
   match do |actual|
-    dependency_tracker = expected.fetch(:tracker)
-    dependency_store = expected.fetch(:store)
-    @to = expected.fetch(:onto)
+    @to = expected
+    dependency_tracker = @to._context.dependency_tracker
+    dependency_store = dependency_tracker.dependency_store
 
     from = Nanoc::Int::Item.new('x', {}, '/x.md')
 
@@ -349,27 +349,27 @@ RSpec::Matchers.define :create_dependency do |expected|
   end
 
   description do
-    'create a dependency'
+    "create a dependency onto #{expected.inspect}"
   end
 
   failure_message do |_actual|
-    "expected dependency to be created onto #{@to.inspect}"
+    "expected dependency to be created onto #{expected.inspect}"
   end
 
   failure_message_when_negated do |_actual|
-    "expected no dependency to be created onto #{@to.inspect}"
+    "expected no dependency to be created onto #{expected.inspect}"
   end
 end
 
-RSpec::Matchers.define :not_create_dependency do |expected|
+RSpec::Matchers.define :create_dependency_from do |expected|
   supports_block_expectations
 
   include RSpec::Matchers::Composable
 
   match do |actual|
-    dependency_tracker = expected.fetch(:tracker)
-    dependency_store = expected.fetch(:store)
-    @from = expected.fetch(:from)
+    @from = expected
+    dependency_tracker = @from._context.dependency_tracker
+    dependency_store = dependency_tracker.dependency_store
 
     a = dependency_store.objects_causing_outdatedness_of(@from)
 
@@ -382,14 +382,18 @@ RSpec::Matchers.define :not_create_dependency do |expected|
 
     b = dependency_store.objects_causing_outdatedness_of(@from)
 
-    (b - a).empty?
+    (b - a).any?
   end
 
   description do
-    'not create a dependency'
+    "create a dependency from #{expected.inspect}"
   end
 
   failure_message do |_actual|
-    "expected no dependency to be created from #{@from.inspect}"
+    "expected a dependency to be created from #{expected.inspect}"
+  end
+
+  failure_message_when_negated do |_actual|
+    "expected no dependency to be created from #{expected.inspect}"
   end
 end

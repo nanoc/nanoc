@@ -3,6 +3,8 @@
 describe Nanoc::Filters::Sass do
   subject(:filter) { ::Nanoc::Filters::Sass.new }
 
+  before { require 'sass' }
+
   it 'can be called with content' do
     expect(filter.setup_and_run(".foo #bar\n  color: #f00"))
       .to match(/.foo\s+#bar\s*\{\s*color:\s+(red|#f00);?\s*\}/)
@@ -20,7 +22,7 @@ describe Nanoc::Filters::Sass do
 
   it 'raises proper error on failure' do
     expect { filter.setup_and_run('$*#&!@($') }
-      .to raise_error(Sass::SyntaxError, /Invalid variable/)
+      .to raise_error(::Sass::SyntaxError, /Invalid variable/)
   end
 
   context 'with item, items, config context' do
@@ -30,6 +32,7 @@ describe Nanoc::Filters::Sass do
       {
         item: item_view,
         items: item_views,
+        config: config,
       }
     end
 
@@ -88,7 +91,7 @@ describe Nanoc::Filters::Sass do
 
     it 'cannot import by nested relative path' do
       expect { filter.setup_and_run('@import content/style/stuff') }
-        .to raise_error(Sass::SyntaxError, /File to import not found/)
+        .to raise_error(::Sass::SyntaxError, /File to import not found/)
     end
 
     it 'can import by relative path with extension' do
@@ -98,7 +101,7 @@ describe Nanoc::Filters::Sass do
 
     it 'cannot import by nested relative path with extension' do
       expect { filter.setup_and_run('@import content/style/stuff.sass') }
-        .to raise_error(Sass::SyntaxError, /File to import not found/)
+        .to raise_error(::Sass::SyntaxError, /File to import not found/)
     end
 
     it 'can import partials by relative path' do
@@ -108,7 +111,7 @@ describe Nanoc::Filters::Sass do
 
     it 'cannot import partials by nested relative path' do
       expect { filter.setup_and_run('@import content/style/partial') }
-        .to raise_error(Sass::SyntaxError, /File to import not found/)
+        .to raise_error(::Sass::SyntaxError, /File to import not found/)
     end
 
     it 'can import partials by relative path with extension' do
@@ -118,7 +121,50 @@ describe Nanoc::Filters::Sass do
 
     it 'cannot import partials by nested relative path with extension' do
       expect { filter.setup_and_run('@import content/style/partial.sass') }
-        .to raise_error(Sass::SyntaxError, /File to import not found/)
+        .to raise_error(::Sass::SyntaxError, /File to import not found/)
+    end
+
+    context 'importing a file for which an item does not exist' do
+      it 'can import' do
+        expect(filter.setup_and_run('@import partial.sass'))
+          .to match(/.qux\s*\{\s*color:\s+(blue|#00f);?\s*\}/)
+      end
+
+      it 'creates no dependency' do
+        expect { filter.setup_and_run('@import partial.sass') }
+          .not_to create_dependency_from(item_view)
+      end
+    end
+
+    context 'importing a file for which an item exists' do
+      let(:target_item) do
+        Nanoc::Int::Item.new(
+          content,
+          { content_filename: 'content/style/_partial.sass' },
+          '/style/_partial.sass',
+        )
+      end
+
+      let(:content) do
+        Nanoc::Int::TextualContent.new(
+          '/* irrelevant */',
+          filename: File.expand_path('content/style/_partial.sass'),
+        )
+      end
+
+      let(:target_item_view) { Nanoc::CompilationItemView.new(target_item, view_context) }
+
+      let(:item_views) { [item_view, target_item_view] }
+
+      it 'can import' do
+        expect(filter.setup_and_run('@import partial.sass'))
+          .to match(/.qux\s*\{\s*color:\s+(blue|#00f);?\s*\}/)
+      end
+
+      it 'creates a dependency' do
+        expect { filter.setup_and_run('@import partial.sass') }
+          .to create_dependency_on(target_item_view)
+      end
     end
   end
 

@@ -23,6 +23,8 @@ module Nanoc::Int
       def bounce(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
     end
 
+    attr_reader :dependency_store
+
     def initialize(dependency_store)
       @dependency_store = dependency_store
       @stack = []
