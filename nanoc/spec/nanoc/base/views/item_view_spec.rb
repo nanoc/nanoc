@@ -362,7 +362,78 @@ describe Nanoc::CompilationItemView do
   end
 
   describe '#raw_filename' do
-    # TODO: implement
+    subject { view.raw_filename }
+
+    let(:item) do
+      Nanoc::Int::Item.new(content, { animal: 'donkey' }, '/foo')
+    end
+
+    let(:view) { described_class.new(item, view_context) }
+
+    context 'textual content with no raw filename' do
+      let(:content) { Nanoc::Int::TextualContent.new('asdf') }
+
+      it { is_expected.to be_nil }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      end
+
+      it 'creates a dependency with the right props' do
+        subject
+        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+        expect(dep.props.raw_content?).to eq(true)
+
+        expect(dep.props.attributes?).to eq(false)
+        expect(dep.props.compiled_content?).to eq(false)
+        expect(dep.props.path?).to eq(false)
+      end
+    end
+
+    context 'textual content with raw filename' do
+      let(:content) { Nanoc::Int::TextualContent.new('asdf', filename: filename) }
+      let(:filename) { '/tmp/lol.txt' }
+
+      it { is_expected.to eql('/tmp/lol.txt') }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      end
+
+      it 'creates a dependency with the right props' do
+        subject
+        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+        expect(dep.props.raw_content?).to eq(true)
+
+        expect(dep.props.attributes?).to eq(false)
+        expect(dep.props.compiled_content?).to eq(false)
+        expect(dep.props.path?).to eq(false)
+      end
+    end
+
+    context 'binary content' do
+      let(:content) { Nanoc::Int::BinaryContent.new(filename) }
+      let(:filename) { '/tmp/lol.txt' }
+
+      it { is_expected.to eql('/tmp/lol.txt') }
+
+      it 'creates a dependency' do
+        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+      end
+
+      it 'creates a dependency with the right props' do
+        subject
+        dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
+
+        expect(dep.props.raw_content?).to eq(true)
+
+        expect(dep.props.attributes?).to eq(false)
+        expect(dep.props.compiled_content?).to eq(false)
+        expect(dep.props.path?).to eq(false)
+      end
+    end
   end
 
   describe '#inspect' do

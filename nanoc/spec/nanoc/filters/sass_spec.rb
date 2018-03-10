@@ -48,9 +48,31 @@ describe Nanoc::Filters::Sass do
       )
     end
 
-    let(:item_view) { Nanoc::CompilationItemView.new(item, nil) }
+    let(:item_view) { Nanoc::CompilationItemView.new(item, view_context) }
 
     let(:item_views) { [item_view] }
+
+    let(:view_context) do
+      Nanoc::ViewContextForCompilation.new(
+        reps: reps,
+        items: items,
+        dependency_tracker: dependency_tracker,
+        compilation_context: compilation_context,
+        snapshot_repo: snapshot_repo,
+      )
+    end
+
+    let(:reps) { Nanoc::Int::ItemRepRepo.new }
+    let(:items) { Nanoc::Int::ItemCollection.new(config) }
+    let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+    let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
+    let(:compilation_context) { double(:compilation_context) }
+    let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
+
+    let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
+    let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
+
+    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
     before do
       FileUtils.mkdir_p(File.dirname(item.attributes[:content_filename]))

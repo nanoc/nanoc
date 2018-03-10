@@ -289,6 +289,15 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
     FileUtils.mkdir_p('content')
     File.open('content/xyzzy.sass', 'w') { |io| io.write('p\n  color: green') }
 
+    config = Nanoc::Int::Configuration.new.with_defaults
+
+    empty_items = Nanoc::Int::ItemCollection.new(config)
+    empty_layouts = Nanoc::Int::LayoutCollection.new(config)
+
+    dependency_store = Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config)
+    dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+    view_context = OpenStruct.new(dependency_tracker: dependency_tracker)
+
     items = [
       Nanoc::CompilationItemView.new(
         Nanoc::Int::Item.new(
@@ -296,7 +305,7 @@ class Nanoc::Filters::SassTest < Nanoc::TestCase
           { content_filename: 'content/xyzzy.sass' },
           '/blah',
         ),
-        nil,
+        view_context,
       ),
     ]
     params = { item: items[0], items: items }.merge(params)

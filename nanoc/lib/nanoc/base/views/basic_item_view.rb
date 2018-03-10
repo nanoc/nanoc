@@ -45,6 +45,7 @@ module Nanoc
 
     # @api private
     def raw_filename
+      @context.dependency_tracker.bounce(_unwrap, raw_content: true)
       _unwrap.content.filename
     end
   end
