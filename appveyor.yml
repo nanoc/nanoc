@@ -3,11 +3,8 @@ cache:
 
 version: "{build}"
 
-branches:
-  only:
-    - master
-
 skip_tags: true
+skip_branch_with_pr: true
 
 shallow_clone: true
 clone_depth: 5
