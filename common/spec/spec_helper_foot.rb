@@ -321,3 +321,75 @@ RSpec::Matchers.define :have_correct_yard_examples do |_name, *_expected_args|
     parts.join("\n\n---\n\n")
   end
 end
+
+RSpec::Matchers.define :create_dependency do |expected|
+  supports_block_expectations
+
+  include RSpec::Matchers::Composable
+
+  match do |actual|
+    dependency_tracker = expected.fetch(:tracker)
+    dependency_store = expected.fetch(:store)
+    @to = expected.fetch(:onto)
+
+    from = Nanoc::Int::Item.new('x', {}, '/x.md')
+
+    a = dependency_store.objects_causing_outdatedness_of(from)
+
+    begin
+      dependency_tracker.enter(from)
+      actual.call
+    ensure
+      dependency_tracker.exit
+    end
+
+    b = dependency_store.objects_causing_outdatedness_of(from)
+
+    (b - a).include?(@to)
+  end
+
+  description do
+    'create a dependency'
+  end
+
+  failure_message do |_actual|
+    "expected dependency to be created onto #{@to.inspect}"
+  end
+
+  failure_message_when_negated do |_actual|
+    "expected no dependency to be created onto #{@to.inspect}"
+  end
+end
+
+RSpec::Matchers.define :not_create_dependency do |expected|
+  supports_block_expectations
+
+  include RSpec::Matchers::Composable
+
+  match do |actual|
+    dependency_tracker = expected.fetch(:tracker)
+    dependency_store = expected.fetch(:store)
+    @from = expected.fetch(:from)
+
+    a = dependency_store.objects_causing_outdatedness_of(@from)
+
+    begin
+      dependency_tracker.enter(@from._unwrap)
+      actual.call
+    ensure
+      dependency_tracker.exit
+    end
+
+    b = dependency_store.objects_causing_outdatedness_of(@from)
+
+    (b - a).empty?
+  end
+
+  description do
+    'not create a dependency'
+  end
+
+  failure_message do |_actual|
+    "expected no dependency to be created from #{@from.inspect}"
+  end
+end

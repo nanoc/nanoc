@@ -228,6 +228,7 @@ module Nanoc
     # @return [void]
     def depend_on(items)
       items.flat_map(&:reps).flat_map(&:raw_path)
+      items.each(&:raw_filename)
     end
   end
 end

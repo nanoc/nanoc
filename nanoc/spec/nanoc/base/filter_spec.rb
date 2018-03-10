@@ -175,8 +175,13 @@ describe Nanoc::Filter do
       )
     end
 
-    let(:dependency_tracker) { double(:dependency_tracker) }
-    let(:config) { Nanoc::Int::Configuration.new }
+    let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+    let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
+
+    let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
+    let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
+
+    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
 
     let(:reps) { Nanoc::Int::ItemRepRepo.new }
 
@@ -186,60 +191,96 @@ describe Nanoc::Filter do
       }
     end
 
-    before do
-      reps << rep
+    context 'reps exist' do
+      before { reps << rep }
 
-      expect(dependency_tracker).to receive(:bounce).with(item, compiled_content: true).at_least(:once)
+      context 'rep is compiled' do
+        before do
+          rep.compiled = true
+        end
+
+        example do
+          expect { subject }.not_to yield_from_fiber(an_instance_of(Nanoc::Int::Errors::UnmetDependency))
+        end
+
+        it 'creates dependency' do
+          expect { subject }
+            .to create_dependency(
+              tracker: dependency_tracker,
+              store: dependency_store,
+              onto: item_view,
+            )
+        end
+      end
+
+      context 'rep is not compiled' do
+        example do
+          fiber = Fiber.new { subject }
+
+          # resume 1
+          res = fiber.resume
+          expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
+          expect(res.rep).to eql(rep)
+
+          # resume 2
+          expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
+        end
+      end
+
+      context 'multiple reps exist' do
+        let(:other_rep) { Nanoc::Int::ItemRep.new(item, :default) }
+
+        before do
+          reps << other_rep
+          rep.compiled = false
+          other_rep.compiled = false
+        end
+
+        it 'yields an unmet dependency error twice' do
+          fiber = Fiber.new { subject }
+
+          # resume 1
+          res = fiber.resume
+          expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
+          expect(res.rep).to eql(rep)
+
+          # resume 2
+          res = fiber.resume
+          expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
+          expect(res.rep).to eql(other_rep)
+
+          # resume 3
+          expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
+        end
+      end
     end
 
-    context 'rep is compiled' do
-      before do
-        rep.compiled = true
+    context 'no reps exist' do
+      context 'textual' do
+        it 'creates dependency' do
+          expect { subject }
+            .to create_dependency(
+              tracker: dependency_tracker,
+              store: dependency_store,
+              onto: item_view,
+            )
+        end
       end
 
-      example do
-        expect { subject }.not_to yield_from_fiber(an_instance_of(Nanoc::Int::Errors::UnmetDependency))
-      end
-    end
+      context 'binary' do
+        let(:item) { Nanoc::Int::Item.new(content, {}, '/stuff.md') }
 
-    context 'rep is not compiled' do
-      example do
-        fiber = Fiber.new { subject }
+        let(:filename) { File.expand_path('foo.dat') }
+        let(:content) { Nanoc::Int::BinaryContent.new(filename) }
 
-        # resume 1
-        res = fiber.resume
-        expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
-        expect(res.rep).to eql(rep)
-
-        # resume 2
-        expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
-      end
-    end
-
-    context 'multiple reps exist' do
-      let(:other_rep) { Nanoc::Int::ItemRep.new(item, :default) }
-
-      before do
-        reps << other_rep
-        rep.compiled = false
-        other_rep.compiled = false
-      end
-
-      it 'yields an unmet dependency error twice' do
-        fiber = Fiber.new { subject }
-
-        # resume 1
-        res = fiber.resume
-        expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
-        expect(res.rep).to eql(rep)
-
-        # resume 2
-        res = fiber.resume
-        expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
-        expect(res.rep).to eql(other_rep)
-
-        # resume 3
-        expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
+        it 'creates dependency' do
+          expect { subject }
+            .to create_dependency(
+              tracker: dependency_tracker,
+              store: dependency_store,
+              onto: item_view,
+            )
+        end
       end
     end
   end
