@@ -19,6 +19,10 @@ module Nanoc::Live::Commands
 
       Thread.new do
         Thread.current.abort_on_exception = true
+        if Thread.current.respond_to?(:report_on_exception)
+          Thread.current.report_on_exception = false
+        end
+
         view_options = options.merge('live-reload': true)
         Nanoc::CLI::Commands::View.new(view_options, [], self).run
       end
