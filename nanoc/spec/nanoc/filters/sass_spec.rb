@@ -21,7 +21,7 @@ describe Nanoc::Filters::Sass do
   end
 
   it 'supports SCSS' do
-    expect(filter.setup_and_run(".foo { color: #f00 }", syntax: :scss))
+    expect(filter.setup_and_run('.foo { color: #f00 }', syntax: :scss))
       .to match(/^\.foo[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
   end
 
