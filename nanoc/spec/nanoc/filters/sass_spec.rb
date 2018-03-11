@@ -166,8 +166,57 @@ describe Nanoc::Filters::Sass do
           .to create_dependency_on(target_item_view)
       end
     end
+
+    context 'load_path set' do
+      before do
+        FileUtils.mkdir_p('content/xyzzy')
+        File.write('content/xyzzy/_hello.sass', ".hello\n  color: #0ff")
+      end
+
+      context 'importing a file for which an item does not exist' do
+        it 'can import' do
+          expect(filter.setup_and_run('@import hello.sass', load_paths: ['content/xyzzy']))
+            .to match(/.hello\s*\{\s*color:\s+#0ff;?\s*\}/)
+        end
+
+        it 'creates no dependency' do
+          expect { filter.setup_and_run('@import hello.sass', load_paths: ['content/xyzzy']) }
+            .not_to create_dependency_from(item_view)
+        end
+      end
+
+      context 'importing a file for which an item exists' do
+        let(:target_item) do
+          Nanoc::Int::Item.new(
+            content,
+            { content_filename: 'content/style/_partial.sass' },
+            '/style/_partial.sass',
+          )
+        end
+
+        let(:content) do
+          Nanoc::Int::TextualContent.new(
+            '/* irrelevant */',
+            filename: File.expand_path('content/style/_partial.sass'),
+          )
+        end
+
+        let(:target_item_view) { Nanoc::CompilationItemView.new(target_item, view_context) }
+
+        let(:item_views) { [item_view, target_item_view] }
+
+        it 'can import' do
+          expect(filter.setup_and_run('@import hello.sass', load_paths: ['content/xyzzy']))
+            .to match(/.hello\s*\{\s*color:\s+#0ff;?\s*\}/)
+        end
+
+        it 'creates a dependency' do
+          expect { filter.setup_and_run('@import hello.sass', load_paths: ['content/xyzzy']) }
+            .to create_dependency_on(target_item_view)
+        end
+      end
+    end
   end
 
-  # TODO: test :load_paths
   # TODO: test scss
 end
