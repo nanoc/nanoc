@@ -20,6 +20,11 @@ describe Nanoc::Filters::Sass do
       .to match(/^\.foo #bar[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
   end
 
+  it 'supports SCSS' do
+    expect(filter.setup_and_run(".foo { color: #f00 }", syntax: :scss))
+      .to match(/^\.foo[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
+  end
+
   it 'raises proper error on failure' do
     expect { filter.setup_and_run('$*#&!@($') }
       .to raise_error(::Sass::SyntaxError, /Invalid variable/)
@@ -217,6 +222,4 @@ describe Nanoc::Filters::Sass do
       end
     end
   end
-
-  # TODO: test scss
 end
