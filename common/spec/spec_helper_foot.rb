@@ -397,3 +397,31 @@ RSpec::Matchers.define :create_dependency_from do |expected|
     "expected no dependency to be created from #{expected.inspect}"
   end
 end
+
+RSpec::Matchers.define :have_a_valid_manifest do
+  match do |actual|
+    manifest_lines = File.readlines(actual + '.manifest').map(&:chomp).reject(&:empty?)
+    gemspec_lines = eval(File.read(actual + '.gemspec'), binding, actual + '.gemspec').files
+
+    @missing_from_manifest = gemspec_lines - manifest_lines
+    @extra_in_manifest = manifest_lines - gemspec_lines
+
+    @missing_from_manifest.empty? && @extra_in_manifest.empty?
+  end
+
+  description do
+    'have a valid manifest'
+  end
+
+  failure_message do |_actual|
+    reasons = []
+    if @missing_from_manifest.any?
+      reasons << "file(s) missing from manifest (#{@missing_from_manifest.join(', ')})"
+    end
+    if @extra_in_manifest.any?
+      reasons << "file(s) extra in manifest (#{@extra_in_manifest.join(', ')})"
+    end
+
+    "expected manifest to be valid (problems: #{reasons.join(' and ')})"
+  end
+end
