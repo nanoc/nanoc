@@ -28,7 +28,12 @@ module Nanoc::Int
 
     # @return [String]
     def self.config_filename_for_cwd
-      filenames = %w[nanoc.yaml config.yaml]
+      filenames =
+        if Nanoc::Feature.enabled?(Nanoc::Feature::TOML)
+          %w[nanoc.yaml config.yaml nanoc.toml]
+        else
+          %w[nanoc.yaml config.yaml]
+        end
       candidate = filenames.find { |f| File.file?(f) }
       candidate && File.expand_path(candidate)
     end
@@ -41,12 +46,23 @@ module Nanoc::Int
       # Read
       config =
         apply_parent_config(
-          Nanoc::Int::Configuration.new(hash: YAML.load_file(filename)),
+          Nanoc::Int::Configuration.new(hash: load_file(filename)),
           [filename],
         ).with_defaults
 
       # Load environment
       config.with_environment
+    end
+
+    def load_file(filename)
+      case File.extname(filename)
+      when '.yaml'
+        YAML.load_file(filename)
+      when '.toml'
+        Tomlrb.load_file(filename)
+      else
+        raise Nanoc::Int::Errors::InternalInconsistency, 'Unhandled config file extension'
+      end
     end
 
     # @api private
@@ -66,7 +82,7 @@ module Nanoc::Int
       end
 
       # Load
-      parent_config = Nanoc::Int::Configuration.new(hash: YAML.load_file(parent_path))
+      parent_config = Nanoc::Int::Configuration.new(hash: load_file(parent_path))
       full_parent_config = apply_parent_config(parent_config, processed_paths + [parent_path])
       full_parent_config.merge(config.without(:parent_config_file))
     end

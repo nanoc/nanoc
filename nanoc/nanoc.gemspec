@@ -30,4 +30,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('parallel', '~> 1.12')
   s.add_runtime_dependency('ref', '~> 2.0')
   s.add_runtime_dependency('slow_enumerator_tools', '~> 1.0')
+  s.add_runtime_dependency('tomlrb', '~> 1.2')
 end
