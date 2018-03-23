@@ -16,13 +16,15 @@ module Nanoc::Filters
     def run(content, params = {})
       # Get options
       options = params.merge(filename: filename)
+      options.delete:(assigns)
 
       # Create context
       context = ::Nanoc::Int::Context.new(assigns)
+      locals = assigns.merge(params[:assigns] || {})
 
       # Get result
       proc = assigns[:content] ? -> { assigns[:content] } : nil
-      ::Haml::Engine.new(content, options).render(context, assigns, &proc)
+      ::Haml::Engine.new(content, options).render(context, locals, &proc)
     end
   end
 end
