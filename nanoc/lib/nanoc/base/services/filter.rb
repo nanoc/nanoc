@@ -178,7 +178,7 @@ module Nanoc
     def verify(res)
       if self.class.to_binary?
         unless File.file?(output_filename)
-          raise Nanoc::Int::Errors::OutputNotWrittenError.new(self.class.identifier, output_filename)
+          raise Nanoc::Int::Errors::OutputNotWritten.new(self.class.identifier, output_filename)
         end
       elsif self.class.to_text?
         unless res
