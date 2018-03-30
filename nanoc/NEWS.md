@@ -1,5 +1,19 @@
 # Nanoc news
 
+## 4.9.2 (2018-03-30)
+
+Fixes:
+
+* Fixed bug which caused `output_dir` not to be ignored when checking for excludes in pruner (#1313, #1324)
+* Fixed bug which caused `Filter#depend_on` not to create a proper dependency when the depended-on item has no representations (#1330)
+
+Enhancements:
+
+* Made Nanoc use hardlinks instead of copying files when possible (#1321) [Antonio Terceiro]
+* Made Nanoc show an understandable error when a filter returns `nil` by accident (#1323, #1326)
+* Made the checks also consider `.xhtml` and `.htm` files (#1328, #1329)
+* Made Nanoc not report thread exceptions, which would freeze Ruby (#1332)
+
 ## 4.9.1 (2018-02-22)
 
 Fixes:
