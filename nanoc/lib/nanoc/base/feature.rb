@@ -91,4 +91,6 @@ module Nanoc
   end
 end
 
+# Tracking issue:
+# https://github.com/nanoc/features/issues/24
 Nanoc::Feature.define('live_cmd', version: '4.9')
