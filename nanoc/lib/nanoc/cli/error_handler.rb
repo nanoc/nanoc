@@ -159,7 +159,7 @@ module Nanoc::CLI
       when Nanoc::Int::Errors::GenericTrivial, Errno::EADDRINUSE
         true
       when LoadError
-        GEM_NAMES.keys.include?(gem_name_from_load_error(error))
+        GEM_NAMES.key?(gem_name_from_load_error(error))
       else
         false
       end

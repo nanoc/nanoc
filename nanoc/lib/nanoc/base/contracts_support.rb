@@ -6,11 +6,9 @@ module Nanoc::Int
     class Ignorer
       include Singleton
 
-      # rubocop:disable Style/MethodMissing
-      def method_missing(*_args)
+      def method_missing(*_args) # rubocop:disable Style/MethodMissingSuper
         self
       end
-      # rubocop:enable Style/MethodMissing
 
       def respond_to_missing?(*_args)
         true

@@ -10,11 +10,9 @@ class Nanoc::CLI::CleaningStreamTest < Nanoc::TestCase
       @called_methods = []
     end
 
-    # rubocop:disable Style/MethodMissing
-    def method_missing(symbol, *_args)
+    def method_missing(symbol, *_args) # rubocop:disable Style/MethodMissingSuper
       @called_methods << symbol
     end
-    # rubocop:enable Style/MethodMissing
 
     def respond_to_missing?(*_args)
       true
