@@ -100,6 +100,15 @@ Naming/UncommunicativeMethodParamName:
 Naming/MemoizedInstanceVariableName:
   Enabled: false
 
+Layout/ClosingHeredocIndentation:
+  Enabled: false
+
+Performance/ReverseEachStyle/AccessModifierDeclarations:
+  Enabled: false
+
+Style/AccessModifierDeclarations:
+  Enabled: false
+
 
 
 # ----- DISABLED (security) -----

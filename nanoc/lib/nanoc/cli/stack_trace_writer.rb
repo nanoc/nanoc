@@ -38,7 +38,7 @@ module Nanoc::CLI
         @stream.puts "  ... #{error.backtrace.size - count} lines omitted (see crash.log for details)"
       end
 
-      backtrace.each_with_index.to_a.reverse.each do |(item, index)|
+      backtrace.each_with_index.to_a.reverse_each do |(item, index)|
         if index.zero?
           @stream.puts "  #{item}"
         else
