@@ -8,6 +8,8 @@ module Nanoc::Filters
     require 'nanoc/helpers/link_to'
     include Nanoc::Helpers::LinkTo
 
+    DDMemoize.activate(self)
+
     SELECTORS = ['*/@href', '*/@src', 'object/@data', 'param[@name="movie"]/@content', 'form/@action', 'comment()'].freeze
 
     GCSE_SEARCH_WORKAROUND = 'nanoc__gcse_search__f7ac3462f628a053f86fe6563c0ec98f1fe45cee'
@@ -41,7 +43,7 @@ module Nanoc::Filters
       # Filter
       case params[:type]
       when :css
-        relativize_css(content)
+        relativize_css(content, params)
       when :html, :html5, :xml, :xhtml
         relativize_html_like(content, params)
       else
@@ -53,13 +55,35 @@ module Nanoc::Filters
 
     protected
 
-    def relativize_css(content)
+    def relativize_css(content, params)
       # FIXME: parse CSS the proper way using csspool or something
       content.gsub(/url\((['"]?)(\/(?:[^\/].*?)?)\1\)/) do
         quote = Regexp.last_match[1]
         path = Regexp.last_match[2]
-        'url(' + quote + relative_path_to(path) + quote + ')'
+
+        if exclude?(path, params)
+          Regexp.last_match[0]
+        else
+          'url(' + quote + relative_path_to(path) + quote + ')'
+        end
       end
+    end
+
+    memoized def excludes(params)
+      raw = [params.fetch(:exclude, [])].flatten
+      raw.map do |exclusion|
+        case exclusion
+        when Regexp
+          exclusion
+        when String
+          /\A#{exclusion}(\z|\/)/
+        end
+      end
+    end
+
+    def exclude?(path, params)
+      # TODO: Use #match? on newer Ruby versions
+      excludes(params).any? { |ex| path =~ ex }
     end
 
     def relativize_html_like(content, params)
@@ -71,7 +95,7 @@ module Nanoc::Filters
       parser = parser_for(type)
       content = fix_content(content, type)
 
-      nokogiri_process(content, selectors, namespaces, parser, type, nokogiri_save_options)
+      nokogiri_process(content, selectors, namespaces, parser, type, nokogiri_save_options, params)
     end
 
     def parser_for(type)
@@ -104,7 +128,7 @@ module Nanoc::Filters
       end
     end
 
-    def nokogiri_process(content, selectors, namespaces, klass, type, nokogiri_save_options = nil)
+    def nokogiri_process(content, selectors, namespaces, klass, type, nokogiri_save_options, params)
       # Ensure that all prefixes are strings
       namespaces = namespaces.reduce({}) { |new, (prefix, uri)| new.merge(prefix.to_s => uri) }
 
@@ -114,8 +138,8 @@ module Nanoc::Filters
       selector = selectors.map { |sel| "descendant-or-self::#{sel}" }.join('|')
       doc.xpath(selector, namespaces).each do |node|
         if node.name == 'comment'
-          nokogiri_process_comment(node, doc, selectors, namespaces, klass, type)
-        elsif path_is_relativizable?(node.content)
+          nokogiri_process_comment(node, doc, selectors, namespaces, klass, type, params)
+        elsif path_is_relativizable?(node.content, params)
           node.content = relative_path_to(node.content)
         end
       end
@@ -139,20 +163,20 @@ module Nanoc::Filters
       content.gsub(GCSE_SEARCH_WORKAROUND, 'gcse:search')
     end
 
-    def nokogiri_process_comment(node, doc, selectors, namespaces, klass, type)
+    def nokogiri_process_comment(node, doc, selectors, namespaces, klass, type, params)
       content = node.content.dup.sub(%r{^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])}m) do |_m|
         beginning = Regexp.last_match[1]
         body = Regexp.last_match[2]
         ending = Regexp.last_match[3]
 
-        beginning + nokogiri_process(body, selectors, namespaces, klass, type) + ending
+        beginning + nokogiri_process(body, selectors, namespaces, klass, type, nil, params) + ending
       end
 
       node.replace(Nokogiri::XML::Comment.new(doc, content))
     end
 
-    def path_is_relativizable?(path)
-      path.start_with?('/')
+    def path_is_relativizable?(path, params)
+      path.start_with?('/') && !exclude?(path, params)
     end
   end
 end
