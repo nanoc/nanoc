@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.9.3 (2018-06-09)
+
+Enhancements:
+
+* Added an `:exclude` option to `relativize_paths`, to exclude certain paths from being relativized (#1340)
+
 ## 4.9.2 (2018-03-30)
 
 Fixes:
