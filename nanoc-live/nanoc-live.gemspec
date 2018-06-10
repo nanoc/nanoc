@@ -15,8 +15,6 @@ Gem::Specification.new do |s|
   s.files         = ['NEWS.md', 'README.md'] + Dir['lib/**/*.rb']
   s.require_paths = ['lib']
 
-  s.has_rdoc = false
-
   s.required_ruby_version = '~> 2.3'
 
   s.add_runtime_dependency('adsf-live', '~> 1.4')
