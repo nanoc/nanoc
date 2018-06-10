@@ -103,7 +103,7 @@ Naming/MemoizedInstanceVariableName:
 Layout/ClosingHeredocIndentation:
   Enabled: false
 
-Performance/ReverseEachStyle/AccessModifierDeclarations:
+Performance/ReverseEachStyle:
   Enabled: false
 
 Style/AccessModifierDeclarations:
