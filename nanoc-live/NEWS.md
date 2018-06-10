@@ -1,5 +1,11 @@
 # Release notes for nanoc-live
 
+## 1.0.0b2 (2018-06-10)
+
+Fixes:
+
+* Fixed issues that could cause nanoc-live to keep running in the background, using more and more memory and CPU
+
 ## 1.0.0b1 (2018-01-07)
 
 Changes:
