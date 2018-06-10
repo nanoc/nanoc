@@ -88,14 +88,13 @@ Style/EvalWithLocation:
 
 Naming/UncommunicativeMethodParamName:
   AllowedNames:
-    - "to"
-    - "e"
+    - "to" # destination
+    - "e"  # element
     - "c1"
     - "c2"
-    - "id"
-    - "io"
-    - "y"
-    - "x"
+    - "id" # identifier
+    - "io" # IO instance
+    - "y"  # enumerator yielder
 
 Naming/MemoizedInstanceVariableName:
   Enabled: false

@@ -113,8 +113,10 @@ RSpec::Matchers.define :be_humanly_sorted do
     "expected collection to be sorted (incorrect order: #{expected_order.join(' < ')})"
   end
 
-  def sort(x)
-    x.sort_by { |n| n.dup.unicode_normalize(:nfd).encode('ASCII', fallback: ->(_) { '' }).downcase }
+  def sort(coll)
+    coll.sort_by do |elem|
+      elem.dup.unicode_normalize(:nfd).encode('ASCII', fallback: ->(_) { '' }).downcase
+    end
   end
 end
 
