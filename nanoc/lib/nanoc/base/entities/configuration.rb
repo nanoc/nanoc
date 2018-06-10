@@ -120,8 +120,14 @@ module Nanoc::Int
       @wrapped[key] = value
     end
 
-    def merge_recursively(c1, c2)
-      c1.merge(c2) { |_, v1, v2| v1.is_a?(Hash) && v2.is_a?(Hash) ? merge_recursively(v1, v2) : v2 }
+    def merge_recursively(config1, config2)
+      config1.merge(config2) do |_, value1, value2|
+        if value1.is_a?(Hash) && value2.is_a?(Hash)
+          merge_recursively(value1, value2)
+        else
+          value2
+        end
+      end
     end
     private :merge_recursively
 

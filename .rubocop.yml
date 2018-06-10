@@ -90,8 +90,6 @@ Naming/UncommunicativeMethodParamName:
   AllowedNames:
     - "to" # destination
     - "e"  # element
-    - "c1"
-    - "c2"
     - "id" # identifier
     - "io" # IO instance
     - "y"  # enumerator yielder
