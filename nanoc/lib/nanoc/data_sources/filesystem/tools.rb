@@ -33,6 +33,8 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
       end
     end
 
+    module_function
+
     # Returns all files in the given directory and directories below it,
     # following symlinks up to a maximum of `recursion_limit` times.
     #
@@ -78,7 +80,6 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
         end
       end.compact.flatten
     end
-    module_function :all_files_in
 
     # Returns all files and directories in the given directory and
     # directories below it.
@@ -114,7 +115,6 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
       patterns = base_patterns + extra_patterns
       Dir.glob(patterns)
     end
-    module_function :all_files_and_dirs_in
 
     # Resolves the given symlink into an absolute path.
     #
@@ -147,7 +147,6 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
         raise UnsupportedFileTypeError.new(absolute_target)
       end
     end
-    module_function :resolve_symlink
 
     # Reads the content of the file with the given name and returns a string
     # in UTF-8 encoding. The original encoding of the string is derived from
@@ -186,6 +185,5 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
 
       data
     end
-    module_function :read_file
   end
 end

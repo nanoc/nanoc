@@ -89,9 +89,6 @@ Naming/MemoizedInstanceVariableName:
 Layout/ClosingHeredocIndentation:
   Enabled: false
 
-Style/AccessModifierDeclarations:
-  Enabled: false
-
 
 
 # ----- DISABLED (security) -----
