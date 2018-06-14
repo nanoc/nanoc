@@ -1,14 +1,3 @@
-# ----- BROKEN -----
-
-# These cops report false positive, and should be re-enabled in a future version
-# of Rubocop.
-
-# See #5274, #5231
-Layout/EmptyLinesAroundArguments:
-  Enabled: false
-
-
-
 # ----- CONFIGURED -----
 
 AllCops:
