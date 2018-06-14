@@ -32,7 +32,7 @@ class Nanoc::Deploying::Deployers::GitTest < Nanoc::TestCase
       git add -A
       git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
       git push origin master
-EOS
+    EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
@@ -65,7 +65,7 @@ EOS
     commands = <<~EOS
       git config --get remote.origin.url
       git checkout master
-EOS
+    EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
@@ -101,7 +101,7 @@ EOS
       git add -A
       git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
       git push -f github gh-pages
-EOS
+    EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
@@ -136,7 +136,7 @@ EOS
       git add -A
       git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
       git push origin master
-EOS
+    EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
@@ -171,7 +171,7 @@ EOS
       git add -A
       git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
       git push git@github.com:myself/myproject.git master
-EOS
+    EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end
@@ -206,7 +206,7 @@ EOS
       git add -A
       git commit -a --author Nanoc <> -m Automated commit at .+ by Nanoc \\d+\\.\\d+\\.\\d+\\w*
       git push https://github.com/nanoc/nanoc.git master
-EOS
+    EOS
 
     assert_match Regexp.new(/^#{commands.chomp}$/), (git.instance_eval { @shell_cmd_args.join("\n") })
   end

@@ -4,7 +4,7 @@ describe 'GH-924', site: true, stdio: true do
   before do
     File.write('nanoc.yaml', <<~EOS)
       text_extensions: [ 'xml', 'xsl' ]
-EOS
+    EOS
 
     File.write('content/index.xml', '<root/>')
 
@@ -24,7 +24,7 @@ EOS
       <xsl:include href='layouts/snippet.xsl' />
 
       </xsl:stylesheet>
-EOS
+    EOS
 
     File.write('layouts/snippet.xsl', <<~EOS)
       <?xml version="1.0" encoding="UTF-8" ?>
@@ -45,7 +45,7 @@ EOS
       </xsl:template>
 
       </xsl:stylesheet>
-EOS
+    EOS
 
     File.write('Rules', <<~EOS)
       compile '/index.xml' do
@@ -54,7 +54,7 @@ EOS
       end
 
       layout '/**/*.xsl', :xsl
-EOS
+    EOS
   end
 
   before do
@@ -81,7 +81,7 @@ EOS
       </xsl:template>
 
       </xsl:stylesheet>
-EOS
+    EOS
 
     expect { Nanoc::CLI.run(%w[compile]) }
       .to change { File.read('output/index.xhtml') }

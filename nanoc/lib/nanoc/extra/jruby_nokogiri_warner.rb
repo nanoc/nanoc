@@ -21,7 +21,7 @@ module Nanoc::Extra
 
       For details, see https://github.com/nanoc/nanoc/pull/422.
       --------------------------------------------------------------------------------
-EOS
+    EOS
 
     def self.check_and_warn
       instance.check_and_warn

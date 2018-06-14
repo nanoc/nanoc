@@ -8,7 +8,7 @@ describe 'GH-974', site: true, stdio: true do
       compile '/foo.*' do
         write item.identifier
       end
-EOS
+    EOS
   end
 
   it 'writes to path corresponding to identifier' do

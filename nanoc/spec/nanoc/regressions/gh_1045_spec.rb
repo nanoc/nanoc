@@ -9,11 +9,11 @@ describe 'GH-1045', site: true, stdio: true do
 
     File.write('nanoc.yaml', <<~EOS)
       base_url: 'http://example.com'
-EOS
+    EOS
 
     File.write('lib/default.rb', <<~EOS)
       include Nanoc::Helpers::XMLSitemap
-EOS
+    EOS
 
     File.write('Rules', <<~EOS)
       compile '/*.txt' do
@@ -24,7 +24,7 @@ EOS
         filter :erb
         write item.identifier.without_ext + '.xml'
       end
-EOS
+    EOS
   end
 
   it 'creates the sitemap' do

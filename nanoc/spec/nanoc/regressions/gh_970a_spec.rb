@@ -8,7 +8,7 @@ describe 'GH-970 (show-rules)', site: true, stdio: true do
       compile '/foo.*' do
         write '/donkey.html'
       end
-EOS
+    EOS
   end
 
   it 'shows reps' do

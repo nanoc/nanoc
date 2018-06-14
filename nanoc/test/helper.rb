@@ -73,7 +73,7 @@ module Nanoc::TestHelpers
       end
 
       layout '*', :erb
-EOS
+    EOS
 
     rules_content =
       rules_content.gsub(

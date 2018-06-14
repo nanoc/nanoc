@@ -80,7 +80,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       <% end %>
       <%= content_for @item, :outerbox %>
       foot
-EOS
+    EOS
 
     item = Nanoc::Int::Item.new('content', {}, '/asdf')
     view_context = view_context_for(item)

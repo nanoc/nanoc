@@ -13,7 +13,7 @@ describe 'write nil (skip routing rule)', site: true, stdio: true do
       route '/foo.*' do
         '/foo-via-routing-rule.txt'
       end
-EOS
+    EOS
   end
 
   it 'starts off empty' do

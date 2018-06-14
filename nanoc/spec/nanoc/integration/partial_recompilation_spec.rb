@@ -14,7 +14,7 @@ describe 'Partial recompilation', site: true, stdio: true do
         filter :erb
         write '/bar.html'
       end
-EOS
+    EOS
   end
 
   example do

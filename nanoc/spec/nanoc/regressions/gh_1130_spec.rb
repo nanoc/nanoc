@@ -6,13 +6,13 @@ describe 'GH-1130', site: true, stdio: true do
 
     File.write('Rules', <<~EOS)
       passthrough '/**/*'
-EOS
+    EOS
 
     File.write('Checks', <<~EOS)
       check :wat do
         @items.flat_map(&:reps).map(&:raw_path)
       end
-EOS
+    EOS
   end
 
   it 'does not raise fiber error' do

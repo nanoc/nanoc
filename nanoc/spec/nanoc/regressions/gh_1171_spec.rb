@@ -7,7 +7,7 @@ describe 'GH-1171', site: true, stdio: true do
         -
           type: filesystem
           encoding: utf-8
-EOS
+    EOS
   end
 
   context 'UTF-8 code in ASCII env' do
@@ -20,7 +20,7 @@ EOS
           filter :erb
           write '/last.html'
         end
-EOS
+      EOS
     end
 
     around do |ex|
@@ -46,7 +46,7 @@ EOS
           filter :erb
           write '/last.html'
         end
-EOS
+      EOS
     end
 
     it 'detects manually specified encodings' do

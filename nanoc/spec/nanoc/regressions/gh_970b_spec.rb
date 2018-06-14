@@ -14,7 +14,7 @@ describe 'GH-970 (show-data)', site: true, stdio: true do
         filter :erb
         write '/bar.html'
       end
-EOS
+    EOS
   end
 
   before { Nanoc::CLI.run(%w[compile]) }

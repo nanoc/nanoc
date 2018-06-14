@@ -86,9 +86,6 @@ Style/EvalWithLocation:
 Naming/MemoizedInstanceVariableName:
   Enabled: false
 
-Layout/ClosingHeredocIndentation:
-  Enabled: false
-
 
 
 # ----- DISABLED (security) -----

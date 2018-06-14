@@ -65,7 +65,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
           postprocess do
             puts @items.select(&:modified).length
           end
-EOS
+        EOS
       end
 
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
@@ -116,7 +116,7 @@ EOS
 
           compile '*' do ; end
           route '*' do ; item.identifier.chop + '-xyz' + item[:extension] ; end
-EOS
+        EOS
       end
 
       # Create items
@@ -140,7 +140,7 @@ EOS
       File.open('Rules', 'w') do |io|
         io.write <<~EOS
           passthrough "/foo/"
-EOS
+        EOS
       end
 
       # Create items
@@ -172,7 +172,7 @@ EOS
           end
 
           passthrough "/foo/"
-EOS
+        EOS
       end
 
       # Create items
@@ -229,7 +229,7 @@ EOS
           ignore '/lame/'
 
           passthrough '*'
-EOS
+        EOS
       end
 
       # Create items
@@ -265,7 +265,7 @@ EOS
           end
 
           ignore "/foo/"
-EOS
+        EOS
       end
 
       # Create items

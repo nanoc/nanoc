@@ -14,7 +14,7 @@ describe 'GH-937', site: true, stdio: true do
         filter :sass, style: @config[:sass_style].to_sym
         write item.identifier.without_ext + '.css'
       end
-EOS
+    EOS
   end
 
   it 'does not use cache when switching environments' do

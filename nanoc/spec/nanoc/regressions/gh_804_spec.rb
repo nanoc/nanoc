@@ -15,7 +15,7 @@ EOS
         self.add_issue('Not enough donkeys')
         self.add_issue('Too many cats', subject: '/catlady.md')
       end
-EOS
+    EOS
   end
 
   it 'does not crash' do

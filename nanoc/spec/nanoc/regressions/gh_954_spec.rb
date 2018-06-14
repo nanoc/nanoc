@@ -20,7 +20,7 @@ describe 'GH-954', site: true, stdio: true do
         filter :erb
         write item.identifier.without_ext + '.html'
       end
-EOS
+    EOS
   end
 
   it 'properly filters foo.md' do

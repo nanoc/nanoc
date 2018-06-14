@@ -11,7 +11,7 @@ class Nanoc::CLITest < Nanoc::TestCase
     run do |opts, args, cmd|
       File.open('_test.out', 'w') { |io| io.write('It works!') }
     end
-EOS
+  EOS
 
   SUBCOMMAND_CODE = <<~EOS
     usage       '_sub [options]'
@@ -21,7 +21,7 @@ EOS
     run do |opts, args, cmd|
       File.open('_test_sub.out', 'w') { |io| io.write('It works sub!') }
     end
-EOS
+  EOS
 
   def test_load_custom_commands
     Nanoc::CLI.run %w[create_site foo]

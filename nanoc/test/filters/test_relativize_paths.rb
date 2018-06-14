@@ -109,7 +109,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
           <a href=/foo>foo</a>
         </body>
       </html>
-EOS
+    EOS
     expected0 = %r{<a href="\.\./\.\.">foo</a>}
     expected1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>(.|\s)*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
 
@@ -149,7 +149,7 @@ EOS
           <a href=/foo>foo</a>
         </body>
       </html>
-EOS
+    EOS
     expected0 = %r{<a href="\.\./\.\.">foo</a>}
     expected1 = %r{\A\s*<!DOCTYPE html\s*>\s*<html>\s*<head>\s*<title>Hello</title>\s*</head>\s*<body>\s*<a href="../..">foo</a>\s*</body>\s*</html>\s*\Z}m
 
@@ -611,7 +611,7 @@ EOS
         <foo>
           <bar boo="/foo">baz</bar>
         </foo>
-XML
+      XML
 
       actual_content = filter.setup_and_run(raw_content, type: :xml, select: ['*/@boo'])
 
@@ -642,7 +642,7 @@ XML
         <foo>
           <bar><far href="/foo">baz</far></bar>
         </foo>
-XML
+      XML
 
       actual_content = filter.setup_and_run(raw_content, type: :xml, select: ['far/@href'])
 
@@ -674,7 +674,7 @@ XML
         <foo xmlns="http://example.org">
           <bar><a href="/foo">baz</a></bar>
         </foo>
-XML
+      XML
 
       options = {
         type: :xml,
@@ -719,7 +719,7 @@ XML
             <img src="/img"/>
           </body>
         </html>
-XML
+      XML
 
       actual_content = filter.setup_and_run(raw_content, type: :xhtml)
 
@@ -754,7 +754,7 @@ XML
         <p>
           <img src="/img"/>
         </p>
-XML
+      XML
 
       expected_content =
         %r{\A\s*<a href="../..">bar</a>\s*<p>\s*<img src="../../../img" />\s*</p>\s*\Z}m

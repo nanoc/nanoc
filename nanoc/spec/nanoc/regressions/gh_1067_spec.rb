@@ -8,7 +8,7 @@ describe 'GH-1067', site: true, stdio: true do
           build: dev
         prod:
           build: prod
-EOS
+    EOS
 
     File.write('content/foo.erb', 'build=<%= @config[:build] %>')
 

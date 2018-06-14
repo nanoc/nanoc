@@ -10,7 +10,7 @@ describe 'GH-1134', site: true, stdio: true do
         filter :erb
         write '/last.html'
       end
-EOS
+    EOS
   end
 
   it 'detects missing output file of non-default rep' do

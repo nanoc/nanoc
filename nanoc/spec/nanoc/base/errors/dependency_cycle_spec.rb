@@ -28,7 +28,7 @@ describe Nanoc::Int::Errors::DependencyCycle do
           (2) item /c.md, rep :default, uses compiled content of
           (3) item /d.md, rep :default, uses compiled content of
           (4) item /e.md, rep :default, uses compiled content of (1)
-EOS
+    EOS
 
     expect(error.message).to eql(expected)
   end

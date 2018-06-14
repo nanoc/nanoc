@@ -14,7 +14,7 @@ describe 'GH-1035', site: true, stdio: true do
           File.write(output_filename, content)
         end
       end
-EOS
+    EOS
 
     File.write('Rules', <<EOS)
   compile '/bar.*' do

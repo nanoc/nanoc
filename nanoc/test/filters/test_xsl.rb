@@ -20,14 +20,14 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
         </html>
       </xsl:template>
     </xsl:stylesheet>
-EOS
+  EOS
 
   SAMPLE_XML_IN = <<~EOS
     <?xml version="1.0" encoding="utf-8"?>
     <report>
       <title>My Report</title>
     </report>
-EOS
+  EOS
 
   SAMPLE_XML_OUT = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m
 
@@ -47,14 +47,14 @@ EOS
         </html>
       </xsl:template>
     </xsl:stylesheet>
-EOS
+  EOS
 
   SAMPLE_XML_IN_WITH_PARAMS = <<~EOS
     <?xml version="1.0" encoding="utf-8"?>
     <report>
       <title>My Report</title>
     </report>
-EOS
+  EOS
 
   SAMPLE_XML_OUT_WITH_PARAMS = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>bar</h1>\s*</body>\s*</html>\s*\Z}m
 
@@ -74,14 +74,14 @@ EOS
         </html>
       </xsl:template>
     </xsl:stylesheet>
-EOS
+  EOS
 
   SAMPLE_XML_IN_WITH_OMIT_XML_DECL = <<~EOS
     <?xml version="1.0" encoding="utf-8"?>
     <report>
       <title>My Report</title>
     </report>
-EOS
+  EOS
 
   SAMPLE_XML_OUT_WITH_OMIT_XML_DECL = %r{\A<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m
 

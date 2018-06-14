@@ -9,7 +9,7 @@ describe 'Compile command', site: true, stdio: true do
         compile '/foo.*' do
           write '/foo.html'
         end
-EOS
+      EOS
     end
 
     it 'does not generate diff by default' do

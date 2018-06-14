@@ -29,7 +29,7 @@ module Nanoc::CLI::Commands
       data_sources:
         - type: filesystem
           encoding: utf-8
-EOS
+    EOS
 
     DEFAULT_RULES = <<~EOS unless defined? DEFAULT_RULES
       #!/usr/bin/env ruby
@@ -59,7 +59,7 @@ EOS
       end
 
       layout '/**/*', :erb
-EOS
+    EOS
 
     DEFAULT_ITEM = <<~EOS unless defined? DEFAULT_ITEM
       ---
@@ -76,7 +76,7 @@ EOS
       </ul>
 
       <p>If you need any help with customizing your Nanoc web site, be sure to check out the documentation (see sidebar), and be sure to subscribe to the discussion group (also see sidebar). Enjoy!</p>
-EOS
+    EOS
 
     DEFAULT_STYLESHEET = <<~EOS unless defined? DEFAULT_STYLESHEET
       * {
@@ -180,7 +180,7 @@ EOS
 
         line-height: 20px;
       }
-EOS
+    EOS
 
     DEFAULT_LAYOUT = <<~EOS unless defined? DEFAULT_LAYOUT
       <!DOCTYPE HTML>
@@ -212,7 +212,7 @@ EOS
           </div>
         </body>
       </html>
-EOS
+    EOS
 
     def run
       # Extract arguments

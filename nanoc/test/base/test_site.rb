@@ -39,14 +39,14 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
       io.write <<~EOF
         output_dir: public_html
         parent_config_file: foo/foo.yaml
-EOF
+      EOF
     end
     FileUtils.mkdir_p('foo')
     FileUtils.cd('foo') do
       File.open('foo.yaml', 'w') do |io|
         io.write <<~EOF
           parent_config_file: ../bar/bar.yaml
-EOF
+        EOF
       end
     end
     FileUtils.mkdir_p('bar')
@@ -56,7 +56,7 @@ EOF
           enable_output_diff: true
           foo: bar
           output_dir: output
-EOF
+        EOF
       end
     end
 
@@ -71,7 +71,7 @@ EOF
     File.open('nanoc.yaml', 'w') do |io|
       io.write <<~EOF
         parent_config_file: foo/foo.yaml
-EOF
+      EOF
     end
 
     assert_raises(Nanoc::Int::ConfigLoader::NoParentConfigFileFoundError) do
@@ -83,14 +83,14 @@ EOF
     File.open('nanoc.yaml', 'w') do |io|
       io.write <<~EOF
         parent_config_file: foo/foo.yaml
-EOF
+      EOF
     end
     FileUtils.mkdir_p('foo')
     FileUtils.cd('foo') do
       File.open('foo.yaml', 'w') do |io|
         io.write <<~EOF
           parent_config_file: ../nanoc.yaml
-EOF
+        EOF
       end
     end
 

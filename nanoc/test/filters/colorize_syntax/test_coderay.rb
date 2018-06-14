@@ -141,7 +141,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
         puts 'hi!'
         </code></pre>
         after
-EOS
+      EOS
       expected_output = <<~EOS.sub(/\s*\Z/m, '')
         before
         <pre><code>
@@ -149,7 +149,7 @@ EOS
         puts 'hi!'
         </code></pre>
         after
-EOS
+      EOS
 
       # Run filter
       actual_output = filter.setup_and_run(input).sub(/\s*\Z/m, '')
@@ -171,13 +171,13 @@ EOS
         puts 'hi!'
         </code></pre>
         after
-EOS
+      EOS
       expected_output = <<~EOS.sub(/\s*\Z/m, '')
         before
         #{CODERAY_PRE}<pre><code class=\"language-ruby\"><span class=\"doctype\">#!/usr/bin/env ruby</span>
         puts <span class=\"string\"><span class=\"delimiter\">'</span><span class=\"content\">hi!</span><span class=\"delimiter\">'</span></span></code></pre>#{CODERAY_POST}
         after
-EOS
+      EOS
 
       # Run filter
       actual_output = filter.setup_and_run(input).sub(/\s*\Z/m, '')
@@ -231,13 +231,13 @@ EOS
           end
         </code></pre>
         after
-EOS
+      EOS
       expected_output = <<~EOS.sub(/\s*\Z/m, '')
         before
         #{CODERAY_PRE}<pre><code class="language-ruby">  <span class=\"keyword\">def</span> <span class=\"function\">foo</span>
           <span class=\"keyword\">end</span></code></pre>#{CODERAY_POST}
         after
-EOS
+      EOS
 
       # Run filter
       actual_output = filter.setup_and_run(input).sub(/\s*\Z/m, '')
