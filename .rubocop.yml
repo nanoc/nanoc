@@ -33,6 +33,14 @@ Style/TrailingCommaInHashLiteral:
 Layout/IndentArray:
   EnforcedStyle: consistent
 
+Naming/UncommunicativeMethodParamName:
+  AllowedNames:
+    - "to" # destination
+    - "e"  # element
+    - "id" # identifier
+    - "io" # IO instance
+    - "y"  # enumerator yielder
+
 
 
 # ----- CONFIGURED (exceptions for tests) -----
@@ -85,14 +93,6 @@ Naming/HeredocDelimiterNaming:
 
 Style/EvalWithLocation:
   Enabled: false
-
-Naming/UncommunicativeMethodParamName:
-  AllowedNames:
-    - "to" # destination
-    - "e"  # element
-    - "id" # identifier
-    - "io" # IO instance
-    - "y"  # enumerator yielder
 
 Naming/MemoizedInstanceVariableName:
   Enabled: false
