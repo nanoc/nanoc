@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require_relative './lib/guard/nanoc/version'
 
@@ -17,6 +17,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'guard-compat', '~> 1.0'
   s.add_dependency 'nanoc', '>= 4.3.8', '< 5.0'
 
-  s.files         = Dir['[A-Z]*'] + Dir['lib/**/*'] + [ 'guard-nanoc.gemspec' ]
-  s.require_paths = [ 'lib' ]
+  s.files         = Dir['[A-Z]*'] + Dir['lib/**/*'] + ['guard-nanoc.gemspec']
+  s.require_paths = ['lib']
 end

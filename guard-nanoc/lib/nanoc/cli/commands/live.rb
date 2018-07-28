@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 usage 'live [options]'
 summary 'start the web server, and recompile the site when changed'
-description <<-EOS
-Start the static web server (like `nanoc view` would), and watch for changes
-in the background (like `guard start` would). See the documentation of those
-two commands for details. The options are forwarded to `nanoc view` only.
+description <<~EOS
+  Start the static web server (like `nanoc view` would), and watch for changes
+  in the background (like `guard start` would). See the documentation of those
+  two commands for details. The options are forwarded to `nanoc view` only.
 EOS
 
 required :H, :handler,       'specify the handler to use (webrick/mongrel/...)'

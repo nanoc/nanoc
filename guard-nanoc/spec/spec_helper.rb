@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../common/spec/spec_helper_head'
 
 require 'guard-nanoc'
@@ -25,7 +27,7 @@ RSpec.configure do |config|
   config.around(:each) do |example|
     Dir.mktmpdir('nanoc-test') do |dir|
       FileUtils.cd(dir) do
-        Nanoc::CLI.run(%w( create-site foo ))
+        Nanoc::CLI.run(%w[create-site foo])
 
         FileUtils.cd('foo') do
           example.run

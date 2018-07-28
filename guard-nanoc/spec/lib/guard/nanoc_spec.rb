@@ -1,5 +1,7 @@
-require "guard/compat/test/helper"
-require "guard/nanoc"
+# frozen_string_literal: true
+
+require 'guard/compat/test/helper'
+require 'guard/nanoc'
 
 RSpec.describe Guard::Nanoc do
   before do
@@ -16,30 +18,30 @@ RSpec.describe Guard::Nanoc do
     allow(Guard::Compat::UI).to receive(:info)
   end
 
-  describe "#start" do
-    context "with no errors" do
-      it "outputs success" do
+  describe '#start' do
+    context 'with no errors' do
+      it 'outputs success' do
         expect(Guard::Compat::UI).to receive(:info).with(/Compilation succeeded/)
         subject.start
       end
 
-      it "notifies about success" do
+      it 'notifies about success' do
         expect(Guard::Compat::UI).to receive(:notify).with(/Compilation succeeded/, anything)
         subject.start
       end
     end
 
-    context "with errors" do
+    context 'with errors' do
       before do
         File.write('layouts/default.html', '<%= raise "boom" %>')
       end
 
-      it "outputs failure" do
+      it 'outputs failure' do
         expect(Guard::Compat::UI).to receive(:error).with(/Compilation failed/)
         subject.start
       end
 
-      it "notifies about failure" do
+      it 'notifies about failure' do
         expect(Guard::Compat::UI).to receive(:notify).with(/Compilation FAILED/, anything)
         subject.start
       end

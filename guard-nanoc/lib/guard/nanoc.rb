@@ -1,4 +1,4 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 require 'guard/compat/plugin'
 
@@ -14,29 +14,29 @@ module Guard
       end
     end
 
-    def initialize(options={})
+    def initialize(options = {})
       @dir = options[:dir] || '.'
       super
     end
 
     def start
-      self.setup_listeners
-      self.recompile_in_subprocess
+      setup_listeners
+      recompile_in_subprocess
     end
 
     def run_all
-      self.recompile_in_subprocess
+      recompile_in_subprocess
     end
 
-    def run_on_changes(paths)
-      self.recompile_in_subprocess
+    def run_on_changes(_paths)
+      recompile_in_subprocess
     end
 
-    def run_on_removals(paths)
-      self.recompile_in_subprocess
+    def run_on_removals(_paths)
+      recompile_in_subprocess
     end
 
-  protected
+    protected
 
     def setup_listeners
       ::Nanoc::CLI.setup
@@ -48,10 +48,10 @@ module Guard
 
     def recompile_in_subprocess
       if Process.respond_to?(:fork)
-        pid = Process.fork { self.recompile }
+        pid = Process.fork { recompile }
         Process.waitpid(pid)
       else
-        self.recompile
+        recompile
       end
     end
 
@@ -60,19 +60,19 @@ module Guard
         site = ::Nanoc::Int::SiteLoader.new.new_from_cwd
         site.compile
       end
-      self.notify_success
+      notify_success
     rescue => e
-      self.notify_failure
+      notify_failure
       ::Nanoc::CLI::ErrorHandler.print_error(e)
     end
 
     def notify_success
-      Compat::UI.notify('Compilation succeeded', :title => 'nanoc', :image => :success)
+      Compat::UI.notify('Compilation succeeded', title: 'nanoc', image: :success)
       Compat::UI.info 'Compilation succeeded.'
     end
 
     def notify_failure
-      Compat::UI.notify('Compilation FAILED', :title => 'nanoc', :image => :failed)
+      Compat::UI.notify('Compilation FAILED', title: 'nanoc', image: :failed)
       Compat::UI.error 'Compilation failed!'
     end
   end
