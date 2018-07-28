@@ -1,5 +1,9 @@
 # guard-nanoc Release Notes
 
+## 2.1.3 (2018-07-28)
+
+* Added missing --live-reload option, passed through to `nanoc view` (#38, #39)
+
 ## 2.1.2 (2017-03-19)
 
 * Fixed compatibility with Nanoc 4.7.1
