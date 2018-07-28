@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gemspec path: 'nanoc'
 gemspec path: 'nanoc-external'
 gemspec path: 'nanoc-live'
+gemspec path: 'guard-nanoc'
 
 group :devel do
   gem 'codecov', require: false

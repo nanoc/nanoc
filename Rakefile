@@ -28,7 +28,12 @@ namespace :nanoc_live do
   task(:rubocop) { sub_sh('nanoc-live', 'bundle exec rake rubocop') }
 end
 
-task test: %i[nanoc:test nanoc_external:test nanoc_live:test]
-task gem: %i[nanoc:gem nanoc_external:gem nanoc_live:gem]
+namespace :guard_nanoc do
+  task(:test) { sub_sh('guard-nanoc', 'bundle exec rake test') }
+  task(:rubocop) { sub_sh('guard-nanoc', 'bundle exec rake rubocop') }
+end
+
+task test: %i[nanoc:test nanoc_external:test nanoc_live:test guard_nanoc:test]
+task gem: %i[nanoc:gem nanoc_external:gem nanoc_live:gem guard_nanoc:gem]
 
 task default: %i[test rubocop]
