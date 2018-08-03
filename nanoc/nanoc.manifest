@@ -180,6 +180,7 @@ lib/nanoc/cli/stream_cleaners.rb
 lib/nanoc/cli/stream_cleaners/abstract.rb
 lib/nanoc/cli/stream_cleaners/ansi_colors.rb
 lib/nanoc/cli/stream_cleaners/utf8.rb
+lib/nanoc/cli/transform.rb
 lib/nanoc/data_sources.rb
 lib/nanoc/data_sources/filesystem.rb
 lib/nanoc/data_sources/filesystem/errors.rb

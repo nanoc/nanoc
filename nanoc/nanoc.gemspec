@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '~> 2.3'
 
   s.add_runtime_dependency('addressable', '~> 2.5')
-  s.add_runtime_dependency('cri', '~> 2.8')
+  s.add_runtime_dependency('cri', '~> 2.11')
   s.add_runtime_dependency('ddmemoize', '~> 1.0')
   s.add_runtime_dependency('ddmetrics', '~> 1.0')
   s.add_runtime_dependency('ddplugin', '~> 1.0')

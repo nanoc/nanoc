@@ -10,7 +10,7 @@ EOS
 
 required :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
 required :o, :host,    'specify the host to listen on (default: 127.0.0.1)'
-required :p, :port,    'specify the port to listen on (default: 3000)'
+required :p, :port,    'specify the port to listen on (default: 3000)', transform: Nanoc::CLI::Transform::Port
 flag :L, :'live-reload', 'reload on changes'
 
 module Nanoc::CLI::Commands
@@ -31,7 +31,7 @@ module Nanoc::CLI::Commands
           live: options[:'live-reload'],
           index_filenames: config[:index_filenames],
           host: (options[:host] || '127.0.0.1'),
-          port: (options[:port] || 3000).to_i,
+          port: (options[:port] || 3000),
           handler: options[:handler],
         )
 
