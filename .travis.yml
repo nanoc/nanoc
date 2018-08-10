@@ -1,13 +1,12 @@
 language: ruby
 
-rvm:
-  - "2.3"
-  - "2.4"
-  - "2.5"
-
 branches:
   only:
     - "master"
+
+stages:
+  - warmup
+  - test
 
 env:
   global:
@@ -17,20 +16,130 @@ env:
 
 jobs:
   include:
-    - script: bundle exec rake rubocop
-      env: JOB=rubocop
+    - stage: warmup
+      script: true
+      rvm: "2.3"
+
+    - stage: warmup
+      script: true
       rvm: "2.4"
+
+    - stage: warmup
+      script: true
+      rvm: "2.5"
+
+    - stage: warmup
+      script: true
+      rvm: "jruby-9.1.9.0"
+
+    - stage: test
+      script: bundle exec rake rubocop
+      env: JOB=rubocop
+      rvm: "2.5"
+
+    - stage: test
+      script: bundle exec rake nanoc:test
+      env: JOB=test_nanoc
+      rvm: "2.3"
+
+    - stage: test
+      script: bundle exec rake nanoc_external:test
+      env: JOB=test_nanoc_external
+      rvm: "2.3"
+
+    - stage: test
+      script: bundle exec rake nanoc_live:test
+      env: JOB=test_nanoc_live
+      rvm: "2.3"
+
+    - stage: test
+      script: bundle exec rake guard_nanoc:test
+      env: JOB=test_guard_nanoc
+      rvm: "2.3"
+
+    - stage: test
+      script: bundle exec rake nanoc:test
+      env: JOB=test_nanoc
+      rvm: "2.4"
+
+    - stage: test
+      script: bundle exec rake nanoc_external:test
+      env: JOB=test_nanoc_external
+      rvm: "2.4"
+
+    - stage: test
+      script: bundle exec rake nanoc_live:test
+      env: JOB=test_nanoc_live
+      rvm: "2.4"
+
+    - stage: test
+      script: bundle exec rake guard_nanoc:test
+      env: JOB=test_guard_nanoc
+      rvm: "2.4"
+
+    - stage: test
+      script: bundle exec rake nanoc:test
+      env: JOB=test_nanoc
+      rvm: "2.5"
+
+    - stage: test
+      script: bundle exec rake nanoc_external:test
+      env: JOB=test_nanoc_external
+      rvm: "2.5"
+
+    - stage: test
+      script: bundle exec rake nanoc_live:test
+      env: JOB=test_nanoc_live
+      rvm: "2.5"
+
+    - stage: test
+      script: bundle exec rake guard_nanoc:test
+      env: JOB=test_guard_nanoc
+      rvm: "2.5"
+
+    - stage: test
+      script: bundle exec rake nanoc:test
+      env: JOB=test_nanoc DISABLE_NOKOGIRI=1
+      rvm: "jruby-9.1.9.0"
+
+    - stage: test
+      script: bundle exec rake nanoc_external:test
+      env: JOB=test_nanoc_external DISABLE_NOKOGIRI=1
+      rvm: "jruby-9.1.9.0"
+
+    - stage: test
+      script: bundle exec rake nanoc_live:test
+      env: JOB=test_nanoc_live DISABLE_NOKOGIRI=1
+      rvm: "jruby-9.1.9.0"
+
+    - stage: test
+      script: bundle exec rake guard_nanoc:test
+      env: JOB=test_guard_nanoc DISABLE_NOKOGIRI=1
+      rvm: "jruby-9.1.9.0"
 
 matrix:
   fast_finish: true
-  include:
-    - rvm: ruby-head
-    - rvm: jruby-9.1.9.0
-      env: DISABLE_NOKOGIRI=1
   allow_failures:
-    - rvm: ruby-head
-    - rvm: jruby-9.1.9.0
-      env: DISABLE_NOKOGIRI=1
+    - env: JOB=test_nanoc DISABLE_NOKOGIRI=1
+      rvm: "jruby-9.1.9.0"
+
+    - env: JOB=test_nanoc_external DISABLE_NOKOGIRI=1
+      rvm: "jruby-9.1.9.0"
+
+    - env: JOB=test_guard_nanoc DISABLE_NOKOGIRI=1
+      rvm: "jruby-9.1.9.0"
+
+    - env: JOB=test_nanoc_live
+      rvm: "2.3"
+
+    - env: JOB=test_nanoc_live
+      rvm: "2.4"
+
+    - env: JOB=test_nanoc_live
+      rvm: "2.5"
+
+    - env: JOB=test_nanoc_live DISABLE_NOKOGIRI=1
+      rvm: "jruby-9.1.9.0"
 
 before_install:
   - gem update --system
