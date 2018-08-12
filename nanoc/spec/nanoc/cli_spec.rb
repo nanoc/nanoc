@@ -24,7 +24,7 @@ describe Nanoc::CLI do
 
   def short_options_for_command(command)
     ancestors = ancestors_of_command(command)
-    ancestors.flat_map { |a| a.option_definitions.to_a.map { |od| od[:short] } }.compact
+    ancestors.flat_map { |a| a.option_definitions.to_a.map(&:short) }.compact
   end
 
   it 'has no commands that have conflicting options' do

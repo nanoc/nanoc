@@ -5,6 +5,7 @@ aliases :create_site, :cs
 summary 'create a site'
 description 'Create a new site at the given path. The site will use the `filesystem` data source.'
 flag nil, :force, 'force creation of new site'
+param :path
 
 module Nanoc::CLI::Commands
   class CreateSite < ::Nanoc::CLI::CommandRunner
@@ -215,11 +216,7 @@ module Nanoc::CLI::Commands
     EOS
 
     def run
-      # Extract arguments
-      if arguments.length != 1
-        raise Nanoc::Int::Errors::GenericTrivial, "usage: #{command.usage}"
-      end
-      path = arguments[0]
+      path = arguments[:path]
 
       # Check whether site exists
       if File.exist?(path) && (!File.directory?(path) || !(Dir.entries(path) - %w[. ..]).empty?) && !options[:force]
