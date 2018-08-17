@@ -5,6 +5,7 @@ summary 'compile items of this site'
 description <<~EOS
   Compile all items of the current site.
 EOS
+no_params
 
 flag nil, :diff, 'generate diff'
 if Nanoc::Feature.enabled?(Nanoc::Feature::LIVE_CMD)

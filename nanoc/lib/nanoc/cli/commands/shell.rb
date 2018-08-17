@@ -7,6 +7,7 @@ description "
 Open an IRB shell on a context that contains @items, @layouts, and @config.
 "
 flag :p, :preprocess, 'run preprocessor'
+no_params
 
 module Nanoc::CLI::Commands
   class Shell < ::Nanoc::CLI::CommandRunner

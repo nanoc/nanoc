@@ -10,6 +10,7 @@ description <<~EOS
   Also see the `auto_prune` configuration option in `nanoc.yaml` (`config.yaml`
   for older Nanoc sites), which will automatically prune after compilation.
 EOS
+no_params
 
 flag :y, :yes,       'confirm deletion'
 flag :n, :'dry-run', 'print files to be deleted instead of actually deleting them'
