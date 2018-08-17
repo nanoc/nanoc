@@ -37,7 +37,7 @@ class Nanoc::Checking::Checks::CSSTest < Nanoc::TestCase
         refute check.issues.empty?
         assert_equal 1, check.issues.size
         assert_equal(
-          'line 1: Property coxlor doesn\'t exist: h1 { coxlor: rxed; }',
+          "line 1: Property “coxlor” doesn't exist. The closest matching property name is “color”: h1 { coxlor: rxed; }",
           check.issues.to_a[0].description,
         )
       end
