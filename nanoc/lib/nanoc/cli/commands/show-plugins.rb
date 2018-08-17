@@ -7,15 +7,11 @@ description <<~EOS
   Show a list of available plugins, including filters and data sources.
   If the current directory contains a Nanoc web site, the plugins defined in this site will be shown as well.
 EOS
+no_params
 
 module Nanoc::CLI::Commands
   class ShowPlugins < ::Nanoc::CLI::CommandRunner
     def run
-      # Check arguments
-      if arguments.any?
-        raise Nanoc::Int::Errors::GenericTrivial, "usage: #{command.usage}"
-      end
-
       # Get list of plugins (before and after)
       plugins_before = PLUGIN_CLASSES.keys.each_with_object({}) { |c, acc| acc[c] = c.all }
       site = load_site

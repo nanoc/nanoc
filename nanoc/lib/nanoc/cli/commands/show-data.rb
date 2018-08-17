@@ -7,6 +7,7 @@ description <<~EOS
   Show information about all items, item representations and layouts in the
   current site, along with dependency information.
 EOS
+no_params
 
 module Nanoc::CLI::Commands
   class ShowData < ::Nanoc::CLI::CommandRunner
