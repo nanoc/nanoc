@@ -1133,7 +1133,7 @@ Fixes:
 
 * Removed the list of available deployers from the `deploy` help text and moved
   them into a new `--list-deployers` option [Damien Pollet]
-* Fixed warning about `__send__ `and `object_id` being redefined on Ruby
+* Fixed warning about `__send__` and `object_id` being redefined on Ruby
   1.8.x [Justin Hileman]
 
 Enhancements:
@@ -1523,7 +1523,7 @@ Deprecated:
 
 ## 3.0.2 (2009-11-07)
 
-* Children-only identifier patterns no longer erroneously also match parent (e.g.` /foo/*/` no longer matches `/foo/`)
+* Children-only identifier patterns no longer erroneously also match parent (e.g. `/foo/*/` no longer matches `/foo/`)
 * The `create_site` command no longer uses those ugly HTML entities
 * Install message now mentions the IRC channel
 
@@ -1658,9 +1658,9 @@ Changed:
 Removed:
 
 * Several filters have been removed and replaced by newer filters:
-	* `eruby`: use `erb` or `erubis` instead
-	* `markdown`: use `bluecloth`, `rdiscount` or `maruku` instead
-	* `textile`: use `redcloth` instead
+  * `eruby`: use `erb` or `erubis` instead
+  * `markdown`: use `bluecloth`, `rdiscount` or `maruku` instead
+  * `textile`: use `redcloth` instead
 
 ## 2.0.4 (2008-05-04)
 
@@ -1739,8 +1739,8 @@ Removed:
 * The `@pages` array now also contains uncompiled pages
 * Pages with `skip_output` set to true will not be outputted
 * Added new filters
-	* Textile/RedCloth
-	* Sass
+  * Textile/RedCloth
+  * Sass
 * nanoc now warns before overwriting in `create_site`, `create_page` and `create_template` (but not in compile)
 
 ## 1.2 (2007-06-05)
