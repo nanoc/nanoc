@@ -2,6 +2,8 @@
 
 module Nanoc::Int::Compiler::Stages
   class CompileReps < Nanoc::Int::Compiler::Stage
+    include Nanoc::Int::ContractsSupport
+
     def initialize(reps:, outdatedness_store:, dependency_store:, action_sequences:, compilation_context:, compiled_content_cache:)
       @reps = reps
       @outdatedness_store = outdatedness_store
@@ -19,6 +21,8 @@ module Nanoc::Int::Compiler::Stages
           handle_errors_while(rep) do
             compile_rep(rep, phase_stack: phase_stack, is_outdated: @outdatedness_store.include?(rep))
           end
+
+          assert { @compiled_content_cache[rep] }
         end
       end
     ensure
