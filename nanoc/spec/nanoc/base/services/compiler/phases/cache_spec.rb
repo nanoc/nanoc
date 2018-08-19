@@ -10,7 +10,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
   end
 
   let(:compiled_content_cache) do
-    Nanoc::Int::CompiledContentCache.new(items: [item], config: config)
+    Nanoc::Int::CompiledContentCache.new(config: config)
   end
 
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }

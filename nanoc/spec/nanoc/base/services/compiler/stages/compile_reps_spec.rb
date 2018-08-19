@@ -25,7 +25,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   let(:action_provider) { double(:action_provider) }
   let(:action_sequences) { double(:action_sequences) }
   let(:reps) { Nanoc::Int::ItemRepRepo.new }
-  let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new(items: items, config: config) }
+  let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new(config: config) }
   let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
 
   let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(config: config) }
@@ -93,6 +93,12 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     end
 
     context 'rep not in outdatedness store' do
+      before do
+        # Needed for consistency
+        compiled_content_cache[rep] = { last: Nanoc::Int::TextualContent.new('asdf') }
+        compiled_content_cache[other_rep] = { last: Nanoc::Int::TextualContent.new('asdf') }
+      end
+
       it 'keeps the item rep out of the outdatedness store' do
         expect(outdatedness_store.include?(rep)).not_to be
         expect { subject }.not_to change { outdatedness_store.include?(rep) }
@@ -101,6 +107,11 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
 
     context 'rep in outdatedness store' do
       before { outdatedness_store.add(rep) }
+
+      before do
+        # Needed for consistency
+        compiled_content_cache[other_rep] = { last: Nanoc::Int::TextualContent.new('asdf') }
+      end
 
       it 'compiles individual reps' do
         expect { subject }.to change { snapshot_repo.get(rep, :last) }

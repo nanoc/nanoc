@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Int::CompiledContentCache do
-  let(:cache) { described_class.new(items: items, config: config) }
+  let(:cache) { described_class.new(config: config) }
 
   let(:items) { [item] }
 
@@ -49,6 +49,16 @@ describe Nanoc::Int::CompiledContentCache do
       before do
         cache.store
         cache.load
+      end
+
+      it 'has content' do
+        expect(cache[other_item_rep][:last].string).to eql('omg')
+      end
+    end
+
+    context 'after pruning' do
+      before do
+        cache.prune(items: items)
       end
 
       it 'has no content' do

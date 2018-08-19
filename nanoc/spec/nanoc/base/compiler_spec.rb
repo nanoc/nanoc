@@ -22,10 +22,7 @@ describe Nanoc::Int::Compiler do
   let(:action_provider) { double(:action_provider) }
 
   let(:compiled_content_cache) do
-    Nanoc::Int::CompiledContentCache.new(
-      config: config,
-      items: items,
-    )
+    Nanoc::Int::CompiledContentCache.new(config: config)
   end
 
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }

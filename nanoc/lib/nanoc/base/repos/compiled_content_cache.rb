@@ -8,11 +8,10 @@ module Nanoc::Int
   class CompiledContentCache < ::Nanoc::Int::Store
     include Nanoc::Int::ContractsSupport
 
-    contract C::KeywordArgs[config: Nanoc::Int::Configuration, items: C::IterOf[Nanoc::Int::Item]] => C::Any
-    def initialize(config:, items:)
+    contract C::KeywordArgs[config: Nanoc::Int::Configuration] => C::Any
+    def initialize(config:)
       super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'compiled_content'), 2)
 
-      @items = items
       @cache = {}
     end
 
@@ -36,6 +35,14 @@ module Nanoc::Int
       @cache[rep.item.identifier][rep.name] = content
     end
 
+    def prune(items:)
+      item_identifiers = Set.new(items.map(&:identifier))
+
+      @cache.keys.each do |key|
+        @cache.delete(key) unless item_identifiers.include?(key)
+      end
+    end
+
     protected
 
     def data
@@ -45,12 +52,8 @@ module Nanoc::Int
     def data=(new_data)
       @cache = {}
 
-      item_identifiers = Set.new(@items.map(&:identifier))
-
       new_data.each_pair do |item_identifier, content_per_rep|
-        if item_identifiers.include?(item_identifier)
-          @cache[item_identifier] ||= content_per_rep
-        end
+        @cache[item_identifier] ||= content_per_rep
       end
     end
   end

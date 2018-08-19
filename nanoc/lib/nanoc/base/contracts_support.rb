@@ -35,10 +35,6 @@ module Nanoc::Int
       def contract(*args); end
     end
 
-    module DisabledContractsMethods
-      def assert(&block); end
-    end
-
     module EnabledContracts
       class AbstractContract
         def self.[](*vals)
@@ -79,14 +75,6 @@ module Nanoc::Int
       end
     end
 
-    module EnabledContractsMethods
-      def assert(&block)
-        val = yield
-        return if val
-        raise Nanoc::Int::Errors::InternalInconsistency, "assertion failure: #{val.inspect} (#{block.source_location.join(':')})"
-      end
-    end
-
     def self.setup_once
       @_contracts_support__setup ||= false
       return @_contracts_support__should_enable if @_contracts_support__setup
@@ -111,6 +99,10 @@ module Nanoc::Int
       @_contracts_support__should_enable
     end
 
+    def self.enabled?
+      setup_once
+    end
+
     def self.included(base)
       should_enable = setup_once
 
@@ -118,12 +110,10 @@ module Nanoc::Int
         unless base.include?(::Contracts::Core)
           base.include(::Contracts::Core)
           base.extend(EnabledContracts)
-          base.include(EnabledContractsMethods)
           base.const_set('C', ::Contracts)
         end
       else
         base.extend(DisabledContracts)
-        base.include(DisabledContractsMethods)
         base.const_set('C', DisabledContracts)
       end
     end

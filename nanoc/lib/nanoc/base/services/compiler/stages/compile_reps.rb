@@ -3,6 +3,7 @@
 module Nanoc::Int::Compiler::Stages
   class CompileReps < Nanoc::Int::Compiler::Stage
     include Nanoc::Int::ContractsSupport
+    include Nanoc::Assertions::Mixin
 
     def initialize(reps:, outdatedness_store:, dependency_store:, action_sequences:, compilation_context:, compiled_content_cache:)
       @reps = reps
@@ -21,12 +22,16 @@ module Nanoc::Int::Compiler::Stages
           handle_errors_while(rep) do
             compile_rep(rep, phase_stack: phase_stack, is_outdated: @outdatedness_store.include?(rep))
           end
-
-          assert { @compiled_content_cache[rep] }
         end
       end
+
+      assert Nanoc::Assertions::AllItemRepsHaveCompiledContent.new(
+        compiled_content_cache: @compiled_content_cache,
+        item_reps: @reps,
+      )
     ensure
       @outdatedness_store.store
+      @compiled_content_cache.prune(items: @reps.map(&:item).uniq)
       @compiled_content_cache.store
     end
 
