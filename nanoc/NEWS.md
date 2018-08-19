@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.9.4 (2018-08-19)
+
+Fixes:
+
+* Fixed an issue where compiled content of items generated in the preprocessor would not be available in the postprocessor (#1341, #1348)
+
 ## 4.9.3 (2018-06-09)
 
 Enhancements:
