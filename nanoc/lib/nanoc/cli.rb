@@ -106,7 +106,7 @@ module Nanoc::CLI
 
     # Add root command
     filename = __dir__ + '/cli/commands/nanoc.rb'
-    @root_command = load_command_at(filename)
+    @root_command = Cri::Command.load_file(filename, infer_name: true)
 
     # Add help command
     help_cmd = Cri::Command.new_basic_help
@@ -119,7 +119,7 @@ module Nanoc::CLI
 
       next if basename == 'nanoc'
 
-      cmd = load_command_at(cmd_filename)
+      cmd = Cri::Command.load_file(cmd_filename, infer_name: true)
       add_command(cmd)
     end
 
@@ -150,7 +150,7 @@ module Nanoc::CLI
   def self.load_commands_at(path)
     recursive_contents_of(path).each do |filename|
       # Create command
-      command = Nanoc::CLI.load_command_at(filename)
+      command = Cri::Command.load_file(filename, infer_name: true)
 
       # Get supercommand
       pieces = filename.gsub(/^#{path}\/|\.rb$/, '').split('/')
@@ -173,17 +173,11 @@ module Nanoc::CLI
   # @param [String] filename The name of the file that contains the command
   #
   # @return [Cri::Command] The loaded command
-  def self.load_command_at(filename, command_name = nil)
-    # Load
-    code = File.read(filename, encoding: 'UTF-8')
-    cmd = Cri::Command.define(code, filename)
-
-    # Set name
-    command_name ||= File.basename(filename, '.rb')
-    cmd.modify { name command_name }
-
-    # Done
-    cmd
+  #
+  # @deprecated
+  def self.load_command_at(filename)
+    # TODO: remove me one guard-nanoc is in this repo
+    Cri::Command.load_file(filename, infer_name: true)
   end
 
   # @return [Array] The directory contents
