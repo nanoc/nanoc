@@ -1,5 +1,11 @@
 # Release notes for nanoc-live
 
+## 1.0.0b3 (2018-08-31)
+
+Fixes:
+
+* Fixed issue which required all command-line options to be specified
+
 ## 1.0.0b2 (2018-06-10)
 
 Fixes:
