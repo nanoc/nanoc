@@ -19,6 +19,7 @@ module Nanoc::Int
       if seq.nil? || seq.size != 1 || !seq[0].is_a?(Nanoc::Int::ProcessingActions::Filter)
         raise Nanoc::Int::Errors::UndefinedFilterForLayout.new(layout)
       end
+
       [seq[0].filter_name, seq[0].params]
     end
 

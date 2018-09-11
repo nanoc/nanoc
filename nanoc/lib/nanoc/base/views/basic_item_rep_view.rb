@@ -70,6 +70,7 @@ module Nanoc
     def binary?
       snapshot_def = _unwrap.snapshot_defs.find { |sd| sd.name == :last }
       raise Nanoc::Int::Errors::NoSuchSnapshot.new(_unwrap, :last) if snapshot_def.nil?
+
       snapshot_def.binary?
     end
 

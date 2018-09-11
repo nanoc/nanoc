@@ -59,6 +59,7 @@ module Nanoc::Int
         if seen.include?(obj.identifier)
           raise Nanoc::Int::Errors::DuplicateIdentifier.new(obj.identifier, type)
         end
+
         seen << obj.identifier
       end
       self

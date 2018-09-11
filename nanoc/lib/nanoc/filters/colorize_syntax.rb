@@ -141,6 +141,7 @@ module Nanoc::Filters
       unless colorizer
         raise "I don’t know how to highlight code using the “#{name}” colorizer"
       end
+
       colorizer
     end
 

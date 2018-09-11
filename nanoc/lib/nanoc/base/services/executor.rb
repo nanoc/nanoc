@@ -40,6 +40,7 @@ module Nanoc
         if filter_name.nil?
           raise Nanoc::Int::Errors::Generic, "Cannot find rule for layout matching #{layout_identifier}"
         end
+
         filter_args = filter_args.merge(extra_filter_args || {})
         filter_args.freeze
 

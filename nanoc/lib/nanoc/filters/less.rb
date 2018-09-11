@@ -49,6 +49,7 @@ module Nanoc::Filters
         # Find matching item
         @items.find do |i|
           next if i[:content_filename].nil?
+
           item_path = Pathname.new(i[:content_filename]).realpath
           full_paths.any? { |fp| fp == item_path }
         end

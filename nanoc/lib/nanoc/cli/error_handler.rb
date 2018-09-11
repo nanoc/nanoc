@@ -260,6 +260,7 @@ module Nanoc::CLI
     def gem_name_from_load_error(error)
       matches = error.message.match(/(no such file to load|cannot load such file) -- ([^\s]+)/)
       return nil if matches.nil?
+
       GEM_NAMES[matches[2]]
     end
 

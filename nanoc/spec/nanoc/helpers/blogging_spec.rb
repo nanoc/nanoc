@@ -155,7 +155,7 @@ describe Nanoc::Helpers::Blogging, helper: true do
     end
 
     context 'with DateTime instance' do
-      let(:arg) { DateTime.new(2015, 11, 7, 13, 31, 16) } # rubocop:disable Style/DateTime
+      let(:arg) { DateTime.new(2015, 11, 7, 13, 31, 16) }
       it { is_expected.to eql(around_noon_utc) }
     end
 

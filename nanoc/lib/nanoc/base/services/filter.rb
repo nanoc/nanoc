@@ -42,6 +42,7 @@ module Nanoc
       def named!(name)
         klass = named(name)
         raise Nanoc::Int::Errors::UnknownFilter.new(name) if klass.nil?
+
         klass
       end
 

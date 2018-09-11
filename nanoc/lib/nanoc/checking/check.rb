@@ -26,6 +26,7 @@ module Nanoc::Checking
       unless File.exist?(output_dir)
         raise Nanoc::Checking::OutputDirNotFoundError.new(output_dir)
       end
+
       output_filenames = Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
 
       # FIXME: ugly

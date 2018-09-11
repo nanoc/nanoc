@@ -81,6 +81,7 @@ module Nanoc::Checking
         name = name.to_s.tr('-', '_').to_sym
         klass = Nanoc::Checking::Check.named(name)
         raise Nanoc::Int::Errors::GenericTrivial, "Unknown check: #{name}" if klass.nil?
+
         klass
       end
     end
@@ -118,6 +119,7 @@ module Nanoc::Checking
       require 'colored'
 
       return if issues.empty?
+
       puts 'Issues found!'
       issues.group_by(&:subject).to_a.sort_by { |s| subject_to_s(s.first) }.each do |pair|
         subject = pair.first

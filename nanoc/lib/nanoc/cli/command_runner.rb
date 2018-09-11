@@ -28,6 +28,7 @@ module Nanoc::CLI
       until Nanoc::Int::SiteLoader.cwd_is_nanoc_site?
         Dir.chdir('..')
         return nil if Dir.pwd == here
+
         here = Dir.pwd
       end
       here
@@ -42,6 +43,7 @@ module Nanoc::CLI
       end
 
       return if Dir.getwd == dir
+
       $stderr.puts "Using Nanoc site in #{dir}"
       Dir.chdir(dir)
     end

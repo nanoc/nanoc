@@ -23,6 +23,7 @@ module Nanoc::Int
       # Don’t write twice
       # TODO: test written_paths behavior
       return if written_paths.include?(raw_path)
+
       written_paths << raw_path
 
       # Create parent directory

@@ -287,6 +287,7 @@ module Nanoc::DataSources
         unless [0, 1].include?(meta_filenames.size)
           raise Errors::MultipleMetaFiles.new(meta_filenames, basename)
         end
+
         unless config[:identifier_type] == 'full'
           unless [0, 1].include?(content_filenames.size)
             raise Errors::MultipleContentFiles.new(meta_filenames, basename)

@@ -179,6 +179,7 @@ module Nanoc::Int
         # Get next unprocessed vertex
         vertex = unprocessed_vertices.pop
         next if processed_vertices.include?(vertex)
+
         processed_vertices << vertex
 
         # Add predecessors of this vertex

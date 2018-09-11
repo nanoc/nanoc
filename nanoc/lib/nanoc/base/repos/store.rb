@@ -78,6 +78,7 @@ module Nanoc::Int
       begin
         pstore.transaction do
           return if pstore[:version] != version
+
           self.data = pstore[:data]
         end
       rescue

@@ -72,6 +72,7 @@ class Nanoc::DataSources::Filesystem
 
     def verify_meta(meta, filename)
       return if meta.is_a?(Hash)
+
       raise Errors::InvalidMetadata.new(filename, meta.class)
     end
   end

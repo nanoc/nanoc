@@ -260,11 +260,12 @@ module Nanoc::Int
           return
         end
 
-        data = begin
-          Marshal.dump(obj)
-        rescue
-          obj.inspect
-        end
+        data =
+          begin
+            Marshal.dump(obj)
+          rescue
+            obj.inspect
+          end
 
         digest.update(data)
       end

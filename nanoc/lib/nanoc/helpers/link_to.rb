@@ -19,6 +19,7 @@ module Nanoc::Helpers
           target
         when Nanoc::CompilationItemView, Nanoc::BasicItemView, Nanoc::BasicItemRepView
           raise "Cannot create a link to #{target.inspect} because this target is not outputted (its routing rule returns nil)" if target.path.nil?
+
           target.path
         else
           raise ArgumentError, "Cannot link to #{target.inspect} (expected a string or an item, not a #{target.class.name})"
@@ -74,6 +75,7 @@ module Nanoc::Helpers
         # TODO: get proper error
         raise "Cannot get the relative path to #{path} because the current item representation, #{@item_rep.inspect}, is not outputted (its routing rule returns nil)"
       end
+
       src_path = Pathname.new(@item_rep.path)
 
       # Calculate the relative path (method depends on whether destination is

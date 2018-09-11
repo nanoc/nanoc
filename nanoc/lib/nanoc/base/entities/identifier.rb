@@ -141,6 +141,7 @@ module Nanoc
       if string !~ /\A\//
         raise InvalidPrefixError.new(string)
       end
+
       Nanoc::Identifier.new(string.sub(/\/+\z/, '') + @string, type: @type)
     end
 

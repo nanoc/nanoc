@@ -16,6 +16,7 @@ module Nanoc::Checking::Checks
 
       resource_uris_with_filenames.each_pair do |uri, fns|
         next unless guaranteed_insecure?(uri)
+
         fns.each do |filename|
           add_issue(
             "mixed content include: #{uri}",

@@ -164,6 +164,7 @@ module Nanoc::CLI
       if supercommand.nil?
         raise "Cannot load command at #{filename} because its supercommand cannot be found"
       end
+
       supercommand.add_command(command)
     end
   end
@@ -183,6 +184,7 @@ module Nanoc::CLI
   # @return [Array] The directory contents
   def self.recursive_contents_of(path)
     return [] unless File.directory?(path)
+
     files, dirs = *Dir[path + '/*'].sort.partition { |e| File.file?(e) }
     dirs.each { |d| files.concat recursive_contents_of(d) }
     files

@@ -77,6 +77,7 @@ module Nanoc
       present_dirs.reverse_each do |dir|
         next if Dir.foreach(dir) { |n| break true if n !~ /\A\.\.?\z/ }
         next if filename_excluded?(dir)
+
         delete_dir(dir)
       end
       self

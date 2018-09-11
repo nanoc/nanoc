@@ -24,6 +24,7 @@ module Nanoc::ArrayExtensions
   # @return [void]
   def __nanoc_freeze_recursively
     return if frozen?
+
     freeze
     each do |value|
       if value.respond_to?(:__nanoc_freeze_recursively)

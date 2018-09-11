@@ -9,6 +9,8 @@ Naming/FileName:
   Exclude:
     - 'nanoc/lib/nanoc/cli/commands/*.rb'
     - 'nanoc-external/lib/nanoc-external.rb'
+    - 'guard-nanoc/lib/guard-nanoc.rb'
+    - '*/*.gemspec'
 
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma

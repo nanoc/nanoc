@@ -78,6 +78,7 @@ module Nanoc::Int
     def self.setup_once
       @_contracts_support__setup ||= false
       return @_contracts_support__should_enable if @_contracts_support__setup
+
       @_contracts_support__setup = true
 
       contracts_loadable =

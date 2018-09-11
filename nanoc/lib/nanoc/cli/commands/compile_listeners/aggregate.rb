@@ -43,6 +43,7 @@ module Nanoc::CLI::Commands::CompileListeners
 
     def teardown_listeners
       return unless @listeners
+
       @listeners.reverse_each(&:stop_safely)
     end
   end
