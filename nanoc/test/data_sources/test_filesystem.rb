@@ -4,14 +4,9 @@ require 'helper'
 
 class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
   def new_data_source(params = nil)
-    # Mock site
-    site = Nanoc::Int::SiteLoader.new.new_empty
-
-    # Create data source
-    data_source = Nanoc::DataSources::Filesystem.new(site.config, nil, nil, params)
-
-    # Done
-    data_source
+    with_site do |site|
+      Nanoc::DataSources::Filesystem.new(site.config, nil, nil, params)
+    end
   end
 
   def test_load_objects
