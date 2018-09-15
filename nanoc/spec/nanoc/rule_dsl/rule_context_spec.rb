@@ -3,7 +3,7 @@
 shared_examples 'a rule context' do
   let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
-  let(:config) { Nanoc::Int::Configuration.new }
+  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
   let(:items) { Nanoc::Int::ItemCollection.new(config) }
   let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
@@ -147,7 +147,7 @@ describe(Nanoc::RuleDSL::RoutingRuleContext) do
   let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
-  let(:config) { Nanoc::Int::Configuration.new }
+  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
   let(:items) { Nanoc::Int::ItemCollection.new(config) }
 
   let(:site) do
@@ -173,7 +173,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
-  let(:config) { Nanoc::Int::Configuration.new }
+  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
   let(:items) { Nanoc::Int::ItemCollection.new(config) }
   let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
 

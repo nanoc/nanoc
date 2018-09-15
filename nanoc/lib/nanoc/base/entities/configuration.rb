@@ -39,19 +39,19 @@ module Nanoc::Int
     # @return [String, nil] The active environment for the configuration
     attr_reader :env_name
 
+    contract C::None => C::AbsolutePathString
+    attr_reader :dir
+
     # Configuration environments property key
     ENVIRONMENTS_CONFIG_KEY = :environments
     NANOC_ENV = 'NANOC_ENV'
     NANOC_ENV_DEFAULT = 'default'
 
-    contract C::KeywordArgs[hash: C::Optional[Hash], env_name: C::Maybe[String]] => C::Any
-    # Creates a new configuration with the given hash.
-    #
-    # @param [Hash] hash The actual configuration hash
-    # @param [String, nil] env_name The active environment for this configuration
-    def initialize(hash: {}, env_name: nil)
+    contract C::KeywordArgs[hash: C::Optional[Hash], env_name: C::Maybe[String], dir: C::AbsolutePathString] => C::Any
+    def initialize(hash: {}, dir:, env_name: nil)
       @env_name = env_name
       @wrapped = hash.__nanoc_symbolize_keys_recursively
+      @dir = dir
     end
 
     contract C::None => self
@@ -61,7 +61,7 @@ module Nanoc::Int
         DEFAULT_DATA_SOURCE_CONFIG.merge(ds)
       end
 
-      self.class.new(hash: new_wrapped, env_name: @env_name)
+      self.class.new(hash: new_wrapped, dir: @dir, env_name: @env_name)
     end
 
     def with_environment
@@ -73,7 +73,7 @@ module Nanoc::Int
       # Load given environment configuration
       env_config = @wrapped[ENVIRONMENTS_CONFIG_KEY].fetch(env_name.to_sym, {})
 
-      self.class.new(hash: @wrapped, env_name: env_name).merge(env_config)
+      self.class.new(hash: @wrapped, dir: @dir, env_name: env_name).merge(env_config)
     end
 
     contract C::None => Hash
@@ -122,12 +122,12 @@ module Nanoc::Int
 
     contract C::Or[Hash, self] => self
     def merge(hash)
-      self.class.new(hash: merge_recursively(@wrapped, hash.to_h), env_name: @env_name)
+      self.class.new(hash: merge_recursively(@wrapped, hash.to_h), dir: @dir, env_name: @env_name)
     end
 
     contract C::Any => self
     def without(key)
-      self.class.new(hash: @wrapped.reject { |k, _v| k == key }, env_name: @env_name)
+      self.class.new(hash: @wrapped.reject { |k, _v| k == key }, dir: @dir, env_name: @env_name)
     end
 
     contract C::Any => self
@@ -149,7 +149,7 @@ module Nanoc::Int
       self
     end
 
-    contract C::None => String
+    contract C::None => C::AbsolutePathString
     def output_dir
       make_absolute(self[:output_dir]).freeze
     end
@@ -159,7 +159,7 @@ module Nanoc::Int
       self[:action_provider].to_sym
     end
 
-    contract C::None => C::IterOf[String]
+    contract C::None => C::IterOf[C::AbsolutePathString]
     def output_dirs
       envs = @wrapped.fetch(ENVIRONMENTS_CONFIG_KEY, {})
       res = [output_dir] + envs.values.map { |v| make_absolute(v[:output_dir]) }
@@ -180,8 +180,7 @@ module Nanoc::Int
     private
 
     def make_absolute(path)
-      # FIXME: don’t depend on working directory
-      path && File.absolute_path(path, Dir.getwd).encode('UTF-8')
+      path && @dir && File.absolute_path(path, @dir).encode('UTF-8')
     end
 
     def merge_recursively(config1, config2)

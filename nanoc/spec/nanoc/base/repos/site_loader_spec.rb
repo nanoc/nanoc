@@ -217,7 +217,7 @@ describe Nanoc::Int::SiteLoader do
   describe '#code_snippets_from_config' do
     subject { loader.send(:code_snippets_from_config, config) }
 
-    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
 
     before { FileUtils.mkdir_p('lib') }
 

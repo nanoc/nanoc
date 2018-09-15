@@ -4,7 +4,7 @@ describe Nanoc::Int::IdentifiableCollection do
   shared_examples 'a generic identifiable collection' do
     subject(:identifiable_collection) { described_class.new(config, objects) }
 
-    let(:config) { Nanoc::Int::Configuration.new }
+    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
     let(:objects) { [] }
 
     describe '#reject' do
@@ -28,7 +28,7 @@ describe Nanoc::Int::IdentifiableCollection do
       end
 
       context 'string pattern style is glob' do
-        let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+        let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
 
         it 'handles glob' do
           expect(identifiable_collection['/on*']).to equal(objects[0])
@@ -37,7 +37,7 @@ describe Nanoc::Int::IdentifiableCollection do
       end
 
       context 'string pattern style is glob' do
-        let(:config) { Nanoc::Int::Configuration.new }
+        let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
 
         it 'does not handle glob' do
           expect(identifiable_collection['/on*']).to be_nil

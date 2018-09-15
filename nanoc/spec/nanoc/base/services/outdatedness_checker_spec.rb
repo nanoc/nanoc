@@ -74,7 +74,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(config: config, objects: items.to_a + layouts.to_a) }
 
-    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
 
     before do
       checksum_store.add(item)
@@ -182,7 +182,7 @@ describe Nanoc::Int::OutdatednessChecker do
     let(:other_item) { Nanoc::Int::Item.new('other stuff', {}, '/other.md') }
     let(:other_item_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
 
-    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
 
     let(:items) { Nanoc::Int::ItemCollection.new(config, [item, other_item]) }
 

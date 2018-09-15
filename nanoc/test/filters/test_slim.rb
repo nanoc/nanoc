@@ -28,7 +28,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
   end
 
   def new_view_context
-    config = Nanoc::Int::Configuration.new
+    config = Nanoc::Int::Configuration.new(dir: Dir.getwd)
 
     Nanoc::ViewContextForCompilation.new(
       reps:                Nanoc::Int::ItemRepRepo.new,

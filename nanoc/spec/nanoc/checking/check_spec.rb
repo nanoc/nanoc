@@ -22,7 +22,7 @@ describe Nanoc::Checking::Check do
       )
     end
 
-    let(:config)        { Nanoc::Int::Configuration.new.with_defaults }
+    let(:config)        { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
     let(:code_snippets) { [] }
     let(:items)         { Nanoc::Int::ItemCollection.new(config, []) }
     let(:layouts)       { Nanoc::Int::LayoutCollection.new(config, []) }

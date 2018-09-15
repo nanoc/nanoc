@@ -18,7 +18,7 @@ describe Nanoc::CLI::Commands::CompileListeners::DiffGenerator do
       )
     end
 
-    let(:config) { Nanoc::Int::Configuration.new(hash: config_hash).with_defaults }
+    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd, hash: config_hash).with_defaults }
     let(:items) { [] }
     let(:layouts) { [] }
     let(:code_snippets) { [] }

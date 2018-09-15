@@ -13,7 +13,7 @@ describe Nanoc::Int::CompiledContentCache do
 
   let(:content) { Nanoc::Int::Content.create('omg') }
 
-  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
 
   it 'has no content by default' do
     expect(cache[item_rep]).to be_nil

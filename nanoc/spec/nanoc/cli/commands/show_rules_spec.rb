@@ -56,7 +56,7 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true, site: true do
       )
     end
 
-    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
 
     let(:action_provider) { double(:action_provider, rules_collection: rules_collection) }
     let(:compiler) { double(:compiler) }

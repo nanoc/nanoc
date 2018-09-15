@@ -4,7 +4,7 @@ describe Nanoc::Int::Compiler::Stages::Cleanup do
   let(:stage) { described_class.new(config.output_dirs) }
 
   let(:config) do
-    Nanoc::Int::Configuration.new.with_defaults
+    Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults
   end
 
   describe '#run' do

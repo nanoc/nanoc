@@ -6,7 +6,7 @@ describe(Nanoc::Int::ItemRepRouter) do
   let(:reps) { double(:reps) }
   let(:action_provider) { double(:action_provider) }
   let(:site) { double(:site, config: config) }
-  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
 
   describe '#run' do
     subject { item_rep_router.run }

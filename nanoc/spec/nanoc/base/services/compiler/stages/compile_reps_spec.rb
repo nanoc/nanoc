@@ -45,7 +45,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     )
   end
 
-  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
   let(:code_snippets) { [] }
 
   let(:layouts) do
