@@ -9,8 +9,8 @@ description <<~EOS
 EOS
 
 required :H, :handler,       'specify the handler to use (webrick/mongrel/...)'
-required :o, :host,          'specify the host to listen on (default: 0.0.0.0)'
-required :p, :port,          'specify the port to listen on (default: 3000)'
+required :o, :host,          'specify the host to listen on (default: 0.0.0.0)', default: '127.0.0.1'
+required :p, :port,          'specify the port to listen on (default: 3000)', transform: Nanoc::CLI::Transform::Port, default: 3000
 flag     :L, :'live-reload', 'reload on changes'
 
 module Nanoc::CLI::Commands
