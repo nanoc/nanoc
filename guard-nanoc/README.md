@@ -1,7 +1,5 @@
 # Guard::Nanoc
 
-:warning: Experimental; please use [the guard-nanoc repository](https://github.com/guard/guard-nanoc) for the time being.
-
 This is a guard for [nanoc](http://nanoc.ws/).
 
 `Guard` is a framework for listening to filesystem changes and acting upon them. `Guard::Nanoc` is a plugin for Guard that recompiles Nanoc sites on changes.
