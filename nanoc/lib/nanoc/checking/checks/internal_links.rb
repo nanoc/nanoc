@@ -56,7 +56,7 @@ module Nanoc::Checking::Checks
       # Make absolute
       path =
         if path[0, 1] == '/'
-          @config[:output_dir] + path
+          @config.output_dir + path
         else
           ::File.expand_path(path, ::File.dirname(origin))
         end
@@ -82,7 +82,10 @@ module Nanoc::Checking::Checks
     end
 
     def excluded_origin?(origin, config)
-      relative_origin = origin[@config[:output_dir].size..-1]
+      # FIXME: do not depend on current working directory
+      origin = File.absolute_path(origin)
+
+      relative_origin = origin[@config.output_dir.size..-1]
       excludes = config.fetch(:exclude_origins, [])
       excludes.any? { |pattern| Regexp.new(pattern).match(relative_origin) }
     end

@@ -151,7 +151,7 @@ module Nanoc::Int
 
     contract C::None => String
     def output_dir
-      self[:output_dir]
+      make_absolute(self[:output_dir]).freeze
     end
 
     contract C::None => Symbol
@@ -162,7 +162,7 @@ module Nanoc::Int
     contract C::None => C::IterOf[String]
     def output_dirs
       envs = @wrapped.fetch(ENVIRONMENTS_CONFIG_KEY, {})
-      res = [output_dir] + envs.values.map { |v| v[:output_dir] }
+      res = [output_dir] + envs.values.map { |v| make_absolute(v[:output_dir]) }
       res.uniq.compact
     end
 
@@ -178,6 +178,11 @@ module Nanoc::Int
     end
 
     private
+
+    def make_absolute(path)
+      # FIXME: don’t depend on working directory
+      path && File.absolute_path(path, Dir.getwd).encode('UTF-8')
+    end
 
     def merge_recursively(config1, config2)
       config1.merge(config2) do |_, value1, value2|

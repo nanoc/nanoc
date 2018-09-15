@@ -48,6 +48,12 @@ module Nanoc::CLI::Commands::CompileListeners
           elsif is_modified then :high
           else :low
           end
+
+        # FIXME: do not depend on working directory
+        if path.start_with?(Dir.getwd)
+          path = path[(Dir.getwd.size + 1)..path.size]
+        end
+
         log(level, action, path, duration)
       end
     end

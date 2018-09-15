@@ -95,7 +95,7 @@ describe Nanoc::Int::OutdatednessRules do
       end
 
       context 'path for last snapshot' do
-        let(:path) { 'foo.txt' }
+        let(:path) { Dir.getwd + '/foo.txt' }
 
         before { item_rep.raw_paths = { last: [path] } }
 
@@ -110,7 +110,7 @@ describe Nanoc::Int::OutdatednessRules do
       end
 
       context 'path for other snapshot' do
-        let(:path) { 'foo.txt' }
+        let(:path) { Dir.getwd + '/foo.txt' }
 
         before { item_rep.raw_paths = { donkey: [path] } }
 

@@ -33,5 +33,15 @@ module Nanoc
         end
       end
     end
+
+    class PathIsAbsolute < Nanoc::Assertions::Base
+      def initialize(path:)
+        @path = path
+      end
+
+      def call
+        Pathname.new(@path).absolute?
+      end
+    end
   end
 end

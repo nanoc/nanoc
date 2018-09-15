@@ -75,7 +75,7 @@ module Nanoc::Int
 
       # Assign
       snapshot_names.each do |snapshot_name|
-        rep.raw_paths[snapshot_name] = paths.map { |path| @site.config[:output_dir] + path }
+        rep.raw_paths[snapshot_name] = paths.map { |path| @site.config.output_dir + path }
         rep.paths[snapshot_name] = paths.map { |path| strip_index_filename(path) }
       end
     end

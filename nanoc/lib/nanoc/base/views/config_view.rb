@@ -16,6 +16,11 @@ module Nanoc
       @config
     end
 
+    # @api private
+    def output_dir
+      @config.output_dir
+    end
+
     # @see Hash#fetch
     def fetch(key, fallback = NONE, &_block)
       @context.dependency_tracker.bounce(_unwrap, attributes: [key])

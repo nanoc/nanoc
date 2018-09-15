@@ -10,6 +10,10 @@ describe Nanoc::Int::Compiler::Stages::Cleanup do
   describe '#run' do
     subject { stage.run }
 
+    def gen_hash(path)
+      Digest::SHA1.hexdigest(File.absolute_path(path))[0..12]
+    end
+
     it 'removes temporary binary items' do
       a = Nanoc::Int::TempFilenameFactory.instance.create(Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
       File.write(a, 'hello there')
@@ -75,14 +79,18 @@ describe Nanoc::Int::Compiler::Stages::Cleanup do
     end
 
     it 'removes stores for unused output paths' do
-      FileUtils.mkdir_p('tmp/nanoc/2f0692fb1a1d')
-      FileUtils.mkdir_p('tmp/nanoc/1a2195bfef6c')
-      FileUtils.mkdir_p('tmp/nanoc/1029d67644815')
+      default_dir = "tmp/nanoc/#{gen_hash(Dir.getwd + '/output')}"
+      prod_dir = "tmp/nanoc/#{gen_hash(Dir.getwd + '/output_production')}"
+      staging_dir = "tmp/nanoc/#{gen_hash(Dir.getwd + '/output_staging')}"
+
+      FileUtils.mkdir_p(default_dir)
+      FileUtils.mkdir_p(prod_dir)
+      FileUtils.mkdir_p(staging_dir)
 
       expect { subject }
         .to change { Dir.glob('tmp/nanoc/*').sort }
-        .from(['tmp/nanoc/1029d67644815', 'tmp/nanoc/1a2195bfef6c', 'tmp/nanoc/2f0692fb1a1d'])
-        .to(['tmp/nanoc/1029d67644815'])
+        .from([default_dir, prod_dir, staging_dir].sort)
+        .to([default_dir])
     end
   end
 end

@@ -12,13 +12,13 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
   def test_initialize_with_dir_with_config_yaml
     File.open('config.yaml', 'w') { |io| io.write('output_dir: public_html') }
     site = Nanoc::Int::SiteLoader.new.new_from_cwd
-    assert_equal 'public_html', site.config[:output_dir]
+    assert_equal Dir.getwd + '/public_html', site.config.output_dir
   end
 
   def test_initialize_with_dir_with_nanoc_yaml
     File.open('nanoc.yaml', 'w') { |io| io.write('output_dir: public_html') }
     site = Nanoc::Int::SiteLoader.new.new_from_cwd
-    assert_equal 'public_html', site.config[:output_dir]
+    assert_equal Dir.getwd + '/public_html', site.config.output_dir
   end
 
   def test_initialize_with_config_hash
@@ -64,7 +64,7 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
     assert_nil site.config[:parent_config_file]
     assert site.config[:enable_output_diff]
     assert_equal 'bar', site.config[:foo]
-    assert_equal 'public_html', site.config[:output_dir]
+    assert_equal Dir.getwd + '/public_html', site.config.output_dir
   end
 
   def test_initialize_with_missing_parent_config_file

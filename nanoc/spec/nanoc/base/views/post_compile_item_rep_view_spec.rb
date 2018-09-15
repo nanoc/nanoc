@@ -56,15 +56,15 @@ describe Nanoc::PostCompileItemRepView do
 
       context 'path for default snapshot specified' do
         before do
-          item_rep.raw_paths = { last: ['output/about/index.html'] }
+          item_rep.raw_paths = { last: [Dir.getwd + '/output/about/index.html'] }
         end
 
-        it { is_expected.to eql('output/about/index.html') }
+        it { is_expected.to eql(Dir.getwd + '/output/about/index.html') }
       end
 
       context 'path specified, but not for default snapshot' do
         before do
-          item_rep.raw_paths = { pre: ['output/about/index.html'] }
+          item_rep.raw_paths = { pre: [Dir.getwd + '/output/about/index.html'] }
         end
 
         it { is_expected.to be_nil }
@@ -84,15 +84,15 @@ describe Nanoc::PostCompileItemRepView do
 
       context 'path for default snapshot specified' do
         before do
-          item_rep.raw_paths = { special: ['output/about/index.html'] }
+          item_rep.raw_paths = { special: [Dir.getwd + '/output/about/index.html'] }
         end
 
-        it { is_expected.to eql('output/about/index.html') }
+        it { is_expected.to eql(Dir.getwd + '/output/about/index.html') }
       end
 
       context 'path specified, but not for default snapshot' do
         before do
-          item_rep.raw_paths = { pre: ['output/about/index.html'] }
+          item_rep.raw_paths = { pre: [Dir.getwd + '/output/about/index.html'] }
         end
 
         it { is_expected.to be_nil }

@@ -24,11 +24,11 @@ module Nanoc::CLI::Commands
       config = Nanoc::Int::ConfigLoader.new.new_from_cwd
 
       # Create output dir so that viewer/watcher doesn’t explode.
-      FileUtils.mkdir_p(config[:output_dir])
+      FileUtils.mkdir_p(config.output_dir)
 
       server =
         Adsf::Server.new(
-          root: File.absolute_path(config[:output_dir]),
+          root: File.absolute_path(config.output_dir),
           live: options[:'live-reload'],
           index_filenames: config[:index_filenames],
           host: options.fetch(:host),

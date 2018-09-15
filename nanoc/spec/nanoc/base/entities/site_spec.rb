@@ -50,7 +50,7 @@ describe Nanoc::Int::Site do
     end
 
     it 'freezes the configuration contents' do
-      expect(site.config[:output_dir]).to be_frozen
+      expect(site.config.output_dir).to be_frozen
     end
 
     it 'freezes items collection' do

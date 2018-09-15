@@ -7,7 +7,7 @@ class Nanoc::Checking::CheckTest < Nanoc::TestCase
     with_site do |site|
       File.open('output/foo.html', 'w') { |io| io.write 'hello' }
       check = Nanoc::Checking::Check.create(site)
-      assert_equal ['output/foo.html'], check.output_filenames
+      assert_equal [Dir.getwd + '/output/foo.html'], check.output_filenames
     end
   end
 
