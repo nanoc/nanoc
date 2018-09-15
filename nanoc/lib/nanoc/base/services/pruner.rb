@@ -25,10 +25,10 @@ module Nanoc
     end
 
     def run
-      return unless File.directory?(@config[:output_dir])
+      return unless File.directory?(@config.output_dir)
 
       compiled_files = @reps.flat_map { |r| r.raw_paths.values.flatten }.compact
-      present_files, present_dirs = files_and_dirs_in(@config[:output_dir] + '/')
+      present_files, present_dirs = files_and_dirs_in(@config.output_dir + '/')
 
       remove_stray_files(present_files, compiled_files)
       remove_empty_directories(present_dirs)
@@ -42,8 +42,8 @@ module Nanoc
 
     contract String => String
     def strip_output_dir(filename)
-      if filename.start_with?(@config[:output_dir])
-        filename[@config[:output_dir].size..-1]
+      if filename.start_with?(@config.output_dir)
+        filename[@config.output_dir.size..-1]
       else
         filename
       end

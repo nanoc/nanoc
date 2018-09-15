@@ -3,6 +3,9 @@
 module Nanoc::Int
   # @api private
   class ItemRepWriter
+    include Nanoc::Int::ContractsSupport
+    include Nanoc::Assertions::Mixin
+
     TMP_TEXT_ITEMS_DIR = 'text_items'
 
     def write_all(item_rep, snapshot_repo)
@@ -20,6 +23,8 @@ module Nanoc::Int
     end
 
     def write_single(item_rep, snapshot_repo, snapshot_name, raw_path, written_paths)
+      assert Nanoc::Assertions::PathIsAbsolute.new(path: raw_path)
+
       # Don’t write twice
       # TODO: test written_paths behavior
       return if written_paths.include?(raw_path)

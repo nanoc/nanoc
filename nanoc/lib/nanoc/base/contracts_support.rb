@@ -31,6 +31,7 @@ module Nanoc::Int
       Named       = Ignorer.instance
       IterOf      = Ignorer.instance
       HashOf      = Ignorer.instance
+      AbsolutePathString = Ignorer.instance
 
       def contract(*args); end
     end
@@ -70,6 +71,12 @@ module Nanoc::Int
         end
       end
 
+      class AbsolutePathString < AbstractContract
+        def self.valid?(val)
+          Pathname.new(val).absolute?
+        end
+      end
+
       def contract(*args)
         Contract(*args)
       end
@@ -95,6 +102,7 @@ module Nanoc::Int
         # FIXME: ugly
         ::Contracts.const_set('Named', EnabledContracts::Named)
         ::Contracts.const_set('IterOf', EnabledContracts::IterOf)
+        ::Contracts.const_set('AbsolutePathString', EnabledContracts::AbsolutePathString)
       end
 
       @_contracts_support__should_enable

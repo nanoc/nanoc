@@ -22,7 +22,7 @@ module Nanoc::Checking
     end
 
     def self.create(site)
-      output_dir = site.config[:output_dir]
+      output_dir = site.config.output_dir
       unless File.exist?(output_dir)
         raise Nanoc::Checking::OutputDirNotFoundError.new(output_dir)
       end
@@ -57,6 +57,12 @@ module Nanoc::Checking
     end
 
     def add_issue(desc, subject: nil)
+      # Simplify subject
+      # FIXME: do not depend on working directory
+      if subject&.start_with?(Dir.getwd)
+        subject = subject[(Dir.getwd.size + 1)..subject.size]
+      end
+
       @issues << Issue.new(desc, subject, self.class)
     end
 

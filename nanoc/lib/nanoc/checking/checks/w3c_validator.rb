@@ -7,7 +7,7 @@ module ::Nanoc::Checking::Checks
       require 'w3c_validators'
       require 'resolv-replace'
 
-      Dir[@config[:output_dir] + '/**/*.' + extension].each do |filename|
+      Dir[@config.output_dir + '/**/*.' + extension].each do |filename|
         results = validator_class.new.validate_file(filename)
         lines = File.readlines(filename)
         results.errors.each do |e|

@@ -42,6 +42,7 @@ module Nanoc::Int
     # @api private
     contract C::KeywordArgs[config: Nanoc::Int::Configuration, store_name: String] => String
     def self.tmp_path_for(store_name:, config:)
+      # FIXME: make absolute
       File.join(tmp_path_prefix(config.output_dir), store_name)
     end
 

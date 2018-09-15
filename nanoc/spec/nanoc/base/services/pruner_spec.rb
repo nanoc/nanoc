@@ -10,11 +10,11 @@ describe Nanoc::Pruner, stdio: true do
   let(:reps) do
     Nanoc::Int::ItemRepRepo.new.tap do |reps|
       reps << Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
-        rep.raw_paths = { last: ['output/asdf.html'] }
+        rep.raw_paths = { last: [Dir.getwd + '/output/asdf.html'] }
       end
 
       reps << Nanoc::Int::ItemRep.new(item, :text).tap do |rep|
-        rep.raw_paths = { last: ['output/asdf.txt'] }
+        rep.raw_paths = { last: [Dir.getwd + '/output/asdf.txt'] }
       end
     end
   end
@@ -28,7 +28,7 @@ describe Nanoc::Pruner, stdio: true do
   describe '#filename_excluded?' do
     subject { pruner.filename_excluded?(filename) }
 
-    let(:filename) { 'output/foo/bar.html' }
+    let(:filename) { Dir.getwd + '/output/foo/bar.html' }
 
     context 'nothing excluded' do
       it { is_expected.to be(false) }
@@ -68,15 +68,15 @@ describe Nanoc::Pruner, stdio: true do
       let(:reps) do
         Nanoc::Int::ItemRepRepo.new.tap do |reps|
           reps << Nanoc::Int::ItemRep.new(item, :a).tap do |rep|
-            rep.raw_paths = { last: ['output/foo.html'] }
+            rep.raw_paths = { last: [Dir.getwd + '/output/foo.html'] }
           end
 
           reps << Nanoc::Int::ItemRep.new(item, :b).tap do |rep|
-            rep.raw_paths = { last: ['output/bar.html'] }
+            rep.raw_paths = { last: [Dir.getwd + '/output/bar.html'] }
           end
 
           reps << Nanoc::Int::ItemRep.new(item, :c).tap do |rep|
-            rep.raw_paths = { last: ['output/foo/bar.html'] }
+            rep.raw_paths = { last: [Dir.getwd + '/output/foo/bar.html'] }
           end
         end
       end

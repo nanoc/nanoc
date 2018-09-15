@@ -51,6 +51,12 @@ module Nanoc::CLI::Commands::CompileListeners
       return if old_content == new_content
 
       @diff_threads << Thread.new do
+        # Simplify path
+        # FIXME: do not depend on working directory
+        if path.start_with?(Dir.getwd)
+          path = path[(Dir.getwd.size + 1)..path.size]
+        end
+
         # Generate diff
         diff = diff_strings(old_content, new_content)
         diff.sub!(/^--- .*/,    '--- ' + path)

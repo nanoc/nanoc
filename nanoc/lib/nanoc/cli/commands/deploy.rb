@@ -81,7 +81,7 @@ module Nanoc::CLI::Commands
 
     def deployer_for(config)
       deployer_class_for_config(config).new(
-        @site.config[:output_dir],
+        @site.config.output_dir,
         config,
         dry_run: options[:'dry-run'],
       )
