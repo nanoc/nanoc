@@ -2,7 +2,7 @@
 
 describe Nanoc::Int::Configuration do
   let(:hash) { { foo: 'bar' } }
-  let(:config) { described_class.new(hash: hash) }
+  let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
 
   describe '#key?' do
     subject { config.key?(key) }
@@ -28,7 +28,7 @@ describe Nanoc::Int::Configuration do
     end
 
     context 'env' do
-      let(:config) { described_class.new(hash: hash, env_name: 'giraffes') }
+      let(:config) { described_class.new(hash: hash, dir: Dir.getwd, env_name: 'giraffes') }
 
       it 'retains the env name' do
         expect(subject.env_name).to eql('giraffes')
@@ -89,8 +89,8 @@ describe Nanoc::Int::Configuration do
   describe '#merge' do
     let(:hash1) { { foo: { bar: 'baz', baz: ['biz'] } } }
     let(:hash2) { { foo: { bar: :boz, biz: 'buz' } } }
-    let(:config1) { described_class.new(hash: hash1) }
-    let(:config2) { described_class.new(hash: hash2) }
+    let(:config1) { described_class.new(hash: hash1, dir: Dir.getwd) }
+    let(:config2) { described_class.new(hash: hash2, dir: Dir.getwd) }
 
     subject { config1.merge(config2).to_h }
 
@@ -101,7 +101,7 @@ describe Nanoc::Int::Configuration do
 
   context 'with environments defined' do
     let(:hash) { { foo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } } }
-    let(:config) { described_class.new(hash: hash, env_name: env_name).with_environment }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd, env_name: env_name).with_environment }
 
     subject { config }
 

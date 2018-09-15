@@ -11,7 +11,7 @@ describe Nanoc::Int::Site do
     end
 
     let(:config) do
-      Nanoc::Int::Configuration.new.with_defaults
+      Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults
     end
 
     let(:code_snippets) do

@@ -58,7 +58,7 @@ module Nanoc
 
         @erbout = +''
         @action_sequence = {}
-        @config = Nanoc::Int::Configuration.new.with_defaults
+        @config = Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults
         @reps = Nanoc::Int::ItemRepRepo.new
         @items = Nanoc::Int::ItemCollection.new(@config)
         @layouts = Nanoc::Int::LayoutCollection.new(@config)

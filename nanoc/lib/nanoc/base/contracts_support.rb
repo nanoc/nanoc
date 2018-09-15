@@ -73,7 +73,7 @@ module Nanoc::Int
 
       class AbsolutePathString < AbstractContract
         def self.valid?(val)
-          Pathname.new(val).absolute?
+          val.is_a?(String) && Pathname.new(val).absolute?
         end
       end
 

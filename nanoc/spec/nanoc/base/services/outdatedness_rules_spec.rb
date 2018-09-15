@@ -22,7 +22,7 @@ describe Nanoc::Int::OutdatednessRules do
     let(:item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
     let(:layout) { Nanoc::Int::Layout.new('layoutz', {}, '/page.erb') }
 
-    let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
     let(:code_snippets) { [] }
     let(:objects) { [config] + code_snippets + [item] }
 

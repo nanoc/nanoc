@@ -12,7 +12,7 @@ describe Nanoc::Int::DependencyStore do
 
   let(:items) { Nanoc::Int::ItemCollection.new(config, [item_a, item_b, item_c]) }
   let(:layouts) { Nanoc::Int::LayoutCollection.new(config, [layout_a, layout_b]) }
-  let(:config) { Nanoc::Int::Configuration.new.with_defaults }
+  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
 
   it 'is empty by default' do
     expect(store.objects_causing_outdatedness_of(item_a)).to be_empty

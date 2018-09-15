@@ -19,7 +19,7 @@ describe Nanoc::Int::Store do
       let(:hash_output_production) { gen_hash('output-production') }
 
       context 'no env specified' do
-        let(:config) { Nanoc::Int::Configuration.new(hash: config_hash).with_defaults.with_environment }
+        let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd, hash: config_hash).with_defaults.with_environment }
 
         context 'output dir is unspecified' do
           let(:config_hash) { {} }
@@ -43,7 +43,7 @@ describe Nanoc::Int::Store do
       end
 
       context 'env specified' do
-        let(:config) { Nanoc::Int::Configuration.new(env_name: 'staging', hash: config_hash).with_defaults.with_environment }
+        let(:config) { Nanoc::Int::Configuration.new(env_name: 'staging', dir: Dir.getwd, hash: config_hash).with_defaults.with_environment }
 
         context 'output dir is unspecified' do
           let(:config_hash) { {} }

@@ -12,7 +12,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
   end
 
   def view_context_for(item)
-    config = Nanoc::Int::Configuration.new
+    config = Nanoc::Int::Configuration.new(dir: Dir.getwd)
 
     Nanoc::ViewContextForCompilation.new(
       reps:                item_rep_repo_for(item),
@@ -85,7 +85,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     item = Nanoc::Int::Item.new('content', {}, '/asdf')
     view_context = view_context_for(item)
     @item = Nanoc::CompilationItemView.new(item, view_context_for(item))
-    @config = Nanoc::ConfigView.new(Nanoc::Int::Configuration.new, view_context)
+    @config = Nanoc::ConfigView.new(Nanoc::Int::Configuration.new(dir: Dir.getwd), view_context)
 
     result = ::ERB.new(content).result(binding)
 

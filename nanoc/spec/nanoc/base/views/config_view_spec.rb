@@ -2,7 +2,7 @@
 
 describe Nanoc::ConfigView do
   let(:config) do
-    Nanoc::Int::Configuration.new(hash: hash)
+    Nanoc::Int::Configuration.new(dir: Dir.getwd, hash: hash)
   end
 
   let(:hash) { { amount: 9000, animal: 'donkey', foo: { bar: :baz } } }
