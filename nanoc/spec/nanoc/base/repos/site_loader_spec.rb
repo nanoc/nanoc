@@ -3,27 +3,6 @@
 describe Nanoc::Int::SiteLoader do
   let(:loader) { described_class.new }
 
-  describe '#new_empty' do
-    subject { loader.new_empty }
-
-    it 'has the default configuration' do
-      expect(subject.config).to be_a(Nanoc::Int::Configuration)
-      expect(subject.config[:index_filenames]).to eq(['index.html'])
-    end
-
-    it 'has no code snippets' do
-      expect(subject.code_snippets).to be_empty
-    end
-
-    it 'has no items' do
-      expect(subject.items).to be_empty
-    end
-
-    it 'has no layouts' do
-      expect(subject.layouts).to be_empty
-    end
-  end
-
   describe '#new_from_cwd' do
     subject { loader.new_from_cwd }
 

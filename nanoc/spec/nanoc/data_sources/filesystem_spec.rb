@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-describe Nanoc::DataSources::Filesystem do
+describe Nanoc::DataSources::Filesystem, site: true do
   let(:data_source) { Nanoc::DataSources::Filesystem.new(site.config, nil, nil, params) }
   let(:params) { {} }
-  let(:site) { Nanoc::Int::SiteLoader.new.new_empty }
+  let(:site) { Nanoc::Int::SiteLoader.new.new_from_cwd }
 
   before { Timecop.freeze(now) }
   after { Timecop.return }

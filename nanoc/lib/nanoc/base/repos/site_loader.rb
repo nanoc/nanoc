@@ -2,11 +2,6 @@
 
 module Nanoc::Int
   class SiteLoader
-    def new_empty
-      # FIXME: don’t depend on working directory
-      site_from_config(Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults)
-    end
-
     def new_from_cwd
       site_from_config(Nanoc::Int::ConfigLoader.new.new_from_cwd)
     end

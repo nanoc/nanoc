@@ -110,7 +110,8 @@ module Nanoc::TestHelpers
 
     # Yield site
     FileUtils.cd(site_name) do
-      yield Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      return yield(site)
     end
   end
 
