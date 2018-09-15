@@ -41,7 +41,7 @@ group :plugins do
   gem 'erubi'
   gem 'erubis'
   gem 'fog-aws'
-  gem 'fog-local', github: 'fog/fog-local'
+  gem 'fog-local', '~> 0.6'
   gem 'haml'
   gem 'handlebars', platforms: :ruby
   gem 'kramdown'
