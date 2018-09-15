@@ -21,13 +21,9 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
     assert_equal Dir.getwd + '/public_html', site.config.output_dir
   end
 
-  def test_initialize_with_config_hash
-    site = Nanoc::Int::SiteLoader.new.new_with_config(foo: 'bar')
-    assert_equal 'bar', site.config[:foo]
-  end
-
   def test_initialize_with_incomplete_data_source_config
-    site = Nanoc::Int::SiteLoader.new.new_with_config(data_sources: [{ items_root: '/bar/' }])
+    File.open('nanoc.yaml', 'w') { |io| io.write('data_sources: [{ items_root: "/bar/" }]') }
+    site = Nanoc::Int::SiteLoader.new.new_from_cwd
     assert_equal('filesystem', site.config[:data_sources][0][:type])
     assert_equal('/bar/', site.config[:data_sources][0][:items_root])
     assert_equal('/',     site.config[:data_sources][0][:layouts_root])
