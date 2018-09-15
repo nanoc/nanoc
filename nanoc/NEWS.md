@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.9.5 (2018-09-15)
+
+Fixes:
+
+* Fixed an issue which would cause Nanoc to trip up when the working directory changes during compilation (#1338, #1353, #1354, #1357)
+
 ## 4.9.4 (2018-08-19)
 
 Fixes:
