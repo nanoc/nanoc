@@ -1,5 +1,9 @@
 # guard-nanoc Release Notes
 
+## 2.1.4 (2018-09-15)
+
+* Fixed issue which caused `--host` and `--port` options to be mandatory.
+
 ## 2.1.3 (2018-07-28)
 
 * Added missing --live-reload option, passed through to `nanoc view` (#38, #39)
