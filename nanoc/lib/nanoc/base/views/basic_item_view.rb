@@ -43,7 +43,7 @@ module Nanoc
       _unwrap.content.binary?
     end
 
-    # @api private
+    # @return [String, nil] The path to the file containing the uncompiled content of this item.
     def raw_filename
       @context.dependency_tracker.bounce(_unwrap, raw_content: true)
       _unwrap.content.filename
