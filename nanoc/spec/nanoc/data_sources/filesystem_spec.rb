@@ -24,7 +24,7 @@ describe Nanoc::DataSources::Filesystem, site: true do
         end
       end
 
-      context 'one regular file' do
+      context 'one textual file' do
         before do
           FileUtils.mkdir_p('foo')
           File.write('foo/bar.html', "---\nnum: 1\n---\ntest 1")
@@ -75,6 +75,39 @@ describe Nanoc::DataSources::Filesystem, site: true do
           it 'has the same content checksum' do
             expect(block).not_to change { data_source.send(:load_objects, 'foo', klass)[0].content_checksum_data }
           end
+        end
+      end
+
+      context 'one binary file' do
+        before do
+          FileUtils.mkdir_p('foo')
+          File.write('foo/bar.dat', "---\nnum: 1\n---\ntest 1")
+          FileUtils.touch('foo/bar.dat', mtime: now)
+        end
+
+        let(:expected_attributes) do
+          {
+            content_filename: 'foo/bar.dat',
+            extension: 'dat',
+            filename: 'foo/bar.dat',
+            meta_filename: nil,
+            mtime: now,
+          }
+        end
+
+        it 'loads that file' do
+          expect(subject.size).to eq(1)
+
+          expect(subject[0].content).to be_a(Nanoc::Int::BinaryContent)
+          expect(subject[0].attributes).to eq(expected_attributes)
+          expect(subject[0].identifier).to eq(Nanoc::Identifier.new('/bar/', type: :legacy))
+          expect(subject[0].checksum_data).to be_nil
+          expect(subject[0].attributes_checksum_data).to be_a(String)
+          expect(subject[0].attributes_checksum_data.size).to eq(20)
+        end
+
+        it 'has no content checksum data' do
+          expect(subject[0].content_checksum_data).to be_nil
         end
       end
     end
