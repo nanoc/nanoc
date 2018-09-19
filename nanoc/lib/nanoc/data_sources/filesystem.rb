@@ -201,9 +201,8 @@ module Nanoc::DataSources
     end
 
     def content_checksum_data_for(proto_doc)
-      Digest::SHA1.digest(
-        proto_doc.content_checksum_data || '',
-      )
+      data = proto_doc.content_checksum_data
+      data ? Digest::SHA1.digest(data) : nil
     end
 
     def attributes_checksum_data_for(proto_doc, content_filename, meta_filename)
