@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.9.6 (2018-09-19)
+
+Fixes:
+
+* Fixed an issue which would cause the checksum of binary items created by the filesystem data source not to be updated when the content changes (#1358, #1359)
+
 ## 4.9.5 (2018-09-15)
 
 Fixes:
