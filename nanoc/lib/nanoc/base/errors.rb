@@ -192,7 +192,7 @@ module Nanoc::Int
       # @param [Symbol] snapshot The name of the snapshot that was attempted to
       #   be made
       def initialize(rep, snapshot)
-        super("Attempted to create a snapshot with a duplicate name #{snapshot.inspect} for the item rep “#{rep.inspect}”")
+        super("Attempted to create a snapshot with a duplicate name #{snapshot.inspect} for the item rep #{rep}")
       end
     end
 

@@ -30,5 +30,17 @@ module Nanoc::Int::ProcessingActions
     def to_s
       "snapshot #{@snapshot_names.inspect}, paths: #{@paths.inspect}"
     end
+
+    def hash
+      self.class.hash ^ snapshot_names.hash ^ paths.hash
+    end
+
+    def ==(other)
+      self.class == other.class && snapshot_names == other.snapshot_names && paths == other.paths
+    end
+
+    def eql?(other)
+      self == other
+    end
   end
 end

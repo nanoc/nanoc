@@ -20,5 +20,17 @@ module Nanoc::Int::ProcessingActions
     def to_s
       "layout #{@layout_identifier.inspect}, #{@params.inspect}"
     end
+
+    def hash
+      self.class.hash ^ layout_identifier.hash ^ params.hash
+    end
+
+    def ==(other)
+      self.class == other.class && layout_identifier == other.layout_identifier && params == other.params
+    end
+
+    def eql?(other)
+      self == other
+    end
   end
 end

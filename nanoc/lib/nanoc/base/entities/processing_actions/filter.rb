@@ -20,5 +20,17 @@ module Nanoc::Int::ProcessingActions
     def to_s
       "filter #{@filter_name.inspect}, #{@params.inspect}"
     end
+
+    def hash
+      self.class.hash ^ filter_name.hash ^ params.hash
+    end
+
+    def ==(other)
+      self.class == other.class && filter_name == other.filter_name && params == other.params
+    end
+
+    def eql?(other)
+      self == other
+    end
   end
 end

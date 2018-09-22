@@ -37,4 +37,96 @@ describe Nanoc::Int::ProcessingActions::Snapshot do
       its(:paths) { is_expected.to eql(['/foo.md', '/donkey.md', '/giraffe.md']) }
     end
   end
+
+  describe '#== and #eql?' do
+    context 'other action is equal' do
+      let(:action_a) { described_class.new([:erb], ['/foo.html']) }
+      let(:action_b) { described_class.new([:erb], ['/foo.html']) }
+
+      it 'is ==' do
+        expect(action_a).to eq(action_b)
+      end
+
+      it 'is eql?' do
+        expect(action_a).to eql(action_b)
+      end
+    end
+
+    context 'other action has different name' do
+      let(:action_a) { described_class.new([:erb], ['/foo.html']) }
+      let(:action_b) { described_class.new([:haml], ['/foo.html']) }
+
+      it 'is not ==' do
+        expect(action_a).not_to eq(action_b)
+      end
+
+      it 'is not eql?' do
+        expect(action_a).not_to eql(action_b)
+      end
+    end
+
+    context 'other action has different paths' do
+      let(:action_a) { described_class.new([:erb], ['/foo.html']) }
+      let(:action_b) { described_class.new([:erb], ['/foo.htm']) }
+
+      it 'is not ==' do
+        expect(action_a).not_to eq(action_b)
+      end
+
+      it 'is not eql?' do
+        expect(action_a).not_to eql(action_b)
+      end
+    end
+
+    context 'other action is not a layout action' do
+      let(:action_a) { described_class.new([:erb], ['/foo.html']) }
+      let(:action_b) { :donkey }
+
+      it 'is not ==' do
+        expect(action_a).not_to eq(action_b)
+      end
+
+      it 'is not eql?' do
+        expect(action_a).not_to eql(action_b)
+      end
+    end
+  end
+
+  describe '#hash' do
+    context 'other action is equal' do
+      let(:action_a) { described_class.new([:erb], ['/foo.html']) }
+      let(:action_b) { described_class.new([:erb], ['/foo.html']) }
+
+      it 'is the same' do
+        expect(action_a.hash == action_b.hash).to eql(true)
+      end
+    end
+
+    context 'other action has different name' do
+      let(:action_a) { described_class.new([:erb], ['/foo.html']) }
+      let(:action_b) { described_class.new([:haml], ['/foo.html']) }
+
+      it 'is the same' do
+        expect(action_a.hash == action_b.hash).to eql(false)
+      end
+    end
+
+    context 'other action has different paths' do
+      let(:action_a) { described_class.new([:erb], ['/foo.html']) }
+      let(:action_b) { described_class.new([:erb], ['/foo.htm']) }
+
+      it 'is the same' do
+        expect(action_a.hash == action_b.hash).to eql(false)
+      end
+    end
+
+    context 'other action is not a layout action' do
+      let(:action_a) { described_class.new([:erb], ['/foo.html']) }
+      let(:action_b) { :woof }
+
+      it 'is the same' do
+        expect(action_a.hash == action_b.hash).to eql(false)
+      end
+    end
+  end
 end
