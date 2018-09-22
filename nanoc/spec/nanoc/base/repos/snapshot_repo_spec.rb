@@ -119,7 +119,7 @@ describe Nanoc::Int::SnapshotRepo do
           let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.dat')) }
 
           it 'raises' do
-            expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem)
+            expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem, 'You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is /foo.md (rep name :foo).')
           end
         end
       end
@@ -202,7 +202,7 @@ describe Nanoc::Int::SnapshotRepo do
                 before { rep.compiled = true }
 
                 it 'raises' do
-                  expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem)
+                  expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem, 'You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is /foo.md (rep name :foo).')
                 end
               end
             end
@@ -263,7 +263,7 @@ describe Nanoc::Int::SnapshotRepo do
                 before { rep.compiled = true }
 
                 it 'raises' do
-                  expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem)
+                  expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem, 'You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is /foo.md (rep name :foo).')
                 end
               end
             end

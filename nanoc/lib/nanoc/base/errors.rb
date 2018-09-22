@@ -200,7 +200,7 @@ module Nanoc::Int
     class CannotGetCompiledContentOfBinaryItem < Generic
       # @param [Nanoc::Int::ItemRep] rep The binary item representation whose compiled content was attempted to be accessed
       def initialize(rep)
-        super("You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is #{rep.inspect}.")
+        super("You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is #{rep}.")
       end
     end
 
