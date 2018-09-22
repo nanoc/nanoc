@@ -40,8 +40,12 @@ module Nanoc::Int
       snapshot_actions.map { |a| [a.snapshot_names, a.paths] }
     end
 
-    # TODO: Add contract
     memoized def serialize
+      serialize_uncached
+    end
+
+    contract C::None => Array
+    def serialize_uncached
       to_a.map(&:serialize)
     end
 
