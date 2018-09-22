@@ -5,6 +5,8 @@ module Nanoc::Int::Compiler::Phases
   class Resume < Abstract
     include Nanoc::Int::ContractsSupport
 
+    DONE = Object.new
+
     def initialize(wrapped:)
       super(wrapped: wrapped)
     end
@@ -22,8 +24,12 @@ module Nanoc::Int::Compiler::Phases
           raise(res)
         when Proc
           fiber.resume(res.call)
+        when DONE # rubocop:disable Lint/EmptyWhen
+          # ignore
         else
-          # TODO: raise
+          raise Nanoc::Int::Errors::InternalInconsistency.new(
+            "Fiber yielded object of unexpected type #{res.class}",
+          )
         end
       end
 
@@ -40,6 +46,7 @@ module Nanoc::Int::Compiler::Phases
         Fiber.new do
           yield
           @fibers.delete(rep)
+          DONE
         end
 
       @fibers[rep]
