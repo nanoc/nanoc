@@ -80,6 +80,10 @@ module Nanoc::Int
       "item_rep:#{item.identifier}:#{name}"
     end
 
+    def to_s
+      "#{item.identifier} (rep name #{name.inspect})"
+    end
+
     def inspect
       "<#{self.class} name=\"#{name}\" raw_path=\"#{raw_path}\" item.identifier=\"#{item.identifier}\">"
     end

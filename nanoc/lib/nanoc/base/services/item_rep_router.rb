@@ -9,13 +9,14 @@ module Nanoc::Int
 
     class IdenticalRoutesError < ::Nanoc::Error
       def initialize(output_path, rep_a, rep_b)
-        super("The item representations #{rep_a.inspect} and #{rep_b.inspect} are both routed to #{output_path}.")
+        # super("The item representations #{rep_a.item.identifier} (rep name #{rep_a.name.inspect}) and #{rep_b.item.identifier} (rep name #{rep_b.name.inspect}) are both routed to #{output_path}.")
+        super("The item representations #{rep_a} and #{rep_b} are both routed to #{output_path}.")
       end
     end
 
     class RouteWithoutSlashError < ::Nanoc::Error
       def initialize(output_path, rep)
-        super("The item representation #{rep.inspect} is routed to #{output_path}, which does not start with a slash, as required.")
+        super("The item representation #{rep} is routed to #{output_path}, which does not start with a slash, as required.")
       end
     end
 
@@ -66,7 +67,8 @@ module Nanoc::Int
       paths.each do |path|
         if assigned_paths.include?(path)
           # TODO: Include snapshot names in error message
-          raise IdenticalRoutesError.new(path, assigned_paths[path], rep)
+          reps = [assigned_paths[path], rep].sort_by { |r| [r.item.identifier, r.name] }
+          raise IdenticalRoutesError.new(path, *reps)
         end
       end
       paths.each do |path|

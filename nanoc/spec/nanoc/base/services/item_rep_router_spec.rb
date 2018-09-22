@@ -103,7 +103,7 @@ describe(Nanoc::Int::ItemRepRouter) do
         let(:paths_to_reps) { { '/foo/index.html' => Nanoc::Int::ItemRep.new(item, :other) } }
 
         it 'errors' do
-          expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::IdenticalRoutesError)
+          expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::IdenticalRoutesError, 'The item representations /foo.md (rep name :default) and /foo.md (rep name :other) are both routed to /foo/index.html.')
         end
       end
 
@@ -128,7 +128,7 @@ describe(Nanoc::Int::ItemRepRouter) do
             let(:paths) { ['foo/index.html'] }
 
             it 'errors' do
-              expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::RouteWithoutSlashError)
+              expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::RouteWithoutSlashError, 'The item representation /foo.md (rep name :default) is routed to foo/index.html, which does not start with a slash, as required.')
             end
           end
 
