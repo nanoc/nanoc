@@ -89,12 +89,12 @@ module Nanoc
         false
       end
 
-      # TODO: Add contract
+      contract C::None => Array
       def marshal_dump
         [filename, string]
       end
 
-      # TODO: Add contract
+      contract Array => C::Any
       def marshal_load(array)
         @filename = array[0]
         @string = Nanoc::Int::LazyValue.new(array[1])
