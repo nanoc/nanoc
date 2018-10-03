@@ -286,13 +286,22 @@ module Nanoc::CLI
 
       error = unwrap_error(error)
 
-      message = "#{error.class}: #{error.message}"
+      message = "#{error.class}: #{message_for_error(error)}"
       unless verbose
         message = "\e[1m\e[31m" + message + "\e[0m"
       end
       stream.puts message
       resolution = resolution_for(error)
       stream.puts resolution.to_s if resolution
+    end
+
+    def message_for_error(error)
+      case error
+      when JsonSchema::AggregateError
+        "\n" + error.errors.map { |e| "  * #{e.pointer}: #{e.message}" }.join("\n")
+      else
+        error.message
+      end
     end
 
     def write_item_rep(stream, error, verbose: false)

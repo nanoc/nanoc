@@ -17,6 +17,16 @@ module Nanoc::HashExtensions
     hash
   end
 
+  def __nanoc_stringify_keys_recursively
+    hash = {}
+    each_pair do |key, value|
+      new_key   = key.is_a?(Symbol) ? key.to_s : key
+      new_value = value.respond_to?(:__nanoc_stringify_keys_recursively) ? value.__nanoc_stringify_keys_recursively : value
+      hash[new_key] = new_value
+    end
+    hash
+  end
+
   # Freezes the contents of the hash, as well as all hash values. The hash
   # values will be frozen using {#__nanoc_freeze_recursively} if they respond to
   # that message, or #freeze if they do not.

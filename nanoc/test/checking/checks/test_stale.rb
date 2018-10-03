@@ -63,7 +63,7 @@ class Nanoc::Checking::Checks::StaleTest < Nanoc::TestCase
       File.open('nanoc.yaml', 'w') { |io| io.write "string_pattern_type: legacy\nprune:\n  blah: meh" }
       File.open('content/index.html', 'w') { |io| io.write('stuff') }
       File.open('output/excluded.html', 'w') { |io| io.write('stuff') }
-      refute calc_issues.empty?
+      assert_raises(JsonSchema::Error) { calc_issues }
     end
   end
 end

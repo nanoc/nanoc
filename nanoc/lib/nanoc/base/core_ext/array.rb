@@ -15,6 +15,14 @@ module Nanoc::ArrayExtensions
     array
   end
 
+  def __nanoc_stringify_keys_recursively
+    array = []
+    each do |element|
+      array << (element.respond_to?(:__nanoc_stringify_keys_recursively) ? element.__nanoc_stringify_keys_recursively : element)
+    end
+    array
+  end
+
   # Freezes the contents of the array, as well as all array elements. The
   # array elements will be frozen using {#__nanoc_freeze_recursively} if they respond
   # to that message, or #freeze if they do not.
