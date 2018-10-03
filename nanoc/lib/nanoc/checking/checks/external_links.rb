@@ -69,7 +69,7 @@ module ::Nanoc::Checking::Checks
           next
         end
 
-        if res.code =~ /^3..$/
+        if /^3..$/.match?(res.code)
           if i == 4
             return Result.new(href, 'too many redirects')
           end
@@ -101,7 +101,7 @@ module ::Nanoc::Checking::Checks
         location
       else
         base_url = url.dup
-        base_url.path = (location =~ /^\// ? '' : '/')
+        base_url.path = (/^\//.match?(location) ? '' : '/')
         base_url.query = nil
         base_url.fragment = nil
         base_url.to_s + location

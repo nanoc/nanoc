@@ -78,7 +78,7 @@ puts
 
 puts '=== Verifying presence of release date…'
 release_line = File.readlines('NEWS.md').drop(2).first
-unless release_line =~ / \(\d{4}-\d{2}-\d{2}\)$/
+unless / \(\d{4}-\d{2}-\d{2}\)$/.match?(release_line)
   $stderr.puts 'Error: No proper release date found!'
   exit 1
 end

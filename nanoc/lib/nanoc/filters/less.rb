@@ -32,7 +32,7 @@ module Nanoc::Filters
       imports.concat(content.scan(/^@import\s+(["'])([^\1]+?)\1;/))
       imports.concat(content.scan(/^@import\s+url\((["']?)([^)]+?)\1\);/))
 
-      imports.map { |i| i[1] =~ /\.(less|css)$/ ? i[1] : i[1] + '.less' }
+      imports.map { |i| /\.(less|css)$/.match?(i[1]) ? i[1] : i[1] + '.less' }
     end
 
     def imported_filenames_to_items(imported_filenames)

@@ -138,7 +138,7 @@ module Nanoc
     contract String => self
     # @return [Nanoc::Identifier]
     def prefix(string)
-      if string !~ /\A\//
+      unless /\A\//.match?(string)
         raise InvalidPrefixError.new(string)
       end
 
