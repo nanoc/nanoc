@@ -160,6 +160,22 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
     end
   end
 
+  describe '#write_error_message' do
+    subject { error_handler.send(:write_error_message, $stdout, error, verbose: true) }
+
+    let(:error) do
+      begin
+        Nanoc::Int::Configuration.new(dir: '/oink', hash: { enable_output_diff: 'yeah' })
+      rescue => e
+        return e
+      end
+    end
+
+    example do
+      expect { subject }.to output("\n===== MESSAGE:\n\nJsonSchema::AggregateError: \n  * #/enable_output_diff: For 'properties/enable_output_diff', \"yeah\" is not a boolean.\n").to_stdout
+    end
+  end
+
   describe 'GEM_NAMES' do
     example do
       requires = Nanoc::Filter.all.flat_map(&:requires)

@@ -52,6 +52,8 @@ module Nanoc::Int
       @env_name = env_name
       @wrapped = hash.__nanoc_symbolize_keys_recursively
       @dir = dir
+
+      validate
     end
 
     contract C::None => self
@@ -191,6 +193,14 @@ module Nanoc::Int
           value2
         end
       end
+    end
+
+    def validate
+      dir = File.dirname(__FILE__)
+      schema_data = JSON.parse(File.read(dir + '/configuration-schema.json'))
+      schema = JsonSchema.parse!(schema_data)
+      schema.expand_references!
+      schema.validate!(@wrapped.__nanoc_stringify_keys_recursively)
     end
   end
 end

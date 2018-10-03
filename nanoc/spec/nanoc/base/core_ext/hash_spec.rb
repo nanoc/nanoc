@@ -14,6 +14,20 @@ describe 'Hash#__nanoc_symbolize_keys_recursively' do
   end
 end
 
+describe 'Hash#__nanoc_stringify_keys_recursively' do
+  it 'should convert keys to strings' do
+    hash_old = { foo: 'bar' }
+    hash_new = { 'foo' => 'bar' }
+    expect(hash_old.__nanoc_stringify_keys_recursively).to eql(hash_new)
+  end
+
+  it 'should not require symbol keys' do
+    hash_old = { Time.now => 'abc' }
+    hash_new = hash_old
+    expect(hash_old.__nanoc_stringify_keys_recursively).to eql(hash_new)
+  end
+end
+
 describe 'Hash#__nanoc_freeze_recursively' do
   it 'should prevent first-level elements from being modified' do
     hash = { a: { b: :c } }

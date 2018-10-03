@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Nanoc configuration schema",
+  "type": "object",
+  "properties": {
+    "text_extensions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "output_dir": {
+      "type": "string"
+    },
+    "index_filenames": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "enable_output_diff": {
+      "type": "boolean"
+    },
+    "prune": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "auto_prune": {
+          "type": "boolean"
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "commands_dirs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "lib_dirs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "data_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "items_root": {
+            "type": "string"
+          },
+          "layouts_root": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "string_pattern_type": {
+      "type": "string",
+      "enum": ["glob", "legacy"]
+    },
+    "checks": {
+      "type": "object",
+      "properties": {
+        "internal_links": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "exclude": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "external_links": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "exclude": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "exclude_files": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "environments": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

@@ -8,6 +8,14 @@ describe 'Array#__nanoc_symbolize_keys_recursively' do
   end
 end
 
+describe 'Array#__nanoc_stringify_keys_recursively' do
+  it 'should convert keys to strings' do
+    array_old = [:abc, 'xyz', { 'foo' => 'bar', baz: :qux }]
+    array_new = [:abc, 'xyz', { 'foo' => 'bar', 'baz' => :qux }]
+    expect(array_old.__nanoc_stringify_keys_recursively).to eql(array_new)
+  end
+end
+
 describe 'Array#__nanoc_freeze_recursively' do
   it 'should prevent first-level elements from being modified' do
     array = [:a, %i[b c], :d]
