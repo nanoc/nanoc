@@ -134,7 +134,7 @@ module Nanoc::Filters
 
       content = apply_gcse_search_workaround(content)
 
-      doc = content =~ /<html[\s>]/ ? klass.parse(content) : klass.fragment(content)
+      doc = /<html[\s>]/.match?(content) ? klass.parse(content) : klass.fragment(content)
       selector = selectors.map { |sel| "descendant-or-self::#{sel}" }.join('|')
       doc.xpath(selector, namespaces).each do |node|
         if node.name == 'comment'

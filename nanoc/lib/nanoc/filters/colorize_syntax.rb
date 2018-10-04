@@ -118,7 +118,7 @@ module Nanoc::Filters
         parse_fragment(klass, content)
       end
     rescue => e
-      if e.message =~ /can't modify frozen string/
+      if /can't modify frozen string/.match?(e.message)
         parse(content.dup, klass, is_fullpage)
       else
         raise e

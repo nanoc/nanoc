@@ -277,7 +277,7 @@ RSpec::Matchers.define :have_correct_yard_examples do |_name, *_expected_args|
       P(actual).tags(:example).flat_map do |example|
         # Classify
         lines = example.text.lines.map do |line|
-          [line =~ /^\s*# ?=>/ ? :result : :code, line]
+          [/^\s*# ?=>/.match?(line) ? :result : :code, line]
         end
 
         # Join

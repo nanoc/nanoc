@@ -42,7 +42,7 @@ class Nanoc::DataSources::Filesystem
     def parse_with_frontmatter(content_filename)
       data = Tools.read_file(content_filename, config: @config)
 
-      if data !~ /\A#{SEPARATOR}\s*$/
+      unless /\A#{SEPARATOR}\s*$/.match?(data)
         return ParseResult.new(content: data, attributes: {}, attributes_data: '')
       end
 

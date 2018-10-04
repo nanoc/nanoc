@@ -173,7 +173,7 @@ module Nanoc::TestHelpers
     P(object).tags(:example).each do |example|
       # Classify
       lines = example.text.lines.map do |line|
-        [line =~ /^\s*# ?=>/ ? :result : :code, line]
+        [/^\s*# ?=>/.match?(line) ? :result : :code, line]
       end
 
       # Join

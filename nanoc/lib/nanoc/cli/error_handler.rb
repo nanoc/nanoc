@@ -246,7 +246,7 @@ module Nanoc::CLI
           end
         end
       when RuntimeError
-        if error.message =~ /^can't modify frozen/
+        if /^can't modify frozen/.match?(error.message)
           'You attempted to modify immutable data. Some data cannot ' \
           'be modified once compilation has started. Such data includes ' \
           'content and attributes of items and layouts, and filter arguments.'

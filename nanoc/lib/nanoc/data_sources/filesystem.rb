@@ -336,7 +336,7 @@ module Nanoc::DataSources
       end
 
       regex =
-        if filename =~ /(^|\/)index(\.[^\/]+)?$/
+        if /(^|\/)index(\.[^\/]+)?$/.match?(filename)
           allow_periods_in_identifiers? ? /\/?(index)?(\.[^\/\.]+)?$/ : /\/?index(\.[^\/]+)?$/
         else
           allow_periods_in_identifiers? ? /\.[^\/\.]+$/ : /\.[^\/]+$/
