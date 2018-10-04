@@ -554,6 +554,26 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     assert_match 'foobar!</summary>', result
   end
 
+  def test_atom_feed_with_title_proc_param
+    # Mock article
+    @items = [mock_article]
+
+    # Mock site
+    config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
+    @config = Nanoc::ConfigView.new(config, @view_context)
+
+    # Create feed item
+    @item = mock
+    @item.stubs(:[]).with(:title).returns('My Blog Or Something')
+    @item.stubs(:[]).with(:author_name).returns('J. Doe')
+    @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
+    @item.stubs(:[]).with(:[]).with(:feed_url).returns('http://example.com/feed')
+
+    # Check
+    result = atom_feed title_proc: ->(_a) { 'foobar!' }
+    assert_match 'foobar!</title>', result
+  end
+
   def test_atom_feed_with_icon_param
     # Mock article
     @items = [mock_article]
