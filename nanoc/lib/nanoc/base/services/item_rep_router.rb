@@ -9,7 +9,6 @@ module Nanoc::Int
 
     class IdenticalRoutesError < ::Nanoc::Error
       def initialize(output_path, rep_a, rep_b)
-        # super("The item representations #{rep_a.item.identifier} (rep name #{rep_a.name.inspect}) and #{rep_b.item.identifier} (rep name #{rep_b.name.inspect}) are both routed to #{output_path}.")
         super("The item representations #{rep_a} and #{rep_b} are both routed to #{output_path}.")
       end
     end
