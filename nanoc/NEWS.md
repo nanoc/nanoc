@@ -1,5 +1,13 @@
 # Nanoc news
 
+## 4.9.7 (2018-10-06)
+
+Enhancements:
+
+* Added `title_proc:` option to the blogging helper (#1362, #1363) [Thomas Hochstein]
+* Dropped Ruby 2.3 support, as it is no longer maintained (#1361)
+* Added static configuration file verification (#1360)
+
 ## 4.9.6 (2018-09-19)
 
 Fixes:
