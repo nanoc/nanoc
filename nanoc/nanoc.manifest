@@ -18,6 +18,7 @@ lib/nanoc/base/entities/action_sequence.rb
 lib/nanoc/base/entities/checksum_collection.rb
 lib/nanoc/base/entities/code_snippet.rb
 lib/nanoc/base/entities/configuration.rb
+lib/nanoc/base/entities/configuration-schema.json
 lib/nanoc/base/entities/content.rb
 lib/nanoc/base/entities/context.rb
 lib/nanoc/base/entities/dependency.rb
