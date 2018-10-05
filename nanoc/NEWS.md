@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.9.8 (2018-10-05)
+
+Fixes:
+
+* Fixed missing `configuration-schema.json` file
+
 ## 4.9.7 (2018-10-05)
 
 Enhancements:
