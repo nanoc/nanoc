@@ -53,7 +53,7 @@ group :plugins do
   gem 'mime-types'
   gem 'mustache', '~> 1.0'
   gem 'nokogiri', '~> 1.8'
-  gem 'nokogumbo', '~> 1.5', platforms: :ruby
+  gem 'nokogumbo', '~> 2.0', platforms: :ruby
   gem 'pandoc-ruby'
   gem 'pygments.rb', '~> 1.2', platforms: :ruby
   gem 'rack'
