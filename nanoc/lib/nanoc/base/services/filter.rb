@@ -34,7 +34,7 @@ module Nanoc
     class << self
       def define(ident, &block)
         filter_class = Class.new(::Nanoc::Filter) { identifier(ident) }
-        filter_class.send(:define_method, :run) do |content, params|
+        filter_class.send(:define_method, :run) do |content, params = {}|
           instance_exec(content, params, &block)
         end
       end
