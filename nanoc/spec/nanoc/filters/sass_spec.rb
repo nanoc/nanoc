@@ -136,7 +136,7 @@ describe Nanoc::Filters::Sass do
     let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
     let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
+    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults.merge(color: 'yellow') }
 
     before do
       items.each do |item|
@@ -269,6 +269,18 @@ describe Nanoc::Filters::Sass do
 
         expect(sass_sourcemap.setup_and_run(".foo #bar\n  color: #f00", sourcemap_path: 'main.sass.map'))
           .to match(/{.*?"sources": \["#{item_main_default_rep.raw_path}"\].*?"file": "#{item_main_sourcemap_rep.raw_path}".*?}/m)
+      end
+    end
+
+    context 'nanoc() sass function' do
+      it 'can inspect @config' do
+        expect(sass.setup_and_run(".foo #bar\n  color: nanoc('@config[:color]', $unquote: true)"))
+          .to match(/.foo\s+#bar\s*\{\s*color:\s+yellow;?\s*\}/)
+      end
+
+      it 'can inspect @items' do
+        expect(sass.setup_and_run(".foo\n  content: nanoc('@items[\"/style/main.*\"][:content_filename]')"))
+          .to match(/.foo\s*\{\s*content:\s+"content\/style\/main\.sass";?\s*\}/)
       end
     end
   end
