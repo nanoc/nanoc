@@ -317,6 +317,22 @@ describe Nanoc::Int::Configuration do
       end
     end
 
+    context 'valid data_sources (null items_root)' do
+      let(:hash) { { data_sources: [{ type: 'something', items_root: nil }] } }
+
+      it 'passes' do
+        expect { subject }.not_to raise_error
+      end
+    end
+
+    context 'valid data_sources (null layouts_root)' do
+      let(:hash) { { data_sources: [{ type: 'something', layouts_root: nil }] } }
+
+      it 'passes' do
+        expect { subject }.not_to raise_error
+      end
+    end
+
     context 'valid data_sources (empty list)' do
       let(:hash) { { data_sources: [] } }
 

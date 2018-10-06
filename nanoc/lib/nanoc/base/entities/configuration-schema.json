@@ -57,10 +57,16 @@
             "type": "string"
           },
           "items_root": {
-            "type": "string"
+            "anyOf": [
+              { "type": "string" },
+              { "type": "null" }
+            ]
           },
           "layouts_root": {
-            "type": "string"
+            "anyOf": [
+              { "type": "string" },
+              { "type": "null" }
+            ]
           }
         }
       }
