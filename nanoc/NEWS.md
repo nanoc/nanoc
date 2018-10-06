@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.9.9 (2018-10-06)
+
+Fixes:
+
+* Allowed `items_root` and `layouts_root` to be null
+
 ## 4.9.8 (2018-10-05)
 
 Fixes:
