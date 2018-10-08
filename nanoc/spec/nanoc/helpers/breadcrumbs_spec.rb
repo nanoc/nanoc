@@ -176,6 +176,29 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true do
             )
         end
       end
+
+      context 'child with multiple extensions' do
+        before do
+          ctx.create_item('grandchild1', {}, Nanoc::Identifier.new('/foo/stuff.zip'))
+          ctx.create_item('grandchild2', {}, Nanoc::Identifier.new('/foo/stuff.md'))
+          ctx.create_item('grandchild3', {}, Nanoc::Identifier.new('/foo/stuff.png'))
+          ctx.create_item('child', {}, Nanoc::Identifier.new('/foo.md'))
+          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+
+          ctx.item = ctx.items['/foo/stuff.md']
+        end
+
+        it 'picks the best parent' do
+          expect(subject)
+            .to eql(
+              [
+                ctx.items['/index.md'],
+                ctx.items['/foo.md'],
+                ctx.items['/foo/stuff.md'],
+              ],
+            )
+        end
+      end
     end
   end
 end

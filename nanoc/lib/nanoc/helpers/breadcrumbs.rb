@@ -33,6 +33,34 @@ module Nanoc::Helpers
 
     # @return [Array]
     def breadcrumbs_trail
+      # The design of this function is a little complicated.
+      #
+      # We can’t use #parent_of from the ChildParent helper, because the
+      # breadcrumb trail can have gaps. For example, the breadcrumbs trail for
+      # /software/oink.md might be /index.md -> nil -> /software/oink.md if
+      # there is no item matching /software.* or /software/index.*.
+      #
+      # What this function does instead is something more complicated:
+      #
+      # 1.  It creates an ordered prefix list, based on the identifier of the
+      #     item to create a breadcrumbs trail for. For example,
+      #     /software/oink.md might have the prefix list
+      #     ['', '/software', '/software/oink.md'].
+      #
+      # 2.  For each of the elements in that list, it will create a list of
+      #     patterns could match zero or more items. For example, the element
+      #     '/software' would correspond to the pattern '/software.*'.
+      #
+      # 3.  For each of the elements in that list, and for each pattern for that
+      #     element, it will find any matching element. For example, the
+      #     pattern '/software.*' (coming from the prefix /software) would match
+      #     the item /software.md.
+      #
+      # 4.  Return the list of items, with the last element replaced by the item
+      #     for which the breadcrumb is generated for -- while ancestral items
+      #     in the breadcrumbs trail can have a bit of ambiguity, the item for
+      #     which to generate the breadcrumbs trail is fixed.
+
       # e.g. ['', '/foo', '/foo/bar']
       components = item.identifier.components
       prefixes = components.inject(['']) { |acc, elem| acc + [acc.last + '/' + elem] }
@@ -40,9 +68,9 @@ module Nanoc::Helpers
       if @item.identifier.legacy?
         prefixes.map { |pr| @items[Nanoc::Identifier.new('/' + pr, type: :legacy)] }
       else
-        prefixes
-          .reject { |pr| pr =~ /^\/index\./ }
-          .map do |pr|
+        ancestral_prefixes = prefixes.reject { |pr| pr =~ /^\/index\./ }[0..-2]
+        ancestral_items =
+          ancestral_prefixes.map do |pr|
             if pr == ''
               @items['/index.*']
             else
@@ -50,6 +78,7 @@ module Nanoc::Helpers
               prefix_patterns.lazy.map { |pat| @items[pat] }.find(&:itself)
             end
           end
+        ancestral_items + [item]
       end
     end
   end
