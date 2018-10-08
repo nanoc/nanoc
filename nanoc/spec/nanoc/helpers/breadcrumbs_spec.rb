@@ -165,15 +165,8 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true do
           ctx.item = ctx.items['/foo/stuff.md']
         end
 
-        it 'picks the closest parent' do
-          expect(subject)
-            .to eql(
-              [
-                ctx.items['/index.md'],
-                ctx.items['/foo.md.erb'],
-                ctx.items['/foo/stuff.md'],
-              ],
-            )
+        it 'errors because of ambiguity' do
+          expect { subject }.to raise_error(Nanoc::Helpers::Breadcrumbs::AmbiguousAncestorError, 'expected only one item to match /foo.*, but found 3')
         end
       end
 

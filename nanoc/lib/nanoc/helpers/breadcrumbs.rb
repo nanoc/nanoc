@@ -3,6 +3,17 @@
 module Nanoc::Helpers
   # @see http://nanoc.ws/doc/reference/helpers/#breadcrumbs
   module Breadcrumbs
+    class AmbiguousAncestorError < Nanoc::Int::Errors::Generic
+      def initialize(pattern, items)
+        @pattern = pattern
+        @items = items
+      end
+
+      def message
+        "expected only one item to match #{@pattern}, but found #{@items.size}"
+      end
+    end
+
     # @api private
     module Int
       # e.g. unfold(10.class, &:superclass)
@@ -28,6 +39,18 @@ module Nanoc::Helpers
           end
 
         prefixes.map { |pr| pr + '.*' }
+      end
+
+      def self.find_one(items, pat)
+        res = items.find_all(pat)
+        case res.size
+        when 0
+          nil
+        when 1
+          res.first
+        else
+          raise AmbiguousAncestorError.new(pat, res)
+        end
       end
     end
 
@@ -75,7 +98,7 @@ module Nanoc::Helpers
               @items['/index.*']
             else
               prefix_patterns = Int.patterns_for_prefix(pr)
-              prefix_patterns.lazy.map { |pat| @items[pat] }.find(&:itself)
+              prefix_patterns.lazy.map { |pat| Int.find_one(@items, pat) }.find(&:itself)
             end
           end
         ancestral_items + [item]
