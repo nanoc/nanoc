@@ -312,7 +312,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
       end
     end
 
-    context 'with :ext, without period' do
+    context 'with :ext, with period' do
       context 'calling once' do
         subject { rule_context.write(ext: '.html') }
 
