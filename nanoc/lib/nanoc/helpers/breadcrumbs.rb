@@ -40,9 +40,9 @@ module Nanoc::Helpers
       if @item.identifier.legacy?
         prefixes.map { |pr| @items[Nanoc::Identifier.new('/' + pr, type: :legacy)] }
       else
-        prefixes
-          .reject { |pr| pr =~ /^\/index\./ }
-          .map do |pr|
+        ancestral_prefixes = prefixes.reject { |pr| pr =~ /^\/index\./ }[0..-2]
+        ancestral_items =
+          ancestral_prefixes.map do |pr|
             if pr == ''
               @items['/index.*']
             else
@@ -50,6 +50,7 @@ module Nanoc::Helpers
               prefix_patterns.lazy.map { |pat| @items[pat] }.find(&:itself)
             end
           end
+        ancestral_items + [item]
       end
     end
   end
