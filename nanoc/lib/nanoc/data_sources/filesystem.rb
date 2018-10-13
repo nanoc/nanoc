@@ -176,28 +176,47 @@ module Nanoc::DataSources
 
       return [] if dir_name.nil?
 
-      all_split_files_in(dir_name).each do |base_filename, (meta_ext, content_exts)|
-        content_exts.each do |content_ext|
-          meta_filename    = filename_for(base_filename, meta_ext)
-          content_filename = filename_for(base_filename, content_ext)
+      each_content_meta_pair_in(dir_name) do |content_filename, meta_filename|
+        proto_doc = read_proto_document(content_filename, meta_filename, klass)
 
-          proto_doc = read_proto_document(content_filename, meta_filename, klass)
+        content = content_for(proto_doc, content_filename)
+        attributes = attributes_for(proto_doc, content_filename, meta_filename)
+        identifier = identifier_for(content_filename, meta_filename, dir_name)
 
-          content = content_for(proto_doc, content_filename)
-          attributes = attributes_for(proto_doc, content_filename, meta_filename)
-          identifier = identifier_for(content_filename, meta_filename, dir_name)
-
-          res << klass.new(
-            content,
-            attributes,
-            identifier,
-            content_checksum_data: content_checksum_data_for(proto_doc),
-            attributes_checksum_data: attributes_checksum_data_for(proto_doc, content_filename, meta_filename),
-          )
-        end
+        res << klass.new(
+          content,
+          attributes,
+          identifier,
+          content_checksum_data: content_checksum_data_for(proto_doc),
+          attributes_checksum_data: attributes_checksum_data_for(proto_doc, content_filename, meta_filename),
+        )
       end
 
       res
+    end
+
+    # Enumerates each pair of content file and meta file. If there is ambiguity, it will raise an error.
+    def each_content_meta_pair_in(dir_name)
+      all_split_files_in(dir_name).each do |base_filename, (meta_ext, content_exts)|
+        meta_filename = filename_for(base_filename, meta_ext)
+        content_filenames = content_exts.map { |e| filename_for(base_filename, e) }
+
+        have_possible_ambiguity = meta_filename && content_filenames.size > 1
+        if have_possible_ambiguity && content_filenames.count { |fn| !parser.frontmatter?(fn) } != 1
+          raise Nanoc::Int::Errors::AmbiguousMetadataAssociation.new(content_filenames, meta_filename)
+        end
+
+        content_filenames.each do |content_filename|
+          real_meta_filename =
+            if have_possible_ambiguity && parser.frontmatter?(content_filename)
+              nil
+            else
+              meta_filename
+            end
+
+          yield(content_filename, real_meta_filename)
+        end
+      end
     end
 
     def content_checksum_data_for(proto_doc)
@@ -379,8 +398,11 @@ module Nanoc::DataSources
       end
     end
 
+    def parser
+      @parser ||= Parser.new(config: @config)
+    end
+
     def parse(content_filename, meta_filename)
-      parser = Parser.new(config: @config)
       parser.call(content_filename, meta_filename)
     end
   end
