@@ -70,6 +70,11 @@ class Nanoc::DataSources::Filesystem
       meta
     end
 
+    def frontmatter?(filename)
+      data = Tools.read_file(filename, config: @config)
+      /\A#{SEPARATOR}\s*$/.match?(data)
+    end
+
     def verify_meta(meta, filename)
       return if meta.is_a?(Hash)
 

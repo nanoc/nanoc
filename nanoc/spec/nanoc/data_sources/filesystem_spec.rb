@@ -110,6 +110,137 @@ describe Nanoc::DataSources::Filesystem, site: true do
           expect(subject[0].content_checksum_data).to be_nil
         end
       end
+
+      context 'two content files (no inline metadata) with one meta file' do
+        let(:params) { { identifier_type: 'full' } }
+
+        before do
+          FileUtils.mkdir_p('foo')
+          File.write('foo/a.txt', 'hi')
+          File.write('foo/a.md', 'ho')
+          File.write('foo/a.yaml', 'title: Aaah')
+        end
+
+        it 'errors' do
+          expect { subject }
+            .to raise_error(
+              Nanoc::Int::Errors::AmbiguousMetadataAssociation,
+              'There are multiple content files (foo/a.txt, foo/a.md) that could match the file containing metadata (foo/a.yaml).',
+            )
+        end
+      end
+
+      context 'two content files (one has inline metadata) with one meta file' do
+        let(:params) { { identifier_type: 'full' } }
+
+        before do
+          FileUtils.mkdir_p('foo')
+          File.write('foo/a.txt', "---\ntitle: Hi\n---\n\nhi")
+          File.write('foo/a.md', 'ho')
+          File.write('foo/a.yaml', 'title: Aaah')
+        end
+
+        it 'assigns metadata to the file that doesn’t have any yet' do
+          expect(subject.size).to eq(2)
+
+          items = subject.sort_by { |i| i.identifier.to_s }
+
+          expect(items[0].content).to be_a(Nanoc::Int::TextualContent)
+          expect(items[0].identifier).to eq(Nanoc::Identifier.new('/a.md', type: :full))
+          expect(items[0].attributes[:title]).to eq('Aaah')
+
+          expect(items[1].content).to be_a(Nanoc::Int::TextualContent)
+          expect(items[1].identifier).to eq(Nanoc::Identifier.new('/a.txt', type: :full))
+          expect(items[1].attributes[:title]).to eq('Hi')
+        end
+      end
+
+      context 'two content files (both have inline metadata) with one meta file' do
+        let(:params) { { identifier_type: 'full' } }
+
+        before do
+          FileUtils.mkdir_p('foo')
+          File.write('foo/a.txt', "---\ntitle: Hi\n---\n\nhi")
+          File.write('foo/a.md', "---\ntitle: Ho\n---\n\nho")
+          File.write('foo/a.yaml', 'title: Aaah')
+        end
+
+        it 'errors' do
+          expect { subject }
+            .to raise_error(
+              Nanoc::Int::Errors::AmbiguousMetadataAssociation,
+              'There are multiple content files (foo/a.txt, foo/a.md) that could match the file containing metadata (foo/a.yaml).',
+            )
+        end
+      end
+
+      context 'two content files (both have inline metadata) with no meta file' do
+        let(:params) { { identifier_type: 'full' } }
+
+        before do
+          FileUtils.mkdir_p('foo')
+          File.write('foo/a.txt', "---\ntitle: Hi\n---\n\nhi")
+          File.write('foo/a.md', "---\ntitle: Ho\n---\n\nho")
+        end
+
+        it 'uses inline metadata' do
+          expect(subject.size).to eq(2)
+
+          items = subject.sort_by { |i| i.identifier.to_s }
+
+          expect(items[0].content).to be_a(Nanoc::Int::TextualContent)
+          expect(items[0].identifier).to eq(Nanoc::Identifier.new('/a.md', type: :full))
+          expect(items[0].attributes[:title]).to eq('Ho')
+
+          expect(items[1].content).to be_a(Nanoc::Int::TextualContent)
+          expect(items[1].identifier).to eq(Nanoc::Identifier.new('/a.txt', type: :full))
+          expect(items[1].attributes[:title]).to eq('Hi')
+        end
+      end
+
+      context 'two content files (neither have inline metadata) with no meta file' do
+        let(:params) { { identifier_type: 'full' } }
+
+        before do
+          FileUtils.mkdir_p('foo')
+          File.write('foo/a.txt', 'hi')
+          File.write('foo/a.md', 'ho')
+        end
+
+        it 'uses no metadata' do
+          expect(subject.size).to eq(2)
+
+          items = subject.sort_by { |i| i.identifier.to_s }
+
+          expect(items[0].content).to be_a(Nanoc::Int::TextualContent)
+          expect(items[0].identifier).to eq(Nanoc::Identifier.new('/a.md', type: :full))
+          expect(items[0].attributes[:title]).to be_nil
+
+          expect(items[1].content).to be_a(Nanoc::Int::TextualContent)
+          expect(items[1].identifier).to eq(Nanoc::Identifier.new('/a.txt', type: :full))
+          expect(items[1].attributes[:title]).to be_nil
+        end
+      end
+
+      context 'one content file (with inline metadata) and a meta file' do
+        let(:params) { { identifier_type: 'full' } }
+
+        before do
+          FileUtils.mkdir_p('foo')
+          File.write('foo/a.txt', "---\ntitle: Hi\n---\n\nhi")
+          File.write('foo/a.yaml', 'author: Denis')
+        end
+
+        it 'uses only metadata from meta file' do
+          expect(subject.size).to eq(1)
+
+          expect(subject[0].content).to be_a(Nanoc::Int::TextualContent)
+          expect(subject[0].content.string).to eq("---\ntitle: Hi\n---\n\nhi")
+          expect(subject[0].identifier).to eq(Nanoc::Identifier.new('/a.txt', type: :full))
+          expect(subject[0].attributes[:title]).to be_nil
+          expect(subject[0].attributes[:author]).to eq('Denis')
+        end
+      end
     end
   end
 
