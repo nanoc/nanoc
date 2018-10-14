@@ -1,5 +1,20 @@
 # Nanoc news
 
+## 4.10.0 (2018-10-14)
+
+Features:
+
+* Added source map support to the Sass filter (#1365) [Gregory Pakosz]
+* Added a `nanoc()` Sass function (#1365) [Gregory Pakosz]
+
+Fixes:
+
+* Ensured breadcrumb trail always ends in item itself (#1367)
+
+Enhancemens:
+
+* Made Nanoc error when meta-file cannot be unambiguously associated (#1370)
+
 ## 4.9.9 (2018-10-06)
 
 Fixes:
