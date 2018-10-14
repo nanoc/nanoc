@@ -384,7 +384,17 @@ RSpec::Matchers.define :create_dependency_from do |expected|
 
     b = dependency_store.objects_causing_outdatedness_of(@from)
 
-    (b - a).any?
+    @actual = b - a
+
+    if @onto
+      values_match?(@onto, @actual)
+    else
+      @actual.any?
+    end
+  end
+
+  chain :onto do |onto|
+    @onto = onto
   end
 
   description do
@@ -392,11 +402,11 @@ RSpec::Matchers.define :create_dependency_from do |expected|
   end
 
   failure_message do |_actual|
-    "expected a dependency to be created from #{expected.inspect}"
+    "expected a dependency to be created from #{expected.inspect}#{@onto ? " onto #{@onto.inspect}" : nil}, but generated #{@actual.inspect}"
   end
 
   failure_message_when_negated do |_actual|
-    "expected no dependency to be created from #{expected.inspect}"
+    "expected no dependency to be created from #{expected.inspect}, but generated #{@actual.inspect}"
   end
 end
 
