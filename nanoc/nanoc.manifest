@@ -227,6 +227,8 @@ lib/nanoc/filters/redcloth.rb
 lib/nanoc/filters/relativize_paths.rb
 lib/nanoc/filters/rubypants.rb
 lib/nanoc/filters/sass.rb
+lib/nanoc/filters/sass/functions.rb
+lib/nanoc/filters/sass/importer.rb
 lib/nanoc/filters/slim.rb
 lib/nanoc/filters/typogruby.rb
 lib/nanoc/filters/uglify_js.rb
