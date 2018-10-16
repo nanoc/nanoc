@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.10.1 (2018-10-16)
+
+Fixes:
+
+* Made Nanoc no longer crash when the Sass gem is not available (#1371)
+
 ## 4.10.0 (2018-10-14)
 
 Features:
