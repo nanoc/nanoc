@@ -181,7 +181,7 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
       requires = Nanoc::Filter.all.flat_map(&:requires)
       described =
         Nanoc::CLI::ErrorHandler::GEM_NAMES.keys +
-        ['erb', 'rdoc', 'nanoc/filters/sass/sass_filesystem_importer']
+        ['erb', 'rdoc', 'nanoc/filters/sass/importer', 'nanoc/filters/sass/functions']
 
       missing = requires - described
 
