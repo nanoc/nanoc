@@ -30,7 +30,7 @@ describe Nanoc::Int::OutdatednessRules do
       Nanoc::Int::Site.new(
         config: config,
         code_snippets: code_snippets,
-        data_source: Nanoc::Int::InMemDataSource.new([], []),
+        data_source: Nanoc::Int::InMemDataSource.new(items, layouts),
       )
     end
 
@@ -326,6 +326,95 @@ describe Nanoc::Int::OutdatednessRules do
         end
 
         it { is_expected.to be }
+      end
+
+      context 'memory is the same, but refers to a layout' do
+        let(:old_mem) do
+          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+            b.add_layout('/page.*', {})
+          end
+        end
+
+        let(:new_mem) { old_mem }
+
+        let(:action_sequences) do
+          {
+            item_rep => new_mem,
+            layout => new_layout_mem,
+          }
+        end
+
+        before do
+          action_sequence_store[layout] = old_layout_mem.serialize
+        end
+
+        context 'everything is the same' do
+          let(:new_layout_mem) do
+            Nanoc::Int::ActionSequence.build(layout) do |b|
+              b.add_filter(:erb, {})
+            end
+          end
+
+          let(:old_layout_mem) { new_layout_mem }
+
+          it { is_expected.not_to be }
+        end
+
+        context 'referenced layout does not exist' do
+          let(:new_layout_mem) do
+            Nanoc::Int::ActionSequence.build(layout) do |b|
+              b.add_filter(:erb, {})
+            end
+          end
+
+          let(:old_layout_mem) do
+            Nanoc::Int::ActionSequence.build(layout) do |b|
+              b.add_filter(:haml, {})
+            end
+          end
+
+          let(:old_mem) do
+            Nanoc::Int::ActionSequence.build(item_rep) do |b|
+              b.add_layout('/moo.*', {})
+            end
+          end
+
+          # Something changed about the layout; the item-on-layout dependency
+          # will ensure this item is marked as outdated.
+          it { is_expected.not_to be }
+        end
+
+        context 'filter name is different' do
+          let(:new_layout_mem) do
+            Nanoc::Int::ActionSequence.build(layout) do |b|
+              b.add_filter(:erb, {})
+            end
+          end
+
+          let(:old_layout_mem) do
+            Nanoc::Int::ActionSequence.build(layout) do |b|
+              b.add_filter(:haml, {})
+            end
+          end
+
+          it { is_expected.to be }
+        end
+
+        context 'params are different' do
+          let(:new_layout_mem) do
+            Nanoc::Int::ActionSequence.build(layout) do |b|
+              b.add_filter(:erb, {})
+            end
+          end
+
+          let(:old_layout_mem) do
+            Nanoc::Int::ActionSequence.build(layout) do |b|
+              b.add_filter(:erb, foo: 123)
+            end
+          end
+
+          it { is_expected.to be }
+        end
       end
     end
 
