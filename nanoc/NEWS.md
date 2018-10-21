@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.10.2 (2018-10-21)
+
+Fixes:
+
+* Fixed an issue where changing a layout rule’s parameters would not recompile items that use the layout for this layout rule (#1372, #1373)
+
 ## 4.10.1 (2018-10-16)
 
 Fixes:
