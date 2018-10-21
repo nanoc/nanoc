@@ -69,7 +69,11 @@ module Nanoc::RuleDSL
       recorder.snapshot(:last) unless recorder.last_snapshot?
       recorder.snapshot(:pre) unless recorder.pre_snapshot?
 
-      copy_paths_from_routing_rules(compact_snapshots(recorder.action_sequence), rep: rep)
+      copy_paths_from_routing_rules(
+        compact_snapshots(recorder.action_sequence),
+        recorder.snapshots_for_which_to_skip_routing_rule,
+        rep: rep,
+      )
     end
 
     # @param [Nanoc::Int::Layout] layout
@@ -99,26 +103,25 @@ module Nanoc::RuleDSL
       Nanoc::Int::ActionSequence.new(seq.item_rep, actions: actions)
     end
 
-    def copy_paths_from_routing_rules(seq, rep:)
+    def copy_paths_from_routing_rules(seq, snapshots_for_which_to_skip_routing_rule, rep:)
+      # NOTE: This assumes that `seq` is compacted, i.e. there are no two consecutive snapshot actions.
+
       seq.map do |action|
-        if action.is_a?(Nanoc::Int::ProcessingActions::Snapshot) && action.paths.empty?
-          copy_path_from_routing_rule(action, rep: rep)
-        else
-          action
-        end
-      end
-    end
+        # Only potentially modify snapshot actions
+        next action unless action.is_a?(Nanoc::Int::ProcessingActions::Snapshot)
 
-    def copy_path_from_routing_rule(action, rep:)
-      paths_from_rules =
-        action.snapshot_names.map do |snapshot_name|
-          basic_path_from_rules_for(rep, snapshot_name)
-        end.compact
+        # If any of the action’s snapshot are explicitly marked as excluded from
+        # getting a path from a routing rule, then ignore routing rules.
+        next action if snapshots_for_which_to_skip_routing_rule.intersect?(Set.new(action.snapshot_names))
 
-      if paths_from_rules.any?
-        action.update(paths: paths_from_rules.map(&:to_s))
-      else
-        action
+        # If this action already has paths that don’t come from routing rules,
+        # then don’t add more to them.
+        next action unless action.paths.empty?
+
+        # For each snapshot name, find a path from a routing rule. The routing
+        # rule might return nil, so we need #compact.
+        paths = action.snapshot_names.map { |sn| basic_path_from_rules_for(rep, sn) }.compact
+        action.update(snapshot_names: [], paths: paths)
       end
     end
 
