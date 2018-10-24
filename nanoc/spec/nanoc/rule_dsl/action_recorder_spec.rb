@@ -102,7 +102,9 @@ describe Nanoc::RuleDSL::ActionRecorder do
           end
 
           it 'keeps skip_routing_rule' do
-            expect { subject }.not_to change { recorder.skip_routing_rule? }
+            expect { subject }
+              .not_to change { recorder.snapshots_for_which_to_skip_routing_rule }
+              .from(Set.new)
           end
         end
 
@@ -117,8 +119,11 @@ describe Nanoc::RuleDSL::ActionRecorder do
             expect(action_sequence[0].paths).to eql(['/routed-foo.html'])
           end
 
-          it 'keeps skip_routing_rule' do
-            expect { subject }.not_to change { recorder.skip_routing_rule? }
+          it 'sets skip_routing_rule' do
+            expect { subject }
+              .to change { recorder.snapshots_for_which_to_skip_routing_rule }
+              .from(Set.new)
+              .to(Set.new([:foo]))
           end
         end
 
@@ -133,8 +138,11 @@ describe Nanoc::RuleDSL::ActionRecorder do
             expect(action_sequence[0].paths).to eql(['/routed-foo.html'])
           end
 
-          it 'keeps skip_routing_rule' do
-            expect { subject }.not_to change { recorder.skip_routing_rule? }
+          it 'sets skip_routing_rule' do
+            expect { subject }
+              .to change { recorder.snapshots_for_which_to_skip_routing_rule }
+              .from(Set.new)
+              .to(Set.new([:foo]))
           end
         end
 
@@ -151,9 +159,9 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
           it 'sets skip_routing_rule' do
             expect { subject }
-              .to change { recorder.skip_routing_rule? }
-              .from(false)
-              .to(true)
+              .to change { recorder.snapshots_for_which_to_skip_routing_rule }
+              .from(Set.new)
+              .to(Set.new([:foo]))
           end
         end
       end
