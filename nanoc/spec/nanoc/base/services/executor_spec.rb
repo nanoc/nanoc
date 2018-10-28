@@ -401,11 +401,11 @@ describe Nanoc::Int::Executor do
 
     let(:view_context) do
       Nanoc::ViewContextForCompilation.new(
-        reps:                Nanoc::Int::ItemRepRepo.new,
-        items:               Nanoc::Int::ItemCollection.new(config),
-        dependency_tracker:  dependency_tracker,
+        reps: Nanoc::Int::ItemRepRepo.new,
+        items: Nanoc::Int::ItemCollection.new(config),
+        dependency_tracker: dependency_tracker,
         compilation_context: double(:compilation_context),
-        snapshot_repo:       snapshot_repo,
+        snapshot_repo: snapshot_repo,
       )
     end
 

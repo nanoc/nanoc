@@ -146,9 +146,9 @@ class Nanoc::CLITest < Nanoc::TestCase
 
   def test_enable_utf8_only_on_tty
     new_env_diff = {
-      'LC_ALL'   => 'en_US.ISO-8859-1',
+      'LC_ALL' => 'en_US.ISO-8859-1',
       'LC_CTYPE' => 'en_US.ISO-8859-1',
-      'LANG'     => 'en_US.ISO-8859-1',
+      'LANG' => 'en_US.ISO-8859-1',
     }
     with_env_vars(new_env_diff) do
       io = StringIO.new
@@ -172,9 +172,9 @@ class Nanoc::CLITest < Nanoc::TestCase
     end
 
     new_env_diff = {
-      'LC_ALL'   => 'en_US.ISO-8859-1',
+      'LC_ALL' => 'en_US.ISO-8859-1',
       'LC_CTYPE' => 'en_US.ISO-8859-1',
-      'LANG'     => 'en_US.ISO-8859-1',
+      'LANG' => 'en_US.ISO-8859-1',
     }
     with_env_vars(new_env_diff) do
       refute Nanoc::CLI.enable_utf8?(io)

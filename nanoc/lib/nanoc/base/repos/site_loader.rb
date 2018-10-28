@@ -77,7 +77,7 @@ module Nanoc::Int
       end
     end
 
-    ENCODING_REGEX = /\A#\s+(-\*-\s+)?(en)?coding: (?<encoding>[^\s]+)(\s+-\*-\s*)?\n{0,2}/
+    ENCODING_REGEX = /\A#\s+(-\*-\s+)?(en)?coding: (?<encoding>[^\s]+)(\s+-\*-\s*)?\n{0,2}/.freeze
 
     def encoding_from_magic_comment(raw)
       match = ENCODING_REGEX.match(raw)

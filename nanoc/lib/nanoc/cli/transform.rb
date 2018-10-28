@@ -4,7 +4,7 @@ module Nanoc::CLI
   # @api private
   module Transform
     module Port
-      RANGE = 0x0001..0xffff
+      RANGE = (0x0001..0xffff).freeze
 
       def self.call(data)
         Integer(data).tap do |int|

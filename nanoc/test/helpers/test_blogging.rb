@@ -38,11 +38,11 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     dependency_tracker = Nanoc::Int::DependencyTracker.new(dep_store)
 
     @view_context = Nanoc::ViewContextForCompilation.new(
-      reps:                Nanoc::Int::ItemRepRepo.new,
-      items:               Nanoc::Int::ItemCollection.new(config),
-      dependency_tracker:  dependency_tracker,
+      reps: Nanoc::Int::ItemRepRepo.new,
+      items: Nanoc::Int::ItemCollection.new(config),
+      dependency_tracker: dependency_tracker,
       compilation_context: :__irrelevant__,
-      snapshot_repo:       :__irrelevant_snapshot_repo,
+      snapshot_repo: :__irrelevant_snapshot_repo,
     )
   end
 

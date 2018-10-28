@@ -5,11 +5,11 @@ shared_examples 'an item rep view' do
 
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
-      reps:                Nanoc::Int::ItemRepRepo.new,
-      items:               Nanoc::Int::ItemCollection.new(config),
-      dependency_tracker:  dependency_tracker,
+      reps: Nanoc::Int::ItemRepRepo.new,
+      items: Nanoc::Int::ItemCollection.new(config),
+      dependency_tracker: dependency_tracker,
       compilation_context: compilation_context,
-      snapshot_repo:       snapshot_repo,
+      snapshot_repo: snapshot_repo,
     )
   end
 

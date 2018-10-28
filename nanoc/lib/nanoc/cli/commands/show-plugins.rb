@@ -75,8 +75,8 @@ module Nanoc::CLI::Commands
     ].freeze
 
     PLUGIN_CLASSES = {
-      Nanoc::Filter          => 'Filters',
-      Nanoc::DataSource      => 'Data Sources',
+      Nanoc::Filter => 'Filters',
+      Nanoc::DataSource => 'Data Sources',
       Nanoc::Deploying::Deployer => 'Deployers',
     }.freeze
 

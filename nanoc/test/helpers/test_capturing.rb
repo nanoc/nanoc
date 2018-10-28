@@ -15,11 +15,11 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
     config = Nanoc::Int::Configuration.new(dir: Dir.getwd)
 
     Nanoc::ViewContextForCompilation.new(
-      reps:                item_rep_repo_for(item),
-      items:               Nanoc::Int::ItemCollection.new(config),
-      dependency_tracker:  :__irrelevant__,
+      reps: item_rep_repo_for(item),
+      items: Nanoc::Int::ItemCollection.new(config),
+      dependency_tracker: :__irrelevant__,
       compilation_context: :__irrelevant__,
-      snapshot_repo:       snapshot_repo,
+      snapshot_repo: snapshot_repo,
     )
   end
 

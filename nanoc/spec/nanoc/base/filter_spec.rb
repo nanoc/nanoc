@@ -167,11 +167,11 @@ describe Nanoc::Filter do
 
     let(:view_context) do
       Nanoc::ViewContextForCompilation.new(
-        reps:                reps,
-        items:               Nanoc::Int::ItemCollection.new(config),
-        dependency_tracker:  dependency_tracker,
+        reps: reps,
+        items: Nanoc::Int::ItemCollection.new(config),
+        dependency_tracker: dependency_tracker,
         compilation_context: double(:compilation_context),
-        snapshot_repo:       double(:snapshot_repo),
+        snapshot_repo: double(:snapshot_repo),
       )
     end
 

@@ -16,11 +16,11 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
     @reps = Nanoc::Int::ItemRepRepo.new
     @view_context = Nanoc::ViewContextForCompilation.new(
-      reps:                @reps,
-      items:               Nanoc::Int::ItemCollection.new(config),
-      dependency_tracker:  dependency_tracker,
+      reps: @reps,
+      items: Nanoc::Int::ItemCollection.new(config),
+      dependency_tracker: dependency_tracker,
       compilation_context: :__irrelevant__,
-      snapshot_repo:       :__irrelevant_snapshot_repo,
+      snapshot_repo: :__irrelevant_snapshot_repo,
     )
 
     @items = nil

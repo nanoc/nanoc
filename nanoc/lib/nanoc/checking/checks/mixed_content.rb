@@ -8,7 +8,7 @@ module Nanoc::Checking::Checks
   class MixedContent < ::Nanoc::Checking::Check
     identifier :mixed_content
 
-    PROTOCOL_PATTERN = /^(\w+):\/\//
+    PROTOCOL_PATTERN = /^(\w+):\/\//.freeze
 
     def run
       filenames = output_html_filenames

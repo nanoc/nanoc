@@ -145,10 +145,10 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get input and expected output
     expected = {
-      '/foo'            => Nanoc::Identifier.new('/foo',            type: :full),
-      '/foo.html'       => Nanoc::Identifier.new('/foo.html',       type: :full),
+      '/foo' => Nanoc::Identifier.new('/foo', type: :full),
+      '/foo.html' => Nanoc::Identifier.new('/foo.html',       type: :full),
       '/foo/index.html' => Nanoc::Identifier.new('/foo/index.html', type: :full),
-      '/foo.html.erb'   => Nanoc::Identifier.new('/foo.html.erb',   type: :full),
+      '/foo.html.erb' => Nanoc::Identifier.new('/foo.html.erb', type: :full),
     }
 
     # Check
@@ -167,8 +167,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get input and expected output
     expected = {
-      '/foo'            => '/foo/',
-      '/foo.html'       => '/foo/',
+      '/foo' => '/foo/',
+      '/foo.html' => '/foo/',
       '/foo/index.html' => '/foo/',
       '/foo.entry.html' => '/foo.entry/',
     }
@@ -189,10 +189,10 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get input and expected output
     expected = {
-      '/foo'            => '/foo/',
-      '/foo.html'       => '/foo/',
+      '/foo' => '/foo/',
+      '/foo.html' => '/foo/',
       '/foo/index.html' => '/foo/',
-      '/foo.html.erb'   => '/foo/',
+      '/foo.html.erb' => '/foo/',
     }
 
     # Check
@@ -207,16 +207,16 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_identifier_for_filename_with_subfilename_allowing_periods_in_identifiers
     expectations = {
-      'foo/bar.yaml'         => '/foo/bar/',
-      'foo/quxbar.yaml'      => '/foo/quxbar/',
-      'foo/barqux.yaml'      => '/foo/barqux/',
-      'foo/quxbarqux.yaml'   => '/foo/quxbarqux/',
-      'foo/qux.bar.yaml'     => '/foo/qux.bar/',
-      'foo/bar.qux.yaml'     => '/foo/bar.qux/',
+      'foo/bar.yaml' => '/foo/bar/',
+      'foo/quxbar.yaml' => '/foo/quxbar/',
+      'foo/barqux.yaml' => '/foo/barqux/',
+      'foo/quxbarqux.yaml' => '/foo/quxbarqux/',
+      'foo/qux.bar.yaml' => '/foo/qux.bar/',
+      'foo/bar.qux.yaml' => '/foo/bar.qux/',
       'foo/qux.bar.qux.yaml' => '/foo/qux.bar.qux/',
-      'foo/index.yaml'       => '/foo/',
-      'index.yaml'           => '/',
-      'foo/blah_index.yaml'  => '/foo/blah_index/',
+      'foo/index.yaml' => '/foo/',
+      'index.yaml' => '/',
+      'foo/blah_index.yaml' => '/foo/blah_index/',
     }
 
     data_source = new_data_source(allow_periods_in_identifiers: true)
@@ -233,16 +233,16 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_identifier_for_filename_with_subfilename_disallowing_periods_in_identifiers
     expectations = {
-      'foo/bar.yaml'         => '/foo/bar/',
-      'foo/quxbar.yaml'      => '/foo/quxbar/',
-      'foo/barqux.yaml'      => '/foo/barqux/',
-      'foo/quxbarqux.yaml'   => '/foo/quxbarqux/',
-      'foo/qux.bar.yaml'     => '/foo/qux/',
-      'foo/bar.qux.yaml'     => '/foo/bar/',
+      'foo/bar.yaml' => '/foo/bar/',
+      'foo/quxbar.yaml' => '/foo/quxbar/',
+      'foo/barqux.yaml' => '/foo/barqux/',
+      'foo/quxbarqux.yaml' => '/foo/quxbarqux/',
+      'foo/qux.bar.yaml' => '/foo/qux/',
+      'foo/bar.qux.yaml' => '/foo/bar/',
       'foo/qux.bar.qux.yaml' => '/foo/qux/',
-      'foo/index.yaml'       => '/foo/',
-      'index.yaml'           => '/',
-      'foo/blah_index.yaml'  => '/foo/blah_index/',
+      'foo/index.yaml' => '/foo/',
+      'index.yaml' => '/',
+      'foo/blah_index.yaml' => '/foo/blah_index/',
     }
 
     data_source = new_data_source
@@ -259,12 +259,12 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_identifier_for_filename_with_index_filenames_allowing_periods_in_identifier
     expected = {
-      '/index.html.erb'       => '/index.html/',
-      '/index.html'           => '/',
-      '/index'                => '/',
-      '/foo/index.html.erb'   => '/foo/index.html/',
-      '/foo/index.html'       => '/foo/',
-      '/foo/index'            => '/foo/',
+      '/index.html.erb' => '/index.html/',
+      '/index.html' => '/',
+      '/index' => '/',
+      '/foo/index.html.erb' => '/foo/index.html/',
+      '/foo/index.html' => '/foo/',
+      '/foo/index' => '/foo/',
     }
 
     data_source = new_data_source(allow_periods_in_identifiers: true)
@@ -279,12 +279,12 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
   def test_identifier_for_filename_with_index_filenames_disallowing_periods_in_identifier
     expected = {
-      '/index.html.erb'       => '/',
-      '/index.html'           => '/',
-      '/index'                => '/',
-      '/foo/index.html.erb'   => '/foo/',
-      '/foo/index.html'       => '/foo/',
-      '/foo/index'            => '/foo/',
+      '/index.html.erb' => '/',
+      '/index.html' => '/',
+      '/index' => '/',
+      '/foo/index.html.erb' => '/foo/',
+      '/foo/index.html' => '/foo/',
+      '/foo/index' => '/foo/',
     }
 
     data_source = new_data_source
@@ -331,11 +331,11 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       klass.new(
         '',
         {
-          'num'             => 1,
+          'num' => 1,
           :content_filename => nil,
-          :meta_filename    => 'foo/a/b/c.yaml',
-          :extension        => nil,
-          :file             => nil,
+          :meta_filename => 'foo/a/b/c.yaml',
+          :extension => nil,
+          :file => nil,
           mtime: File.mtime('foo/a/b/c.yaml'),
         },
         '/a/b/c/',
@@ -343,11 +343,11 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       klass.new(
         'test 2',
         {
-          'num'             => 2,
+          'num' => 2,
           :content_filename => 'foo/b.c.html',
-          :meta_filename    => 'foo/b.c.yaml',
-          :extension        => 'html',
-          :file             => File.open('foo/b.c.html'),
+          :meta_filename => 'foo/b.c.yaml',
+          :extension => 'html',
+          :file => File.open('foo/b.c.html'),
           mtime: File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml'),
         },
         '/b.c/',
@@ -413,11 +413,11 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       klass.new(
         '',
         {
-          'num'             => 1,
+          'num' => 1,
           :content_filename => nil,
-          :meta_filename    => 'foo/a/b/c.yaml',
-          :extension        => nil,
-          :file             => nil,
+          :meta_filename => 'foo/a/b/c.yaml',
+          :extension => nil,
+          :file => nil,
           mtime: File.mtime('foo/a/b/c.yaml'),
         },
         '/a/b/c/',
@@ -425,11 +425,11 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       klass.new(
         'test 2',
         {
-          'num'             => 2,
+          'num' => 2,
           :content_filename => 'foo/b.html.erb',
-          :meta_filename    => 'foo/b.yaml',
-          :extension        => 'html.erb',
-          :file             => File.open('foo/b.html.erb'),
+          :meta_filename => 'foo/b.yaml',
+          :extension => 'html.erb',
+          :file => File.open('foo/b.html.erb'),
           mtime: File.mtime('foo/b.html.erb') > File.mtime('foo/b.yaml') ? File.mtime('foo/b.html.erb') : File.mtime('foo/b.yaml'),
         },
         '/b/',
@@ -543,9 +543,9 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get all files
     output_expected = {
-      './foo'       => ['yaml', ['html']],
-      './bar.entry' => [nil,    ['html']],
-      './foo/qux'   => ['yaml', [nil]],
+      './foo' => ['yaml', ['html']],
+      './bar.entry' => [nil, ['html']],
+      './foo/qux' => ['yaml', [nil]],
     }
     output_actual = data_source.send :all_split_files_in, '.'
 
@@ -570,9 +570,9 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get all files
     output_expected = {
-      './foo'       => ['yaml', ['html']],
-      './bar'       => [nil,    ['html.erb']],
-      './foo/qux'   => ['yaml', [nil]],
+      './foo' => ['yaml', ['html']],
+      './bar' => [nil,    ['html.erb']],
+      './foo/qux' => ['yaml', [nil]],
     }
     output_actual = data_source.send :all_split_files_in, '.'
 
@@ -641,12 +641,12 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get input and expected output
     expected = {
-      '/'                 => '/',
-      '/foo'              => '/foo',
-      '/foo.html'         => '/foo',
-      '/foo.xyz.html'     => '/foo.xyz',
-      '/foo/bar'          => '/foo/bar',
-      '/foo/bar.html'     => '/foo/bar',
+      '/' => '/',
+      '/foo' => '/foo',
+      '/foo.html' => '/foo',
+      '/foo.xyz.html' => '/foo.xyz',
+      '/foo/bar' => '/foo/bar',
+      '/foo/bar.html' => '/foo/bar',
       '/foo/bar.xyz.html' => '/foo/bar.xyz',
     }
 
@@ -666,17 +666,17 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get input and expected output
     expected = {
-      '/'                 => '/',
-      '/foo'              => '/foo',
-      '/foo.html'         => '/foo',
-      '/foo.xyz.html'     => '/foo.xyz',
-      '/foo/'             => '/foo/',
-      '/foo.xyz/'         => '/foo.xyz/',
-      '/foo/bar'          => '/foo/bar',
-      '/foo/bar.html'     => '/foo/bar',
+      '/' => '/',
+      '/foo' => '/foo',
+      '/foo.html' => '/foo',
+      '/foo.xyz.html' => '/foo.xyz',
+      '/foo/' => '/foo/',
+      '/foo.xyz/' => '/foo.xyz/',
+      '/foo/bar' => '/foo/bar',
+      '/foo/bar.html' => '/foo/bar',
       '/foo/bar.xyz.html' => '/foo/bar.xyz',
-      '/foo/bar/'         => '/foo/bar/',
-      '/foo/bar.xyz/'     => '/foo/bar.xyz/',
+      '/foo/bar/' => '/foo/bar/',
+      '/foo/bar.xyz/' => '/foo/bar.xyz/',
       '/foo.xyz/bar.xyz/' => '/foo.xyz/bar.xyz/',
     }
 
@@ -696,17 +696,17 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get input and expected output
     expected = {
-      '/'                 => '/',
-      '/foo'              => '/foo',
-      '/foo.html'         => '/foo',
-      '/foo.xyz.html'     => '/foo',
-      '/foo/'             => '/foo/',
-      '/foo.xyz/'         => '/foo.xyz/',
-      '/foo/bar'          => '/foo/bar',
-      '/foo/bar.html'     => '/foo/bar',
+      '/' => '/',
+      '/foo' => '/foo',
+      '/foo.html' => '/foo',
+      '/foo.xyz.html' => '/foo',
+      '/foo/' => '/foo/',
+      '/foo.xyz/' => '/foo.xyz/',
+      '/foo/bar' => '/foo/bar',
+      '/foo/bar.html' => '/foo/bar',
       '/foo/bar.xyz.html' => '/foo/bar',
-      '/foo/bar/'         => '/foo/bar/',
-      '/foo/bar.xyz/'     => '/foo/bar.xyz/',
+      '/foo/bar/' => '/foo/bar/',
+      '/foo/bar.xyz/' => '/foo/bar.xyz/',
       '/foo.xyz/bar.xyz/' => '/foo.xyz/bar.xyz/',
     }
 
@@ -726,17 +726,17 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get input and expected output
     expected = {
-      '/'                 => '',
-      '/foo'              => '',
-      '/foo.html'         => '.html',
-      '/foo.xyz.html'     => '.html',
-      '/foo/'             => '',
-      '/foo.xyz/'         => '',
-      '/foo/bar'          => '',
-      '/foo/bar.html'     => '.html',
+      '/' => '',
+      '/foo' => '',
+      '/foo.html' => '.html',
+      '/foo.xyz.html' => '.html',
+      '/foo/' => '',
+      '/foo.xyz/' => '',
+      '/foo/bar' => '',
+      '/foo/bar.html' => '.html',
       '/foo/bar.xyz.html' => '.html',
-      '/foo/bar/'         => '',
-      '/foo/bar.xyz/'     => '',
+      '/foo/bar/' => '',
+      '/foo/bar.xyz/' => '',
       '/foo.xyz/bar.xyz/' => '',
     }
 
@@ -756,17 +756,17 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get input and expected output
     expected = {
-      '/'                 => '',
-      '/foo'              => '',
-      '/foo.html'         => '.html',
-      '/foo.xyz.html'     => '.xyz.html',
-      '/foo/'             => '',
-      '/foo.xyz/'         => '',
-      '/foo/bar'          => '',
-      '/foo/bar.html'     => '.html',
+      '/' => '',
+      '/foo' => '',
+      '/foo.html' => '.html',
+      '/foo.xyz.html' => '.xyz.html',
+      '/foo/' => '',
+      '/foo.xyz/' => '',
+      '/foo/bar' => '',
+      '/foo/bar.html' => '.html',
       '/foo/bar.xyz.html' => '.xyz.html',
-      '/foo/bar/'         => '',
-      '/foo/bar.xyz/'     => '',
+      '/foo/bar/' => '',
+      '/foo/bar.xyz/' => '',
       '/foo.xyz/bar.xyz/' => '',
     }
 
