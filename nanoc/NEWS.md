@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.10.3 (2018-10-28)
+
+Fixes:
+
+* Fixed an issue which could cause `write nil` to still invoke the routing rule (#1374, #1375)
+
 ## 4.10.2 (2018-10-21)
 
 Fixes:
