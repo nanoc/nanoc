@@ -298,9 +298,9 @@ RSpec::Matchers.define :have_correct_yard_examples do |_name, *_expected_args|
     b = binding
     executed_examples = examples.map do |pair|
       {
-        input:    pair.first,
+        input: pair.first,
         expected: eval(pair.last.match(/# ?=>(.*)/)[1], b),
-        actual:   eval(pair.first, b),
+        actual: eval(pair.first, b),
       }
     end
 
