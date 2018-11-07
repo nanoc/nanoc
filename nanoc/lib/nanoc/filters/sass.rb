@@ -25,11 +25,14 @@ module Nanoc::Filters
         filename: rep.item.identifier.to_s,
         cache: false,
       )
+      css_path = options.delete(:css_path) || filter.object_id.to_s
       sourcemap_path = options.delete(:sourcemap_path)
 
       engine = ::Sass::Engine.new(content, options)
       css, sourcemap = sourcemap_path ? engine.render_with_sourcemap(sourcemap_path) : engine.render
-      [css, sourcemap&.to_json(css_uri: rep.path, type: rep.path.nil? ? :inline : :auto)]
+      sourcemap = sourcemap&.to_json(css_path: css_path, sourcemap_path: sourcemap_path, type: params[:sources_content] ? :inline : :auto)
+      sourcemap = sourcemap&.split("\n")&.reject { |l| l =~ /^\s*"file":\s*"#{filter.object_id.to_s}"\s*$/ }&.join("\n")
+      [css, sourcemap]
     end
   end
 

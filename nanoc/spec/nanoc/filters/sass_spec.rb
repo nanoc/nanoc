@@ -264,11 +264,14 @@ describe Nanoc::Filters::SassCommon do
 
     context 'sourcemaps' do
       it 'generates proper sourcemaps' do
-        expect(sass.setup_and_run(".foo #bar\n  color: #f00", sourcemap_path: 'main.sass.map'))
-          .to match(/.foo\s+#bar\s*\{\s*color:\s+(red|#f00);?\s*\}\s*\/\*# sourceMappingURL=main.sass.map \*\//)
+        expect(sass.setup_and_run(".foo #bar\n  color: #f00", sourcemap_path: 'main.css.map'))
+          .to match(/.foo\s+#bar\s*\{\s*color:\s+(red|#f00);?\s*\}\s*\/\*# sourceMappingURL=main.css.map \*\//)
 
-        expect(sass_sourcemap.setup_and_run(".foo #bar\n  color: #f00", sourcemap_path: 'main.sass.map'))
-          .to match(/{.*?"sources": \["#{item_main_default_rep.raw_path}"\].*?"file": "#{item_main_sourcemap_rep.raw_path}".*?}/m)
+        expect(sass_sourcemap.setup_and_run(".foo #bar\n  color: #f00", css_path: 'main.css', sourcemap_path: 'main.css.map'))
+          .to match(/{.*?"sources": \["#{item_main_default_rep.raw_path}"\].*?"file": "main\.css".*?}/m)
+
+        expect(sass_sourcemap.setup_and_run(".foo #bar\n  color: #f00", sourcemap_path: 'main.css.map'))
+          .not_to match(/{.*?"sources": \["#{item_main_default_rep.raw_path}"\].*?"file": ".*?".*?}/m)
       end
     end
 
