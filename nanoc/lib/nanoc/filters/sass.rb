@@ -27,12 +27,23 @@ module Nanoc::Filters
       )
       css_path = options.delete(:css_path) || filter.object_id.to_s
       sourcemap_path = options.delete(:sourcemap_path)
+      if sourcemap_path == :inline
+        sourcemap_path = Nanoc::Int::TempFilenameFactory.instance.create('sass_sourcemap')
+        inline = true
+      end
 
       engine = ::Sass::Engine.new(content, options)
       css, sourcemap = sourcemap_path ? engine.render_with_sourcemap(sourcemap_path) : engine.render
-      sourcemap = sourcemap&.to_json(css_path: css_path, sourcemap_path: sourcemap_path, type: params[:sources_content] ? :inline : :auto)
-      sourcemap = sourcemap&.split("\n")&.reject { |l| l =~ /^\s*"file":\s*"#{filter.object_id.to_s}"\s*$/ }&.join("\n")
-      [css, sourcemap]
+
+      if inline
+        sourcemap = sourcemap&.to_json(css_uri: css_path)
+        encoded = "data:application/json;base64,#{Base64.urlsafe_encode64(sourcemap)}"
+        [css.gsub(%r{^/\*#\s+sourceMappingURL=\s*#{sourcemap_path}\s*\*/$}, "/*# sourceMappingURL=#{encoded} */")]
+      else
+        sourcemap = sourcemap&.to_json(css_path: css_path, sourcemap_path: sourcemap_path, type: params[:sources_content] ? :inline : :auto)
+        sourcemap = sourcemap&.split("\n")&.reject { |l| l =~ /^\s*"file":\s*"#{filter.object_id.to_s}"\s*$/ }&.join("\n")
+        [css, sourcemap]
+      end
     end
   end
 

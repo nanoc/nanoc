@@ -273,6 +273,11 @@ describe Nanoc::Filters::SassCommon do
         expect(sass_sourcemap.setup_and_run(".foo #bar\n  color: #f00", sourcemap_path: 'main.css.map'))
           .not_to match(/{.*?"sources": \["#{item_main_default_rep.raw_path}"\].*?"file": ".*?".*?}/m)
       end
+
+      it 'generates inlined sourcemaps' do
+        expect(sass.setup_and_run(".foo #bar\n  color: #f00", css_path: 'main.css', sourcemap_path: :inline))
+          .to match(/.foo\s+#bar\s*\{\s*color:\s+(red|#f00);?\s*\}\s*\/\*# sourceMappingURL=data:application\/json;base64.*? \*\//)
+      end
     end
 
     context 'nanoc() sass function' do
