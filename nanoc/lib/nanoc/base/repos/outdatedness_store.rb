@@ -10,34 +10,45 @@ module Nanoc
       def initialize(config:)
         super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'outdatedness'), 1)
 
+        @mutex = Mutex.new
         @outdated_refs = Set.new
       end
 
       contract Nanoc::Core::ItemRep => C::Bool
       def include?(obj)
-        @outdated_refs.include?(obj.reference)
+        @mutex.synchronize do
+          @outdated_refs.include?(obj.reference)
+        end
       end
 
       contract Nanoc::Core::ItemRep => self
       def add(obj)
-        @outdated_refs << obj.reference
+        @mutex.synchronize do
+          @outdated_refs << obj.reference
+        end
         self
       end
 
       contract Nanoc::Core::ItemRep => self
       def remove(obj)
-        @outdated_refs.delete(obj.reference)
+        @mutex.synchronize do
+          @outdated_refs.delete(obj.reference)
+        end
         self
       end
 
       contract C::None => C::Bool
       def empty?
-        @outdated_refs.empty?
+        @mutex.synchronize do
+          @outdated_refs.empty?
+        end
       end
 
       contract C::None => self
       def clear
-        @outdated_refs = Set.new
+        @mutex.synchronize do
+          @outdated_refs = Set.new
+        end
         self
       end
 

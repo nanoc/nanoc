@@ -45,111 +45,8 @@ describe Nanoc::Int::Compiler::Phases::Resume do
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
   describe '#call' do
-    context 'one run' do
+    context 'full run' do
       subject do
-        phase.call(rep, is_outdated: true)
-      end
-
-      it 'delegates to wrapped' do
-        expect { subject rescue nil }.to change(wrapped, :count).from(0).to(1)
-      end
-
-      it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::UnmetDependency)
-      end
-
-      it 'posts correct notifications' do
-        begin
-          msgs = []
-          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-
-          subject rescue nil
-          Nanoc::Core::NotificationCenter.sync
-          expect(msgs).to eq([:compilation_suspended])
-        ensure
-          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
-        end
-      end
-
-      context 'wrapped in Notify' do
-        let(:phase) do
-          Nanoc::Int::Compiler::Phases::Notify.new(wrapped: super())
-        end
-
-        it 'posts correct notifications' do
-          begin
-            msgs = []
-            Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
-            Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-            Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
-
-            subject rescue nil
-            Nanoc::Core::NotificationCenter.sync
-            expect(msgs).to eq(%i[compilation_started compilation_suspended])
-          ensure
-            Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
-          end
-        end
-      end
-    end
-
-    context 'two runs' do
-      subject do
-        phase.call(rep, is_outdated: true) rescue nil
-        phase.call(rep, is_outdated: true)
-      end
-
-      it 'delegates to wrapped' do
-        expect { subject rescue nil }.to change(wrapped, :count).from(0).to(2)
-      end
-
-      it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::UnmetDependency)
-      end
-
-      it 'posts correct notifications' do
-        begin
-          msgs = []
-          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-
-          subject rescue nil
-          Nanoc::Core::NotificationCenter.sync
-          expect(msgs).to eq(%i[compilation_suspended compilation_suspended])
-        ensure
-          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
-        end
-      end
-
-      context 'wrapped in Notify' do
-        let(:phase) do
-          Nanoc::Int::Compiler::Phases::Notify.new(wrapped: super())
-        end
-
-        it 'posts correct notifications' do
-          begin
-            msgs = []
-            Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
-            Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-            Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
-
-            subject rescue nil
-            Nanoc::Core::NotificationCenter.sync
-            expect(msgs).to eq(%i[compilation_started compilation_suspended compilation_started compilation_suspended])
-          ensure
-            Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
-          end
-        end
-      end
-    end
-
-    context 'three runs' do
-      subject do
-        phase.call(rep, is_outdated: true) rescue nil
-        phase.call(rep, is_outdated: true) rescue nil
         phase.call(rep, is_outdated: true)
       end
 
@@ -164,13 +61,13 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       it 'posts correct notifications' do
         begin
           msgs = []
-          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+          Nanoc::Core::NotificationCenter.on(:compilation_interrupted, self) { msgs << :compilation_interrupted }
 
           subject
           Nanoc::Core::NotificationCenter.sync
-          expect(msgs).to eq(%i[compilation_suspended compilation_suspended])
+          expect(msgs).to eq(%i[compilation_interrupted compilation_interrupted])
         ensure
-          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
+          Nanoc::Core::NotificationCenter.remove(:compilation_interrupted, self)
         end
       end
 
@@ -183,15 +80,15 @@ describe Nanoc::Int::Compiler::Phases::Resume do
           begin
             msgs = []
             Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
-            Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+            Nanoc::Core::NotificationCenter.on(:compilation_interrupted, self) { msgs << :compilation_interrupted }
             Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
 
             subject
             Nanoc::Core::NotificationCenter.sync
-            expect(msgs).to eq(%i[compilation_started compilation_suspended compilation_started compilation_suspended compilation_started compilation_ended])
+            expect(msgs).to eq(%i[compilation_started compilation_interrupted compilation_interrupted compilation_ended])
           ensure
             Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
+            Nanoc::Core::NotificationCenter.remove(:compilation_interrupted, self)
             Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
           end
         end

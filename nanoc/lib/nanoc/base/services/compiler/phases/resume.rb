@@ -18,8 +18,7 @@ module Nanoc
 
               case res
               when Nanoc::Int::Errors::UnmetDependency
-                Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, res.rep, res.snapshot_name)
-                raise(res)
+                Nanoc::Core::NotificationCenter.post(:compilation_interrupted, rep, res.rep, res.snapshot_name)
               when Proc
                 fiber.resume(res.call)
               when DONE # rubocop:disable Lint/EmptyWhen

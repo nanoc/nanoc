@@ -13,6 +13,8 @@ module Nanoc
       def initialize(items, layouts, config)
         super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'dependencies'), 5)
 
+        @mutex = Mutex.new
+
         @items = items
         @layouts = layouts
 
@@ -118,11 +120,15 @@ module Nanoc
         new_props = Nanoc::Core::DependencyProps.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
         props = existing_props.merge(new_props)
 
-        @graph.add_edge(dst_ref, src_ref, props: props.to_h)
+        @mutex.synchronize do
+          @graph.add_edge(dst_ref, src_ref, props: props.to_h)
+        end
       end
 
       def add_vertex_for(obj)
-        @refs2objs[obj2ref(obj)] = obj
+        @mutex.synchronize do
+          @refs2objs[obj2ref(obj)] = obj
+        end
       end
 
       # Empties the list of dependencies for the given object. This is necessary
@@ -135,7 +141,9 @@ module Nanoc
       #
       # @return [void]
       def forget_dependencies_for(object)
-        @graph.delete_edges_to(obj2ref(object))
+        @mutex.synchronize do
+          @graph.delete_edges_to(obj2ref(object))
+        end
       end
 
       protected
@@ -161,7 +169,10 @@ module Nanoc
       end
 
       def props_for(from, to)
-        props = @graph.props_for(obj2ref(from), obj2ref(to)) || {}
+        props =
+          @mutex.synchronize do
+            @graph.props_for(obj2ref(from), obj2ref(to)) || {}
+          end
 
         if props.values.any? { |v| v }
           props

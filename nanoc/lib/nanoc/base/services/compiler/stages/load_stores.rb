@@ -24,7 +24,7 @@ module Nanoc
             load_store(@outdatedness_store)
           end
 
-          contract Nanoc::Int::Store => C::Any
+          contract C::Or[Nanoc::Int::Store, Nanoc::Int::ThreadsafeCompiledContentCacheDecorator] => C::Any
           def load_store(store)
             Nanoc::Core::Instrumentor.call(:store_loaded, store.class) do
               store.load

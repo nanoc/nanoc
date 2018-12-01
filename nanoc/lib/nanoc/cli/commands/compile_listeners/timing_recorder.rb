@@ -52,14 +52,6 @@ module Nanoc::CLI::Commands::CompileListeners
         @load_stores_summary.observe(duration, name: klass.to_s)
       end
 
-      on(:compilation_suspended) do |rep, _target_rep, _snapshot_name|
-        filter_stopwatches.fetch(rep).each(&:stop)
-      end
-
-      on(:compilation_started) do |rep|
-        filter_stopwatches.fetch(rep, []).each(&:start)
-      end
-
       setup_phase_notifications
     end
 

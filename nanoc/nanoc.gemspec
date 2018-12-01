@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('addressable', '~> 2.5')
   s.add_runtime_dependency('colored', '~> 1.2')
+  s.add_runtime_dependency('concurrent-ruby', '~> 1.1')
   s.add_runtime_dependency('cri', '~> 2.15')
   s.add_runtime_dependency('nanoc-core', "= #{Nanoc::VERSION}")
   s.add_runtime_dependency('parallel', '~> 1.12')

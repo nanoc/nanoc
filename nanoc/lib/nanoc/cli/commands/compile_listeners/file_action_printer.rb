@@ -15,10 +15,6 @@ module Nanoc::CLI::Commands::CompileListeners
         @stopwatches[rep].start
       end
 
-      on(:compilation_suspended) do |rep|
-        @stopwatches[rep].stop
-      end
-
       cached_reps = Set.new
       on(:cached_content_used) do |rep|
         cached_reps << rep

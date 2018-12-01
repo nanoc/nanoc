@@ -28,6 +28,7 @@ lib/nanoc/base/repos/site_loader.rb
 lib/nanoc/base/repos/compiled_content_store.rb
 lib/nanoc/base/repos/store.rb
 lib/nanoc/base/repos/textual_compiled_content_cache.rb
+lib/nanoc/base/repos/threadsafe_compiled_content_cache_decorator.rb
 lib/nanoc/base/services.rb
 lib/nanoc/base/services/compilation_context.rb
 lib/nanoc/base/services/compiler_loader.rb
@@ -59,7 +60,6 @@ lib/nanoc/base/services/executor.rb
 lib/nanoc/base/services/filter.rb
 lib/nanoc/base/services/item_rep_builder.rb
 lib/nanoc/base/services/item_rep_router.rb
-lib/nanoc/base/services/item_rep_selector.rb
 lib/nanoc/base/services/item_rep_writer.rb
 lib/nanoc/base/services/outdatedness_checker.rb
 lib/nanoc/base/services/outdatedness_rule.rb

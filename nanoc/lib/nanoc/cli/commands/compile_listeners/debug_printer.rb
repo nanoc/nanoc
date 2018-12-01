@@ -27,8 +27,8 @@ module Nanoc::CLI::Commands::CompileListeners
         log('compilation', '')
       end
 
-      on(:compilation_suspended) do |rep, target_rep, snapshot_name|
-        log('compilation', "Suspended compilation of #{rep}: depends on #{target_rep}, snapshot #{snapshot_name}")
+      on(:compilation_interrupted) do |rep, target_rep, snapshot_name|
+        log('compilation', "Interrupted compilation of #{rep}: depends on #{target_rep}, snapshot #{snapshot_name}")
       end
 
       on(:cached_content_used) do |rep|

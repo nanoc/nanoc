@@ -100,45 +100,6 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     expect(listener.filters_summary.get(name: 'outer').count).to eq(1.00)
   end
 
-  it 'pauses outer stopwatch when suspended' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
-    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :outer).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :inner).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
-    Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, :__anything__).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
-    Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 10))
-    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :inner).sync
-    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :outer).sync
-
-    expect(listener.filters_summary.get(name: 'outer').min).to eq(7.00)
-    expect(listener.filters_summary.get(name: 'outer').avg).to eq(7.00)
-    expect(listener.filters_summary.get(name: 'outer').max).to eq(7.00)
-    expect(listener.filters_summary.get(name: 'outer').sum).to eq(7.00)
-    expect(listener.filters_summary.get(name: 'outer').count).to eq(1.00)
-  end
-
-  it 'records single from filtering_started over compilation_{suspended,started} to filtering_ended' do
-    Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, :__anything__).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
-    Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 7))
-    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
-
-    expect(listener.filters_summary.get(name: 'erb').min).to eq(5.00)
-    expect(listener.filters_summary.get(name: 'erb').avg).to eq(5.00)
-    expect(listener.filters_summary.get(name: 'erb').max).to eq(5.00)
-    expect(listener.filters_summary.get(name: 'erb').sum).to eq(5.00)
-    expect(listener.filters_summary.get(name: 'erb').count).to eq(1.00)
-  end
-
   it 'records single phase start+stop' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
     Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync

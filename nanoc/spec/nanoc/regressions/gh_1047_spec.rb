@@ -20,7 +20,11 @@ EOS
     File.write('content/foo.md', 'I am foo!')
     File.write('content/bar.md', '<%= @items["/foo.*"].compiled_content %><%= raise "boom" %>')
     expect { Nanoc::CLI.run(%w[compile]) }.to raise_error(Nanoc::Int::Errors::CompilationError)
-    expect(File.read('output/foo.md')).to eql('I am foo!')
+
+    # NOTE: There is no guarantee about what the content of output/foo.md is at
+    # this point. Previously (before parallel compilation), the /foo.* item
+    # would be fully finished before moving on to the /bar.* item, and that
+    # guarantee therefore used to be true. But not anymore!
 
     File.write('content/bar.md', '[<%= @items["/foo.*"].compiled_content %>]')
     Nanoc::CLI.run(%w[compile])
