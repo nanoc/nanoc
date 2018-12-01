@@ -122,7 +122,7 @@ module Nanoc::Int
       #   compiled
       attr_reader :rep
 
-      # TODO: document
+      # @return [Symbol] The name of the snapshot that cannot yet be compiled
       attr_reader :snapshot_name
 
       # @param [Nanoc::Int::ItemRep] rep The item representation that cannot yet be
