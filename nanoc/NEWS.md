@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.11.0 (2018-12-01)
+
+Features:
+
+* Added support for generating inline source maps for Sass (#1376) [Gregory Pakosz]
+* Added `:tiebreaker` option to the breadcrumbs helper, so that it can deal with ambiguity (#1368)
+
 ## 4.10.4 (2018-12-01)
 
 Fixes:
