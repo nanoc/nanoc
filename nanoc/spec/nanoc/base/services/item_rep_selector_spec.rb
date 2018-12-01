@@ -35,7 +35,7 @@ describe Nanoc::Int::ItemRepSelector do
 
       dependencies.fetch(rep.name, []).each do |name|
         unless successfully_yielded.include?(name)
-          raise Nanoc::Int::Errors::UnmetDependency.new(names_to_reps[name])
+          raise Nanoc::Int::Errors::UnmetDependency.new(names_to_reps[name], :foo)
         end
       end
 
@@ -63,7 +63,7 @@ describe Nanoc::Int::ItemRepSelector do
         selector.each do |_rep|
           idx += 1
 
-          raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[2]) if idx == 1
+          raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[2], :foo) if idx == 1
         end
       end
 
@@ -98,7 +98,7 @@ describe Nanoc::Int::ItemRepSelector do
           idx += 1
 
           begin
-            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[2]) if idx == 1
+            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[2], :foo) if idx == 1
           rescue => e
             raise Nanoc::Int::Errors::CompilationError.new(e, rep)
           end
@@ -114,7 +114,7 @@ describe Nanoc::Int::ItemRepSelector do
   describe 'cycle' do
     context 'dependency on self' do
       subject do
-        selector.each { |r| raise Nanoc::Int::Errors::UnmetDependency.new(r) }
+        selector.each { |r| raise Nanoc::Int::Errors::UnmetDependency.new(r, :foo) }
       end
 
       example do
@@ -131,11 +131,11 @@ describe Nanoc::Int::ItemRepSelector do
         selector.each do |r|
           case r
           when reps_array[0]
-            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[1])
+            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[1], :foo)
           when reps_array[1]
-            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[2])
+            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[2], :foo)
           when reps_array[2]
-            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[0])
+            raise Nanoc::Int::Errors::UnmetDependency.new(reps_array[0], :foo)
           end
         end
       end

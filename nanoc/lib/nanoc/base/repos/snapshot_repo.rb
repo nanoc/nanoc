@@ -46,7 +46,7 @@ module Nanoc::Int
       stopped_moving = snapshot_name != :last || rep.compiled?
       is_usable_snapshot = get(rep, snapshot_name) && stopped_moving
       unless is_usable_snapshot
-        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep))
+        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep, snapshot_name))
         return raw_compiled_content(rep: rep, snapshot: snapshot)
       end
 

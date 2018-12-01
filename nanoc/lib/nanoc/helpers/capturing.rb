@@ -67,7 +67,8 @@ module Nanoc::Helpers
           dependency_tracker.bounce(@requested_item._unwrap, compiled_content: true)
 
           unless rep.compiled?
-            Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep))
+            # FIXME: is :last appropriate?
+            Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep, :last))
             return run
           end
         end

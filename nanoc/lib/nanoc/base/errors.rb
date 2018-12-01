@@ -122,11 +122,16 @@ module Nanoc::Int
       #   compiled
       attr_reader :rep
 
+      # TODO: document
+      attr_reader :snapshot_name
+
       # @param [Nanoc::Int::ItemRep] rep The item representation that cannot yet be
       #   compiled
-      def initialize(rep)
+      def initialize(rep, snapshot_name)
         @rep = rep
-        super("The current item cannot be compiled yet because of an unmet dependency on the “#{rep.item.identifier}” item (rep “#{rep.name}”).")
+        @snapshot_name = snapshot_name
+
+        super("The current item cannot be compiled yet because of an unmet dependency on the “#{rep.item.identifier}” item (rep “#{rep.name}”, snapshot “#{snapshot_name}”).")
       end
     end
 
