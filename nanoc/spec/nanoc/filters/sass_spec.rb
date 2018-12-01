@@ -88,11 +88,13 @@ describe Nanoc::Filters::SassCommon do
         rep.raw_paths = rep.paths = { last: [Dir.getwd + '/output/style/main.sass'] }
       end
     end
+
     let(:item_main_sourcemap_rep) do
       Nanoc::Int::ItemRep.new(item_main, :sourcemap).tap do |rep|
         rep.raw_paths = rep.paths = { last: [Dir.getwd + '/output/style/main.sass.map'] }
       end
     end
+
     let(:item_main_view) { Nanoc::CompilationItemView.new(item_main, view_context) }
     let(:item_main_default_rep_view) { Nanoc::CompilationItemRepView.new(item_main_default_rep, view_context) }
     let(:item_main_sourcemap_rep_view) { Nanoc::CompilationItemRepView.new(item_main_sourcemap_rep, view_context) }
@@ -122,9 +124,11 @@ describe Nanoc::Filters::SassCommon do
         reps << item_main_sourcemap_rep
       end
     end
+
     let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
     let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
     let(:compilation_context) { double(:compilation_context) }
+
     let(:snapshot_repo) do
       Nanoc::Int::SnapshotRepo.new.tap do |repo|
         repo.set(reps[item_blue].first, :last, Nanoc::Int::TextualContent.new('.blue { color: blue }'))
@@ -229,7 +233,7 @@ describe Nanoc::Filters::SassCommon do
       before { File.write('_external.scss', 'body { font: 100%; }') }
 
       context 'load_path set' do
-        it 'can import by relative path' do
+        it 'can import (using load paths) by relative path' do
           expect(sass.setup_and_run('@import external', load_paths: ['.']))
             .to match(/\Abody\s+\{\s*font:\s+100%;?\s*\}\s*\z/)
         end
@@ -241,9 +245,14 @@ describe Nanoc::Filters::SassCommon do
       end
 
       context 'load_path not set' do
-        it 'cannot import by relative path' do
+        it 'cannot import (using load paths) by relative path' do
           expect { sass.setup_and_run('@import external') }
             .to raise_error(::Sass::SyntaxError, /File to import not found/)
+        end
+
+        it 'can import (using importer) by relative path' do
+          expect(sass.setup_and_run('@import "../../_external"'))
+            .to match(/\Abody\s+\{\s*font:\s+100%;?\s*\}\s*\z/)
         end
       end
     end

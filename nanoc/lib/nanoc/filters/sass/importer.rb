@@ -20,15 +20,16 @@ module Nanoc::Filters::SassCommon
       return unless raw_filename
 
       item = raw_filename_to_item(raw_filename)
-      # it doesn't make sense to import a file, from Nanoc's content if the corresponding item has been deleted
-      raise "unable to map #{raw_filename} to any item" if item.nil?
 
-      filter.depend_on([item])
+      content = item ? item.raw_content : File.read(raw_filename)
+      filename = item ? item.identifier.to_s : raw_filename
+
+      filter.depend_on([item]) if item
 
       options[:syntax] = syntax
-      options[:filename] = item.identifier.to_s
+      options[:filename] = filename
       options[:importer] = self
-      ::Sass::Engine.new(item.raw_content, options)
+      ::Sass::Engine.new(content, options)
     end
 
     def find(identifier, options)
