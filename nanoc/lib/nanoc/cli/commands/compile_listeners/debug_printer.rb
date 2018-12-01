@@ -16,8 +16,8 @@ module Nanoc::CLI::Commands::CompileListeners
         puts "*** Ended compilation of #{rep.inspect}"
         puts
       end
-      Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, e|
-        puts "*** Suspended compilation of #{rep.inspect}: #{e.message}"
+      Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, target_rep, snapshot_name|
+        puts "*** Suspended compilation of #{rep.inspect}: depends on #{target_rep}, snapshot #{snapshot_name}"
       end
       Nanoc::Int::NotificationCenter.on(:cached_content_used) do |rep|
         puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling"

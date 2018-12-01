@@ -124,7 +124,7 @@ describe Nanoc::Int::Compiler do
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:dependency_created, item, other_item).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_suspended, rep, anything).ordered
+        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_suspended, rep, anything, anything).ordered
 
         # rep 2
         expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_started, other_rep).ordered
