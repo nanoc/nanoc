@@ -198,7 +198,26 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
           subject { helper.breadcrumbs_trail(tiebreaker: tiebreaker) }
 
           let(:tiebreaker) do
-            ->(_pattern, items) { items.max_by(&:identifier) }
+            ->(items, _pattern) { items.max_by(&:identifier) }
+          end
+
+          it 'picks the last' do
+            expect(subject)
+              .to eql(
+                [
+                  ctx.items['/index.md'],
+                  ctx.items['/foo.md.erb'],
+                  ctx.items['/foo/stuff.md'],
+                ],
+              )
+          end
+        end
+
+        context 'tiebreaker without pattern arg which picks the last' do
+          subject { helper.breadcrumbs_trail(tiebreaker: tiebreaker) }
+
+          let(:tiebreaker) do
+            ->(items) { items.max_by(&:identifier) }
           end
 
           it 'picks the last' do
