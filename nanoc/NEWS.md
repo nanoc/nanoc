@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.10.4 (2018-12-01)
+
+Fixes:
+
+* Fixed an error when importing a Sass/SCSS file outside of Nanoc’s content directory (#1378, #1379)
+
 ## 4.10.3 (2018-10-28)
 
 Fixes:
