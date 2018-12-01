@@ -20,7 +20,7 @@ module Nanoc
       res = @item_rep.raw_path(snapshot: snapshot)
 
       unless @item_rep.compiled?
-        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(@item_rep))
+        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(@item_rep, snapshot))
       end
 
       # Wait for file to exist
