@@ -72,6 +72,7 @@ lib/nanoc/base/services/compiler/phases.rb
 lib/nanoc/base/services/compiler/phases/abstract.rb
 lib/nanoc/base/services/compiler/phases/cache.rb
 lib/nanoc/base/services/compiler/phases/mark_done.rb
+lib/nanoc/base/services/compiler/phases/notify.rb
 lib/nanoc/base/services/compiler/phases/recalculate.rb
 lib/nanoc/base/services/compiler/phases/resume.rb
 lib/nanoc/base/services/compiler/phases/write.rb

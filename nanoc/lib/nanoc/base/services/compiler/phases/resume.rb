@@ -15,7 +15,6 @@ module Nanoc::Int::Compiler::Phases
     def run(rep, is_outdated:)
       fiber = fiber_for(rep, is_outdated: is_outdated) { yield }
       while fiber.alive?
-        Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
         res = fiber.resume
 
         case res
@@ -32,8 +31,6 @@ module Nanoc::Int::Compiler::Phases
           )
         end
       end
-
-      Nanoc::Int::NotificationCenter.post(:compilation_ended, rep)
     end
 
     private
