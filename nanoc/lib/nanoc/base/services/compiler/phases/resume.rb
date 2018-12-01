@@ -22,8 +22,6 @@ module Nanoc::Int::Compiler::Phases
         when Nanoc::Int::Errors::UnmetDependency
           Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res)
           raise(res)
-        when Proc
-          fiber.resume(res.call)
         when DONE # rubocop:disable Lint/EmptyWhen
           # ignore
         else
