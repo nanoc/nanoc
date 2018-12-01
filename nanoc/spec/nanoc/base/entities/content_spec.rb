@@ -116,7 +116,7 @@ describe Nanoc::Int::TextualContent do
   end
 
   describe '#freeze' do
-    let(:content) { described_class.new('foo', filename: '/asdf.md') }
+    let(:content) { described_class.new(+'foo', filename: '/asdf.md') }
 
     before do
       content.freeze
@@ -133,7 +133,7 @@ describe Nanoc::Int::TextualContent do
     end
 
     context 'with proc' do
-      let(:content) { described_class.new(proc { 'foo' }) }
+      let(:content) { described_class.new(proc { +'foo' }) }
 
       it 'prevents changes to string' do
         expect(content.string).to be_frozen
