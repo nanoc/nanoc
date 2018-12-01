@@ -93,8 +93,8 @@ end
 
 # Tracking issue:
 # https://github.com/nanoc/features/issues/24
-Nanoc::Feature.define('live_cmd', version: '4.10')
+Nanoc::Feature.define('live_cmd', version: '4.11')
 
 # Tracking issue:
 # https://github.com/nanoc/features/issues/40
-Nanoc::Feature.define('toml', version: '4.10')
+Nanoc::Feature.define('toml', version: '4.11')
