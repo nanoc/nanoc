@@ -16,6 +16,11 @@ module Nanoc::Helpers
 
     # @api private
     module Int
+      DEFAULT_TIEBREAKER =
+        lambda do |pattern, items|
+          raise AmbiguousAncestorError.new(pattern, items)
+        end
+
       # e.g. unfold(10.class, &:superclass)
       # => [Integer, Numeric, Object, BasicObject]
       def self.unfold(obj, &blk)
@@ -41,7 +46,7 @@ module Nanoc::Helpers
         prefixes.map { |pr| pr + '.*' }
       end
 
-      def self.find_one(items, pat)
+      def self.find_one(items, pat, tiebreaker)
         res = items.find_all(pat)
         case res.size
         when 0
@@ -49,13 +54,13 @@ module Nanoc::Helpers
         when 1
           res.first
         else
-          raise AmbiguousAncestorError.new(pat, res)
+          tiebreaker.call(pat, res)
         end
       end
     end
 
     # @return [Array]
-    def breadcrumbs_trail
+    def breadcrumbs_trail(tiebreaker: Int::DEFAULT_TIEBREAKER)
       # The design of this function is a little complicated.
       #
       # We can’t use #parent_of from the ChildParent helper, because the
@@ -98,7 +103,7 @@ module Nanoc::Helpers
               @items['/index.*']
             else
               prefix_patterns = Int.patterns_for_prefix(pr)
-              prefix_patterns.lazy.map { |pat| Int.find_one(@items, pat) }.find(&:itself)
+              prefix_patterns.lazy.map { |pat| Int.find_one(@items, pat, tiebreaker) }.find(&:itself)
             end
           end
         ancestral_items + [item]

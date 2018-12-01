@@ -165,8 +165,33 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true do
           ctx.item = ctx.items['/foo/stuff.md']
         end
 
-        it 'errors because of ambiguity' do
-          expect { subject }.to raise_error(Nanoc::Helpers::Breadcrumbs::AmbiguousAncestorError, 'expected only one item to match /foo.*, but found 3')
+        context 'no tiebreaker specified' do
+          it 'errors because of ambiguity' do
+            expect { subject }
+              .to raise_error(
+                Nanoc::Helpers::Breadcrumbs::AmbiguousAncestorError,
+                'expected only one item to match /foo.*, but found 3',
+              )
+          end
+        end
+
+        context 'tiebreaker which picks the first' do
+          subject { helper.breadcrumbs_trail(tiebreaker: tiebreaker) }
+
+          let(:tiebreaker) do
+            ->(_pattern, items) { items.min_by(&:identifier) }
+          end
+
+          it 'picks the first' do
+            expect(subject)
+              .to eql(
+                [
+                  ctx.items['/index.md'],
+                  ctx.items['/foo.erb'],
+                  ctx.items['/foo/stuff.md'],
+                ],
+              )
+          end
         end
       end
 
