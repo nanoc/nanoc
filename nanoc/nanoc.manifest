@@ -31,7 +31,6 @@ lib/nanoc/base/entities/item_rep.rb
 lib/nanoc/base/entities/item.rb
 lib/nanoc/base/entities/layout_collection.rb
 lib/nanoc/base/entities/layout.rb
-lib/nanoc/base/entities/lazy_value.rb
 lib/nanoc/base/entities/outdatedness_reasons.rb
 lib/nanoc/base/entities/outdatedness_status.rb
 lib/nanoc/base/entities/pattern.rb

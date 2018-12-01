@@ -74,14 +74,13 @@ module Nanoc
       contract C::Or[String, Proc], C::KeywordArgs[filename: C::Optional[C::Maybe[String]]] => C::Any
       def initialize(string, filename: nil)
         super(filename)
-        @string = Nanoc::Int::LazyValue.new(string)
+        @string = Concurrent::Promises.delay { string.respond_to?(:call) ? string.call : string }
       end
 
       contract C::None => self
       def freeze
+        @string = @string.then(&:freeze)
         super
-        @string.freeze
-        self
       end
 
       contract C::None => C::Bool
@@ -97,7 +96,7 @@ module Nanoc
       contract Array => C::Any
       def marshal_load(array)
         @filename = array[0]
-        @string = Nanoc::Int::LazyValue.new(array[1])
+        @string = Concurrent::Promises.fulfilled_future(array[1])
       end
     end
 

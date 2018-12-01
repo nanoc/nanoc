@@ -49,7 +49,10 @@ module Nanoc
       # @param [String, nil] attributes_checksum_data
       def initialize(content, attributes, identifier, checksum_data: nil, content_checksum_data: nil, attributes_checksum_data: nil)
         @content = Nanoc::Int::Content.create(content)
-        @attributes = Nanoc::Int::LazyValue.new(attributes).map(&:__nanoc_symbolize_keys_recursively)
+        @attributes =
+          Concurrent::Promises
+          .delay { attributes.respond_to?(:call) ? attributes.call : attributes }
+          .then(&:__nanoc_symbolize_keys_recursively)
         @identifier = Nanoc::Identifier.from(identifier)
 
         @checksum_data = checksum_data
@@ -60,10 +63,9 @@ module Nanoc
       contract C::None => self
       # @return [void]
       def freeze
-        super
+        @attributes = @attributes.then(&:__nanoc_freeze_recursively)
         @content.freeze
-        @attributes.freeze
-        self
+        super
       end
 
       contract String => self

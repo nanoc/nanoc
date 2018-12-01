@@ -2,6 +2,7 @@
 
 # Load external dependencies
 require 'addressable'
+require 'concurrent'
 require 'ddmemoize'
 require 'ddmetrics'
 require 'ddplugin'

@@ -14,7 +14,6 @@ require_relative 'entities/layout_collection'
 
 require_relative 'entities/code_snippet'
 require_relative 'entities/configuration'
-require_relative 'entities/lazy_value'
 require_relative 'entities/document'
 require_relative 'entities/item'
 require_relative 'entities/item_rep'
