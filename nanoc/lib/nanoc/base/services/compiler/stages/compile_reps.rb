@@ -82,7 +82,11 @@ module Nanoc::Int::Compiler::Stages
         outdatedness_store: @outdatedness_store,
       )
 
-      mark_done_phase
+      notify_phrase = Nanoc::Int::Compiler::Phases::Notify.new(
+        wrapped: mark_done_phase,
+      )
+
+      notify_phrase
     end
   end
 end
