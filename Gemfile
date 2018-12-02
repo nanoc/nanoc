@@ -64,7 +64,7 @@ group :plugins do
   gem 'rouge', '~> 3.1'
   gem 'rubypants'
   gem 'sass'
-  gem 'slim', '~> 3.0'
+  gem 'slim', '~> 4.0'
   gem 'therubyracer', '~> 0.12', platforms: :ruby
   gem 'typogruby'
   gem 'uglifier'
