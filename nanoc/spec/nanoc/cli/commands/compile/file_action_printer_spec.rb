@@ -5,6 +5,7 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
 
   before { Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0)) }
   after { Timecop.return }
+  after { listener.stop_safely }
 
   let(:reps) do
     Nanoc::Int::ItemRepRepo.new.tap do |reps|
