@@ -9,26 +9,32 @@ module Nanoc::CLI::Commands::CompileListeners
 
     # @see Listener#start
     def start
-      Nanoc::Int::NotificationCenter.on(:compilation_started) do |rep|
+      on(:compilation_started) do |rep|
         puts "*** Started compilation of #{rep.inspect}"
       end
-      Nanoc::Int::NotificationCenter.on(:compilation_ended) do |rep|
+
+      on(:compilation_ended) do |rep|
         puts "*** Ended compilation of #{rep.inspect}"
         puts
       end
-      Nanoc::Int::NotificationCenter.on(:compilation_suspended) do |rep, target_rep, snapshot_name|
+
+      on(:compilation_suspended) do |rep, target_rep, snapshot_name|
         puts "*** Suspended compilation of #{rep.inspect}: depends on #{target_rep}, snapshot #{snapshot_name}"
       end
-      Nanoc::Int::NotificationCenter.on(:cached_content_used) do |rep|
+
+      on(:cached_content_used) do |rep|
         puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling"
       end
-      Nanoc::Int::NotificationCenter.on(:filtering_started) do |rep, filter_name|
+
+      on(:filtering_started) do |rep, filter_name|
         puts "*** Started filtering #{rep.inspect} with #{filter_name}"
       end
-      Nanoc::Int::NotificationCenter.on(:filtering_ended) do |rep, filter_name|
+
+      on(:filtering_ended) do |rep, filter_name|
         puts "*** Ended filtering #{rep.inspect} with #{filter_name}"
       end
-      Nanoc::Int::NotificationCenter.on(:dependency_created) do |src, dst|
+
+      on(:dependency_created) do |src, dst|
         puts "*** Dependency created from #{src.inspect} onto #{dst.inspect}"
       end
     end

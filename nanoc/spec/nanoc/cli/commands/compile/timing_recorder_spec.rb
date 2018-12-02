@@ -8,7 +8,7 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
 
   before { Nanoc::CLI.verbosity = 2 }
 
-  before { listener.start }
+  before { listener.start_safely }
   after { listener.stop_safely }
 
   let(:reps) do
@@ -41,7 +41,7 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 14, 3))
     Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
 
-    expect { listener.stop }
+    expect { listener.stop_safely }
       .to output(/^\s*erb │     2   1\.00s   1\.50s   1\.90s   1\.95s   2\.00s   3\.00s$/).to_stdout
   end
 
@@ -213,14 +213,14 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   it 'prints stage durations' do
     Nanoc::Int::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage')
 
-    expect { listener.stop }
+    expect { listener.stop_safely }
       .to output(/^\s*donkey_stage │ 1\.23s$/).to_stdout
   end
 
   it 'prints out outdatedness rule durations' do
     Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified)
 
-    expect { listener.stop }
+    expect { listener.stop_safely }
       .to output(/^\s*CodeSnippetsModified │     1   1\.00s   1\.00s   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
   end
 
@@ -248,12 +248,12 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   it 'prints load store durations' do
     Nanoc::Int::NotificationCenter.post(:store_loaded, 1.23, Nanoc::Int::ChecksumStore)
 
-    expect { listener.stop }
+    expect { listener.stop_safely }
       .to output(/^\s*Nanoc::Int::ChecksumStore │ 1\.23s$/).to_stdout
   end
 
   it 'skips printing empty metrics' do
-    expect { listener.stop }
+    expect { listener.stop_safely }
       .not_to output(/filters|phases|stages/).to_stdout
   end
 end

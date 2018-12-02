@@ -21,7 +21,7 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
   end
 
   it 'records from compilation_started to rep_write_ended' do
-    listener.start
+    listener.start_safely
 
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
     Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
@@ -32,8 +32,8 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
   end
 
   it 'stops listening after #stop' do
-    listener.start
-    listener.stop
+    listener.start_safely
+    listener.stop_safely
 
     Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
 
@@ -42,7 +42,7 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
   end
 
   it 'records from compilation_started over compilation_suspended to rep_write_ended' do
-    listener.start
+    listener.start_safely
 
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
     Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
@@ -57,7 +57,7 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
   end
 
   it 'records from compilation_started over rep_write_{enqueued,started} to rep_write_ended' do
-    listener.start
+    listener.start_safely
 
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
     Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
@@ -72,11 +72,11 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
   end
 
   context 'log level = high' do
-    before { listener.start }
+    before { listener.start_safely }
     before { Nanoc::CLI::Logger.instance.level = :high }
 
     it 'does not print skipped (uncompiled) reps' do
-      expect { listener.stop }
+      expect { listener.stop_safely }
         .not_to output(/skip/).to_stdout
     end
 
@@ -99,11 +99,11 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
   end
 
   context 'log level = low' do
-    before { listener.start }
+    before { listener.start_safely }
     before { Nanoc::CLI::Logger.instance.level = :low }
 
     it 'prints skipped (uncompiled) reps' do
-      expect { listener.stop }
+      expect { listener.stop_safely }
         .to output(/skip.*\/hi\.html/).to_stdout
     end
 

@@ -95,7 +95,6 @@ module Nanoc::CLI::Commands::CompileListeners
     # @see Listener#stop
     def stop
       print_profiling_feedback
-      super
     end
 
     protected
