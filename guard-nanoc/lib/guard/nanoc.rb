@@ -43,7 +43,7 @@ module Guard
 
       ::Nanoc::CLI::Commands::CompileListeners::FileActionPrinter
         .new(reps: [])
-        .start
+        .start_safely
     end
 
     def recompile_in_subprocess

@@ -3,39 +3,39 @@
 module Nanoc::CLI::Commands::CompileListeners
   class FileActionPrinter < Abstract
     def initialize(reps:)
-      @stopwatches = {}
-
       @reps = reps
+
+      @stopwatches = {}
     end
 
     # @see Listener#start
     def start
-      Nanoc::Int::NotificationCenter.on(:compilation_started, self) do |rep|
+      on(:compilation_started) do |rep|
         @stopwatches[rep] = DDMetrics::Stopwatch.new.tap(&:start)
       end
 
-      Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) do |rep|
+      on(:compilation_suspended) do |rep|
         @stopwatches[rep].stop
       end
 
-      Nanoc::Int::NotificationCenter.on(:compilation_resumed, self) do |rep|
+      on(:compilation_resumed) do |rep|
         @stopwatches[rep].start
       end
 
       cached_reps = Set.new
-      Nanoc::Int::NotificationCenter.on(:cached_content_used, self) do |rep|
+      on(:cached_content_used) do |rep|
         cached_reps << rep
       end
 
-      Nanoc::Int::NotificationCenter.on(:rep_write_enqueued, self) do |rep|
+      on(:rep_write_enqueued) do |rep|
         @stopwatches[rep].stop
       end
 
-      Nanoc::Int::NotificationCenter.on(:rep_write_started, self) do |rep, _raw_path|
+      on(:rep_write_started) do |rep, _raw_path|
         @stopwatches[rep].start
       end
 
-      Nanoc::Int::NotificationCenter.on(:rep_write_ended, self) do |rep, _binary, path, is_created, is_modified|
+      on(:rep_write_ended) do |rep, _binary, path, is_created, is_modified|
         @stopwatches[rep].stop
         duration = @stopwatches[rep].duration
 
@@ -62,16 +62,6 @@ module Nanoc::CLI::Commands::CompileListeners
 
     # @see Listener#stop
     def stop
-      super
-
-      Nanoc::Int::NotificationCenter.remove(:compilation_started, self)
-      Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
-      Nanoc::Int::NotificationCenter.remove(:compilation_resumed, self)
-      Nanoc::Int::NotificationCenter.remove(:cached_content_used, self)
-      Nanoc::Int::NotificationCenter.remove(:rep_write_enqueued, self)
-      Nanoc::Int::NotificationCenter.remove(:rep_write_started, self)
-      Nanoc::Int::NotificationCenter.remove(:rep_write_ended, self)
-
       @reps.reject(&:compiled?).each do |rep|
         raw_paths = rep.raw_paths.values.flatten.uniq
         raw_paths.each do |raw_path|

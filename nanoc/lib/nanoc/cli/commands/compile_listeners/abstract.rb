@@ -16,25 +16,38 @@ module Nanoc::CLI::Commands::CompileListeners
     # @abstract
     def stop; end
 
-    def run_while
+    def wrapped_start
+      @_notification_names = []
       start
+    end
+
+    def wrapped_stop
+      stop
+
+      @_notification_names.each do |name|
+        Nanoc::Int::NotificationCenter.remove(name, self)
+      end
+    end
+
+    def run_while
+      wrapped_start
       yield
     ensure
-      stop
+      wrapped_stop
     end
 
     def start_safely
-      start
+      wrapped_start
       @_started = true
     end
 
     def stop_safely
-      stop if @_started
+      wrapped_stop if @_started
       @_started = false
     end
 
     def on(sym)
-      # TODO: clean up on stop
+      @_notification_names << sym
       Nanoc::Int::NotificationCenter.on(sym, self) { |*args| yield(*args) }
     end
   end
