@@ -3,8 +3,7 @@
 module Nanoc::CLI::Commands::CompileListeners
   class FileActionPrinter < Abstract
     def initialize(reps:)
-      @start_times = {}
-      @acc_durations = {}
+      @stopwatches = {}
 
       @reps = reps
     end
@@ -12,12 +11,15 @@ module Nanoc::CLI::Commands::CompileListeners
     # @see Listener#start
     def start
       Nanoc::Int::NotificationCenter.on(:compilation_started, self) do |rep|
-        @start_times[rep] = Time.now
-        @acc_durations[rep] ||= 0.0
+        @stopwatches[rep] = DDMetrics::Stopwatch.new.tap(&:start)
       end
 
       Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) do |rep|
-        @acc_durations[rep] += Time.now - @start_times[rep]
+        @stopwatches[rep].stop
+      end
+
+      Nanoc::Int::NotificationCenter.on(:compilation_resumed, self) do |rep|
+        @stopwatches[rep].start
       end
 
       cached_reps = Set.new
@@ -26,16 +28,16 @@ module Nanoc::CLI::Commands::CompileListeners
       end
 
       Nanoc::Int::NotificationCenter.on(:rep_write_enqueued, self) do |rep|
-        @acc_durations[rep] += Time.now - @start_times[rep]
+        @stopwatches[rep].stop
       end
 
       Nanoc::Int::NotificationCenter.on(:rep_write_started, self) do |rep, _raw_path|
-        @start_times[rep] = Time.now
+        @stopwatches[rep].start
       end
 
       Nanoc::Int::NotificationCenter.on(:rep_write_ended, self) do |rep, _binary, path, is_created, is_modified|
-        @acc_durations[rep] += Time.now - @start_times[rep]
-        duration = @acc_durations[rep]
+        @stopwatches[rep].stop
+        duration = @stopwatches[rep].duration
 
         action =
           if is_created then :create
@@ -64,6 +66,8 @@ module Nanoc::CLI::Commands::CompileListeners
 
       Nanoc::Int::NotificationCenter.remove(:compilation_started, self)
       Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+      Nanoc::Int::NotificationCenter.remove(:compilation_resumed, self)
+      Nanoc::Int::NotificationCenter.remove(:cached_content_used, self)
       Nanoc::Int::NotificationCenter.remove(:rep_write_enqueued, self)
       Nanoc::Int::NotificationCenter.remove(:rep_write_started, self)
       Nanoc::Int::NotificationCenter.remove(:rep_write_ended, self)
