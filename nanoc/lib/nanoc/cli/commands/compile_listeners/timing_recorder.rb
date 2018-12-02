@@ -60,36 +60,7 @@ module Nanoc::CLI::Commands::CompileListeners
         filter_stopwatches.fetch(rep, []).each(&:start)
       end
 
-      phase_stopwatches = {}
-
-      on(:phase_started) do |phase_name, rep|
-        stopwatches = phase_stopwatches.fetch(rep) { phase_stopwatches[rep] = {} }
-        stopwatches[phase_name] = DDMetrics::Stopwatch.new.tap(&:start)
-      end
-
-      on(:phase_ended) do |phase_name, rep|
-        stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
-        stopwatch.stop
-
-        @phases_summary.observe(stopwatch.duration, name: phase_name)
-      end
-
-      on(:phase_yielded) do |phase_name, rep|
-        stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
-        stopwatch.stop
-      end
-
-      on(:phase_resumed) do |phase_name, rep|
-        stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
-        stopwatch.start if stopwatch.stopped?
-      end
-
-      on(:phase_aborted) do |phase_name, rep|
-        stopwatch = phase_stopwatches.fetch(rep).fetch(phase_name)
-        stopwatch.stop if stopwatch.running?
-
-        @phases_summary.observe(stopwatch.duration, name: phase_name)
-      end
+      setup_phase_notifications
     end
 
     # @see Listener#stop
@@ -98,6 +69,40 @@ module Nanoc::CLI::Commands::CompileListeners
     end
 
     protected
+
+    def setup_phase_notifications
+      stopwatches = {}
+
+      on(:phase_started) do |phase_name, rep|
+        stopwatch = stopwatches[[phase_name, rep]] = DDMetrics::Stopwatch.new
+        stopwatch.start
+      end
+
+      on(:phase_ended) do |phase_name, rep|
+        stopwatch = stopwatches[[phase_name, rep]]
+        stopwatch.stop
+
+        @phases_summary.observe(stopwatch.duration, name: phase_name)
+      end
+
+      on(:phase_yielded) do |phase_name, rep|
+        stopwatch = stopwatches[[phase_name, rep]]
+        stopwatch.stop
+      end
+
+      on(:phase_resumed) do |phase_name, rep|
+        # It probably looks weird that a phase can be resumed even though it was not suspended earlier. This can happen when compilation is suspended, where you’d get the sequence started -> suspended -> started -> resumed.
+        stopwatch = stopwatches[[phase_name, rep]]
+        stopwatch.start unless stopwatch.running?
+      end
+
+      on(:phase_aborted) do |phase_name, rep|
+        stopwatch = stopwatches[[phase_name, rep]]
+        stopwatch.stop if stopwatch.running?
+
+        @phases_summary.observe(stopwatch.duration, name: phase_name)
+      end
+    end
 
     def table_for_summary(name, summary)
       headers = [name.to_s, 'count', 'min', '.50', '.90', '.95', 'max', 'tot']
