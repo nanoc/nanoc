@@ -11,6 +11,8 @@ module Nanoc::Int
   #
   # @api private
   class NotificationCenter
+    DONE = Object.new
+
     class << self
       # Adds the given block to the list of blocks that should be called when
       # the notification with the given name is received.
@@ -33,6 +35,26 @@ module Nanoc::Int
         @notifications[name] << { id: id, block: block }
       end
 
+      def start_unless_started
+        @thread ||= Thread.new do
+          Thread.current.abort_on_exception = true
+
+          loop do
+            elem = @queue.pop
+            break if DONE.equal?(elem)
+
+            name = elem[0]
+            args = elem[1]
+
+            initialize_if_necessary(name)
+
+            @notifications[name].each do |observer|
+              observer[:block].call(*args)
+            end
+          end
+        end
+      end
+
       # Posts a notification with the given name and the given arguments.
       #
       # @param [String, Symbol] name The name of the notification that should
@@ -44,11 +66,8 @@ module Nanoc::Int
       # @return [void]
       def post(name, *args)
         initialize_if_necessary(name)
-
-        # Notify all observers
-        @notifications[name].each do |observer|
-          observer[:block].call(*args)
-        end
+        @queue << [name, args]
+        self
       end
 
       # Removes the block with the given identifier from the list of blocks
@@ -73,12 +92,34 @@ module Nanoc::Int
       #
       # @return [void]
       def reset
+        # FIXME: ugh this @__xyz business is awful
+
         @notifications = nil
+        @__sync_queue_set_up = false
+        @__sync_queue = nil
+        @queue&.clear
+      end
+
+      def sync
+        maybe_setup_sync_queue
+        post(:__sync)
+        @__sync_queue.pop
       end
 
       private
 
+      def maybe_setup_sync_queue
+        @__sync_queue_set_up ||=
+          begin
+            @__sync_queue ||= Queue.new
+            on(:__sync, self) { @__sync_queue << true }
+            true
+          end
+      end
+
       def initialize_if_necessary(name)
+        @queue ||= Queue.new
+        start_unless_started
         @notifications ||= {}       # name => observers dictionary
         @notifications[name] ||= [] # list of observers
       end

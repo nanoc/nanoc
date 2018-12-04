@@ -33,13 +33,13 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
 
   it 'prints filters table' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 14, 1))
-    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 14, 3))
-    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb).sync
 
     expect { listener.stop_safely }
       .to output(/^\s*erb │     2   1\.00s   1\.50s   1\.90s   1\.95s   2\.00s   3\.00s$/).to_stdout
@@ -47,9 +47,9 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records single from filtering_started to filtering_ended' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb).sync
 
     expect(listener.filters_summary.get(name: 'erb').min).to eq(1.00)
     expect(listener.filters_summary.get(name: 'erb').avg).to eq(1.00)
@@ -60,13 +60,13 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records multiple from filtering_started to filtering_ended' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 14, 1))
-    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 14, 3))
-    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb).sync
 
     expect(listener.filters_summary.get(name: 'erb').min).to eq(1.00)
     expect(listener.filters_summary.get(name: 'erb').avg).to eq(1.50)
@@ -77,13 +77,13 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records filters in nested filtering_started/filtering_ended' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :outer)
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :outer).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :inner)
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :inner).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
-    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :inner)
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :inner).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
-    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer)
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer).sync
 
     expect(listener.filters_summary.get(name: 'inner').min).to eq(2.00)
     expect(listener.filters_summary.get(name: 'inner').avg).to eq(2.00)
@@ -100,17 +100,17 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
 
   it 'pauses outer stopwatch when suspended' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
-    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :outer)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :outer).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :inner)
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :inner).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
-    Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, :__anything__)
+    Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, :__anything__).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
-    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 10))
-    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :inner)
-    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer)
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :inner).sync
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :outer).sync
 
     expect(listener.filters_summary.get(name: 'outer').min).to eq(7.00)
     expect(listener.filters_summary.get(name: 'outer').avg).to eq(7.00)
@@ -120,15 +120,15 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records single from filtering_started over compilation_{suspended,started} to filtering_ended' do
-    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_started, rep, :erb).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, :__anything__)
+    Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, :__anything__).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
-    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 7))
-    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb)
+    Nanoc::Int::NotificationCenter.post(:filtering_ended, rep, :erb).sync
 
     expect(listener.filters_summary.get(name: 'erb').min).to eq(5.00)
     expect(listener.filters_summary.get(name: 'erb').avg).to eq(5.00)
@@ -139,9 +139,9 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records single phase start+stop' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(1.00)
     expect(listener.phases_summary.get(name: 'donkey').avg).to eq(1.00)
@@ -152,13 +152,13 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records multiple phase start+stop' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 0))
-    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 2))
-    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(1.00)
     expect(listener.phases_summary.get(name: 'donkey').avg).to eq(1.50)
@@ -169,13 +169,13 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records single phase start+yield+resume+stop' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:phase_yielded, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_yielded, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 0))
-    Nanoc::Int::NotificationCenter.post(:phase_resumed, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_resumed, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 2))
-    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(3.00)
     expect(listener.phases_summary.get(name: 'donkey').avg).to eq(3.00)
@@ -186,15 +186,15 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records single phase start+yield+abort+start+stop' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:phase_yielded, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_yielded, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 0))
-    Nanoc::Int::NotificationCenter.post(:phase_aborted, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_aborted, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 12, 7, 2))
-    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_started, 'donkey', rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 12, 7, 5))
-    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep)
+    Nanoc::Int::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(1.00)
     expect(listener.phases_summary.get(name: 'donkey').avg).to eq(2.00)
@@ -204,28 +204,28 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records stage duration' do
-    Nanoc::Int::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage')
+    Nanoc::Int::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage').sync
 
     expect(listener.stages_summary.get(name: 'donkey_stage').sum).to eq(1.23)
     expect(listener.stages_summary.get(name: 'donkey_stage').count).to eq(1)
   end
 
   it 'prints stage durations' do
-    Nanoc::Int::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage')
+    Nanoc::Int::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage').sync
 
     expect { listener.stop_safely }
       .to output(/^\s*donkey_stage │ 1\.23s$/).to_stdout
   end
 
   it 'prints out outdatedness rule durations' do
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified)
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified).sync
 
     expect { listener.stop_safely }
       .to output(/^\s*CodeSnippetsModified │     1   1\.00s   1\.00s   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
   end
 
   it 'records single outdatedness rule duration' do
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified)
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified).sync
 
     expect(listener.outdatedness_rules_summary.get(name: 'CodeSnippetsModified').min).to eq(1.00)
     expect(listener.outdatedness_rules_summary.get(name: 'CodeSnippetsModified').avg).to eq(1.00)
@@ -235,8 +235,8 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records multiple outdatedness rule duration' do
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified)
-    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 3.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified)
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified).sync
+    Nanoc::Int::NotificationCenter.post(:outdatedness_rule_ran, 3.0, Nanoc::Int::OutdatednessRules::CodeSnippetsModified).sync
 
     expect(listener.outdatedness_rules_summary.get(name: 'CodeSnippetsModified').min).to eq(1.00)
     expect(listener.outdatedness_rules_summary.get(name: 'CodeSnippetsModified').avg).to eq(2.00)
@@ -246,7 +246,7 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'prints load store durations' do
-    Nanoc::Int::NotificationCenter.post(:store_loaded, 1.23, Nanoc::Int::ChecksumStore)
+    Nanoc::Int::NotificationCenter.post(:store_loaded, 1.23, Nanoc::Int::ChecksumStore).sync
 
     expect { listener.stop_safely }
       .to output(/^\s*Nanoc::Int::ChecksumStore │ 1\.23s$/).to_stdout
