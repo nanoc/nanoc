@@ -12,116 +12,86 @@ module Nanoc::Int
   # @api private
   class NotificationCenter
     DONE = Object.new
+    SYNC = Object.new
 
-    class << self
-      # Adds the given block to the list of blocks that should be called when
-      # the notification with the given name is received.
-      #
-      # @param [String, Symbol] name The name of the notification that will
-      #   cause the given block to be called.
-      #
-      # @param [String, Symbol, nil] id An identifier for the block. This is
-      #   only used to be able to remove the block (using the remove method)
-      #   later. Can be nil, but this is not recommended because it prevents
-      #   the given notification block from being unregistered.
-      #
-      # @yield [*args] Will be executed with the arguments passed to {.post}
-      #
-      # @return [void]
-      def on(name, id = nil, &block)
-        initialize_if_necessary(name)
+    def initialize
+      @thread = nil
 
-        # Add observer
-        @notifications[name] << { id: id, block: block }
-      end
+      # name => observers dictionary
+      @notifications = Hash.new { |hash, name| hash[name] = [] }
 
-      def start_unless_started
-        @thread ||= Thread.new do
-          Thread.current.abort_on_exception = true
+      @queue = Queue.new
 
-          loop do
-            elem = @queue.pop
-            break if DONE.equal?(elem)
+      @sync_queue = Queue.new
+      on(SYNC, self) { @sync_queue << true }
+    end
 
-            name = elem[0]
-            args = elem[1]
+    def start
+      @thread ||= Thread.new do
+        Thread.current.abort_on_exception = true
 
-            initialize_if_necessary(name)
+        loop do
+          elem = @queue.pop
+          break if DONE.equal?(elem)
 
-            @notifications[name].each do |observer|
-              observer[:block].call(*args)
-            end
+          name = elem[0]
+          args = elem[1]
+
+          @notifications[name].each do |observer|
+            observer[:block].call(*args)
           end
         end
       end
+    end
 
-      # Posts a notification with the given name and the given arguments.
-      #
-      # @param [String, Symbol] name The name of the notification that should
-      #   be posted.
-      #
-      # @param args Arguments that wil be passed to the blocks handling the
-      #   notification.
-      #
-      # @return [void]
+    def stop
+      @queue << DONE
+      @thread.join
+    end
+
+    def on(name, id = nil, &block)
+      @notifications[name] << { id: id, block: block }
+    end
+
+    def remove(name, id)
+      @notifications[name].reject! { |i| i[:id] == id }
+    end
+
+    def post(name, *args)
+      @queue << [name, args]
+      self
+    end
+
+    def sync
+      post(SYNC)
+      @sync_queue.pop
+    end
+
+    class << self
+      def instance
+        @_instance ||= new.tap(&:start)
+      end
+
+      def on(name, id = nil, &block)
+        instance.on(name, id, &block)
+      end
+
       def post(name, *args)
-        initialize_if_necessary(name)
-        @queue << [name, args]
+        instance.post(name, *args)
         self
       end
 
-      # Removes the block with the given identifier from the list of blocks
-      # that should be called when the notification with the given name is
-      # posted.
-      #
-      # @param [String, Symbol] name The name of the notification that should
-      #   no longer be registered.
-      #
-      # @param [String, Symbol] id The identifier of the block that should be
-      #   removed.
-      #
-      # @return [void]
       def remove(name, id)
-        initialize_if_necessary(name)
-
-        # Remove relevant observers
-        @notifications[name].reject! { |i| i[:id] == id }
+        instance.remove(name, id)
       end
 
-      # @api private
-      #
-      # @return [void]
       def reset
-        # FIXME: ugh this @__xyz business is awful
-
-        @notifications = nil
-        @__sync_queue_set_up = false
-        @__sync_queue = nil
-        @queue&.clear
+        instance.stop
+        @_instance = nil
       end
 
       def sync
-        maybe_setup_sync_queue
-        post(:__sync)
-        @__sync_queue.pop
-      end
-
-      private
-
-      def maybe_setup_sync_queue
-        @__sync_queue_set_up ||=
-          begin
-            @__sync_queue ||= Queue.new
-            on(:__sync, self) { @__sync_queue << true }
-            true
-          end
-      end
-
-      def initialize_if_necessary(name)
-        @queue ||= Queue.new
-        start_unless_started
-        @notifications ||= {}       # name => observers dictionary
-        @notifications[name] ||= [] # list of observers
+        instance.sync
       end
     end
   end
