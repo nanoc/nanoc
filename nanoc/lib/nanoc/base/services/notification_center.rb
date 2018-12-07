@@ -78,7 +78,6 @@ module Nanoc::Int
 
       def post(name, *args)
         instance.post(name, *args)
-        self
       end
 
       def remove(name, id)
