@@ -243,7 +243,7 @@ module Nanoc::Int
 
     class AmbiguousMetadataAssociation < Generic
       def initialize(content_filenames, meta_filename)
-        super("There are multiple content files (#{content_filenames.join(', ')}) that could match the file containing metadata (#{meta_filename}).")
+        super("There are multiple content files (#{content_filenames.sort.join(', ')}) that could match the file containing metadata (#{meta_filename}).")
       end
     end
 
