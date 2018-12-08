@@ -10,28 +10,28 @@ module Nanoc::CLI::Commands::CompileListeners
     # @see Listener#start
     def start
       on(:compilation_started) do |rep|
-        puts "*** Started compilation of #{rep.inspect}"
+        puts "*** Started compilation of #{rep}"
       end
 
       on(:compilation_ended) do |rep|
-        puts "*** Ended compilation of #{rep.inspect}"
+        puts "*** Ended compilation of #{rep}"
         puts
       end
 
       on(:compilation_suspended) do |rep, target_rep, snapshot_name|
-        puts "*** Suspended compilation of #{rep.inspect}: depends on #{target_rep}, snapshot #{snapshot_name}"
+        puts "*** Suspended compilation of #{rep}: depends on #{target_rep}, snapshot #{snapshot_name}"
       end
 
       on(:cached_content_used) do |rep|
-        puts "*** Used cached compiled content for #{rep.inspect} instead of recompiling"
+        puts "*** Used cached compiled content for #{rep} instead of recompiling"
       end
 
       on(:filtering_started) do |rep, filter_name|
-        puts "*** Started filtering #{rep.inspect} with #{filter_name}"
+        puts "*** Started filtering #{rep} with #{filter_name}"
       end
 
       on(:filtering_ended) do |rep, filter_name|
-        puts "*** Ended filtering #{rep.inspect} with #{filter_name}"
+        puts "*** Ended filtering #{rep} with #{filter_name}"
       end
 
       on(:dependency_created) do |src, dst|
