@@ -37,6 +37,26 @@ module Nanoc::CLI::Commands::CompileListeners
       on(:dependency_created) do |src, dst|
         puts "*** Dependency created from #{src.inspect} onto #{dst.inspect}"
       end
+
+      on(:phase_started) do |phase_name, rep|
+        puts "*** Phase started: #{phase_name} (rep: #{rep})"
+      end
+
+      on(:phase_yielded) do |phase_name, rep|
+        puts "*** Phase yielded: #{phase_name} (rep: #{rep})"
+      end
+
+      on(:phase_resumed) do |phase_name, rep|
+        puts "*** Phase resumed: #{phase_name} (rep: #{rep})"
+      end
+
+      on(:phase_ended) do |phase_name, rep|
+        puts "*** Phase ended: #{phase_name} (rep: #{rep})"
+      end
+
+      on(:phase_aborted) do |phase_name, rep|
+        puts "*** Phase aborted: #{phase_name} (rep: #{rep})"
+      end
     end
   end
 end
