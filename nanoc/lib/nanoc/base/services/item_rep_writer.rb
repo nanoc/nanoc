@@ -42,6 +42,9 @@ module Nanoc::Int
         :rep_write_started, item_rep, raw_path
       )
 
+      # Sync (needed so that diff generator can read the old contents)
+      Nanoc::Int::NotificationCenter.sync
+
       content = snapshot_repo.get(item_rep, snapshot_name)
       if content.binary?
         temp_path = content.filename

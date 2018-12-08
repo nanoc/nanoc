@@ -25,10 +25,10 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
     listener.start_safely
 
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
 
-    expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true) }
+    expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true).sync }
       .to output(/create.*\[1\.00s\]/).to_stdout
   end
 
@@ -36,9 +36,9 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
     listener.start_safely
     listener.stop_safely
 
-    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
 
-    expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true) }
+    expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true).sync }
       .not_to output(/create/).to_stdout
   end
 
@@ -46,14 +46,14 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
     listener.start_safely
 
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, :__irrelevant__)
+    Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, :__irrelevant__).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
-    Nanoc::Int::NotificationCenter.post(:compilation_resumed, rep)
+    Nanoc::Int::NotificationCenter.post(:compilation_resumed, rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
 
-    expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true) }
+    expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true).sync }
       .to output(/create.*\[4\.00s\]/).to_stdout
   end
 
@@ -61,14 +61,14 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
     listener.start_safely
 
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Int::NotificationCenter.post(:rep_write_enqueued, rep)
+    Nanoc::Int::NotificationCenter.post(:rep_write_enqueued, rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
-    Nanoc::Int::NotificationCenter.post(:rep_write_started, rep)
+    Nanoc::Int::NotificationCenter.post(:rep_write_started, rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
 
-    expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true) }
+    expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true).sync }
       .to output(/create.*\[4\.00s\]/).to_stdout
   end
 
@@ -82,19 +82,19 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
     end
 
     it 'prints nothing' do
-      Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+      Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
       Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
 
-      expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false) }
+      expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false).sync }
         .not_to output(/identical/).to_stdout
     end
 
     it 'prints nothing' do
-      Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
-      Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
+      Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
+      Nanoc::Int::NotificationCenter.post(:cached_content_used, rep).sync
       Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
 
-      expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false) }
+      expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false).sync }
         .not_to output(/cached/).to_stdout
     end
   end
@@ -109,19 +109,19 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
     end
 
     it 'prints “identical” if not cached' do
-      Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+      Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
       Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
 
-      expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false) }
+      expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false).sync }
         .to output(/identical/).to_stdout
     end
 
     it 'prints “cached” if cached' do
-      Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
-      Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
+      Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
+      Nanoc::Int::NotificationCenter.post(:cached_content_used, rep).sync
       Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
 
-      expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false) }
+      expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false).sync }
         .to output(/cached/).to_stdout
     end
   end

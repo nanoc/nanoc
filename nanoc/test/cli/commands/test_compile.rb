@@ -139,8 +139,8 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     # Listen
     listener = new_file_action_printer([rep])
     listener.start_safely
-    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
-    Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, rep.raw_path, false, true)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
+    Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, rep.raw_path, false, true).sync
     listener.stop_safely
 
     # Check
@@ -160,7 +160,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     # Listen
     listener = new_file_action_printer([rep])
     listener.start_safely
-    Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
     listener.stop_safely
 
     # Check

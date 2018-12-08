@@ -19,15 +19,12 @@ describe Nanoc::Helpers::Filtering, helper: true do
     context 'basic case' do
       it { is_expected.to eql('AXB') }
 
-      it 'notifies' do
-        ns = Set.new
-        Nanoc::Int::NotificationCenter.on(:filtering_started) { ns << :filtering_started }
-        Nanoc::Int::NotificationCenter.on(:filtering_ended)   { ns << :filtering_ended   }
+      it 'notifies filtering_started' do
+        expect { subject }.to send_notification(:filtering_started, ctx.item_rep._unwrap, :erb)
+      end
 
-        subject
-
-        expect(ns).to include(:filtering_started)
-        expect(ns).to include(:filtering_ended)
+      it 'notifies filtering_ended' do
+        expect { subject }.to send_notification(:filtering_ended, ctx.item_rep._unwrap, :erb)
       end
     end
 
