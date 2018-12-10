@@ -2,12 +2,25 @@
 
 class Nanoc::Int::Compiler::Stage
   def call(*args)
-    Nanoc::Int::Instrumentor.call(:stage_ran, self.class) do
+    notify(:stage_started)
+    res = Nanoc::Int::Instrumentor.call(:stage_ran, self.class) do
       run(*args)
     end
+    notify(:stage_ended)
+    res
+  rescue
+    notify(:stage_aborted)
+    raise
   end
 
   def run(*)
     raise NotImplementedError
+  end
+
+  private
+
+  def notify(sym)
+    name = self.class.to_s.sub(/^.*::/, '')
+    Nanoc::Int::NotificationCenter.post(sym, name)
   end
 end
