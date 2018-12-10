@@ -50,7 +50,7 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
     Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, :__irrelevant__).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
-    Nanoc::Int::NotificationCenter.post(:compilation_resumed, rep).sync
+    Nanoc::Int::NotificationCenter.post(:compilation_started, rep).sync
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
 
     expect { Nanoc::Int::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true).sync }

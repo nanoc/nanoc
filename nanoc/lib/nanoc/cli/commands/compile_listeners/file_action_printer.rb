@@ -11,15 +11,12 @@ module Nanoc::CLI::Commands::CompileListeners
     # @see Listener#start
     def start
       on(:compilation_started) do |rep|
-        @stopwatches[rep] = DDMetrics::Stopwatch.new.tap(&:start)
+        @stopwatches[rep] ||= DDMetrics::Stopwatch.new
+        @stopwatches[rep].start
       end
 
       on(:compilation_suspended) do |rep|
         @stopwatches[rep].stop
-      end
-
-      on(:compilation_resumed) do |rep|
-        @stopwatches[rep].start
       end
 
       cached_reps = Set.new

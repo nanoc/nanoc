@@ -31,6 +31,10 @@ module Nanoc::CLI::Commands::CompileListeners
         log('compilation', "Suspended compilation of #{rep}: depends on #{target_rep}, snapshot #{snapshot_name}")
       end
 
+      on(:compilation_resumed) do |rep|
+        log('compilation', "Resumed compilation of #{rep}")
+      end
+
       on(:cached_content_used) do |rep|
         log('cache', "Used cached compiled content for #{rep} instead of recompiling")
       end
