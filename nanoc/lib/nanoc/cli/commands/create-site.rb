@@ -227,11 +227,6 @@ module Nanoc::CLI::Commands
         )
       end
 
-      # Setup notifications
-      Nanoc::Int::NotificationCenter.on(:file_created) do |file_path|
-        Nanoc::CLI::Logger.instance.file(:high, :create, file_path)
-      end
-
       # Build entire site
       FileUtils.mkdir_p(path)
       FileUtils.cd(File.join(path)) do
@@ -254,7 +249,7 @@ module Nanoc::CLI::Commands
 
     def write(filename, content)
       File.write(filename, content)
-      Nanoc::Int::NotificationCenter.post(:file_created, filename)
+      Nanoc::CLI::Logger.instance.file(:high, :create, filename)
     end
   end
 end
