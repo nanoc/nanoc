@@ -13,6 +13,7 @@ module Nanoc::CLI::Commands::CompileListeners
       'filtering' => "\e[33m",
       'dependency_tracking' => "\e[34m",
       'phase' => "\e[35m",
+      'stage' => "\e[36m",
     }.freeze
 
     # @see Listener#start
@@ -64,6 +65,18 @@ module Nanoc::CLI::Commands::CompileListeners
 
       on(:phase_aborted) do |phase_name, rep|
         log('phase', "Phase aborted: #{phase_name} (rep: #{rep})")
+      end
+
+      on(:stage_started) do |stage_name|
+        log('stage', "Stage started: #{stage_name}")
+      end
+
+      on(:stage_ended) do |stage_name|
+        log('stage', "Stage ended: #{stage_name}")
+      end
+
+      on(:stage_aborted) do |stage_name|
+        log('stage', "Stage aborted: #{stage_name}")
       end
     end
 
