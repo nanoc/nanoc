@@ -9,7 +9,7 @@ module Nanoc::CLI::Commands::CompileListeners
 
     COLOR_MAP = {
       'compilation' => "\e[31m",
-      'cache' => "\e[32m",
+      'content' => "\e[32m",
       'filtering' => "\e[33m",
       'dependency_tracking' => "\e[34m",
       'phase' => "\e[35m",
@@ -32,7 +32,11 @@ module Nanoc::CLI::Commands::CompileListeners
       end
 
       on(:cached_content_used) do |rep|
-        log('cache', "Used cached compiled content for #{rep} instead of recompiling")
+        log('content', "Used cached compiled content for #{rep} instead of recompiling")
+      end
+
+      on(:snapshot_created) do |rep, snapshot_name|
+        log('content', "Snapshot #{snapshot_name} created for #{rep}")
       end
 
       on(:filtering_started) do |rep, filter_name|

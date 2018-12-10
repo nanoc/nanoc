@@ -76,6 +76,7 @@ module Nanoc
       def snapshot(snapshot_name)
         last = @compilation_context.snapshot_repo.get(@rep, :last)
         @compilation_context.snapshot_repo.set(@rep, snapshot_name, last)
+        Nanoc::Int::NotificationCenter.post(:snapshot_created, @rep, snapshot_name)
       end
 
       def assigns_for(rep)
