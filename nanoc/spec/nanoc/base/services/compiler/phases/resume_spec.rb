@@ -22,7 +22,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
         @count = 0
       end
 
-      def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
+      def run(_rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
         @count += 1
         Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(@other_rep, :last))
 
@@ -59,16 +59,18 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       end
 
       it 'posts correct notifications' do
-        msgs = []
-        Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-        Nanoc::Int::NotificationCenter.on(:compilation_resumed, self) { msgs << :compilation_resumed }
+        begin
+          msgs = []
+          Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+          Nanoc::Int::NotificationCenter.on(:compilation_resumed, self) { msgs << :compilation_resumed }
 
-        subject rescue nil
-        Nanoc::Int::NotificationCenter.sync
-        expect(msgs).to eq([:compilation_suspended]) # no resume! only running this phase once, after all
-      ensure
-        Nanoc::Int::NotificationCenter.remove(:compilation_resumed, self)
-        Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+          subject rescue nil
+          Nanoc::Int::NotificationCenter.sync
+          expect(msgs).to eq([:compilation_suspended]) # no resume! only running this phase once, after all
+        ensure
+          Nanoc::Int::NotificationCenter.remove(:compilation_resumed, self)
+          Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+        end
       end
     end
 
@@ -87,16 +89,18 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       end
 
       it 'posts correct notifications' do
-        msgs = []
-        Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-        Nanoc::Int::NotificationCenter.on(:compilation_resumed, self) { msgs << :compilation_resumed }
+        begin
+          msgs = []
+          Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+          Nanoc::Int::NotificationCenter.on(:compilation_resumed, self) { msgs << :compilation_resumed }
 
-        subject rescue nil
-        Nanoc::Int::NotificationCenter.sync
-        expect(msgs).to eq([:compilation_suspended, :compilation_resumed, :compilation_suspended])
-      ensure
-        Nanoc::Int::NotificationCenter.remove(:compilation_resumed, self)
-        Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+          subject rescue nil
+          Nanoc::Int::NotificationCenter.sync
+          expect(msgs).to eq(%i[compilation_suspended compilation_resumed compilation_suspended])
+        ensure
+          Nanoc::Int::NotificationCenter.remove(:compilation_resumed, self)
+          Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+        end
       end
     end
 
@@ -116,16 +120,18 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       end
 
       it 'posts correct notifications' do
-        msgs = []
-        Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-        Nanoc::Int::NotificationCenter.on(:compilation_resumed, self) { msgs << :compilation_resumed }
+        begin
+          msgs = []
+          Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+          Nanoc::Int::NotificationCenter.on(:compilation_resumed, self) { msgs << :compilation_resumed }
 
-        subject
-        Nanoc::Int::NotificationCenter.sync
-        expect(msgs).to eq([:compilation_suspended, :compilation_resumed, :compilation_suspended, :compilation_resumed])
-      ensure
-        Nanoc::Int::NotificationCenter.remove(:compilation_resumed, self)
-        Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+          subject
+          Nanoc::Int::NotificationCenter.sync
+          expect(msgs).to eq(%i[compilation_suspended compilation_resumed compilation_suspended compilation_resumed])
+        ensure
+          Nanoc::Int::NotificationCenter.remove(:compilation_resumed, self)
+          Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+        end
       end
     end
   end
