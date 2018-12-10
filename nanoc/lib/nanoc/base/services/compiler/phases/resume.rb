@@ -9,14 +9,15 @@ module Nanoc::Int::Compiler::Phases
 
     def initialize(wrapped:)
       super(wrapped: wrapped)
+
+      @once_suspended_reps = Set.new
     end
 
     contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
     def run(rep, is_outdated:)
       fiber = fiber_for(rep, is_outdated: is_outdated) { yield }
-      once_suspended = false
       while fiber.alive?
-        if once_suspended
+        if once_suspended?(rep)
           Nanoc::Int::NotificationCenter.post(:compilation_resumed, rep)
         end
 
@@ -25,7 +26,7 @@ module Nanoc::Int::Compiler::Phases
         case res
         when Nanoc::Int::Errors::UnmetDependency
           Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res.rep, res.snapshot_name)
-          once_suspended = true
+          mark_once_suspended(rep)
           raise(res)
         when Proc
           fiber.resume(res.call)
@@ -53,6 +54,14 @@ module Nanoc::Int::Compiler::Phases
         end
 
       @fibers[rep]
+    end
+
+    def once_suspended?(rep)
+      @once_suspended_reps.include?(rep)
+    end
+
+    def mark_once_suspended(rep)
+      @once_suspended_reps << rep
     end
   end
 end
