@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::SnapshotRepo do
+describe Nanoc::Int::CompiledContentStore do
   subject(:repo) { described_class.new }
 
   describe '#get' do

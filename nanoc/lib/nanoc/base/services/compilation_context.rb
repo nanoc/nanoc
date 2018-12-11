@@ -4,14 +4,14 @@ module Nanoc::Int
   class CompilationContext
     attr_reader :site
     attr_reader :compiled_content_cache
-    attr_reader :snapshot_repo
+    attr_reader :compiled_content_store
 
-    def initialize(action_provider:, reps:, site:, compiled_content_cache:, snapshot_repo:)
+    def initialize(action_provider:, reps:, site:, compiled_content_cache:, compiled_content_store:)
       @action_provider = action_provider
       @reps = reps
       @site = site
       @compiled_content_cache = compiled_content_cache
-      @snapshot_repo = snapshot_repo
+      @compiled_content_store = compiled_content_store
     end
 
     def filter_name_and_args_for_layout(layout)
@@ -29,12 +29,12 @@ module Nanoc::Int
         items: @site.items,
         dependency_tracker: dependency_tracker,
         compilation_context: self,
-        snapshot_repo: @snapshot_repo,
+        compiled_content_store: @compiled_content_store,
       )
     end
 
     def assigns_for(rep, dependency_tracker)
-      last_content = @snapshot_repo.get_current(rep)
+      last_content = @compiled_content_store.get_current(rep)
       content_or_filename_assigns =
         if last_content.binary?
           { filename: last_content.filename }

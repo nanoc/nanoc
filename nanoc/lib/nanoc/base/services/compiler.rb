@@ -17,7 +17,7 @@ module Nanoc::Int
       @action_provider        = action_provider
       @outdatedness_store     = outdatedness_store
 
-      @snapshot_repo = Nanoc::Int::SnapshotRepo.new
+      @compiled_content_store = Nanoc::Int::CompiledContentStore.new
     end
 
     contract Nanoc::Int::Site => Nanoc::Int::Compiler
@@ -92,7 +92,7 @@ module Nanoc::Int
         reps: reps,
         site: @site,
         compiled_content_cache: @compiled_content_cache,
-        snapshot_repo: @snapshot_repo,
+        compiled_content_store: @compiled_content_store,
       )
     end
 

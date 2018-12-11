@@ -5,9 +5,9 @@ module Nanoc::Int::Compiler::Phases
     include Nanoc::Int::ContractsSupport
 
     class Worker
-      def initialize(queue:, snapshot_repo:)
+      def initialize(queue:, compiled_content_store:)
         @queue = queue
-        @snapshot_repo = snapshot_repo
+        @compiled_content_store = compiled_content_store
       end
 
       def start
@@ -18,7 +18,7 @@ module Nanoc::Int::Compiler::Phases
           writer = Nanoc::Int::ItemRepWriter.new
 
           while rep = @queue.pop # rubocop:disable Lint/AssignmentInCondition
-            writer.write_all(rep, @snapshot_repo)
+            writer.write_all(rep, @compiled_content_store)
           end
         end
       end
@@ -29,8 +29,8 @@ module Nanoc::Int::Compiler::Phases
     end
 
     class WorkerPool
-      def initialize(queue:, size:, snapshot_repo:)
-        @workers = Array.new(size) { Worker.new(queue: queue, snapshot_repo: snapshot_repo) }
+      def initialize(queue:, size:, compiled_content_store:)
+        @workers = Array.new(size) { Worker.new(queue: queue, compiled_content_store: compiled_content_store) }
       end
 
       def start
@@ -45,13 +45,13 @@ module Nanoc::Int::Compiler::Phases
     QUEUE_SIZE = 40
     WORKER_POOL_SIZE = 5
 
-    def initialize(snapshot_repo:, wrapped:)
+    def initialize(compiled_content_store:, wrapped:)
       super(wrapped: wrapped)
 
-      @snapshot_repo = snapshot_repo
+      @compiled_content_store = compiled_content_store
 
       @queue = SizedQueue.new(QUEUE_SIZE)
-      @worker_pool = WorkerPool.new(queue: @queue, size: WORKER_POOL_SIZE, snapshot_repo: @snapshot_repo)
+      @worker_pool = WorkerPool.new(queue: @queue, size: WORKER_POOL_SIZE, compiled_content_store: @compiled_content_store)
     end
 
     def start

@@ -2,7 +2,7 @@
 
 module Nanoc::Int
   # @api private
-  class SnapshotRepo
+  class CompiledContentStore
     include Nanoc::Int::ContractsSupport
 
     def initialize

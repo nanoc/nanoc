@@ -9,21 +9,21 @@ module Nanoc
     attr_reader :items
     attr_reader :dependency_tracker
     attr_reader :compilation_context
-    attr_reader :snapshot_repo
+    attr_reader :compiled_content_store
 
     contract C::KeywordArgs[
       reps: Nanoc::Int::ItemRepRepo,
       items: Nanoc::Int::IdentifiableCollection,
       dependency_tracker: C::Any,
       compilation_context: C::Any,
-      snapshot_repo: C::Any,
+      compiled_content_store: C::Any,
     ] => C::Any
-    def initialize(reps:, items:, dependency_tracker:, compilation_context:, snapshot_repo:)
+    def initialize(reps:, items:, dependency_tracker:, compilation_context:, compiled_content_store:)
       @reps = reps
       @items = items
       @dependency_tracker = dependency_tracker
       @compilation_context = compilation_context
-      @snapshot_repo = snapshot_repo
+      @compiled_content_store = compiled_content_store
     end
   end
 end

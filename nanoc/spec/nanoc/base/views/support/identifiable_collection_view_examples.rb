@@ -10,7 +10,7 @@ shared_examples 'an identifiable collection view' do
       items: Nanoc::Int::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
       compilation_context: double(:__compilation_context),
-      snapshot_repo: double(:__snapshot_repo),
+      compiled_content_store: double(:__compiled_content_store),
     )
   end
 

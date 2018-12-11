@@ -19,12 +19,12 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       items: Nanoc::Int::ItemCollection.new(config),
       dependency_tracker: :__irrelevant__,
       compilation_context: :__irrelevant__,
-      snapshot_repo: snapshot_repo,
+      compiled_content_store: compiled_content_store,
     )
   end
 
-  def snapshot_repo
-    @_snapshot_repo ||= Nanoc::Int::SnapshotRepo.new
+  def compiled_content_store
+    @_compiled_content_store ||= Nanoc::Int::CompiledContentStore.new
   end
 
   def before

@@ -65,7 +65,7 @@ module Nanoc::RuleDSL
           items: site.items,
           dependency_tracker: dependency_tracker,
           compilation_context: compiler.compilation_context(reps: reps),
-          snapshot_repo: nil,
+          compiled_content_store: nil,
         )
       ctx = new_postprocessor_context(site, view_context)
 

@@ -108,7 +108,7 @@ describe Nanoc::Filters::SassCommon do
         items: items,
         dependency_tracker: dependency_tracker,
         compilation_context: compilation_context,
-        snapshot_repo: snapshot_repo,
+        compiled_content_store: compiled_content_store,
       )
     end
 
@@ -129,8 +129,8 @@ describe Nanoc::Filters::SassCommon do
     let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
     let(:compilation_context) { double(:compilation_context) }
 
-    let(:snapshot_repo) do
-      Nanoc::Int::SnapshotRepo.new.tap do |repo|
+    let(:compiled_content_store) do
+      Nanoc::Int::CompiledContentStore.new.tap do |repo|
         repo.set(reps[item_blue].first, :last, Nanoc::Int::TextualContent.new('.blue { color: blue }'))
         repo.set(reps[item_red].first, :last, Nanoc::Int::TextualContent.new('.red { color: red }'))
         repo.set(reps[item_partial].first, :last, Nanoc::Int::TextualContent.new('* { margin: 0 }'))
