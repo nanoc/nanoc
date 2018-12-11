@@ -59,7 +59,7 @@ lib/nanoc/base/repos/item_rep_repo.rb
 lib/nanoc/base/repos/outdatedness_store.rb
 lib/nanoc/base/repos/prefixed_data_source.rb
 lib/nanoc/base/repos/site_loader.rb
-lib/nanoc/base/repos/snapshot_repo.rb
+lib/nanoc/base/repos/compiled_content_store.rb
 lib/nanoc/base/repos/store.rb
 lib/nanoc/base/services.rb
 lib/nanoc/base/services/action_provider.rb

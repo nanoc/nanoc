@@ -15,7 +15,7 @@ describe Nanoc::ConfigView do
       items: Nanoc::Int::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
       compilation_context: double(:compilation_context),
-      snapshot_repo: double(:snapshot_repo),
+      compiled_content_store: double(:compiled_content_store),
     )
   end
 

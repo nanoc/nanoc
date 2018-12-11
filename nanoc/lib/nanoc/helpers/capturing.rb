@@ -20,7 +20,7 @@ module Nanoc::Helpers
         content_string = capture(&block)
 
         # Get existing contents and prep for store
-        snapshot_repo = @item._context.snapshot_repo
+        compiled_content_store = @item._context.compiled_content_store
         rep = @item.reps[:default]._unwrap
         capture_name = "__capture_#{@name}".to_sym
         old_content_string =
@@ -28,10 +28,10 @@ module Nanoc::Helpers
           when :overwrite
             ''
           when :append
-            c = snapshot_repo.get(rep, capture_name)
+            c = compiled_content_store.get(rep, capture_name)
             c ? c.string : ''
           when :error
-            contents = snapshot_repo.get(rep, capture_name)
+            contents = compiled_content_store.get(rep, capture_name)
             if contents && contents.string != content_string
               # FIXME: get proper exception
               raise "a capture named #{@name.inspect} for #{@item.identifier} already exists"
@@ -45,7 +45,7 @@ module Nanoc::Helpers
 
         # Store
         new_content = Nanoc::Int::TextualContent.new(old_content_string + content_string)
-        snapshot_repo.set(rep, capture_name, new_content)
+        compiled_content_store.set(rep, capture_name, new_content)
       end
     end
 
@@ -73,8 +73,8 @@ module Nanoc::Helpers
           end
         end
 
-        snapshot_repo = @config._context.snapshot_repo
-        content = snapshot_repo.get(rep, "__capture_#{@name}".to_sym)
+        compiled_content_store = @config._context.compiled_content_store
+        content = compiled_content_store.get(rep, "__capture_#{@name}".to_sym)
         content ? content.string : nil
       end
     end

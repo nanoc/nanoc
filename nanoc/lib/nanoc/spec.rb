@@ -63,7 +63,7 @@ module Nanoc
         @items = Nanoc::Int::ItemCollection.new(@config)
         @layouts = Nanoc::Int::LayoutCollection.new(@config)
         @dependency_tracker = Nanoc::Int::DependencyTracker.new(Object.new)
-        @snapshot_repo = Nanoc::Int::SnapshotRepo.new
+        @compiled_content_store = Nanoc::Int::CompiledContentStore.new
         @action_provider = new_action_provider
       end
 
@@ -158,8 +158,8 @@ module Nanoc
         @action_sequence[obj] = memory
       end
 
-      def snapshot_repo
-        view_context.snapshot_repo
+      def compiled_content_store
+        view_context.compiled_content_store
       end
 
       private
@@ -171,7 +171,7 @@ module Nanoc
             reps: @reps,
             site: @site,
             compiled_content_cache: :__compiled_content_cache,
-            snapshot_repo: @snapshot_repo,
+            compiled_content_store: @compiled_content_store,
           )
 
         Nanoc::ViewContextForCompilation.new(
@@ -179,7 +179,7 @@ module Nanoc
           items: @items,
           dependency_tracker: @dependency_tracker,
           compilation_context: compilation_context,
-          snapshot_repo: @snapshot_repo,
+          compiled_content_store: @compiled_content_store,
         )
       end
 

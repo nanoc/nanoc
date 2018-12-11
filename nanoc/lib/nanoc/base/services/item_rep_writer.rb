@@ -8,21 +8,21 @@ module Nanoc::Int
 
     TMP_TEXT_ITEMS_DIR = 'text_items'
 
-    def write_all(item_rep, snapshot_repo)
+    def write_all(item_rep, compiled_content_store)
       written_paths = Set.new
 
       item_rep.snapshot_defs.map(&:name).each do |snapshot_name|
-        write(item_rep, snapshot_repo, snapshot_name, written_paths)
+        write(item_rep, compiled_content_store, snapshot_name, written_paths)
       end
     end
 
-    def write(item_rep, snapshot_repo, snapshot_name, written_paths)
+    def write(item_rep, compiled_content_store, snapshot_name, written_paths)
       item_rep.raw_paths.fetch(snapshot_name, []).each do |raw_path|
-        write_single(item_rep, snapshot_repo, snapshot_name, raw_path, written_paths)
+        write_single(item_rep, compiled_content_store, snapshot_name, raw_path, written_paths)
       end
     end
 
-    def write_single(item_rep, snapshot_repo, snapshot_name, raw_path, written_paths)
+    def write_single(item_rep, compiled_content_store, snapshot_name, raw_path, written_paths)
       assert Nanoc::Assertions::PathIsAbsolute.new(path: raw_path)
 
       # Don’t write twice
@@ -45,7 +45,7 @@ module Nanoc::Int
       # Sync (needed so that diff generator can read the old contents)
       Nanoc::Int::NotificationCenter.sync
 
-      content = snapshot_repo.get(item_rep, snapshot_name)
+      content = compiled_content_store.get(item_rep, snapshot_name)
       if content.binary?
         temp_path = content.filename
       else

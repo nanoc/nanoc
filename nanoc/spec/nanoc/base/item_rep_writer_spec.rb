@@ -25,17 +25,17 @@ describe Nanoc::Int::ItemRepWriter do
       { snapshot_name => [raw_path] }
     end
 
-    let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
+    let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
 
     let(:written_paths) { [] }
 
-    subject { described_class.new.write(item_rep, snapshot_repo, snapshot_name, written_paths) }
+    subject { described_class.new.write(item_rep, compiled_content_store, snapshot_name, written_paths) }
 
     before do
       expect(File.directory?('output')).to be_falsy
 
       snapshot_contents.each_pair do |key, value|
-        snapshot_repo.set(item_rep, key, value)
+        compiled_content_store.set(item_rep, key, value)
       end
     end
 

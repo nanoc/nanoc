@@ -64,7 +64,7 @@ module Nanoc::Int::Compiler::Stages
 
       cache_phase = Nanoc::Int::Compiler::Phases::Cache.new(
         compiled_content_cache: @compiled_content_cache,
-        snapshot_repo: @compilation_context.snapshot_repo,
+        compiled_content_store: @compilation_context.compiled_content_store,
         wrapped: recalculate_phase,
       )
 
@@ -73,7 +73,7 @@ module Nanoc::Int::Compiler::Stages
       )
 
       write_phase = Nanoc::Int::Compiler::Phases::Write.new(
-        snapshot_repo: @compilation_context.snapshot_repo,
+        compiled_content_store: @compilation_context.compiled_content_store,
         wrapped: resume_phase,
       )
 

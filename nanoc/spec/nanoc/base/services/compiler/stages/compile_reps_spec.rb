@@ -18,7 +18,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
       reps: reps,
       site: site,
       compiled_content_cache: compiled_content_cache,
-      snapshot_repo: snapshot_repo,
+      compiled_content_store: compiled_content_store,
     )
   end
 
@@ -26,7 +26,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   let(:action_sequences) { double(:action_sequences) }
   let(:reps) { Nanoc::Int::ItemRepRepo.new }
   let(:compiled_content_cache) { Nanoc::Int::CompiledContentCache.new(config: config) }
-  let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
+  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
 
   let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(config: config) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
@@ -114,7 +114,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
       end
 
       it 'compiles individual reps' do
-        expect { subject }.to change { snapshot_repo.get(rep, :last) }
+        expect { subject }.to change { compiled_content_store.get(rep, :last) }
           .from(nil)
           .to(some_textual_content('3'))
       end

@@ -9,12 +9,12 @@ shared_examples 'a mutable document view' do
       items: Nanoc::Int::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
       compilation_context: double(:compilation_context),
-      snapshot_repo: snapshot_repo,
+      compiled_content_store: compiled_content_store,
     )
   end
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
-  let(:snapshot_repo) { double(:snapshot_repo) }
+  let(:compiled_content_store) { double(:compiled_content_store) }
   let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
 
   describe '#raw_content=' do

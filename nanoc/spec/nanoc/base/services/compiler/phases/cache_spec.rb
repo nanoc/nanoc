@@ -4,7 +4,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
   subject(:phase) do
     described_class.new(
       compiled_content_cache: compiled_content_cache,
-      snapshot_repo: snapshot_repo,
+      compiled_content_store: compiled_content_store,
       wrapped: wrapped,
     )
   end
@@ -13,21 +13,21 @@ describe Nanoc::Int::Compiler::Phases::Cache do
     Nanoc::Int::CompiledContentCache.new(config: config)
   end
 
-  let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
+  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
 
   let(:wrapped_class) do
     Class.new(Nanoc::Int::Compiler::Phases::Abstract) do
-      def initialize(snapshot_repo)
-        @snapshot_repo = snapshot_repo
+      def initialize(compiled_content_store)
+        @compiled_content_store = compiled_content_store
       end
 
       def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
-        @snapshot_repo.set(rep, :last, Nanoc::Int::TextualContent.new('wrapped content'))
+        @compiled_content_store.set(rep, :last, Nanoc::Int::TextualContent.new('wrapped content'))
       end
     end
   end
 
-  let(:wrapped) { wrapped_class.new(snapshot_repo) }
+  let(:wrapped) { wrapped_class.new(compiled_content_store) }
 
   let(:item) { Nanoc::Int::Item.new('item content', {}, '/donkey.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :latex) }
@@ -84,10 +84,10 @@ describe Nanoc::Int::Compiler::Phases::Cache do
           compiled_content_cache[rep] = { last: Nanoc::Int::TextualContent.new('cached') }
         end
 
-        it 'writes content to cache' do
+        it 'reads content from cache' do
           expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
-            .to change { snapshot_repo.get(rep, :last) }
+            .to change { compiled_content_store.get(rep, :last) }
             .from(nil)
             .to(some_textual_content('cached'))
         end
@@ -115,9 +115,9 @@ describe Nanoc::Int::Compiler::Phases::Cache do
           compiled_content_cache[rep] = { last: Nanoc::Int::BinaryContent.new(binary_filename) }
         end
 
-        it 'writes content to cache' do
+        it 'reads content from cache' do
           expect { subject }
-            .to change { snapshot_repo.get(rep, :last) }
+            .to change { compiled_content_store.get(rep, :last) }
             .from(nil)
             .to(some_textual_content('wrapped content'))
         end

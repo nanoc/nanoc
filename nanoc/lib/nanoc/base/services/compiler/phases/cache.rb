@@ -6,11 +6,11 @@ module Nanoc::Int::Compiler::Phases
   class Cache < Abstract
     include Nanoc::Int::ContractsSupport
 
-    def initialize(wrapped:, compiled_content_cache:, snapshot_repo:)
+    def initialize(wrapped:, compiled_content_cache:, compiled_content_store:)
       super(wrapped: wrapped)
 
       @compiled_content_cache = compiled_content_cache
-      @snapshot_repo = snapshot_repo
+      @compiled_content_store = compiled_content_store
     end
 
     contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
@@ -18,13 +18,13 @@ module Nanoc::Int::Compiler::Phases
       if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
         Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
 
-        @snapshot_repo.set_all(rep, @compiled_content_cache[rep])
+        @compiled_content_store.set_all(rep, @compiled_content_cache[rep])
       else
         yield
       end
 
       rep.compiled = true
-      @compiled_content_cache[rep] = @snapshot_repo.get_all(rep)
+      @compiled_content_cache[rep] = @compiled_content_store.get_all(rep)
     end
 
     contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Bool

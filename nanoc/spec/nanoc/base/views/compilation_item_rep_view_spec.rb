@@ -13,12 +13,12 @@ describe Nanoc::CompilationItemRepView do
       items: Nanoc::Int::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
       compilation_context: compilation_context,
-      snapshot_repo: snapshot_repo,
+      compiled_content_store: compiled_content_store,
     )
   end
 
   let(:compilation_context) { double(:compilation_context) }
-  let(:snapshot_repo) { Nanoc::Int::SnapshotRepo.new }
+  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
@@ -123,7 +123,7 @@ describe Nanoc::CompilationItemRepView do
     end
 
     before do
-      snapshot_repo.set(rep, :last, Nanoc::Int::TextualContent.new('Hallo'))
+      compiled_content_store.set(rep, :last, Nanoc::Int::TextualContent.new('Hallo'))
     end
 
     it 'creates a dependency' do

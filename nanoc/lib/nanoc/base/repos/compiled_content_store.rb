@@ -2,11 +2,12 @@
 
 module Nanoc::Int
   # @api private
-  class SnapshotRepo
+  class CompiledContentStore
     include Nanoc::Int::ContractsSupport
 
     def initialize
       @contents = Hash.new { |hash, rep| hash[rep] = {} }
+      @current_content = {}
     end
 
     contract Nanoc::Int::ItemRep, Symbol => C::Maybe[Nanoc::Int::Content]
@@ -14,9 +15,19 @@ module Nanoc::Int
       @contents[rep][snapshot_name]
     end
 
+    contract Nanoc::Int::ItemRep => C::Maybe[Nanoc::Int::Content]
+    def get_current(rep)
+      @current_content[rep]
+    end
+
     contract Nanoc::Int::ItemRep, Symbol, Nanoc::Int::Content => C::Any
     def set(rep, snapshot_name, contents)
       @contents[rep][snapshot_name] = contents
+    end
+
+    contract Nanoc::Int::ItemRep, Nanoc::Int::Content => C::Any
+    def set_current(rep, content)
+      @current_content[rep] = content
     end
 
     contract Nanoc::Int::ItemRep => C::HashOf[Symbol => Nanoc::Int::Content]
@@ -40,14 +51,12 @@ module Nanoc::Int
         raise Nanoc::Int::Errors::NoSuchSnapshot.new(rep, snapshot_name)
       end
 
-      # Verify snapshot is usable
-      stopped_moving = snapshot_name != :last || rep.compiled?
-      is_usable_snapshot = get(rep, snapshot_name) && stopped_moving
-      unless is_usable_snapshot
-        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep, snapshot_name))
-        return raw_compiled_content(rep: rep, snapshot: snapshot)
-      end
+      # Return content if it is available
+      content = get(rep, snapshot_name)
+      return content if content
 
+      # Content is unavailable; notify and try again
+      Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep, snapshot_name))
       get(rep, snapshot_name)
     end
 
