@@ -6,24 +6,22 @@ module Nanoc::Int
     include Nanoc::Int::ContractsSupport
 
     def initialize
-      @contents = {}
+      @contents = Hash.new { |hash, rep| hash[rep] = {} }
     end
 
     contract Nanoc::Int::ItemRep, Symbol => C::Maybe[Nanoc::Int::Content]
     def get(rep, snapshot_name)
-      @contents[rep] ||= {}
       @contents[rep][snapshot_name]
     end
 
     contract Nanoc::Int::ItemRep, Symbol, Nanoc::Int::Content => C::Any
     def set(rep, snapshot_name, contents)
-      @contents[rep] ||= {}
       @contents[rep][snapshot_name] = contents
     end
 
     contract Nanoc::Int::ItemRep => C::HashOf[Symbol => Nanoc::Int::Content]
     def get_all(rep)
-      @contents[rep] || {}
+      @contents[rep]
     end
 
     contract Nanoc::Int::ItemRep, C::HashOf[Symbol => Nanoc::Int::Content] => C::Any
