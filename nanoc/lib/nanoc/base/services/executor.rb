@@ -16,7 +16,7 @@ module Nanoc
           Nanoc::Int::NotificationCenter.post(:filtering_started, @rep, filter_name)
 
           # Run filter
-          last = @compilation_context.snapshot_repo.get(@rep, :last)
+          last = @compilation_context.snapshot_repo.get_current(@rep)
           source = last.binary? ? last.filename : last.string
           filter_args.freeze
           result = filter.setup_and_run(source, filter_args)
@@ -28,7 +28,7 @@ module Nanoc
             end
 
           # Store
-          @compilation_context.snapshot_repo.set(@rep, :last, last)
+          @compilation_context.snapshot_repo.set_current(@rep, last)
         ensure
           Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
@@ -45,7 +45,7 @@ module Nanoc
         filter_args.freeze
 
         # Check whether item can be laid out
-        last = @compilation_context.snapshot_repo.get(@rep, :last)
+        last = @compilation_context.snapshot_repo.get_current(@rep)
         raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(@rep) if last.binary?
 
         # Create filter
@@ -67,14 +67,14 @@ module Nanoc
 
           # Store
           last = Nanoc::Int::TextualContent.new(res).tap(&:freeze)
-          @compilation_context.snapshot_repo.set(@rep, :last, last)
+          @compilation_context.snapshot_repo.set_current(@rep, last)
         ensure
           Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
       end
 
       def snapshot(snapshot_name)
-        last = @compilation_context.snapshot_repo.get(@rep, :last)
+        last = @compilation_context.snapshot_repo.get_current(@rep)
         @compilation_context.snapshot_repo.set(@rep, snapshot_name, last)
         Nanoc::Int::NotificationCenter.post(:snapshot_created, @rep, snapshot_name)
       end
@@ -104,7 +104,7 @@ module Nanoc
       def filter_for_filtering(rep, filter_name)
         klass = Nanoc::Filter.named!(filter_name)
 
-        last = @compilation_context.snapshot_repo.get(@rep, :last)
+        last = @compilation_context.snapshot_repo.get_current(@rep)
         if klass.from_binary? && !last.binary?
           raise Nanoc::Int::Errors::CannotUseBinaryFilter.new(rep, klass)
         elsif !klass.from_binary? && last.binary?

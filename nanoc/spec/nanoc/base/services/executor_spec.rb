@@ -43,7 +43,7 @@ describe Nanoc::Int::Executor do
         expect(Nanoc::Int::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :erb)
 
-        snapshot_repo.set(rep, :last, content)
+        snapshot_repo.set_current(rep, content)
       end
 
       it 'does not set :pre in repo' do
@@ -56,9 +56,14 @@ describe Nanoc::Int::Executor do
         expect { subject }.not_to change { snapshot_repo.get(rep, :post) }
       end
 
-      it 'updates :last in repo' do
+      it 'does not set :last in repo' do
+        expect(snapshot_repo.get(rep, :last)).to be_nil
+        expect { subject }.not_to change { snapshot_repo.get(rep, :last) }
+      end
+
+      it 'updates current content in repo' do
         expect { subject }
-          .to change { snapshot_repo.get(rep, :last).string }
+          .to change { snapshot_repo.get_current(rep).string }
           .from('<%= "Donkey" %> Power')
           .to('Donkey Power')
       end
@@ -66,7 +71,7 @@ describe Nanoc::Int::Executor do
       it 'returns frozen data' do
         executor.filter(:erb)
 
-        expect(snapshot_repo.get(rep, :last)).to be_frozen
+        expect(snapshot_repo.get_current(rep)).to be_frozen
       end
     end
 
@@ -93,7 +98,7 @@ describe Nanoc::Int::Executor do
 
         expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
 
-        snapshot_repo.set(rep, :last, content)
+        snapshot_repo.set_current(rep, content)
       end
 
       it 'does not set :pre in repo' do
@@ -106,9 +111,14 @@ describe Nanoc::Int::Executor do
         expect { subject }.not_to change { snapshot_repo.get(rep, :post) }
       end
 
-      it 'updates :last in repo' do
+      it 'does not set :last in repo' do
+        expect(snapshot_repo.get(rep, :last)).to be_nil
+        expect { subject }.not_to change { snapshot_repo.get(rep, :last) }
+      end
+
+      it 'updates current content in repo' do
         expect { subject }
-          .to change { File.read(snapshot_repo.get(rep, :last).filename) }
+          .to change { File.read(snapshot_repo.get_current(rep).filename) }
           .from('Foo Data')
           .to(/\ACompiled data for (C:)?\/.*\/foo.dat\z/)
       end
@@ -116,7 +126,7 @@ describe Nanoc::Int::Executor do
       it 'returns frozen data' do
         executor.filter(:whatever)
 
-        expect(snapshot_repo.get(rep, :last)).to be_frozen
+        expect(snapshot_repo.get_current(rep)).to be_frozen
       end
     end
 
@@ -143,7 +153,7 @@ describe Nanoc::Int::Executor do
 
         expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
 
-        snapshot_repo.set(rep, :last, content)
+        snapshot_repo.set_current(rep, content)
       end
 
       it 'does not set :pre in repo' do
@@ -156,9 +166,14 @@ describe Nanoc::Int::Executor do
         expect { subject }.not_to change { snapshot_repo.get(rep, :post) }
       end
 
-      it 'updates :last in repo' do
+      it 'does not set :last in repo' do
+        expect(snapshot_repo.get(rep, :last)).to be_nil
+        expect { subject }.not_to change { snapshot_repo.get(rep, :last) }
+      end
+
+      it 'updates current content repo' do
         expect { subject }
-          .to change { snapshot_repo.get(rep, :last) }
+          .to change { snapshot_repo.get_current(rep) }
           .from(some_binary_content('Foo Data'))
           .to(some_textual_content(/\ACompiled data for (C:)?\/.*\/foo.dat\z/))
       end
@@ -183,7 +198,7 @@ describe Nanoc::Int::Executor do
 
         expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
 
-        snapshot_repo.set(rep, :last, content)
+        snapshot_repo.set_current(rep, content)
       end
 
       it 'does not set :pre in repo' do
@@ -196,9 +211,14 @@ describe Nanoc::Int::Executor do
         expect { subject }.not_to change { snapshot_repo.get(rep, :post) }
       end
 
-      it 'updates :last in repo' do
+      it 'does not set :last in repo' do
+        expect(snapshot_repo.get(rep, :last)).to be_nil
+        expect { subject }.not_to change { snapshot_repo.get(rep, :last) }
+      end
+
+      it 'updates current content in repo' do
         expect { subject }
-          .to change { snapshot_repo.get(rep, :last) }
+          .to change { snapshot_repo.get_current(rep) }
           .from(some_textual_content('<%= "Donkey" %> Power'))
           .to(some_binary_content('Binary <%= "Donkey" %> Power'))
       end
@@ -221,7 +241,7 @@ describe Nanoc::Int::Executor do
 
         expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
 
-        snapshot_repo.set(rep, :last, content)
+        snapshot_repo.set_current(rep, content)
       end
 
       it 'raises' do
@@ -234,7 +254,7 @@ describe Nanoc::Int::Executor do
       let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.md')) }
 
       before do
-        snapshot_repo.set(rep, :last, content)
+        snapshot_repo.set_current(rep, content)
       end
 
       it 'raises' do
@@ -260,7 +280,7 @@ describe Nanoc::Int::Executor do
           def run(_filename, _params = {}); end
         end
 
-        snapshot_repo.set(rep, :last, content)
+        snapshot_repo.set_current(rep, content)
 
         expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
       end
@@ -273,7 +293,7 @@ describe Nanoc::Int::Executor do
 
     context 'content is frozen' do
       before do
-        snapshot_repo.set(rep, :last, item.content)
+        snapshot_repo.set_current(rep, item.content)
       end
 
       let(:item) do
@@ -350,7 +370,7 @@ describe Nanoc::Int::Executor do
     before do
       rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:pre, binary: false)]
 
-      snapshot_repo.set(rep, :last, content)
+      snapshot_repo.set_current(rep, content)
 
       allow(compilation_context).to receive(:site) { site }
       allow(compilation_context).to receive(:assigns_for).with(rep, dependency_tracker) { assigns }
@@ -371,21 +391,21 @@ describe Nanoc::Int::Executor do
           .with(layout, raw_content: false, attributes: [:bug], compiled_content: false, path: false)
         allow(dependency_tracker).to receive(:exit)
         subject
-        expect(snapshot_repo.get(rep, :last).string).to eq('head Gum Emperor foot')
+        expect(snapshot_repo.get_current(rep).string).to eq('head Gum Emperor foot')
       end
     end
 
     context 'normal flow' do
       it 'updates :last in repo' do
         expect { subject }
-          .to change { snapshot_repo.get(rep, :last) }
+          .to change { snapshot_repo.get_current(rep) }
           .from(some_textual_content('Donkey Power'))
           .to(some_textual_content('head hallo foot'))
       end
 
       it 'sets frozen content' do
         subject
-        expect(snapshot_repo.get(rep, :last)).to be_frozen
+        expect(snapshot_repo.get_current(rep)).to be_frozen
         expect(snapshot_repo.get(rep, :pre)).to be_frozen
       end
 
@@ -414,9 +434,14 @@ describe Nanoc::Int::Executor do
           executor.snapshot(:pre)
         end
 
-        it 'updates :last in repo' do
+        it 'does not set :last in repo' do
+          expect(snapshot_repo.get(rep, :last)).to be_nil
+          expect { subject }.not_to change { snapshot_repo.get(rep, :last) }
+        end
+
+        it 'updates current content in repo' do
           expect { subject }
-            .to change { snapshot_repo.get(rep, :last) }
+            .to change { snapshot_repo.get_current(rep) }
             .from(some_textual_content('Donkey Power'))
             .to(some_textual_content('head Donkey Power foot'))
         end
@@ -425,9 +450,14 @@ describe Nanoc::Int::Executor do
       context 'content with layout reference' do
         let(:layout_content) { 'head <%= @layout.identifier %> foot' }
 
-        it 'updates :last in repo' do
+        it 'does not set :last in repo' do
+          expect(snapshot_repo.get(rep, :last)).to be_nil
+          expect { subject }.not_to change { snapshot_repo.get(rep, :last) }
+        end
+
+        it 'updates current content in repo' do
           expect { subject }
-            .to change { snapshot_repo.get(rep, :last) }
+            .to change { snapshot_repo.get_current(rep) }
             .from(some_textual_content('Donkey Power'))
             .to(some_textual_content('head /default.erb foot'))
         end
@@ -483,7 +513,7 @@ describe Nanoc::Int::Executor do
     subject { executor.snapshot(:something) }
 
     before do
-      snapshot_repo.set(rep, :last, content)
+      snapshot_repo.set_current(rep, content)
 
       File.write('donkey.dat', 'binary donkey')
     end

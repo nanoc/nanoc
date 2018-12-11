@@ -90,7 +90,7 @@ describe Nanoc::Int::Compiler do
     it 'generates expected output' do
       reps = Nanoc::Int::ItemRepRepo.new
       expect { subject }
-        .to change { compiler.compilation_context(reps: reps).snapshot_repo.get(rep, :last) }
+        .to change { compiler.compilation_context(reps: reps).snapshot_repo.get_current(rep) }
         .from(nil)
         .to(some_textual_content('3'))
     end
@@ -109,14 +109,14 @@ describe Nanoc::Int::Compiler do
 
       it 'generates expected output' do
         reps = Nanoc::Int::ItemRepRepo.new
-        expect(compiler.compilation_context(reps: reps).snapshot_repo.get(rep, :last)).to be_nil
+        expect(compiler.compilation_context(reps: reps).snapshot_repo.get_current(rep)).to be_nil
 
         expect { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true) }
           .to raise_error(Nanoc::Int::Errors::UnmetDependency)
         stage.send(:compile_rep, other_rep, phase_stack: phase_stack, is_outdated: true)
         stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true)
 
-        expect(compiler.compilation_context(reps: reps).snapshot_repo.get(rep, :last).string).to eql('other=other content')
+        expect(compiler.compilation_context(reps: reps).snapshot_repo.get_current(rep).string).to eql('other=other content')
       end
 
       it 'generates notifications in the proper order' do

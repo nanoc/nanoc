@@ -84,7 +84,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
           compiled_content_cache[rep] = { last: Nanoc::Int::TextualContent.new('cached') }
         end
 
-        it 'writes content to cache' do
+        it 'reads content from cache' do
           expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
             .to change { snapshot_repo.get(rep, :last) }
@@ -115,7 +115,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
           compiled_content_cache[rep] = { last: Nanoc::Int::BinaryContent.new(binary_filename) }
         end
 
-        it 'writes content to cache' do
+        it 'reads content from cache' do
           expect { subject }
             .to change { snapshot_repo.get(rep, :last) }
             .from(nil)

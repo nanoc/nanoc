@@ -34,7 +34,7 @@ module Nanoc::Int
     end
 
     def assigns_for(rep, dependency_tracker)
-      last_content = @snapshot_repo.get(rep, :last)
+      last_content = @snapshot_repo.get_current(rep)
       content_or_filename_assigns =
         if last_content.binary?
           { filename: last_content.filename }

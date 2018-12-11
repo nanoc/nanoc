@@ -66,7 +66,7 @@ module Nanoc::RuleDSL
       recorder.snapshot(:raw)
       rule.apply_to(rep, recorder: recorder, site: @site, view_context: view_context)
       recorder.snapshot(:post) if recorder.any_layouts?
-      recorder.snapshot(:last) unless recorder.last_snapshot?
+      recorder.snapshot(:last)
       recorder.snapshot(:pre) unless recorder.pre_snapshot?
 
       copy_paths_from_routing_rules(

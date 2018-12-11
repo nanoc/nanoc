@@ -21,7 +21,7 @@ module Nanoc::Int::Compiler::Phases
 
       executor = Nanoc::Int::Executor.new(rep, @compilation_context, dependency_tracker)
 
-      @compilation_context.snapshot_repo.set(rep, :last, rep.item.content)
+      @compilation_context.snapshot_repo.set_current(rep, rep.item.content)
 
       actions = @action_sequences[rep]
       actions.each do |action|
