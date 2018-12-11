@@ -46,23 +46,6 @@ describe Nanoc::Int::Executor do
         snapshot_repo.set(rep, :last, content)
       end
 
-      it 'does not set :pre on rep' do
-        expect(snapshot_repo.get(rep, :pre)).to be_nil
-        expect { subject }.not_to change { snapshot_repo.get(rep, :pre) }
-      end
-
-      it 'does not set :post on rep' do
-        expect(snapshot_repo.get(rep, :post)).to be_nil
-        expect { subject }.not_to change { snapshot_repo.get(rep, :post) }
-      end
-
-      it 'updates :last on rep' do
-        expect { subject }
-          .to change { snapshot_repo.get(rep, :last).string }
-          .from('<%= "Donkey" %> Power')
-          .to('Donkey Power')
-      end
-
       it 'does not set :pre in repo' do
         expect(snapshot_repo.get(rep, :pre)).to be_nil
         expect { subject }.not_to change { snapshot_repo.get(rep, :pre) }
@@ -111,23 +94,6 @@ describe Nanoc::Int::Executor do
         expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
 
         snapshot_repo.set(rep, :last, content)
-      end
-
-      it 'does not set :pre on rep' do
-        expect(snapshot_repo.get(rep, :pre)).to be_nil
-        expect { subject }.not_to change { snapshot_repo.get(rep, :pre) }
-      end
-
-      it 'does not set :post on rep' do
-        expect(snapshot_repo.get(rep, :post)).to be_nil
-        expect { subject }.not_to change { snapshot_repo.get(rep, :post) }
-      end
-
-      it 'updates :last on rep' do
-        expect { subject }
-          .to change { snapshot_repo.get(rep, :last) }
-          .from(some_binary_content('Foo Data'))
-          .to(some_binary_content(/\ACompiled data for (C:)?\/.*\/foo.dat\z/))
       end
 
       it 'does not set :pre in repo' do
@@ -180,23 +146,6 @@ describe Nanoc::Int::Executor do
         snapshot_repo.set(rep, :last, content)
       end
 
-      it 'does not set :pre on rep' do
-        expect(snapshot_repo.get(rep, :pre)).to be_nil
-        expect { subject }.not_to change { snapshot_repo.get(rep, :pre) }
-      end
-
-      it 'does not set :post on rep' do
-        expect(snapshot_repo.get(rep, :post)).to be_nil
-        expect { subject }.not_to change { snapshot_repo.get(rep, :post) }
-      end
-
-      it 'updates :last on rep' do
-        expect { subject }
-          .to change { snapshot_repo.get(rep, :last) }
-          .from(some_binary_content('Foo Data'))
-          .to(some_textual_content(/\ACompiled data for (C:)?\/.*\/foo.dat\z/))
-      end
-
       it 'does not set :pre in repo' do
         expect(snapshot_repo.get(rep, :pre)).to be_nil
         expect { subject }.not_to change { snapshot_repo.get(rep, :pre) }
@@ -235,23 +184,6 @@ describe Nanoc::Int::Executor do
         expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
 
         snapshot_repo.set(rep, :last, content)
-      end
-
-      it 'does not set :pre on rep' do
-        expect(snapshot_repo.get(rep, :pre)).to be_nil
-        expect { subject }.not_to change { snapshot_repo.get(rep, :pre) }
-      end
-
-      it 'does not set :post on rep' do
-        expect(snapshot_repo.get(rep, :post)).to be_nil
-        expect { subject }.not_to change { snapshot_repo.get(rep, :post) }
-      end
-
-      it 'updates :last on rep' do
-        expect { subject }
-          .to change { snapshot_repo.get(rep, :last) }
-          .from(some_textual_content('<%= "Donkey" %> Power'))
-          .to(some_binary_content('Binary <%= "Donkey" %> Power'))
       end
 
       it 'does not set :pre in repo' do
@@ -444,13 +376,6 @@ describe Nanoc::Int::Executor do
     end
 
     context 'normal flow' do
-      it 'updates :last on rep' do
-        expect { subject }
-          .to change { snapshot_repo.get(rep, :last) }
-          .from(some_textual_content('Donkey Power'))
-          .to(some_textual_content('head hallo foot'))
-      end
-
       it 'updates :last in repo' do
         expect { subject }
           .to change { snapshot_repo.get(rep, :last) }
@@ -489,13 +414,6 @@ describe Nanoc::Int::Executor do
           executor.snapshot(:pre)
         end
 
-        it 'updates :last on rep' do
-          expect { subject }
-            .to change { snapshot_repo.get(rep, :last) }
-            .from(some_textual_content('Donkey Power'))
-            .to(some_textual_content('head Donkey Power foot'))
-        end
-
         it 'updates :last in repo' do
           expect { subject }
             .to change { snapshot_repo.get(rep, :last) }
@@ -506,13 +424,6 @@ describe Nanoc::Int::Executor do
 
       context 'content with layout reference' do
         let(:layout_content) { 'head <%= @layout.identifier %> foot' }
-
-        it 'updates :last on rep' do
-          expect { subject }
-            .to change { snapshot_repo.get(rep, :last) }
-            .from(some_textual_content('Donkey Power'))
-            .to(some_textual_content('head /default.erb foot'))
-        end
 
         it 'updates :last in repo' do
           expect { subject }
@@ -580,13 +491,6 @@ describe Nanoc::Int::Executor do
     context 'binary content' do
       let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.dat')) }
 
-      it 'creates snapshots on rep' do
-        expect { subject }
-          .to change { snapshot_repo.get(rep, :something) }
-          .from(nil)
-          .to(some_binary_content('binary donkey'))
-      end
-
       it 'creates snapshots in repo' do
         expect { subject }
           .to change { snapshot_repo.get(rep, :something) }
@@ -597,13 +501,6 @@ describe Nanoc::Int::Executor do
 
     context 'textual content' do
       let(:content) { Nanoc::Int::TextualContent.new('Donkey Power') }
-
-      it 'creates snapshots on rep' do
-        expect { subject }
-          .to change { snapshot_repo.get(rep, :something) }
-          .from(nil)
-          .to(some_textual_content('Donkey Power'))
-      end
 
       it 'creates snapshots in repo' do
         expect { subject }
