@@ -60,46 +60,4 @@ describe Nanoc::Int::Compiler::Phases::Abstract do
       subject
     end
   end
-
-  describe '#start' do
-    subject { phase.start }
-
-    context 'with wrapped' do
-      let(:wrapped) { described_class.new(wrapped: nil) }
-
-      it 'starts wrapped' do
-        expect(wrapped).to receive(:start)
-        subject
-      end
-    end
-
-    context 'without wrapped' do
-      let(:wrapped) { nil }
-
-      it 'does not start wrapped' do
-        subject
-      end
-    end
-  end
-
-  describe '#stop' do
-    subject { phase.stop }
-
-    context 'with wrapped' do
-      let(:wrapped) { described_class.new(wrapped: nil) }
-
-      it 'stops wrapped' do
-        expect(wrapped).to receive(:stop)
-        subject
-      end
-    end
-
-    context 'without wrapped' do
-      let(:wrapped) { nil }
-
-      it 'does not stop wrapped' do
-        subject
-      end
-    end
-  end
 end

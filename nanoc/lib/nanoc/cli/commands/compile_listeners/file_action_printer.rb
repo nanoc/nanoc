@@ -24,17 +24,11 @@ module Nanoc::CLI::Commands::CompileListeners
         cached_reps << rep
       end
 
-      on(:rep_write_enqueued) do |rep|
-        @stopwatches[rep].stop
-      end
-
-      on(:rep_write_started) do |rep, _raw_path|
-        @stopwatches[rep].start
-      end
-
       on(:rep_write_ended) do |rep, _binary, path, is_created, is_modified|
-        @stopwatches[rep].stop
-        duration = @stopwatches[rep].duration
+        stopwatch = @stopwatches[rep]
+        stopwatch.stop unless stopwatch.stopped?
+        # NOTE: stopwatch might have been stopped already, for another snapshot
+        # of this rep.
 
         action =
           if is_created then :create
@@ -53,7 +47,7 @@ module Nanoc::CLI::Commands::CompileListeners
           path = path[(Dir.getwd.size + 1)..path.size]
         end
 
-        log(level, action, path, duration)
+        log(level, action, path, stopwatch.duration)
       end
     end
 

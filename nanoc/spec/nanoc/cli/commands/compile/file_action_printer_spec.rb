@@ -59,21 +59,6 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
       .to output(/create.*\[4\.00s\]/).to_stdout
   end
 
-  it 'records from compilation_started over rep_write_{enqueued,started} to rep_write_ended' do
-    listener.start_safely
-
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
-    Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
-    Nanoc::Core::NotificationCenter.post(:rep_write_enqueued, rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
-    Nanoc::Core::NotificationCenter.post(:rep_write_started, rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
-
-    expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true).sync }
-      .to output(/create.*\[4\.00s\]/).to_stdout
-  end
-
   context 'log level = high' do
     before { listener.start_safely }
 

@@ -51,11 +51,7 @@ module Nanoc
           end
 
           def run_phase_stack
-            phase_stack = build_phase_stack
-            phase_stack.start
-            yield(phase_stack)
-          ensure
-            phase_stack.stop
+            yield(build_phase_stack)
           end
 
           def build_phase_stack
