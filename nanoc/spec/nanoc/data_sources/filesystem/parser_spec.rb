@@ -14,7 +14,7 @@ describe Nanoc::DataSources::Filesystem::Parser do
     let(:meta_filename) { nil }
 
     context 'only meta file' do
-      let(:meta_filename) { Tempfile.open('test') { |fn| fn << 'asdf' }.path }
+      let(:meta_filename) { 'test_meta.txt' }
 
       before do
         File.write(meta_filename, meta)
@@ -79,7 +79,7 @@ describe Nanoc::DataSources::Filesystem::Parser do
     end
 
     context 'only content file' do
-      let(:content_filename) { Tempfile.open('test') { |fn| fn << 'asdf' }.path }
+      let(:content_filename) { 'test_content.txt' }
 
       before do
         File.write(content_filename, content)
@@ -301,8 +301,8 @@ describe Nanoc::DataSources::Filesystem::Parser do
     end
 
     context 'meta and content file' do
-      let(:content_filename) { Tempfile.open('test') { |fn| fn << 'asdf' }.path }
-      let(:meta_filename) { Tempfile.open('test') { |fn| fn << 'asdf' }.path }
+      let(:content_filename) { 'test_content.txt' }
+      let(:meta_filename) { 'test_meta.txt' }
 
       before do
         File.write(content_filename, content)
