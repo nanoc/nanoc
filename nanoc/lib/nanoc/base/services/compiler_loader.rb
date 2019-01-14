@@ -21,7 +21,7 @@ module Nanoc
           Nanoc::Int::OutdatednessStore.new(config: site.config)
 
         compiled_content_cache =
-          Nanoc::Int::CompiledContentCache.new(config: site.config)
+          Nanoc::Int::CompositeCache.new(config: site.config)
 
         params = {
           compiled_content_cache: compiled_content_cache,
