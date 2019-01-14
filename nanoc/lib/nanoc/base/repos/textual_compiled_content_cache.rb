@@ -26,7 +26,7 @@ module Nanoc
         item_cache[rep.name]
       end
 
-      contract Nanoc::Core::ItemRep, C::HashOf[Symbol => Nanoc::Core::Content] => C::Any
+      contract Nanoc::Core::ItemRep, C::HashOf[Symbol => Nanoc::Core::TextualContent] => C::Any
       # Sets the compiled content for the given representation.
       #
       # This cached compiled content is a hash where the keys are the snapshot
@@ -48,7 +48,7 @@ module Nanoc
       end
 
       # True if there is cached compiled content available for this item, and
-      # all entries are textual. (Binary content cannot be cached.)
+      # all entries are textual.
       def full_cache_available?(rep)
         cache = self[rep]
         cache ? cache.none? { |_snapshot_name, content| content.binary? } : false
