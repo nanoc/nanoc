@@ -26,12 +26,16 @@ jobs:
 
     - stage: warmup
       script: true
+      rvm: "2.6"
+
+    - stage: warmup
+      script: true
       rvm: "jruby-9.2.0.0"
 
     - stage: test
       script: bundle exec rake rubocop
       env: JOB=rubocop
-      rvm: "2.5"
+      rvm: "2.6"
 
     - stage: test
       script: bundle exec rake nanoc:test
@@ -72,6 +76,26 @@ jobs:
       script: bundle exec rake guard_nanoc:test
       env: JOB=test_guard_nanoc
       rvm: "2.5"
+
+    - stage: test
+      script: bundle exec rake nanoc:test
+      env: JOB=test_nanoc
+      rvm: "2.6"
+
+    - stage: test
+      script: bundle exec rake nanoc_external:test
+      env: JOB=test_nanoc_external
+      rvm: "2.6"
+
+    - stage: test
+      script: bundle exec rake nanoc_live:test
+      env: JOB=test_nanoc_live
+      rvm: "2.6"
+
+    - stage: test
+      script: bundle exec rake guard_nanoc:test
+      env: JOB=test_guard_nanoc
+      rvm: "2.6"
 
     - stage: test
       script: bundle exec rake nanoc:test
@@ -110,6 +134,9 @@ matrix:
 
     - env: JOB=test_nanoc_live
       rvm: "2.5"
+
+    - env: JOB=test_nanoc_live
+      rvm: "2.6"
 
     - env: JOB=test_nanoc_live DISABLE_NOKOGIRI=1
       rvm: "jruby-9.2.0.0"
