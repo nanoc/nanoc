@@ -22,7 +22,7 @@ group :devel do
   gem 'rspec'
   gem 'rspec-its', '~> 1.2'
   gem 'rspec-mocks'
-  gem 'rubocop'
+  gem 'rubocop', git: 'https://github.com/rubocop-hq/rubocop.git'
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
