@@ -14,7 +14,7 @@ module Nanoc::CLI
       identical: '',    # (nothing)
       cached: '',       # (nothing)
       skip: '',         # (nothing)
-      delete: "\e[31m"  # red
+      delete: "\e[31m", # red
     }.freeze
 
     include Singleton
