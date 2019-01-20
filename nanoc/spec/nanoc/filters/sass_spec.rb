@@ -140,7 +140,7 @@ describe Nanoc::Filters::SassCommon do
     let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
     let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults.merge(color: 'yellow') }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults.merge(color: 'yellow') }
 
     before do
       items.each do |item|

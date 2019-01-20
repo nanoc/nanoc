@@ -40,7 +40,7 @@ module Nanoc::Int
 
     # Logic for building tmp path from active environment and store name
     # @api private
-    contract C::KeywordArgs[config: Nanoc::Int::Configuration, store_name: String] => C::AbsolutePathString
+    contract C::KeywordArgs[config: Nanoc::Core::Configuration, store_name: String] => C::AbsolutePathString
     def self.tmp_path_for(store_name:, config:)
       File.absolute_path(
         File.join(tmp_path_prefix(config.output_dir), store_name),

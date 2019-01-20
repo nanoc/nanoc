@@ -177,9 +177,9 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::Int::CodeSnippet<String<asdf>>') }
   end
 
-  context 'Nanoc::Int::Configuration' do
-    let(:obj) { Nanoc::Int::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
-    it { is_expected.to eql('Nanoc::Int::Configuration<Symbol<foo>=String<bar>,>') }
+  context 'Nanoc::Core::Configuration' do
+    let(:obj) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
+    it { is_expected.to eql('Nanoc::Core::Configuration<Symbol<foo>=String<bar>,>') }
   end
 
   context 'Nanoc::Core::Item' do
@@ -296,15 +296,15 @@ describe Nanoc::Int::Checksummer do
 
   context 'Nanoc::ConfigView' do
     let(:obj) { Nanoc::ConfigView.new(config, nil) }
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
 
-    it { is_expected.to eql('Nanoc::ConfigView<Nanoc::Int::Configuration<Symbol<foo>=String<bar>,>>') }
+    it { is_expected.to eql('Nanoc::ConfigView<Nanoc::Core::Configuration<Symbol<foo>=String<bar>,>>') }
   end
 
   context 'Nanoc::ItemCollectionWithRepsView' do
     let(:obj) { Nanoc::ItemCollectionWithRepsView.new(wrapped, nil) }
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
 
     let(:wrapped) do
       Nanoc::Int::ItemCollection.new(
@@ -322,7 +322,7 @@ describe Nanoc::Int::Checksummer do
   context 'Nanoc::ItemCollectionWithoutRepsView' do
     let(:obj) { Nanoc::ItemCollectionWithoutRepsView.new(wrapped, nil) }
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
 
     let(:wrapped) do
       Nanoc::Int::ItemCollection.new(
@@ -351,7 +351,7 @@ describe Nanoc::Int::Checksummer do
       )
     end
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
     let(:code_snippets) { [Nanoc::Int::CodeSnippet.new('asdf', '/bob.rb')] }
     let(:items) { Nanoc::Int::ItemCollection.new(config, [item]) }
     let(:layouts) { [Nanoc::Core::Layout.new('asdf', {}, '/foo.md')] }
@@ -362,7 +362,7 @@ describe Nanoc::Int::Checksummer do
     let(:expected_item_checksum) { 'Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<stuff>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</stuff.md>>>' }
     let(:expected_item_rep_checksum) { 'Nanoc::Int::ItemRep<item=' + expected_item_checksum + ',name=Symbol<pdf>>' }
     let(:expected_layout_checksum) { 'Nanoc::Core::Layout<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>' }
-    let(:expected_config_checksum) { 'Nanoc::Int::Configuration<Symbol<foo>=String<bar>,>' }
+    let(:expected_config_checksum) { 'Nanoc::Core::Configuration<Symbol<foo>=String<bar>,>' }
 
     let(:expected_checksum) do
       [

@@ -14,6 +14,7 @@ require 'nanoc/core/contracts_support'
 require 'nanoc/core/lazy_value'
 require 'nanoc/core/error'
 
+require 'nanoc/core/configuration'
 require 'nanoc/core/content'
 require 'nanoc/core/context'
 require 'nanoc/core/pattern'

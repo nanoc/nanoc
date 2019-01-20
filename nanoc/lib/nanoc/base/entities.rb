@@ -13,7 +13,6 @@ require_relative 'entities/item_collection'
 require_relative 'entities/layout_collection'
 
 require_relative 'entities/code_snippet'
-require_relative 'entities/configuration'
 require_relative 'entities/item_rep'
 require_relative 'entities/props'
 require_relative 'entities/action_sequence'

@@ -4,7 +4,7 @@ describe Nanoc::DataSources::Filesystem::Parser do
   subject(:parser) { described_class.new(config: config) }
 
   let(:config) do
-    Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults
+    Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
   end
 
   describe '#call' do

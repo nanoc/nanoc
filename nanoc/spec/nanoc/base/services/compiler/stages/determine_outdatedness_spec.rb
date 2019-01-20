@@ -21,7 +21,7 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
     Nanoc::Int::OutdatednessStore.new(config: config)
   end
 
-  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
   let(:code_snippets) { [] }
 
   describe '#run' do

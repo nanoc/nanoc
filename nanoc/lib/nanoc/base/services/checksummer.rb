@@ -80,7 +80,7 @@ module Nanoc::Int
           BinaryContentUpdateBehavior
         when Array, Nanoc::Int::IdentifiableCollection
           ArrayUpdateBehavior
-        when Hash, Nanoc::Int::Configuration
+        when Hash, Nanoc::Core::Configuration
           HashUpdateBehavior
         when Nanoc::Core::Item, Nanoc::Core::Layout
           DocumentUpdateBehavior

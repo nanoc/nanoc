@@ -93,7 +93,7 @@ module Nanoc::CLI::Commands
               'layout'
             when Nanoc::Core::Item
               'item'
-            when Nanoc::Int::Configuration
+            when Nanoc::Core::Configuration
               'config'
             when Nanoc::Int::ItemCollection
               'items'
@@ -107,7 +107,7 @@ module Nanoc::CLI::Commands
             case pred
             when Nanoc::Core::Document
               pred.identifier.to_s
-            when Nanoc::Int::Configuration
+            when Nanoc::Core::Configuration
               nil
             when Nanoc::Int::IdentifiableCollection
               case dep.props.raw_content

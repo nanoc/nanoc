@@ -3,7 +3,7 @@
 describe Nanoc::Pruner, stdio: true do
   subject(:pruner) { described_class.new(config, reps, dry_run: dry_run, exclude: exclude) }
 
-  let(:config) { Nanoc::Int::Configuration.new(hash: {}, dir: Dir.getwd).with_defaults }
+  let(:config) { Nanoc::Core::Configuration.new(hash: {}, dir: Dir.getwd).with_defaults }
   let(:dry_run) { false }
   let(:exclude) { [] }
 

@@ -42,7 +42,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
   let(:other_item) { Nanoc::Core::Item.new('other item content', {}, '/other.md') }
   let(:other_rep) { Nanoc::Int::ItemRep.new(other_item, :latex) }
 
-  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
   describe '#call' do
     context 'one run' do

@@ -23,7 +23,7 @@ describe Nanoc::Int::Compiler::Stages::Preprocess do
   end
 
   let(:data_source) { Nanoc::Int::InMemDataSource.new(items, layouts) }
-  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
   let(:items) { Nanoc::Int::ItemCollection.new(config) }
   let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
 

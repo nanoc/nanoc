@@ -8,7 +8,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def setup
     super
 
-    config = Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults
+    config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
     items = Nanoc::Int::ItemCollection.new(config)
     layouts = Nanoc::Int::LayoutCollection.new(config)
     dep_store = Nanoc::Int::DependencyStore.new(items, layouts, config)
@@ -63,7 +63,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
 
       # Create site
-      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
+      config = Nanoc::Core::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
       @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Build sitemap
@@ -110,7 +110,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::Core::Item.new('sitemap content', {}, '/sitemap')
 
       # Create site
-      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
+      config = Nanoc::Core::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
       @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Build sitemap
@@ -145,7 +145,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
 
       # Create site
-      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
+      config = Nanoc::Core::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
       @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Build sitemap
@@ -186,7 +186,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
 
       # Create site
-      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
+      config = Nanoc::Core::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
       @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Build sitemap
@@ -218,7 +218,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @item = Nanoc::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
 
       # Create site
-      config = Nanoc::Int::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
+      config = Nanoc::Core::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
       @config = Nanoc::ConfigView.new(config, @view_context)
 
       # Build sitemap

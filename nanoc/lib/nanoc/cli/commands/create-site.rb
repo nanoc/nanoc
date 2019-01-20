@@ -22,7 +22,7 @@ module Nanoc::CLI::Commands
       # A list of file extensions that Nanoc will consider to be textual rather than
       # binary. If an item with an extension not in this list is found,  the file
       # will be considered as binary.
-      text_extensions: #{array_to_yaml(Nanoc::Int::Configuration::DEFAULT_CONFIG[:text_extensions])}
+      text_extensions: #{array_to_yaml(Nanoc::Core::Configuration::DEFAULT_CONFIG[:text_extensions])}
 
       prune:
         auto_prune: true

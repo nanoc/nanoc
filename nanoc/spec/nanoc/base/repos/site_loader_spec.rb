@@ -16,7 +16,7 @@ describe Nanoc::Int::SiteLoader do
 
     shared_examples 'a directory with a config file' do
       it 'has the default configuration' do
-        expect(subject.config).to be_a(Nanoc::Int::Configuration)
+        expect(subject.config).to be_a(Nanoc::Core::Configuration)
         expect(subject.config[:index_filenames]).to eq(['index.html'])
         expect(subject.config[:foo]).to eq('bar')
       end
@@ -172,7 +172,7 @@ describe Nanoc::Int::SiteLoader do
   describe '#code_snippets_from_config' do
     subject { loader.send(:code_snippets_from_config, config) }
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
     before { FileUtils.mkdir_p('lib') }
 

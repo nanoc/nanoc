@@ -15,7 +15,7 @@ shared_examples 'a mutable document view' do
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
   let(:compiled_content_store) { double(:compiled_content_store) }
-  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
 
   describe '#raw_content=' do
     let(:document) { entity_class.new('content', {}, '/asdf') }

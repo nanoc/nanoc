@@ -181,7 +181,7 @@ describe Nanoc::Filter do
     let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
     let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
     let(:reps) { Nanoc::Int::ItemRepRepo.new }
 

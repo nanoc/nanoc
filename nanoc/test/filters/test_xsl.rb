@@ -88,7 +88,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
   def setup
     super
 
-    config = Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults
+    config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
     items = Nanoc::Int::ItemCollection.new(config)
     layouts = Nanoc::Int::LayoutCollection.new(config)
 
@@ -101,7 +101,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
   end
 
   def new_view_context
-    config = Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults
+    config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
 
     Nanoc::ViewContextForCompilation.new(
       reps: Nanoc::Int::ItemRepRepo.new,

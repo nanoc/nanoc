@@ -32,7 +32,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
   let(:item) { Nanoc::Core::Item.new('item content', {}, '/donkey.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :latex) }
 
-  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
   describe '#run' do
     subject { phase.call(rep, is_outdated: is_outdated) }

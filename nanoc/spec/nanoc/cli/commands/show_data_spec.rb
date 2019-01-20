@@ -27,7 +27,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:item_dog)   { Nanoc::Core::Item.new('About My Dog', {}, '/dog.md') }
     let(:item_other) { Nanoc::Core::Item.new('Raw Data', {}, '/other.dat') }
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
     let(:dependency_store) do
       Nanoc::Int::DependencyStore.new(items, layouts, config)
@@ -194,7 +194,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:arguments) { [] }
     let(:command) { double(:command) }
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
 
     let(:items) do
       Nanoc::Int::ItemCollection.new(
@@ -276,7 +276,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:arguments) { [] }
     let(:command) { double(:command) }
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
 
     let(:layouts) do
       Nanoc::Int::LayoutCollection.new(config, [layout])

@@ -3,7 +3,7 @@
 describe Nanoc::Int::ChecksumStore do
   let(:store) { described_class.new(config: config, objects: objects) }
 
-  let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
   let(:objects) { [item, code_snippet] }
 

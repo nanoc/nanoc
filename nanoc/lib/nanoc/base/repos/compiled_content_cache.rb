@@ -8,7 +8,7 @@ module Nanoc::Int
   class CompiledContentCache < ::Nanoc::Int::Store
     include Nanoc::Core::ContractsSupport
 
-    contract C::KeywordArgs[config: Nanoc::Int::Configuration] => C::Any
+    contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
     def initialize(config:)
       super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'compiled_content'), 2)
 

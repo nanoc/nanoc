@@ -8,7 +8,7 @@ module Nanoc
   class Pruner
     include Nanoc::Core::ContractsSupport
 
-    # @param [Nanoc::Int::Configuration] config
+    # @param [Nanoc::Core::Configuration] config
     #
     # @param [Nanoc::Int::ItemRepRepo] reps
     #

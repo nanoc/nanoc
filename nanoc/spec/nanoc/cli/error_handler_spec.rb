@@ -165,7 +165,7 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
 
     let(:error) do
       begin
-        Nanoc::Int::Configuration.new(dir: '/oink', hash: { enable_output_diff: 'yeah' })
+        Nanoc::Core::Configuration.new(dir: '/oink', hash: { enable_output_diff: 'yeah' })
       rescue => e
         return e
       end

@@ -8,7 +8,7 @@ module Nanoc::Int
     attr_reader :items
     attr_reader :layouts
 
-    contract Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection, Nanoc::Int::Configuration => C::Any
+    contract Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection, Nanoc::Core::Configuration => C::Any
     def initialize(items, layouts, config)
       super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'dependencies'), 5)
 
@@ -27,7 +27,7 @@ module Nanoc::Int
     end
 
     C_OBJ_SRC = Nanoc::Core::Item
-    C_OBJ_DST = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Int::Configuration, Nanoc::Int::IdentifiableCollection]
+    C_OBJ_DST = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Int::IdentifiableCollection]
 
     contract C_OBJ_SRC => C::ArrayOf[Nanoc::Int::Dependency]
     def dependencies_causing_outdatedness_of(object)

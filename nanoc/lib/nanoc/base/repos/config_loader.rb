@@ -46,7 +46,7 @@ module Nanoc::Int
       # Read
       config =
         apply_parent_config(
-          Nanoc::Int::Configuration.new(
+          Nanoc::Core::Configuration.new(
             hash: load_file(filename),
             dir: File.dirname(filename),
           ),
@@ -85,7 +85,7 @@ module Nanoc::Int
       end
 
       # Load
-      parent_config = Nanoc::Int::Configuration.new(hash: load_file(parent_path), dir: config.dir)
+      parent_config = Nanoc::Core::Configuration.new(hash: load_file(parent_path), dir: config.dir)
       full_parent_config = apply_parent_config(parent_config, processed_paths + [parent_path])
       full_parent_config.merge(config.without(:parent_config_file))
     end

@@ -20,7 +20,7 @@ describe Nanoc::Int::ConfigLoader do
       end
 
       it 'returns a configuration' do
-        expect(subject).to be_a(Nanoc::Int::Configuration)
+        expect(subject).to be_a(Nanoc::Core::Configuration)
       end
 
       it 'has the defaults' do
@@ -44,7 +44,7 @@ describe Nanoc::Int::ConfigLoader do
       end
 
       it 'returns a configuration' do
-        expect(subject).to be_a(Nanoc::Int::Configuration)
+        expect(subject).to be_a(Nanoc::Core::Configuration)
       end
 
       it 'has the defaults' do
@@ -63,7 +63,7 @@ describe Nanoc::Int::ConfigLoader do
       end
 
       it 'returns the configuration' do
-        expect(subject).to be_a(Nanoc::Int::Configuration)
+        expect(subject).to be_a(Nanoc::Core::Configuration)
       end
 
       it 'has the defaults' do
@@ -92,7 +92,7 @@ describe Nanoc::Int::ConfigLoader do
       end
 
       it 'returns the configuration' do
-        expect(subject).to be_a(Nanoc::Int::Configuration)
+        expect(subject).to be_a(Nanoc::Core::Configuration)
       end
 
       it 'has the defaults' do
@@ -131,7 +131,7 @@ describe Nanoc::Int::ConfigLoader do
       end
 
       it 'returns the configuration' do
-        expect(subject).to be_a(Nanoc::Int::Configuration)
+        expect(subject).to be_a(Nanoc::Core::Configuration)
       end
 
       it 'has option defined not within environments' do
@@ -186,7 +186,7 @@ describe Nanoc::Int::ConfigLoader do
   describe '#apply_parent_config' do
     subject { loader.apply_parent_config(config, processed_paths) }
 
-    let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd, hash: { foo: 'bar' }) }
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { foo: 'bar' }) }
 
     let(:processed_paths) { ['nanoc.yaml'] }
 
@@ -198,7 +198,7 @@ describe Nanoc::Int::ConfigLoader do
 
     context 'parent config file is set' do
       let(:config) do
-        Nanoc::Int::Configuration.new(dir: Dir.getwd, hash: { parent_config_file: 'foo.yaml', foo: 'bar' })
+        Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { parent_config_file: 'foo.yaml', foo: 'bar' })
       end
 
       context 'parent config file is not present' do
@@ -241,7 +241,7 @@ describe Nanoc::Int::ConfigLoader do
           end
 
           it 'returns a configuration' do
-            expect(subject).to be_a(Nanoc::Int::Configuration)
+            expect(subject).to be_a(Nanoc::Core::Configuration)
           end
 
           it 'has no defaults (added in #new_from_cwd only)' do
@@ -268,7 +268,7 @@ describe Nanoc::Int::ConfigLoader do
           end
 
           it 'returns a configuration' do
-            expect(subject).to be_a(Nanoc::Int::Configuration)
+            expect(subject).to be_a(Nanoc::Core::Configuration)
           end
 
           it 'has no defaults (added in #new_from_cwd only)' do
