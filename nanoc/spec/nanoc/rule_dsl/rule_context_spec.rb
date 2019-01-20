@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 shared_examples 'a rule context' do
-  let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
+  let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
   let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
   let(:items) { Nanoc::Int::ItemCollection.new(config) }
@@ -59,12 +59,12 @@ shared_examples 'a rule context' do
     end
 
     context 'with legacy identifier and children/parent' do
-      let(:item_identifier) { Nanoc::Identifier.new('/foo/', type: :legacy) }
+      let(:item_identifier) { Nanoc::Core::Identifier.new('/foo/', type: :legacy) }
 
-      let(:parent_identifier) { Nanoc::Identifier.new('/', type: :legacy) }
+      let(:parent_identifier) { Nanoc::Core::Identifier.new('/', type: :legacy) }
       let(:parent) { Nanoc::Int::Item.new('parent', {}, parent_identifier) }
 
-      let(:child_identifier) { Nanoc::Identifier.new('/foo/bar/', type: :legacy) }
+      let(:child_identifier) { Nanoc::Core::Identifier.new('/foo/bar/', type: :legacy) }
       let(:child) { Nanoc::Int::Item.new('child', {}, child_identifier) }
 
       let(:items) do
@@ -98,12 +98,12 @@ shared_examples 'a rule context' do
   describe '#items' do
     subject { rule_context.items }
 
-    let(:item_identifier) { Nanoc::Identifier.new('/foo/', type: :legacy) }
+    let(:item_identifier) { Nanoc::Core::Identifier.new('/foo/', type: :legacy) }
 
-    let(:parent_identifier) { Nanoc::Identifier.new('/', type: :legacy) }
+    let(:parent_identifier) { Nanoc::Core::Identifier.new('/', type: :legacy) }
     let(:parent) { Nanoc::Int::Item.new('parent', {}, parent_identifier) }
 
-    let(:child_identifier) { Nanoc::Identifier.new('/foo/bar/', type: :legacy) }
+    let(:child_identifier) { Nanoc::Core::Identifier.new('/foo/bar/', type: :legacy) }
     let(:child) { Nanoc::Int::Item.new('child', {}, child_identifier) }
 
     let(:items) do
@@ -144,7 +144,7 @@ describe(Nanoc::RuleDSL::RoutingRuleContext) do
     described_class.new(rep: rep, site: site, view_context: view_context)
   end
 
-  let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
+  let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
@@ -170,7 +170,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
     described_class.new(rep: rep, site: site, recorder: recorder, view_context: view_context)
   end
 
-  let(:item_identifier) { Nanoc::Identifier.new('/foo.md') }
+  let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
@@ -263,7 +263,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
     context 'with identifier' do
       context 'calling once' do
         subject { rule_context.write(identifier) }
-        let(:identifier) { Nanoc::Identifier.new('/foo.html') }
+        let(:identifier) { Nanoc::Core::Identifier.new('/foo.html') }
 
         it 'makes a request to the recorder' do
           expect(recorder).to receive(:snapshot).with(:_0, path: '/foo.html')
@@ -277,8 +277,8 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
           rule_context.write(identifier_b)
         end
 
-        let(:identifier_a) { Nanoc::Identifier.new('/foo.html') }
-        let(:identifier_b) { Nanoc::Identifier.new('/bar.html') }
+        let(:identifier_a) { Nanoc::Core::Identifier.new('/foo.html') }
+        let(:identifier_b) { Nanoc::Core::Identifier.new('/bar.html') }
 
         it 'makes two requests to the recorder with unique snapshot names' do
           expect(recorder).to receive(:snapshot).with(:_0, path: '/foo.html')

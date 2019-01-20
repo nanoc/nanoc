@@ -31,7 +31,7 @@ module Nanoc
       self.class.hash ^ identifier.hash
     end
 
-    # @return [Nanoc::Identifier]
+    # @return [Nanoc::Core::Identifier]
     def identifier
       _unwrap.identifier
     end

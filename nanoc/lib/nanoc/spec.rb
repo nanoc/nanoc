@@ -73,7 +73,7 @@ module Nanoc
       #
       # @param [Hash] attributes A hash containing this item's attributes
       #
-      # @param [Nanoc::Identifier, String] identifier This item's identifier
+      # @param [Nanoc::Core::Identifier, String] identifier This item's identifier
       #
       # @return [Nanoc::CompilationItemView] A view for the newly created item
       def create_item(content, attributes, identifier)
@@ -88,7 +88,7 @@ module Nanoc
       #
       # @param [Hash] attributes A hash containing this layout's attributes
       #
-      # @param [Nanoc::Identifier, String] identifier This layout's identifier
+      # @param [Nanoc::Core::Identifier, String] identifier This layout's identifier
       #
       # @return [Nanoc::CompilationItemView] A view for the newly created layout
       def create_layout(content, attributes, identifier)

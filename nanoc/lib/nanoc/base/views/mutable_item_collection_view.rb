@@ -15,7 +15,7 @@ module Nanoc
     #
     # @param [Hash] attributes A hash containing this item's attributes.
     #
-    # @param [Nanoc::Identifier, String] identifier This item's identifier.
+    # @param [Nanoc::Core::Identifier, String] identifier This item's identifier.
     #
     # @param [Boolean] binary Whether or not this item is binary
     #

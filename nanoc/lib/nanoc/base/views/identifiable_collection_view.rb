@@ -56,7 +56,7 @@ module Nanoc
 
       prop_attribute =
         case arg
-        when String, Nanoc::Identifier
+        when String, Nanoc::Core::Identifier
           [arg.to_s]
         when Regexp
           [arg]
@@ -93,7 +93,7 @@ module Nanoc
     def [](arg)
       prop_attribute =
         case arg
-        when String, Nanoc::Identifier
+        when String, Nanoc::Core::Identifier
           [arg.to_s]
         when Regexp
           [arg]

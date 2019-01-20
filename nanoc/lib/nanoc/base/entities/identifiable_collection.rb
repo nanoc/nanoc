@@ -89,7 +89,7 @@ module Nanoc::Int
     contract C::Any => C::Maybe[C::RespondTo[:identifier]]
     def get_unmemoized(arg)
       case arg
-      when Nanoc::Identifier
+      when Nanoc::Core::Identifier
         object_with_identifier(arg)
       when String
         object_with_identifier(arg) || object_matching_glob(arg)

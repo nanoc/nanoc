@@ -47,7 +47,7 @@ describe Nanoc::DataSources::Filesystem, site: true do
 
           expect(subject[0].content.string).to eq('test 1')
           expect(subject[0].attributes).to eq(expected_attributes)
-          expect(subject[0].identifier).to eq(Nanoc::Identifier.new('/bar/', type: :legacy))
+          expect(subject[0].identifier).to eq(Nanoc::Core::Identifier.new('/bar/', type: :legacy))
           expect(subject[0].checksum_data).to be_nil
           expect(subject[0].attributes_checksum_data).to be_a(String)
           expect(subject[0].attributes_checksum_data.size).to eq(20)
@@ -100,7 +100,7 @@ describe Nanoc::DataSources::Filesystem, site: true do
 
           expect(subject[0].content).to be_a(Nanoc::Core::BinaryContent)
           expect(subject[0].attributes).to eq(expected_attributes)
-          expect(subject[0].identifier).to eq(Nanoc::Identifier.new('/bar/', type: :legacy))
+          expect(subject[0].identifier).to eq(Nanoc::Core::Identifier.new('/bar/', type: :legacy))
           expect(subject[0].checksum_data).to be_nil
           expect(subject[0].attributes_checksum_data).to be_a(String)
           expect(subject[0].attributes_checksum_data.size).to eq(20)
@@ -146,11 +146,11 @@ describe Nanoc::DataSources::Filesystem, site: true do
           items = subject.sort_by { |i| i.identifier.to_s }
 
           expect(items[0].content).to be_a(Nanoc::Core::TextualContent)
-          expect(items[0].identifier).to eq(Nanoc::Identifier.new('/a.md', type: :full))
+          expect(items[0].identifier).to eq(Nanoc::Core::Identifier.new('/a.md', type: :full))
           expect(items[0].attributes[:title]).to eq('Aaah')
 
           expect(items[1].content).to be_a(Nanoc::Core::TextualContent)
-          expect(items[1].identifier).to eq(Nanoc::Identifier.new('/a.txt', type: :full))
+          expect(items[1].identifier).to eq(Nanoc::Core::Identifier.new('/a.txt', type: :full))
           expect(items[1].attributes[:title]).to eq('Hi')
         end
       end
@@ -189,11 +189,11 @@ describe Nanoc::DataSources::Filesystem, site: true do
           items = subject.sort_by { |i| i.identifier.to_s }
 
           expect(items[0].content).to be_a(Nanoc::Core::TextualContent)
-          expect(items[0].identifier).to eq(Nanoc::Identifier.new('/a.md', type: :full))
+          expect(items[0].identifier).to eq(Nanoc::Core::Identifier.new('/a.md', type: :full))
           expect(items[0].attributes[:title]).to eq('Ho')
 
           expect(items[1].content).to be_a(Nanoc::Core::TextualContent)
-          expect(items[1].identifier).to eq(Nanoc::Identifier.new('/a.txt', type: :full))
+          expect(items[1].identifier).to eq(Nanoc::Core::Identifier.new('/a.txt', type: :full))
           expect(items[1].attributes[:title]).to eq('Hi')
         end
       end
@@ -213,11 +213,11 @@ describe Nanoc::DataSources::Filesystem, site: true do
           items = subject.sort_by { |i| i.identifier.to_s }
 
           expect(items[0].content).to be_a(Nanoc::Core::TextualContent)
-          expect(items[0].identifier).to eq(Nanoc::Identifier.new('/a.md', type: :full))
+          expect(items[0].identifier).to eq(Nanoc::Core::Identifier.new('/a.md', type: :full))
           expect(items[0].attributes[:title]).to be_nil
 
           expect(items[1].content).to be_a(Nanoc::Core::TextualContent)
-          expect(items[1].identifier).to eq(Nanoc::Identifier.new('/a.txt', type: :full))
+          expect(items[1].identifier).to eq(Nanoc::Core::Identifier.new('/a.txt', type: :full))
           expect(items[1].attributes[:title]).to be_nil
         end
       end
@@ -236,7 +236,7 @@ describe Nanoc::DataSources::Filesystem, site: true do
 
           expect(subject[0].content).to be_a(Nanoc::Core::TextualContent)
           expect(subject[0].content.string).to eq("---\ntitle: Hi\n---\n\nhi")
-          expect(subject[0].identifier).to eq(Nanoc::Identifier.new('/a.txt', type: :full))
+          expect(subject[0].identifier).to eq(Nanoc::Core::Identifier.new('/a.txt', type: :full))
           expect(subject[0].attributes[:title]).to be_nil
           expect(subject[0].attributes[:author]).to eq('Denis')
         end

@@ -12,12 +12,12 @@ shared_examples 'a generic rule' do
     subject { rule.matches(identifier) }
 
     context 'does not match' do
-      let(:identifier) { Nanoc::Identifier.new('/moo/', type: :legacy) }
+      let(:identifier) { Nanoc::Core::Identifier.new('/moo/', type: :legacy) }
       it { is_expected.to be_nil }
     end
 
     context 'matches' do
-      let(:identifier) { Nanoc::Identifier.new('/foo/bar/', type: :legacy) }
+      let(:identifier) { Nanoc::Core::Identifier.new('/foo/bar/', type: :legacy) }
       it { is_expected.to eql(%w[foo bar]) }
     end
   end

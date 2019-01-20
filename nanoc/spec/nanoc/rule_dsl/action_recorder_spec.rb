@@ -128,7 +128,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
         end
 
         context 'explicit path given as identifier' do
-          let(:subject_params) { { path: Nanoc::Identifier.from('/routed-foo.html') } }
+          let(:subject_params) { { path: Nanoc::Core::Identifier.from('/routed-foo.html') } }
 
           it 'records' do
             subject

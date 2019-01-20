@@ -17,7 +17,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
     end
 
     context 'legacy identifier' do
-      let(:layout_identifier) { Nanoc::Identifier.new('/partial/', type: :legacy) }
+      let(:layout_identifier) { Nanoc::Core::Identifier.new('/partial/', type: :legacy) }
 
       context 'cleaned identifier' do
         subject { helper.instance_eval { render('/partial/') } }
@@ -61,7 +61,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
     end
 
     context 'full-style identifier' do
-      let(:layout_identifier) { Nanoc::Identifier.new('/partial.erb') }
+      let(:layout_identifier) { Nanoc::Core::Identifier.new('/partial.erb') }
 
       context 'layout without instructions' do
         let(:layout_content) { 'blah' }

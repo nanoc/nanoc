@@ -23,7 +23,7 @@ module Nanoc::RuleDSL
     end
 
     # @api private
-    contract Nanoc::Identifier => C::Or[nil, C::ArrayOf[String]]
+    contract Nanoc::Core::Identifier => C::Or[nil, C::ArrayOf[String]]
     def matches(identifier)
       @pattern.captures(identifier)
     end

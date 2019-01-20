@@ -73,7 +73,7 @@ module Nanoc::RuleDSL
       @_write_snapshot_counter += 1
 
       case arg
-      when String, Nanoc::Identifier, nil
+      when String, Nanoc::Core::Identifier, nil
         snapshot(snapshot_name, path: arg)
       when Hash
         if arg.key?(:ext)
