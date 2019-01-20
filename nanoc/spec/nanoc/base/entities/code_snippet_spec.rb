@@ -21,7 +21,7 @@ describe Nanoc::Int::CodeSnippet do
 
       it 'makes helper functions available everywhere' do
         expect { subject }
-          .to change { [Nanoc::Int::Context.new({}).respond_to?(:fe345b48e4), Complex.respond_to?(:fe345b48e4)] }
+          .to change { [Nanoc::Core::Context.new({}).respond_to?(:fe345b48e4), Complex.respond_to?(:fe345b48e4)] }
           .from([false, false])
           .to([true, true])
       end
@@ -42,7 +42,7 @@ describe Nanoc::Int::CodeSnippet do
 
       it 'makes helper functions available in helpers only' do
         expect { subject }
-          .to change { [Nanoc::Int::Context.new({}).respond_to?(:e0f0c30b5e), Complex.respond_to?(:e0f0c30b5e)] }
+          .to change { [Nanoc::Core::Context.new({}).respond_to?(:e0f0c30b5e), Complex.respond_to?(:e0f0c30b5e)] }
           .from([false, false])
           .to([true, false])
       end

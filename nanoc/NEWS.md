@@ -537,7 +537,7 @@ Fixes:
 Enhancements:
 
 * Added support for non-legacy identifiers in `#breadcrumbs_trail` (#1010, #1011)
-* Defined checksum for `Nanoc::Int::Context` to make outdatedness checker more precise (#1008, #1012)
+* Defined checksum for `Nanoc::Core::Context` to make outdatedness checker more precise (#1008, #1012)
 * Made Nanoc raise an error when item reps are routed to a path that does not start with a slash (#1015, #1016)
 
 ## 4.4.2 (2016-11-27)

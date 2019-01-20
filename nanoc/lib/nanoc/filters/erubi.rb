@@ -16,7 +16,7 @@ module Nanoc::Filters
     # @return [String] The filtered content
     def run(content, params = {})
       # Create context
-      context = ::Nanoc::Int::Context.new(assigns)
+      context = ::Nanoc::Core::Context.new(assigns)
 
       # Get binding
       proc = assigns[:content] ? -> { assigns[:content] } : nil

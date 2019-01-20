@@ -18,7 +18,7 @@ module Nanoc::Filters
       options = params.merge(filename: filename)
 
       # Create context
-      context = ::Nanoc::Int::Context.new(assigns)
+      context = ::Nanoc::Core::Context.new(assigns)
 
       # Get result
       proc = assigns[:content] ? -> { assigns[:content] } : nil

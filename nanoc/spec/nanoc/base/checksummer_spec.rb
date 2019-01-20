@@ -384,10 +384,10 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql(expected_checksum) }
   end
 
-  context 'Nanoc::Int::Context' do
-    let(:obj) { Nanoc::Int::Context.new(foo: 123) }
+  context 'Nanoc::Core::Context' do
+    let(:obj) { Nanoc::Core::Context.new(foo: 123) }
 
-    it { is_expected.to match(/\ANanoc::Int::Context<@foo=(Fixnum|Integer)<123>,>\z/) }
+    it { is_expected.to match(/\ANanoc::Core::Context<@foo=(Fixnum|Integer)<123>,>\z/) }
   end
 
   context 'Sass::Importers::Filesystem' do

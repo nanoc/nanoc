@@ -113,7 +113,7 @@ module Nanoc
       # @return [Object] An object that includes the helper functions
       def helper
         mod = @mod
-        klass = Class.new(Nanoc::Int::Context) { include mod }
+        klass = Class.new(Nanoc::Core::Context) { include mod }
         klass.new(assigns)
       end
 

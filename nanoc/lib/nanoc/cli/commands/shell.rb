@@ -20,7 +20,7 @@ module Nanoc::CLI::Commands
       @site = load_site
       Nanoc::Int::Compiler.new_for(@site).run_until_preprocessed if options[:preprocess]
 
-      Nanoc::Int::Context.new(env).pry
+      Nanoc::Core::Context.new(env).pry
     end
 
     def env

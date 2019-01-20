@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::RuleDSL
-  class RuleContext < Nanoc::Int::Context
+  class RuleContext < Nanoc::Core::Context
     include Nanoc::Core::ContractsSupport
 
     contract C::KeywordArgs[
