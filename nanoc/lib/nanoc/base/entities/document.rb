@@ -14,7 +14,7 @@ module Nanoc
         @attributes.value
       end
 
-      # @return [Nanoc::Identifier]
+      # @return [Nanoc::Core::Identifier]
       attr_reader :identifier
 
       # @return [String, nil]
@@ -28,7 +28,7 @@ module Nanoc
 
       c_content = C::Or[String, Nanoc::Core::Content]
       c_attributes = C::Or[Hash, Proc]
-      c_identifier = C::Or[String, Nanoc::Identifier]
+      c_identifier = C::Or[String, Nanoc::Core::Identifier]
       c_checksum_data = C::KeywordArgs[
         checksum_data: C::Optional[C::Maybe[String]],
         content_checksum_data: C::Optional[C::Maybe[String]],
@@ -40,7 +40,7 @@ module Nanoc
       #
       # @param [Hash, Proc] attributes
       #
-      # @param [String, Nanoc::Identifier] identifier
+      # @param [String, Nanoc::Core::Identifier] identifier
       #
       # @param [String, nil] checksum_data
       #
@@ -50,7 +50,7 @@ module Nanoc
       def initialize(content, attributes, identifier, checksum_data: nil, content_checksum_data: nil, attributes_checksum_data: nil)
         @content = Nanoc::Core::Content.create(content)
         @attributes = Nanoc::Core::LazyValue.new(attributes).map(&:__nanoc_symbolize_keys_recursively)
-        @identifier = Nanoc::Identifier.from(identifier)
+        @identifier = Nanoc::Core::Identifier.from(identifier)
 
         @checksum_data = checksum_data
         @content_checksum_data = content_checksum_data
@@ -81,9 +81,9 @@ module Nanoc
         raise NotImplementedError
       end
 
-      contract C::Or[Nanoc::Identifier, String] => Nanoc::Identifier
+      contract C::Or[Nanoc::Core::Identifier, String] => Nanoc::Core::Identifier
       def identifier=(new_identifier)
-        @identifier = Nanoc::Identifier.from(new_identifier)
+        @identifier = Nanoc::Core::Identifier.from(new_identifier)
       end
 
       contract Nanoc::Core::Content => C::Any

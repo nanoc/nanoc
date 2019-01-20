@@ -38,7 +38,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
     context 'with item rep' do
       let(:obj) { Nanoc::Int::ItemRep.new(item, :csv) }
 
-      let(:item) { Nanoc::Int::Item.new('content', {}, Nanoc::Identifier.from('/list.md')) }
+      let(:item) { Nanoc::Int::Item.new('content', {}, Nanoc::Core::Identifier.from('/list.md')) }
 
       context 'no rules exist' do
         it 'raises error' do

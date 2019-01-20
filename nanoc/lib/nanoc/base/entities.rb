@@ -2,8 +2,6 @@
 
 require_relative 'entities/directed_graph'
 
-Nanoc::Identifier = Nanoc::Core::Identifier
-
 require_relative 'entities/processing_action'
 require_relative 'entities/processing_actions'
 

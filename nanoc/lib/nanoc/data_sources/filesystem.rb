@@ -351,7 +351,7 @@ module Nanoc::DataSources
     # can be the content filename or the meta filename.
     def identifier_for_filename(filename)
       if config[:identifier_type] == 'full'
-        return Nanoc::Identifier.new(filename)
+        return Nanoc::Core::Identifier.new(filename)
       end
 
       regex =
@@ -360,7 +360,7 @@ module Nanoc::DataSources
         else
           allow_periods_in_identifiers? ? /\.[^\/\.]+$/ : /\.[^\/]+$/
         end
-      Nanoc::Identifier.new(filename.sub(regex, ''), type: :legacy)
+      Nanoc::Core::Identifier.new(filename.sub(regex, ''), type: :legacy)
     end
 
     # Returns the base name of filename, i.e. filename with the first or all

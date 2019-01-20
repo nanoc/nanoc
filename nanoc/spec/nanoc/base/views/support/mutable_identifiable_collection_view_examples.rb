@@ -13,7 +13,7 @@ shared_examples 'a mutable identifiable collection view' do
     let(:wrapped) do
       collection_class.new(
         config,
-        [double(:identifiable, identifier: Nanoc::Identifier.new('/asdf'))],
+        [double(:identifiable, identifier: Nanoc::Core::Identifier.new('/asdf'))],
       )
     end
 

@@ -27,8 +27,8 @@ shared_examples 'an identifiable collection view' do
       collection_class.new(
         config,
         [
-          double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/bar')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/foo')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/bar')),
         ],
       )
     end
@@ -54,9 +54,9 @@ shared_examples 'an identifiable collection view' do
       collection_class.new(
         config,
         [
-          double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/bar')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/baz')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/foo')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/bar')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/baz')),
         ],
       )
     end
@@ -76,9 +76,9 @@ shared_examples 'an identifiable collection view' do
       collection_class.new(
         config,
         [
-          double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/bar')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/baz')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/foo')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/bar')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/baz')),
         ],
       )
     end
@@ -102,9 +102,9 @@ shared_examples 'an identifiable collection view' do
       collection_class.new(
         config,
         [
-          double(:identifiable, identifier: Nanoc::Identifier.new('/foo')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/bar')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/baz')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/foo')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/bar')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/baz')),
         ],
       )
     end
@@ -121,11 +121,11 @@ shared_examples 'an identifiable collection view' do
 
   describe '#[]' do
     let(:page_object) do
-      double(:identifiable, identifier: Nanoc::Identifier.new('/page.erb'))
+      double(:identifiable, identifier: Nanoc::Core::Identifier.new('/page.erb'))
     end
 
     let(:home_object) do
-      double(:identifiable, identifier: Nanoc::Identifier.new('/home.erb'))
+      double(:identifiable, identifier: Nanoc::Core::Identifier.new('/home.erb'))
     end
 
     let(:wrapped) do
@@ -169,7 +169,7 @@ shared_examples 'an identifiable collection view' do
     end
 
     context 'identifier' do
-      let(:arg) { Nanoc::Identifier.new('/home.erb') }
+      let(:arg) { Nanoc::Core::Identifier.new('/home.erb') }
 
       it 'creates dependency' do
         expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/home.erb'])
@@ -231,9 +231,9 @@ shared_examples 'an identifiable collection view' do
       collection_class.new(
         config,
         [
-          double(:identifiable, identifier: Nanoc::Identifier.new('/about.css')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/about.md')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/style.css')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/about.css')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/about.md')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/style.css')),
         ],
       )
     end

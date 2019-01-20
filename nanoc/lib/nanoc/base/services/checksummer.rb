@@ -90,7 +90,7 @@ module Nanoc::Int
           NoUpdateBehavior
         when Time
           ToIToSUpdateBehavior
-        when Nanoc::Identifier
+        when Nanoc::Core::Identifier
           ToSUpdateBehavior
         when Nanoc::RuleDSL::RulesCollection, Nanoc::Int::CodeSnippet
           DataUpdateBehavior

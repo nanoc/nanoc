@@ -37,7 +37,7 @@ module Nanoc
         @any_layouts = true
       end
 
-      MaybePathlike = C::Or[nil, Nanoc::UNDEFINED, String, Nanoc::Identifier]
+      MaybePathlike = C::Or[nil, Nanoc::UNDEFINED, String, Nanoc::Core::Identifier]
       contract Symbol, C::KeywordArgs[path: C::Optional[MaybePathlike]] => nil
       def snapshot(snapshot_name, path: Nanoc::UNDEFINED)
         unless Nanoc::UNDEFINED.equal?(path)

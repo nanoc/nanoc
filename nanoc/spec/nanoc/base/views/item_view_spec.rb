@@ -57,7 +57,7 @@ describe Nanoc::CompilationItemView do
     context 'with parent' do
       context 'full identifier' do
         let(:identifier) do
-          Nanoc::Identifier.new('/parent/me.md')
+          Nanoc::Core::Identifier.new('/parent/me.md')
         end
 
         let(:parent_item) do
@@ -71,11 +71,11 @@ describe Nanoc::CompilationItemView do
 
       context 'legacy identifier' do
         let(:identifier) do
-          Nanoc::Identifier.new('/parent/me/', type: :legacy)
+          Nanoc::Core::Identifier.new('/parent/me/', type: :legacy)
         end
 
         let(:parent_item) do
-          Nanoc::Int::Item.new('parent', {}, Nanoc::Identifier.new('/parent/', type: :legacy))
+          Nanoc::Int::Item.new('parent', {}, Nanoc::Core::Identifier.new('/parent/', type: :legacy))
         end
 
         it 'returns a view for the parent' do
@@ -98,8 +98,8 @@ describe Nanoc::CompilationItemView do
 
         context 'with root parent' do
           let(:parent_item) { Nanoc::Int::Item.new('parent', {}, parent_identifier) }
-          let(:identifier) { Nanoc::Identifier.new('/me/', type: :legacy) }
-          let(:parent_identifier) { Nanoc::Identifier.new('/', type: :legacy) }
+          let(:identifier) { Nanoc::Core::Identifier.new('/me/', type: :legacy) }
+          let(:parent_identifier) { Nanoc::Core::Identifier.new('/', type: :legacy) }
 
           it 'returns a view for the parent' do
             expect(subject.class).to eql(Nanoc::CompilationItemView)
@@ -116,7 +116,7 @@ describe Nanoc::CompilationItemView do
 
       context 'full identifier' do
         let(:identifier) do
-          Nanoc::Identifier.new('/me.md')
+          Nanoc::Core::Identifier.new('/me.md')
         end
 
         it 'raises' do
@@ -126,7 +126,7 @@ describe Nanoc::CompilationItemView do
 
       context 'legacy identifier' do
         let(:identifier) do
-          Nanoc::Identifier.new('/me/', type: :legacy)
+          Nanoc::Core::Identifier.new('/me/', type: :legacy)
         end
 
         it { is_expected.to be_nil }
@@ -156,7 +156,7 @@ describe Nanoc::CompilationItemView do
 
     context 'full identifier' do
       let(:identifier) do
-        Nanoc::Identifier.new('/me.md')
+        Nanoc::Core::Identifier.new('/me.md')
       end
 
       let(:children) do
@@ -170,11 +170,11 @@ describe Nanoc::CompilationItemView do
 
     context 'legacy identifier' do
       let(:identifier) do
-        Nanoc::Identifier.new('/me/', type: :legacy)
+        Nanoc::Core::Identifier.new('/me/', type: :legacy)
       end
 
       let(:children) do
-        [Nanoc::Int::Item.new('child', {}, Nanoc::Identifier.new('/me/child/', type: :legacy))]
+        [Nanoc::Int::Item.new('child', {}, Nanoc::Core::Identifier.new('/me/child/', type: :legacy))]
       end
 
       it 'returns views for the children' do

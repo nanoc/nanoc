@@ -8,12 +8,12 @@ describe Nanoc::Helpers::ChildParent, helper: true do
     let(:item) { ctx.items[identifier] }
 
     context 'legacy identifier' do
-      let(:identifier) { Nanoc::Identifier.new('/foo/', type: :legacy) }
+      let(:identifier) { Nanoc::Core::Identifier.new('/foo/', type: :legacy) }
 
       before do
-        ctx.create_item('abc', {}, Nanoc::Identifier.new('/foo/a/', type: :legacy))
-        ctx.create_item('def', {}, Nanoc::Identifier.new('/foo/a/b/', type: :legacy))
-        ctx.create_item('xyz', {}, Nanoc::Identifier.new('/bar/', type: :legacy))
+        ctx.create_item('abc', {}, Nanoc::Core::Identifier.new('/foo/a/', type: :legacy))
+        ctx.create_item('def', {}, Nanoc::Core::Identifier.new('/foo/a/b/', type: :legacy))
+        ctx.create_item('xyz', {}, Nanoc::Core::Identifier.new('/bar/', type: :legacy))
       end
 
       it 'returns only direct children' do
@@ -22,13 +22,13 @@ describe Nanoc::Helpers::ChildParent, helper: true do
     end
 
     context 'full identifier' do
-      let(:identifier) { Nanoc::Identifier.new('/foo.md', type: :full) }
+      let(:identifier) { Nanoc::Core::Identifier.new('/foo.md', type: :full) }
 
       before do
-        ctx.create_item('abc', {}, Nanoc::Identifier.new('/foo/a.md', type: :full))
-        ctx.create_item('def', {}, Nanoc::Identifier.new('/foo/a/b.md', type: :full))
-        ctx.create_item('xyz', {}, Nanoc::Identifier.new('/bar.md', type: :full))
-        ctx.create_item('xyz', {}, Nanoc::Identifier.new('/foo/a/index.md', type: :full))
+        ctx.create_item('abc', {}, Nanoc::Core::Identifier.new('/foo/a.md', type: :full))
+        ctx.create_item('def', {}, Nanoc::Core::Identifier.new('/foo/a/b.md', type: :full))
+        ctx.create_item('xyz', {}, Nanoc::Core::Identifier.new('/bar.md', type: :full))
+        ctx.create_item('xyz', {}, Nanoc::Core::Identifier.new('/foo/a/index.md', type: :full))
       end
 
       it 'returns only direct children' do
@@ -44,13 +44,13 @@ describe Nanoc::Helpers::ChildParent, helper: true do
     let(:item) { ctx.items[identifier] }
 
     context 'legacy identifier' do
-      let(:identifier) { Nanoc::Identifier.new('/foo/bar/', type: :legacy) }
+      let(:identifier) { Nanoc::Core::Identifier.new('/foo/bar/', type: :legacy) }
 
       before do
-        ctx.create_item('abc', {}, Nanoc::Identifier.new('/foo/', type: :legacy))
-        ctx.create_item('def', {}, Nanoc::Identifier.new('/foo/qux/', type: :legacy))
-        ctx.create_item('xyz', {}, Nanoc::Identifier.new('/foo/bar/asdf/', type: :legacy))
-        ctx.create_item('opq', {}, Nanoc::Identifier.new('/', type: :legacy))
+        ctx.create_item('abc', {}, Nanoc::Core::Identifier.new('/foo/', type: :legacy))
+        ctx.create_item('def', {}, Nanoc::Core::Identifier.new('/foo/qux/', type: :legacy))
+        ctx.create_item('xyz', {}, Nanoc::Core::Identifier.new('/foo/bar/asdf/', type: :legacy))
+        ctx.create_item('opq', {}, Nanoc::Core::Identifier.new('/', type: :legacy))
       end
 
       it 'returns parent' do
@@ -59,13 +59,13 @@ describe Nanoc::Helpers::ChildParent, helper: true do
     end
 
     context 'full identifier' do
-      let(:identifier) { Nanoc::Identifier.new('/foo/bar.md', type: :full) }
+      let(:identifier) { Nanoc::Core::Identifier.new('/foo/bar.md', type: :full) }
 
       before do
-        ctx.create_item('abc', {}, Nanoc::Identifier.new('/foo.md', type: :full))
-        ctx.create_item('def', {}, Nanoc::Identifier.new('/foo/qux.md', type: :full))
-        ctx.create_item('xyz', {}, Nanoc::Identifier.new('/foo/bar/asdf.md', type: :full))
-        ctx.create_item('opq', {}, Nanoc::Identifier.new('/index.md', type: :full))
+        ctx.create_item('abc', {}, Nanoc::Core::Identifier.new('/foo.md', type: :full))
+        ctx.create_item('def', {}, Nanoc::Core::Identifier.new('/foo/qux.md', type: :full))
+        ctx.create_item('xyz', {}, Nanoc::Core::Identifier.new('/foo/bar/asdf.md', type: :full))
+        ctx.create_item('opq', {}, Nanoc::Core::Identifier.new('/index.md', type: :full))
       end
 
       it 'returns parent' do

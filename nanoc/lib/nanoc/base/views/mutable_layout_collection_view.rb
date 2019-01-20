@@ -13,7 +13,7 @@ module Nanoc
     #
     # @param [Hash] attributes A hash containing this layout's attributes.
     #
-    # @param [Nanoc::Identifier, String] identifier This layout's identifier.
+    # @param [Nanoc::Core::Identifier, String] identifier This layout's identifier.
     #
     # @return [self]
     def create(content, attributes, identifier)

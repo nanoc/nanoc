@@ -22,8 +22,8 @@ describe Nanoc::Int::IdentifiableCollection do
     describe '#[]' do
       let(:objects) do
         [
-          Nanoc::Int::Item.new('asdf', {}, Nanoc::Identifier.new('/one')),
-          Nanoc::Int::Item.new('asdf', {}, Nanoc::Identifier.new('/two')),
+          Nanoc::Int::Item.new('asdf', {}, Nanoc::Core::Identifier.new('/one')),
+          Nanoc::Int::Item.new('asdf', {}, Nanoc::Core::Identifier.new('/two')),
         ]
       end
 
@@ -78,9 +78,9 @@ describe Nanoc::Int::IdentifiableCollection do
     describe '#find_all' do
       let(:objects) do
         [
-          double(:identifiable, identifier: Nanoc::Identifier.new('/about.css')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/about.md')),
-          double(:identifiable, identifier: Nanoc::Identifier.new('/style.css')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/about.css')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/about.md')),
+          double(:identifiable, identifier: Nanoc::Core::Identifier.new('/style.css')),
         ]
       end
 
@@ -112,9 +112,9 @@ describe Nanoc::Int::IdentifiableCollection do
     describe '#object_with_identifier' do
       let(:objects) do
         [
-          Nanoc::Int::Item.new('stuff', {}, Nanoc::Identifier.new('/about.css')),
-          Nanoc::Int::Item.new('stuff', {}, Nanoc::Identifier.new('/about.md')),
-          Nanoc::Int::Item.new('stuff', {}, Nanoc::Identifier.new('/style.css')),
+          Nanoc::Int::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.css')),
+          Nanoc::Int::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.md')),
+          Nanoc::Int::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/style.css')),
         ]
       end
 
@@ -128,7 +128,7 @@ describe Nanoc::Int::IdentifiableCollection do
       end
 
       context 'with identifier' do
-        let(:arg) { Nanoc::Identifier.new('/about.css') }
+        let(:arg) { Nanoc::Core::Identifier.new('/about.css') }
         it { is_expected.to eq(objects[0]) }
       end
 

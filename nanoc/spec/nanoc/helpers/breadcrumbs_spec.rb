@@ -12,7 +12,7 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
     context 'legacy identifiers' do
       context 'root' do
         before do
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/', type: :legacy))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/', type: :legacy))
 
           ctx.item = ctx.items['/']
         end
@@ -24,8 +24,8 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
 
       context 'root and direct child' do
         before do
-          ctx.create_item('child', {}, Nanoc::Identifier.new('/foo/', type: :legacy))
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/', type: :legacy))
+          ctx.create_item('child', {}, Nanoc::Core::Identifier.new('/foo/', type: :legacy))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/', type: :legacy))
 
           ctx.item = ctx.items['/foo/']
         end
@@ -37,9 +37,9 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
 
       context 'root, child and grandchild' do
         before do
-          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/foo/bar/', type: :legacy))
-          ctx.create_item('child', {}, Nanoc::Identifier.new('/foo/', type: :legacy))
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/', type: :legacy))
+          ctx.create_item('grandchild', {}, Nanoc::Core::Identifier.new('/foo/bar/', type: :legacy))
+          ctx.create_item('child', {}, Nanoc::Core::Identifier.new('/foo/', type: :legacy))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/', type: :legacy))
 
           ctx.item = ctx.items['/foo/bar/']
         end
@@ -51,8 +51,8 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
 
       context 'root, missing child and grandchild' do
         before do
-          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/foo/bar/', type: :legacy))
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/', type: :legacy))
+          ctx.create_item('grandchild', {}, Nanoc::Core::Identifier.new('/foo/bar/', type: :legacy))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/', type: :legacy))
 
           ctx.item = ctx.items['/foo/bar/']
         end
@@ -66,7 +66,7 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
     context 'non-legacy identifiers' do
       context 'root' do
         before do
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/index.md'))
 
           ctx.item = ctx.items['/index.md']
         end
@@ -78,8 +78,8 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
 
       context 'root and direct child' do
         before do
-          ctx.create_item('child', {}, Nanoc::Identifier.new('/foo.md'))
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+          ctx.create_item('child', {}, Nanoc::Core::Identifier.new('/foo.md'))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/index.md'))
 
           ctx.item = ctx.items['/foo.md']
         end
@@ -91,9 +91,9 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
 
       context 'root, child and grandchild' do
         before do
-          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/foo/bar.md'))
-          ctx.create_item('child', {}, Nanoc::Identifier.new('/foo.md'))
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+          ctx.create_item('grandchild', {}, Nanoc::Core::Identifier.new('/foo/bar.md'))
+          ctx.create_item('child', {}, Nanoc::Core::Identifier.new('/foo.md'))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/index.md'))
 
           ctx.item = ctx.items['/foo/bar.md']
         end
@@ -105,8 +105,8 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
 
       context 'root, missing child and grandchild' do
         before do
-          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/foo/bar.md'))
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+          ctx.create_item('grandchild', {}, Nanoc::Core::Identifier.new('/foo/bar.md'))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/index.md'))
 
           ctx.item = ctx.items['/foo/bar.md']
         end
@@ -120,8 +120,8 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
         # No special handling of non-root index.* files.
 
         before do
-          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/foo/index.md'))
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+          ctx.create_item('grandchild', {}, Nanoc::Core::Identifier.new('/foo/index.md'))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/index.md'))
 
           ctx.item = ctx.items['/foo/index.md']
         end
@@ -133,11 +133,11 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
 
       context 'item with version number component in path' do
         before do
-          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/1.5/stuff.md'))
-          ctx.create_item('child0', {}, Nanoc::Identifier.new('/1.4.md'))
-          ctx.create_item('child1', {}, Nanoc::Identifier.new('/1.5.md'))
-          ctx.create_item('child2', {}, Nanoc::Identifier.new('/1.6.md'))
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+          ctx.create_item('grandchild', {}, Nanoc::Core::Identifier.new('/1.5/stuff.md'))
+          ctx.create_item('child0', {}, Nanoc::Core::Identifier.new('/1.4.md'))
+          ctx.create_item('child1', {}, Nanoc::Core::Identifier.new('/1.5.md'))
+          ctx.create_item('child2', {}, Nanoc::Core::Identifier.new('/1.6.md'))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/index.md'))
 
           ctx.item = ctx.items['/1.5/stuff.md']
         end
@@ -156,11 +156,11 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
 
       context 'item with multiple extensions in path' do
         before do
-          ctx.create_item('grandchild', {}, Nanoc::Identifier.new('/foo/stuff.md'))
-          ctx.create_item('child0', {}, Nanoc::Identifier.new('/foo.md.erb'))
-          ctx.create_item('child1', {}, Nanoc::Identifier.new('/foo.md'))
-          ctx.create_item('child2', {}, Nanoc::Identifier.new('/foo.erb'))
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+          ctx.create_item('grandchild', {}, Nanoc::Core::Identifier.new('/foo/stuff.md'))
+          ctx.create_item('child0', {}, Nanoc::Core::Identifier.new('/foo.md.erb'))
+          ctx.create_item('child1', {}, Nanoc::Core::Identifier.new('/foo.md'))
+          ctx.create_item('child2', {}, Nanoc::Core::Identifier.new('/foo.erb'))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/index.md'))
 
           ctx.item = ctx.items['/foo/stuff.md']
         end
@@ -235,11 +235,11 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
 
       context 'child with multiple extensions' do
         before do
-          ctx.create_item('grandchild1', {}, Nanoc::Identifier.new('/foo/stuff.zip'))
-          ctx.create_item('grandchild2', {}, Nanoc::Identifier.new('/foo/stuff.md'))
-          ctx.create_item('grandchild3', {}, Nanoc::Identifier.new('/foo/stuff.png'))
-          ctx.create_item('child', {}, Nanoc::Identifier.new('/foo.md'))
-          ctx.create_item('root', {}, Nanoc::Identifier.new('/index.md'))
+          ctx.create_item('grandchild1', {}, Nanoc::Core::Identifier.new('/foo/stuff.zip'))
+          ctx.create_item('grandchild2', {}, Nanoc::Core::Identifier.new('/foo/stuff.md'))
+          ctx.create_item('grandchild3', {}, Nanoc::Core::Identifier.new('/foo/stuff.png'))
+          ctx.create_item('child', {}, Nanoc::Core::Identifier.new('/foo.md'))
+          ctx.create_item('root', {}, Nanoc::Core::Identifier.new('/index.md'))
 
           ctx.item = ctx.items['/foo/stuff.md']
         end

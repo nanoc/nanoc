@@ -141,7 +141,7 @@ shared_examples 'an item rep view' do
 
     subject { view.hash }
 
-    it { should == described_class.hash ^ Nanoc::Identifier.new('/foo').hash ^ :jacques.hash }
+    it { should == described_class.hash ^ Nanoc::Core::Identifier.new('/foo').hash ^ :jacques.hash }
   end
 
   describe '#snapshot?' do

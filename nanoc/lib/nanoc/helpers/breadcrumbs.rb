@@ -49,7 +49,7 @@ module Nanoc::Helpers
       def self.patterns_for_prefix(prefix)
         prefixes =
           unfold(prefix) do |old_prefix|
-            new_prefix = Nanoc::Identifier.new(old_prefix).without_ext
+            new_prefix = Nanoc::Core::Identifier.new(old_prefix).without_ext
             new_prefix == old_prefix ? nil : new_prefix
           end
 
@@ -110,7 +110,7 @@ module Nanoc::Helpers
       tiebreaker = Int::ERROR_TIEBREAKER if tiebreaker == :error
 
       if @item.identifier.legacy?
-        prefixes.map { |pr| @items[Nanoc::Identifier.new('/' + pr, type: :legacy)] }
+        prefixes.map { |pr| @items[Nanoc::Core::Identifier.new('/' + pr, type: :legacy)] }
       else
         ancestral_prefixes = prefixes.reject { |pr| pr =~ /^\/index\./ }[0..-2]
         ancestral_items =

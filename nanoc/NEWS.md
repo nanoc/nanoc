@@ -979,8 +979,8 @@ Changes:
 Enhancements:
 
 * Removed unused options from CLI
-* Added `Nanoc::Identifier#without_ext`
-* Made `Nanoc::Identifier#=~` work with a glob
+* Added `Nanoc::Core::Identifier#without_ext`
+* Made `Nanoc::Core::Identifier#=~` work with a glob
 * Added `Nanoc::LayoutCollectionView#[]`
 * Allowed creation of site in current directory (#549) [David Alexander]
 

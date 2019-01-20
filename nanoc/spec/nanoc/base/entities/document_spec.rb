@@ -76,13 +76,13 @@ shared_examples 'a document' do
     describe 'identifier arg' do
       context 'string' do
         it 'converts identifier' do
-          expect(subject.identifier).to be_a(Nanoc::Identifier)
+          expect(subject.identifier).to be_a(Nanoc::Core::Identifier)
           expect(subject.identifier.to_s).to eql('/home.md')
         end
       end
 
       context 'identifier' do
-        let(:identifier_arg) { Nanoc::Identifier.new('/foo.md') }
+        let(:identifier_arg) { Nanoc::Core::Identifier.new('/foo.md') }
 
         it 'retains identifier' do
           expect(subject.identifier).to equal(identifier_arg)
@@ -238,18 +238,18 @@ shared_examples 'a document' do
 
     it 'refuses changing to a string that does not contain a full identifier' do
       expect { document.identifier = '/thing/' }
-        .to raise_error(Nanoc::Identifier::InvalidFullIdentifierError)
+        .to raise_error(Nanoc::Core::Identifier::InvalidFullIdentifierError)
     end
 
     it 'allos changing to a full identifier' do
-      document.identifier = Nanoc::Identifier.new('/thing')
+      document.identifier = Nanoc::Core::Identifier.new('/thing')
 
       expect(document.identifier.to_s).to eq('/thing')
       expect(document.identifier).to be_full
     end
 
     it 'allos changing to a legacy identifier' do
-      document.identifier = Nanoc::Identifier.new('/thing/', type: :legacy)
+      document.identifier = Nanoc::Core::Identifier.new('/thing/', type: :legacy)
 
       expect(document.identifier).to eq('/thing/')
       expect(document.identifier).to be_legacy

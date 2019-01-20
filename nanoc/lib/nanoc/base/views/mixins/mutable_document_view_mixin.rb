@@ -40,9 +40,9 @@ module Nanoc
 
     # Sets the identifier to the given argument.
     #
-    # @param [String, Nanoc::Identifier] arg
+    # @param [String, Nanoc::Core::Identifier] arg
     def identifier=(arg)
-      _unwrap.identifier = Nanoc::Identifier.from(arg)
+      _unwrap.identifier = Nanoc::Core::Identifier.from(arg)
     end
 
     # Updates the attributes based on the given hash.

@@ -27,7 +27,7 @@ describe Nanoc::DataSource, stdio: true do
 
       expect(item.content.string).to eql('stuff')
       expect(item.attributes[:title]).to eql('Stuff!')
-      expect(item.identifier).to eql(Nanoc::Identifier.new('/asdf'))
+      expect(item.identifier).to eql(Nanoc::Core::Identifier.new('/asdf'))
       expect(item.checksum_data).to eql('abcdef')
     end
 
@@ -36,7 +36,7 @@ describe Nanoc::DataSource, stdio: true do
 
       expect(item.content.string).to eql('stuff')
       expect(item.attributes[:title]).to eql('Stuff!')
-      expect(item.identifier).to eql(Nanoc::Identifier.new('/asdf'))
+      expect(item.identifier).to eql(Nanoc::Core::Identifier.new('/asdf'))
       expect(item.content_checksum_data).to eql('con-cs')
       expect(item.attributes_checksum_data).to eql('attr-cs')
     end
@@ -48,7 +48,7 @@ describe Nanoc::DataSource, stdio: true do
 
       expect(layout.content.string).to eql('stuff')
       expect(layout.attributes[:title]).to eql('Stuff!')
-      expect(layout.identifier).to eql(Nanoc::Identifier.new('/asdf'))
+      expect(layout.identifier).to eql(Nanoc::Core::Identifier.new('/asdf'))
       expect(layout.checksum_data).to eql('abcdef')
     end
 
@@ -57,7 +57,7 @@ describe Nanoc::DataSource, stdio: true do
 
       expect(layout.content.string).to eql('stuff')
       expect(layout.attributes[:title]).to eql('Stuff!')
-      expect(layout.identifier).to eql(Nanoc::Identifier.new('/asdf'))
+      expect(layout.identifier).to eql(Nanoc::Core::Identifier.new('/asdf'))
       expect(layout.content_checksum_data).to eql('con-cs')
       expect(layout.attributes_checksum_data).to eql('attr-cs')
     end

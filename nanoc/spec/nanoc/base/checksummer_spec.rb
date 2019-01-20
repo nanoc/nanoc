@@ -157,8 +157,8 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to match(/\A(Integer|Fixnum)<3>\z/) }
   end
 
-  context 'Nanoc::Identifier' do
-    let(:obj) { Nanoc::Identifier.new('/foo.md') }
+  context 'Nanoc::Core::Identifier' do
+    let(:obj) { Nanoc::Core::Identifier.new('/foo.md') }
     it { is_expected.to eql('Nanoc::Core::Identifier<String</foo.md>>') }
   end
 

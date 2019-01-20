@@ -126,7 +126,7 @@ shared_examples 'a mutable document view' do
     end
 
     context 'given an identifier' do
-      let(:arg) { Nanoc::Identifier.new('/about.adoc') }
+      let(:arg) { Nanoc::Core::Identifier.new('/about.adoc') }
 
       it 'changes the identifier' do
         subject
@@ -138,7 +138,7 @@ shared_examples 'a mutable document view' do
       let(:arg) { :donkey }
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Identifier::NonCoercibleObjectError)
+        expect { subject }.to raise_error(Nanoc::Core::Identifier::NonCoercibleObjectError)
       end
     end
   end

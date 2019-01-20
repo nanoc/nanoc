@@ -107,11 +107,11 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
 
       site.items.each do |item|
-        assert_equal Nanoc::Identifier, item.identifier.class
+        assert_equal Nanoc::Core::Identifier, item.identifier.class
       end
 
       site.layouts.each do |layout|
-        assert_equal Nanoc::Identifier, layout.identifier.class
+        assert_equal Nanoc::Core::Identifier, layout.identifier.class
       end
     end
   end
