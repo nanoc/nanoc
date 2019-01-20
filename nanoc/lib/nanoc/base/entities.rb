@@ -3,8 +3,6 @@
 # Re-exported from Nanoc::Core
 Nanoc::Identifier = Nanoc::Core::Identifier
 
-require_relative 'entities/directed_graph'
-
 require_relative 'entities/processing_action'
 require_relative 'entities/processing_actions'
 

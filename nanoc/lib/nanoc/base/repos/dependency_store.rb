@@ -23,7 +23,7 @@ module Nanoc::Int
       add_vertex_for(layouts)
 
       @new_objects = []
-      @graph = Nanoc::Int::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))
+      @graph = Nanoc::Core::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))
     end
 
     C_OBJ_SRC = Nanoc::Core::Item
@@ -181,7 +181,7 @@ module Nanoc::Int
       refs = objs2refs(objects)
 
       # Create new graph
-      @graph = Nanoc::Int::DirectedGraph.new([nil] + refs)
+      @graph = Nanoc::Core::DirectedGraph.new([nil] + refs)
 
       # Load vertices
       previous_refs = new_data[:vertices]

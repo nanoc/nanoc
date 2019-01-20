@@ -14,6 +14,7 @@ lib/nanoc/core/contracts_support.rb
 lib/nanoc/core/core_ext/array.rb
 lib/nanoc/core/core_ext/hash.rb
 lib/nanoc/core/core_ext/string.rb
+lib/nanoc/core/directed_graph.rb
 lib/nanoc/core/document.rb
 lib/nanoc/core/error.rb
 lib/nanoc/core/identifier.rb

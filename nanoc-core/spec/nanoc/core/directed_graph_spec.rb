@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::DirectedGraph do
+describe Nanoc::Core::DirectedGraph do
   subject(:graph) { described_class.new(%w[1 2 3]) }
 
   describe '#edges' do
@@ -52,9 +52,9 @@ describe Nanoc::Int::DirectedGraph do
   end
 
   it 'has correct examples' do
-    expect('Nanoc::Int::DirectedGraph')
+    expect('Nanoc::Core::DirectedGraph')
       .to have_correct_yard_examples
-      .in_file('nanoc/lib/nanoc/base/entities/directed_graph.rb')
+      .in_file('nanoc-core/lib/nanoc/core/directed_graph.rb')
   end
 
   describe '#vertices' do
@@ -218,7 +218,7 @@ describe Nanoc::Int::DirectedGraph do
     subject { graph.inspect }
 
     context 'empty graph' do
-      it { is_expected.to eq('Nanoc::Int::DirectedGraph()') }
+      it { is_expected.to eq('Nanoc::Core::DirectedGraph()') }
     end
 
     context 'one edge, no props' do
@@ -226,7 +226,7 @@ describe Nanoc::Int::DirectedGraph do
         graph.add_edge('1', '2')
       end
 
-      it { is_expected.to eq('Nanoc::Int::DirectedGraph("1" -> "2" props=nil)') }
+      it { is_expected.to eq('Nanoc::Core::DirectedGraph("1" -> "2" props=nil)') }
     end
 
     context 'two edges, no props' do
@@ -235,7 +235,7 @@ describe Nanoc::Int::DirectedGraph do
         graph.add_edge('2', '3')
       end
 
-      it { is_expected.to eq('Nanoc::Int::DirectedGraph("1" -> "2" props=nil, "2" -> "3" props=nil)') }
+      it { is_expected.to eq('Nanoc::Core::DirectedGraph("1" -> "2" props=nil, "2" -> "3" props=nil)') }
     end
 
     context 'one edge, props' do
@@ -243,7 +243,7 @@ describe Nanoc::Int::DirectedGraph do
         graph.add_edge('1', '2', props: 'giraffe')
       end
 
-      it { is_expected.to eq('Nanoc::Int::DirectedGraph("1" -> "2" props="giraffe")') }
+      it { is_expected.to eq('Nanoc::Core::DirectedGraph("1" -> "2" props="giraffe")') }
     end
 
     context 'two edges, props' do
@@ -252,7 +252,7 @@ describe Nanoc::Int::DirectedGraph do
         graph.add_edge('2', '3', props: 'zebra')
       end
 
-      it { is_expected.to eq('Nanoc::Int::DirectedGraph("1" -> "2" props="donkey", "2" -> "3" props="zebra")') }
+      it { is_expected.to eq('Nanoc::Core::DirectedGraph("1" -> "2" props="donkey", "2" -> "3" props="zebra")') }
     end
   end
 end
