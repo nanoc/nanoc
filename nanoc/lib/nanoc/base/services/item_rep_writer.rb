@@ -3,7 +3,7 @@
 module Nanoc::Int
   # @api private
   class ItemRepWriter
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
     include Nanoc::Assertions::Mixin
 
     TMP_TEXT_ITEMS_DIR = 'text_items'

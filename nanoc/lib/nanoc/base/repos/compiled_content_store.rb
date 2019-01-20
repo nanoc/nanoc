@@ -3,44 +3,44 @@
 module Nanoc::Int
   # @api private
   class CompiledContentStore
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     def initialize
       @contents = Hash.new { |hash, rep| hash[rep] = {} }
       @current_content = {}
     end
 
-    contract Nanoc::Int::ItemRep, Symbol => C::Maybe[Nanoc::Int::Content]
+    contract Nanoc::Int::ItemRep, Symbol => C::Maybe[Nanoc::Core::Content]
     def get(rep, snapshot_name)
       @contents[rep][snapshot_name]
     end
 
-    contract Nanoc::Int::ItemRep => C::Maybe[Nanoc::Int::Content]
+    contract Nanoc::Int::ItemRep => C::Maybe[Nanoc::Core::Content]
     def get_current(rep)
       @current_content[rep]
     end
 
-    contract Nanoc::Int::ItemRep, Symbol, Nanoc::Int::Content => C::Any
+    contract Nanoc::Int::ItemRep, Symbol, Nanoc::Core::Content => C::Any
     def set(rep, snapshot_name, contents)
       @contents[rep][snapshot_name] = contents
     end
 
-    contract Nanoc::Int::ItemRep, Nanoc::Int::Content => C::Any
+    contract Nanoc::Int::ItemRep, Nanoc::Core::Content => C::Any
     def set_current(rep, content)
       @current_content[rep] = content
     end
 
-    contract Nanoc::Int::ItemRep => C::HashOf[Symbol => Nanoc::Int::Content]
+    contract Nanoc::Int::ItemRep => C::HashOf[Symbol => Nanoc::Core::Content]
     def get_all(rep)
       @contents[rep]
     end
 
-    contract Nanoc::Int::ItemRep, C::HashOf[Symbol => Nanoc::Int::Content] => C::Any
+    contract Nanoc::Int::ItemRep, C::HashOf[Symbol => Nanoc::Core::Content] => C::Any
     def set_all(rep, contents_per_snapshot)
       @contents[rep] = contents_per_snapshot
     end
 
-    contract C::KeywordArgs[rep: Nanoc::Int::ItemRep, snapshot: C::Optional[C::Maybe[Symbol]]] => Nanoc::Int::Content
+    contract C::KeywordArgs[rep: Nanoc::Int::ItemRep, snapshot: C::Optional[C::Maybe[Symbol]]] => Nanoc::Core::Content
     def raw_compiled_content(rep:, snapshot: nil)
       # Get name of last pre-layout snapshot
       snapshot_name = snapshot || (get(rep, :pre) ? :pre : :last)

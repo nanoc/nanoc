@@ -3,7 +3,7 @@
 module Nanoc
   module RuleDSL
     class ActionRecorder
-      include Nanoc::Int::ContractsSupport
+      include Nanoc::Core::ContractsSupport
 
       contract Nanoc::Int::ItemRep => C::Any
       def initialize(rep)

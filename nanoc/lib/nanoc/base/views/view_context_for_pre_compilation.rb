@@ -3,7 +3,7 @@
 module Nanoc
   # @api private
   class ViewContextForPreCompilation
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     attr_reader :items
     attr_reader :dependency_tracker

@@ -22,9 +22,9 @@ module Nanoc
           result = filter.setup_and_run(source, filter_args)
           last =
             if filter.class.to_binary?
-              Nanoc::Int::BinaryContent.new(filter.output_filename).tap(&:freeze)
+              Nanoc::Core::BinaryContent.new(filter.output_filename).tap(&:freeze)
             else
-              Nanoc::Int::TextualContent.new(result).tap(&:freeze)
+              Nanoc::Core::TextualContent.new(result).tap(&:freeze)
             end
 
           # Store
@@ -66,7 +66,7 @@ module Nanoc
           res = filter.setup_and_run(arg, filter_args)
 
           # Store
-          last = Nanoc::Int::TextualContent.new(res).tap(&:freeze)
+          last = Nanoc::Core::TextualContent.new(res).tap(&:freeze)
           @compilation_context.compiled_content_store.set_current(@rep, last)
         ensure
           Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)

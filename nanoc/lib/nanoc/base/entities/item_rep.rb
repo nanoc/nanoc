@@ -3,7 +3,7 @@
 module Nanoc::Int
   # @api private
   class ItemRep
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     contract C::None => C::Bool
     attr_accessor :compiled

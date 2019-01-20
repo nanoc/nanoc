@@ -261,9 +261,9 @@ module Nanoc::DataSources
       full_content_filename = content_filename && File.expand_path(content_filename)
 
       if proto_doc.binary?
-        Nanoc::Int::BinaryContent.new(full_content_filename)
+        Nanoc::Core::BinaryContent.new(full_content_filename)
       else
-        Nanoc::Int::TextualContent.new(proto_doc.content, filename: full_content_filename)
+        Nanoc::Core::TextualContent.new(proto_doc.content, filename: full_content_filename)
       end
     end
 

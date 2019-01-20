@@ -3,7 +3,7 @@
 module Nanoc::Int
   # @api private
   class OutdatednessStore < ::Nanoc::Int::Store
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     contract C::KeywordArgs[config: Nanoc::Int::Configuration] => C::Any
     def initialize(config:)

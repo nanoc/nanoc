@@ -14,8 +14,8 @@ describe Nanoc::Int::ItemRepWriter do
 
     let(:snapshot_contents) do
       {
-        last: Nanoc::Int::TextualContent.new('last content'),
-        donkey: Nanoc::Int::TextualContent.new('donkey content'),
+        last: Nanoc::Core::TextualContent.new('last content'),
+        donkey: Nanoc::Core::TextualContent.new('donkey content'),
       }
     end
 
@@ -40,12 +40,12 @@ describe Nanoc::Int::ItemRepWriter do
     end
 
     context 'binary item rep' do
-      let(:orig_content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.dat')) }
+      let(:orig_content) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.dat')) }
 
       let(:snapshot_contents) do
         {
-          last: Nanoc::Int::BinaryContent.new(File.expand_path('input-last.dat')),
-          donkey: Nanoc::Int::BinaryContent.new(File.expand_path('input-donkey.dat')),
+          last: Nanoc::Core::BinaryContent.new(File.expand_path('input-last.dat')),
+          donkey: Nanoc::Core::BinaryContent.new(File.expand_path('input-donkey.dat')),
         }
       end
 
@@ -104,7 +104,7 @@ describe Nanoc::Int::ItemRepWriter do
     end
 
     context 'textual item rep' do
-      let(:orig_content) { Nanoc::Int::TextualContent.new('Hallo Welt') }
+      let(:orig_content) { Nanoc::Core::TextualContent.new('Hallo Welt') }
 
       it 'writes' do
         expect(Nanoc::Int::NotificationCenter).to receive(:post)

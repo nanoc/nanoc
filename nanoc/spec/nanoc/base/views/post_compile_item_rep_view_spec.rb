@@ -30,9 +30,9 @@ describe Nanoc::PostCompileItemRepView do
 
   let(:snapshot_contents) do
     {
-      last: Nanoc::Int::TextualContent.new('content-last'),
-      pre: Nanoc::Int::TextualContent.new('content-pre'),
-      donkey: Nanoc::Int::TextualContent.new('content-donkey'),
+      last: Nanoc::Core::TextualContent.new('content-last'),
+      pre: Nanoc::Core::TextualContent.new('content-pre'),
+      donkey: Nanoc::Core::TextualContent.new('content-donkey'),
     }
   end
 
@@ -106,9 +106,9 @@ describe Nanoc::PostCompileItemRepView do
     context 'binary' do
       let(:snapshot_contents) do
         {
-          last: Nanoc::Int::TextualContent.new('content-last'),
-          pre: Nanoc::Int::BinaryContent.new('/content/pre'),
-          donkey: Nanoc::Int::TextualContent.new('content-donkey'),
+          last: Nanoc::Core::TextualContent.new('content-last'),
+          pre: Nanoc::Core::BinaryContent.new('/content/pre'),
+          donkey: Nanoc::Core::TextualContent.new('content-donkey'),
         }
       end
 
@@ -148,8 +148,8 @@ describe Nanoc::PostCompileItemRepView do
         context 'snapshot does not exist' do
           let(:snapshot_contents) do
             {
-              last: Nanoc::Int::TextualContent.new('content-last'),
-              pre: Nanoc::Int::TextualContent.new('content-pre'),
+              last: Nanoc::Core::TextualContent.new('content-last'),
+              pre: Nanoc::Core::TextualContent.new('content-pre'),
             }
           end
 
@@ -161,9 +161,9 @@ describe Nanoc::PostCompileItemRepView do
         context 'pre and last snapshots exist' do
           let(:snapshot_contents) do
             {
-              last: Nanoc::Int::TextualContent.new('content-last'),
-              pre: Nanoc::Int::TextualContent.new('content-pre'),
-              donkey: Nanoc::Int::TextualContent.new('content-donkey'),
+              last: Nanoc::Core::TextualContent.new('content-last'),
+              pre: Nanoc::Core::TextualContent.new('content-pre'),
+              donkey: Nanoc::Core::TextualContent.new('content-donkey'),
             }
           end
 
@@ -173,8 +173,8 @@ describe Nanoc::PostCompileItemRepView do
         context 'pre snapshot exists' do
           let(:snapshot_contents) do
             {
-              pre: Nanoc::Int::TextualContent.new('content-pre'),
-              donkey: Nanoc::Int::TextualContent.new('content-donkey'),
+              pre: Nanoc::Core::TextualContent.new('content-pre'),
+              donkey: Nanoc::Core::TextualContent.new('content-donkey'),
             }
           end
 
@@ -184,8 +184,8 @@ describe Nanoc::PostCompileItemRepView do
         context 'last snapshot exists' do
           let(:snapshot_contents) do
             {
-              last: Nanoc::Int::TextualContent.new('content-last'),
-              donkey: Nanoc::Int::TextualContent.new('content-donkey'),
+              last: Nanoc::Core::TextualContent.new('content-last'),
+              donkey: Nanoc::Core::TextualContent.new('content-donkey'),
             }
           end
 
@@ -195,7 +195,7 @@ describe Nanoc::PostCompileItemRepView do
         context 'neither pre nor last snapshot exists' do
           let(:snapshot_contents) do
             {
-              donkey: Nanoc::Int::TextualContent.new('content-donkey'),
+              donkey: Nanoc::Core::TextualContent.new('content-donkey'),
             }
           end
 

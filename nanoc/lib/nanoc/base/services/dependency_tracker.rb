@@ -3,7 +3,7 @@
 module Nanoc::Int
   # @api private
   class DependencyTracker
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::IdentifiableCollection]
     C_RAW_CONTENT = C::Or[C::IterOf[C::Or[String, Regexp]], C::Bool]
@@ -11,7 +11,7 @@ module Nanoc::Int
     C_ARGS = C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
 
     class Null
-      include Nanoc::Int::ContractsSupport
+      include Nanoc::Core::ContractsSupport
 
       contract C_OBJ, C_ARGS => C::Any
       def enter(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end

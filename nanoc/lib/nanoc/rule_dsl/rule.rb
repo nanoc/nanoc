@@ -2,7 +2,7 @@
 
 module Nanoc::RuleDSL
   class Rule
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     contract C::None => Symbol
     attr_reader :rep_name

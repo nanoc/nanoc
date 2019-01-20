@@ -4,9 +4,9 @@ module Nanoc
   module Int
     # @api private
     class Document
-      include Nanoc::Int::ContractsSupport
+      include Nanoc::Core::ContractsSupport
 
-      # @return [Nanoc::Int::Content]
+      # @return [Nanoc::Core::Content]
       attr_reader :content
 
       # @return [Hash]
@@ -26,7 +26,7 @@ module Nanoc
       # @return [String, nil]
       attr_accessor :attributes_checksum_data
 
-      c_content = C::Or[String, Nanoc::Int::Content]
+      c_content = C::Or[String, Nanoc::Core::Content]
       c_attributes = C::Or[Hash, Proc]
       c_identifier = C::Or[String, Nanoc::Identifier]
       c_checksum_data = C::KeywordArgs[
@@ -36,7 +36,7 @@ module Nanoc
       ]
 
       contract c_content, c_attributes, c_identifier, c_checksum_data => C::Any
-      # @param [String, Nanoc::Int::Content] content
+      # @param [String, Nanoc::Core::Content] content
       #
       # @param [Hash, Proc] attributes
       #
@@ -48,8 +48,8 @@ module Nanoc
       #
       # @param [String, nil] attributes_checksum_data
       def initialize(content, attributes, identifier, checksum_data: nil, content_checksum_data: nil, attributes_checksum_data: nil)
-        @content = Nanoc::Int::Content.create(content)
-        @attributes = Nanoc::Int::LazyValue.new(attributes).map(&:__nanoc_symbolize_keys_recursively)
+        @content = Nanoc::Core::Content.create(content)
+        @attributes = Nanoc::Core::LazyValue.new(attributes).map(&:__nanoc_symbolize_keys_recursively)
         @identifier = Nanoc::Identifier.from(identifier)
 
         @checksum_data = checksum_data
@@ -86,7 +86,7 @@ module Nanoc
         @identifier = Nanoc::Identifier.from(new_identifier)
       end
 
-      contract Nanoc::Int::Content => C::Any
+      contract Nanoc::Core::Content => C::Any
       def content=(new_content)
         @content = new_content
 

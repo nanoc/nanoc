@@ -3,7 +3,7 @@
 module Nanoc
   # @api private
   class ViewContextForCompilation
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     attr_reader :reps
     attr_reader :items

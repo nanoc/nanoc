@@ -2,7 +2,7 @@
 
 module Nanoc::RuleDSL
   class RuleContext < Nanoc::Int::Context
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     contract C::KeywordArgs[
       rep: Nanoc::Int::ItemRep,

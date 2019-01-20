@@ -263,7 +263,7 @@ describe Nanoc::Filter do
         let(:item) { Nanoc::Int::Item.new(content, {}, '/stuff.md') }
 
         let(:filename) { File.expand_path('foo.dat') }
-        let(:content) { Nanoc::Int::BinaryContent.new(filename) }
+        let(:content) { Nanoc::Core::BinaryContent.new(filename) }
 
         it 'creates dependency' do
           expect { subject }

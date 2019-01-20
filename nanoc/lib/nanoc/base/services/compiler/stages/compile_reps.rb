@@ -2,7 +2,7 @@
 
 module Nanoc::Int::Compiler::Stages
   class CompileReps < Nanoc::Int::Compiler::Stage
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
     include Nanoc::Assertions::Mixin
 
     def initialize(reps:, outdatedness_store:, dependency_store:, action_sequences:, compilation_context:, compiled_content_cache:)

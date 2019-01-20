@@ -6,7 +6,7 @@ module Nanoc::Int
   #
   # @api private
   class ActionSequenceStore < ::Nanoc::Int::Store
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     contract C::KeywordArgs[config: Nanoc::Int::Configuration] => C::Any
     def initialize(config:)

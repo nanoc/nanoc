@@ -2,7 +2,7 @@
 
 module Nanoc::Int::Compiler::Phases
   class Abstract
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     def initialize(wrapped:)
       @wrapped = wrapped

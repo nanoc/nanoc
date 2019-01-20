@@ -3,7 +3,7 @@
 module Nanoc::Int
   # @api private
   class DependencyStore < ::Nanoc::Int::Store
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     attr_reader :items
     attr_reader :layouts

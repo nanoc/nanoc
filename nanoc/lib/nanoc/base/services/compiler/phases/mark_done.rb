@@ -2,7 +2,7 @@
 
 module Nanoc::Int::Compiler::Phases
   class MarkDone < Abstract
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     def initialize(wrapped:, outdatedness_store:)
       super(wrapped: wrapped)

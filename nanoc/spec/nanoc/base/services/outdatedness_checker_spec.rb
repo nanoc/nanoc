@@ -253,7 +253,7 @@ describe Nanoc::Int::OutdatednessChecker do
         end
 
         context 'distant raw content changed' do
-          before { distant_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+          before { distant_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
           it 'has correct outdatedness of item' do
             expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).not_to be
@@ -284,7 +284,7 @@ describe Nanoc::Int::OutdatednessChecker do
         end
 
         context 'distant raw content changed' do
-          before { distant_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+          before { distant_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
           it 'has correct outdatedness of item' do
             expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).not_to be
@@ -308,13 +308,13 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'raw content changed' do
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.not_to be }
       end
 
       context 'attribute + raw content changed' do
         before { other_item.attributes[:title] = 'omg new title' }
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.to be }
       end
 
@@ -346,19 +346,19 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'raw content changed' do
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.not_to be }
       end
 
       context 'attribute + raw content changed' do
         before { other_item.attributes[:title] = 'omg new title' }
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.to be }
       end
 
       context 'other attribute + raw content changed' do
         before { other_item.attributes[:subtitle] = 'tagline here' }
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.not_to be }
       end
 
@@ -425,13 +425,13 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'raw content changed' do
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.to be }
       end
 
       context 'attribute + raw content changed' do
         before { other_item.attributes[:title] = 'omg new title' }
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.to be }
       end
 
@@ -458,7 +458,7 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'raw content changed' do
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.to be }
       end
 
@@ -485,13 +485,13 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'raw content changed' do
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.to be }
       end
 
       context 'attribute + raw content changed' do
         before { other_item.attributes[:title] = 'omg new title' }
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.to be }
       end
 
@@ -518,7 +518,7 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'raw content changed' do
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.not_to be }
       end
     end
@@ -534,7 +534,7 @@ describe Nanoc::Int::OutdatednessChecker do
       end
 
       context 'raw content changed' do
-        before { other_item.content = Nanoc::Int::TextualContent.new('omg new content') }
+        before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
         it { is_expected.not_to be }
       end
     end

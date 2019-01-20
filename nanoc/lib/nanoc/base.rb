@@ -4,8 +4,6 @@
 module Nanoc::Int
 end
 
-require_relative 'base/core_ext'
-require_relative 'base/contracts_support'
 require_relative 'base/error'
 require_relative 'base/errors'
 require_relative 'base/changes_stream'

@@ -5,7 +5,7 @@ module Nanoc::Int
   #
   # @api private
   class ItemRepRouter
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     class IdenticalRoutesError < ::Nanoc::Error
       def initialize(output_path, rep_a, rep_b)

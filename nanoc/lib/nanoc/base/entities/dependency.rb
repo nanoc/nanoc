@@ -4,7 +4,7 @@ module Nanoc::Int
   # @api private
   # A dependency between two items/layouts.
   class Dependency
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     C_OBJ_FROM = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::IdentifiableCollection]
     C_OBJ_TO   = Nanoc::Int::Item

@@ -107,7 +107,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal 1, items.size
     assert items[0].content.binary?
     assert_equal "#{Dir.getwd}/foo/stuff.dat", items[0].content.filename
-    assert_equal Nanoc::Int::BinaryContent, items[0].content.class
+    assert_equal Nanoc::Core::BinaryContent, items[0].content.class
   end
 
   def test_load_layouts_with_nil_dir_name

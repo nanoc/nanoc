@@ -16,7 +16,7 @@ module Nanoc
     end
 
     def raw_content=(arg)
-      _unwrap.content = Nanoc::Int::Content.create(arg)
+      _unwrap.content = Nanoc::Core::Content.create(arg)
     end
 
     # Sets the value for the given attribute.

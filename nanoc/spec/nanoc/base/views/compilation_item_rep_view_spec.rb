@@ -123,7 +123,7 @@ describe Nanoc::CompilationItemRepView do
     end
 
     before do
-      compiled_content_store.set(rep, :last, Nanoc::Int::TextualContent.new('Hallo'))
+      compiled_content_store.set(rep, :last, Nanoc::Core::TextualContent.new('Hallo'))
     end
 
     it 'creates a dependency' do

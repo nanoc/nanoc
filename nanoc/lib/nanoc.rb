@@ -63,6 +63,9 @@ require 'tmpdir'
 require 'uri'
 require 'yaml'
 
+# Load extracted Nanoc dependencies
+require 'nanoc-core'
+
 # Load Nanoc
 require 'nanoc/version'
 require 'nanoc/base'

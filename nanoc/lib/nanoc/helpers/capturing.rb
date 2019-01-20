@@ -44,7 +44,7 @@ module Nanoc::Helpers
           end
 
         # Store
-        new_content = Nanoc::Int::TextualContent.new(old_content_string + content_string)
+        new_content = Nanoc::Core::TextualContent.new(old_content_string + content_string)
         compiled_content_store.set(rep, capture_name, new_content)
       end
     end

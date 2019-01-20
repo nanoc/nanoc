@@ -15,7 +15,7 @@ describe Nanoc::Int::Executor do
 
   let(:item) { Nanoc::Int::Item.new(content, {}, '/index.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :donkey) }
-  let(:content) { Nanoc::Int::TextualContent.new('Donkey Power').tap(&:freeze) }
+  let(:content) { Nanoc::Core::TextualContent.new('Donkey Power').tap(&:freeze) }
 
   let(:action_provider) { double(:action_provider) }
   let(:reps) { double(:reps) }
@@ -28,7 +28,7 @@ describe Nanoc::Int::Executor do
   describe '#filter' do
     let(:assigns) { {} }
 
-    let(:content) { Nanoc::Int::TextualContent.new('<%= "Donkey" %> Power') }
+    let(:content) { Nanoc::Core::TextualContent.new('<%= "Donkey" %> Power') }
 
     before do
       allow(compilation_context).to receive(:assigns_for) { assigns }
@@ -78,7 +78,7 @@ describe Nanoc::Int::Executor do
     context 'normal flow with binary rep' do
       subject { executor.filter(:whatever) }
 
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.dat')) }
+      let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.dat')) }
 
       before do
         expect(Nanoc::Int::NotificationCenter)
@@ -133,7 +133,7 @@ describe Nanoc::Int::Executor do
     context 'normal flow with binary rep and binary-to-text filter' do
       subject { executor.filter(:whatever) }
 
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.dat')) }
+      let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.dat')) }
 
       before do
         expect(Nanoc::Int::NotificationCenter)
@@ -251,7 +251,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'binary rep, text-to-something filter' do
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.md')) }
+      let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.md')) }
 
       before do
         compiled_content_store.set_current(rep, content)
@@ -264,7 +264,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'binary filter that does not write anything' do
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.dat')) }
+      let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.dat')) }
 
       before do
         expect(Nanoc::Int::NotificationCenter)
@@ -485,7 +485,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'binary item' do
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.md')) }
+      let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('donkey.md')) }
 
       it 'raises' do
         expect { subject }.to raise_error(
@@ -519,7 +519,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'binary content' do
-      let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.dat')) }
+      let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('donkey.dat')) }
 
       it 'creates snapshots in repo' do
         expect { subject }
@@ -530,7 +530,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'textual content' do
-      let(:content) { Nanoc::Int::TextualContent.new('Donkey Power') }
+      let(:content) { Nanoc::Core::TextualContent.new('Donkey Power') }
 
       it 'creates snapshots in repo' do
         expect { subject }
@@ -541,7 +541,7 @@ describe Nanoc::Int::Executor do
     end
 
     context 'final snapshot' do
-      let(:content) { Nanoc::Int::TextualContent.new('Donkey Power') }
+      let(:content) { Nanoc::Core::TextualContent.new('Donkey Power') }
 
       context 'raw path' do
         before do

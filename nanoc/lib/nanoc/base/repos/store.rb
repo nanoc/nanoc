@@ -14,7 +14,7 @@ module Nanoc::Int
   #
   # @api private
   class Store
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     # @return [String] The name of the file where data will be loaded from and
     #   stored to.

@@ -4,7 +4,6 @@ require_relative 'entities/context'
 require_relative 'entities/directed_graph'
 
 require_relative 'entities/identifier'
-require_relative 'entities/content'
 require_relative 'entities/processing_action'
 require_relative 'entities/processing_actions'
 
@@ -14,7 +13,6 @@ require_relative 'entities/layout_collection'
 
 require_relative 'entities/code_snippet'
 require_relative 'entities/configuration'
-require_relative 'entities/lazy_value'
 require_relative 'entities/document'
 require_relative 'entities/item'
 require_relative 'entities/item_rep'

@@ -241,10 +241,10 @@ describe Nanoc::CompilationItemView do
     end
 
     before do
-      compiled_content_store.set(rep, :last, Nanoc::Int::TextualContent.new('Last Hallo'))
-      compiled_content_store.set(rep, :pre, Nanoc::Int::TextualContent.new('Pre Hallo'))
-      compiled_content_store.set(rep, :post, Nanoc::Int::TextualContent.new('Post Hallo'))
-      compiled_content_store.set(rep, :specific, Nanoc::Int::TextualContent.new('Specific Hallo'))
+      compiled_content_store.set(rep, :last, Nanoc::Core::TextualContent.new('Last Hallo'))
+      compiled_content_store.set(rep, :pre, Nanoc::Core::TextualContent.new('Pre Hallo'))
+      compiled_content_store.set(rep, :post, Nanoc::Core::TextualContent.new('Post Hallo'))
+      compiled_content_store.set(rep, :specific, Nanoc::Core::TextualContent.new('Specific Hallo'))
     end
 
     context 'requesting implicit default rep' do
@@ -371,7 +371,7 @@ describe Nanoc::CompilationItemView do
     let(:view) { described_class.new(item, view_context) }
 
     context 'textual content with no raw filename' do
-      let(:content) { Nanoc::Int::TextualContent.new('asdf') }
+      let(:content) { Nanoc::Core::TextualContent.new('asdf') }
 
       it { is_expected.to be_nil }
 
@@ -392,7 +392,7 @@ describe Nanoc::CompilationItemView do
     end
 
     context 'textual content with raw filename' do
-      let(:content) { Nanoc::Int::TextualContent.new('asdf', filename: filename) }
+      let(:content) { Nanoc::Core::TextualContent.new('asdf', filename: filename) }
       let(:filename) { '/tmp/lol.txt' }
 
       it { is_expected.to eql('/tmp/lol.txt') }
@@ -414,7 +414,7 @@ describe Nanoc::CompilationItemView do
     end
 
     context 'binary content' do
-      let(:content) { Nanoc::Int::BinaryContent.new(filename) }
+      let(:content) { Nanoc::Core::BinaryContent.new(filename) }
       let(:filename) { '/tmp/lol.txt' }
 
       it { is_expected.to eql('/tmp/lol.txt') }

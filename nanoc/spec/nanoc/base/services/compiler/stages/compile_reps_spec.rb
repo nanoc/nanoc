@@ -95,8 +95,8 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     context 'rep not in outdatedness store' do
       before do
         # Needed for consistency
-        compiled_content_cache[rep] = { last: Nanoc::Int::TextualContent.new('asdf') }
-        compiled_content_cache[other_rep] = { last: Nanoc::Int::TextualContent.new('asdf') }
+        compiled_content_cache[rep] = { last: Nanoc::Core::TextualContent.new('asdf') }
+        compiled_content_cache[other_rep] = { last: Nanoc::Core::TextualContent.new('asdf') }
       end
 
       it 'keeps the item rep out of the outdatedness store' do
@@ -110,7 +110,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
 
       before do
         # Needed for consistency
-        compiled_content_cache[other_rep] = { last: Nanoc::Int::TextualContent.new('asdf') }
+        compiled_content_cache[other_rep] = { last: Nanoc::Core::TextualContent.new('asdf') }
       end
 
       it 'compiles individual reps' do

@@ -5,7 +5,7 @@ module Nanoc::Int
   class IdentifiableCollection
     DDMemoize.activate(self)
 
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
     include Enumerable
 
     extend Forwardable

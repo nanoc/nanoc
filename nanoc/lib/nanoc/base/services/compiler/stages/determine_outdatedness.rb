@@ -2,7 +2,7 @@
 
 module Nanoc::Int::Compiler::Stages
   class DetermineOutdatedness < Nanoc::Int::Compiler::Stage
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     def initialize(reps:, outdatedness_checker:, outdatedness_store:)
       @reps = reps

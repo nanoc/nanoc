@@ -52,7 +52,7 @@ describe Nanoc::Int::SiteLoader do
 
         it 'has an item' do
           expect(subject.items.size).to eq(1)
-          expect(subject.items['/about.md'].content).to be_a(Nanoc::Int::TextualContent)
+          expect(subject.items['/about.md'].content).to be_a(Nanoc::Core::TextualContent)
           expect(subject.items['/about.md'].content.string).to eq('I am Denis!')
           expect(subject.items['/about.md'].attributes[:content_filename])
             .to eq('content/about.md')
@@ -69,7 +69,7 @@ describe Nanoc::Int::SiteLoader do
 
         it 'has a layout' do
           expect(subject.layouts.size).to eq(1)
-          expect(subject.layouts['/page.erb'].content).to be_a(Nanoc::Int::TextualContent)
+          expect(subject.layouts['/page.erb'].content).to be_a(Nanoc::Core::TextualContent)
           expect(subject.layouts['/page.erb'].content.string).to eq('<html><%= yield %></html>')
           expect(subject.layouts['/page.erb'].attributes[:content_filename])
             .to eq('layouts/page.erb')
@@ -161,7 +161,7 @@ describe Nanoc::Int::SiteLoader do
 
       it 'loads code snippets before items/layouts' do
         expect(subject.items.size).to eq(1)
-        expect(subject.items['/generated.txt'].content).to be_a(Nanoc::Int::TextualContent)
+        expect(subject.items['/generated.txt'].content).to be_a(Nanoc::Core::TextualContent)
         expect(subject.items['/generated.txt'].content.string).to eq('Generated content!')
         expect(subject.items['/generated.txt'].attributes).to eq(generated: true)
         expect(subject.items['/generated.txt'].identifier.to_s).to eq('/generated.txt')

@@ -15,14 +15,14 @@ describe Nanoc::Int::CompiledContentStore do
     end
 
     context 'rep exists in repo' do
-      before { repo.set(rep, :foobar, Nanoc::Int::TextualContent.new('other content')) }
+      before { repo.set(rep, :foobar, Nanoc::Core::TextualContent.new('other content')) }
 
       context 'snapshot does not exist in repo' do
         it { is_expected.to be_nil }
       end
 
       context 'snapshot exists in repo' do
-        before { repo.set(rep, :donkey, Nanoc::Int::TextualContent.new('donkey')) }
+        before { repo.set(rep, :donkey, Nanoc::Core::TextualContent.new('donkey')) }
         it { is_expected.to be_some_textual_content('donkey') }
       end
     end
@@ -39,7 +39,7 @@ describe Nanoc::Int::CompiledContentStore do
     end
 
     context 'rep exists in repo' do
-      before { repo.set(rep, :foobar, Nanoc::Int::TextualContent.new('donkey')) }
+      before { repo.set(rep, :foobar, Nanoc::Core::TextualContent.new('donkey')) }
       it { is_expected.to match(foobar: some_textual_content('donkey')) }
     end
   end
@@ -50,7 +50,7 @@ describe Nanoc::Int::CompiledContentStore do
     let(:item) { Nanoc::Int::Item.new('contentz', {}, '/foo.md') }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
     let(:snapshot_name) { :donkey }
-    let(:contents) { Nanoc::Int::TextualContent.new('donkey') }
+    let(:contents) { Nanoc::Core::TextualContent.new('donkey') }
 
     it 'changes the given rep+snapshot' do
       expect { subject }
@@ -68,7 +68,7 @@ describe Nanoc::Int::CompiledContentStore do
 
     let(:item) { Nanoc::Int::Item.new('contentz', {}, '/foo.md') }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
-    let(:contents_by_snapshot) { { donkey: Nanoc::Int::TextualContent.new('donkey') } }
+    let(:contents_by_snapshot) { { donkey: Nanoc::Core::TextualContent.new('donkey') } }
 
     it 'changes the given rep+snapshot' do
       expect { subject }
@@ -118,13 +118,13 @@ describe Nanoc::Int::CompiledContentStore do
           end
 
           context 'content is textual' do
-            let(:content) { Nanoc::Int::TextualContent.new('hellos') }
+            let(:content) { Nanoc::Core::TextualContent.new('hellos') }
             it { is_expected.to eql('hellos') }
           end
 
           context 'content is binary' do
             before { File.write('donkey.dat', 'binary data') }
-            let(:content) { Nanoc::Int::BinaryContent.new(File.expand_path('donkey.dat')) }
+            let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('donkey.dat')) }
 
             it 'raises' do
               expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem, 'You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is /foo.md (rep name :foo).')

@@ -3,7 +3,7 @@
 module Nanoc::Int
   # @api private
   class OutdatednessRule
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
     include Singleton
 
     def call(obj, outdatedness_checker)

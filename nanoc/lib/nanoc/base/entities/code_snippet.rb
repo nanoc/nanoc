@@ -5,7 +5,7 @@ module Nanoc::Int
   #
   # @api private
   class CodeSnippet
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     # A string containing the actual code in this code snippet.
     #

@@ -4,7 +4,7 @@ module Nanoc::Int::Compiler::Phases
   # Provides functionality for (re)calculating the content of an item rep, without caching or
   # outdatedness checking.
   class Recalculate < Abstract
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     def initialize(action_sequences:, dependency_store:, compilation_context:)
       super(wrapped: nil)

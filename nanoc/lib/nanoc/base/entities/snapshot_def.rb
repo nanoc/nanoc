@@ -3,7 +3,7 @@
 module Nanoc
   module Int
     class SnapshotDef
-      include Nanoc::Int::ContractsSupport
+      include Nanoc::Core::ContractsSupport
 
       attr_reader :name
       attr_reader :binary

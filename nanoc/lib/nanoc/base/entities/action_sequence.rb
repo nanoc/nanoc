@@ -2,7 +2,7 @@
 
 module Nanoc::Int
   class ActionSequence
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
     include Enumerable
     DDMemoize.activate(self)
 
