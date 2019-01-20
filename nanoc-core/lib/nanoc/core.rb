@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
+# Ruby stdlib
 require 'singleton'
+
+# External gems
+require 'json_schema'
 
 module Nanoc
   # @api private
