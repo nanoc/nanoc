@@ -15,6 +15,7 @@ require 'nanoc/core/lazy_value'
 require 'nanoc/core/error'
 
 require 'nanoc/core/content'
+require 'nanoc/core/context'
 require 'nanoc/core/pattern'
 require 'nanoc/core/identifier'
 require 'nanoc/core/core_ext/array'

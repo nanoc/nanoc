@@ -25,7 +25,7 @@ module Nanoc
   #     # => 'bar'
   #
   # @abstract Subclass and override {#run} to implement a custom filter.
-  class Filter < Nanoc::Int::Context
+  class Filter < Nanoc::Core::Context
     # @api private
     TMP_BINARY_ITEMS_DIR = 'binary_items'
 

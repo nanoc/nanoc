@@ -100,7 +100,7 @@ module Nanoc::Int
           UnwrapUpdateBehavior
         when Nanoc::RuleDSL::CompilationRuleContext
           RuleContextUpdateBehavior
-        when Nanoc::Int::Context
+        when Nanoc::Core::Context
           ContextUpdateBehavior
         else
           RescueUpdateBehavior

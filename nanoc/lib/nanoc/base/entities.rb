@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'entities/context'
 require_relative 'entities/directed_graph'
 
 Nanoc::Identifier = Nanoc::Core::Identifier

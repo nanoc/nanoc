@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::RuleDSL
-  class CompilerDSL < Nanoc::Int::Context
+  class CompilerDSL < Nanoc::Core::Context
     # The current rules filename.
     #
     # @return [String] The current rules filename.
