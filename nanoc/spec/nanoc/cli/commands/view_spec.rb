@@ -82,7 +82,7 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true, fork: true do
             request = Net::HTTP::Get.new('/')
             http.request(request)
           end
-        end.to raise_error(/CONNREFUSED|execution expired/)
+        end.to raise_error(/Failed to open TCP connection|execution expired/)
       end
     end
   end
