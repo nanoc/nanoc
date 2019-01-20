@@ -2,15 +2,10 @@
 
 # Load external dependencies
 require 'addressable'
-require 'ddmemoize'
-require 'ddmetrics'
 require 'ddplugin'
-require 'hamster'
 require 'json'
 require 'parallel'
 require 'slow_enumerator_tools'
-
-DDMemoize.enable_metrics
 
 module Nanoc
   # @return [String] A string containing information about this Nanoc version

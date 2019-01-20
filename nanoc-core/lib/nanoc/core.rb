@@ -7,6 +7,7 @@ require 'singleton'
 require 'json_schema'
 require 'ddmemoize'
 require 'ddmetrics'
+require 'hamster'
 
 DDMemoize.enable_metrics
 
