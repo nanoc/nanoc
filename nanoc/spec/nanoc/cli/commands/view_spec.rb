@@ -77,7 +77,12 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true, fork: true do
       end
 
       run_nanoc_cmd(['view', '--port', '50385']) do
-        expect { Net::HTTP.get(non_local_addresses[0], '/', 50_385) }.to raise_error(Errno::ECONNREFUSED)
+        expect do
+          Net::HTTP.start(non_local_addresses[0], 50_385, open_timeout: 0.2) do |http|
+            request = Net::HTTP::Get.new('/')
+            http.request(request)
+          end
+        end.to raise_error(/CONNREFUSED|execution expired/)
       end
     end
   end
