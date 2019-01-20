@@ -89,8 +89,8 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     super
 
     config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
-    items = Nanoc::Int::ItemCollection.new(config)
-    layouts = Nanoc::Int::LayoutCollection.new(config)
+    items = Nanoc::Core::ItemCollection.new(config)
+    layouts = Nanoc::Core::LayoutCollection.new(config)
 
     @dependency_store = Nanoc::Int::DependencyStore.new(items, layouts, config)
     @dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
@@ -105,7 +105,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 
     Nanoc::ViewContextForCompilation.new(
       reps: Nanoc::Int::ItemRepRepo.new,
-      items: Nanoc::Int::ItemCollection.new(config),
+      items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: @dependency_tracker,
       compilation_context: :__irrelevat_compiler,
       compiled_content_store: :__irrelevant_compiled_content_store,

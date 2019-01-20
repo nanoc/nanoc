@@ -7,7 +7,7 @@ shared_examples 'an identifiable collection view' do
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
       reps: Nanoc::Int::ItemRepRepo.new,
-      items: Nanoc::Int::ItemCollection.new(config),
+      items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
       compilation_context: double(:__compilation_context),
       compiled_content_store: double(:__compiled_content_store),

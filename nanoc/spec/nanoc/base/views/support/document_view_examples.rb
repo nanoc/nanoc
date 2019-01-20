@@ -6,7 +6,7 @@ shared_examples 'a document view' do
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
       reps: Nanoc::Int::ItemRepRepo.new,
-      items: Nanoc::Int::ItemCollection.new(config),
+      items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
       compilation_context: double(:compilation_context),
       compiled_content_store: double(:compiled_content_store),
@@ -17,8 +17,8 @@ shared_examples 'a document view' do
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
 
-  let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
-  let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
+  let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 

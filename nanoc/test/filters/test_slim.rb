@@ -32,7 +32,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
 
     Nanoc::ViewContextForCompilation.new(
       reps: Nanoc::Int::ItemRepRepo.new,
-      items: Nanoc::Int::ItemCollection.new(config),
+      items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: :__irrelevant_dependency_tracker,
       compilation_context: :__irrelevat_compiler,
       compiled_content_store: :__irrelevant_compiled_content_store,

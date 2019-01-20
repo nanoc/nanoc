@@ -49,8 +49,8 @@ describe Nanoc::Int::OutdatednessRules do
       ).run
     end
 
-    let(:items) { Nanoc::Int::ItemCollection.new(config, [item]) }
-    let(:layouts) { Nanoc::Int::LayoutCollection.new(config, [layout]) }
+    let(:items) { Nanoc::Core::ItemCollection.new(config, [item]) }
+    let(:layouts) { Nanoc::Core::LayoutCollection.new(config, [layout]) }
 
     before do
       allow(site).to receive(:code_snippets).and_return(code_snippets)
@@ -429,7 +429,7 @@ describe Nanoc::Int::OutdatednessRules do
       let(:stored_obj) { raise 'override me' }
       let(:new_obj)    { raise 'override me' }
 
-      let(:items) { Nanoc::Int::ItemCollection.new(config, [new_obj]) }
+      let(:items) { Nanoc::Core::ItemCollection.new(config, [new_obj]) }
 
       shared_examples 'a document' do
         let(:stored_obj) { klass.new('a', {}, '/foo.md') }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::IdentifiableCollection do
+describe Nanoc::Core::IdentifiableCollection do
   shared_examples 'a generic identifiable collection' do
     subject(:identifiable_collection) { described_class.new(config, objects) }
 
@@ -197,12 +197,12 @@ describe Nanoc::Int::IdentifiableCollection do
     end
   end
 
-  describe Nanoc::Int::ItemCollection do
+  describe Nanoc::Core::ItemCollection do
     let(:expected_reference) { 'items' }
     it_behaves_like 'a generic identifiable collection'
   end
 
-  describe Nanoc::Int::LayoutCollection do
+  describe Nanoc::Core::LayoutCollection do
     let(:expected_reference) { 'layouts' }
     it_behaves_like 'a generic identifiable collection'
   end

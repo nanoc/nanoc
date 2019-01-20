@@ -95,9 +95,9 @@ module Nanoc::CLI::Commands
               'item'
             when Nanoc::Core::Configuration
               'config'
-            when Nanoc::Int::ItemCollection
+            when Nanoc::Core::ItemCollection
               'items'
-            when Nanoc::Int::LayoutCollection
+            when Nanoc::Core::LayoutCollection
               'layouts'
             else
               raise Nanoc::Int::Errors::InternalInconsistency, "unexpected pred type #{pred}"
@@ -109,7 +109,7 @@ module Nanoc::CLI::Commands
               pred.identifier.to_s
             when Nanoc::Core::Configuration
               nil
-            when Nanoc::Int::IdentifiableCollection
+            when Nanoc::Core::IdentifiableCollection
               case dep.props.raw_content
               when true
                 'matching any'

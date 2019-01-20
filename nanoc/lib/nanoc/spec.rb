@@ -60,8 +60,8 @@ module Nanoc
         @action_sequence = {}
         @config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
         @reps = Nanoc::Int::ItemRepRepo.new
-        @items = Nanoc::Int::ItemCollection.new(@config)
-        @layouts = Nanoc::Int::LayoutCollection.new(@config)
+        @items = Nanoc::Core::ItemCollection.new(@config)
+        @layouts = Nanoc::Core::LayoutCollection.new(@config)
         @dependency_tracker = Nanoc::Int::DependencyTracker.new(Object.new)
         @compiled_content_store = Nanoc::Int::CompiledContentStore.new
         @action_provider = new_action_provider

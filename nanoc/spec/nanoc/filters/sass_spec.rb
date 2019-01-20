@@ -99,7 +99,7 @@ describe Nanoc::Filters::SassCommon do
     let(:item_main_default_rep_view) { Nanoc::CompilationItemRepView.new(item_main_default_rep, view_context) }
     let(:item_main_sourcemap_rep_view) { Nanoc::CompilationItemRepView.new(item_main_sourcemap_rep, view_context) }
 
-    let(:items) { Nanoc::Int::ItemCollection.new(config, [item_main, item_blue, item_red, item_partial]) }
+    let(:items) { Nanoc::Core::ItemCollection.new(config, [item_main, item_blue, item_red, item_partial]) }
     let(:item_views) { Nanoc::ItemCollectionWithRepsView.new(items, view_context) }
 
     let(:view_context) do
@@ -137,8 +137,8 @@ describe Nanoc::Filters::SassCommon do
       end
     end
 
-    let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
-    let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
+    let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
+    let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults.merge(color: 'yellow') }
 
@@ -240,7 +240,7 @@ describe Nanoc::Filters::SassCommon do
 
         it 'creates no dependency' do
           expect { sass.setup_and_run('@import external', load_paths: ['.']) }
-            .to create_dependency_from(item_main_view).onto([instance_of(Nanoc::Int::ItemCollection)])
+            .to create_dependency_from(item_main_view).onto([instance_of(Nanoc::Core::ItemCollection)])
         end
       end
 

@@ -16,7 +16,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
     Nanoc::ViewContextForCompilation.new(
       reps: item_rep_repo_for(item),
-      items: Nanoc::Int::ItemCollection.new(config),
+      items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: :__irrelevant__,
       compilation_context: :__irrelevant__,
       compiled_content_store: compiled_content_store,

@@ -10,8 +10,8 @@ describe Nanoc::Int::DependencyStore do
   let(:layout_a) { Nanoc::Core::Layout.new('la', {}, '/la.md') }
   let(:layout_b) { Nanoc::Core::Layout.new('lb', {}, '/lb.md') }
 
-  let(:items) { Nanoc::Int::ItemCollection.new(config, [item_a, item_b, item_c]) }
-  let(:layouts) { Nanoc::Int::LayoutCollection.new(config, [layout_a, layout_b]) }
+  let(:items) { Nanoc::Core::ItemCollection.new(config, [item_a, item_b, item_c]) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config, [layout_a, layout_b]) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
   it 'is empty by default' do
@@ -251,7 +251,7 @@ describe Nanoc::Int::DependencyStore do
 
     context 'one new item' do
       let(:items_after) do
-        Nanoc::Int::ItemCollection.new(config, [item_a, item_b, item_c, item_d])
+        Nanoc::Core::ItemCollection.new(config, [item_a, item_b, item_c, item_d])
       end
 
       let(:item_d) { Nanoc::Core::Item.new('d', {}, '/d.md') }
@@ -266,7 +266,7 @@ describe Nanoc::Int::DependencyStore do
 
     context 'unrelated item removed' do
       let(:items_after) do
-        Nanoc::Int::ItemCollection.new(config, [item_a, item_b])
+        Nanoc::Core::ItemCollection.new(config, [item_a, item_b])
       end
 
       it 'does not mark items as outdated' do
@@ -278,7 +278,7 @@ describe Nanoc::Int::DependencyStore do
 
     context 'related item removed' do
       let(:items_after) do
-        Nanoc::Int::ItemCollection.new(config, [item_a, item_c])
+        Nanoc::Core::ItemCollection.new(config, [item_a, item_c])
       end
 
       it 'does not mark items as outdated' do

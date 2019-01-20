@@ -4,8 +4,8 @@ shared_examples 'a rule context' do
   let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Core::Item.new('content', {}, item_identifier) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
-  let(:items) { Nanoc::Int::ItemCollection.new(config) }
-  let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
+  let(:items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:site) do
     Nanoc::Int::Site.new(
@@ -68,7 +68,7 @@ shared_examples 'a rule context' do
       let(:child) { Nanoc::Core::Item.new('child', {}, child_identifier) }
 
       let(:items) do
-        Nanoc::Int::ItemCollection.new(config, [item, parent, child])
+        Nanoc::Core::ItemCollection.new(config, [item, parent, child])
       end
 
       it 'has a parent' do
@@ -107,7 +107,7 @@ shared_examples 'a rule context' do
     let(:child) { Nanoc::Core::Item.new('child', {}, child_identifier) }
 
     let(:items) do
-      Nanoc::Int::ItemCollection.new(config, [item, parent, child])
+      Nanoc::Core::ItemCollection.new(config, [item, parent, child])
     end
 
     it 'is a view without reps access' do
@@ -148,7 +148,7 @@ describe(Nanoc::RuleDSL::RoutingRuleContext) do
   let(:item) { Nanoc::Core::Item.new('content', {}, item_identifier) }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
-  let(:items) { Nanoc::Int::ItemCollection.new(config) }
+  let(:items) { Nanoc::Core::ItemCollection.new(config) }
 
   let(:site) do
     Nanoc::Int::Site.new(
@@ -174,8 +174,8 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   let(:item) { Nanoc::Core::Item.new('content', {}, item_identifier) }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
-  let(:items) { Nanoc::Int::ItemCollection.new(config) }
-  let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
+  let(:items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:site) do
     Nanoc::Int::Site.new(

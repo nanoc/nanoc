@@ -5,7 +5,7 @@ require_relative 'support/mutable_identifiable_collection_view_examples'
 
 describe Nanoc::MutableItemCollectionView do
   let(:view_class) { Nanoc::MutableItemView }
-  let(:collection_class) { Nanoc::Int::ItemCollection }
+  let(:collection_class) { Nanoc::Core::ItemCollection }
   it_behaves_like 'an identifiable collection view'
   it_behaves_like 'a mutable identifiable collection view'
 
@@ -19,7 +19,7 @@ describe Nanoc::MutableItemCollectionView do
     end
 
     let(:wrapped) do
-      Nanoc::Int::ItemCollection.new(config, [item])
+      Nanoc::Core::ItemCollection.new(config, [item])
     end
 
     let(:view) { described_class.new(wrapped, nil) }
@@ -46,7 +46,7 @@ describe Nanoc::MutableItemCollectionView do
 
   describe '#inspect' do
     let(:wrapped) do
-      Nanoc::Int::ItemCollection.new(config)
+      Nanoc::Core::ItemCollection.new(config)
     end
 
     let(:view) { described_class.new(wrapped, view_context) }

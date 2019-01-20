@@ -78,7 +78,7 @@ module Nanoc::Int
           PathnameUpdateBehavior
         when Nanoc::Core::BinaryContent
           BinaryContentUpdateBehavior
-        when Array, Nanoc::Int::IdentifiableCollection
+        when Array, Nanoc::Core::IdentifiableCollection
           ArrayUpdateBehavior
         when Hash, Nanoc::Core::Configuration
           HashUpdateBehavior

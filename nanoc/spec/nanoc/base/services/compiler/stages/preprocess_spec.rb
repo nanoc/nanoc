@@ -24,8 +24,8 @@ describe Nanoc::Int::Compiler::Stages::Preprocess do
 
   let(:data_source) { Nanoc::Int::InMemDataSource.new(items, layouts) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
-  let(:items) { Nanoc::Int::ItemCollection.new(config) }
-  let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
+  let(:items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:dependency_store) do
     Nanoc::Int::DependencyStore.new(items, layouts, config)
@@ -65,8 +65,8 @@ describe Nanoc::Int::Compiler::Stages::Preprocess do
         expect(action_provider).to receive(:preprocess) do |site|
           site.data_source =
             Nanoc::Int::InMemDataSource.new(
-              Nanoc::Int::ItemCollection.new(config, [new_item]),
-              Nanoc::Int::LayoutCollection.new(config, [new_layout]),
+              Nanoc::Core::ItemCollection.new(config, [new_item]),
+              Nanoc::Core::LayoutCollection.new(config, [new_layout]),
             )
         end
       end

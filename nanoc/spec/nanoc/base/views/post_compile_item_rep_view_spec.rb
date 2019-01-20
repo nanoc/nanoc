@@ -14,7 +14,7 @@ describe Nanoc::PostCompileItemRepView do
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
       reps: Nanoc::Int::ItemRepRepo.new,
-      items: Nanoc::Int::ItemCollection.new(config),
+      items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
       compilation_context: compilation_context,
       compiled_content_store: compiled_content_store,
@@ -22,7 +22,7 @@ describe Nanoc::PostCompileItemRepView do
   end
 
   let(:reps) { double(:reps) }
-  let(:items) { Nanoc::Int::ItemCollection.new(config) }
+  let(:items) { Nanoc::Core::ItemCollection.new(config) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
   let(:compilation_context) { double(:compilation_context, compiled_content_cache: compiled_content_cache) }

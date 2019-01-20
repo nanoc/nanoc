@@ -6,10 +6,6 @@ Nanoc::Identifier = Nanoc::Core::Identifier
 require_relative 'entities/processing_action'
 require_relative 'entities/processing_actions'
 
-require_relative 'entities/identifiable_collection'
-require_relative 'entities/item_collection'
-require_relative 'entities/layout_collection'
-
 require_relative 'entities/code_snippet'
 require_relative 'entities/item_rep'
 require_relative 'entities/props'

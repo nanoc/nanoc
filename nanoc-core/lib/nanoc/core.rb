@@ -5,6 +5,10 @@ require 'singleton'
 
 # External gems
 require 'json_schema'
+require 'ddmemoize'
+require 'ddmetrics'
+
+DDMemoize.enable_metrics
 
 module Nanoc
   # @api private
@@ -23,12 +27,15 @@ require 'nanoc/core/content'
 require 'nanoc/core/context'
 require 'nanoc/core/directed_graph'
 require 'nanoc/core/pattern'
+require 'nanoc/core/identifiable_collection'
 require 'nanoc/core/identifier'
 require 'nanoc/core/core_ext/array'
 require 'nanoc/core/core_ext/hash'
 require 'nanoc/core/core_ext/string'
 
 require 'nanoc/core/binary_content'
+require 'nanoc/core/item_collection'
+require 'nanoc/core/layout_collection'
 require 'nanoc/core/regexp_pattern'
 require 'nanoc/core/string_pattern'
 require 'nanoc/core/textual_content'

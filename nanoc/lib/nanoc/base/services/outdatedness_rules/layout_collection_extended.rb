@@ -4,7 +4,7 @@ module Nanoc::Int::OutdatednessRules
   class LayoutCollectionExtended < Nanoc::Int::OutdatednessRule
     affects_props :raw_content
 
-    contract Nanoc::Int::LayoutCollection, C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Int::OutdatednessReasons::Generic]
+    contract Nanoc::Core::LayoutCollection, C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Int::OutdatednessReasons::Generic]
     def apply(_obj, outdatedness_checker)
       new_layouts = outdatedness_checker.dependency_store.new_layouts
 

@@ -8,7 +8,7 @@ module Nanoc
     attr_reader :items
     attr_reader :dependency_tracker
 
-    contract C::KeywordArgs[items: Nanoc::Int::IdentifiableCollection] => C::Any
+    contract C::KeywordArgs[items: Nanoc::Core::IdentifiableCollection] => C::Any
     def initialize(items:)
       @items = items
 

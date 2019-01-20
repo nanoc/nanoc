@@ -22,7 +22,7 @@ describe Nanoc::Int::Site do
     end
 
     let(:items) do
-      Nanoc::Int::ItemCollection.new(
+      Nanoc::Core::ItemCollection.new(
         config,
         [
           Nanoc::Core::Item.new('foo', {}, '/foo.md'),
@@ -32,7 +32,7 @@ describe Nanoc::Int::Site do
     end
 
     let(:layouts) do
-      Nanoc::Int::LayoutCollection.new(
+      Nanoc::Core::LayoutCollection.new(
         config,
         [
           Nanoc::Core::Layout.new('foo', {}, '/foo.md'),

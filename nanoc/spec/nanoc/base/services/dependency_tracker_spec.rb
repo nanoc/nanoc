@@ -9,8 +9,8 @@ describe Nanoc::Int::DependencyTracker do
   let(:item_b) { Nanoc::Core::Item.new('b', {}, '/b.md') }
   let(:item_c) { Nanoc::Core::Item.new('c', {}, '/c.md') }
 
-  let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
-  let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
+  let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 

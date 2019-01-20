@@ -18,7 +18,7 @@ describe Nanoc::CompilationItemView do
   end
 
   let(:reps) { Nanoc::Int::ItemRepRepo.new }
-  let(:items) { Nanoc::Int::ItemCollection.new(config) }
+  let(:items) { Nanoc::Core::ItemCollection.new(config) }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:compilation_context) { double(:compilation_context) }
@@ -26,8 +26,8 @@ describe Nanoc::CompilationItemView do
 
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
 
-  let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
-  let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
+  let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
@@ -43,7 +43,7 @@ describe Nanoc::CompilationItemView do
     let(:view) { described_class.new(item, view_context) }
 
     let(:items) do
-      Nanoc::Int::ItemCollection.new(
+      Nanoc::Core::ItemCollection.new(
         {},
         [
           item,
@@ -143,7 +143,7 @@ describe Nanoc::CompilationItemView do
     let(:view) { described_class.new(item, view_context) }
 
     let(:items) do
-      Nanoc::Int::ItemCollection.new(
+      Nanoc::Core::ItemCollection.new(
         {},
         [
           item,

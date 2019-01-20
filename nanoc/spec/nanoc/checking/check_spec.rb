@@ -24,8 +24,8 @@ describe Nanoc::Checking::Check do
 
     let(:config)        { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
     let(:code_snippets) { [] }
-    let(:items)         { Nanoc::Int::ItemCollection.new(config, []) }
-    let(:layouts)       { Nanoc::Int::LayoutCollection.new(config, []) }
+    let(:items)         { Nanoc::Core::ItemCollection.new(config, []) }
+    let(:layouts)       { Nanoc::Core::LayoutCollection.new(config, []) }
 
     before do
       FileUtils.mkdir_p('output')

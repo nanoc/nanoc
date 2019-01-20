@@ -13,10 +13,7 @@ lib/nanoc/base/entities/action_sequence.rb
 lib/nanoc/base/entities/checksum_collection.rb
 lib/nanoc/base/entities/code_snippet.rb
 lib/nanoc/base/entities/dependency.rb
-lib/nanoc/base/entities/identifiable_collection.rb
-lib/nanoc/base/entities/item_collection.rb
 lib/nanoc/base/entities/item_rep.rb
-lib/nanoc/base/entities/layout_collection.rb
 lib/nanoc/base/entities/outdatedness_reasons.rb
 lib/nanoc/base/entities/outdatedness_status.rb
 lib/nanoc/base/entities/processing_action.rb

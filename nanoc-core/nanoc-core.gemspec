@@ -17,5 +17,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '~> 2.4'
 
+  s.add_runtime_dependency('ddmemoize', '~> 1.0')
+  s.add_runtime_dependency('ddmetrics', '~> 1.0')
   s.add_runtime_dependency('json_schema', '~> 0.19')
 end

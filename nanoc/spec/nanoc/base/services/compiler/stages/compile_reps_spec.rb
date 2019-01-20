@@ -49,11 +49,11 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   let(:code_snippets) { [] }
 
   let(:layouts) do
-    Nanoc::Int::LayoutCollection.new(config)
+    Nanoc::Core::LayoutCollection.new(config)
   end
 
   let(:items) do
-    Nanoc::Int::ItemCollection.new(
+    Nanoc::Core::ItemCollection.new(
       config,
       [item, other_item],
     )

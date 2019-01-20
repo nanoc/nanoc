@@ -28,8 +28,8 @@ describe Nanoc::Int::OutdatednessChecker do
     Nanoc::Int::DependencyStore.new(items, layouts, config)
   end
 
-  let(:items) { Nanoc::Int::ItemCollection.new(config, [item]) }
-  let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
+  let(:items) { Nanoc::Core::ItemCollection.new(config, [item]) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:code_snippets) { [] }
 
@@ -135,7 +135,7 @@ describe Nanoc::Int::OutdatednessChecker do
           dependency_store.store
 
           new_item = Nanoc::Core::Item.new('stuff', {}, '/newblahz.md')
-          dependency_store.items = Nanoc::Int::ItemCollection.new(config, [item, new_item])
+          dependency_store.items = Nanoc::Core::ItemCollection.new(config, [item, new_item])
 
           dependency_store.load
         end
@@ -160,7 +160,7 @@ describe Nanoc::Int::OutdatednessChecker do
           dependency_store.store
 
           new_layout = Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md')
-          dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, layouts.to_a + [new_layout])
+          dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
 
           dependency_store.load
         end
@@ -184,7 +184,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
-    let(:items) { Nanoc::Int::ItemCollection.new(config, [item, other_item]) }
+    let(:items) { Nanoc::Core::ItemCollection.new(config, [item, other_item]) }
 
     let(:old_action_sequence_for_other_item_rep) do
       Nanoc::Int::ActionSequence.build(other_item_rep) do |b|
@@ -217,7 +217,7 @@ describe Nanoc::Int::OutdatednessChecker do
       let(:distant_item_rep) { Nanoc::Int::ItemRep.new(distant_item, :default) }
 
       let(:items) do
-        Nanoc::Int::ItemCollection.new(config, [item, other_item, distant_item])
+        Nanoc::Core::ItemCollection.new(config, [item, other_item, distant_item])
       end
 
       let(:action_sequences) do
@@ -555,7 +555,7 @@ describe Nanoc::Int::OutdatednessChecker do
         context 'item added' do
           before do
             new_item = Nanoc::Core::Item.new('stuff', {}, '/newblahz.md')
-            dependency_store.items = Nanoc::Int::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
             dependency_store.load
           end
 
@@ -564,7 +564,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
         context 'item removed' do
           before do
-            dependency_store.items = Nanoc::Int::ItemCollection.new(config, [])
+            dependency_store.items = Nanoc::Core::ItemCollection.new(config, [])
             dependency_store.load
           end
 
@@ -587,7 +587,7 @@ describe Nanoc::Int::OutdatednessChecker do
         context 'matching item added' do
           before do
             new_item = Nanoc::Core::Item.new('stuff', {}, '/newblahz.md')
-            dependency_store.items = Nanoc::Int::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
             dependency_store.load
           end
 
@@ -597,7 +597,7 @@ describe Nanoc::Int::OutdatednessChecker do
         context 'non-matching item added' do
           before do
             new_item = Nanoc::Core::Item.new('stuff', {}, '/nublahz.md')
-            dependency_store.items = Nanoc::Int::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
             dependency_store.load
           end
 
@@ -606,7 +606,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
         context 'item removed' do
           before do
-            dependency_store.items = Nanoc::Int::ItemCollection.new(config, [])
+            dependency_store.items = Nanoc::Core::ItemCollection.new(config, [])
             dependency_store.load
           end
 
@@ -629,7 +629,7 @@ describe Nanoc::Int::OutdatednessChecker do
         context 'matching item added' do
           before do
             new_item = Nanoc::Core::Item.new('stuff', {}, '/newblahz.md')
-            dependency_store.items = Nanoc::Int::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
             dependency_store.load
           end
 
@@ -639,7 +639,7 @@ describe Nanoc::Int::OutdatednessChecker do
         context 'non-matching item added' do
           before do
             new_item = Nanoc::Core::Item.new('stuff', {}, '/nublahz.md')
-            dependency_store.items = Nanoc::Int::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
             dependency_store.load
           end
 
@@ -648,7 +648,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
         context 'item removed' do
           before do
-            dependency_store.items = Nanoc::Int::ItemCollection.new(config, [])
+            dependency_store.items = Nanoc::Core::ItemCollection.new(config, [])
             dependency_store.load
           end
 
@@ -673,7 +673,7 @@ describe Nanoc::Int::OutdatednessChecker do
         context 'layout added' do
           before do
             new_layout = Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md')
-            dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, layouts.to_a + [new_layout])
+            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
             dependency_store.load
           end
 
@@ -682,7 +682,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
         context 'layout removed' do
           before do
-            dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, [])
+            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, [])
             dependency_store.load
           end
 
@@ -705,7 +705,7 @@ describe Nanoc::Int::OutdatednessChecker do
         context 'matching layout added' do
           before do
             new_layout = Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md')
-            dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, layouts.to_a + [new_layout])
+            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
             dependency_store.load
           end
 
@@ -715,7 +715,7 @@ describe Nanoc::Int::OutdatednessChecker do
         context 'non-matching layout added' do
           before do
             new_layout = Nanoc::Core::Layout.new('stuff', {}, '/nublahz.md')
-            dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, layouts.to_a + [new_layout])
+            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
             dependency_store.load
           end
 
@@ -724,7 +724,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
         context 'layout removed' do
           before do
-            dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, [])
+            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, [])
             dependency_store.load
           end
 
@@ -747,7 +747,7 @@ describe Nanoc::Int::OutdatednessChecker do
         context 'matching layout added' do
           before do
             new_layout = Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md')
-            dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, layouts.to_a + [new_layout])
+            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
             dependency_store.load
           end
 
@@ -757,7 +757,7 @@ describe Nanoc::Int::OutdatednessChecker do
         context 'non-matching layout added' do
           before do
             new_layout = Nanoc::Core::Layout.new('stuff', {}, '/nublahz.md')
-            dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, layouts.to_a + [new_layout])
+            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
             dependency_store.load
           end
 
@@ -766,7 +766,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
         context 'layout removed' do
           before do
-            dependency_store.layouts = Nanoc::Int::LayoutCollection.new(config, [])
+            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, [])
             dependency_store.load
           end
 

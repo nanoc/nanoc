@@ -307,7 +307,7 @@ describe Nanoc::Int::Checksummer do
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
 
     let(:wrapped) do
-      Nanoc::Int::ItemCollection.new(
+      Nanoc::Core::ItemCollection.new(
         config,
         [
           Nanoc::Core::Item.new('foo', {}, '/foo.md'),
@@ -316,7 +316,7 @@ describe Nanoc::Int::Checksummer do
       )
     end
 
-    it { is_expected.to eql('Nanoc::ItemCollectionWithRepsView<Nanoc::Int::ItemCollection<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,>>') }
+    it { is_expected.to eql('Nanoc::ItemCollectionWithRepsView<Nanoc::Core::ItemCollection<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,>>') }
   end
 
   context 'Nanoc::ItemCollectionWithoutRepsView' do
@@ -325,7 +325,7 @@ describe Nanoc::Int::Checksummer do
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
 
     let(:wrapped) do
-      Nanoc::Int::ItemCollection.new(
+      Nanoc::Core::ItemCollection.new(
         config,
         [
           Nanoc::Core::Item.new('foo', {}, '/foo.md'),
@@ -334,7 +334,7 @@ describe Nanoc::Int::Checksummer do
       )
     end
 
-    it { is_expected.to eql('Nanoc::ItemCollectionWithoutRepsView<Nanoc::Int::ItemCollection<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,>>') }
+    it { is_expected.to eql('Nanoc::ItemCollectionWithoutRepsView<Nanoc::Core::ItemCollection<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,>>') }
   end
 
   context 'Nanoc::RuleDSL::CompilationRuleContext' do
@@ -353,7 +353,7 @@ describe Nanoc::Int::Checksummer do
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
     let(:code_snippets) { [Nanoc::Int::CodeSnippet.new('asdf', '/bob.rb')] }
-    let(:items) { Nanoc::Int::ItemCollection.new(config, [item]) }
+    let(:items) { Nanoc::Core::ItemCollection.new(config, [item]) }
     let(:layouts) { [Nanoc::Core::Layout.new('asdf', {}, '/foo.md')] }
 
     let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
@@ -372,7 +372,7 @@ describe Nanoc::Int::Checksummer do
         ',rep=',
         'Nanoc::BasicItemRepView<' + expected_item_rep_checksum + '>',
         ',items=',
-        'Nanoc::ItemCollectionWithoutRepsView<Nanoc::Int::ItemCollection<' + expected_item_checksum + ',>>',
+        'Nanoc::ItemCollectionWithoutRepsView<Nanoc::Core::ItemCollection<' + expected_item_checksum + ',>>',
         ',layouts=',
         'Nanoc::LayoutCollectionView<Array<' + expected_layout_checksum + ',>>',
         ',config=',
