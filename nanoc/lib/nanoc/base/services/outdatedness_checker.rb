@@ -8,7 +8,7 @@ module Nanoc::Int
     class Basic
       DDMemoize.activate(self)
 
-      include Nanoc::Int::ContractsSupport
+      include Nanoc::Core::ContractsSupport
 
       Rules = Nanoc::Int::OutdatednessRules
 
@@ -99,7 +99,7 @@ module Nanoc::Int
 
     DDMemoize.activate(self)
 
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     attr_reader :checksum_store
     attr_reader :checksums

@@ -76,7 +76,7 @@ module Nanoc::Int
           RawUpdateBehavior
         when Pathname
           PathnameUpdateBehavior
-        when Nanoc::Int::BinaryContent
+        when Nanoc::Core::BinaryContent
           BinaryContentUpdateBehavior
         when Array, Nanoc::Int::IdentifiableCollection
           ArrayUpdateBehavior
@@ -94,7 +94,7 @@ module Nanoc::Int
           ToSUpdateBehavior
         when Nanoc::RuleDSL::RulesCollection, Nanoc::Int::CodeSnippet
           DataUpdateBehavior
-        when Nanoc::Int::TextualContent
+        when Nanoc::Core::TextualContent
           StringUpdateBehavior
         when Nanoc::View
           UnwrapUpdateBehavior

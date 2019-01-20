@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Content do
+describe Nanoc::Core::Content do
   describe '.create' do
     subject { described_class.create(arg, params) }
 
@@ -15,7 +15,7 @@ describe Nanoc::Int::Content do
     end
 
     context 'content arg' do
-      let(:arg) { Nanoc::Int::TextualContent.new('foo') }
+      let(:arg) { Nanoc::Core::TextualContent.new('foo') }
 
       it { is_expected.to eql(arg) }
     end
@@ -25,7 +25,7 @@ describe Nanoc::Int::Content do
       let(:params) { { binary: true } }
 
       it 'returns binary content' do
-        expect(subject).to be_a(Nanoc::Int::BinaryContent)
+        expect(subject).to be_a(Nanoc::Core::BinaryContent)
         expect(subject.filename).to eql('/foo.dat')
       end
     end
@@ -36,7 +36,7 @@ describe Nanoc::Int::Content do
         let(:params) { { binary: false, filename: '/foo.md' } }
 
         it 'returns textual content' do
-          expect(subject).to be_a(Nanoc::Int::TextualContent)
+          expect(subject).to be_a(Nanoc::Core::TextualContent)
           expect(subject.string).to eql('foo')
           expect(subject.filename).to eql('/foo.md')
         end
@@ -47,7 +47,7 @@ describe Nanoc::Int::Content do
         let(:params) { { binary: false } }
 
         it 'returns textual content' do
-          expect(subject).to be_a(Nanoc::Int::TextualContent)
+          expect(subject).to be_a(Nanoc::Core::TextualContent)
           expect(subject.string).to eql('foo')
           expect(subject.filename).to be_nil
         end
@@ -56,7 +56,7 @@ describe Nanoc::Int::Content do
   end
 end
 
-describe Nanoc::Int::TextualContent do
+describe Nanoc::Core::TextualContent do
   describe '#initialize' do
     context 'without filename' do
       let(:content) { described_class.new('foo') }
@@ -157,7 +157,7 @@ describe Nanoc::Int::TextualContent do
   end
 end
 
-describe Nanoc::Int::BinaryContent do
+describe Nanoc::Core::BinaryContent do
   describe '#initialize' do
     let(:content) { described_class.new('/foo.dat') }
 

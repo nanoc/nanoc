@@ -3,7 +3,7 @@
 module Nanoc
   class Identifier
     include Comparable
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     # @api private
     class InvalidIdentifierError < ::Nanoc::Error

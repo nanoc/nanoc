@@ -1,0 +1,4 @@
+-r ./spec/spec_helper.rb
+--format Fuubar
+--color
+--backtrace

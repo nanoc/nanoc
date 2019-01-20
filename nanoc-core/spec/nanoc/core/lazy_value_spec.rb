@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::LazyValue do
+describe Nanoc::Core::LazyValue do
   describe '#value' do
     let(:value_arg) { +'Hello world' }
     let(:lazy_value) { described_class.new(value_arg) }

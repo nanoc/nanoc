@@ -2,7 +2,7 @@
 
 module Nanoc::Int::Compiler::Stages
   class Postprocess < Nanoc::Int::Compiler::Stage
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     def initialize(action_provider:, site:)
       @action_provider = action_provider

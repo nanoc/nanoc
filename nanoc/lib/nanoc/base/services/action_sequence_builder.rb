@@ -2,7 +2,7 @@
 
 module Nanoc::Int
   class ActionSequenceBuilder
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     def initialize(item_rep)
       @item_rep = item_rep

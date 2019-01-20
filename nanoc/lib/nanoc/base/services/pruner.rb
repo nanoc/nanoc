@@ -6,7 +6,7 @@ module Nanoc
   #
   # @api private
   class Pruner
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     # @param [Nanoc::Int::Configuration] config
     #

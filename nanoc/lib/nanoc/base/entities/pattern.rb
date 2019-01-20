@@ -3,7 +3,7 @@
 module Nanoc::Int
   # @api private
   class Pattern
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     contract C::Any => self
     def self.from(obj)

@@ -7,7 +7,7 @@ module Nanoc
 
     module Mixin
       def assert(assertion)
-        return unless Nanoc::Int::ContractsSupport.enabled?
+        return unless Nanoc::Core::ContractsSupport.enabled?
 
         unless assertion.call
           raise AssertionFailure, "assertion failed: #{assertion.class}"

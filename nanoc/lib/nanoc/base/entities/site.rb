@@ -3,7 +3,7 @@
 module Nanoc::Int
   # @api private
   class Site
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     attr_reader :code_snippets
     attr_reader :config

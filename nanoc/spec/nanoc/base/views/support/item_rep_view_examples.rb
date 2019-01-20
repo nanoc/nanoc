@@ -165,7 +165,7 @@ shared_examples 'an item rep view' do
     let(:snapshot_name) { raise 'override me' }
 
     before do
-      compiled_content_store.set(rep, :last, Nanoc::Int::TextualContent.new('Hallo'))
+      compiled_content_store.set(rep, :last, Nanoc::Core::TextualContent.new('Hallo'))
     end
 
     context 'snapshot exists' do

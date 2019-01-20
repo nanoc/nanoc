@@ -5,7 +5,7 @@ module Nanoc::Int::ProcessingActions
     # snapshot :before_layout
     # snapshot :before_layout, path: '/about.md'
 
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     attr_reader :snapshot_names
     attr_reader :paths

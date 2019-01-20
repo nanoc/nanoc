@@ -4,7 +4,7 @@ module Nanoc::Int::OutdatednessRules
   class CodeSnippetsModified < Nanoc::Int::OutdatednessRule
     DDMemoize.activate(self)
 
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     affects_props :raw_content, :attributes, :compiled_content, :path
 

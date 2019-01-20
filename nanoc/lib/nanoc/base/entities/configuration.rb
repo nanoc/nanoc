@@ -5,7 +5,7 @@ module Nanoc::Int
   #
   # @api private
   class Configuration
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     NONE = Object.new.freeze
 

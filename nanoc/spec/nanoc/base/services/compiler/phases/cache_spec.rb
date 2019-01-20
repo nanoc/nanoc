@@ -22,7 +22,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
       end
 
       def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
-        @compiled_content_store.set(rep, :last, Nanoc::Int::TextualContent.new('wrapped content'))
+        @compiled_content_store.set(rep, :last, Nanoc::Core::TextualContent.new('wrapped content'))
       end
     end
   end
@@ -81,7 +81,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
 
       context 'textual cached compiled content available' do
         before do
-          compiled_content_cache[rep] = { last: Nanoc::Int::TextualContent.new('cached') }
+          compiled_content_cache[rep] = { last: Nanoc::Core::TextualContent.new('cached') }
         end
 
         it 'reads content from cache' do
@@ -112,7 +112,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
         let(:binary_filename) { Tempfile.open('test') { |fn| fn << binary_content }.path }
 
         before do
-          compiled_content_cache[rep] = { last: Nanoc::Int::BinaryContent.new(binary_filename) }
+          compiled_content_cache[rep] = { last: Nanoc::Core::BinaryContent.new(binary_filename) }
         end
 
         it 'reads content from cache' do

@@ -2,7 +2,7 @@
 
 module Nanoc::Int
   class Compiler
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, outdatedness_store:)
       @site = site

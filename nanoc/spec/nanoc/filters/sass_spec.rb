@@ -32,7 +32,7 @@ describe Nanoc::Filters::SassCommon do
     end
 
     let(:content_main) do
-      Nanoc::Int::TextualContent.new(
+      Nanoc::Core::TextualContent.new(
         '/* irrelevant */',
         filename: File.expand_path('content/style/main.sass'),
       )
@@ -47,7 +47,7 @@ describe Nanoc::Filters::SassCommon do
     end
 
     let(:content_blue) do
-      Nanoc::Int::TextualContent.new(
+      Nanoc::Core::TextualContent.new(
         "\.blue\n  color: blue",
         filename: File.expand_path('content/style/colors/blue.sass'),
       )
@@ -62,7 +62,7 @@ describe Nanoc::Filters::SassCommon do
     end
 
     let(:content_red) do
-      Nanoc::Int::TextualContent.new(
+      Nanoc::Core::TextualContent.new(
         '.red { color: red; }',
         filename: File.expand_path('content/style/colors/red.scss'),
       )
@@ -77,7 +77,7 @@ describe Nanoc::Filters::SassCommon do
     end
 
     let(:content_partial) do
-      Nanoc::Int::TextualContent.new(
+      Nanoc::Core::TextualContent.new(
         '* { margin: 0; }',
         filename: File.expand_path('content/style/_partial.scss'),
       )
@@ -131,9 +131,9 @@ describe Nanoc::Filters::SassCommon do
 
     let(:compiled_content_store) do
       Nanoc::Int::CompiledContentStore.new.tap do |repo|
-        repo.set(reps[item_blue].first, :last, Nanoc::Int::TextualContent.new('.blue { color: blue }'))
-        repo.set(reps[item_red].first, :last, Nanoc::Int::TextualContent.new('.red { color: red }'))
-        repo.set(reps[item_partial].first, :last, Nanoc::Int::TextualContent.new('* { margin: 0 }'))
+        repo.set(reps[item_blue].first, :last, Nanoc::Core::TextualContent.new('.blue { color: blue }'))
+        repo.set(reps[item_red].first, :last, Nanoc::Core::TextualContent.new('.red { color: red }'))
+        repo.set(reps[item_partial].first, :last, Nanoc::Core::TextualContent.new('* { margin: 0 }'))
       end
     end
 

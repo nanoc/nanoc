@@ -3,7 +3,7 @@
 module Nanoc::Int::Compiler::Phases
   # Provides functionality for suspending and resuming item rep compilation (using fibers).
   class Resume < Abstract
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     DONE = Object.new
 

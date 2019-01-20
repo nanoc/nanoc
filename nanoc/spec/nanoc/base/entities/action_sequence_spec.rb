@@ -250,7 +250,7 @@ describe Nanoc::Int::ActionSequence do
     end
 
     context 'binary item' do
-      let(:item) { Nanoc::Int::Item.new(Nanoc::Int::BinaryContent.new('/asdf.dat'), {}, '/foo.md') }
+      let(:item) { Nanoc::Int::Item.new(Nanoc::Core::BinaryContent.new('/asdf.dat'), {}, '/foo.md') }
 
       it 'generates initial binary snapshot def' do
         action_sequence =

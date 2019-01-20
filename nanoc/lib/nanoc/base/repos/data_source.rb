@@ -143,7 +143,7 @@ module Nanoc
     #
     # @param [String, nil] attributes_checksum_data
     def new_item(content, attributes, identifier, binary: false, checksum_data: nil, content_checksum_data: nil, attributes_checksum_data: nil)
-      content = Nanoc::Int::Content.create(content, binary: binary)
+      content = Nanoc::Core::Content.create(content, binary: binary)
       Nanoc::Int::Item.new(content, attributes, identifier, checksum_data: checksum_data, content_checksum_data: content_checksum_data, attributes_checksum_data: attributes_checksum_data)
     end
 

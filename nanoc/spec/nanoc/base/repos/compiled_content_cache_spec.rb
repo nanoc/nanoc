@@ -11,7 +11,7 @@ describe Nanoc::Int::CompiledContentCache do
   let(:other_item) { Nanoc::Int::Item.new('asdf', {}, '/sneaky.md') }
   let(:other_item_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
 
-  let(:content) { Nanoc::Int::Content.create('omg') }
+  let(:content) { Nanoc::Core::Content.create('omg') }
 
   let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
 

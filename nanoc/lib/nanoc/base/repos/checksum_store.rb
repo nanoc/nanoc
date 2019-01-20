@@ -6,7 +6,7 @@ module Nanoc::Int
   #
   # @api private
   class ChecksumStore < ::Nanoc::Int::Store
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     attr_writer :checksums
     attr_accessor :objects

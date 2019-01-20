@@ -3,7 +3,7 @@
 module Nanoc::Int
   # @api private
   class Props
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     attr_reader :attributes
     attr_reader :raw_content

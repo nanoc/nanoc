@@ -2,7 +2,7 @@
 
 module Nanoc::Int::Compiler::Phases
   class Write < Abstract
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     class Worker
       def initialize(queue:, compiled_content_store:)

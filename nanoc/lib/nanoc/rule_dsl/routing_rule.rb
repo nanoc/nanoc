@@ -2,7 +2,7 @@
 
 module Nanoc::RuleDSL
   class RoutingRule < Rule
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     contract C::None => C::Maybe[Symbol]
     attr_reader :snapshot_name

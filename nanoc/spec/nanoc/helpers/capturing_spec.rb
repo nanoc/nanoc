@@ -171,7 +171,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
             ctx.compiled_content_store.set(
               item.reps[:default]._unwrap,
               :__capture_foo,
-              Nanoc::Int::TextualContent.new('content after compilation'),
+              Nanoc::Core::TextualContent.new('content after compilation'),
             )
             expect(fiber.resume).to eql('content after compilation')
           end
@@ -183,7 +183,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
             ctx.compiled_content_store.set(
               item.reps[:default]._unwrap,
               :__capture_foo,
-              Nanoc::Int::TextualContent.new('other captured foo'),
+              Nanoc::Core::TextualContent.new('other captured foo'),
             )
           end
 

@@ -1,0 +1,15 @@
+NEWS.md
+README.md
+
+lib/nanoc-core.rb
+lib/nanoc/core.rb
+lib/nanoc/core/version.rb
+
+lib/nanoc/core/binary_content.rb
+lib/nanoc/core/content.rb
+lib/nanoc/core/contracts_support.rb
+lib/nanoc/core/core_ext/array.rb
+lib/nanoc/core/core_ext/hash.rb
+lib/nanoc/core/core_ext/string.rb
+lib/nanoc/core/lazy_value.rb
+lib/nanoc/core/textual_content.rb

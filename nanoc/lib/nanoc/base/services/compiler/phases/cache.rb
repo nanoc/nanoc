@@ -4,7 +4,7 @@ module Nanoc::Int::Compiler::Phases
   # Provides functionality for (re)calculating the content of an item rep, with caching or
   # outdatedness checking. Delegates to s::Recalculate if outdated or no cache available.
   class Cache < Abstract
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     def initialize(wrapped:, compiled_content_cache:, compiled_content_store:)
       super(wrapped: wrapped)

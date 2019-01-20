@@ -2,7 +2,7 @@
 
 module Nanoc::RuleDSL
   class CompilationRule < Rule
-    include Nanoc::Int::ContractsSupport
+    include Nanoc::Core::ContractsSupport
 
     contract Nanoc::Int::ItemRep, C::KeywordArgs[
       site: Nanoc::Int::Site,

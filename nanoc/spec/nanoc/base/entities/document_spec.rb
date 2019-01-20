@@ -23,13 +23,13 @@ shared_examples 'a document' do
     describe 'content arg' do
       context 'string' do
         it 'converts content' do
-          expect(subject.content).to be_a(Nanoc::Int::TextualContent)
+          expect(subject.content).to be_a(Nanoc::Core::TextualContent)
           expect(subject.content.string).to eql('Hello world')
         end
       end
 
       context 'content' do
-        let(:content_arg) { Nanoc::Int::TextualContent.new('foo') }
+        let(:content_arg) { Nanoc::Core::TextualContent.new('foo') }
 
         it 'reuses content' do
           expect(subject.content).to equal(content_arg)
@@ -135,7 +135,7 @@ shared_examples 'a document' do
     end
 
     context 'binary content' do
-      let(:content_arg) { Nanoc::Int::BinaryContent.new(File.expand_path('foo.dat')) }
+      let(:content_arg) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.dat')) }
 
       it 'refuses changes to content' do
         expect { document.instance_variable_set(:@content, 'hah') }.to raise_frozen_error
@@ -271,7 +271,7 @@ shared_examples 'a document' do
     let(:content_arg) { 'Hallo' }
     let(:attributes_arg) { { foo: { bar: 'asdf' } } }
 
-    subject { document.content = Nanoc::Int::TextualContent.new('New!') }
+    subject { document.content = Nanoc::Core::TextualContent.new('New!') }
 
     it 'clears checksum' do
       expect { subject }
