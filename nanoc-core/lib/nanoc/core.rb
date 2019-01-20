@@ -9,52 +9,30 @@ require 'ddmemoize'
 require 'ddmetrics'
 require 'ddplugin'
 require 'hamster'
+require 'zeitwerk'
 
 DDMemoize.enable_metrics
 
-module Nanoc
-  # @api private
-  module Core
+inflector_class = Class.new(Zeitwerk::Inflector) do
+  def camelize(basename, abspath)
+    case basename
+    when 'version'
+      'VERSION'
+    else
+      super(basename.tr('-', '_'), abspath.tr('-', '_'))
+    end
   end
 end
 
-require 'nanoc/core/version'
+loader = Zeitwerk::Loader.new
+loader.inflector = inflector_class.new
+loader.push_dir(__dir__ + '/..')
+loader.ignore(File.expand_path('core/core_ext/array.rb', __dir__))
+loader.ignore(File.expand_path('core/core_ext/hash.rb', __dir__))
+loader.ignore(File.expand_path('core/core_ext/string.rb', __dir__))
+loader.setup
+loader.eager_load
 
-require 'nanoc/core/contracts_support'
-require 'nanoc/core/lazy_value'
-require 'nanoc/core/error'
-
-require 'nanoc/core/code_snippet'
-require 'nanoc/core/configuration'
-require 'nanoc/core/content'
-require 'nanoc/core/context'
-require 'nanoc/core/directed_graph'
-require 'nanoc/core/pattern'
-require 'nanoc/core/identifiable_collection'
-require 'nanoc/core/identifier'
-require 'nanoc/core/core_ext/array'
-require 'nanoc/core/core_ext/hash'
-require 'nanoc/core/core_ext/string'
-require 'nanoc/core/temp_filename_factory'
-
-require 'nanoc/core/binary_content'
-require 'nanoc/core/item_collection'
-require 'nanoc/core/layout_collection'
-require 'nanoc/core/regexp_pattern'
-require 'nanoc/core/string_pattern'
-require 'nanoc/core/textual_content'
-
-require 'nanoc/core/document'
-require 'nanoc/core/item'
-require 'nanoc/core/layout'
-
-require 'nanoc/core/item_rep'
-require 'nanoc/core/snapshot_def'
-
-require 'nanoc/core/checksummer'
-require 'nanoc/core/notification_center'
-
-require 'nanoc/core/processing_action'
-require 'nanoc/core/processing_actions'
-
-require 'nanoc/core/data_source'
+require_relative 'core/core_ext/array'
+require_relative 'core/core_ext/hash'
+require_relative 'core/core_ext/string'
