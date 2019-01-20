@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email       = 'denis+rubygems@denis.ws'
   s.license     = 'MIT'
 
-  s.files         = ['NEWS.md', 'README.md'] + Dir['lib/**/*.rb']
+  s.files         = ['NEWS.md', 'README.md'] + Dir['lib/**/*.rb'] + Dir['lib/**/*-schema.json']
   s.require_paths = ['lib']
 
   s.required_ruby_version = '~> 2.4'

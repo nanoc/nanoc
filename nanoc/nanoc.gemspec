@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.email   = 'denis+rubygems@denis.ws'
   s.license = 'MIT'
 
-  s.files = Dir['*.md'] + ['LICENSE'] + Dir['bin/*'] + Dir['lib/**/*.rb'] + Dir['lib/**/*-schema.json']
+  s.files = Dir['*.md'] + ['LICENSE'] + Dir['bin/*'] + Dir['lib/**/*.rb']
   s.executables        = ['nanoc']
   s.require_paths      = ['lib']
 
