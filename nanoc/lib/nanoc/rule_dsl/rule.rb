@@ -7,10 +7,10 @@ module Nanoc::RuleDSL
     contract C::None => Symbol
     attr_reader :rep_name
 
-    contract C::None => Nanoc::Int::Pattern
+    contract C::None => Nanoc::Core::Pattern
     attr_reader :pattern
 
-    contract Nanoc::Int::Pattern, Symbol, Proc => C::Any
+    contract Nanoc::Core::Pattern, Symbol, Proc => C::Any
     def initialize(pattern, rep_name, block)
       @pattern = pattern
       @rep_name = rep_name.to_sym

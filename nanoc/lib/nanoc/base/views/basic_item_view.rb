@@ -13,7 +13,7 @@ module Nanoc
         raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(_unwrap.identifier)
       end
 
-      children_pattern = Nanoc::Int::Pattern.from(_unwrap.identifier.to_s + '*/')
+      children_pattern = Nanoc::Core::Pattern.from(_unwrap.identifier.to_s + '*/')
       children = @context.items.select { |i| children_pattern.match?(i.identifier) }
 
       children.map { |i| self.class.new(i, @context) }.freeze

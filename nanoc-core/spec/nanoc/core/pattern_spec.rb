@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Pattern do
+describe Nanoc::Core::Pattern do
   describe '.from' do
     it 'converts from string' do
       pattern = described_class.from('/foo/x[ab]z/bar.*')
@@ -59,7 +59,7 @@ describe Nanoc::Int::Pattern do
   end
 end
 
-describe Nanoc::Int::RegexpPattern do
+describe Nanoc::Core::RegexpPattern do
   let(:pattern) { described_class.new(/the answer is (\d+)/) }
 
   describe '#match?' do
@@ -88,7 +88,7 @@ describe Nanoc::Int::RegexpPattern do
   end
 end
 
-describe Nanoc::Int::StringPattern do
+describe Nanoc::Core::StringPattern do
   describe '#match?' do
     it 'matches simple strings' do
       pattern = described_class.new('d*key')

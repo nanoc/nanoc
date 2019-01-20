@@ -11,5 +11,10 @@ lib/nanoc/core/contracts_support.rb
 lib/nanoc/core/core_ext/array.rb
 lib/nanoc/core/core_ext/hash.rb
 lib/nanoc/core/core_ext/string.rb
+lib/nanoc/core/error.rb
+lib/nanoc/core/identifier.rb
 lib/nanoc/core/lazy_value.rb
+lib/nanoc/core/pattern.rb
+lib/nanoc/core/regexp_pattern.rb
+lib/nanoc/core/string_pattern.rb
 lib/nanoc/core/textual_content.rb

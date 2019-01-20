@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-describe Nanoc::Identifier do
+describe Nanoc::Core::Identifier do
   describe '.from' do
     subject { described_class.from(arg) }
 
     context 'given an identifier' do
-      let(:arg) { Nanoc::Identifier.new('/foo.md') }
+      let(:arg) { Nanoc::Core::Identifier.new('/foo.md') }
 
       it 'returns an identifier' do
-        expect(subject).to be_a(Nanoc::Identifier)
+        expect(subject).to be_a(Nanoc::Core::Identifier)
         expect(subject.to_s).to eq('/foo.md')
         expect(subject).to be_full
       end
@@ -18,7 +18,7 @@ describe Nanoc::Identifier do
       let(:arg) { '/foo.md' }
 
       it 'returns an identifier' do
-        expect(subject).to be_a(Nanoc::Identifier)
+        expect(subject).to be_a(Nanoc::Core::Identifier)
         expect(subject.to_s).to eq('/foo.md')
         expect(subject).to be_full
       end
@@ -28,7 +28,7 @@ describe Nanoc::Identifier do
       let(:arg) { 12_345 }
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Identifier::NonCoercibleObjectError)
+        expect { subject }.to raise_error(Nanoc::Core::Identifier::NonCoercibleObjectError)
       end
     end
   end
@@ -64,17 +64,17 @@ describe Nanoc::Identifier do
     context 'full type' do
       it 'refuses string not starting with a slash' do
         expect { described_class.new('foo') }
-          .to raise_error(Nanoc::Identifier::InvalidIdentifierError)
+          .to raise_error(Nanoc::Core::Identifier::InvalidIdentifierError)
       end
 
       it 'refuses string ending with a slash' do
         expect { described_class.new('/foo/') }
-          .to raise_error(Nanoc::Identifier::InvalidFullIdentifierError)
+          .to raise_error(Nanoc::Core::Identifier::InvalidFullIdentifierError)
       end
 
       it 'refuses string with only slash' do
         expect { described_class.new('/') }
-          .to raise_error(Nanoc::Identifier::InvalidFullIdentifierError)
+          .to raise_error(Nanoc::Core::Identifier::InvalidFullIdentifierError)
       end
 
       it 'has proper string representation' do
@@ -90,7 +90,7 @@ describe Nanoc::Identifier do
     context 'other type' do
       it 'errors' do
         expect { described_class.new('foo', type: :donkey) }
-          .to raise_error(Nanoc::Identifier::InvalidTypeError)
+          .to raise_error(Nanoc::Core::Identifier::InvalidTypeError)
       end
     end
 
@@ -132,7 +132,7 @@ describe Nanoc::Identifier do
 
     subject { identifier.inspect }
 
-    it { should == '<Nanoc::Identifier type=full "/foo/bar">' }
+    it { should == '<Nanoc::Core::Identifier type=full "/foo/bar">' }
   end
 
   describe '#== and #eql?' do
@@ -303,7 +303,7 @@ describe Nanoc::Identifier do
 
       it 'raises an error' do
         expect { subject }.to raise_error(
-          Nanoc::Identifier::InvalidPrefixError,
+          Nanoc::Core::Identifier::InvalidPrefixError,
           'Invalid prefix (does not start with a slash): "asdf"',
         )
       end
@@ -314,7 +314,7 @@ describe Nanoc::Identifier do
 
       it 'raises an error' do
         expect { subject }.to raise_error(
-          Nanoc::Identifier::InvalidPrefixError,
+          Nanoc::Core::Identifier::InvalidPrefixError,
           'Invalid prefix (does not start with a slash): "asdf/"',
         )
       end
@@ -324,7 +324,7 @@ describe Nanoc::Identifier do
       let(:prefix) { '/asdf/' }
 
       it 'returns a proper new identifier' do
-        expect(subject).to be_a(Nanoc::Identifier)
+        expect(subject).to be_a(Nanoc::Core::Identifier)
         expect(subject.to_s).to eql('/asdf/foo')
       end
     end
@@ -333,7 +333,7 @@ describe Nanoc::Identifier do
       let(:prefix) { '/asdf' }
 
       it 'returns a proper new identifier' do
-        expect(subject).to be_a(Nanoc::Identifier)
+        expect(subject).to be_a(Nanoc::Core::Identifier)
         expect(subject.to_s).to eql('/asdf/foo')
       end
     end
@@ -346,7 +346,7 @@ describe Nanoc::Identifier do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::Identifier::UnsupportedLegacyOperationError)
+        expect { subject }.to raise_error(Nanoc::Core::Identifier::UnsupportedLegacyOperationError)
       end
     end
 
@@ -374,7 +374,7 @@ describe Nanoc::Identifier do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::Identifier::UnsupportedLegacyOperationError)
+        expect { subject }.to raise_error(Nanoc::Core::Identifier::UnsupportedLegacyOperationError)
       end
     end
 
@@ -398,7 +398,7 @@ describe Nanoc::Identifier do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::Identifier::UnsupportedLegacyOperationError)
+        expect { subject }.to raise_error(Nanoc::Core::Identifier::UnsupportedLegacyOperationError)
       end
     end
 
@@ -434,7 +434,7 @@ describe Nanoc::Identifier do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::Identifier::UnsupportedLegacyOperationError)
+        expect { subject }.to raise_error(Nanoc::Core::Identifier::UnsupportedLegacyOperationError)
       end
     end
 

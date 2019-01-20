@@ -7,7 +7,7 @@ module Nanoc::RuleDSL
     contract C::None => C::Maybe[Symbol]
     attr_reader :snapshot_name
 
-    contract Nanoc::Int::Pattern, Symbol, Proc, C::KeywordArgs[snapshot_name: C::Optional[Symbol]] => C::Any
+    contract Nanoc::Core::Pattern, Symbol, Proc, C::KeywordArgs[snapshot_name: C::Optional[Symbol]] => C::Any
     def initialize(pattern, rep_name, block, snapshot_name: nil)
       super(pattern, rep_name, block)
 

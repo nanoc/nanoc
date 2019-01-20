@@ -93,7 +93,7 @@ module Nanoc
         return layout if layout
 
         if use_globs?
-          pat = Nanoc::Int::Pattern.from(arg)
+          pat = Nanoc::Core::Pattern.from(arg)
           layout = layouts.find { |l| pat.match?(l.identifier) }
           return layout if layout
         end

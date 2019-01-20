@@ -107,7 +107,7 @@ module Nanoc::Int
 
     contract C::Any => C::IterOf[C::RespondTo[:identifier]]
     def find_all_unmemoized(arg)
-      pat = Nanoc::Int::Pattern.from(arg)
+      pat = Nanoc::Core::Pattern.from(arg)
       select { |i| pat.match?(i.identifier) }
     end
 
@@ -118,7 +118,7 @@ module Nanoc::Int
 
     def object_matching_glob(glob)
       if use_globs?
-        pat = Nanoc::Int::Pattern.from(glob)
+        pat = Nanoc::Core::Pattern.from(glob)
         @objects.find { |i| pat.match?(i.identifier) }
       else
         nil
