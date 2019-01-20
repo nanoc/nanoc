@@ -8,7 +8,6 @@ require 'ddplugin'
 require 'hamster'
 require 'json'
 require 'parallel'
-require 'ref'
 require 'slow_enumerator_tools'
 
 DDMemoize.enable_metrics
