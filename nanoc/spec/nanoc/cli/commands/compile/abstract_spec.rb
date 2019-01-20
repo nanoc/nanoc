@@ -57,6 +57,31 @@ describe Nanoc::CLI::Commands::CompileListeners::Abstract do
       subject.stop_safely
       expect(subject.stopped).to be
     end
+
+    context 'listener that notifies' do
+      let!(:notifications) { [] }
+
+      before do
+        Nanoc::Int::NotificationCenter.on(:sah8sem0jaiw1phi4bai) do
+          sleep 0.1
+          notifications << :notified
+        end
+      end
+
+      let(:klass) do
+        Class.new(described_class) do
+          def start; end
+        end
+      end
+
+      it 'waits for notifications to be processed' do
+        subject.run_while do
+          Nanoc::Int::NotificationCenter.post(:sah8sem0jaiw1phi4bai)
+        end
+
+        expect(notifications).to eq([:notified])
+      end
+    end
   end
 
   context 'listener that does not start or stop properly' do
