@@ -70,7 +70,7 @@ module Nanoc::CLI::Commands
       sorter =
         lambda do |dep|
           case dep
-          when Nanoc::Int::Document
+          when Nanoc::Core::Document
             dep.from.identifier.to_s
           else
             ''
@@ -89,9 +89,9 @@ module Nanoc::CLI::Commands
 
           type =
             case pred
-            when Nanoc::Int::Layout
+            when Nanoc::Core::Layout
               'layout'
-            when Nanoc::Int::Item
+            when Nanoc::Core::Item
               'item'
             when Nanoc::Int::Configuration
               'config'
@@ -105,7 +105,7 @@ module Nanoc::CLI::Commands
 
           pred_identifier =
             case pred
-            when Nanoc::Int::Document
+            when Nanoc::Core::Document
               pred.identifier.to_s
             when Nanoc::Int::Configuration
               nil

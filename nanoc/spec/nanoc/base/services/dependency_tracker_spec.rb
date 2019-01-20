@@ -5,9 +5,9 @@ describe Nanoc::Int::DependencyTracker do
 
   let(:store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
 
-  let(:item_a) { Nanoc::Int::Item.new('a', {}, '/a.md') }
-  let(:item_b) { Nanoc::Int::Item.new('b', {}, '/b.md') }
-  let(:item_c) { Nanoc::Int::Item.new('c', {}, '/c.md') }
+  let(:item_a) { Nanoc::Core::Item.new('a', {}, '/a.md') }
+  let(:item_b) { Nanoc::Core::Item.new('b', {}, '/b.md') }
+  let(:item_c) { Nanoc::Core::Item.new('c', {}, '/c.md') }
 
   let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
   let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }

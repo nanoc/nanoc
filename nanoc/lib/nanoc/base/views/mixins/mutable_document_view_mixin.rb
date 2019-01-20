@@ -26,8 +26,8 @@ module Nanoc
     # @see Hash#[]=
     def []=(key, value)
       disallowed_value_classes = Set.new([
-        Nanoc::Int::Item,
-        Nanoc::Int::Layout,
+        Nanoc::Core::Item,
+        Nanoc::Core::Layout,
         Nanoc::CompilationItemView,
         Nanoc::LayoutView,
       ])

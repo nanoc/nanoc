@@ -10,7 +10,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -36,7 +36,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -62,7 +62,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -88,7 +88,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -128,7 +128,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -166,7 +166,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -192,7 +192,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -218,7 +218,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -244,7 +244,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -270,7 +270,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -296,7 +296,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -322,7 +322,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -348,7 +348,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -374,7 +374,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -398,7 +398,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -434,7 +434,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -460,7 +460,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -486,7 +486,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -512,7 +512,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -541,7 +541,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -567,7 +567,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -594,7 +594,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       # Mock item
       filter.instance_eval do
         @item_rep = Nanoc::Int::ItemRep.new(
-          Nanoc::Int::Item.new(
+          Nanoc::Core::Item.new(
             'content',
             {},
             '/foo/bar/baz',
@@ -627,7 +627,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       # Mock item
       filter.instance_eval do
         @item_rep = Nanoc::Int::ItemRep.new(
-          Nanoc::Int::Item.new(
+          Nanoc::Core::Item.new(
             'content',
             {},
             '/foo/bar/baz',
@@ -659,7 +659,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       # Mock item
       filter.instance_eval do
         @item_rep = Nanoc::Int::ItemRep.new(
-          Nanoc::Int::Item.new(
+          Nanoc::Core::Item.new(
             'content',
             {},
             '/foo/bar/baz',
@@ -696,7 +696,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       # Mock item
       filter.instance_eval do
         @item_rep = Nanoc::Int::ItemRep.new(
-          Nanoc::Int::Item.new(
+          Nanoc::Core::Item.new(
             'content',
             {},
             '/foo/bar/baz',
@@ -738,7 +738,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       # Mock item
       filter.instance_eval do
         @item_rep = Nanoc::Int::ItemRep.new(
-          Nanoc::Int::Item.new(
+          Nanoc::Core::Item.new(
             'content',
             {},
             '/foo/bar/baz',
@@ -773,7 +773,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       # Mock item
       filter.instance_eval do
         @item_rep = Nanoc::Int::ItemRep.new(
-          Nanoc::Int::Item.new(
+          Nanoc::Core::Item.new(
             'content',
             {},
             '/foo/baz',
@@ -807,7 +807,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       # Mock item
       filter.instance_eval do
         @item_rep = Nanoc::Int::ItemRep.new(
-          Nanoc::Int::Item.new(
+          Nanoc::Core::Item.new(
             'content',
             {},
             '/foo/baz',
@@ -838,7 +838,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     # Mock item
     filter.instance_eval do
       @item_rep = Nanoc::Int::ItemRep.new(
-        Nanoc::Int::Item.new(
+        Nanoc::Core::Item.new(
           'content',
           {},
           '/foo/bar/baz',
@@ -865,7 +865,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       # Mock item
       filter.instance_eval do
         @item_rep = Nanoc::Int::ItemRep.new(
-          Nanoc::Int::Item.new(
+          Nanoc::Core::Item.new(
             'content',
             {},
             '/foo/baz',

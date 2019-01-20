@@ -143,7 +143,7 @@ describe Nanoc::Int::SiteLoader do
 
             def items
               [
-                Nanoc::Int::Item.new(
+                Nanoc::Core::Item.new(
                   'Generated content!',
                   { generated: true },
                   '/generated.txt',

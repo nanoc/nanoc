@@ -3,7 +3,7 @@
 require_relative 'support/mutable_document_view_examples'
 
 describe Nanoc::MutableItemView do
-  let(:entity_class) { Nanoc::Int::Item }
+  let(:entity_class) { Nanoc::Core::Item }
   it_behaves_like 'a mutable document view'
 
   let(:item) { entity_class.new('content', {}, '/asdf') }
@@ -16,7 +16,7 @@ describe Nanoc::MutableItemView do
   end
 
   describe '#inspect' do
-    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf') }
+    let(:item) { Nanoc::Core::Item.new('content', {}, '/asdf') }
     let(:view) { described_class.new(item, nil) }
 
     subject { view.inspect }

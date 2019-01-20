@@ -15,7 +15,7 @@ describe Nanoc::MutableItemCollectionView do
 
   describe '#create' do
     let(:item) do
-      Nanoc::Int::Layout.new('content', {}, '/asdf')
+      Nanoc::Core::Layout.new('content', {}, '/asdf')
     end
 
     let(:wrapped) do

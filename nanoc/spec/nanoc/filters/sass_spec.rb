@@ -24,7 +24,7 @@ describe Nanoc::Filters::SassCommon do
     end
 
     let(:item_main) do
-      Nanoc::Int::Item.new(
+      Nanoc::Core::Item.new(
         content_main,
         { content_filename: 'content/style/main.sass' },
         '/style/main.sass',
@@ -39,7 +39,7 @@ describe Nanoc::Filters::SassCommon do
     end
 
     let(:item_blue) do
-      Nanoc::Int::Item.new(
+      Nanoc::Core::Item.new(
         content_blue,
         { content_filename: 'content/style/colors/blue.sass' },
         '/style/colors/blue.sass',
@@ -54,7 +54,7 @@ describe Nanoc::Filters::SassCommon do
     end
 
     let(:item_red) do
-      Nanoc::Int::Item.new(
+      Nanoc::Core::Item.new(
         content_red,
         { content_filename: 'content/style/colors/red.scss' },
         '/style/colors/red.scss',
@@ -69,7 +69,7 @@ describe Nanoc::Filters::SassCommon do
     end
 
     let(:item_partial) do
-      Nanoc::Int::Item.new(
+      Nanoc::Core::Item.new(
         content_partial,
         { content_filename: 'content/style/_partial.scss' },
         '/style/_partial.scss',

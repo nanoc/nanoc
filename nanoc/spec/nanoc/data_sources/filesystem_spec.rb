@@ -16,7 +16,7 @@ describe Nanoc::DataSources::Filesystem, site: true do
     let(:klass) { raise 'override me' }
 
     context 'items' do
-      let(:klass) { Nanoc::Int::Item }
+      let(:klass) { Nanoc::Core::Item }
 
       context 'no files' do
         it 'loads nothing' do

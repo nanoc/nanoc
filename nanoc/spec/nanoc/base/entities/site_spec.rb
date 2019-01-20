@@ -25,8 +25,8 @@ describe Nanoc::Int::Site do
       Nanoc::Int::ItemCollection.new(
         config,
         [
-          Nanoc::Int::Item.new('foo', {}, '/foo.md'),
-          Nanoc::Int::Item.new('bar', {}, '/bar.md'),
+          Nanoc::Core::Item.new('foo', {}, '/foo.md'),
+          Nanoc::Core::Item.new('bar', {}, '/bar.md'),
         ],
       )
     end
@@ -35,8 +35,8 @@ describe Nanoc::Int::Site do
       Nanoc::Int::LayoutCollection.new(
         config,
         [
-          Nanoc::Int::Layout.new('foo', {}, '/foo.md'),
-          Nanoc::Int::Layout.new('bar', {}, '/bar.md'),
+          Nanoc::Core::Layout.new('foo', {}, '/foo.md'),
+          Nanoc::Core::Layout.new('bar', {}, '/bar.md'),
         ],
       )
     end

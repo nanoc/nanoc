@@ -80,7 +80,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
       context 'printing unwrapped layout class' do
         let(:layout_content) { 'blah <%= @layout._unwrap.class %>' }
-        it { is_expected.to eql('blah Nanoc::Int::Layout') }
+        it { is_expected.to eql('blah Nanoc::Core::Layout') }
       end
 
       context 'unknown layout' do

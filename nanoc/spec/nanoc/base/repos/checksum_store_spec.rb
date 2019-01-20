@@ -7,8 +7,8 @@ describe Nanoc::Int::ChecksumStore do
 
   let(:objects) { [item, code_snippet] }
 
-  let(:item) { Nanoc::Int::Item.new('asdf', item_attributes, '/foo.md') }
-  let(:other_item) { Nanoc::Int::Item.new('asdf', other_item_attributes, '/sneaky.md') }
+  let(:item) { Nanoc::Core::Item.new('asdf', item_attributes, '/foo.md') }
+  let(:other_item) { Nanoc::Core::Item.new('asdf', other_item_attributes, '/sneaky.md') }
 
   let(:item_attributes) { {} }
   let(:other_item_attributes) { {} }

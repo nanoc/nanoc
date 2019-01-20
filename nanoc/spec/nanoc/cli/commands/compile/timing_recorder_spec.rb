@@ -17,7 +17,7 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
     end
   end
 
-  let(:item) { Nanoc::Int::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
+  let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
 
   let(:rep) do
     Nanoc::Int::ItemRep.new(item, :default).tap do |rep|

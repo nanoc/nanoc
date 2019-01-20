@@ -5,7 +5,7 @@ describe Nanoc::Int::Compiler::Phases::Abstract do
     described_class.new(wrapped: wrapped)
   end
 
-  let(:item) { Nanoc::Int::Item.new('foo', {}, '/stuff.md') }
+  let(:item) { Nanoc::Core::Item.new('foo', {}, '/stuff.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
   let(:wrapped) { nil }

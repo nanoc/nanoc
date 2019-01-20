@@ -28,9 +28,9 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true, site: true do
       Nanoc::Int::ItemCollection.new(
         config,
         [
-          Nanoc::Int::Item.new('About Me', {}, '/about.md'),
-          Nanoc::Int::Item.new('About My Dog', {}, '/dog.md'),
-          Nanoc::Int::Item.new('Raw Data', {}, '/other.dat'),
+          Nanoc::Core::Item.new('About Me', {}, '/about.md'),
+          Nanoc::Core::Item.new('About My Dog', {}, '/dog.md'),
+          Nanoc::Core::Item.new('Raw Data', {}, '/other.dat'),
         ],
       )
     end
@@ -49,9 +49,9 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true, site: true do
       Nanoc::Int::LayoutCollection.new(
         config,
         [
-          Nanoc::Int::Layout.new('Default', {}, '/default.erb'),
-          Nanoc::Int::Layout.new('Article', {}, '/article.haml'),
-          Nanoc::Int::Layout.new('Other', {}, '/other.xyzzy'),
+          Nanoc::Core::Layout.new('Default', {}, '/default.erb'),
+          Nanoc::Core::Layout.new('Article', {}, '/article.haml'),
+          Nanoc::Core::Layout.new('Other', {}, '/other.xyzzy'),
         ],
       )
     end

@@ -101,7 +101,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     File.open('foo/stuff.dat', 'w') { |io| io.write('random binary data') }
 
     # Load
-    items = data_source.send(:load_objects, 'foo', Nanoc::Int::Item)
+    items = data_source.send(:load_objects, 'foo', Nanoc::Core::Item)
 
     # Check
     assert_equal 1, items.size
@@ -135,7 +135,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Load
     assert_raises(Nanoc::DataSources::Filesystem::Errors::BinaryLayout) do
-      data_source.send(:load_objects, 'foo', Nanoc::Int::Layout)
+      data_source.send(:load_objects, 'foo', Nanoc::Core::Layout)
     end
   end
 
@@ -145,10 +145,10 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get input and expected output
     expected = {
-      '/foo' => Nanoc::Core::Identifier.new('/foo', type: :full),
-      '/foo.html' => Nanoc::Core::Identifier.new('/foo.html',       type: :full),
-      '/foo/index.html' => Nanoc::Core::Identifier.new('/foo/index.html', type: :full),
-      '/foo.html.erb' => Nanoc::Core::Identifier.new('/foo.html.erb', type: :full),
+      '/foo' => Nanoc::Identifier.new('/foo', type: :full),
+      '/foo.html' => Nanoc::Identifier.new('/foo.html',       type: :full),
+      '/foo/index.html' => Nanoc::Identifier.new('/foo/index.html', type: :full),
+      '/foo.html.erb' => Nanoc::Identifier.new('/foo.html.erb', type: :full),
     }
 
     # Check
@@ -468,7 +468,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     File.write('foo/donkey.jpeg', 'data')
     File.write('foo/donkey.yaml', "---\nalt: Donkey\n")
 
-    objects = data_source.send(:load_objects, 'foo', Nanoc::Int::Item)
+    objects = data_source.send(:load_objects, 'foo', Nanoc::Core::Item)
     assert_equal 1, objects.size
     assert_equal '/donkey.jpeg', objects.first.identifier.to_s
   end

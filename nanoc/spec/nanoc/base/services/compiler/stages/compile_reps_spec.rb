@@ -32,10 +32,10 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
 
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
-  let(:item) { Nanoc::Int::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
+  let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
 
   let(:other_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
-  let(:other_item) { Nanoc::Int::Item.new('other content', {}, '/other.md') }
+  let(:other_item) { Nanoc::Core::Item.new('other content', {}, '/other.md') }
 
   let(:site) do
     Nanoc::Int::Site.new(
@@ -124,7 +124,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
       end
 
       context 'exception' do
-        let(:item) { Nanoc::Int::Item.new('<%= \'invalid_ruby %>', {}, '/hi.md') }
+        let(:item) { Nanoc::Core::Item.new('<%= \'invalid_ruby %>', {}, '/hi.md') }
 
         it 'wraps exception' do
           expect { subject }.to raise_error(Nanoc::Int::Errors::CompilationError)

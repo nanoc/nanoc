@@ -26,8 +26,8 @@ module Nanoc::Int
       @graph = Nanoc::Int::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))
     end
 
-    C_OBJ_SRC = Nanoc::Int::Item
-    C_OBJ_DST = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::IdentifiableCollection]
+    C_OBJ_SRC = Nanoc::Core::Item
+    C_OBJ_DST = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Int::Configuration, Nanoc::Int::IdentifiableCollection]
 
     contract C_OBJ_SRC => C::ArrayOf[Nanoc::Int::Dependency]
     def dependencies_causing_outdatedness_of(object)
@@ -60,11 +60,11 @@ module Nanoc::Int
     end
 
     def new_items
-      @new_objects.select { |o| o.is_a?(Nanoc::Int::Item) }
+      @new_objects.select { |o| o.is_a?(Nanoc::Core::Item) }
     end
 
     def new_layouts
-      @new_objects.select { |o| o.is_a?(Nanoc::Int::Layout) }
+      @new_objects.select { |o| o.is_a?(Nanoc::Core::Layout) }
     end
 
     # Returns the direct dependencies for the given object.
@@ -78,10 +78,10 @@ module Nanoc::Int
     # The direct predecessors can include nil, which indicates an item that is
     # no longer present in the site.
     #
-    # @param [Nanoc::Int::Item, Nanoc::Int::Layout] object The object for
+    # @param [Nanoc::Core::Item, Nanoc::Core::Layout] object The object for
     #   which to fetch the direct predecessors
     #
-    # @return [Array<Nanoc::Int::Item, Nanoc::Int::Layout, nil>] The direct
+    # @return [Array<Nanoc::Core::Item, Nanoc::Core::Layout, nil>] The direct
     # predecessors of
     #   the given object
     def objects_causing_outdatedness_of(object)
@@ -96,10 +96,10 @@ module Nanoc::Int
     # Records a dependency from `src` to `dst` in the dependency graph. When
     # `dst` is oudated, `src` will also become outdated.
     #
-    # @param [Nanoc::Int::Item, Nanoc::Int::Layout] src The source of the dependency,
+    # @param [Nanoc::Core::Item, Nanoc::Core::Layout] src The source of the dependency,
     #   i.e. the object that will become outdated if dst is outdated
     #
-    # @param [Nanoc::Int::Item, Nanoc::Int::Layout] dst The destination of the
+    # @param [Nanoc::Core::Item, Nanoc::Core::Layout] dst The destination of the
     #   dependency, i.e. the object that will cause the source to become
     #   outdated if the destination is outdated
     #
@@ -129,7 +129,7 @@ module Nanoc::Int
     # will stick around and new dependencies will appear twice. This function
     # removes all incoming edges for the given vertex.
     #
-    # @param [Nanoc::Int::Item, Nanoc::Int::Layout] object The object for which to
+    # @param [Nanoc::Core::Item, Nanoc::Core::Layout] object The object for which to
     #   forget all dependencies
     #
     # @return [void]

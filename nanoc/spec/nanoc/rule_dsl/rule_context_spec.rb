@@ -2,7 +2,7 @@
 
 shared_examples 'a rule context' do
   let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
-  let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
+  let(:item) { Nanoc::Core::Item.new('content', {}, item_identifier) }
   let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
   let(:items) { Nanoc::Int::ItemCollection.new(config) }
   let(:layouts) { Nanoc::Int::LayoutCollection.new(config) }
@@ -62,10 +62,10 @@ shared_examples 'a rule context' do
       let(:item_identifier) { Nanoc::Core::Identifier.new('/foo/', type: :legacy) }
 
       let(:parent_identifier) { Nanoc::Core::Identifier.new('/', type: :legacy) }
-      let(:parent) { Nanoc::Int::Item.new('parent', {}, parent_identifier) }
+      let(:parent) { Nanoc::Core::Item.new('parent', {}, parent_identifier) }
 
       let(:child_identifier) { Nanoc::Core::Identifier.new('/foo/bar/', type: :legacy) }
-      let(:child) { Nanoc::Int::Item.new('child', {}, child_identifier) }
+      let(:child) { Nanoc::Core::Item.new('child', {}, child_identifier) }
 
       let(:items) do
         Nanoc::Int::ItemCollection.new(config, [item, parent, child])
@@ -101,10 +101,10 @@ shared_examples 'a rule context' do
     let(:item_identifier) { Nanoc::Core::Identifier.new('/foo/', type: :legacy) }
 
     let(:parent_identifier) { Nanoc::Core::Identifier.new('/', type: :legacy) }
-    let(:parent) { Nanoc::Int::Item.new('parent', {}, parent_identifier) }
+    let(:parent) { Nanoc::Core::Item.new('parent', {}, parent_identifier) }
 
     let(:child_identifier) { Nanoc::Core::Identifier.new('/foo/bar/', type: :legacy) }
-    let(:child) { Nanoc::Int::Item.new('child', {}, child_identifier) }
+    let(:child) { Nanoc::Core::Item.new('child', {}, child_identifier) }
 
     let(:items) do
       Nanoc::Int::ItemCollection.new(config, [item, parent, child])
@@ -145,7 +145,7 @@ describe(Nanoc::RuleDSL::RoutingRuleContext) do
   end
 
   let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
-  let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
+  let(:item) { Nanoc::Core::Item.new('content', {}, item_identifier) }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
   let(:items) { Nanoc::Int::ItemCollection.new(config) }
@@ -171,7 +171,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   end
 
   let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
-  let(:item) { Nanoc::Int::Item.new('content', {}, item_identifier) }
+  let(:item) { Nanoc::Core::Item.new('content', {}, item_identifier) }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
   let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd) }
   let(:items) { Nanoc::Int::ItemCollection.new(config) }

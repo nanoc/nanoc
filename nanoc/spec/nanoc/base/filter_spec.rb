@@ -98,7 +98,7 @@ describe Nanoc::Filter do
     subject { described_class.new(assigns).filename }
 
     context 'assigns contains item + item rep' do
-      let(:item) { Nanoc::Int::Item.new('asdf', {}, '/donkey.md') }
+      let(:item) { Nanoc::Core::Item.new('asdf', {}, '/donkey.md') }
       let(:item_rep) { Nanoc::Int::ItemRep.new(item, :animal) }
       let(:assigns) { { item: item, item_rep: item_rep } }
 
@@ -106,7 +106,7 @@ describe Nanoc::Filter do
     end
 
     context 'assigns contains layout' do
-      let(:layout) { Nanoc::Int::Layout.new('asdf', {}, '/donkey.md') }
+      let(:layout) { Nanoc::Core::Layout.new('asdf', {}, '/donkey.md') }
       let(:assigns) { { layout: layout } }
 
       it { is_expected.to eq('layout /donkey.md') }
@@ -161,7 +161,7 @@ describe Nanoc::Filter do
     let(:filter) { Nanoc::Filters::ERB.new(assigns) }
     let(:item_views) { [item_view] }
 
-    let(:item) { Nanoc::Int::Item.new('foo', {}, '/stuff.md') }
+    let(:item) { Nanoc::Core::Item.new('foo', {}, '/stuff.md') }
     let(:item_view) { Nanoc::CompilationItemView.new(item, view_context) }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
@@ -260,7 +260,7 @@ describe Nanoc::Filter do
       end
 
       context 'binary' do
-        let(:item) { Nanoc::Int::Item.new(content, {}, '/stuff.md') }
+        let(:item) { Nanoc::Core::Item.new(content, {}, '/stuff.md') }
 
         let(:filename) { File.expand_path('foo.dat') }
         let(:content) { Nanoc::Core::BinaryContent.new(filename) }

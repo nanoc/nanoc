@@ -22,8 +22,8 @@ describe Nanoc::Int::IdentifiableCollection do
     describe '#[]' do
       let(:objects) do
         [
-          Nanoc::Int::Item.new('asdf', {}, Nanoc::Core::Identifier.new('/one')),
-          Nanoc::Int::Item.new('asdf', {}, Nanoc::Core::Identifier.new('/two')),
+          Nanoc::Core::Item.new('asdf', {}, Nanoc::Core::Identifier.new('/one')),
+          Nanoc::Core::Item.new('asdf', {}, Nanoc::Core::Identifier.new('/two')),
         ]
       end
 
@@ -112,9 +112,9 @@ describe Nanoc::Int::IdentifiableCollection do
     describe '#object_with_identifier' do
       let(:objects) do
         [
-          Nanoc::Int::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.css')),
-          Nanoc::Int::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.md')),
-          Nanoc::Int::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/style.css')),
+          Nanoc::Core::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.css')),
+          Nanoc::Core::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.md')),
+          Nanoc::Core::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/style.css')),
         ]
       end
 
@@ -146,7 +146,7 @@ describe Nanoc::Int::IdentifiableCollection do
     describe 'changing identifiers' do
       let(:objects) do
         [
-          Nanoc::Int::Item.new('Foo', {}, '/foo'),
+          Nanoc::Core::Item.new('Foo', {}, '/foo'),
         ]
       end
 
@@ -170,8 +170,8 @@ describe Nanoc::Int::IdentifiableCollection do
     describe '#each' do
       let(:objects) do
         [
-          Nanoc::Int::Item.new('Foo', {}, '/foo'),
-          Nanoc::Int::Item.new('Bar', {}, '/bar'),
+          Nanoc::Core::Item.new('Foo', {}, '/foo'),
+          Nanoc::Core::Item.new('Bar', {}, '/bar'),
         ]
       end
 
@@ -185,8 +185,8 @@ describe Nanoc::Int::IdentifiableCollection do
     describe '#map' do
       let(:objects) do
         [
-          Nanoc::Int::Item.new('Foo', {}, '/foo'),
-          Nanoc::Int::Item.new('Bar', {}, '/bar'),
+          Nanoc::Core::Item.new('Foo', {}, '/foo'),
+          Nanoc::Core::Item.new('Bar', {}, '/bar'),
         ]
       end
 

@@ -66,12 +66,12 @@ module Nanoc::DataSources
 
     # See {Nanoc::DataSource#items}.
     def items
-      load_objects(content_dir_name, Nanoc::Int::Item)
+      load_objects(content_dir_name, Nanoc::Core::Item)
     end
 
     # See {Nanoc::DataSource#layouts}.
     def layouts
-      load_objects(layouts_dir_name, Nanoc::Int::Layout)
+      load_objects(layouts_dir_name, Nanoc::Core::Layout)
     end
 
     def item_changes
@@ -141,11 +141,11 @@ module Nanoc::DataSources
     def read_proto_document(content_filename, meta_filename, klass)
       is_binary = content_filename && !@site_config[:text_extensions].include?(File.extname(content_filename)[1..-1])
 
-      if is_binary && klass == Nanoc::Int::Item
+      if is_binary && klass == Nanoc::Core::Item
         meta = (meta_filename && YAML.load_file(meta_filename)) || {}
 
         ProtoDocument.new(is_binary: true, filename: content_filename, attributes: meta)
-      elsif is_binary && klass == Nanoc::Int::Layout
+      elsif is_binary && klass == Nanoc::Core::Layout
         raise Errors::BinaryLayout.new(content_filename)
       else
         parse_result = parse(content_filename, meta_filename)

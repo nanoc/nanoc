@@ -82,7 +82,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       foot
     EOS
 
-    item = Nanoc::Int::Item.new('content', {}, '/asdf')
+    item = Nanoc::Core::Item.new('content', {}, '/asdf')
     view_context = view_context_for(item)
     @item = Nanoc::CompilationItemView.new(item, view_context_for(item))
     @config = Nanoc::ConfigView.new(Nanoc::Int::Configuration.new(dir: Dir.getwd), view_context)

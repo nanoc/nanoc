@@ -137,7 +137,7 @@ RSpec::Matchers.define :create_dependency_on do |expected|
     dependency_tracker = @to._context.dependency_tracker
     dependency_store = dependency_tracker.dependency_store
 
-    from = Nanoc::Int::Item.new('x', {}, '/x.md')
+    from = Nanoc::Core::Item.new('x', {}, '/x.md')
 
     a = dependency_store.objects_causing_outdatedness_of(from)
 

@@ -3,7 +3,7 @@
 require_relative 'support/document_view_examples'
 
 describe Nanoc::CompilationItemView do
-  let(:entity_class) { Nanoc::Int::Item }
+  let(:entity_class) { Nanoc::Core::Item }
   let(:other_view_class) { Nanoc::LayoutView }
   it_behaves_like 'a document view'
 
@@ -24,7 +24,7 @@ describe Nanoc::CompilationItemView do
   let(:compilation_context) { double(:compilation_context) }
   let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
 
-  let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md') }
+  let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
 
   let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
   let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
@@ -37,7 +37,7 @@ describe Nanoc::CompilationItemView do
 
   describe '#parent' do
     let(:item) do
-      Nanoc::Int::Item.new('me', {}, identifier)
+      Nanoc::Core::Item.new('me', {}, identifier)
     end
 
     let(:view) { described_class.new(item, view_context) }
@@ -61,7 +61,7 @@ describe Nanoc::CompilationItemView do
         end
 
         let(:parent_item) do
-          Nanoc::Int::Item.new('parent', {}, '/parent.md')
+          Nanoc::Core::Item.new('parent', {}, '/parent.md')
         end
 
         it 'raises' do
@@ -75,7 +75,7 @@ describe Nanoc::CompilationItemView do
         end
 
         let(:parent_item) do
-          Nanoc::Int::Item.new('parent', {}, Nanoc::Core::Identifier.new('/parent/', type: :legacy))
+          Nanoc::Core::Item.new('parent', {}, Nanoc::Core::Identifier.new('/parent/', type: :legacy))
         end
 
         it 'returns a view for the parent' do
@@ -97,7 +97,7 @@ describe Nanoc::CompilationItemView do
         end
 
         context 'with root parent' do
-          let(:parent_item) { Nanoc::Int::Item.new('parent', {}, parent_identifier) }
+          let(:parent_item) { Nanoc::Core::Item.new('parent', {}, parent_identifier) }
           let(:identifier) { Nanoc::Core::Identifier.new('/me/', type: :legacy) }
           let(:parent_identifier) { Nanoc::Core::Identifier.new('/', type: :legacy) }
 
@@ -137,7 +137,7 @@ describe Nanoc::CompilationItemView do
 
   describe '#children' do
     let(:item) do
-      Nanoc::Int::Item.new('me', {}, identifier)
+      Nanoc::Core::Item.new('me', {}, identifier)
     end
 
     let(:view) { described_class.new(item, view_context) }
@@ -160,7 +160,7 @@ describe Nanoc::CompilationItemView do
       end
 
       let(:children) do
-        [Nanoc::Int::Item.new('child', {}, '/me/child.md')]
+        [Nanoc::Core::Item.new('child', {}, '/me/child.md')]
       end
 
       it 'raises' do
@@ -174,7 +174,7 @@ describe Nanoc::CompilationItemView do
       end
 
       let(:children) do
-        [Nanoc::Int::Item.new('child', {}, Nanoc::Core::Identifier.new('/me/child/', type: :legacy))]
+        [Nanoc::Core::Item.new('child', {}, Nanoc::Core::Identifier.new('/me/child/', type: :legacy))]
       end
 
       it 'returns views for the children' do
@@ -188,7 +188,7 @@ describe Nanoc::CompilationItemView do
   end
 
   describe '#reps' do
-    let(:item) { Nanoc::Int::Item.new('blah', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('blah', {}, '/foo.md') }
     let(:rep_a) { Nanoc::Int::ItemRep.new(item, :a) }
     let(:rep_b) { Nanoc::Int::ItemRep.new(item, :b) }
 
@@ -219,7 +219,7 @@ describe Nanoc::CompilationItemView do
     let(:view) { described_class.new(item, view_context) }
 
     let(:item) do
-      Nanoc::Int::Item.new('content', {}, '/asdf')
+      Nanoc::Core::Item.new('content', {}, '/asdf')
     end
 
     let(:reps) do
@@ -298,7 +298,7 @@ describe Nanoc::CompilationItemView do
     let(:view) { described_class.new(item, view_context) }
 
     let(:item) do
-      Nanoc::Int::Item.new('content', {}, '/asdf.md')
+      Nanoc::Core::Item.new('content', {}, '/asdf.md')
     end
 
     let(:reps) do
@@ -365,7 +365,7 @@ describe Nanoc::CompilationItemView do
     subject { view.raw_filename }
 
     let(:item) do
-      Nanoc::Int::Item.new(content, { animal: 'donkey' }, '/foo')
+      Nanoc::Core::Item.new(content, { animal: 'donkey' }, '/foo')
     end
 
     let(:view) { described_class.new(item, view_context) }
@@ -437,7 +437,7 @@ describe Nanoc::CompilationItemView do
   end
 
   describe '#inspect' do
-    let(:item) { Nanoc::Int::Item.new('content', {}, '/asdf') }
+    let(:item) { Nanoc::Core::Item.new('content', {}, '/asdf') }
     let(:view) { described_class.new(item, nil) }
 
     subject { view.inspect }

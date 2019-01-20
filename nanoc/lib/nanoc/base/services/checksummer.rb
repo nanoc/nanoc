@@ -82,7 +82,7 @@ module Nanoc::Int
           ArrayUpdateBehavior
         when Hash, Nanoc::Int::Configuration
           HashUpdateBehavior
-        when Nanoc::Int::Item, Nanoc::Int::Layout
+        when Nanoc::Core::Item, Nanoc::Core::Layout
           DocumentUpdateBehavior
         when Nanoc::Int::ItemRep
           ItemRepUpdateBehavior

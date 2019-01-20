@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
-    # @api private
+  module Core
     class Document
       include Nanoc::Core::ContractsSupport
 

@@ -36,10 +36,10 @@ describe Nanoc::Int::Compiler::Phases::Resume do
 
   let(:wrapped) { wrapped_class.new(other_rep) }
 
-  let(:item) { Nanoc::Int::Item.new('item content', {}, '/donkey.md') }
+  let(:item) { Nanoc::Core::Item.new('item content', {}, '/donkey.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :latex) }
 
-  let(:other_item) { Nanoc::Int::Item.new('other item content', {}, '/other.md') }
+  let(:other_item) { Nanoc::Core::Item.new('other item content', {}, '/other.md') }
   let(:other_rep) { Nanoc::Int::ItemRep.new(other_item, :latex) }
 
   let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }

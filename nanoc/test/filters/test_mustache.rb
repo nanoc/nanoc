@@ -5,7 +5,7 @@ require 'helper'
 class Nanoc::Filters::MustacheTest < Nanoc::TestCase
   def test_filter
     # Create item
-    item = Nanoc::Int::Item.new(
+    item = Nanoc::Core::Item.new(
       'content',
       { title: 'Max Payne', protagonist: 'Max Payne' },
       '/games/max-payne',
@@ -21,7 +21,7 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
 
   def test_filter_with_yield
     # Create item
-    item = Nanoc::Int::Item.new(
+    item = Nanoc::Core::Item.new(
       'content',
       { title: 'Max Payne', protagonist: 'Max Payne' },
       '/games/max-payne',

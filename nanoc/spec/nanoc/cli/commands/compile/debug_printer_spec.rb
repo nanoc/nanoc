@@ -7,7 +7,7 @@ describe Nanoc::CLI::Commands::CompileListeners::DebugPrinter, stdio: true do
     Nanoc::Int::ItemRepRepo.new
   end
 
-  let(:item) { Nanoc::Int::Item.new('item content', {}, '/donkey.md') }
+  let(:item) { Nanoc::Core::Item.new('item content', {}, '/donkey.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :latex) }
 
   it 'records snapshot_created' do

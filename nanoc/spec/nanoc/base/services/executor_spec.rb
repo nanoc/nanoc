@@ -13,7 +13,7 @@ describe Nanoc::Int::Executor do
     )
   end
 
-  let(:item) { Nanoc::Int::Item.new(content, {}, '/index.md') }
+  let(:item) { Nanoc::Core::Item.new(content, {}, '/index.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :donkey) }
   let(:content) { Nanoc::Core::TextualContent.new('Donkey Power').tap(&:freeze) }
 
@@ -297,7 +297,7 @@ describe Nanoc::Int::Executor do
       end
 
       let(:item) do
-        Nanoc::Int::Item.new('foo bar', {}, '/foo.md').tap(&:freeze)
+        Nanoc::Core::Item.new('foo bar', {}, '/foo.md').tap(&:freeze)
       end
 
       let(:filter_that_modifies_content) do
@@ -340,7 +340,7 @@ describe Nanoc::Int::Executor do
     end
 
     let(:layout) do
-      Nanoc::Int::Layout.new(layout_content, { bug: 'Gum Emperor' }, '/default.erb')
+      Nanoc::Core::Layout.new(layout_content, { bug: 'Gum Emperor' }, '/default.erb')
     end
 
     let(:layouts) { [layout] }
@@ -466,7 +466,7 @@ describe Nanoc::Int::Executor do
 
     context 'no layout found' do
       let(:layouts) do
-        [Nanoc::Int::Layout.new('head <%= @foo %> foot', {}, '/other.erb')]
+        [Nanoc::Core::Layout.new('head <%= @foo %> foot', {}, '/other.erb')]
       end
 
       it 'raises' do
@@ -580,7 +580,7 @@ describe Nanoc::Int::Executor do
       let(:arg) { '/default' }
 
       let(:layouts) do
-        [Nanoc::Int::Layout.new('head <%= @foo %> foot', {}, Nanoc::Core::Identifier.new('/default/', type: :legacy))]
+        [Nanoc::Core::Layout.new('head <%= @foo %> foot', {}, Nanoc::Core::Identifier.new('/default/', type: :legacy))]
       end
 
       it { is_expected.to eq(layouts[0]) }
@@ -588,7 +588,7 @@ describe Nanoc::Int::Executor do
 
     context 'no layout with cleaned identifier exists' do
       let(:layouts) do
-        [Nanoc::Int::Layout.new('head <%= @foo %> foot', {}, '/default.erb')]
+        [Nanoc::Core::Layout.new('head <%= @foo %> foot', {}, '/default.erb')]
       end
 
       context 'globs' do

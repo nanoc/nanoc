@@ -98,7 +98,7 @@ module Nanoc::Int
     # Error that is raised when no compilation rule that can be applied to the
     # current item can be found.
     class NoMatchingCompilationRuleFound < Generic
-      # @param [Nanoc::Int::Item] item The item for which no compilation rule
+      # @param [Nanoc::Core::Item] item The item for which no compilation rule
       #   could be found
       def initialize(item)
         super("No compilation rules were found for the “#{item.identifier}” item.")

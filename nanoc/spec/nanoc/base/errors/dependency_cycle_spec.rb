@@ -14,11 +14,11 @@ describe Nanoc::Int::Errors::DependencyCycle do
     ]
   end
 
-  let(:rep_a) { Nanoc::Int::ItemRep.new(Nanoc::Int::Item.new('a', {}, '/a.md'), :default) }
-  let(:rep_b) { Nanoc::Int::ItemRep.new(Nanoc::Int::Item.new('b', {}, '/b.md'), :default) }
-  let(:rep_c) { Nanoc::Int::ItemRep.new(Nanoc::Int::Item.new('c', {}, '/c.md'), :default) }
-  let(:rep_d) { Nanoc::Int::ItemRep.new(Nanoc::Int::Item.new('d', {}, '/d.md'), :default) }
-  let(:rep_e) { Nanoc::Int::ItemRep.new(Nanoc::Int::Item.new('e', {}, '/e.md'), :default) }
+  let(:rep_a) { Nanoc::Int::ItemRep.new(Nanoc::Core::Item.new('a', {}, '/a.md'), :default) }
+  let(:rep_b) { Nanoc::Int::ItemRep.new(Nanoc::Core::Item.new('b', {}, '/b.md'), :default) }
+  let(:rep_c) { Nanoc::Int::ItemRep.new(Nanoc::Core::Item.new('c', {}, '/c.md'), :default) }
+  let(:rep_d) { Nanoc::Int::ItemRep.new(Nanoc::Core::Item.new('d', {}, '/d.md'), :default) }
+  let(:rep_e) { Nanoc::Int::ItemRep.new(Nanoc::Core::Item.new('e', {}, '/e.md'), :default) }
 
   it 'has an informative error message' do
     expected = <<~EOS

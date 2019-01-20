@@ -8,7 +8,7 @@ describe Nanoc::Filters::RelativizePaths do
   end
 
   let(:item) do
-    Nanoc::Int::Item.new('contentz', {}, '/sub/page.html')
+    Nanoc::Core::Item.new('contentz', {}, '/sub/page.html')
   end
 
   let(:item_rep) do

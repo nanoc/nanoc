@@ -3,7 +3,7 @@
 describe Nanoc::Int::ActionSequence do
   let(:action_sequence) { raise 'override me' }
 
-  let(:item) { Nanoc::Int::Item.new('foo', {}, '/foo.md') }
+  let(:item) { Nanoc::Core::Item.new('foo', {}, '/foo.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
   describe '#size' do
@@ -165,7 +165,7 @@ describe Nanoc::Int::ActionSequence do
   end
 
   describe '#snapshots_defs' do
-    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
     Class.new(Nanoc::Filter) do
@@ -205,7 +205,7 @@ describe Nanoc::Int::ActionSequence do
     end
 
     context 'textual item' do
-      let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
+      let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
 
       it 'generates initial textual snapshot def' do
         action_sequence =
@@ -250,7 +250,7 @@ describe Nanoc::Int::ActionSequence do
     end
 
     context 'binary item' do
-      let(:item) { Nanoc::Int::Item.new(Nanoc::Core::BinaryContent.new('/asdf.dat'), {}, '/foo.md') }
+      let(:item) { Nanoc::Core::Item.new(Nanoc::Core::BinaryContent.new('/asdf.dat'), {}, '/foo.md') }
 
       it 'generates initial binary snapshot def' do
         action_sequence =

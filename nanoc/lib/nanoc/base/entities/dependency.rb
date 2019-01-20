@@ -6,8 +6,8 @@ module Nanoc::Int
   class Dependency
     include Nanoc::Core::ContractsSupport
 
-    C_OBJ_FROM = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::IdentifiableCollection]
-    C_OBJ_TO   = Nanoc::Int::Item
+    C_OBJ_FROM = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Int::Configuration, Nanoc::Int::IdentifiableCollection]
+    C_OBJ_TO   = Nanoc::Core::Item
 
     contract C::None => C::Maybe[C_OBJ_FROM]
     attr_reader :from

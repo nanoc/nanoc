@@ -11,7 +11,7 @@ describe(Nanoc::Int::ItemRepRouter) do
   describe '#run' do
     subject { item_rep_router.run }
 
-    let(:item) { Nanoc::Int::Item.new('content', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
 
     let(:reps) do
       [
@@ -84,7 +84,7 @@ describe(Nanoc::Int::ItemRepRouter) do
 
     let(:snapshot_names) { [:foo] }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
-    let(:item) { Nanoc::Int::Item.new('content', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
     let(:paths_to_reps) { {} }
 
     context 'basic path is nil' do

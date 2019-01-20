@@ -4,7 +4,7 @@ describe Nanoc::Int::ItemRepSelector do
   let(:selector) { described_class.new(reps_for_selector) }
 
   let(:item) do
-    Nanoc::Int::Item.new('stuff', {}, '/foo.md')
+    Nanoc::Core::Item.new('stuff', {}, '/foo.md')
   end
 
   let(:reps_array) do

@@ -22,7 +22,7 @@ describe Nanoc::CompilationItemRepView do
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
-  let(:base_item) { Nanoc::Int::Item.new('base', {}, '/base.md') }
+  let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
 
   let(:empty_items) { Nanoc::Int::ItemCollection.new(config) }
   let(:empty_layouts) { Nanoc::Int::LayoutCollection.new(config) }
@@ -47,7 +47,7 @@ describe Nanoc::CompilationItemRepView do
     end
 
     let(:item) do
-      Nanoc::Int::Item.new('content', {}, '/asdf.md')
+      Nanoc::Core::Item.new('content', {}, '/asdf.md')
     end
 
     context 'rep is not compiled' do
@@ -119,7 +119,7 @@ describe Nanoc::CompilationItemRepView do
     end
 
     let(:item) do
-      Nanoc::Int::Item.new('content', {}, '/asdf.md')
+      Nanoc::Core::Item.new('content', {}, '/asdf.md')
     end
 
     before do

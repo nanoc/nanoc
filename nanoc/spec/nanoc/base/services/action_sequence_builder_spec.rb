@@ -4,7 +4,7 @@ describe Nanoc::Int::ActionSequenceBuilder do
   let(:builder) { described_class.new(item_rep) }
 
   let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
-  let(:item) { Nanoc::Int::Item.new('some content', {}, '/foo.md') }
+  let(:item) { Nanoc::Core::Item.new('some content', {}, '/foo.md') }
 
   describe '#add_filter' do
     subject { builder.add_filter(:erb, foo: :bar) }

@@ -95,7 +95,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     @dependency_store = Nanoc::Int::DependencyStore.new(items, layouts, config)
     @dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
 
-    @base_item = Nanoc::Int::Item.new('base', {}, '/base.md')
+    @base_item = Nanoc::Core::Item.new('base', {}, '/base.md')
 
     @dependency_tracker.enter(@base_item)
   end
@@ -115,9 +115,9 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
   def test_filter_as_layout
     if_have 'nokogiri' do
       # Create our data objects
-      item = Nanoc::Int::Item.new(SAMPLE_XML_IN, {}, '/content')
+      item = Nanoc::Core::Item.new(SAMPLE_XML_IN, {}, '/content')
       item = Nanoc::CompilationItemView.new(item, new_view_context)
-      layout = Nanoc::Int::Layout.new(SAMPLE_XSL, {}, '/layout')
+      layout = Nanoc::Core::Layout.new(SAMPLE_XSL, {}, '/layout')
       layout = Nanoc::LayoutView.new(layout, new_view_context)
 
       # Create an instance of the filter
@@ -141,9 +141,9 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
   def test_filter_with_params
     if_have 'nokogiri' do
       # Create our data objects
-      item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_PARAMS, {}, '/content')
+      item = Nanoc::Core::Item.new(SAMPLE_XML_IN_WITH_PARAMS, {}, '/content')
       item = Nanoc::CompilationItemView.new(item, new_view_context)
-      layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_PARAMS, {}, '/layout')
+      layout = Nanoc::Core::Layout.new(SAMPLE_XSL_WITH_PARAMS, {}, '/layout')
       layout = Nanoc::LayoutView.new(layout, new_view_context)
 
       # Create an instance of the filter
@@ -167,9 +167,9 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
   def test_filter_with_omit_xml_decl
     if_have 'nokogiri' do
       # Create our data objects
-      item = Nanoc::Int::Item.new(SAMPLE_XML_IN_WITH_OMIT_XML_DECL, {}, '/content')
+      item = Nanoc::Core::Item.new(SAMPLE_XML_IN_WITH_OMIT_XML_DECL, {}, '/content')
       item = Nanoc::CompilationItemView.new(item, new_view_context)
-      layout = Nanoc::Int::Layout.new(SAMPLE_XSL_WITH_OMIT_XML_DECL, {}, '/layout')
+      layout = Nanoc::Core::Layout.new(SAMPLE_XSL_WITH_OMIT_XML_DECL, {}, '/layout')
       layout = Nanoc::LayoutView.new(layout, new_view_context)
 
       # Create an instance of the filter

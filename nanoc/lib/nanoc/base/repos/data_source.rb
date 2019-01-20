@@ -84,7 +84,7 @@ module Nanoc
     # @return [void]
     def down; end
 
-    # Returns the collection of items (represented by {Nanoc::Int::Item}) in
+    # Returns the collection of items (represented by {Nanoc::Core::Item}) in
     # this site. The default implementation simply returns an empty array.
     #
     # Subclasses should not prepend `items_root` to the item's identifiers, as
@@ -110,7 +110,7 @@ module Nanoc
       Enumerator.new { |_y| sleep }
     end
 
-    # Returns the collection of layouts (represented by {Nanoc::Int::Layout}) in
+    # Returns the collection of layouts (represented by {Nanoc::Core::Layout}) in
     # this site. The default implementation simply returns an empty array.
     #
     # Subclasses should prepend `layout_root` to the layout's identifiers,
@@ -144,7 +144,7 @@ module Nanoc
     # @param [String, nil] attributes_checksum_data
     def new_item(content, attributes, identifier, binary: false, checksum_data: nil, content_checksum_data: nil, attributes_checksum_data: nil)
       content = Nanoc::Core::Content.create(content, binary: binary)
-      Nanoc::Int::Item.new(content, attributes, identifier, checksum_data: checksum_data, content_checksum_data: content_checksum_data, attributes_checksum_data: attributes_checksum_data)
+      Nanoc::Core::Item.new(content, attributes, identifier, checksum_data: checksum_data, content_checksum_data: content_checksum_data, attributes_checksum_data: attributes_checksum_data)
     end
 
     # Creates a new in-memory layout instance. This is intended for use within
@@ -162,7 +162,7 @@ module Nanoc
     #
     # @param [String, nil] attributes_checksum_data
     def new_layout(raw_content, attributes, identifier, checksum_data: nil, content_checksum_data: nil, attributes_checksum_data: nil)
-      Nanoc::Int::Layout.new(raw_content, attributes, identifier, checksum_data: checksum_data, content_checksum_data: content_checksum_data, attributes_checksum_data: attributes_checksum_data)
+      Nanoc::Core::Layout.new(raw_content, attributes, identifier, checksum_data: checksum_data, content_checksum_data: content_checksum_data, attributes_checksum_data: attributes_checksum_data)
     end
   end
 end

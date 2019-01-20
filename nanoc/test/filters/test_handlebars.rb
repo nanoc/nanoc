@@ -6,12 +6,12 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
   def test_filter
     if_have 'handlebars' do
       # Create data
-      item = Nanoc::Int::Item.new(
+      item = Nanoc::Core::Item.new(
         'content',
         { title: 'Max Payne', protagonist: 'Max Payne', location: 'here' },
         '/games/max-payne',
       )
-      layout = Nanoc::Int::Layout.new(
+      layout = Nanoc::Core::Layout.new(
         'layout content',
         { name: 'Max Payne' },
         '/default',
@@ -40,7 +40,7 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
   def test_filter_without_layout
     if_have 'handlebars' do
       # Create data
-      item = Nanoc::Int::Item.new(
+      item = Nanoc::Core::Item.new(
         'content',
         { title: 'Max Payne', protagonist: 'Max Payne', location: 'here' },
         '/games/max-payne',

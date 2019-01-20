@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Layout do
+describe Nanoc::Core::Layout do
   it_behaves_like 'a document'
 
   describe '#reference' do

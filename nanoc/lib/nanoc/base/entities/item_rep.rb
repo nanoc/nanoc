@@ -15,7 +15,7 @@ module Nanoc::Int
     contract C::None => C::HashOf[Symbol => C::IterOf[String]]
     attr_reader :paths
 
-    contract C::None => Nanoc::Int::Item
+    contract C::None => Nanoc::Core::Item
     attr_reader :item
 
     contract C::None => Symbol
@@ -28,7 +28,7 @@ module Nanoc::Int
     attr_accessor :modified
     alias modified? modified
 
-    contract Nanoc::Int::Item, Symbol => C::Any
+    contract Nanoc::Core::Item, Symbol => C::Any
     def initialize(item, name)
       # Set primary attributes
       @item   = item

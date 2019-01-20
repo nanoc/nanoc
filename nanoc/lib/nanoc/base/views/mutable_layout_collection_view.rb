@@ -17,7 +17,7 @@ module Nanoc
     #
     # @return [self]
     def create(content, attributes, identifier)
-      @objects = @objects.add(Nanoc::Int::Layout.new(content, attributes, identifier))
+      @objects = @objects.add(Nanoc::Core::Layout.new(content, attributes, identifier))
       self
     end
   end

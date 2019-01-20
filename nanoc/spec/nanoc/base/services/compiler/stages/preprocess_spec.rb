@@ -56,8 +56,8 @@ describe Nanoc::Int::Compiler::Stages::Preprocess do
     end
 
     context 'preprocessing needed' do
-      let(:new_item) { Nanoc::Int::Item.new('new item', {}, '/new.md') }
-      let(:new_layout) { Nanoc::Int::Layout.new('new layout', {}, '/new.md') }
+      let(:new_item) { Nanoc::Core::Item.new('new item', {}, '/new.md') }
+      let(:new_layout) { Nanoc::Core::Layout.new('new layout', {}, '/new.md') }
 
       before do
         expect(action_provider).to receive(:need_preprocessing?).and_return(true)

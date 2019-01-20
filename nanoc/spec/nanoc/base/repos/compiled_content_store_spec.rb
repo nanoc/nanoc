@@ -6,7 +6,7 @@ describe Nanoc::Int::CompiledContentStore do
   describe '#get' do
     subject { repo.get(rep, snapshot_name) }
 
-    let(:item) { Nanoc::Int::Item.new('contentz', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
     let(:snapshot_name) { :donkey }
 
@@ -31,7 +31,7 @@ describe Nanoc::Int::CompiledContentStore do
   describe '#get_all' do
     subject { repo.get_all(rep) }
 
-    let(:item) { Nanoc::Int::Item.new('contentz', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
 
     context 'rep does not exist in repo' do
@@ -47,7 +47,7 @@ describe Nanoc::Int::CompiledContentStore do
   describe '#set' do
     subject { repo.set(rep, snapshot_name, contents) }
 
-    let(:item) { Nanoc::Int::Item.new('contentz', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
     let(:snapshot_name) { :donkey }
     let(:contents) { Nanoc::Core::TextualContent.new('donkey') }
@@ -63,10 +63,10 @@ describe Nanoc::Int::CompiledContentStore do
   describe '#set_all' do
     subject { repo.set_all(rep, contents_by_snapshot) }
 
-    let(:other_item) { Nanoc::Int::Item.new('contentz', {}, '/foo.md') }
+    let(:other_item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
     let(:other_rep) { Nanoc::Int::ItemRep.new(other_item, :foo) }
 
-    let(:item) { Nanoc::Int::Item.new('contentz', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
     let(:contents_by_snapshot) { { donkey: Nanoc::Core::TextualContent.new('donkey') } }
 
@@ -89,7 +89,7 @@ describe Nanoc::Int::CompiledContentStore do
   end
 
   describe '#compiled_content' do
-    let(:item) { Nanoc::Int::Item.new('contentz', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
 
     shared_examples 'a snapshot' do

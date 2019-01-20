@@ -54,7 +54,7 @@ module Nanoc::RuleDSL
       @item_routing_rules << rule
     end
 
-    # @param [Nanoc::Int::Item] item The item for which the compilation rules
+    # @param [Nanoc::Core::Item] item The item for which the compilation rules
     #   should be retrieved
     #
     # @return [Array] The list of item compilation rules for the given item
@@ -97,7 +97,7 @@ module Nanoc::RuleDSL
 
     # Finds the filter name and arguments to use for the given layout.
     #
-    # @param [Nanoc::Int::Layout] layout The layout for which to fetch the filter.
+    # @param [Nanoc::Core::Layout] layout The layout for which to fetch the filter.
     #
     # @return [Array, nil] A tuple containing the filter name and the filter
     #   arguments for the given layout.

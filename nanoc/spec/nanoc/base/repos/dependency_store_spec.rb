@@ -3,12 +3,12 @@
 describe Nanoc::Int::DependencyStore do
   let(:store) { described_class.new(items, layouts, config) }
 
-  let(:item_a) { Nanoc::Int::Item.new('a', {}, '/a.md') }
-  let(:item_b) { Nanoc::Int::Item.new('b', {}, '/b.md') }
-  let(:item_c) { Nanoc::Int::Item.new('c', {}, '/c.md') }
+  let(:item_a) { Nanoc::Core::Item.new('a', {}, '/a.md') }
+  let(:item_b) { Nanoc::Core::Item.new('b', {}, '/b.md') }
+  let(:item_c) { Nanoc::Core::Item.new('c', {}, '/c.md') }
 
-  let(:layout_a) { Nanoc::Int::Layout.new('la', {}, '/la.md') }
-  let(:layout_b) { Nanoc::Int::Layout.new('lb', {}, '/lb.md') }
+  let(:layout_a) { Nanoc::Core::Layout.new('la', {}, '/la.md') }
+  let(:layout_b) { Nanoc::Core::Layout.new('lb', {}, '/lb.md') }
 
   let(:items) { Nanoc::Int::ItemCollection.new(config, [item_a, item_b, item_c]) }
   let(:layouts) { Nanoc::Int::LayoutCollection.new(config, [layout_a, layout_b]) }
@@ -254,7 +254,7 @@ describe Nanoc::Int::DependencyStore do
         Nanoc::Int::ItemCollection.new(config, [item_a, item_b, item_c, item_d])
       end
 
-      let(:item_d) { Nanoc::Int::Item.new('d', {}, '/d.md') }
+      let(:item_d) { Nanoc::Core::Item.new('d', {}, '/d.md') }
 
       it 'does not mark items as outdated' do
         expect(reloaded_store.objects_causing_outdatedness_of(item_a)).not_to include(item_d)

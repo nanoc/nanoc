@@ -19,8 +19,8 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
-    let(:item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
-    let(:layout) { Nanoc::Int::Layout.new('layoutz', {}, '/page.erb') }
+    let(:item) { Nanoc::Core::Item.new('stuff', {}, '/foo.md') }
+    let(:layout) { Nanoc::Core::Layout.new('layoutz', {}, '/page.erb') }
 
     let(:config) { Nanoc::Int::Configuration.new(dir: Dir.getwd).with_defaults }
     let(:code_snippets) { [] }
@@ -143,13 +143,13 @@ describe Nanoc::Int::OutdatednessRules do
         end
 
         context 'checksum available, but content different' do
-          let(:old_item) { Nanoc::Int::Item.new('other stuff!!!!', {}, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('other stuff!!!!', {}, '/foo.md') }
           before { checksum_store.add(old_item) }
           it { is_expected.to be }
         end
 
         context 'checksum available, but attributes different' do
-          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
           before { checksum_store.add(old_item) }
           it { is_expected.not_to be }
         end
@@ -168,13 +168,13 @@ describe Nanoc::Int::OutdatednessRules do
         end
 
         context 'checksum available, but content different' do
-          let(:old_item) { Nanoc::Int::Item.new('other stuff!!!!', {}, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('other stuff!!!!', {}, '/foo.md') }
           before { checksum_store.add(old_item) }
           it { is_expected.to be }
         end
 
         context 'checksum available, but attributes different' do
-          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
           before { checksum_store.add(old_item) }
           it { is_expected.not_to be }
         end
@@ -199,13 +199,13 @@ describe Nanoc::Int::OutdatednessRules do
         end
 
         context 'checksum available, but content different' do
-          let(:old_item) { Nanoc::Int::Item.new('other stuff!!!!', {}, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('other stuff!!!!', {}, '/foo.md') }
           before { checksum_store.add(old_item) }
           it { is_expected.not_to be }
         end
 
         context 'checksum available, but attributes different' do
-          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
 
           before { checksum_store.add(old_item) }
 
@@ -217,8 +217,8 @@ describe Nanoc::Int::OutdatednessRules do
         end
 
         context 'attribute kept identical' do
-          let(:item)     { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
-          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:item)     { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
 
           before { checksum_store.add(old_item) }
 
@@ -228,8 +228,8 @@ describe Nanoc::Int::OutdatednessRules do
         end
 
         context 'attribute changed' do
-          let(:item)     { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
-          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'ho' }, '/foo.md') }
+          let(:item)     { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('stuff', { greeting: 'ho' }, '/foo.md') }
 
           before { checksum_store.add(old_item) }
 
@@ -239,8 +239,8 @@ describe Nanoc::Int::OutdatednessRules do
         end
 
         context 'attribute deleted' do
-          let(:item)     { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
-          let(:old_item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
+          let(:item)     { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('stuff', {}, '/foo.md') }
 
           before { checksum_store.add(old_item) }
 
@@ -250,8 +250,8 @@ describe Nanoc::Int::OutdatednessRules do
         end
 
         context 'attribute added' do
-          let(:item)     { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
-          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:item)     { Nanoc::Core::Item.new('stuff', {}, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
 
           before { checksum_store.add(old_item) }
 
@@ -274,13 +274,13 @@ describe Nanoc::Int::OutdatednessRules do
         end
 
         context 'checksum available, but content different' do
-          let(:old_item) { Nanoc::Int::Item.new('other stuff!!!!', {}, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('other stuff!!!!', {}, '/foo.md') }
           before { checksum_store.add(old_item) }
           it { is_expected.not_to be }
         end
 
         context 'checksum available, but attributes different' do
-          let(:old_item) { Nanoc::Int::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+          let(:old_item) { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
 
           before { checksum_store.add(old_item) }
 
@@ -531,12 +531,12 @@ describe Nanoc::Int::OutdatednessRules do
       end
 
       context 'item' do
-        let(:klass) { Nanoc::Int::Item }
+        let(:klass) { Nanoc::Core::Item }
         it_behaves_like 'a document'
       end
 
       context 'layout' do
-        let(:klass) { Nanoc::Int::Layout }
+        let(:klass) { Nanoc::Core::Layout }
         it_behaves_like 'a document'
       end
 

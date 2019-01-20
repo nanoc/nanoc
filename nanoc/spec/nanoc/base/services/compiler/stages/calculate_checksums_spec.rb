@@ -26,11 +26,11 @@ describe Nanoc::Int::Compiler::Stages::CalculateChecksums do
   end
 
   let(:item) do
-    Nanoc::Int::Item.new('hello there', {}, '/hi.md')
+    Nanoc::Core::Item.new('hello there', {}, '/hi.md')
   end
 
   let(:layout) do
-    Nanoc::Int::Layout.new('t3mpl4t3', {}, '/page.erb')
+    Nanoc::Core::Layout.new('t3mpl4t3', {}, '/page.erb')
   end
 
   describe '#run' do

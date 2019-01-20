@@ -82,7 +82,7 @@ describe Nanoc::Filters::ERB do
   context 'error' do
     let(:filter) { described_class.new(layout: layout) }
 
-    let(:layout) { Nanoc::Int::Layout.new('asdf', {}, '/default.erb') }
+    let(:layout) { Nanoc::Core::Layout.new('asdf', {}, '/default.erb') }
 
     subject do
       filter.setup_and_run('<% raise "boom %>')

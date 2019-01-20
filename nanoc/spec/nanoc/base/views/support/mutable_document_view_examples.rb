@@ -64,22 +64,22 @@ shared_examples 'a mutable document view' do
     end
 
     it 'disallows items' do
-      item = Nanoc::Int::Item.new('content', {}, '/foo.md')
+      item = Nanoc::Core::Item.new('content', {}, '/foo.md')
       expect { view[:item] = item }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
 
     it 'disallows layouts' do
-      layout = Nanoc::Int::Layout.new('content', {}, '/foo.md')
+      layout = Nanoc::Core::Layout.new('content', {}, '/foo.md')
       expect { view[:layout] = layout }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
 
     it 'disallows item views' do
-      item = Nanoc::CompilationItemView.new(Nanoc::Int::Item.new('content', {}, '/foo.md'), nil)
+      item = Nanoc::CompilationItemView.new(Nanoc::Core::Item.new('content', {}, '/foo.md'), nil)
       expect { view[:item] = item }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
 
     it 'disallows layout views' do
-      layout = Nanoc::LayoutView.new(Nanoc::Int::Layout.new('content', {}, '/foo.md'), nil)
+      layout = Nanoc::LayoutView.new(Nanoc::Core::Layout.new('content', {}, '/foo.md'), nil)
       expect { view[:layout] = layout }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
 

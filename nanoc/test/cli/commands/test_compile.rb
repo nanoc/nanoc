@@ -131,7 +131,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_file_action_printer_normal
     # Create data
-    item = Nanoc::Int::Item.new('content', {}, '/a')
+    item = Nanoc::Core::Item.new('content', {}, '/a')
     rep = Nanoc::Int::ItemRep.new(item, :default)
     rep.raw_paths[:last] = ['output/foo.txt']
     rep.compiled = true
@@ -153,7 +153,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
 
   def test_file_action_printer_skip
     # Create data
-    item = Nanoc::Int::Item.new('content', {}, '/a')
+    item = Nanoc::Core::Item.new('content', {}, '/a')
     rep = Nanoc::Int::ItemRep.new(item, :default)
     rep.raw_paths[:last] = ['output/foo.txt']
 

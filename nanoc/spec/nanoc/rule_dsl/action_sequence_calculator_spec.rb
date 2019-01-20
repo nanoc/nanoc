@@ -38,7 +38,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
     context 'with item rep' do
       let(:obj) { Nanoc::Int::ItemRep.new(item, :csv) }
 
-      let(:item) { Nanoc::Int::Item.new('content', {}, Nanoc::Core::Identifier.from('/list.md')) }
+      let(:item) { Nanoc::Core::Item.new('content', {}, Nanoc::Core::Identifier.from('/list.md')) }
 
       context 'no rules exist' do
         it 'raises error' do
@@ -153,7 +153,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
     end
 
     context 'with layout' do
-      let(:obj) { Nanoc::Int::Layout.new('content', {}, '/default.erb') }
+      let(:obj) { Nanoc::Core::Layout.new('content', {}, '/default.erb') }
 
       context 'no rules exist' do
         it 'raises error' do
@@ -204,7 +204,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
       end
     end
 
-    let(:item) { Nanoc::Int::Item.new('asdf', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
     let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
     example do

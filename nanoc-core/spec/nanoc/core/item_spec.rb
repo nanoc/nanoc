@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Item do
+describe Nanoc::Core::Item do
   it_behaves_like 'a document'
 
   describe '#reference' do

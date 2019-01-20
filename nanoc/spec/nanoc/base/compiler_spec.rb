@@ -26,10 +26,10 @@ describe Nanoc::Int::Compiler do
   end
 
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
-  let(:item) { Nanoc::Int::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
+  let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
 
   let(:other_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
-  let(:other_item) { Nanoc::Int::Item.new('other content', {}, '/other.md') }
+  let(:other_item) { Nanoc::Core::Item.new('other content', {}, '/other.md') }
 
   let(:site) do
     Nanoc::Int::Site.new(
@@ -105,7 +105,7 @@ describe Nanoc::Int::Compiler do
     end
 
     context 'interrupted compilation' do
-      let(:item) { Nanoc::Int::Item.new('other=<%= @items["/other.*"].compiled_content %>', {}, '/hi.md') }
+      let(:item) { Nanoc::Core::Item.new('other=<%= @items["/other.*"].compiled_content %>', {}, '/hi.md') }
 
       it 'generates expected output' do
         reps = Nanoc::Int::ItemRepRepo.new

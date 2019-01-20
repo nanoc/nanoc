@@ -45,7 +45,7 @@ module Nanoc::Int
           Rules::LayoutCollectionExtended,
         ].freeze
 
-      C_OBJ_MAYBE_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout, Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection]
+      C_OBJ_MAYBE_REP = C::Or[Nanoc::Core::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Core::Layout, Nanoc::Int::ItemCollection, Nanoc::Int::LayoutCollection]
 
       contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Int::ItemRepRepo] => C::Any
       def initialize(outdatedness_checker:, reps:)
@@ -58,9 +58,9 @@ module Nanoc::Int
         case obj
         when Nanoc::Int::ItemRep
           apply_rules(RULES_FOR_ITEM_REP, obj)
-        when Nanoc::Int::Item
+        when Nanoc::Core::Item
           apply_rules_multi(RULES_FOR_ITEM_REP, @reps[obj])
-        when Nanoc::Int::Layout
+        when Nanoc::Core::Layout
           apply_rules(RULES_FOR_LAYOUT, obj)
         when Nanoc::Int::Configuration
           apply_rules(RULES_FOR_CONFIG, obj)
@@ -110,8 +110,8 @@ module Nanoc::Int
 
     Reasons = Nanoc::Int::OutdatednessReasons
 
-    C_OBJ = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Int::Layout, Nanoc::Int::ItemCollection]
-    C_ITEM_OR_REP = C::Or[Nanoc::Int::Item, Nanoc::Int::ItemRep]
+    C_OBJ = C::Or[Nanoc::Core::Item, Nanoc::Int::ItemRep, Nanoc::Int::Configuration, Nanoc::Core::Layout, Nanoc::Int::ItemCollection]
+    C_ITEM_OR_REP = C::Or[Nanoc::Core::Item, Nanoc::Int::ItemRep]
     C_ACTION_SEQUENCES = C::HashOf[C_OBJ => Nanoc::Int::ActionSequence]
 
     contract C::KeywordArgs[site: Nanoc::Int::Site, checksum_store: Nanoc::Int::ChecksumStore, checksums: Nanoc::Int::ChecksumCollection, dependency_store: Nanoc::Int::DependencyStore, action_sequence_store: Nanoc::Int::ActionSequenceStore, action_sequences: C_ACTION_SEQUENCES, reps: Nanoc::Int::ItemRepRepo] => C::Any

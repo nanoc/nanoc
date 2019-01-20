@@ -52,7 +52,7 @@ module Nanoc::Int
       self
     end
 
-    contract C::IterOf[C::Or[Nanoc::Int::Item, Nanoc::Int::Layout]], String => self
+    contract C::IterOf[C::Or[Nanoc::Core::Item, Nanoc::Core::Layout]], String => self
     def ensure_identifier_uniqueness(objects, type)
       seen = Set.new
       objects.each do |obj|

@@ -77,7 +77,7 @@ module Nanoc
       #
       # @return [Nanoc::CompilationItemView] A view for the newly created item
       def create_item(content, attributes, identifier)
-        item = Nanoc::Int::Item.new(content, attributes, identifier)
+        item = Nanoc::Core::Item.new(content, attributes, identifier)
         @items = @items.add(item)
         self
       end
@@ -92,7 +92,7 @@ module Nanoc
       #
       # @return [Nanoc::CompilationItemView] A view for the newly created layout
       def create_layout(content, attributes, identifier)
-        layout = Nanoc::Int::Layout.new(content, attributes, identifier)
+        layout = Nanoc::Core::Layout.new(content, attributes, identifier)
         @layouts = @layouts.add(layout)
         self
       end

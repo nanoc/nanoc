@@ -45,7 +45,7 @@ module Nanoc::RuleDSL
       case obj
       when Nanoc::Int::ItemRep
         new_action_sequence_for_rep(obj)
-      when Nanoc::Int::Layout
+      when Nanoc::Core::Layout
         new_action_sequence_for_layout(obj)
       else
         raise UnsupportedObjectTypeException.new(obj)
@@ -76,7 +76,7 @@ module Nanoc::RuleDSL
       )
     end
 
-    # @param [Nanoc::Int::Layout] layout
+    # @param [Nanoc::Core::Layout] layout
     #
     # @return [Nanoc::Int::ActionSequence]
     def new_action_sequence_for_layout(layout)

@@ -8,6 +8,9 @@ lib/nanoc/core/version.rb
 lib/nanoc/core/binary_content.rb
 lib/nanoc/core/content.rb
 lib/nanoc/core/context.rb
+lib/nanoc/core/document.rb
+lib/nanoc/core/item.rb
+lib/nanoc/core/layout.rb
 lib/nanoc/core/contracts_support.rb
 lib/nanoc/core/core_ext/array.rb
 lib/nanoc/core/core_ext/hash.rb

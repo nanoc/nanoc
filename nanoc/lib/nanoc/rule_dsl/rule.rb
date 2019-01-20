@@ -17,7 +17,7 @@ module Nanoc::RuleDSL
       @block = block
     end
 
-    contract Nanoc::Int::Item => C::Bool
+    contract Nanoc::Core::Item => C::Bool
     def applicable_to?(item)
       @pattern.match?(item.identifier)
     end

@@ -26,3 +26,7 @@ require 'nanoc/core/binary_content'
 require 'nanoc/core/regexp_pattern'
 require 'nanoc/core/string_pattern'
 require 'nanoc/core/textual_content'
+
+require 'nanoc/core/document'
+require 'nanoc/core/item'
+require 'nanoc/core/layout'

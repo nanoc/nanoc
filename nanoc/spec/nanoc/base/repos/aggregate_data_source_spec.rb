@@ -4,7 +4,7 @@ describe Nanoc::Int::AggregateDataSource, stdio: true do
   let(:klass_1) do
     Class.new(Nanoc::DataSource) do
       def items
-        [Nanoc::Int::Item.new('One', {}, '/one.md')]
+        [Nanoc::Core::Item.new('One', {}, '/one.md')]
       end
 
       def item_changes
@@ -12,7 +12,7 @@ describe Nanoc::Int::AggregateDataSource, stdio: true do
       end
 
       def layouts
-        [Nanoc::Int::Layout.new('One', {}, '/one.md')]
+        [Nanoc::Core::Layout.new('One', {}, '/one.md')]
       end
 
       def layout_changes
@@ -24,7 +24,7 @@ describe Nanoc::Int::AggregateDataSource, stdio: true do
   let(:klass_2) do
     Class.new(Nanoc::DataSource) do
       def items
-        [Nanoc::Int::Item.new('Two', {}, '/two.md')]
+        [Nanoc::Core::Item.new('Two', {}, '/two.md')]
       end
 
       def item_changes
@@ -32,7 +32,7 @@ describe Nanoc::Int::AggregateDataSource, stdio: true do
       end
 
       def layouts
-        [Nanoc::Int::Layout.new('Two', {}, '/two.md')]
+        [Nanoc::Core::Layout.new('Two', {}, '/two.md')]
       end
 
       def layout_changes

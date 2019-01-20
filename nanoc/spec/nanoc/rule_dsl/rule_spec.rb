@@ -32,7 +32,7 @@ shared_examples 'a generic rule' do
   describe '#applicable_to?' do
     subject { rule.applicable_to?(item) }
 
-    let(:item) { Nanoc::Int::Item.new('', {}, '/foo.md') }
+    let(:item) { Nanoc::Core::Item.new('', {}, '/foo.md') }
 
     context 'pattern matches' do
       let(:pattern) { Nanoc::Core::Pattern.from(%r{^/foo.*}) }
@@ -51,7 +51,7 @@ shared_examples 'Rule#apply_to' do
     proc { self }
   end
 
-  let(:item) { Nanoc::Int::Item.new('', {}, '/foo.md') }
+  let(:item) { Nanoc::Core::Item.new('', {}, '/foo.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :amazings) }
 
   let(:site) { Nanoc::Int::Site.new(config: config, data_source: data_source, code_snippets: []) }

@@ -11,7 +11,7 @@ module Nanoc::Int
     attr_writer :checksums
     attr_accessor :objects
 
-    c_obj = C::Or[Nanoc::Int::Item, Nanoc::Int::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet]
+    c_obj = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Int::Configuration, Nanoc::Int::CodeSnippet]
 
     contract C::KeywordArgs[config: Nanoc::Int::Configuration, objects: C::IterOf[c_obj]] => C::Any
     def initialize(config:, objects:)
@@ -29,11 +29,11 @@ module Nanoc::Int
 
     contract c_obj => self
     def add(obj)
-      if obj.is_a?(Nanoc::Int::Document)
+      if obj.is_a?(Nanoc::Core::Document)
         @checksums[[obj.reference, :content]] = Nanoc::Int::Checksummer.calc_for_content_of(obj)
       end
 
-      if obj.is_a?(Nanoc::Int::Document) || obj.is_a?(Nanoc::Int::Configuration)
+      if obj.is_a?(Nanoc::Core::Document) || obj.is_a?(Nanoc::Int::Configuration)
         @checksums[[obj.reference, :each_attribute]] = Nanoc::Int::Checksummer.calc_for_each_attribute_of(obj)
       end
 

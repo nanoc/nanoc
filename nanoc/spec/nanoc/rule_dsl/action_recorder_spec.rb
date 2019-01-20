@@ -4,7 +4,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
   let(:recorder) { described_class.new(rep) }
 
   let(:action_sequence) { recorder.action_sequence }
-  let(:item) { Nanoc::Int::Item.new('stuff', {}, '/foo.md') }
+  let(:item) { Nanoc::Core::Item.new('stuff', {}, '/foo.md') }
   let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
 
   describe '#filter' do

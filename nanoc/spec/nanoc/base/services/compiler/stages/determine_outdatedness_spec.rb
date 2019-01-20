@@ -29,7 +29,7 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
 
     context 'outdatedness store is empty' do
       let(:item) do
-        Nanoc::Int::Item.new('', {}, '/hi.md')
+        Nanoc::Core::Item.new('', {}, '/hi.md')
       end
 
       let(:rep) do
@@ -85,7 +85,7 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
 
     context 'outdatedness store contains known rep' do
       let(:item) do
-        Nanoc::Int::Item.new('', {}, '/hi.md')
+        Nanoc::Core::Item.new('', {}, '/hi.md')
       end
 
       let(:rep) do
@@ -125,7 +125,7 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
 
     context 'outdatedness store contains unknown rep' do
       let(:item) do
-        Nanoc::Int::Item.new('', {}, '/hi.md')
+        Nanoc::Core::Item.new('', {}, '/hi.md')
       end
 
       let(:unknown_rep) do
