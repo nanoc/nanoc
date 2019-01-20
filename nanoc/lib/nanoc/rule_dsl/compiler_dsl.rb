@@ -140,7 +140,7 @@ module Nanoc::RuleDSL
     #
     #     layout '/custom/',  :haml, :format => :html5
     def layout(identifier, filter_name, params = {})
-      pattern = Nanoc::Int::Pattern.from(create_pattern(identifier))
+      pattern = Nanoc::Core::Pattern.from(create_pattern(identifier))
       @rules_collection.layout_filter_mapping[pattern] = [filter_name, params]
     end
 
@@ -254,9 +254,9 @@ module Nanoc::RuleDSL
     def create_pattern(arg)
       case @config[:string_pattern_type]
       when 'glob'
-        Nanoc::Int::Pattern.from(arg)
+        Nanoc::Core::Pattern.from(arg)
       when 'legacy'
-        Nanoc::Int::Pattern.from(identifier_to_regex(arg))
+        Nanoc::Core::Pattern.from(identifier_to_regex(arg))
       else
         raise(
           Nanoc::Int::Errors::GenericTrivial,

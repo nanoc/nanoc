@@ -3,7 +3,8 @@
 require_relative 'entities/context'
 require_relative 'entities/directed_graph'
 
-require_relative 'entities/identifier'
+Nanoc::Identifier = Nanoc::Core::Identifier
+
 require_relative 'entities/processing_action'
 require_relative 'entities/processing_actions'
 
@@ -17,7 +18,6 @@ require_relative 'entities/document'
 require_relative 'entities/item'
 require_relative 'entities/item_rep'
 require_relative 'entities/layout'
-require_relative 'entities/pattern'
 require_relative 'entities/props'
 require_relative 'entities/action_sequence'
 require_relative 'entities/site'

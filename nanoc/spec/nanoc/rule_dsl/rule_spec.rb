@@ -5,7 +5,7 @@ shared_examples 'a generic rule' do
     described_class.new(pattern, :xml, block)
   end
 
-  let(:pattern) { Nanoc::Int::Pattern.from(%r{/(.*)/(.*)/}) }
+  let(:pattern) { Nanoc::Core::Pattern.from(%r{/(.*)/(.*)/}) }
   let(:block) { proc {} }
 
   describe '#matches' do
@@ -35,12 +35,12 @@ shared_examples 'a generic rule' do
     let(:item) { Nanoc::Int::Item.new('', {}, '/foo.md') }
 
     context 'pattern matches' do
-      let(:pattern) { Nanoc::Int::Pattern.from(%r{^/foo.*}) }
+      let(:pattern) { Nanoc::Core::Pattern.from(%r{^/foo.*}) }
       it { is_expected.to be }
     end
 
     context 'pattern does not match' do
-      let(:pattern) { Nanoc::Int::Pattern.from(%r{^/bar.*}) }
+      let(:pattern) { Nanoc::Core::Pattern.from(%r{^/bar.*}) }
       it { is_expected.not_to be }
     end
   end
@@ -97,7 +97,7 @@ describe Nanoc::RuleDSL::RoutingRule do
     described_class.new(pattern, :xml, block)
   end
 
-  let(:pattern) { Nanoc::Int::Pattern.from(%r{/(.*)/(.*)/}) }
+  let(:pattern) { Nanoc::Core::Pattern.from(%r{/(.*)/(.*)/}) }
   let(:block) { proc {} }
 
   it_behaves_like 'a generic rule'
@@ -131,7 +131,7 @@ describe Nanoc::RuleDSL::CompilationRule do
     described_class.new(pattern, :xml, block)
   end
 
-  let(:pattern) { Nanoc::Int::Pattern.from(%r{/(.*)/(.*)/}) }
+  let(:pattern) { Nanoc::Core::Pattern.from(%r{/(.*)/(.*)/}) }
   let(:block) { proc {} }
 
   it_behaves_like 'a generic rule'

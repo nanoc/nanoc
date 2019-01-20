@@ -54,7 +54,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
             layout '/default.*'
             filter :typohero
           end
-          rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, rules_proc)
+          rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Core::Pattern.from('/list.*'), :csv, rules_proc)
           rules_collection.add_item_compilation_rule(rule)
         end
 
@@ -92,7 +92,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
       context 'no routing rule exists' do
         before do
           # Add compilation rule
-          compilation_rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
+          compilation_rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Core::Pattern.from('/list.*'), :csv, proc {})
           rules_collection.add_item_compilation_rule(compilation_rule)
         end
 
@@ -110,11 +110,11 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
       context 'routing rule exists' do
         before do
           # Add compilation rule
-          compilation_rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
+          compilation_rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Core::Pattern.from('/list.*'), :csv, proc {})
           rules_collection.add_item_compilation_rule(compilation_rule)
 
           # Add routing rule
-          routing_rule = Nanoc::RuleDSL::RoutingRule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc { '/foo.md' }, snapshot_name: :last)
+          routing_rule = Nanoc::RuleDSL::RoutingRule.new(Nanoc::Core::Pattern.from('/list.*'), :csv, proc { '/foo.md' }, snapshot_name: :last)
           rules_collection.add_item_routing_rule(routing_rule)
         end
 
@@ -132,11 +132,11 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
       context 'routing rule for other rep exists' do
         before do
           # Add compilation rule
-          compilation_rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Int::Pattern.from('/list.*'), :csv, proc {})
+          compilation_rule = Nanoc::RuleDSL::CompilationRule.new(Nanoc::Core::Pattern.from('/list.*'), :csv, proc {})
           rules_collection.add_item_compilation_rule(compilation_rule)
 
           # Add routing rule
-          routing_rule = Nanoc::RuleDSL::RoutingRule.new(Nanoc::Int::Pattern.from('/list.*'), :abc, proc { '/foo.md' }, snapshot_name: :last)
+          routing_rule = Nanoc::RuleDSL::RoutingRule.new(Nanoc::Core::Pattern.from('/list.*'), :abc, proc { '/foo.md' }, snapshot_name: :last)
           rules_collection.add_item_routing_rule(routing_rule)
         end
 
@@ -164,7 +164,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
 
       context 'rule exists' do
         before do
-          pat = Nanoc::Int::Pattern.from('/*.erb')
+          pat = Nanoc::Core::Pattern.from('/*.erb')
           rules_collection.layout_filter_mapping[pat] = [:erb, { x: 123 }]
         end
 

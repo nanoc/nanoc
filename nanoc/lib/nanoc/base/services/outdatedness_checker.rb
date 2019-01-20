@@ -209,7 +209,7 @@ module Nanoc::Int
       elsif !dependency.props.raw_content.is_a?(Enumerable)
         false
       else
-        patterns = dependency.props.raw_content.map { |r| Nanoc::Int::Pattern.from(r) }
+        patterns = dependency.props.raw_content.map { |r| Nanoc::Core::Pattern.from(r) }
         patterns.none? { |pat| reason.objects.any? { |obj| pat.match?(obj.identifier) } }
       end
     end
