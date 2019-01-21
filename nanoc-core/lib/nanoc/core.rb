@@ -44,3 +44,6 @@ require 'nanoc/core/textual_content'
 require 'nanoc/core/document'
 require 'nanoc/core/item'
 require 'nanoc/core/layout'
+
+require 'nanoc/core/item_rep'
+require 'nanoc/core/snapshot_def'

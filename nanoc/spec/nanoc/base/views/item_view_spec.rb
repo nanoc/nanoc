@@ -189,8 +189,8 @@ describe Nanoc::CompilationItemView do
 
   describe '#reps' do
     let(:item) { Nanoc::Core::Item.new('blah', {}, '/foo.md') }
-    let(:rep_a) { Nanoc::Int::ItemRep.new(item, :a) }
-    let(:rep_b) { Nanoc::Int::ItemRep.new(item, :b) }
+    let(:rep_a) { Nanoc::Core::ItemRep.new(item, :a) }
+    let(:rep_b) { Nanoc::Core::ItemRep.new(item, :b) }
 
     let(:reps) do
       Nanoc::Int::ItemRepRepo.new.tap do |reps|
@@ -229,13 +229,13 @@ describe Nanoc::CompilationItemView do
     end
 
     let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+      Nanoc::Core::ItemRep.new(item, :default).tap do |ir|
         ir.compiled = true
         ir.snapshot_defs = [
-          Nanoc::Int::SnapshotDef.new(:last, binary: false),
-          Nanoc::Int::SnapshotDef.new(:pre, binary: false),
-          Nanoc::Int::SnapshotDef.new(:post, binary: false),
-          Nanoc::Int::SnapshotDef.new(:specific, binary: false),
+          Nanoc::Core::SnapshotDef.new(:last, binary: false),
+          Nanoc::Core::SnapshotDef.new(:pre, binary: false),
+          Nanoc::Core::SnapshotDef.new(:post, binary: false),
+          Nanoc::Core::SnapshotDef.new(:specific, binary: false),
         ]
       end
     end
@@ -308,7 +308,7 @@ describe Nanoc::CompilationItemView do
     end
 
     let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+      Nanoc::Core::ItemRep.new(item, :default).tap do |ir|
         ir.paths = {
           last: ['/about/'],
           specific: ['/about.txt'],

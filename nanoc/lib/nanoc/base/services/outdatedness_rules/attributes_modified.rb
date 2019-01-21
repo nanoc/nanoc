@@ -6,10 +6,10 @@ module Nanoc::Int::OutdatednessRules
 
     affects_props :attributes, :compiled_content
 
-    contract C::Or[Nanoc::Int::ItemRep, Nanoc::Core::Item, Nanoc::Core::Configuration, Nanoc::Core::Layout], C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Int::OutdatednessReasons::Generic]
+    contract C::Or[Nanoc::Core::ItemRep, Nanoc::Core::Item, Nanoc::Core::Configuration, Nanoc::Core::Layout], C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Int::OutdatednessReasons::Generic]
     def apply(obj, outdatedness_checker)
       case obj
-      when Nanoc::Int::ItemRep
+      when Nanoc::Core::ItemRep
         apply(obj.item, outdatedness_checker)
       when Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration
         if outdatedness_checker.checksum_store[obj] == outdatedness_checker.checksums.checksum_for(obj)

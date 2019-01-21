@@ -12,7 +12,7 @@ module Nanoc::CLI::Commands::CompileListeners
       Nanoc::CLI.verbosity >= 1
     end
 
-    # @param [Enumerable<Nanoc::Int::ItemRep>] reps
+    # @param [Enumerable<Nanoc::Core::ItemRep>] reps
     def initialize(reps:)
       @reps = reps
 

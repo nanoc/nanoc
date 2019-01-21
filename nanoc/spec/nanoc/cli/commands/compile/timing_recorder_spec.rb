@@ -20,13 +20,13 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
 
   let(:rep) do
-    Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
+    Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
       rep.raw_paths = { default: ['/hi.html'] }
     end
   end
 
   let(:other_rep) do
-    Nanoc::Int::ItemRep.new(item, :other).tap do |rep|
+    Nanoc::Core::ItemRep.new(item, :other).tap do |rep|
       rep.raw_paths = { default: ['/bye.html'] }
     end
   end

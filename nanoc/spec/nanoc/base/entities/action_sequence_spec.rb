@@ -4,7 +4,7 @@ describe Nanoc::Int::ActionSequence do
   let(:action_sequence) { raise 'override me' }
 
   let(:item) { Nanoc::Core::Item.new('foo', {}, '/foo.md') }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
   describe '#size' do
     subject { action_sequence.size }
@@ -166,7 +166,7 @@ describe Nanoc::Int::ActionSequence do
 
   describe '#snapshots_defs' do
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
     Class.new(Nanoc::Filter) do
       identifier :RuleMemSpec_filter_b2b

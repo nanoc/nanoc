@@ -43,7 +43,7 @@ module Nanoc::RuleDSL
     # @return [Nanoc::Int::ActionSequence]
     def [](obj)
       case obj
-      when Nanoc::Int::ItemRep
+      when Nanoc::Core::ItemRep
         new_action_sequence_for_rep(obj)
       when Nanoc::Core::Layout
         new_action_sequence_for_layout(obj)

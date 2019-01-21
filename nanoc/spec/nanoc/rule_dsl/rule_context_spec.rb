@@ -19,7 +19,7 @@ shared_examples 'a rule context' do
     Nanoc::Int::InMemDataSource.new(items, layouts)
   end
 
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
   let(:reps) { double(:reps) }
   let(:compilation_context) { double(:compilation_context) }
 
@@ -146,7 +146,7 @@ describe(Nanoc::RuleDSL::RoutingRuleContext) do
 
   let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Core::Item.new('content', {}, item_identifier) }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
   let(:items) { Nanoc::Core::ItemCollection.new(config) }
 
@@ -172,7 +172,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
 
   let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
   let(:item) { Nanoc::Core::Item.new('content', {}, item_identifier) }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
   let(:items) { Nanoc::Core::ItemCollection.new(config) }
   let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
@@ -189,7 +189,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
     Nanoc::Int::InMemDataSource.new(items, layouts)
   end
 
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
   let(:view_context) do
     Nanoc::ViewContextForPreCompilation.new(items: items)

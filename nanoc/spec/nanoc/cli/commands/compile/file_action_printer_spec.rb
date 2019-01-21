@@ -16,7 +16,7 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
   let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
 
   let(:rep) do
-    Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
+    Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
       rep.raw_paths = { default: ['/hi.html'] }
     end
   end

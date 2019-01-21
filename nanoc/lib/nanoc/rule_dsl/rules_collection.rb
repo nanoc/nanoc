@@ -65,7 +65,7 @@ module Nanoc::RuleDSL
     # Finds the first matching compilation rule for the given item
     # representation.
     #
-    # @param [Nanoc::Int::ItemRep] rep The item rep for which to fetch the rule
+    # @param [Nanoc::Core::ItemRep] rep The item rep for which to fetch the rule
     #
     # @return [Nanoc::Int::Rule, nil] The compilation rule for the given item rep,
     #   or nil if no rules have been found
@@ -80,7 +80,7 @@ module Nanoc::RuleDSL
     # returned. The result is a hash containing the corresponding rule for
     # each snapshot.
     #
-    # @param [Nanoc::Int::ItemRep] rep The item rep for which to fetch the rules
+    # @param [Nanoc::Core::ItemRep] rep The item rep for which to fetch the rules
     #
     # @return [Hash<Symbol, Nanoc::Int::Rule>] The routing rules for the given rep
     def routing_rules_for(rep)

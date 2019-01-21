@@ -13,7 +13,6 @@ lib/nanoc/base/entities/action_sequence.rb
 lib/nanoc/base/entities/checksum_collection.rb
 lib/nanoc/base/entities/code_snippet.rb
 lib/nanoc/base/entities/dependency.rb
-lib/nanoc/base/entities/item_rep.rb
 lib/nanoc/base/entities/outdatedness_reasons.rb
 lib/nanoc/base/entities/outdatedness_status.rb
 lib/nanoc/base/entities/processing_action.rb
@@ -23,7 +22,6 @@ lib/nanoc/base/entities/processing_actions/layout.rb
 lib/nanoc/base/entities/processing_actions/snapshot.rb
 lib/nanoc/base/entities/props.rb
 lib/nanoc/base/entities/site.rb
-lib/nanoc/base/entities/snapshot_def.rb
 lib/nanoc/base/error.rb
 lib/nanoc/base/errors.rb
 lib/nanoc/base/feature.rb

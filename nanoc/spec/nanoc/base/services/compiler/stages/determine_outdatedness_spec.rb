@@ -33,11 +33,11 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
       end
 
       let(:rep) do
-        Nanoc::Int::ItemRep.new(item, :woof)
+        Nanoc::Core::ItemRep.new(item, :woof)
       end
 
       let(:other_rep) do
-        Nanoc::Int::ItemRep.new(item, :bark)
+        Nanoc::Core::ItemRep.new(item, :bark)
       end
 
       context 'outdatedness checker thinks rep is outdated' do
@@ -89,11 +89,11 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
       end
 
       let(:rep) do
-        Nanoc::Int::ItemRep.new(item, :woof)
+        Nanoc::Core::ItemRep.new(item, :woof)
       end
 
       let(:other_rep) do
-        Nanoc::Int::ItemRep.new(item, :bark)
+        Nanoc::Core::ItemRep.new(item, :bark)
       end
 
       before do
@@ -129,7 +129,7 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
       end
 
       let(:unknown_rep) do
-        Nanoc::Int::ItemRep.new(item, :woof)
+        Nanoc::Core::ItemRep.new(item, :woof)
       end
 
       before do

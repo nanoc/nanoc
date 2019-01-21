@@ -7,7 +7,7 @@ describe Nanoc::PostCompileItemRepView do
 
   it_behaves_like 'an item rep view'
 
-  let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+  let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
   let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
   let(:view) { described_class.new(item_rep, view_context) }
 

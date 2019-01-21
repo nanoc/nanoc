@@ -104,7 +104,7 @@ module Nanoc
       # @param [String] path The path of the `:last` snapshot of this item representation
       # @param [Symbol] rep The rep name to create
       def create_rep(item, path, rep = :default)
-        rep = Nanoc::Int::ItemRep.new(item._unwrap, rep)
+        rep = Nanoc::Core::ItemRep.new(item._unwrap, rep)
         rep.paths[:last] = [path]
         @reps << rep
         self
@@ -202,7 +202,7 @@ module Nanoc
           end
 
           def snapshots_defs_for(_rep)
-            [Nanoc::Int::SnapshotDef.new(:last, binary: false)]
+            [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
           end
         end.new(self)
       end

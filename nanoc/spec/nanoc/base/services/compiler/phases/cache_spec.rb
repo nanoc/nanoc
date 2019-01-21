@@ -30,7 +30,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
   let(:wrapped) { wrapped_class.new(compiled_content_store) }
 
   let(:item) { Nanoc::Core::Item.new('item content', {}, '/donkey.md') }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :latex) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :latex) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 

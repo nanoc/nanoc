@@ -20,11 +20,13 @@ lib/nanoc/core/error.rb
 lib/nanoc/core/identifiable_collection.rb
 lib/nanoc/core/identifier.rb
 lib/nanoc/core/item_collection.rb
+lib/nanoc/core/item_rep.rb
 lib/nanoc/core/item.rb
 lib/nanoc/core/layout_collection.rb
 lib/nanoc/core/layout.rb
 lib/nanoc/core/lazy_value.rb
 lib/nanoc/core/pattern.rb
 lib/nanoc/core/regexp_pattern.rb
+lib/nanoc/core/snapshot_def.rb
 lib/nanoc/core/string_pattern.rb
 lib/nanoc/core/textual_content.rb

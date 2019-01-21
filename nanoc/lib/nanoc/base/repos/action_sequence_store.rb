@@ -15,7 +15,7 @@ module Nanoc::Int
       @action_sequences = {}
     end
 
-    # @param [Nanoc::Int::ItemRep, Nanoc::Core::Layout] obj The item representation or
+    # @param [Nanoc::Core::ItemRep, Nanoc::Core::Layout] obj The item representation or
     #   the layout to get the action sequence for
     #
     # @return [Array] The action sequence for the given object
@@ -23,7 +23,7 @@ module Nanoc::Int
       @action_sequences[obj.reference]
     end
 
-    # @param [Nanoc::Int::ItemRep, Nanoc::Core::Layout] obj The item representation or
+    # @param [Nanoc::Core::ItemRep, Nanoc::Core::Layout] obj The item representation or
     #   the layout to set the action sequence for
     #
     # @param [Array] action_sequence The new action sequence to be stored

@@ -14,7 +14,7 @@ module Nanoc::RuleDSL
       @snapshot_name = snapshot_name
     end
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[
+    contract Nanoc::Core::ItemRep, C::KeywordArgs[
       site: Nanoc::Int::Site,
       view_context: Nanoc::ViewContextForPreCompilation,
     ] => C::Any

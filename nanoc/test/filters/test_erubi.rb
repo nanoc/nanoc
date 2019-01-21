@@ -24,7 +24,7 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
   def test_filter_syntax_error
     # Create filter
     item = Nanoc::Core::Item.new('asdf', {}, '/about.md')
-    item_rep = Nanoc::Int::ItemRep.new(item, :xml)
+    item_rep = Nanoc::Core::ItemRep.new(item, :xml)
     filter = ::Nanoc::Filters::Erubi.new(item: item, item_rep: item_rep)
 
     # Run filter
@@ -42,7 +42,7 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
   def test_filter_regular_error
     # Create filter
     item = Nanoc::Core::Item.new('asdf', {}, '/about.md')
-    item_rep = Nanoc::Int::ItemRep.new(item, :xml)
+    item_rep = Nanoc::Core::ItemRep.new(item, :xml)
     filter = ::Nanoc::Filters::Erubi.new(item: item, item_rep: item_rep)
 
     # Run filter

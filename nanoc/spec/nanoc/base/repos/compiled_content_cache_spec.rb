@@ -6,10 +6,10 @@ describe Nanoc::Int::CompiledContentCache do
   let(:items) { [item] }
 
   let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
-  let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:item_rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
   let(:other_item) { Nanoc::Core::Item.new('asdf', {}, '/sneaky.md') }
-  let(:other_item_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
+  let(:other_item_rep) { Nanoc::Core::ItemRep.new(other_item, :default) }
 
   let(:content) { Nanoc::Core::Content.create('omg') }
 

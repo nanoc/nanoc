@@ -209,8 +209,8 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:item_about) { Nanoc::Core::Item.new('About Me', {}, '/about.md') }
     let(:item_dog)   { Nanoc::Core::Item.new('About My Dog', {}, '/dog.md') }
 
-    let(:item_rep_about) { Nanoc::Int::ItemRep.new(item_about, :default) }
-    let(:item_rep_dog)   { Nanoc::Int::ItemRep.new(item_dog, :default) }
+    let(:item_rep_about) { Nanoc::Core::ItemRep.new(item_about, :default) }
+    let(:item_rep_dog)   { Nanoc::Core::ItemRep.new(item_dog, :default) }
 
     let(:site) { double(:site) }
     let(:outdatedness_checker) { double(:outdatedness_checker) }

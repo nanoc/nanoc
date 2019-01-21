@@ -78,7 +78,7 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
 
   def new_wrapped_error(wrapped)
     item = Nanoc::Core::Item.new('asdf', {}, '/about.md')
-    item_rep = Nanoc::Int::ItemRep.new(item, :latex)
+    item_rep = Nanoc::Core::ItemRep.new(item, :latex)
     raise Nanoc::Int::Errors::CompilationError.new(wrapped, item_rep)
   rescue => e
     e

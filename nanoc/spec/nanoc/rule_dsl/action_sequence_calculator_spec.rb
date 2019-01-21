@@ -36,7 +36,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
     subject { action_sequence_calculator[obj] }
 
     context 'with item rep' do
-      let(:obj) { Nanoc::Int::ItemRep.new(item, :csv) }
+      let(:obj) { Nanoc::Core::ItemRep.new(item, :csv) }
 
       let(:item) { Nanoc::Core::Item.new('content', {}, Nanoc::Core::Identifier.from('/list.md')) }
 
@@ -205,7 +205,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
     end
 
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
     example do
       expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)

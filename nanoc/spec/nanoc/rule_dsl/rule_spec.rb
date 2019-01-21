@@ -52,7 +52,7 @@ shared_examples 'Rule#apply_to' do
   end
 
   let(:item) { Nanoc::Core::Item.new('', {}, '/foo.md') }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :amazings) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :amazings) }
 
   let(:site) { Nanoc::Int::Site.new(config: config, data_source: data_source, code_snippets: []) }
   let(:data_source) { Nanoc::Int::InMemDataSource.new(items, layouts) }

@@ -10,7 +10,7 @@ module Nanoc::Int::Compiler::Phases
       @outdatedness_store = outdatedness_store
     end
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
+    contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
     def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
       yield
       @outdatedness_store.remove(rep)

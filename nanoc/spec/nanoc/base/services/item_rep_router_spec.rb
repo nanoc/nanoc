@@ -15,8 +15,8 @@ describe(Nanoc::Int::ItemRepRouter) do
 
     let(:reps) do
       [
-        Nanoc::Int::ItemRep.new(item, :default),
-        Nanoc::Int::ItemRep.new(item, :csv),
+        Nanoc::Core::ItemRep.new(item, :default),
+        Nanoc::Core::ItemRep.new(item, :csv),
       ]
     end
 
@@ -83,7 +83,7 @@ describe(Nanoc::Int::ItemRepRouter) do
     subject { item_rep_router.route_rep(rep, paths, snapshot_names, paths_to_reps) }
 
     let(:snapshot_names) { [:foo] }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
     let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
     let(:paths_to_reps) { {} }
 
@@ -100,7 +100,7 @@ describe(Nanoc::Int::ItemRepRouter) do
       let(:paths) { ['/foo/index.html'] }
 
       context 'other snapshot with this path already exists' do
-        let(:paths_to_reps) { { '/foo/index.html' => Nanoc::Int::ItemRep.new(item, :other) } }
+        let(:paths_to_reps) { { '/foo/index.html' => Nanoc::Core::ItemRep.new(item, :other) } }
 
         it 'errors' do
           expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::IdenticalRoutesError, 'The item representations /foo.md (rep name :default) and /foo.md (rep name :other) are both routed to /foo/index.html.')

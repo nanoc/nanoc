@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::ItemRep do
+describe Nanoc::Core::ItemRep do
   let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :giraffe) }
+  let(:rep) { described_class.new(item, :giraffe) }
 
   describe '#snapshot?' do
     subject { rep.snapshot?(snapshot_name) }
@@ -10,7 +10,7 @@ describe Nanoc::Int::ItemRep do
     let(:snapshot_name) { raise 'override me' }
 
     before do
-      rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:donkey, binary: false)]
+      rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:donkey, binary: false)]
     end
 
     context 'snapshot does not exist' do

@@ -7,7 +7,7 @@ module Nanoc::Int::Compiler::Phases
 
     DONE = Object.new
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
+    contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
     def run(rep, is_outdated:)
       fiber = fiber_for(rep, is_outdated: is_outdated) { yield }
       while fiber.alive?
@@ -31,7 +31,7 @@ module Nanoc::Int::Compiler::Phases
 
     private
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => Fiber
+    contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => Fiber
     def fiber_for(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
       @fibers ||= {}
 

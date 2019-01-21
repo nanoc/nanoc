@@ -39,7 +39,7 @@ describe Nanoc::CompilationItemRepView do
     let(:view) { described_class.new(rep, view_context) }
 
     let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+      Nanoc::Core::ItemRep.new(item, :default).tap do |ir|
         ir.raw_paths = {
           last: [Dir.getwd + '/output/about/index.html'],
         }
@@ -110,10 +110,10 @@ describe Nanoc::CompilationItemRepView do
     let(:view) { described_class.new(rep, view_context) }
 
     let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+      Nanoc::Core::ItemRep.new(item, :default).tap do |ir|
         ir.compiled = true
         ir.snapshot_defs = [
-          Nanoc::Int::SnapshotDef.new(:last, binary: false),
+          Nanoc::Core::SnapshotDef.new(:last, binary: false),
         ]
       end
     end

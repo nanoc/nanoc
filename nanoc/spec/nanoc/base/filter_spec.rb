@@ -99,7 +99,7 @@ describe Nanoc::Filter do
 
     context 'assigns contains item + item rep' do
       let(:item) { Nanoc::Core::Item.new('asdf', {}, '/donkey.md') }
-      let(:item_rep) { Nanoc::Int::ItemRep.new(item, :animal) }
+      let(:item_rep) { Nanoc::Core::ItemRep.new(item, :animal) }
       let(:assigns) { { item: item, item_rep: item_rep } }
 
       it { is_expected.to eq('item /donkey.md (rep animal)') }
@@ -163,7 +163,7 @@ describe Nanoc::Filter do
 
     let(:item) { Nanoc::Core::Item.new('foo', {}, '/stuff.md') }
     let(:item_view) { Nanoc::CompilationItemView.new(item, view_context) }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
     let(:view_context) do
       Nanoc::ViewContextForCompilation.new(
@@ -224,7 +224,7 @@ describe Nanoc::Filter do
       end
 
       context 'multiple reps exist' do
-        let(:other_rep) { Nanoc::Int::ItemRep.new(item, :default) }
+        let(:other_rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
         before do
           reps << other_rep

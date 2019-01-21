@@ -5,7 +5,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
   let(:action_sequence) { recorder.action_sequence }
   let(:item) { Nanoc::Core::Item.new('stuff', {}, '/foo.md') }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
   describe '#filter' do
     it 'records filter call without arguments' do

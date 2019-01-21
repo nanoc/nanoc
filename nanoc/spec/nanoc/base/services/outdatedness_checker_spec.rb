@@ -61,7 +61,7 @@ describe Nanoc::Int::OutdatednessChecker do
     Nanoc::Int::ItemRepRepo.new
   end
 
-  let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:item_rep) { Nanoc::Core::ItemRep.new(item, :default) }
   let(:item) { Nanoc::Core::Item.new('stuff', {}, '/foo.md') }
 
   before do
@@ -180,7 +180,7 @@ describe Nanoc::Int::OutdatednessChecker do
     let(:checksum_store) { Nanoc::Int::ChecksumStore.new(config: config, objects: items.to_a + layouts.to_a) }
 
     let(:other_item) { Nanoc::Core::Item.new('other stuff', {}, '/other.md') }
-    let(:other_item_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
+    let(:other_item_rep) { Nanoc::Core::ItemRep.new(other_item, :default) }
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
@@ -214,7 +214,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
     context 'transitive dependency' do
       let(:distant_item) { Nanoc::Core::Item.new('distant stuff', {}, '/distant.md') }
-      let(:distant_item_rep) { Nanoc::Int::ItemRep.new(distant_item, :default) }
+      let(:distant_item_rep) { Nanoc::Core::ItemRep.new(distant_item, :default) }
 
       let(:items) do
         Nanoc::Core::ItemCollection.new(config, [item, other_item, distant_item])

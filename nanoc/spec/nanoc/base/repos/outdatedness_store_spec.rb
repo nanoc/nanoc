@@ -4,7 +4,7 @@ describe Nanoc::Int::OutdatednessStore do
   subject(:store) { described_class.new(config: config) }
 
   let(:item) { Nanoc::Core::Item.new('foo', {}, '/foo.md') }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :foo) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
   let(:items) { [] }

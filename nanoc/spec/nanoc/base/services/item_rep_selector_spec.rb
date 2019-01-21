@@ -9,11 +9,11 @@ describe Nanoc::Int::ItemRepSelector do
 
   let(:reps_array) do
     [
-      Nanoc::Int::ItemRep.new(item, :a),
-      Nanoc::Int::ItemRep.new(item, :b),
-      Nanoc::Int::ItemRep.new(item, :c),
-      Nanoc::Int::ItemRep.new(item, :d),
-      Nanoc::Int::ItemRep.new(item, :e),
+      Nanoc::Core::ItemRep.new(item, :a),
+      Nanoc::Core::ItemRep.new(item, :b),
+      Nanoc::Core::ItemRep.new(item, :c),
+      Nanoc::Core::ItemRep.new(item, :d),
+      Nanoc::Core::ItemRep.new(item, :e),
     ]
   end
 

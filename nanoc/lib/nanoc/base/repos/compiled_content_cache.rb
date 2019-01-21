@@ -15,7 +15,7 @@ module Nanoc::Int
       @cache = {}
     end
 
-    contract Nanoc::Int::ItemRep => C::Maybe[C::HashOf[Symbol => Nanoc::Core::Content]]
+    contract Nanoc::Core::ItemRep => C::Maybe[C::HashOf[Symbol => Nanoc::Core::Content]]
     # Returns the cached compiled content for the given item representation.
     #
     # This cached compiled content is a hash where the keys are the snapshot
@@ -25,7 +25,7 @@ module Nanoc::Int
       item_cache[rep.name]
     end
 
-    contract Nanoc::Int::ItemRep, C::HashOf[Symbol => Nanoc::Core::Content] => C::HashOf[Symbol => Nanoc::Core::Content]
+    contract Nanoc::Core::ItemRep, C::HashOf[Symbol => Nanoc::Core::Content] => C::HashOf[Symbol => Nanoc::Core::Content]
     # Sets the compiled content for the given representation.
     #
     # This cached compiled content is a hash where the keys are the snapshot

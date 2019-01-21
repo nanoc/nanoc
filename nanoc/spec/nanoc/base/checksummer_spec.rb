@@ -257,27 +257,27 @@ describe Nanoc::Int::Checksummer do
     it { is_expected.to eql('Nanoc::CompilationItemView<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>>') }
   end
 
-  context 'Nanoc::Int::ItemRep' do
-    let(:obj) { Nanoc::Int::ItemRep.new(item, :pdf) }
+  context 'Nanoc::Core::ItemRep' do
+    let(:obj) { Nanoc::Core::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::Int::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>') }
+    it { is_expected.to eql('Nanoc::Core::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>') }
   end
 
   context 'Nanoc::BasicItemRepView' do
     let(:obj) { Nanoc::BasicItemRepView.new(rep, :_unused_context) }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :pdf) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::BasicItemRepView<Nanoc::Int::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
+    it { is_expected.to eql('Nanoc::BasicItemRepView<Nanoc::Core::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
   end
 
   context 'Nanoc::CompilationItemRepView' do
     let(:obj) { Nanoc::CompilationItemRepView.new(rep, :_unused_context) }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :pdf) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::CompilationItemRepView<Nanoc::Int::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
+    it { is_expected.to eql('Nanoc::CompilationItemRepView<Nanoc::Core::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
   end
 
   context 'Nanoc::BasicItemView' do
@@ -340,7 +340,7 @@ describe Nanoc::Int::Checksummer do
   context 'Nanoc::RuleDSL::CompilationRuleContext' do
     let(:obj) { Nanoc::RuleDSL::CompilationRuleContext.new(rep: rep, site: site, recorder: recorder, view_context: view_context) }
 
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :pdf) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Core::Item.new('stuff', {}, '/stuff.md') }
 
     let(:site) do
@@ -360,7 +360,7 @@ describe Nanoc::Int::Checksummer do
     let(:view_context) { Nanoc::ViewContextForPreCompilation.new(items: items) }
 
     let(:expected_item_checksum) { 'Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<stuff>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</stuff.md>>>' }
-    let(:expected_item_rep_checksum) { 'Nanoc::Int::ItemRep<item=' + expected_item_checksum + ',name=Symbol<pdf>>' }
+    let(:expected_item_rep_checksum) { 'Nanoc::Core::ItemRep<item=' + expected_item_checksum + ',name=Symbol<pdf>>' }
     let(:expected_layout_checksum) { 'Nanoc::Core::Layout<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>' }
     let(:expected_config_checksum) { 'Nanoc::Core::Configuration<Symbol<foo>=String<bar>,>' }
 

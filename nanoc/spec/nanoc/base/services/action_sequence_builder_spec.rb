@@ -3,7 +3,7 @@
 describe Nanoc::Int::ActionSequenceBuilder do
   let(:builder) { described_class.new(item_rep) }
 
-  let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:item_rep) { Nanoc::Core::ItemRep.new(item, :default) }
   let(:item) { Nanoc::Core::Item.new('some content', {}, '/foo.md') }
 
   describe '#add_filter' do

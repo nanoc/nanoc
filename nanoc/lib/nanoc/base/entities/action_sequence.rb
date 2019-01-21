@@ -71,7 +71,7 @@ module Nanoc::Int
         case action
         when Nanoc::Int::ProcessingActions::Snapshot
           action.snapshot_names.each do |snapshot_name|
-            snapshot_defs << Nanoc::Int::SnapshotDef.new(snapshot_name, binary: is_binary)
+            snapshot_defs << Nanoc::Core::SnapshotDef.new(snapshot_name, binary: is_binary)
           end
         when Nanoc::Int::ProcessingActions::Filter
           is_binary = Nanoc::Filter.named!(action.filter_name).to_binary?

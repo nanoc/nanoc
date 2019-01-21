@@ -45,7 +45,7 @@ module Nanoc::Int
           Rules::LayoutCollectionExtended,
         ].freeze
 
-      C_OBJ_MAYBE_REP = C::Or[Nanoc::Core::Item, Nanoc::Int::ItemRep, Nanoc::Core::Configuration, Nanoc::Core::Layout, Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection]
+      C_OBJ_MAYBE_REP = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep, Nanoc::Core::Configuration, Nanoc::Core::Layout, Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection]
 
       contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Int::ItemRepRepo] => C::Any
       def initialize(outdatedness_checker:, reps:)
@@ -56,7 +56,7 @@ module Nanoc::Int
       contract C_OBJ_MAYBE_REP => C::Maybe[OutdatednessStatus]
       memoized def outdatedness_status_for(obj)
         case obj
-        when Nanoc::Int::ItemRep
+        when Nanoc::Core::ItemRep
           apply_rules(RULES_FOR_ITEM_REP, obj)
         when Nanoc::Core::Item
           apply_rules_multi(RULES_FOR_ITEM_REP, @reps[obj])
@@ -110,8 +110,8 @@ module Nanoc::Int
 
     Reasons = Nanoc::Int::OutdatednessReasons
 
-    C_OBJ = C::Or[Nanoc::Core::Item, Nanoc::Int::ItemRep, Nanoc::Core::Configuration, Nanoc::Core::Layout, Nanoc::Core::ItemCollection]
-    C_ITEM_OR_REP = C::Or[Nanoc::Core::Item, Nanoc::Int::ItemRep]
+    C_OBJ = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep, Nanoc::Core::Configuration, Nanoc::Core::Layout, Nanoc::Core::ItemCollection]
+    C_ITEM_OR_REP = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep]
     C_ACTION_SEQUENCES = C::HashOf[C_OBJ => Nanoc::Int::ActionSequence]
 
     contract C::KeywordArgs[site: Nanoc::Int::Site, checksum_store: Nanoc::Int::ChecksumStore, checksums: Nanoc::Int::ChecksumCollection, dependency_store: Nanoc::Int::DependencyStore, action_sequence_store: Nanoc::Int::ActionSequenceStore, action_sequences: C_ACTION_SEQUENCES, reps: Nanoc::Int::ItemRepRepo] => C::Any
@@ -158,7 +158,7 @@ module Nanoc::Int
     contract C_ITEM_OR_REP, Hamster::Set => C::Bool
     def outdated_due_to_dependencies?(obj, processed = Hamster::Set.new)
       # Convert from rep to item if necessary
-      obj = obj.item if obj.is_a?(Nanoc::Int::ItemRep)
+      obj = obj.item if obj.is_a?(Nanoc::Core::ItemRep)
 
       # Get from cache
       if @objects_outdated_due_to_dependencies.key?(obj)

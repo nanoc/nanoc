@@ -9,11 +9,11 @@ describe Nanoc::Pruner, stdio: true do
 
   let(:reps) do
     Nanoc::Int::ItemRepRepo.new.tap do |reps|
-      reps << Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
+      reps << Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
         rep.raw_paths = { last: [Dir.getwd + '/output/asdf.html'] }
       end
 
-      reps << Nanoc::Int::ItemRep.new(item, :text).tap do |rep|
+      reps << Nanoc::Core::ItemRep.new(item, :text).tap do |rep|
         rep.raw_paths = { last: [Dir.getwd + '/output/asdf.txt'] }
       end
     end
@@ -67,15 +67,15 @@ describe Nanoc::Pruner, stdio: true do
 
       let(:reps) do
         Nanoc::Int::ItemRepRepo.new.tap do |reps|
-          reps << Nanoc::Int::ItemRep.new(item, :a).tap do |rep|
+          reps << Nanoc::Core::ItemRep.new(item, :a).tap do |rep|
             rep.raw_paths = { last: [Dir.getwd + '/output/foo.html'] }
           end
 
-          reps << Nanoc::Int::ItemRep.new(item, :b).tap do |rep|
+          reps << Nanoc::Core::ItemRep.new(item, :b).tap do |rep|
             rep.raw_paths = { last: [Dir.getwd + '/output/bar.html'] }
           end
 
-          reps << Nanoc::Int::ItemRep.new(item, :c).tap do |rep|
+          reps << Nanoc::Core::ItemRep.new(item, :c).tap do |rep|
             rep.raw_paths = { last: [Dir.getwd + '/output/foo/bar.html'] }
           end
         end

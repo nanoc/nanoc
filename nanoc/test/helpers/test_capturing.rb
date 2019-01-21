@@ -7,7 +7,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
   def item_rep_repo_for(item)
     Nanoc::Int::ItemRepRepo.new.tap do |repo|
-      repo << Nanoc::Int::ItemRep.new(item, :default)
+      repo << Nanoc::Core::ItemRep.new(item, :default)
     end
   end
 

@@ -5,7 +5,7 @@ module Nanoc::RuleDSL
     include Nanoc::Core::ContractsSupport
 
     contract C::KeywordArgs[
-      rep: Nanoc::Int::ItemRep,
+      rep: Nanoc::Core::ItemRep,
       site: Nanoc::Int::Site,
       recorder: Nanoc::RuleDSL::ActionRecorder,
       view_context: Nanoc::ViewContextForPreCompilation,
@@ -16,10 +16,10 @@ module Nanoc::RuleDSL
       super(rep: rep, site: site, view_context: view_context)
     end
 
-    # Filters the current representation (calls {Nanoc::Int::ItemRep#filter} with
+    # Filters the current representation (calls {Nanoc::Core::ItemRep#filter} with
     # the given arguments on the rep).
     #
-    # @see Nanoc::Int::ItemRep#filter
+    # @see Nanoc::Core::ItemRep#filter
     #
     # @param [Symbol] filter_name The name of the filter to run the item
     #   representations' content through
@@ -32,10 +32,10 @@ module Nanoc::RuleDSL
       @_recorder.filter(filter_name, filter_args)
     end
 
-    # Layouts the current representation (calls {Nanoc::Int::ItemRep#layout} with
+    # Layouts the current representation (calls {Nanoc::Core::ItemRep#layout} with
     # the given arguments on the rep).
     #
-    # @see Nanoc::Int::ItemRep#layout
+    # @see Nanoc::Core::ItemRep#layout
     #
     # @param [String] layout_identifier The identifier of the layout the item
     #   should be laid out with
@@ -46,9 +46,9 @@ module Nanoc::RuleDSL
     end
 
     # Creates a snapshot of the current compiled item content. Calls
-    # {Nanoc::Int::ItemRep#snapshot} with the given arguments on the rep.
+    # {Nanoc::Core::ItemRep#snapshot} with the given arguments on the rep.
     #
-    # @see Nanoc::Int::ItemRep#snapshot
+    # @see Nanoc::Core::ItemRep#snapshot
     #
     # @param [Symbol] snapshot_name The name of the snapshot to create
     #

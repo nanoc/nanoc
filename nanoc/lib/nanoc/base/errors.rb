@@ -108,7 +108,7 @@ module Nanoc::Int
     # Error that is raised when no routing rule that can be applied to the
     # current item can be found.
     class NoMatchingRoutingRuleFound < Generic
-      # @param [Nanoc::Int::ItemRep] rep The item repiresentation for which no
+      # @param [Nanoc::Core::ItemRep] rep The item repiresentation for which no
       #   routing rule could be found
       def initialize(rep)
         super("No routing rules were found for the “#{rep.item.identifier}” item (rep “#{rep.name}”).")
@@ -118,14 +118,14 @@ module Nanoc::Int
     # Error that is raised when an rep cannot be compiled because it depends
     # on other representations.
     class UnmetDependency < Generic
-      # @return [Nanoc::Int::ItemRep] The item representation that cannot yet be
+      # @return [Nanoc::Core::ItemRep] The item representation that cannot yet be
       #   compiled
       attr_reader :rep
 
       # @return [Symbol] The name of the snapshot that cannot yet be compiled
       attr_reader :snapshot_name
 
-      # @param [Nanoc::Int::ItemRep] rep The item representation that cannot yet be
+      # @param [Nanoc::Core::ItemRep] rep The item representation that cannot yet be
       #   compiled
       def initialize(rep, snapshot_name)
         @rep = rep
@@ -137,7 +137,7 @@ module Nanoc::Int
 
     # Error that is raised when a binary item is attempted to be laid out.
     class CannotLayoutBinaryItem < Generic
-      # @param [Nanoc::Int::ItemRep] rep The item representation that was attempted
+      # @param [Nanoc::Core::ItemRep] rep The item representation that was attempted
       #   to be laid out
       def initialize(rep)
         super("The “#{rep.item.identifier}” item (rep “#{rep.name}”) cannot be laid out because it is a binary item. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.")
@@ -147,7 +147,7 @@ module Nanoc::Int
     # Error that is raised when a textual filter is attempted to be applied to
     # a binary item representation.
     class CannotUseTextualFilter < Generic
-      # @param [Nanoc::Int::ItemRep] rep The item representation that was
+      # @param [Nanoc::Core::ItemRep] rep The item representation that was
       #   attempted to be filtered
       #
       # @param [Class] filter_class The filter class that was used
@@ -159,7 +159,7 @@ module Nanoc::Int
     # Error that is raised when a binary filter is attempted to be applied to
     # a textual item representation.
     class CannotUseBinaryFilter < Generic
-      # @param [Nanoc::Int::ItemRep] rep The item representation that was
+      # @param [Nanoc::Core::ItemRep] rep The item representation that was
       #   attempted to be filtered
       #
       # @param [Class] filter_class The filter class that was used
@@ -171,14 +171,14 @@ module Nanoc::Int
     # Error that is raised when the compiled content at a non-existing snapshot
     # is requested.
     class NoSuchSnapshot < Generic
-      # @return [Nanoc::Int::ItemRep] The item rep from which the compiled content
+      # @return [Nanoc::Core::ItemRep] The item rep from which the compiled content
       #   was requested
       attr_reader :item_rep
 
       # @return [Symbol] The requested snapshot
       attr_reader :snapshot
 
-      # @param [Nanoc::Int::ItemRep] item_rep The item rep from which the compiled
+      # @param [Nanoc::Core::ItemRep] item_rep The item rep from which the compiled
       #   content was requested
       #
       # @param [Symbol] snapshot The requested snapshot
@@ -191,7 +191,7 @@ module Nanoc::Int
 
     # Error that is raised when a snapshot with an existing name is made.
     class CannotCreateMultipleSnapshotsWithSameName < Generic
-      # @param [Nanoc::Int::ItemRep] rep The item representation for which a
+      # @param [Nanoc::Core::ItemRep] rep The item representation for which a
       #   snapshot was attempted to be made
       #
       # @param [Symbol] snapshot The name of the snapshot that was attempted to
@@ -203,7 +203,7 @@ module Nanoc::Int
 
     # Error that is raised when the compiled content of a binary item is attempted to be accessed.
     class CannotGetCompiledContentOfBinaryItem < Generic
-      # @param [Nanoc::Int::ItemRep] rep The binary item representation whose compiled content was attempted to be accessed
+      # @param [Nanoc::Core::ItemRep] rep The binary item representation whose compiled content was attempted to be accessed
       def initialize(rep)
         super("You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is #{rep}.")
       end

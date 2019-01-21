@@ -31,10 +31,10 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(config: config) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
 
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
   let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
 
-  let(:other_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
+  let(:other_rep) { Nanoc::Core::ItemRep.new(other_item, :default) }
   let(:other_item) { Nanoc::Core::Item.new('other content', {}, '/other.md') }
 
   let(:site) do
@@ -74,7 +74,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     reps << other_rep
 
     reps.each do |rep|
-      rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last, binary: false)
+      rep.snapshot_defs << Nanoc::Core::SnapshotDef.new(:last, binary: false)
     end
 
     allow(action_sequences).to receive(:[]).with(rep).and_return(memory)
@@ -85,11 +85,11 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     subject { stage.run }
 
     let(:snapshot_defs_for_rep) do
-      [Nanoc::Int::SnapshotDef.new(:last, binary: false)]
+      [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
     end
 
     let(:snapshot_defs_for_other_rep) do
-      [Nanoc::Int::SnapshotDef.new(:last, binary: false)]
+      [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
     end
 
     context 'rep not in outdatedness store' do

@@ -14,7 +14,7 @@ module Nanoc::Int
     def run
       @site.items.each do |item|
         @action_provider.rep_names_for(item).each do |rep_name|
-          @reps << Nanoc::Int::ItemRep.new(item, rep_name)
+          @reps << Nanoc::Core::ItemRep.new(item, rep_name)
         end
       end
 

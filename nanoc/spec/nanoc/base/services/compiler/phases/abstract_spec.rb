@@ -6,7 +6,7 @@ describe Nanoc::Int::Compiler::Phases::Abstract do
   end
 
   let(:item) { Nanoc::Core::Item.new('foo', {}, '/stuff.md') }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
   let(:wrapped) { nil }
 

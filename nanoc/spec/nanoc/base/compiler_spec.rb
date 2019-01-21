@@ -25,10 +25,10 @@ describe Nanoc::Int::Compiler do
     Nanoc::Int::CompiledContentCache.new(config: config)
   end
 
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
   let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
 
-  let(:other_rep) { Nanoc::Int::ItemRep.new(other_item, :default) }
+  let(:other_rep) { Nanoc::Core::ItemRep.new(other_item, :default) }
   let(:other_item) { Nanoc::Core::Item.new('other content', {}, '/other.md') }
 
   let(:site) do
@@ -82,7 +82,7 @@ describe Nanoc::Int::Compiler do
         rs << other_rep
 
         rs.each do |rep|
-          rep.snapshot_defs << Nanoc::Int::SnapshotDef.new(:last, binary: false)
+          rep.snapshot_defs << Nanoc::Core::SnapshotDef.new(:last, binary: false)
         end
       end
     end

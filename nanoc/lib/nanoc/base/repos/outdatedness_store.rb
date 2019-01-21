@@ -12,18 +12,18 @@ module Nanoc::Int
       @outdated_refs = Set.new
     end
 
-    contract Nanoc::Int::ItemRep => C::Bool
+    contract Nanoc::Core::ItemRep => C::Bool
     def include?(obj)
       @outdated_refs.include?(obj.reference)
     end
 
-    contract Nanoc::Int::ItemRep => self
+    contract Nanoc::Core::ItemRep => self
     def add(obj)
       @outdated_refs << obj.reference
       self
     end
 
-    contract Nanoc::Int::ItemRep => self
+    contract Nanoc::Core::ItemRep => self
     def remove(obj)
       @outdated_refs.delete(obj.reference)
       self

@@ -14,7 +14,7 @@ describe Nanoc::Int::Executor do
   end
 
   let(:item) { Nanoc::Core::Item.new(content, {}, '/index.md') }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :donkey) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :donkey) }
   let(:content) { Nanoc::Core::TextualContent.new('Donkey Power').tap(&:freeze) }
 
   let(:action_provider) { double(:action_provider) }
@@ -368,7 +368,7 @@ describe Nanoc::Int::Executor do
     end
 
     before do
-      rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:pre, binary: false)]
+      rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:pre, binary: false)]
 
       compiled_content_store.set_current(rep, content)
 

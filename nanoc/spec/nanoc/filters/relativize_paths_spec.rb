@@ -12,7 +12,7 @@ describe Nanoc::Filters::RelativizePaths do
   end
 
   let(:item_rep) do
-    Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
+    Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
       rep.paths = { last: ['/sub/page.html'] }
     end
   end

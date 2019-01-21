@@ -19,7 +19,7 @@ describe Nanoc::RuleDSL::RulesCollection do
   describe '#compilation_rule_for' do
     let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
 
-    let(:rep) { Nanoc::Int::ItemRep.new(item, rep_name) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, rep_name) }
 
     let(:rep_name) { :default }
 
@@ -184,7 +184,7 @@ describe Nanoc::RuleDSL::RulesCollection do
   describe '#routing_rules_for' do
     let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
 
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :default) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
     subject { rules_collection.routing_rules_for(rep) }
 

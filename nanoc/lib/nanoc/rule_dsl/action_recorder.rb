@@ -5,7 +5,7 @@ module Nanoc
     class ActionRecorder
       include Nanoc::Core::ContractsSupport
 
-      contract Nanoc::Int::ItemRep => C::Any
+      contract Nanoc::Core::ItemRep => C::Any
       def initialize(rep)
         @action_sequence_builder = Nanoc::Int::ActionSequenceBuilder.new(rep)
 

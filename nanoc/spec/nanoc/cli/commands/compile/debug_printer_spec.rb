@@ -8,7 +8,7 @@ describe Nanoc::CLI::Commands::CompileListeners::DebugPrinter, stdio: true do
   end
 
   let(:item) { Nanoc::Core::Item.new('item content', {}, '/donkey.md') }
-  let(:rep) { Nanoc::Int::ItemRep.new(item, :latex) }
+  let(:rep) { Nanoc::Core::ItemRep.new(item, :latex) }
 
   it 'records snapshot_created' do
     listener.start_safely

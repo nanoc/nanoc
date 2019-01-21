@@ -50,7 +50,7 @@ module Nanoc::Int
       action_sequences
     end
 
-    contract Nanoc::Int::ItemRep, C::IterOf[String], C::IterOf[Symbol], C::HashOf[String => Nanoc::Int::ItemRep] => C::Any
+    contract Nanoc::Core::ItemRep, C::IterOf[String], C::IterOf[Symbol], C::HashOf[String => Nanoc::Core::ItemRep] => C::Any
     def route_rep(rep, paths, snapshot_names, assigned_paths)
       # Encode
       paths = paths.map { |path| path.encode('UTF-8') }

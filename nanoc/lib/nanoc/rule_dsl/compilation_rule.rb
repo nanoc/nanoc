@@ -4,7 +4,7 @@ module Nanoc::RuleDSL
   class CompilationRule < Rule
     include Nanoc::Core::ContractsSupport
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[
+    contract Nanoc::Core::ItemRep, C::KeywordArgs[
       site: Nanoc::Int::Site,
       recorder: Nanoc::RuleDSL::ActionRecorder,
       view_context: Nanoc::ViewContextForPreCompilation,

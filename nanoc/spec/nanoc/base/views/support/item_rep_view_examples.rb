@@ -30,7 +30,7 @@ shared_examples 'an item rep view' do
   end
 
   describe '#frozen?' do
-    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
@@ -47,7 +47,7 @@ shared_examples 'an item rep view' do
   end
 
   describe '#== and #eql?' do
-    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
@@ -135,7 +135,7 @@ shared_examples 'an item rep view' do
   end
 
   describe '#hash' do
-    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
@@ -150,10 +150,10 @@ shared_examples 'an item rep view' do
     let(:view) { described_class.new(rep, view_context) }
 
     let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+      Nanoc::Core::ItemRep.new(item, :default).tap do |ir|
         ir.compiled = true
         ir.snapshot_defs = [
-          Nanoc::Int::SnapshotDef.new(:last, binary: false),
+          Nanoc::Core::SnapshotDef.new(:last, binary: false),
         ]
       end
     end
@@ -217,7 +217,7 @@ shared_examples 'an item rep view' do
     let(:view) { described_class.new(rep, view_context) }
 
     let(:rep) do
-      Nanoc::Int::ItemRep.new(item, :default).tap do |ir|
+      Nanoc::Core::ItemRep.new(item, :default).tap do |ir|
         ir.paths = {
           last: ['/about/'],
         }
@@ -247,7 +247,7 @@ shared_examples 'an item rep view' do
   end
 
   describe '#binary?' do
-    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
@@ -265,7 +265,7 @@ shared_examples 'an item rep view' do
 
     context ':last snapshot is textual' do
       before do
-        item_rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:last, binary: false)]
+        item_rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
       end
 
       it { is_expected.not_to be }
@@ -273,7 +273,7 @@ shared_examples 'an item rep view' do
 
     context ':last snapshot is binary' do
       before do
-        item_rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:last, binary: true)]
+        item_rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: true)]
       end
 
       it { is_expected.to be }
@@ -281,7 +281,7 @@ shared_examples 'an item rep view' do
   end
 
   describe '#item' do
-    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
@@ -297,7 +297,7 @@ shared_examples 'an item rep view' do
   end
 
   describe '#inspect' do
-    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :jacques) }
+    let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 

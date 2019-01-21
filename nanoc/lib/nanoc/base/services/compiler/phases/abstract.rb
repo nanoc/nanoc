@@ -29,7 +29,7 @@ module Nanoc::Int::Compiler::Phases
       raise
     end
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
+    contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
     def run(_rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
       raise NotImplementedError
     end

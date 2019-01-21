@@ -18,7 +18,7 @@ describe Nanoc::Int::OutdatednessRules do
       )
     end
 
-    let(:item_rep) { Nanoc::Int::ItemRep.new(item, :default) }
+    let(:item_rep) { Nanoc::Core::ItemRep.new(item, :default) }
     let(:item) { Nanoc::Core::Item.new('stuff', {}, '/foo.md') }
     let(:layout) { Nanoc::Core::Layout.new('layoutz', {}, '/page.erb') }
 

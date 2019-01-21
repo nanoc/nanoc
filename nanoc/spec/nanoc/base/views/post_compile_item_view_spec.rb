@@ -2,8 +2,8 @@
 
 describe Nanoc::PostCompileItemView do
   let(:item) { Nanoc::Core::Item.new('blah', {}, '/foo.md') }
-  let(:rep_a) { Nanoc::Int::ItemRep.new(item, :no_mod) }
-  let(:rep_b) { Nanoc::Int::ItemRep.new(item, :modded).tap { |r| r.modified = true } }
+  let(:rep_a) { Nanoc::Core::ItemRep.new(item, :no_mod) }
+  let(:rep_b) { Nanoc::Core::ItemRep.new(item, :modded).tap { |r| r.modified = true } }
 
   let(:reps) do
     Nanoc::Int::ItemRepRepo.new.tap do |reps|

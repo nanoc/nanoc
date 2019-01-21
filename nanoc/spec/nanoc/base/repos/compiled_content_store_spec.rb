@@ -7,7 +7,7 @@ describe Nanoc::Int::CompiledContentStore do
     subject { repo.get(rep, snapshot_name) }
 
     let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :foo) }
     let(:snapshot_name) { :donkey }
 
     context 'rep does not exist in repo' do
@@ -32,7 +32,7 @@ describe Nanoc::Int::CompiledContentStore do
     subject { repo.get_all(rep) }
 
     let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :foo) }
 
     context 'rep does not exist in repo' do
       it { is_expected.to eq({}) }
@@ -48,7 +48,7 @@ describe Nanoc::Int::CompiledContentStore do
     subject { repo.set(rep, snapshot_name, contents) }
 
     let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :foo) }
     let(:snapshot_name) { :donkey }
     let(:contents) { Nanoc::Core::TextualContent.new('donkey') }
 
@@ -64,10 +64,10 @@ describe Nanoc::Int::CompiledContentStore do
     subject { repo.set_all(rep, contents_by_snapshot) }
 
     let(:other_item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
-    let(:other_rep) { Nanoc::Int::ItemRep.new(other_item, :foo) }
+    let(:other_rep) { Nanoc::Core::ItemRep.new(other_item, :foo) }
 
     let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :foo) }
     let(:contents_by_snapshot) { { donkey: Nanoc::Core::TextualContent.new('donkey') } }
 
     it 'changes the given rep+snapshot' do
@@ -90,7 +90,7 @@ describe Nanoc::Int::CompiledContentStore do
 
   describe '#compiled_content' do
     let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
-    let(:rep) { Nanoc::Int::ItemRep.new(item, :foo) }
+    let(:rep) { Nanoc::Core::ItemRep.new(item, :foo) }
 
     shared_examples 'a snapshot' do
       context 'no snapshot def' do
@@ -102,7 +102,7 @@ describe Nanoc::Int::CompiledContentStore do
       context 'snapshot def exists' do
         context 'content is missing' do
           before do
-            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(expected_snapshot_name, binary: false)]
+            rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(expected_snapshot_name, binary: false)]
             repo.set_all(rep, {})
           end
 
@@ -113,7 +113,7 @@ describe Nanoc::Int::CompiledContentStore do
 
         context 'content is present' do
           before do
-            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(expected_snapshot_name, binary: false)]
+            rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(expected_snapshot_name, binary: false)]
             repo.set_all(rep, expected_snapshot_name => content)
           end
 

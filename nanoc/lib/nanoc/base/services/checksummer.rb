@@ -84,7 +84,7 @@ module Nanoc::Int
           HashUpdateBehavior
         when Nanoc::Core::Item, Nanoc::Core::Layout
           DocumentUpdateBehavior
-        when Nanoc::Int::ItemRep
+        when Nanoc::Core::ItemRep
           ItemRepUpdateBehavior
         when NilClass, TrueClass, FalseClass
           NoUpdateBehavior

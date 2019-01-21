@@ -84,13 +84,13 @@ describe Nanoc::Filters::SassCommon do
     end
 
     let(:item_main_default_rep) do
-      Nanoc::Int::ItemRep.new(item_main, :default).tap do |rep|
+      Nanoc::Core::ItemRep.new(item_main, :default).tap do |rep|
         rep.raw_paths = rep.paths = { last: [Dir.getwd + '/output/style/main.sass'] }
       end
     end
 
     let(:item_main_sourcemap_rep) do
-      Nanoc::Int::ItemRep.new(item_main, :sourcemap).tap do |rep|
+      Nanoc::Core::ItemRep.new(item_main, :sourcemap).tap do |rep|
         rep.raw_paths = rep.paths = { last: [Dir.getwd + '/output/style/main.sass.map'] }
       end
     end
@@ -115,9 +115,9 @@ describe Nanoc::Filters::SassCommon do
     let(:reps) do
       Nanoc::Int::ItemRepRepo.new.tap do |reps|
         [item_blue, item_red, item_partial].each do |item|
-          reps << Nanoc::Int::ItemRep.new(item, :default).tap do |rep|
+          reps << Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
             rep.compiled = true
-            rep.snapshot_defs = [Nanoc::Int::SnapshotDef.new(:last, binary: false)]
+            rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
           end
         end
         reps << item_main_default_rep

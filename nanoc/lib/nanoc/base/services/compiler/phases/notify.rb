@@ -5,7 +5,7 @@ module Nanoc::Int::Compiler::Phases
   class Notify < Abstract
     include Nanoc::Core::ContractsSupport
 
-    contract Nanoc::Int::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
+    contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
     def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
       Nanoc::Int::NotificationCenter.post(:compilation_started, rep)
       yield
