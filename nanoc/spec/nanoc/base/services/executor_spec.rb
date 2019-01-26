@@ -362,7 +362,7 @@ describe Nanoc::Int::Executor do
     end
 
     let(:action_sequence) do
-      Nanoc::Int::ActionSequence.build(rep) do |b|
+      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:erb, {})
       end
     end

@@ -301,7 +301,7 @@ describe Nanoc::Int::OutdatednessRules do
       let(:rule_class) { Nanoc::Int::OutdatednessRules::RulesModified }
 
       let(:old_mem) do
-        Nanoc::Int::ActionSequence.build(item_rep) do |b|
+        Nanoc::Int::ActionSequenceBuilder.build(item_rep) do |b|
           b.add_filter(:erb, {})
         end
       end
@@ -319,7 +319,7 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'memory is different' do
         let(:new_mem) do
-          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(item_rep) do |b|
             b.add_filter(:erb, {})
             b.add_filter(:donkey, {})
           end
@@ -330,7 +330,7 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'memory is the same, but refers to a layout' do
         let(:old_mem) do
-          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(item_rep) do |b|
             b.add_layout('/page.*', {})
           end
         end
@@ -350,7 +350,7 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'everything is the same' do
           let(:new_layout_mem) do
-            Nanoc::Int::ActionSequence.build(layout) do |b|
+            Nanoc::Int::ActionSequenceBuilder.build(layout) do |b|
               b.add_filter(:erb, {})
             end
           end
@@ -362,19 +362,19 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'referenced layout does not exist' do
           let(:new_layout_mem) do
-            Nanoc::Int::ActionSequence.build(layout) do |b|
+            Nanoc::Int::ActionSequenceBuilder.build(layout) do |b|
               b.add_filter(:erb, {})
             end
           end
 
           let(:old_layout_mem) do
-            Nanoc::Int::ActionSequence.build(layout) do |b|
+            Nanoc::Int::ActionSequenceBuilder.build(layout) do |b|
               b.add_filter(:haml, {})
             end
           end
 
           let(:old_mem) do
-            Nanoc::Int::ActionSequence.build(item_rep) do |b|
+            Nanoc::Int::ActionSequenceBuilder.build(item_rep) do |b|
               b.add_layout('/moo.*', {})
             end
           end
@@ -386,13 +386,13 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'filter name is different' do
           let(:new_layout_mem) do
-            Nanoc::Int::ActionSequence.build(layout) do |b|
+            Nanoc::Int::ActionSequenceBuilder.build(layout) do |b|
               b.add_filter(:erb, {})
             end
           end
 
           let(:old_layout_mem) do
-            Nanoc::Int::ActionSequence.build(layout) do |b|
+            Nanoc::Int::ActionSequenceBuilder.build(layout) do |b|
               b.add_filter(:haml, {})
             end
           end
@@ -402,13 +402,13 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'params are different' do
           let(:new_layout_mem) do
-            Nanoc::Int::ActionSequence.build(layout) do |b|
+            Nanoc::Int::ActionSequenceBuilder.build(layout) do |b|
               b.add_filter(:erb, {})
             end
           end
 
           let(:old_layout_mem) do
-            Nanoc::Int::ActionSequence.build(layout) do |b|
+            Nanoc::Int::ActionSequenceBuilder.build(layout) do |b|
               b.add_filter(:erb, foo: 123)
             end
           end
@@ -550,7 +550,7 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'unknown filter' do
         let(:mem) do
-          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(item_rep) do |b|
             b.add_snapshot(:donkey, '/foo.md')
             b.add_filter(:asdf, {})
           end
@@ -561,7 +561,7 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'known filter, not always outdated' do
         let(:mem) do
-          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(item_rep) do |b|
             b.add_snapshot(:donkey, '/foo.md')
             b.add_filter(:erb, {})
           end
@@ -572,7 +572,7 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'known filter, always outdated' do
         let(:mem) do
-          Nanoc::Int::ActionSequence.build(item_rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(item_rep) do |b|
             b.add_snapshot(:donkey, '/foo.md')
             b.add_filter(:xsl, {})
           end

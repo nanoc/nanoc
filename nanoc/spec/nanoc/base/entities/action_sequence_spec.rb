@@ -11,7 +11,7 @@ describe Nanoc::Int::ActionSequence do
 
     context 'no actions' do
       let(:action_sequence) do
-        described_class.build(rep) do |b|
+        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
         end
       end
 
@@ -20,7 +20,7 @@ describe Nanoc::Int::ActionSequence do
 
     context 'some actions' do
       let(:action_sequence) do
-        described_class.build(rep) do |b|
+        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
           b.add_filter(:foo, {})
         end
       end
@@ -35,7 +35,7 @@ describe Nanoc::Int::ActionSequence do
 
     context 'no actions' do
       let(:action_sequence) do
-        described_class.build(rep) do |b|
+        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
         end
       end
 
@@ -44,7 +44,7 @@ describe Nanoc::Int::ActionSequence do
 
     context 'some actions' do
       let(:action_sequence) do
-        described_class.build(rep) do |b|
+        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
           b.add_filter(:foo, {})
         end
       end
@@ -55,7 +55,7 @@ describe Nanoc::Int::ActionSequence do
 
   describe '#add_filter' do
     let(:action_sequence) do
-      described_class.build(rep) do |b|
+      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:foo, donkey: 123)
       end
     end
@@ -70,7 +70,7 @@ describe Nanoc::Int::ActionSequence do
 
   describe '#add_layout' do
     let(:action_sequence) do
-      described_class.build(rep) do |b|
+      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
         b.add_layout('/foo.*', donkey: 123)
       end
     end
@@ -86,7 +86,7 @@ describe Nanoc::Int::ActionSequence do
   describe '#add_snapshot' do
     context 'snapshot does not yet exist' do
       let(:action_sequence) do
-        described_class.build(rep) do |b|
+        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
           b.add_snapshot(:before_layout, '/foo.md')
         end
       end
@@ -101,7 +101,7 @@ describe Nanoc::Int::ActionSequence do
 
     context 'snapshot already exist' do
       it 'raises' do
-        described_class.build(rep) do |b|
+        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
           b.add_snapshot(:before_layout, '/bar.md')
           expect { b.add_snapshot(:before_layout, '/foo.md') }
             .to raise_error(Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName)
@@ -112,7 +112,7 @@ describe Nanoc::Int::ActionSequence do
 
   describe '#each' do
     let(:action_sequence) do
-      described_class.build(rep) do |b|
+      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:erb, awesomeness: 'high')
         b.add_snapshot(:bar, '/foo.md')
         b.add_layout('/default.erb', somelayoutparam: 'yes')
@@ -128,7 +128,7 @@ describe Nanoc::Int::ActionSequence do
 
   describe '#map' do
     let(:action_sequence) do
-      described_class.build(rep) do |b|
+      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:erb, awesomeness: 'high')
         b.add_snapshot(:bar, '/foo.md')
         b.add_layout('/default.erb', somelayoutparam: 'yes')
@@ -146,7 +146,7 @@ describe Nanoc::Int::ActionSequence do
     subject { action_sequence.serialize }
 
     let(:action_sequence) do
-      described_class.build(rep) do |b|
+      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:erb, awesomeness: 'high')
         b.add_snapshot(:bar, '/foo.md')
         b.add_layout('/default.erb', somelayoutparam: 'yes')
@@ -198,7 +198,7 @@ describe Nanoc::Int::ActionSequence do
 
     it 'has no snapshot defs by default' do
       action_sequence =
-        described_class.build(rep) do |b|
+        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
         end
 
       expect(action_sequence.snapshots_defs).to be_empty
@@ -209,7 +209,7 @@ describe Nanoc::Int::ActionSequence do
 
       it 'generates initial textual snapshot def' do
         action_sequence =
-          described_class.build(rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
             b.add_snapshot(:giraffe, nil)
           end
 
@@ -220,7 +220,7 @@ describe Nanoc::Int::ActionSequence do
 
       it 'generated follow-up textual snapshot def if previous filter is textual' do
         action_sequence =
-          described_class.build(rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
             b.add_snapshot(:giraffe, nil)
             b.add_filter(:RuleMemSpec_filter_t2t, arguments: 'irrelevant')
             b.add_snapshot(:zebra, nil)
@@ -235,7 +235,7 @@ describe Nanoc::Int::ActionSequence do
 
       it 'generated follow-up binary snapshot def if previous filter is text-to-bianry' do
         action_sequence =
-          described_class.build(rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
             b.add_snapshot(:giraffe, nil)
             b.add_filter(:RuleMemSpec_filter_t2b, arguments: 'irrelevant')
             b.add_snapshot(:zebra, nil)
@@ -254,7 +254,7 @@ describe Nanoc::Int::ActionSequence do
 
       it 'generates initial binary snapshot def' do
         action_sequence =
-          described_class.build(rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
             b.add_snapshot(:giraffe, nil)
           end
 
@@ -265,7 +265,7 @@ describe Nanoc::Int::ActionSequence do
 
       it 'generated follow-up binary snapshot def if previous filter is binary' do
         action_sequence =
-          described_class.build(rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
             b.add_snapshot(:giraffe, nil)
             b.add_filter(:RuleMemSpec_filter_b2b, arguments: 'irrelevant')
             b.add_snapshot(:zebra, nil)
@@ -280,7 +280,7 @@ describe Nanoc::Int::ActionSequence do
 
       it 'generated follow-up textual snapshot def if previous filter is binary-to-text' do
         action_sequence =
-          described_class.build(rep) do |b|
+          Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
             b.add_snapshot(:giraffe, nil)
             b.add_filter(:RuleMemSpec_filter_b2t, arguments: 'irrelevant')
             b.add_snapshot(:zebra, nil)

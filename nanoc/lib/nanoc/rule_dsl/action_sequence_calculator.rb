@@ -86,7 +86,7 @@ module Nanoc::RuleDSL
         raise NoActionSequenceForLayoutException.new(layout)
       end
 
-      Nanoc::Int::ActionSequence.build(layout) do |b|
+      Nanoc::Int::ActionSequenceBuilder.build(layout) do |b|
         b.add_filter(res[0], res[1])
       end
     end

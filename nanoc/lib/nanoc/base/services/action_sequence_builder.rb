@@ -4,6 +4,12 @@ module Nanoc::Int
   class ActionSequenceBuilder
     include Nanoc::Core::ContractsSupport
 
+    def self.build(rep)
+      builder = new(rep)
+      yield(builder)
+      builder.action_sequence
+    end
+
     def initialize(item_rep)
       @item_rep = item_rep
       @actions = []
