@@ -38,37 +38,37 @@ describe Nanoc::Int::Compiler::Stages::CalculateChecksums do
 
     it 'checksums items' do
       expect(subject.checksum_for(item))
-        .to eq(Nanoc::Int::Checksummer.calc(item))
+        .to eq(Nanoc::Core::Checksummer.calc(item))
 
       expect(subject.content_checksum_for(item))
-        .to eq(Nanoc::Int::Checksummer.calc_for_content_of(item))
+        .to eq(Nanoc::Core::Checksummer.calc_for_content_of(item))
 
       expect(subject.attributes_checksum_for(item))
-        .to eq(Nanoc::Int::Checksummer.calc_for_each_attribute_of(item))
+        .to eq(Nanoc::Core::Checksummer.calc_for_each_attribute_of(item))
     end
 
     it 'checksums layouts' do
       expect(subject.checksum_for(layout))
-        .to eq(Nanoc::Int::Checksummer.calc(layout))
+        .to eq(Nanoc::Core::Checksummer.calc(layout))
 
       expect(subject.content_checksum_for(layout))
-        .to eq(Nanoc::Int::Checksummer.calc_for_content_of(layout))
+        .to eq(Nanoc::Core::Checksummer.calc_for_content_of(layout))
 
       expect(subject.attributes_checksum_for(layout))
-        .to eq(Nanoc::Int::Checksummer.calc_for_each_attribute_of(layout))
+        .to eq(Nanoc::Core::Checksummer.calc_for_each_attribute_of(layout))
     end
 
     it 'checksums config' do
       expect(subject.checksum_for(config))
-        .to eq(Nanoc::Int::Checksummer.calc(config))
+        .to eq(Nanoc::Core::Checksummer.calc(config))
 
       expect(subject.attributes_checksum_for(config))
-        .to eq(Nanoc::Int::Checksummer.calc_for_each_attribute_of(config))
+        .to eq(Nanoc::Core::Checksummer.calc_for_each_attribute_of(config))
     end
 
     it 'checksums code snippets' do
       expect(subject.checksum_for(code_snippet))
-        .to eq(Nanoc::Int::Checksummer.calc(code_snippet))
+        .to eq(Nanoc::Core::Checksummer.calc(code_snippet))
     end
   end
 end

@@ -2,7 +2,6 @@
 
 require_relative 'services/action_provider'
 require_relative 'services/action_sequence_builder'
-require_relative 'services/checksummer'
 require_relative 'services/compilation_context'
 require_relative 'services/compiler'
 require_relative 'services/compiler_loader'
@@ -27,7 +26,7 @@ require_relative 'services/outdatedness_checker'
 
 # TODO: Move this into the entity, once the load order is improved (i.e. the
 # checksummer is loaded after CodeSnippet).
-Nanoc::Int::Checksummer.define_behavior(
+Nanoc::Core::Checksummer.define_behavior(
   Nanoc::Int::CodeSnippet,
-  Nanoc::Int::Checksummer::DataUpdateBehavior,
+  Nanoc::Core::Checksummer::DataUpdateBehavior,
 )

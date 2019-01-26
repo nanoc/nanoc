@@ -21,12 +21,12 @@ require_relative 'rule_dsl/rule'
 require_relative 'rule_dsl/compilation_rule'
 require_relative 'rule_dsl/routing_rule'
 
-Nanoc::Int::Checksummer.define_behavior(
+Nanoc::Core::Checksummer.define_behavior(
   Nanoc::RuleDSL::CompilationRuleContext,
-  Nanoc::Int::Checksummer::RuleContextUpdateBehavior,
+  Nanoc::Core::Checksummer::RuleContextUpdateBehavior,
 )
 
-Nanoc::Int::Checksummer.define_behavior(
+Nanoc::Core::Checksummer.define_behavior(
   Nanoc::RuleDSL::RulesCollection,
-  Nanoc::Int::Checksummer::DataUpdateBehavior,
+  Nanoc::Core::Checksummer::DataUpdateBehavior,
 )

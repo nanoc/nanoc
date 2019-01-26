@@ -43,7 +43,6 @@ lib/nanoc/base/repos/store.rb
 lib/nanoc/base/services.rb
 lib/nanoc/base/services/action_provider.rb
 lib/nanoc/base/services/action_sequence_builder.rb
-lib/nanoc/base/services/checksummer.rb
 lib/nanoc/base/services/compilation_context.rb
 lib/nanoc/base/services/compiler_loader.rb
 lib/nanoc/base/services/compiler.rb

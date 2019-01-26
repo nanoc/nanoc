@@ -14,7 +14,7 @@ module Nanoc::Int::ProcessingActions
     end
 
     def serialize
-      [:filter, @filter_name, Nanoc::Int::Checksummer.calc(@params)]
+      [:filter, @filter_name, Nanoc::Core::Checksummer.calc(@params)]
     end
 
     def to_s

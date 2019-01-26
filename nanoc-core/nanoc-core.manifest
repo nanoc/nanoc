@@ -6,6 +6,7 @@ lib/nanoc/core.rb
 lib/nanoc/core/version.rb
 
 lib/nanoc/core/binary_content.rb
+lib/nanoc/core/checksummer.rb
 lib/nanoc/core/configuration-schema.json
 lib/nanoc/core/configuration.rb
 lib/nanoc/core/content.rb

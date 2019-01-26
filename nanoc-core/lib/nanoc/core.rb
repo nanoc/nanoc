@@ -47,3 +47,5 @@ require 'nanoc/core/layout'
 
 require 'nanoc/core/item_rep'
 require 'nanoc/core/snapshot_def'
+
+require 'nanoc/core/checksummer'

@@ -30,14 +30,14 @@ module Nanoc::Int
     contract c_obj => self
     def add(obj)
       if obj.is_a?(Nanoc::Core::Document)
-        @checksums[[obj.reference, :content]] = Nanoc::Int::Checksummer.calc_for_content_of(obj)
+        @checksums[[obj.reference, :content]] = Nanoc::Core::Checksummer.calc_for_content_of(obj)
       end
 
       if obj.is_a?(Nanoc::Core::Document) || obj.is_a?(Nanoc::Core::Configuration)
-        @checksums[[obj.reference, :each_attribute]] = Nanoc::Int::Checksummer.calc_for_each_attribute_of(obj)
+        @checksums[[obj.reference, :each_attribute]] = Nanoc::Core::Checksummer.calc_for_each_attribute_of(obj)
       end
 
-      @checksums[obj.reference] = Nanoc::Int::Checksummer.calc(obj)
+      @checksums[obj.reference] = Nanoc::Core::Checksummer.calc(obj)
 
       self
     end
