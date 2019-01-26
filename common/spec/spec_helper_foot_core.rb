@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 
+def __nanoc_core_chdir(dir)
+  here = Dir.getwd
+  Dir.chdir(dir)
+  yield
+ensure
+  Dir.chdir(here)
+end
+
 RSpec.configure do |c|
   c.fuubar_progress_bar_options = {
     format: '%c/%C |<%b>%i| %p%%',
@@ -16,7 +24,7 @@ RSpec.configure do |c|
 
     if should_chdir
       Dir.mktmpdir('nanoc-test') do |dir|
-        chdir(dir) { example.run }
+        __nanoc_core_chdir(dir) { example.run }
       end
     else
       example.run
