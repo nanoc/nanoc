@@ -24,3 +24,10 @@ require_relative 'services/compiler/phases'
 require_relative 'services/compiler/stages'
 
 require_relative 'services/outdatedness_checker'
+
+# TODO: Move this into the entity, once the load order is improved (i.e. the
+# checksummer is loaded after CodeSnippet).
+Nanoc::Int::Checksummer.define_behavior(
+  Nanoc::Int::CodeSnippet,
+  Nanoc::Int::Checksummer::DataUpdateBehavior,
+)

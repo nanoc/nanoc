@@ -35,3 +35,10 @@ require_relative 'views/post_compile_item_view'
 require_relative 'views/post_compile_item_collection_view'
 require_relative 'views/post_compile_item_rep_view'
 require_relative 'views/post_compile_item_rep_collection_view'
+
+# TODO: Move this, once the load order is improved (i.e. the checksummer is
+# loded after the views are).
+Nanoc::Int::Checksummer.define_behavior(
+  Nanoc::View,
+  Nanoc::Int::Checksummer::UnwrapUpdateBehavior,
+)

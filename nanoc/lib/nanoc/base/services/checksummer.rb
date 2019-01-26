@@ -56,6 +56,10 @@ module Nanoc::Int
         end
       end
 
+      def define_behavior(klass, behavior)
+        behaviors[klass] = behavior
+      end
+
       private
 
       def update(obj, digest, visited = Hamster::Set.new)
@@ -70,41 +74,48 @@ module Nanoc::Int
         end
       end
 
-      def behavior_for(obj)
-        case obj
-        when String, Symbol, Numeric
-          RawUpdateBehavior
-        when Pathname
-          PathnameUpdateBehavior
-        when Nanoc::Core::BinaryContent
-          BinaryContentUpdateBehavior
-        when Array, Nanoc::Core::IdentifiableCollection
-          ArrayUpdateBehavior
-        when Hash, Nanoc::Core::Configuration
-          HashUpdateBehavior
-        when Nanoc::Core::Item, Nanoc::Core::Layout
-          DocumentUpdateBehavior
-        when Nanoc::Core::ItemRep
-          ItemRepUpdateBehavior
-        when NilClass, TrueClass, FalseClass
-          NoUpdateBehavior
-        when Time
-          ToIToSUpdateBehavior
-        when Nanoc::Core::Identifier
-          ToSUpdateBehavior
-        when Nanoc::RuleDSL::RulesCollection, Nanoc::Int::CodeSnippet
-          DataUpdateBehavior
-        when Nanoc::Core::TextualContent
-          StringUpdateBehavior
-        when Nanoc::View
-          UnwrapUpdateBehavior
-        when Nanoc::RuleDSL::CompilationRuleContext
-          RuleContextUpdateBehavior
-        when Nanoc::Core::Context
-          ContextUpdateBehavior
-        else
-          RescueUpdateBehavior
+      def behaviors
+        return @behaviors if @behaviors
+
+        @behaviors = {}
+
+        # NOTE: Other behaviors are registered elsewhere
+        # (search for `define_behavior`).
+        define_behavior(Array, ArrayUpdateBehavior)
+        define_behavior(FalseClass, NoUpdateBehavior)
+        define_behavior(Hash, HashUpdateBehavior)
+        define_behavior(Nanoc::Core::BinaryContent, BinaryContentUpdateBehavior)
+        define_behavior(Nanoc::Core::Configuration, HashUpdateBehavior)
+        define_behavior(Nanoc::Core::Context, ContextUpdateBehavior)
+        define_behavior(Nanoc::Core::IdentifiableCollection, ArrayUpdateBehavior)
+        define_behavior(Nanoc::Core::Identifier, ToSUpdateBehavior)
+        define_behavior(Nanoc::Core::Item, DocumentUpdateBehavior)
+        define_behavior(Nanoc::Core::ItemRep, ItemRepUpdateBehavior)
+        define_behavior(Nanoc::Core::Layout, DocumentUpdateBehavior)
+        define_behavior(Nanoc::Core::TextualContent, StringUpdateBehavior)
+        define_behavior(NilClass, NoUpdateBehavior)
+        define_behavior(Numeric, RawUpdateBehavior)
+        define_behavior(Pathname, PathnameUpdateBehavior)
+        define_behavior(String, RawUpdateBehavior)
+        define_behavior(Symbol, RawUpdateBehavior)
+        define_behavior(Time, ToIToSUpdateBehavior)
+        define_behavior(TrueClass, NoUpdateBehavior)
+
+        @behaviors
+      end
+
+      def behavior_for_class(klass)
+        behaviors.fetch(klass) do
+          if Object.equal?(klass.superclass)
+            RescueUpdateBehavior
+          else
+            behavior_for_class(klass.superclass)
+          end
         end
+      end
+
+      def behavior_for(obj)
+        behavior_for_class(obj.class)
       end
     end
 
