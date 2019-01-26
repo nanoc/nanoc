@@ -31,6 +31,8 @@ module Nanoc
 
     extend DDPlugin::Plugin
 
+    include Nanoc::Core::ContractsSupport
+
     class << self
       def define(ident, &block)
         filter_class = Class.new(::Nanoc::Filter) { identifier(ident) }
@@ -188,6 +190,7 @@ module Nanoc
       end
     end
 
+    contract C::None => String
     # Returns a filename that is used to write data to. This method is only
     #   used on binary items. When running a binary filter on a file, the
     #   resulting file must end up in the location returned by this method.
@@ -201,6 +204,7 @@ module Nanoc
         Nanoc::Core::TempFilenameFactory.instance.create(TMP_BINARY_ITEMS_DIR)
     end
 
+    contract C::None => String
     # Returns the filename associated with the item that is being filtered.
     #   It is in the format `item <identifier> (rep <name>)`.
     #
@@ -222,6 +226,7 @@ module Nanoc
       Fiber.yield(block)
     end
 
+    contract C::ArrayOf[C::Named['Nanoc::BasicItemView']] => C::Any
     # Creates a dependency from the item that is currently being filtered onto
     # the given collection of items. In other words, require the given items
     # to be compiled first before this items is processed.
