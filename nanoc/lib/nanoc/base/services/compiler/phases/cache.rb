@@ -16,7 +16,7 @@ module Nanoc::Int::Compiler::Phases
     contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
     def run(rep, is_outdated:)
       if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
-        Nanoc::Int::NotificationCenter.post(:cached_content_used, rep)
+        Nanoc::Core::NotificationCenter.post(:cached_content_used, rep)
 
         @compiled_content_store.set_all(rep, @compiled_content_cache[rep])
       else

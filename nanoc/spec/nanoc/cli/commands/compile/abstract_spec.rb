@@ -62,7 +62,7 @@ describe Nanoc::CLI::Commands::CompileListeners::Abstract do
       let!(:notifications) { [] }
 
       before do
-        Nanoc::Int::NotificationCenter.on(:sah8sem0jaiw1phi4bai) do
+        Nanoc::Core::NotificationCenter.on(:sah8sem0jaiw1phi4bai) do
           sleep 0.1
           notifications << :notified
         end
@@ -76,7 +76,7 @@ describe Nanoc::CLI::Commands::CompileListeners::Abstract do
 
       it 'waits for notifications to be processed' do
         subject.run_while do
-          Nanoc::Int::NotificationCenter.post(:sah8sem0jaiw1phi4bai)
+          Nanoc::Core::NotificationCenter.post(:sah8sem0jaiw1phi4bai)
         end
 
         expect(notifications).to eq([:notified])

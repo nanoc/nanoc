@@ -41,10 +41,6 @@ RSpec.configure do |c|
     Nanoc::CLI::ErrorHandler.enable
   end
 
-  c.before(:each) do
-    Nanoc::Int::NotificationCenter.reset
-  end
-
   c.before(:each, fork: true) do
     skip 'fork() is not supported on Windows' if Nanoc.on_windows?
   end
@@ -78,40 +74,6 @@ end
 
 RSpec::Matchers.alias_matcher :some_textual_content, :be_some_textual_content
 RSpec::Matchers.alias_matcher :some_binary_content, :be_some_binary_content
-
-RSpec::Matchers.define :send_notification do |name, *expected_args|
-  supports_block_expectations
-
-  include RSpec::Matchers::Composable
-
-  match do |actual|
-    @actual_notifications = []
-    Nanoc::Int::NotificationCenter.on(name, self) do |*actual_args|
-      @actual_notifications << actual_args
-    end
-
-    actual.call
-    Nanoc::Int::NotificationCenter.sync
-
-    @actual_notifications.any? { |c| c == expected_args }
-  end
-
-  description do
-    "send notification #{name.inspect} with args #{expected_args.inspect}"
-  end
-
-  failure_message do |_actual|
-    s = +"expected that proc would send notification #{name.inspect} with args #{expected_args.inspect}"
-    if @actual_notifications.any?
-      s << " (received #{@actual_notifications.size} times with other arguments: #{@actual_notifications.map(&:inspect).join(', ')})"
-    end
-    s
-  end
-
-  failure_message_when_negated do |_actual|
-    "expected that proc would not send notification #{name.inspect} with args #{expected_args.inspect}"
-  end
-end
 
 RSpec::Matchers.define :create_dependency_on do |expected|
   supports_block_expectations

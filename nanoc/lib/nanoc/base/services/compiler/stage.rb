@@ -21,6 +21,6 @@ class Nanoc::Int::Compiler::Stage
 
   def notify(sym)
     name = self.class.to_s.sub(/^.*::/, '')
-    Nanoc::Int::NotificationCenter.post(sym, name)
+    Nanoc::Core::NotificationCenter.post(sym, name)
   end
 end

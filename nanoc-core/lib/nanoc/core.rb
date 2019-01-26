@@ -49,6 +49,7 @@ require 'nanoc/core/item_rep'
 require 'nanoc/core/snapshot_def'
 
 require 'nanoc/core/checksummer'
+require 'nanoc/core/notification_center'
 
 require 'nanoc/core/processing_action'
 require 'nanoc/core/processing_actions'

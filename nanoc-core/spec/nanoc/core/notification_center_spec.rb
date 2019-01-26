@@ -24,7 +24,7 @@ shared_examples 'a notification center' do
   end
 end
 
-describe Nanoc::Int::NotificationCenter do
+describe Nanoc::Core::NotificationCenter do
   describe 'class' do
     subject { described_class }
     it_behaves_like 'a notification center'

@@ -26,10 +26,10 @@ module Nanoc::CLI::Commands::CompileListeners
     def wrapped_stop
       stop
 
-      Nanoc::Int::NotificationCenter.sync
+      Nanoc::Core::NotificationCenter.sync
 
       @_notification_names.each do |name|
-        Nanoc::Int::NotificationCenter.remove(name, self)
+        Nanoc::Core::NotificationCenter.remove(name, self)
       end
     end
 
@@ -52,7 +52,7 @@ module Nanoc::CLI::Commands::CompileListeners
 
     def on(sym)
       @_notification_names << sym
-      Nanoc::Int::NotificationCenter.on(sym, self) { |*args| yield(*args) }
+      Nanoc::Core::NotificationCenter.on(sym, self) { |*args| yield(*args) }
     end
   end
 end

@@ -38,12 +38,12 @@ module Nanoc::Int
       is_created = !File.file?(raw_path)
 
       # Notify
-      Nanoc::Int::NotificationCenter.post(
+      Nanoc::Core::NotificationCenter.post(
         :rep_write_started, item_rep, raw_path
       )
 
       # Sync (needed so that diff generator can read the old contents)
-      Nanoc::Int::NotificationCenter.sync
+      Nanoc::Core::NotificationCenter.sync
 
       content = compiled_content_store.get(item_rep, snapshot_name)
       if content.binary?
@@ -68,7 +68,7 @@ module Nanoc::Int
       item_rep.modified = is_modified
 
       # Notify
-      Nanoc::Int::NotificationCenter.post(
+      Nanoc::Core::NotificationCenter.post(
         :rep_write_ended, item_rep, content.binary?, raw_path, is_created, is_modified
       )
     end

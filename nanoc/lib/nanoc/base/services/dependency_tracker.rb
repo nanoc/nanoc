@@ -33,7 +33,7 @@ module Nanoc::Int
     contract C_OBJ, C_ARGS => C::Any
     def enter(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
       unless @stack.empty?
-        Nanoc::Int::NotificationCenter.post(:dependency_created, @stack.last, obj)
+        Nanoc::Core::NotificationCenter.post(:dependency_created, @stack.last, obj)
         @dependency_store.record_dependency(
           @stack.last,
           obj,

@@ -38,7 +38,7 @@ module Nanoc::Int::Compiler::Phases
 
     def notify(sym, rep)
       name = self.class.to_s.sub(/^.*::/, '')
-      Nanoc::Int::NotificationCenter.post(sym, name, rep)
+      Nanoc::Core::NotificationCenter.post(sym, name, rep)
     end
   end
 end

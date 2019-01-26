@@ -17,6 +17,10 @@ RSpec.configure do |c|
     skip 'fork() is not supported on Windows' if Nanoc.on_windows?
   end
 
+  c.before(:each) do
+    Nanoc::Core::NotificationCenter.reset
+  end
+
   c.around(:each) do |example|
     should_chdir =
       !example.metadata.key?(:chdir) ||
@@ -33,6 +37,40 @@ RSpec.configure do |c|
 end
 
 RSpec::Matchers.define_negated_matcher :not_match, :match
+
+RSpec::Matchers.define :send_notification do |name, *expected_args|
+  supports_block_expectations
+
+  include RSpec::Matchers::Composable
+
+  match do |actual|
+    @actual_notifications = []
+    Nanoc::Core::NotificationCenter.on(name, self) do |*actual_args|
+      @actual_notifications << actual_args
+    end
+
+    actual.call
+    Nanoc::Core::NotificationCenter.sync
+
+    @actual_notifications.any? { |c| c == expected_args }
+  end
+
+  description do
+    "send notification #{name.inspect} with args #{expected_args.inspect}"
+  end
+
+  failure_message do |_actual|
+    s = +"expected that proc would send notification #{name.inspect} with args #{expected_args.inspect}"
+    if @actual_notifications.any?
+      s << " (received #{@actual_notifications.size} times with other arguments: #{@actual_notifications.map(&:inspect).join(', ')})"
+    end
+    s
+  end
+
+  failure_message_when_negated do |_actual|
+    "expected that proc would not send notification #{name.inspect} with args #{expected_args.inspect}"
+  end
+end
 
 RSpec::Matchers.define :raise_frozen_error do |_expected|
   match do |actual|

@@ -48,14 +48,14 @@ describe Nanoc::Int::Compiler::Phases::Abstract do
     let(:wrapped) { wrapped_class.new(wrapped: nil) }
 
     it 'sends the proper notifications' do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:phase_started, 'MyTestingPhaseClass', rep).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:phase_yielded, 'MyTestingPhaseClass', rep).ordered
+      expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:phase_started, 'MyTestingPhaseClass', rep).ordered
+      expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:phase_yielded, 'MyTestingPhaseClass', rep).ordered
 
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:phase_started, 'MyTestingWrappedPhaseClass', rep).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:phase_ended, 'MyTestingWrappedPhaseClass', rep).ordered
+      expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:phase_started, 'MyTestingWrappedPhaseClass', rep).ordered
+      expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:phase_ended, 'MyTestingWrappedPhaseClass', rep).ordered
 
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:phase_resumed, 'MyTestingPhaseClass', rep).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:phase_ended, 'MyTestingPhaseClass', rep).ordered
+      expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:phase_resumed, 'MyTestingPhaseClass', rep).ordered
+      expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:phase_ended, 'MyTestingPhaseClass', rep).ordered
 
       subject
     end

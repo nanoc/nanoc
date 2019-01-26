@@ -65,7 +65,7 @@ describe Nanoc::Int::Compiler do
   end
 
   before do
-    allow(Nanoc::Int::NotificationCenter).to receive(:post)
+    allow(Nanoc::Core::NotificationCenter).to receive(:post)
   end
 
   describe '#compile_rep' do
@@ -96,10 +96,10 @@ describe Nanoc::Int::Compiler do
     end
 
     it 'generates notifications in the proper order' do
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
-      expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
+      expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
+      expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
+      expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
+      expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
 
       subject
     end
@@ -121,21 +121,21 @@ describe Nanoc::Int::Compiler do
 
       it 'generates notifications in the proper order' do
         # rep 1
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:dependency_created, item, other_item).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_suspended, rep, anything, anything).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:dependency_created, item, other_item).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_suspended, rep, anything, anything).ordered
 
         # rep 2
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_started, other_rep).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_started, other_rep, :erb).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, other_rep, :erb).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_ended, other_rep).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_started, other_rep).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_started, other_rep, :erb).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_ended, other_rep, :erb).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_ended, other_rep).ordered
 
         # rep 1 (again)
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
 
         expect { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true) }
           .to raise_error(Nanoc::Int::Errors::UnmetDependency)

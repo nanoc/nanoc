@@ -13,7 +13,7 @@ module Nanoc
         filter = filter_for_filtering(@rep, filter_name)
 
         begin
-          Nanoc::Int::NotificationCenter.post(:filtering_started, @rep, filter_name)
+          Nanoc::Core::NotificationCenter.post(:filtering_started, @rep, filter_name)
 
           # Run filter
           last = @compilation_context.compiled_content_store.get_current(@rep)
@@ -30,7 +30,7 @@ module Nanoc
           # Store
           @compilation_context.compiled_content_store.set_current(@rep, last)
         ensure
-          Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
+          Nanoc::Core::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
       end
 
@@ -58,7 +58,7 @@ module Nanoc
         @dependency_tracker.bounce(layout, raw_content: true)
 
         begin
-          Nanoc::Int::NotificationCenter.post(:filtering_started, @rep, filter_name)
+          Nanoc::Core::NotificationCenter.post(:filtering_started, @rep, filter_name)
 
           # Layout
           content = layout.content
@@ -69,14 +69,14 @@ module Nanoc
           last = Nanoc::Core::TextualContent.new(res).tap(&:freeze)
           @compilation_context.compiled_content_store.set_current(@rep, last)
         ensure
-          Nanoc::Int::NotificationCenter.post(:filtering_ended, @rep, filter_name)
+          Nanoc::Core::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
       end
 
       def snapshot(snapshot_name)
         last = @compilation_context.compiled_content_store.get_current(@rep)
         @compilation_context.compiled_content_store.set(@rep, snapshot_name, last)
-        Nanoc::Int::NotificationCenter.post(:snapshot_created, @rep, snapshot_name)
+        Nanoc::Core::NotificationCenter.post(:snapshot_created, @rep, snapshot_name)
       end
 
       def assigns_for(rep)

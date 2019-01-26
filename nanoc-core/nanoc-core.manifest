@@ -26,6 +26,7 @@ lib/nanoc/core/item.rb
 lib/nanoc/core/layout_collection.rb
 lib/nanoc/core/layout.rb
 lib/nanoc/core/lazy_value.rb
+lib/nanoc/core/notification_center.rb
 lib/nanoc/core/pattern.rb
 lib/nanoc/core/processing_action.rb
 lib/nanoc/core/processing_actions.rb

@@ -55,9 +55,9 @@ describe Nanoc::Int::ItemRepWriter do
       end
 
       it 'copies contents' do
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        expect(Nanoc::Core::NotificationCenter).to receive(:post)
           .with(:rep_write_started, item_rep, Dir.getwd + '/output/blah.dat')
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        expect(Nanoc::Core::NotificationCenter).to receive(:post)
           .with(:rep_write_ended, item_rep, true, Dir.getwd + '/output/blah.dat', true, true)
 
         subject
@@ -107,9 +107,9 @@ describe Nanoc::Int::ItemRepWriter do
       let(:orig_content) { Nanoc::Core::TextualContent.new('Hallo Welt') }
 
       it 'writes' do
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        expect(Nanoc::Core::NotificationCenter).to receive(:post)
           .with(:rep_write_started, item_rep, Dir.getwd + '/output/blah.dat')
-        expect(Nanoc::Int::NotificationCenter).to receive(:post)
+        expect(Nanoc::Core::NotificationCenter).to receive(:post)
           .with(:rep_write_ended, item_rep, false, Dir.getwd + '/output/blah.dat', true, true)
 
         subject

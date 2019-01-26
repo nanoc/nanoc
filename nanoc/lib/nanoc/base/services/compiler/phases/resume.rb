@@ -15,7 +15,7 @@ module Nanoc::Int::Compiler::Phases
 
         case res
         when Nanoc::Int::Errors::UnmetDependency
-          Nanoc::Int::NotificationCenter.post(:compilation_suspended, rep, res.rep, res.snapshot_name)
+          Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, res.rep, res.snapshot_name)
           raise(res)
         when Proc
           fiber.resume(res.call)

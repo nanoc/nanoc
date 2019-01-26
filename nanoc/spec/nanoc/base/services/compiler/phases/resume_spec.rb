@@ -61,13 +61,13 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       it 'posts correct notifications' do
         begin
           msgs = []
-          Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
 
           subject rescue nil
-          Nanoc::Int::NotificationCenter.sync
+          Nanoc::Core::NotificationCenter.sync
           expect(msgs).to eq([:compilation_suspended])
         ensure
-          Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
         end
       end
 
@@ -79,17 +79,17 @@ describe Nanoc::Int::Compiler::Phases::Resume do
         it 'posts correct notifications' do
           begin
             msgs = []
-            Nanoc::Int::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
-            Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-            Nanoc::Int::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
+            Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
+            Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+            Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
 
             subject rescue nil
-            Nanoc::Int::NotificationCenter.sync
+            Nanoc::Core::NotificationCenter.sync
             expect(msgs).to eq(%i[compilation_started compilation_suspended])
           ensure
-            Nanoc::Int::NotificationCenter.remove(:compilation_ended, self)
-            Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
-            Nanoc::Int::NotificationCenter.remove(:compilation_started, self)
+            Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
+            Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
+            Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
           end
         end
       end
@@ -112,13 +112,13 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       it 'posts correct notifications' do
         begin
           msgs = []
-          Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
 
           subject rescue nil
-          Nanoc::Int::NotificationCenter.sync
+          Nanoc::Core::NotificationCenter.sync
           expect(msgs).to eq(%i[compilation_suspended compilation_suspended])
         ensure
-          Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
         end
       end
 
@@ -130,17 +130,17 @@ describe Nanoc::Int::Compiler::Phases::Resume do
         it 'posts correct notifications' do
           begin
             msgs = []
-            Nanoc::Int::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
-            Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-            Nanoc::Int::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
+            Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
+            Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+            Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
 
             subject rescue nil
-            Nanoc::Int::NotificationCenter.sync
+            Nanoc::Core::NotificationCenter.sync
             expect(msgs).to eq(%i[compilation_started compilation_suspended compilation_started compilation_suspended])
           ensure
-            Nanoc::Int::NotificationCenter.remove(:compilation_ended, self)
-            Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
-            Nanoc::Int::NotificationCenter.remove(:compilation_started, self)
+            Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
+            Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
+            Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
           end
         end
       end
@@ -164,13 +164,13 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       it 'posts correct notifications' do
         begin
           msgs = []
-          Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
 
           subject
-          Nanoc::Int::NotificationCenter.sync
+          Nanoc::Core::NotificationCenter.sync
           expect(msgs).to eq(%i[compilation_suspended compilation_suspended])
         ensure
-          Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
+          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
         end
       end
 
@@ -182,17 +182,17 @@ describe Nanoc::Int::Compiler::Phases::Resume do
         it 'posts correct notifications' do
           begin
             msgs = []
-            Nanoc::Int::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
-            Nanoc::Int::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-            Nanoc::Int::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
+            Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
+            Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+            Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
 
             subject
-            Nanoc::Int::NotificationCenter.sync
+            Nanoc::Core::NotificationCenter.sync
             expect(msgs).to eq(%i[compilation_started compilation_suspended compilation_started compilation_suspended compilation_started compilation_ended])
           ensure
-            Nanoc::Int::NotificationCenter.remove(:compilation_ended, self)
-            Nanoc::Int::NotificationCenter.remove(:compilation_suspended, self)
-            Nanoc::Int::NotificationCenter.remove(:compilation_started, self)
+            Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
+            Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
+            Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
           end
         end
       end

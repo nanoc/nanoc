@@ -9,7 +9,7 @@ module Nanoc::Int
       yield
     ensure
       stopwatch.stop
-      Nanoc::Int::NotificationCenter.post(key, stopwatch.duration, *args)
+      Nanoc::Core::NotificationCenter.post(key, stopwatch.duration, *args)
     end
   end
 end

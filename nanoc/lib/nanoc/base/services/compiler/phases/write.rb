@@ -71,7 +71,7 @@ module Nanoc::Int::Compiler::Phases
 
       @queue << rep
 
-      Nanoc::Int::NotificationCenter.post(:rep_write_enqueued, rep)
+      Nanoc::Core::NotificationCenter.post(:rep_write_enqueued, rep)
     end
   end
 end

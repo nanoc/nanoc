@@ -38,9 +38,9 @@ describe Nanoc::Int::Executor do
       subject { executor.filter(:erb) }
 
       before do
-        expect(Nanoc::Int::NotificationCenter)
+        expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_started, rep, :erb)
-        expect(Nanoc::Int::NotificationCenter)
+        expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :erb)
 
         compiled_content_store.set_current(rep, content)
@@ -81,9 +81,9 @@ describe Nanoc::Int::Executor do
       let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.dat')) }
 
       before do
-        expect(Nanoc::Int::NotificationCenter)
+        expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_started, rep, :whatever)
-        expect(Nanoc::Int::NotificationCenter)
+        expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :whatever)
 
         File.write(content.filename, 'Foo Data')
@@ -136,9 +136,9 @@ describe Nanoc::Int::Executor do
       let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.dat')) }
 
       before do
-        expect(Nanoc::Int::NotificationCenter)
+        expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_started, rep, :whatever)
-        expect(Nanoc::Int::NotificationCenter)
+        expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :whatever)
 
         File.write(content.filename, 'Foo Data')
@@ -183,9 +183,9 @@ describe Nanoc::Int::Executor do
       subject { executor.filter(:whatever) }
 
       before do
-        expect(Nanoc::Int::NotificationCenter)
+        expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_started, rep, :whatever)
-        expect(Nanoc::Int::NotificationCenter)
+        expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :whatever)
 
         filter_class = Class.new(::Nanoc::Filter) do
@@ -267,9 +267,9 @@ describe Nanoc::Int::Executor do
       let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.dat')) }
 
       before do
-        expect(Nanoc::Int::NotificationCenter)
+        expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_started, rep, :whatever)
-        expect(Nanoc::Int::NotificationCenter)
+        expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :whatever)
 
         File.write(content.filename, 'Foo Data')
@@ -417,8 +417,8 @@ describe Nanoc::Int::Executor do
       end
 
       it 'sends notifications' do
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
-        expect(Nanoc::Int::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
 
         subject
       end
