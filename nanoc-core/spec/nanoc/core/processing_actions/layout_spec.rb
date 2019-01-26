@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::ProcessingActions::Layout do
+describe Nanoc::Core::ProcessingActions::Layout do
   let(:action) { described_class.new('/foo.erb', awesome: true) }
 
   describe '#serialize' do
@@ -15,7 +15,7 @@ describe Nanoc::Int::ProcessingActions::Layout do
 
   describe '#inspect' do
     subject { action.inspect }
-    it { is_expected.to eql('<Nanoc::Int::ProcessingActions::Layout "/foo.erb", "sJYzLjHGo1e4ytuDfnOLkqrt9QE=">') }
+    it { is_expected.to eql('<Nanoc::Core::ProcessingActions::Layout "/foo.erb", "sJYzLjHGo1e4ytuDfnOLkqrt9QE=">') }
   end
 
   describe '#== and #eql?' do

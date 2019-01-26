@@ -26,11 +26,11 @@ module Nanoc::Int::Compiler::Phases
       actions = @action_sequences[rep]
       actions.each do |action|
         case action
-        when Nanoc::Int::ProcessingActions::Filter
+        when Nanoc::Core::ProcessingActions::Filter
           executor.filter(action.filter_name, action.params)
-        when Nanoc::Int::ProcessingActions::Layout
+        when Nanoc::Core::ProcessingActions::Layout
           executor.layout(action.layout_identifier, action.params)
-        when Nanoc::Int::ProcessingActions::Snapshot
+        when Nanoc::Core::ProcessingActions::Snapshot
           action.snapshot_names.each do |snapshot_name|
             executor.snapshot(snapshot_name)
           end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::ProcessingActions::Snapshot do
+describe Nanoc::Core::ProcessingActions::Snapshot do
   let(:action) { described_class.new([:before_layout], ['/foo.md']) }
 
   describe '#serialize' do
@@ -15,7 +15,7 @@ describe Nanoc::Int::ProcessingActions::Snapshot do
 
   describe '#inspect' do
     subject { action.inspect }
-    it { is_expected.to eql('<Nanoc::Int::ProcessingActions::Snapshot [:before_layout], true, ["/foo.md"]>') }
+    it { is_expected.to eql('<Nanoc::Core::ProcessingActions::Snapshot [:before_layout], true, ["/foo.md"]>') }
   end
 
   describe '#update' do

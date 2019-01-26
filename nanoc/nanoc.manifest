@@ -15,11 +15,6 @@ lib/nanoc/base/entities/code_snippet.rb
 lib/nanoc/base/entities/dependency.rb
 lib/nanoc/base/entities/outdatedness_reasons.rb
 lib/nanoc/base/entities/outdatedness_status.rb
-lib/nanoc/base/entities/processing_action.rb
-lib/nanoc/base/entities/processing_actions.rb
-lib/nanoc/base/entities/processing_actions/filter.rb
-lib/nanoc/base/entities/processing_actions/layout.rb
-lib/nanoc/base/entities/processing_actions/snapshot.rb
 lib/nanoc/base/entities/props.rb
 lib/nanoc/base/entities/site.rb
 lib/nanoc/base/error.rb

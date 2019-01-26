@@ -16,7 +16,7 @@ module Nanoc::Int
 
     def filter_name_and_args_for_layout(layout)
       seq = @action_provider.action_sequence_for(layout)
-      if seq.nil? || seq.size != 1 || !seq[0].is_a?(Nanoc::Int::ProcessingActions::Filter)
+      if seq.nil? || seq.size != 1 || !seq[0].is_a?(Nanoc::Core::ProcessingActions::Filter)
         raise Nanoc::Int::Errors::UndefinedFilterForLayout.new(layout)
       end
 

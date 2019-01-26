@@ -94,7 +94,7 @@ module Nanoc::RuleDSL
     def compact_snapshots(seq)
       actions = []
       seq.actions.each do |action|
-        if [actions.last, action].all? { |a| a.is_a?(Nanoc::Int::ProcessingActions::Snapshot) }
+        if [actions.last, action].all? { |a| a.is_a?(Nanoc::Core::ProcessingActions::Snapshot) }
           actions[-1] = actions.last.update(snapshot_names: action.snapshot_names, paths: action.paths)
         else
           actions << action
@@ -108,7 +108,7 @@ module Nanoc::RuleDSL
 
       seq.map do |action|
         # Only potentially modify snapshot actions
-        next action unless action.is_a?(Nanoc::Int::ProcessingActions::Snapshot)
+        next action unless action.is_a?(Nanoc::Core::ProcessingActions::Snapshot)
 
         # If any of the action’s snapshot are explicitly marked as excluded from
         # getting a path from a routing rule, then ignore routing rules.

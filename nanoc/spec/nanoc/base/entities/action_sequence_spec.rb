@@ -49,7 +49,7 @@ describe Nanoc::Int::ActionSequence do
         end
       end
 
-      it { is_expected.to be_a(Nanoc::Int::ProcessingActions::Filter) }
+      it { is_expected.to be_a(Nanoc::Core::ProcessingActions::Filter) }
     end
   end
 
@@ -62,7 +62,7 @@ describe Nanoc::Int::ActionSequence do
 
     example do
       expect(action_sequence.size).to eql(1)
-      expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
+      expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Filter)
       expect(action_sequence[0].filter_name).to eql(:foo)
       expect(action_sequence[0].params).to eql(donkey: 123)
     end
@@ -77,7 +77,7 @@ describe Nanoc::Int::ActionSequence do
 
     example do
       expect(action_sequence.size).to eql(1)
-      expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Layout)
+      expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Layout)
       expect(action_sequence[0].layout_identifier).to eql('/foo.*')
       expect(action_sequence[0].params).to eql(donkey: 123)
     end
@@ -93,7 +93,7 @@ describe Nanoc::Int::ActionSequence do
 
       example do
         expect(action_sequence.size).to eql(1)
-        expect(action_sequence[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+        expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
         expect(action_sequence[0].snapshot_names).to eql([:before_layout])
         expect(action_sequence[0].paths).to eql(['/foo.md'])
       end
@@ -136,9 +136,9 @@ describe Nanoc::Int::ActionSequence do
     end
 
     example do
-      res = action_sequence.map { Nanoc::Int::ProcessingActions::Filter.new(:donkey, {}) }
+      res = action_sequence.map { Nanoc::Core::ProcessingActions::Filter.new(:donkey, {}) }
       expect(res.to_a.size).to eq(3)
-      expect(res.to_a).to all(be_a(Nanoc::Int::ProcessingActions::Filter))
+      expect(res.to_a).to all(be_a(Nanoc::Core::ProcessingActions::Filter))
     end
   end
 

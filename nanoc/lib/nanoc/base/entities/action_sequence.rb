@@ -25,14 +25,14 @@ module Nanoc::Int
       @actions.size
     end
 
-    contract Numeric => C::Maybe[Nanoc::Int::ProcessingAction]
+    contract Numeric => C::Maybe[Nanoc::Core::ProcessingAction]
     def [](idx)
       @actions[idx]
     end
 
-    contract C::None => C::ArrayOf[Nanoc::Int::ProcessingAction]
+    contract C::None => C::ArrayOf[Nanoc::Core::ProcessingAction]
     def snapshot_actions
-      @actions.select { |a| a.is_a?(Nanoc::Int::ProcessingActions::Snapshot) }
+      @actions.select { |a| a.is_a?(Nanoc::Core::ProcessingActions::Snapshot) }
     end
 
     contract C::None => Array
@@ -49,13 +49,13 @@ module Nanoc::Int
       to_a.map(&:serialize)
     end
 
-    contract C::Func[Nanoc::Int::ProcessingAction => C::Any] => self
+    contract C::Func[Nanoc::Core::ProcessingAction => C::Any] => self
     def each
       @actions.each { |a| yield(a) }
       self
     end
 
-    contract C::Func[Nanoc::Int::ProcessingAction => C::Any] => self
+    contract C::Func[Nanoc::Core::ProcessingAction => C::Any] => self
     def map
       self.class.new(
         @item_rep,
@@ -69,11 +69,11 @@ module Nanoc::Int
 
       each do |action|
         case action
-        when Nanoc::Int::ProcessingActions::Snapshot
+        when Nanoc::Core::ProcessingActions::Snapshot
           action.snapshot_names.each do |snapshot_name|
             snapshot_defs << Nanoc::Core::SnapshotDef.new(snapshot_name, binary: is_binary)
           end
-        when Nanoc::Int::ProcessingActions::Filter
+        when Nanoc::Core::ProcessingActions::Filter
           is_binary = Nanoc::Filter.named!(action.filter_name).to_binary?
         end
       end

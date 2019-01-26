@@ -61,27 +61,27 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
         example do
           subject
 
-          expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
           expect(subject[0].snapshot_names).to eql([:raw])
           expect(subject[0].paths).to be_empty
 
-          expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Filter)
+          expect(subject[1]).to be_a(Nanoc::Core::ProcessingActions::Filter)
           expect(subject[1].filter_name).to eql(:erb)
           expect(subject[1].params).to eql(speed: :over_9000)
 
-          expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[2]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
           expect(subject[2].snapshot_names).to eql([:pre])
           expect(subject[2].paths).to be_empty
 
-          expect(subject[3]).to be_a(Nanoc::Int::ProcessingActions::Layout)
+          expect(subject[3]).to be_a(Nanoc::Core::ProcessingActions::Layout)
           expect(subject[3].layout_identifier).to eql('/default.*')
           expect(subject[3].params).to be_nil
 
-          expect(subject[4]).to be_a(Nanoc::Int::ProcessingActions::Filter)
+          expect(subject[4]).to be_a(Nanoc::Core::ProcessingActions::Filter)
           expect(subject[4].filter_name).to eql(:typohero)
           expect(subject[4].params).to eql({})
 
-          expect(subject[5]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[5]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
           expect(subject[5].snapshot_names).to eql(%i[post last])
           expect(subject[5].paths).to be_empty
 
@@ -99,7 +99,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
         example do
           subject
 
-          expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
           expect(subject[0].snapshot_names).to eql(%i[raw last pre])
           expect(subject[0].paths).to be_empty
 
@@ -121,7 +121,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
         example do
           subject
 
-          expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
           expect(subject[0].snapshot_names).to eql(%i[raw last pre])
           expect(subject[0].paths).to eq(['/foo.md'])
 
@@ -143,7 +143,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
         example do
           subject
 
-          expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+          expect(subject[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
           expect(subject[0].snapshot_names).to eql(%i[raw last pre])
           expect(subject[0].paths).to be_empty
 
@@ -170,7 +170,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
 
         it 'contains memory for the rule' do
           expect(subject.size).to eql(1)
-          expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Filter)
+          expect(subject[0]).to be_a(Nanoc::Core::ProcessingActions::Filter)
           expect(subject[0].filter_name).to eql(:erb)
           expect(subject[0].params).to eql(x: 123)
         end
@@ -208,19 +208,19 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
     let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
     example do
-      expect(subject[0]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+      expect(subject[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
       expect(subject[0].snapshot_names).to eql(%i[a1 a2 a3])
       expect(subject[0].paths).to eql(['/a2.md'])
 
-      expect(subject[1]).to be_a(Nanoc::Int::ProcessingActions::Filter)
+      expect(subject[1]).to be_a(Nanoc::Core::ProcessingActions::Filter)
 
-      expect(subject[2]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+      expect(subject[2]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
       expect(subject[2].snapshot_names).to eql(%i[b1 b2 b3])
       expect(subject[2].paths).to eql(['/b1.md', '/b3.md'])
 
-      expect(subject[3]).to be_a(Nanoc::Int::ProcessingActions::Filter)
+      expect(subject[3]).to be_a(Nanoc::Core::ProcessingActions::Filter)
 
-      expect(subject[4]).to be_a(Nanoc::Int::ProcessingActions::Snapshot)
+      expect(subject[4]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
       expect(subject[4].snapshot_names).to eql([:c])
       expect(subject[4].paths).to be_empty
 

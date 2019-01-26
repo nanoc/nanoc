@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::ProcessingActions::Filter do
+describe Nanoc::Core::ProcessingActions::Filter do
   let(:action) { described_class.new(:foo, awesome: true) }
 
   describe '#serialize' do
@@ -15,7 +15,7 @@ describe Nanoc::Int::ProcessingActions::Filter do
 
   describe '#inspect' do
     subject { action.inspect }
-    it { is_expected.to eql('<Nanoc::Int::ProcessingActions::Filter :foo, "sJYzLjHGo1e4ytuDfnOLkqrt9QE=">') }
+    it { is_expected.to eql('<Nanoc::Core::ProcessingActions::Filter :foo, "sJYzLjHGo1e4ytuDfnOLkqrt9QE=">') }
   end
 
   describe '#== and #eql?' do

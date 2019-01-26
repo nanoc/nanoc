@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::ProcessingAction do
+describe Nanoc::Core::ProcessingAction do
   let(:action) { described_class.new }
 
   it 'is abstract' do

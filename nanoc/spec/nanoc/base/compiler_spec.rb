@@ -53,8 +53,8 @@ describe Nanoc::Int::Compiler do
   let(:memory) do
     actions =
       [
-        Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
-        Nanoc::Int::ProcessingActions::Snapshot.new([:last], []),
+        Nanoc::Core::ProcessingActions::Filter.new(:erb, {}),
+        Nanoc::Core::ProcessingActions::Snapshot.new([:last], []),
       ]
 
     Nanoc::Int::ActionSequence.new(nil, actions: actions)

@@ -11,20 +11,20 @@ module Nanoc::Int
 
     contract Symbol, Hash => self
     def add_filter(filter_name, params)
-      @actions << Nanoc::Int::ProcessingActions::Filter.new(filter_name, params)
+      @actions << Nanoc::Core::ProcessingActions::Filter.new(filter_name, params)
       self
     end
 
     contract String, C::Maybe[Hash] => self
     def add_layout(layout_identifier, params)
-      @actions << Nanoc::Int::ProcessingActions::Layout.new(layout_identifier, params)
+      @actions << Nanoc::Core::ProcessingActions::Layout.new(layout_identifier, params)
       self
     end
 
     contract Symbol, C::Maybe[String] => self
     def add_snapshot(snapshot_name, path)
       will_add_snapshot(snapshot_name)
-      @actions << Nanoc::Int::ProcessingActions::Snapshot.new([snapshot_name], path ? [path] : [])
+      @actions << Nanoc::Core::ProcessingActions::Snapshot.new([snapshot_name], path ? [path] : [])
       self
     end
 

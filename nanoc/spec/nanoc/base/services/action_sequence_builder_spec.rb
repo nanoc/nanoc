@@ -13,7 +13,7 @@ describe Nanoc::Int::ActionSequenceBuilder do
       expect { subject }
         .to change { builder.action_sequence.actions }
         .from([])
-        .to([Nanoc::Int::ProcessingActions::Filter.new(:erb, foo: :bar)])
+        .to([Nanoc::Core::ProcessingActions::Filter.new(:erb, foo: :bar)])
     end
   end
 
@@ -24,7 +24,7 @@ describe Nanoc::Int::ActionSequenceBuilder do
       expect { subject }
         .to change { builder.action_sequence.actions }
         .from([])
-        .to([Nanoc::Int::ProcessingActions::Layout.new('/oink.erb', foo: :bar)])
+        .to([Nanoc::Core::ProcessingActions::Layout.new('/oink.erb', foo: :bar)])
     end
   end
 
@@ -36,7 +36,7 @@ describe Nanoc::Int::ActionSequenceBuilder do
         expect { subject }
           .to change { builder.action_sequence.actions }
           .from([])
-          .to([Nanoc::Int::ProcessingActions::Snapshot.new([:last], ['/foo.html'])])
+          .to([Nanoc::Core::ProcessingActions::Snapshot.new([:last], ['/foo.html'])])
       end
     end
 

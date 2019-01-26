@@ -13,7 +13,7 @@ module Nanoc::Int::OutdatednessRules
 
     def any_always_outdated?(seq)
       seq
-        .select { |a| a.is_a?(Nanoc::Int::ProcessingActions::Filter) }
+        .select { |a| a.is_a?(Nanoc::Core::ProcessingActions::Filter) }
         .map { |a| Nanoc::Filter.named(a.filter_name) }
         .compact
         .any?(&:always_outdated?)

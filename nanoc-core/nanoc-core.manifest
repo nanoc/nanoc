@@ -27,6 +27,11 @@ lib/nanoc/core/layout_collection.rb
 lib/nanoc/core/layout.rb
 lib/nanoc/core/lazy_value.rb
 lib/nanoc/core/pattern.rb
+lib/nanoc/core/processing_action.rb
+lib/nanoc/core/processing_actions.rb
+lib/nanoc/core/processing_actions/filter.rb
+lib/nanoc/core/processing_actions/layout.rb
+lib/nanoc/core/processing_actions/snapshot.rb
 lib/nanoc/core/regexp_pattern.rb
 lib/nanoc/core/snapshot_def.rb
 lib/nanoc/core/string_pattern.rb

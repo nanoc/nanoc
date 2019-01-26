@@ -23,8 +23,8 @@ describe(Nanoc::Int::ItemRepRouter) do
     let(:memory_without_paths) do
       actions =
         [
-          Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
-          Nanoc::Int::ProcessingActions::Snapshot.new([], []),
+          Nanoc::Core::ProcessingActions::Filter.new(:erb, {}),
+          Nanoc::Core::ProcessingActions::Snapshot.new([], []),
         ]
 
       Nanoc::Int::ActionSequence.new(nil, actions: actions)
@@ -33,8 +33,8 @@ describe(Nanoc::Int::ItemRepRouter) do
     let(:action_sequence_for_default) do
       actions =
         [
-          Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
-          Nanoc::Int::ProcessingActions::Snapshot.new([:last], ['/foo/index.html']),
+          Nanoc::Core::ProcessingActions::Filter.new(:erb, {}),
+          Nanoc::Core::ProcessingActions::Snapshot.new([:last], ['/foo/index.html']),
         ]
 
       Nanoc::Int::ActionSequence.new(nil, actions: actions)
@@ -43,8 +43,8 @@ describe(Nanoc::Int::ItemRepRouter) do
     let(:action_sequence_for_csv) do
       actions =
         [
-          Nanoc::Int::ProcessingActions::Filter.new(:erb, {}),
-          Nanoc::Int::ProcessingActions::Snapshot.new([:last], ['/foo.csv']),
+          Nanoc::Core::ProcessingActions::Filter.new(:erb, {}),
+          Nanoc::Core::ProcessingActions::Snapshot.new([:last], ['/foo.csv']),
         ]
 
       Nanoc::Int::ActionSequence.new(nil, actions: actions)

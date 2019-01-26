@@ -5,7 +5,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
     subject { helper.instance_eval { render('/partial.erb') } }
 
     let(:action_sequence_for_layout) do
-      [Nanoc::Int::ProcessingActions::Filter.new(:erb, {})]
+      [Nanoc::Core::ProcessingActions::Filter.new(:erb, {})]
     end
 
     let(:layout_view) { ctx.layouts[layout_identifier] }
@@ -95,7 +95,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
       context 'layout with unknown filter' do
         let(:action_sequence_for_layout) do
-          [Nanoc::Int::ProcessingActions::Filter.new(:donkey, {})]
+          [Nanoc::Core::ProcessingActions::Filter.new(:donkey, {})]
         end
 
         let(:layout_content) { 'blah' }
@@ -107,7 +107,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
       context 'layout without filter' do
         let(:action_sequence_for_layout) do
-          [Nanoc::Int::ProcessingActions::Filter.new(nil, {})]
+          [Nanoc::Core::ProcessingActions::Filter.new(nil, {})]
         end
 
         let(:layout_content) { 'blah' }
