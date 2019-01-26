@@ -36,4 +36,5 @@ lib/nanoc/core/processing_actions/snapshot.rb
 lib/nanoc/core/regexp_pattern.rb
 lib/nanoc/core/snapshot_def.rb
 lib/nanoc/core/string_pattern.rb
+lib/nanoc/core/temp_filename_factory.rb
 lib/nanoc/core/textual_content.rb

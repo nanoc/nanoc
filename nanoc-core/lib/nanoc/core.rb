@@ -33,6 +33,7 @@ require 'nanoc/core/identifier'
 require 'nanoc/core/core_ext/array'
 require 'nanoc/core/core_ext/hash'
 require 'nanoc/core/core_ext/string'
+require 'nanoc/core/temp_filename_factory'
 
 require 'nanoc/core/binary_content'
 require 'nanoc/core/item_collection'

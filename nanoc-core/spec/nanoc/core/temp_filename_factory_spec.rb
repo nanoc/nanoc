@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::TempFilenameFactory do
+describe Nanoc::Core::TempFilenameFactory do
   subject(:factory) { described_class.new }
 
   let(:prefix) { 'foo' }
@@ -77,7 +77,7 @@ describe Nanoc::Int::TempFilenameFactory do
 
   describe 'other instance' do
     let(:other_instance) do
-      Nanoc::Int::TempFilenameFactory.new
+      Nanoc::Core::TempFilenameFactory.new
     end
 
     it 'creates unique paths across instances' do

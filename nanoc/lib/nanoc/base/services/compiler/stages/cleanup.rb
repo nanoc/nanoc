@@ -16,7 +16,7 @@ module Nanoc::Int::Compiler::Stages
     private
 
     def cleanup_temps(dir)
-      Nanoc::Int::TempFilenameFactory.instance.cleanup(dir)
+      Nanoc::Core::TempFilenameFactory.instance.cleanup(dir)
     end
 
     def cleanup_unused_stores

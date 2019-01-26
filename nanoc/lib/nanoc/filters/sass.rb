@@ -28,7 +28,7 @@ module Nanoc::Filters
       css_path = options.delete(:css_path) || filter.object_id.to_s
       sourcemap_path = options.delete(:sourcemap_path)
       if sourcemap_path == :inline
-        sourcemap_path = Nanoc::Int::TempFilenameFactory.instance.create('sass_sourcemap')
+        sourcemap_path = Nanoc::Core::TempFilenameFactory.instance.create('sass_sourcemap')
         inline = true
       end
 

@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
-    # @api private
+  module Core
     class TempFilenameFactory
       # @return [String] The root directory for all temporary filenames
       attr_reader :root_dir
 
-      # @return [Nanoc::Int::TempFilenameFactory] A common instance
+      # @return [Nanoc::Core::TempFilenameFactory] A common instance
       def self.instance
         @instance ||= new
       end

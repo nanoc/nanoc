@@ -15,7 +15,7 @@ describe Nanoc::Int::Compiler::Stages::Cleanup do
     end
 
     it 'removes temporary binary items' do
-      a = Nanoc::Int::TempFilenameFactory.instance.create(Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
+      a = Nanoc::Core::TempFilenameFactory.instance.create(Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
       File.write(a, 'hello there')
 
       expect { subject }
@@ -24,7 +24,7 @@ describe Nanoc::Int::Compiler::Stages::Cleanup do
     end
 
     it 'removes temporary textual items' do
-      a = Nanoc::Int::TempFilenameFactory.instance.create(Nanoc::Int::ItemRepWriter::TMP_TEXT_ITEMS_DIR)
+      a = Nanoc::Core::TempFilenameFactory.instance.create(Nanoc::Int::ItemRepWriter::TMP_TEXT_ITEMS_DIR)
       File.write(a, 'hello there')
 
       expect { subject }

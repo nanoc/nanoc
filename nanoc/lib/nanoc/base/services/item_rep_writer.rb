@@ -74,7 +74,7 @@ module Nanoc::Int
     end
 
     def temp_filename
-      Nanoc::Int::TempFilenameFactory.instance.create(TMP_TEXT_ITEMS_DIR)
+      Nanoc::Core::TempFilenameFactory.instance.create(TMP_TEXT_ITEMS_DIR)
     end
   end
 end
