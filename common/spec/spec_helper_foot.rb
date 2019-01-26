@@ -9,20 +9,6 @@ RSpec.configure do |c|
 
   c.include(Nanoc::Spec::HelperHelper, helper: true)
 
-  c.around(:each) do |example|
-    should_chdir =
-      !example.metadata.key?(:chdir) ||
-      example.metadata[:chdir]
-
-    if should_chdir
-      Dir.mktmpdir('nanoc-test') do |dir|
-        chdir(dir) { example.run }
-      end
-    else
-      example.run
-    end
-  end
-
   c.around(:each, stdio: true) do |example|
     orig_stdout = $stdout
     orig_stderr = $stderr

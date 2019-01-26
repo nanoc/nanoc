@@ -8,6 +8,20 @@ RSpec.configure do |c|
   c.before(:each, fork: true) do
     skip 'fork() is not supported on Windows' if Nanoc.on_windows?
   end
+
+  c.around(:each) do |example|
+    should_chdir =
+      !example.metadata.key?(:chdir) ||
+      example.metadata[:chdir]
+
+    if should_chdir
+      Dir.mktmpdir('nanoc-test') do |dir|
+        chdir(dir) { example.run }
+      end
+    else
+      example.run
+    end
+  end
 end
 
 RSpec::Matchers.define_negated_matcher :not_match, :match
