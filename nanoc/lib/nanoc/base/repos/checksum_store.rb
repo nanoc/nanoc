@@ -1,70 +1,72 @@
 # frozen_string_literal: true
 
-module Nanoc::Int
-  # Stores checksums for objects in order to be able to detect whether a file
-  # has changed since the last site compilation.
-  #
-  # @api private
-  class ChecksumStore < ::Nanoc::Int::Store
-    include Nanoc::Core::ContractsSupport
+module Nanoc
+  module Int
+    # Stores checksums for objects in order to be able to detect whether a file
+    # has changed since the last site compilation.
+    #
+    # @api private
+    class ChecksumStore < ::Nanoc::Int::Store
+      include Nanoc::Core::ContractsSupport
 
-    attr_writer :checksums
-    attr_accessor :objects
+      attr_writer :checksums
+      attr_accessor :objects
 
-    c_obj = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Int::CodeSnippet]
+      c_obj = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Int::CodeSnippet]
 
-    contract C::KeywordArgs[config: Nanoc::Core::Configuration, objects: C::IterOf[c_obj]] => C::Any
-    def initialize(config:, objects:)
-      super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'checksums'), 2)
+      contract C::KeywordArgs[config: Nanoc::Core::Configuration, objects: C::IterOf[c_obj]] => C::Any
+      def initialize(config:, objects:)
+        super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'checksums'), 2)
 
-      @objects = objects
+        @objects = objects
 
-      @checksums = {}
-    end
-
-    contract c_obj => C::Maybe[String]
-    def [](obj)
-      @checksums[obj.reference]
-    end
-
-    contract c_obj => self
-    def add(obj)
-      if obj.is_a?(Nanoc::Core::Document)
-        @checksums[[obj.reference, :content]] = Nanoc::Core::Checksummer.calc_for_content_of(obj)
+        @checksums = {}
       end
 
-      if obj.is_a?(Nanoc::Core::Document) || obj.is_a?(Nanoc::Core::Configuration)
-        @checksums[[obj.reference, :each_attribute]] = Nanoc::Core::Checksummer.calc_for_each_attribute_of(obj)
+      contract c_obj => C::Maybe[String]
+      def [](obj)
+        @checksums[obj.reference]
       end
 
-      @checksums[obj.reference] = Nanoc::Core::Checksummer.calc(obj)
+      contract c_obj => self
+      def add(obj)
+        if obj.is_a?(Nanoc::Core::Document)
+          @checksums[[obj.reference, :content]] = Nanoc::Core::Checksummer.calc_for_content_of(obj)
+        end
 
-      self
-    end
+        if obj.is_a?(Nanoc::Core::Document) || obj.is_a?(Nanoc::Core::Configuration)
+          @checksums[[obj.reference, :each_attribute]] = Nanoc::Core::Checksummer.calc_for_each_attribute_of(obj)
+        end
 
-    contract c_obj => C::Maybe[String]
-    def content_checksum_for(obj)
-      @checksums[[obj.reference, :content]]
-    end
+        @checksums[obj.reference] = Nanoc::Core::Checksummer.calc(obj)
 
-    contract c_obj => C::Maybe[C::HashOf[Symbol, String]]
-    def attributes_checksum_for(obj)
-      @checksums[[obj.reference, :each_attribute]]
-    end
+        self
+      end
 
-    protected
+      contract c_obj => C::Maybe[String]
+      def content_checksum_for(obj)
+        @checksums[[obj.reference, :content]]
+      end
 
-    def data
-      @checksums
-    end
+      contract c_obj => C::Maybe[C::HashOf[Symbol, String]]
+      def attributes_checksum_for(obj)
+        @checksums[[obj.reference, :each_attribute]]
+      end
 
-    def data=(new_data)
-      references = Set.new(@objects.map(&:reference))
+      protected
 
-      @checksums = {}
-      new_data.each_pair do |key, checksum|
-        if references.include?(key) || references.include?(key.first)
-          @checksums[key] = checksum
+      def data
+        @checksums
+      end
+
+      def data=(new_data)
+        references = Set.new(@objects.map(&:reference))
+
+        @checksums = {}
+        new_data.each_pair do |key, checksum|
+          if references.include?(key) || references.include?(key.first)
+            @checksums[key] = checksum
+          end
         end
       end
     end

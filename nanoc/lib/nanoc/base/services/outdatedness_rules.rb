@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-module Nanoc::Int
-  # @api private
-  module OutdatednessRules
+module Nanoc
+  module Int
+    # @api private
+    module OutdatednessRules
+    end
   end
 end
 

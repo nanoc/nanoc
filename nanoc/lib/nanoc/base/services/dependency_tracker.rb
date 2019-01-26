@@ -1,61 +1,63 @@
 # frozen_string_literal: true
 
-module Nanoc::Int
-  # @api private
-  class DependencyTracker
-    include Nanoc::Core::ContractsSupport
-
-    C_OBJ = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Core::IdentifiableCollection]
-    C_RAW_CONTENT = C::Or[C::IterOf[C::Or[String, Regexp]], C::Bool]
-    C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
-    C_ARGS = C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
-
-    class Null
+module Nanoc
+  module Int
+    # @api private
+    class DependencyTracker
       include Nanoc::Core::ContractsSupport
 
-      contract C_OBJ, C_ARGS => C::Any
-      def enter(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
+      C_OBJ = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Core::IdentifiableCollection]
+      C_RAW_CONTENT = C::Or[C::IterOf[C::Or[String, Regexp]], C::Bool]
+      C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
+      C_ARGS = C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
 
-      contract C_OBJ => C::Any
-      def exit; end
+      class Null
+        include Nanoc::Core::ContractsSupport
 
-      contract C_OBJ, C_ARGS => C::Any
-      def bounce(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
-    end
+        contract C_OBJ, C_ARGS => C::Any
+        def enter(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
 
-    attr_reader :dependency_store
+        contract C_OBJ => C::Any
+        def exit; end
 
-    def initialize(dependency_store)
-      @dependency_store = dependency_store
-      @stack = []
-    end
-
-    contract C_OBJ, C_ARGS => C::Any
-    def enter(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
-      unless @stack.empty?
-        Nanoc::Core::NotificationCenter.post(:dependency_created, @stack.last, obj)
-        @dependency_store.record_dependency(
-          @stack.last,
-          obj,
-          raw_content: raw_content,
-          attributes: attributes,
-          compiled_content: compiled_content,
-          path: path,
-        )
+        contract C_OBJ, C_ARGS => C::Any
+        def bounce(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
       end
 
-      @stack.push(obj)
-    end
+      attr_reader :dependency_store
 
-    contract C_OBJ => C::Any
-    def exit
-      @stack.pop
-    end
+      def initialize(dependency_store)
+        @dependency_store = dependency_store
+        @stack = []
+      end
 
-    contract C_OBJ, C_ARGS => C::Any
-    def bounce(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
-      enter(obj, raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
-      exit
+      contract C_OBJ, C_ARGS => C::Any
+      def enter(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
+        unless @stack.empty?
+          Nanoc::Core::NotificationCenter.post(:dependency_created, @stack.last, obj)
+          @dependency_store.record_dependency(
+            @stack.last,
+            obj,
+            raw_content: raw_content,
+            attributes: attributes,
+            compiled_content: compiled_content,
+            path: path,
+          )
+        end
+
+        @stack.push(obj)
+      end
+
+      contract C_OBJ => C::Any
+      def exit
+        @stack.pop
+      end
+
+      contract C_OBJ, C_ARGS => C::Any
+      def bounce(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
+        enter(obj, raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
+        exit
+      end
     end
   end
 end

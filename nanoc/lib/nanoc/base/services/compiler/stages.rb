@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
-module Nanoc::Int::Compiler::Stages
+module Nanoc
+  module Int
+    class Compiler
+      module Stages
+      end
+    end
+  end
 end
 
 require_relative 'stage'

@@ -1,16 +1,22 @@
 # frozen_string_literal: true
 
-module Nanoc::Int::Compiler::Stages
-  class ForgetOutdatedDependencies < Nanoc::Int::Compiler::Stage
-    include Nanoc::Core::ContractsSupport
+module Nanoc
+  module Int
+    class Compiler
+      module Stages
+        class ForgetOutdatedDependencies < Nanoc::Int::Compiler::Stage
+          include Nanoc::Core::ContractsSupport
 
-    def initialize(dependency_store:)
-      @dependency_store = dependency_store
-    end
+          def initialize(dependency_store:)
+            @dependency_store = dependency_store
+          end
 
-    contract C::IterOf[Nanoc::Core::Item] => C::Any
-    def run(outdated_items)
-      outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
+          contract C::IterOf[Nanoc::Core::Item] => C::Any
+          def run(outdated_items)
+            outdated_items.each { |i| @dependency_store.forget_dependencies_for(i) }
+          end
+        end
+      end
     end
   end
 end

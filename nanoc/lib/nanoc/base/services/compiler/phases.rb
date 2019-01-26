@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
-module Nanoc::Int::Compiler::Phases
+module Nanoc
+  module Int
+    class Compiler
+      module Phases
+      end
+    end
+  end
 end
 
 require_relative 'phases/abstract'

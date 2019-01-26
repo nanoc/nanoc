@@ -71,7 +71,8 @@ Style/RegexpLiteral:
   Enabled: false
 
 Style/ClassAndModuleChildren:
-  Enabled: false
+  Include:
+    - 'nanoc/lib/nanoc/base/**/*.rb'
 
 Style/EmptyElse:
   Enabled: false

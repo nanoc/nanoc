@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 # @api private
-module Nanoc::Int
+module Nanoc
+  module Int
+  end
 end
 
 require_relative 'base/error'
