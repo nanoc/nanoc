@@ -242,13 +242,6 @@ describe Nanoc::Core::Checksummer do
     it { is_expected.to eql('Nanoc::Core::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>') }
   end
 
-  context 'Nanoc::ConfigView' do
-    let(:obj) { Nanoc::ConfigView.new(config, nil) }
-    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
-
-    it { is_expected.to eql('Nanoc::ConfigView<Nanoc::Core::Configuration<Symbol<foo>=String<bar>,>>') }
-  end
-
   context 'Nanoc::Core::Context' do
     let(:obj) { Nanoc::Core::Context.new(foo: 123) }
 
