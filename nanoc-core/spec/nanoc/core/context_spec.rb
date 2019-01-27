@@ -21,6 +21,16 @@ describe Nanoc::Core::Context do
 
   it 'provides instance methods' do
     expect(eval('foo', context.get_binding)).to eq('bar')
+    expect(context).to respond_to(:asdf)
+  end
+
+  it 'returns null for unknown instance variables' do
+    expect(eval('@asdf', context.get_binding)).to be_nil
+  end
+
+  it 'does not provide missing instance methods' do
+    expect { eval('asdf', context.get_binding) }.to raise_error(NameError)
+    expect(context).not_to respond_to(:asdf)
   end
 
   it 'supports #include' do
