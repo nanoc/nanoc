@@ -86,6 +86,200 @@ describe Nanoc::Core::Configuration do
     end
   end
 
+  describe '#dig' do
+    let(:hash) do
+      { foo: { bar: { baz: 1 } } }
+    end
+
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+
+    subject { config.dig(:foo, :bar, :baz) }
+
+    it 'works like Hash#dig' do
+      expect(subject).to eq(1)
+    end
+  end
+
+  describe '#fetch' do
+    let(:hash) { { foo: 123 } }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+
+    context 'key exists' do
+      subject { config.fetch(:foo) }
+      it { is_expected.to eq(123) }
+    end
+
+    context 'key does not exist, and called without fallback nor block' do
+      subject { config.fetch(:bar) }
+
+      it 'raises KeyError' do
+        expect { subject }.to raise_error(KeyError)
+      end
+    end
+
+    context 'key does not exist, and called with fallback' do
+      subject { config.fetch(:bar, 1000) }
+      it { is_expected.to eq(1000) }
+    end
+
+    context 'key does not exist, and called with block' do
+      subject { config.fetch(:bar) { 2000 } }
+      it { is_expected.to eq(2000) }
+    end
+  end
+
+  describe '#[]' do
+    let(:hash) { { foo: 123 } }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+
+    context 'key exists' do
+      subject { config[:foo] }
+      it { is_expected.to eq(123) }
+    end
+
+    context 'key does not exist' do
+      subject { config[:bar] }
+      it { is_expected.to be_nil }
+    end
+  end
+
+  describe '#[]=' do
+    let(:hash) { { foo: 123 } }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+
+    subject { config[:foo] = 234 }
+
+    it 'modifies' do
+      expect { subject }
+        .to change { config[:foo] }
+        .from(123)
+        .to(234)
+    end
+  end
+
+  describe '#attributes' do
+    let(:hash) { { foo: 123 } }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+
+    subject { config.attributes }
+
+    it 'returns itself as a hash' do
+      expect(subject).to eq(foo: 123)
+    end
+  end
+
+  describe '#without' do
+    let(:hash) { { foo: 123, bar: 234 } }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+
+    subject { config.without(:foo) }
+
+    it 'returns a new config' do
+      expect(subject).to be_a(described_class)
+    end
+
+    it 'removes only the requested key' do
+      expect(config.key?(:foo)).to be(true)
+      expect(subject.key?(:foo)).to be(false)
+    end
+
+    it 'retains dir' do
+      expect(subject.dir).to eq(config.dir)
+    end
+
+    it 'retains env_name' do
+      expect(subject.env_name).to eq(config.env_name)
+    end
+  end
+
+  describe '#update' do
+    let(:hash) { { foo: 100, bar: 200 } }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:other_hash) { { bar: 300, qux: 400 } }
+
+    subject { config.update(other_hash) }
+
+    it 'retains :foo' do
+      expect { subject }
+        .not_to change { config[:foo] }
+        .from(100)
+    end
+
+    it 'updates :bar' do
+      expect { subject }
+        .to change { config[:bar] }
+        .from(200)
+        .to(300)
+    end
+
+    it 'adds :qux' do
+      expect { subject }
+        .to change { config[:qux] }
+        .from(nil)
+        .to(400)
+    end
+  end
+
+  describe '#freeze' do
+    let(:hash) { { foo: { bar: 100 } } }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+
+    subject { config.freeze }
+
+    it 'freezes' do
+      expect { subject }
+        .to change { config.frozen? }
+        .from(false)
+        .to(true)
+    end
+
+    it 'freezes children' do
+      expect { subject }
+        .to change { config[:foo].frozen? }
+        .from(false)
+        .to(true)
+    end
+  end
+
+  describe '#action_provider' do
+    let(:hash) { { foo: { bar: 100 } } }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+
+    subject { config.action_provider }
+
+    context 'no action_provider key present' do
+      let(:hash) { { foo: 123 } }
+
+      it 'raises' do
+        # Maybe not the best… but it works for now
+        expect { subject }.to raise_error(NoMethodError)
+      end
+    end
+
+    context 'action_provider key present' do
+      let(:hash) { { foo: 123, action_provider: 'rulez' } }
+      it { is_expected.to eq(:rulez) }
+    end
+  end
+
+  describe '#reference' do
+    let(:hash) { { foo: { bar: 100 } } }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+
+    subject { config.reference }
+
+    it { is_expected.to eq('configuration') }
+  end
+
+  describe '#inspect' do
+    let(:hash) { { foo: { bar: 100 } } }
+    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+
+    subject { config.inspect }
+
+    it { is_expected.to eq('<Nanoc::Core::Configuration>') }
+  end
+
   describe '#merge' do
     let(:hash1) { { foo: { bar: 'baz', baz: ['biz'] } } }
     let(:hash2) { { foo: { bar: :boz, biz: 'buz' } } }
