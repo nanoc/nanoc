@@ -42,6 +42,24 @@ module Nanoc
       end
     end
 
+    class OutputNotWrittenError < Nanoc::Core::Error
+      include Nanoc::Core::ContractsSupport
+
+      contract C::Or[String, Symbol], String => self
+      def initialize(filter_name, output_filename)
+        super("The #{filter_name.inspect} filter did not write anything to the required output file, #{output_filename}.")
+      end
+    end
+
+    class FilterReturnedNilError < Nanoc::Core::Error
+      include Nanoc::Core::ContractsSupport
+
+      contract C::Or[String, Symbol] => self
+      def initialize(filter_name)
+        super("The #{filter_name.inspect} filter returned nil, but is required to return a String.")
+      end
+    end
+
     class << self
       def define(ident, &block)
         filter_class = Class.new(::Nanoc::Filter) { identifier(ident) }
@@ -190,11 +208,11 @@ module Nanoc
     def verify(res)
       if self.class.to_binary?
         unless File.file?(output_filename)
-          raise Nanoc::Int::Errors::OutputNotWritten.new(self.class.identifier, output_filename)
+          raise Nanoc::Filter::OutputNotWrittenError.new(self.class.identifier, output_filename)
         end
       elsif self.class.to_text?
         unless res
-          raise Nanoc::Int::Errors::FilterReturnedNil.new(self.class.identifier)
+          raise Nanoc::Filter::FilterReturnedNilError.new(self.class.identifier)
         end
       end
     end

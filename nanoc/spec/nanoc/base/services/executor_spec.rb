@@ -275,6 +275,7 @@ describe Nanoc::Int::Executor do
         File.write(content.filename, 'Foo Data')
 
         filter_class = Class.new(::Nanoc::Filter) do
+          identifier :executor_spec_Toing1Oowoa3aewoop0k
           type :binary
 
           def run(_filename, _params = {}); end
@@ -287,7 +288,7 @@ describe Nanoc::Int::Executor do
 
       example do
         expect { executor.filter(:whatever) }
-          .to raise_error(Nanoc::Int::Errors::OutputNotWritten)
+          .to raise_error(Nanoc::Filter::OutputNotWrittenError)
       end
     end
 

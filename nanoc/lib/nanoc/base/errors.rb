@@ -220,18 +220,6 @@ module Nanoc
         end
       end
 
-      class OutputNotWritten < Generic
-        def initialize(filter_name, output_filename)
-          super("The #{filter_name.inspect} filter did not write anything to the required output file, #{output_filename}.")
-        end
-      end
-
-      class FilterReturnedNil < Generic
-        def initialize(filter_name)
-          super("The #{filter_name.inspect} filter returned nil, but is required to return a String.")
-        end
-      end
-
       class AmbiguousMetadataAssociation < Generic
         def initialize(content_filenames, meta_filename)
           super("There are multiple content files (#{content_filenames.sort.join(', ')}) that could match the file containing metadata (#{meta_filename}).")
