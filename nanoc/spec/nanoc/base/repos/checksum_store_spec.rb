@@ -13,8 +13,8 @@ describe Nanoc::Int::ChecksumStore do
   let(:item_attributes) { {} }
   let(:other_item_attributes) { {} }
 
-  let(:code_snippet) { Nanoc::Int::CodeSnippet.new('def hi ; end', 'lib/foo.rb') }
-  let(:other_code_snippet) { Nanoc::Int::CodeSnippet.new('def ho ; end', 'lib/bar.rb') }
+  let(:code_snippet) { Nanoc::Core::CodeSnippet.new('def hi ; end', 'lib/foo.rb') }
+  let(:other_code_snippet) { Nanoc::Core::CodeSnippet.new('def ho ; end', 'lib/bar.rb') }
 
   context 'nothing added' do
     it 'has no checksum' do

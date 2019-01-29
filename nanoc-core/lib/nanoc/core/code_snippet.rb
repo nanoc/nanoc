@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
-    # Nanoc::Int::CodeSnippet represent a piece of custom code of a Nanoc site.
+  module Core
+    # Nanoc::Core::CodeSnippet represent a piece of custom code of a Nanoc site.
     #
     # @api private
     class CodeSnippet
@@ -35,8 +35,10 @@ module Nanoc
       #
       # @return [void]
       def load
+        # rubocop:disable Security/Eval
         eval('def self.use_helper(mod); Nanoc::Core::Context.instance_eval { include mod }; end', TOPLEVEL_BINDING)
         eval(@data, TOPLEVEL_BINDING, @filename)
+        # rubocop:enable Security/Eval
         nil
       end
 

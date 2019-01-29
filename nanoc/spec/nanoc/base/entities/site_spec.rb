@@ -16,8 +16,8 @@ describe Nanoc::Int::Site do
 
     let(:code_snippets) do
       [
-        Nanoc::Int::CodeSnippet.new('FOO = 123', 'hello.rb'),
-        Nanoc::Int::CodeSnippet.new('BAR = 123', 'hi.rb'),
+        Nanoc::Core::CodeSnippet.new('FOO = 123', 'hello.rb'),
+        Nanoc::Core::CodeSnippet.new('BAR = 123', 'hi.rb'),
       ]
     end
 

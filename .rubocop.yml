@@ -105,7 +105,6 @@ Security/Eval:
   Exclude:
     - '*/test/**/*.rb'
     - '*/spec/**/*.rb'
-    - 'nanoc/lib/nanoc/base/entities/code_snippet.rb'
     - 'nanoc/lib/nanoc/filters/erubi.rb'
 
 

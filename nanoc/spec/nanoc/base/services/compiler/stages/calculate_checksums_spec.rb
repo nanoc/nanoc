@@ -22,7 +22,7 @@ describe Nanoc::Int::Compiler::Stages::CalculateChecksums do
   end
 
   let(:code_snippet) do
-    Nanoc::Int::CodeSnippet.new('woof!', 'dog.rb')
+    Nanoc::Core::CodeSnippet.new('woof!', 'dog.rb')
   end
 
   let(:item) do

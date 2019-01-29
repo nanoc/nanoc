@@ -10,7 +10,7 @@ module Nanoc
       attr_reader :config
       attr_accessor :data_source
 
-      contract C::KeywordArgs[config: Nanoc::Core::Configuration, code_snippets: C::IterOf[Nanoc::Int::CodeSnippet], data_source: C::Named['Nanoc::DataSource']] => C::Any
+      contract C::KeywordArgs[config: Nanoc::Core::Configuration, code_snippets: C::IterOf[Nanoc::Core::CodeSnippet], data_source: C::Named['Nanoc::DataSource']] => C::Any
       def initialize(config:, code_snippets:, data_source:)
         @config = config
         @code_snippets = code_snippets

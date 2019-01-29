@@ -12,7 +12,7 @@ module Nanoc
       attr_writer :checksums
       attr_accessor :objects
 
-      c_obj = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Int::CodeSnippet]
+      c_obj = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Core::CodeSnippet]
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration, objects: C::IterOf[c_obj]] => C::Any
       def initialize(config:, objects:)

@@ -70,7 +70,7 @@ module Nanoc
       def code_snippets_from_config(config)
         config[:lib_dirs].flat_map do |lib|
           Dir["#{lib}/**/*.rb"].sort.map do |filename|
-            Nanoc::Int::CodeSnippet.new(
+            Nanoc::Core::CodeSnippet.new(
               read_code_snippet_contents(filename),
               filename,
             )

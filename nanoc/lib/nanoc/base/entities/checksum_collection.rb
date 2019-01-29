@@ -5,7 +5,7 @@ module Nanoc
     class ChecksumCollection
       include Nanoc::Core::ContractsSupport
 
-      c_obj = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Int::CodeSnippet]
+      c_obj = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Core::CodeSnippet]
 
       def initialize(checksums)
         @checksums = checksums

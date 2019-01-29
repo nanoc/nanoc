@@ -66,7 +66,7 @@ describe Nanoc::Int::OutdatednessRules do
       end
 
       context 'only non-outdated snippets' do
-        let(:code_snippet) { Nanoc::Int::CodeSnippet.new('asdf', 'lib/foo.md') }
+        let(:code_snippet) { Nanoc::Core::CodeSnippet.new('asdf', 'lib/foo.md') }
         let(:code_snippets) { [code_snippet] }
 
         before { checksum_store.add(code_snippet) }
@@ -75,8 +75,8 @@ describe Nanoc::Int::OutdatednessRules do
       end
 
       context 'only outdated snippets' do
-        let(:code_snippet) { Nanoc::Int::CodeSnippet.new('asdf', 'lib/foo.md') }
-        let(:code_snippet_old) { Nanoc::Int::CodeSnippet.new('aaaaaaaa', 'lib/foo.md') }
+        let(:code_snippet) { Nanoc::Core::CodeSnippet.new('asdf', 'lib/foo.md') }
+        let(:code_snippet_old) { Nanoc::Core::CodeSnippet.new('aaaaaaaa', 'lib/foo.md') }
         let(:code_snippets) { [code_snippet] }
 
         before { checksum_store.add(code_snippet_old) }

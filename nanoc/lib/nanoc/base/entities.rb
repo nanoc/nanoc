@@ -3,7 +3,6 @@
 # Re-exported from Nanoc::Core
 Nanoc::Identifier = Nanoc::Core::Identifier
 
-require_relative 'entities/code_snippet'
 require_relative 'entities/props'
 require_relative 'entities/action_sequence'
 require_relative 'entities/site'

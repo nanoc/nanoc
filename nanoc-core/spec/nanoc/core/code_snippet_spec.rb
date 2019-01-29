@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::CodeSnippet do
+describe Nanoc::Core::CodeSnippet do
   subject(:code_snippet) { described_class.new(data, 'lib/foo.rb') }
 
   describe '#load' do
@@ -51,7 +51,7 @@ describe Nanoc::Int::CodeSnippet do
     it 'defines at top level' do
       @foo = 'meow'
 
-      code_snippet = Nanoc::Int::CodeSnippet.new("@foo = 'woof'", 'dog.rb')
+      code_snippet = Nanoc::Core::CodeSnippet.new("@foo = 'woof'", 'dog.rb')
       code_snippet.load
 
       expect(@foo).to eq('meow')

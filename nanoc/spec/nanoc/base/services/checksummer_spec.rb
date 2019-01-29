@@ -15,9 +15,9 @@ describe Nanoc::Core::Checksummer do
     it { is_expected.to eql('Nanoc::RuleDSL::RulesCollection<String<STUFF!>>') }
   end
 
-  context 'Nanoc::Int::CodeSnippet' do
-    let(:obj) { Nanoc::Int::CodeSnippet.new('asdf', '/bob.rb') }
-    it { is_expected.to eql('Nanoc::Int::CodeSnippet<String<asdf>>') }
+  context 'Nanoc::Core::CodeSnippet' do
+    let(:obj) { Nanoc::Core::CodeSnippet.new('asdf', '/bob.rb') }
+    it { is_expected.to eql('Nanoc::Core::CodeSnippet<String<asdf>>') }
   end
 
   context 'Nanoc::CompilationItemView' do
@@ -115,7 +115,7 @@ describe Nanoc::Core::Checksummer do
     end
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
-    let(:code_snippets) { [Nanoc::Int::CodeSnippet.new('asdf', '/bob.rb')] }
+    let(:code_snippets) { [Nanoc::Core::CodeSnippet.new('asdf', '/bob.rb')] }
     let(:items) { Nanoc::Core::ItemCollection.new(config, [item]) }
     let(:layouts) { [Nanoc::Core::Layout.new('asdf', {}, '/foo.md')] }
 
