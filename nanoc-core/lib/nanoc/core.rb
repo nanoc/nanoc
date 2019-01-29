@@ -7,6 +7,7 @@ require 'singleton'
 require 'json_schema'
 require 'ddmemoize'
 require 'ddmetrics'
+require 'ddplugin'
 require 'hamster'
 
 DDMemoize.enable_metrics
@@ -55,3 +56,5 @@ require 'nanoc/core/notification_center'
 
 require 'nanoc/core/processing_action'
 require 'nanoc/core/processing_actions'
+
+require 'nanoc/core/data_source'
