@@ -22,12 +22,6 @@ module Nanoc
         ensure_identifier_uniqueness(@data_source.layouts, 'layout')
       end
 
-      contract C::None => self
-      def compile
-        Nanoc::Int::Compiler.new_for(self).run_until_end
-        self
-      end
-
       def mark_as_preprocessed
         @preprocessed = true
       end

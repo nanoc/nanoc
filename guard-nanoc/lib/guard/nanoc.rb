@@ -58,7 +58,7 @@ module Guard
     def recompile
       Dir.chdir(@dir) do
         site = ::Nanoc::Int::SiteLoader.new.new_from_cwd
-        site.compile
+        ::Nanoc::Int::Compiler.compile(site)
       end
       notify_success
     rescue => e

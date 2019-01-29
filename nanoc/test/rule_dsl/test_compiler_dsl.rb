@@ -72,7 +72,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
       io = capturing_stdio do
         site = Nanoc::Int::SiteLoader.new.new_from_cwd
-        site.compile
+        Nanoc::Int::Compiler.compile(site)
       end
 
       assert_match(/1/, io[:stdout])
@@ -100,7 +100,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
       # Compile
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compile
+      Nanoc::Int::Compiler.compile(site)
 
       # Check
       assert File.file?('output/index.html')
@@ -127,7 +127,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
       # Compile
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compile
+      Nanoc::Int::Compiler.compile(site)
 
       # Check paths
       assert_equal ['output/robots.txt'], Dir['output/*']
@@ -151,7 +151,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
       # Compile
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compile
+      Nanoc::Int::Compiler.compile(site)
 
       # Check paths
       assert_equal ['output/foo'], Dir['output/*']
@@ -183,7 +183,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
       # Compile
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compile
+      Nanoc::Int::Compiler.compile(site)
 
       # Check paths
       assert_equal ['output/foo'],            Dir['output/*']
@@ -214,7 +214,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
       # Compile
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compile
+      Nanoc::Int::Compiler.compile(site)
 
       # Check paths
       assert_equal ['output/robots.txt'], Dir['output/*']
@@ -244,7 +244,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
       # Compile
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compile
+      Nanoc::Int::Compiler.compile(site)
 
       # Check paths
       assert_equal ['output/notlame.txt'], Dir['output/*']
@@ -276,7 +276,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
       # Compile
       site = Nanoc::Int::SiteLoader.new.new_from_cwd
-      site.compile
+      Nanoc::Int::Compiler.compile(site)
 
       # Check paths
       assert_equal ['output/foo'],            Dir['output/*']

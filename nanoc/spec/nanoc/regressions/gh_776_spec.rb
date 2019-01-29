@@ -18,7 +18,7 @@ EOS
   let(:site) { Nanoc::Int::SiteLoader.new.new_from_cwd }
 
   before do
-    site.compile
+    Nanoc::Int::Compiler.compile(site)
   end
 
   context 'without pruning' do
