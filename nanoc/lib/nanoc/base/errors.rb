@@ -48,16 +48,6 @@ module Nanoc
         end
       end
 
-      # Error that is raised during site compilation when an item uses a filter
-      # that is not known.
-      class UnknownFilter < Generic
-        # @param [Symbol] filter_name The filter name for which no filter could
-        #   be found
-        def initialize(filter_name)
-          super("The requested filter, “#{filter_name}”, does not exist.")
-        end
-      end
-
       # Error that is raised during site compilation when a layout is compiled
       # for which the filter cannot be determined. This is similar to the
       # {UnknownFilter} error, but specific for filters for layouts.

@@ -48,7 +48,7 @@ describe Nanoc::Filter do
     it 'raises if non-existent' do
       expect { Nanoc::Filter.named!(:ajklsdfklasjflkd) }
         .to raise_error(
-          Nanoc::Int::Errors::UnknownFilter,
+          Nanoc::Filter::UnknownFilterError,
           'The requested filter, “ajklsdfklasjflkd”, does not exist.',
         )
     end

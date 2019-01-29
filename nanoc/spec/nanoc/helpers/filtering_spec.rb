@@ -42,7 +42,7 @@ describe Nanoc::Helpers::Filtering, helper: true do
       end
 
       it 'errors' do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::UnknownFilter)
+        expect { subject }.to raise_error(Nanoc::Filter::UnknownFilterError)
       end
     end
 

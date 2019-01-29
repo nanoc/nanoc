@@ -33,6 +33,15 @@ module Nanoc
 
     include Nanoc::Core::ContractsSupport
 
+    class UnknownFilterError < Nanoc::Core::Error
+      include Nanoc::Core::ContractsSupport
+
+      contract C::Or[String, Symbol] => self
+      def initialize(filter_name)
+        super("The requested filter, “#{filter_name}”, does not exist.")
+      end
+    end
+
     class << self
       def define(ident, &block)
         filter_class = Class.new(::Nanoc::Filter) { identifier(ident) }
@@ -43,7 +52,7 @@ module Nanoc
 
       def named!(name)
         klass = named(name)
-        raise Nanoc::Int::Errors::UnknownFilter.new(name) if klass.nil?
+        raise UnknownFilterError.new(name) if klass.nil?
 
         klass
       end

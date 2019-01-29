@@ -227,7 +227,7 @@ describe Nanoc::Int::Executor do
     context 'non-existant filter' do
       it 'raises' do
         expect { executor.filter(:ajlsdfjklaskldfj) }
-          .to raise_error(Nanoc::Int::Errors::UnknownFilter)
+          .to raise_error(Nanoc::Filter::UnknownFilterError)
       end
     end
 

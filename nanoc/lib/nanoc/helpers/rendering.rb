@@ -10,7 +10,7 @@ module Nanoc::Helpers
     #
     # @raise [Nanoc::Int::Errors::UnknownLayout]
     # @raise [Nanoc::Int::Errors::CannotDetermineFilter]
-    # @raise [Nanoc::Int::Errors::UnknownFilter]
+    # @raise [Nanoc::Filter::UnknownFilter]
     #
     # @return [String, nil]
     def render(identifier, other_assigns = {}, &block)
