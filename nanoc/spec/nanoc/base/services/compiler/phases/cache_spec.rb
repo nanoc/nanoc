@@ -10,7 +10,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
   end
 
   let(:compiled_content_cache) do
-    Nanoc::Int::CompiledContentCache.new(config: config)
+    Nanoc::Int::CompositeCache.new(config: config)
   end
 
   let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
@@ -40,6 +40,8 @@ describe Nanoc::Int::Compiler::Phases::Cache do
     let(:is_outdated) { raise 'override me' }
 
     before do
+      rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
+
       allow(Nanoc::Core::NotificationCenter).to receive(:post).with(:phase_started, anything, anything)
       allow(Nanoc::Core::NotificationCenter).to receive(:post).with(:phase_yielded, anything, anything)
       allow(Nanoc::Core::NotificationCenter).to receive(:post).with(:phase_resumed, anything, anything)
@@ -81,6 +83,8 @@ describe Nanoc::Int::Compiler::Phases::Cache do
 
       context 'textual cached compiled content available' do
         before do
+          rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
+
           compiled_content_cache[rep] = { last: Nanoc::Core::TextualContent.new('cached') }
         end
 
@@ -112,33 +116,32 @@ describe Nanoc::Int::Compiler::Phases::Cache do
         let(:binary_filename) { Tempfile.open('test') { |fn| fn << binary_content }.path }
 
         before do
+          rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: true)]
+
           compiled_content_cache[rep] = { last: Nanoc::Core::BinaryContent.new(binary_filename) }
         end
 
         it 'reads content from cache' do
+          expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
             .to change { compiled_content_store.get(rep, :last) }
             .from(nil)
-            .to(some_textual_content('wrapped content'))
+            .to(some_binary_content(binary_content))
         end
 
         it 'marks rep as compiled' do
+          expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
             .to change { rep.compiled? }
             .from(false)
             .to(true)
         end
 
-        it 'changes compiled content cache' do
-          expect { subject }
-            .to change { compiled_content_cache[rep] }
-            .from(last: some_binary_content(binary_content))
-            .to(last: some_textual_content('wrapped content'))
-        end
+        it 'does not change compiled content cache' do
+          expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
 
-        it 'does not send notification' do
-          expect(Nanoc::Core::NotificationCenter).not_to receive(:post).with(:cached_content_used, rep)
-          subject
+          expect { subject }
+            .not_to change { compiled_content_cache[rep][:last].filename }
         end
       end
 
