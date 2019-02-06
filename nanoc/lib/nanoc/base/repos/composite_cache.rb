@@ -64,7 +64,9 @@ module Nanoc
 
         # Keys must match.
         rep_keys = Set.new(rep.snapshot_defs.map(&:name))
-        cache_keys = Set.new(cache.keys)
+        # FIXME: The capturing helper injects __capture_ keys that don't make it
+        # into the rep's snapshot_defs.
+        cache_keys = Set.new(cache.keys.reject { |k| k.match?(/^__capture_/) })
 
         return false unless rep_keys == cache_keys
 
