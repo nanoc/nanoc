@@ -86,17 +86,19 @@ Dir['*.gem'].each do |fn|
 end
 puts
 
-puts '=== Verifying presence of release date…'
-release_line = File.readlines('NEWS.md').drop(2).first
-unless / \(\d{4}-\d{2}-\d{2}\)$/.match?(release_line)
-  $stderr.puts 'Error: No proper release date found!'
-  exit 1
+unless gem_name == 'nanoc-core'
+  puts '=== Verifying presence of release date…'
+  release_line = File.readlines('NEWS.md').drop(2).first
+  unless / \(\d{4}-\d{2}-\d{2}\)$/.match?(release_line)
+    $stderr.puts 'Error: No proper release date found!'
+    exit 1
+  end
+  unless release_line.include?(Time.now.strftime('%Y-%m-%d'))
+    $stderr.puts 'Error: The release date does not match today’s date!'
+    exit 1
+  end
+  puts
 end
-unless release_line.include?(Time.now.strftime('%Y-%m-%d'))
-  $stderr.puts 'Error: The release date does not match today’s date!'
-  exit 1
-end
-puts
 
 puts '=== Reading version…'
 require "./lib/#{gem_path}/version"
