@@ -1,5 +1,3 @@
-(Summarise the change in a single line.)
-
 ### Detailed description
 
 (Describe the change in detail.)

@@ -1,5 +1,3 @@
-(Summarise the bug in a single line.)
-
 ### Steps to reproduce
 
 1. [First step]
