@@ -23,13 +23,17 @@ module Nanoc
         cached = file_for(rep)
         return nil unless File.directory?(cached)
 
-        Dir[File.join(cached, '*')]
-          .select { |e| File.file?(e) }
-          .each_with_object({}) do |f, memo|
-            snapshot_name = File.basename(f).to_sym
+        cached = Dir.glob(File.join(cached, '*'), File::FNM_DOTMATCH)
+                    .select { |e| File.file?(e) }
+                    .each_with_object({}) do |f, memo|
+                      snapshot_name = File.basename(f).to_sym
 
-            memo[snapshot_name] = Nanoc::Core::Content.create(f, binary: true)
-          end
+                      memo[snapshot_name] = Nanoc::Core::Content.create(f, binary: true)
+                    end
+
+        return nil if cached.empty?
+
+        cached
       end
 
       contract Nanoc::Core::ItemRep, C::HashOf[Symbol => Nanoc::Core::Content] => C::HashOf[Symbol => Nanoc::Core::Content]
@@ -51,14 +55,13 @@ module Nanoc
       end
 
       def prune(items:)
-        kept_dirs = Set.new(items.map(&:identifier))
-                       .map { |i| File.join(filename, i) }
+        keep_dirs = Set.new(items.map { |i| directory_for(i) })
 
-        extra = Dir["#{filename}/**/*"].select { |e| File.directory?(e) }
-                                       .reject { |f| kept_dirs.any? { |k| f.start_with?(k) } }
-                                       .reject { |d| Dir["#{d}/*"].select { |e| File.file?(e) }.empty? }
+        extra = Dir.glob(File.join(filename, '**/*'), File::FNM_DOTMATCH)
+                   .select { |e| File.file?(e) }
+                   .reject { |f| keep_dirs.any? { |k| f.start_with?(k) } }
 
-        extra.each { |f| FileUtils.rm_rf(f) }
+        extra.each { |f| FileUtils.rm(f) }
       end
 
       def load(*args); end
@@ -67,8 +70,12 @@ module Nanoc
 
       private
 
+      def directory_for(item)
+        File.join(filename, item.identifier.to_s)
+      end
+
       def file_for(rep, snapshot: '')
-        File.join(filename, rep.item.identifier.to_s, rep.name.to_s, snapshot.to_s)
+        File.join(directory_for(rep.item), rep.name.to_s, snapshot.to_s)
       end
     end
   end
