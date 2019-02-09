@@ -3,6 +3,7 @@
 
 require 'fileutils'
 require 'json'
+require 'netrc'
 require 'octokit'
 require 'shellwords'
 require 'uri'
