@@ -16,11 +16,15 @@ if ARGV.size != 1
   $stderr.puts "usage: #{$PROGRAM_NAME} [gem-name]"
   exit 1
 end
+
 gem_name = ARGV[0]
+
 version_constant =
   case gem_name
   when 'nanoc'
     'Nanoc::VERSION'
+  when 'nanoc-core'
+    'Nanoc::Core::VERSION'
   when 'nanoc-live'
     'Nanoc::Live::VERSION'
   when 'nanoc-external'
@@ -31,10 +35,13 @@ version_constant =
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
     exit 1
   end
+
 gem_dir =
   case gem_name
   when 'nanoc'
     'nanoc'
+  when 'nanoc-core'
+    'nanoc-core'
   when 'nanoc-live'
     'nanoc-live'
   when 'nanoc-external'
@@ -45,10 +52,13 @@ gem_dir =
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
     exit 1
   end
+
 gem_path =
   case gem_name
   when 'nanoc'
     'nanoc'
+  when 'nanoc-core'
+    'nanoc/core'
   when 'nanoc-live'
     'nanoc/live'
   when 'nanoc-external'
