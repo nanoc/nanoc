@@ -61,7 +61,7 @@ module Nanoc
         if is_modified
           begin
             FileUtils.ln(temp_path, raw_path, force: true)
-          rescue Errno::EXDEV
+          rescue Errno::EXDEV, Errno::EACCES
             FileUtils.cp(temp_path, raw_path)
           end
         end
