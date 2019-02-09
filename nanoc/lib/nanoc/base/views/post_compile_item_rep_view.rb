@@ -8,7 +8,7 @@ module Nanoc
 
     def compiled_content(snapshot: nil)
       compilation_context = @context.compilation_context
-      snapshot_contents = compilation_context.compiled_content_cache[_unwrap]
+      snapshot_contents = compilation_context.compiled_content_cache[_unwrap] || {}
 
       snapshot_name = snapshot || (snapshot_contents[:pre] ? :pre : :last)
 

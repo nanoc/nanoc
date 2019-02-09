@@ -7,7 +7,14 @@ describe Nanoc::PostCompileItemRepView do
 
   it_behaves_like 'an item rep view'
 
-  let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
+  let(:item_rep) do
+    Nanoc::Core::ItemRep.new(item, :jacques).tap do |rep|
+      rep.snapshot_defs = snapshot_contents.map do |name, content|
+        Nanoc::Core::SnapshotDef.new(name, binary: content.binary?)
+      end
+    end
+  end
+
   let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
   let(:view) { described_class.new(item_rep, view_context) }
 
@@ -37,6 +44,16 @@ describe Nanoc::PostCompileItemRepView do
   end
 
   let(:compiled_content_cache) do
+    # Pretend binary snapshots exist on disk so the binary cache can cache them.
+    snapshot_contents
+      .select { |_, content| content.binary? }
+      .each do |_, binary_content|
+        allow(FileUtils).to receive(:cp).with(binary_content.filename, anything)
+                                        .and_wrap_original do |_meth, _src, dst|
+          File.new(dst, 'w').close
+        end
+      end
+
     Nanoc::Int::CompiledContentCache.new(config: config).tap do |ccc|
       ccc[item_rep] = snapshot_contents
     end
