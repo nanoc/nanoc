@@ -38,10 +38,8 @@ module Nanoc
       # This cached compiled content is a hash where the keys are the snapshot
       # names. and the values the compiled content at the given snapshot.
       def []=(rep, content)
-        binaries = rep.snapshot_defs.select(&:binary?).map(&:name)
-
         content
-          .select { |snapshot, _| binaries.include?(snapshot) }
+          .select { |_, c| c.binary? }
           .each do |snapshot, binary_content|
           cached = file_for(rep, snapshot: snapshot)
 
