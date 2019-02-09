@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.1 (2019-02-09)
+
+Fixes:
+
+* Fixed an issue which caused hardlinking to fail in certain situations (#1405, #1406)
+
 ## 4.11.0 (2018-12-01)
 
 Features:
