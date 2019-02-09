@@ -11,9 +11,10 @@ module Nanoc
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
       def initialize(config:)
-        super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'compiled_content'), 2)
+        @textual = Nanoc::Int::TextualCompiledContentCache.new(config: config)
+        @binary = Nanoc::Int::BinaryCompiledContentCache.new(config: config)
 
-        @cache = {}
+        @wrapped = [@textual, @binary]
       end
 
       contract Nanoc::Core::ItemRep => C::Maybe[C::HashOf[Symbol => Nanoc::Core::Content]]
@@ -22,39 +23,56 @@ module Nanoc
       # This cached compiled content is a hash where the keys are the snapshot
       # names. and the values the compiled content at the given snapshot.
       def [](rep)
-        item_cache = @cache[rep.item.identifier] || {}
-        item_cache[rep.name]
+        textual = (@textual[rep] || {}).reject { |_, content| content.binary? }
+        binary = @binary[rep] || {}
+
+        cache = textual.merge(binary)
+
+        return cache if equals_snapshot_def(rep, cache)
+
+        nil
       end
 
       contract Nanoc::Core::ItemRep, C::HashOf[Symbol => Nanoc::Core::Content] => C::HashOf[Symbol => Nanoc::Core::Content]
       # Sets the compiled content for the given representation.
       #
       # This cached compiled content is a hash where the keys are the snapshot
-      # names. and the values the compiled content at the given snapshot.
+      # names and the values the compiled content at the given snapshot.
       def []=(rep, content)
-        @cache[rep.item.identifier] ||= {}
-        @cache[rep.item.identifier][rep.name] = content
+        @wrapped.each { |w| w[rep] = content }
+
+        # Required to adhere to the contract.
+        content = content
       end
 
-      def prune(items:)
-        item_identifiers = Set.new(items.map(&:identifier))
-
-        @cache.keys.each do |key|
-          @cache.delete(key) unless item_identifiers.include?(key)
-        end
+      def prune(*args)
+        @wrapped.each { |w| w.prune(*args) }
       end
 
-      protected
-
-      def data
-        @cache
+      def load(*args)
+        @wrapped.each { |w| w.load(*args) }
       end
 
-      def data=(new_data)
-        @cache = {}
+      def store(*args)
+        @wrapped.each { |w| w.store(*args) }
+      end
 
-        new_data.each_pair do |item_identifier, content_per_rep|
-          @cache[item_identifier] ||= content_per_rep
+      private
+
+      def equals_snapshot_def(rep, cache)
+        return false if cache.empty?
+
+        # Keys must match.
+        rep_keys = Set.new(rep.snapshot_defs.map(&:name))
+        # FIXME: The capturing helper injects __capture_ keys that don't make it
+        # into the rep's snapshot_defs.
+        cache_keys = Set.new(cache.keys.reject { |k| k.match?(/^__capture_/) })
+
+        return false unless rep_keys == cache_keys
+
+        # Types must match.
+        rep.snapshot_defs.all? do |snapshot|
+          snapshot.binary? == cache[snapshot.name].binary?
         end
       end
     end

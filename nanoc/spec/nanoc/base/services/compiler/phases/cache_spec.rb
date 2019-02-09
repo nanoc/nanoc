@@ -10,7 +10,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
   end
 
   let(:compiled_content_cache) do
-    Nanoc::Int::CompositeCache.new(config: config)
+    Nanoc::Int::CompiledContentCache.new(config: config)
   end
 
   let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }

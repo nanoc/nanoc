@@ -6,7 +6,7 @@ module Nanoc
     # to prevent it from being needlessly recompiled.
     #
     # @api private
-    class BinaryContentCache < ::Nanoc::Int::Store
+    class BinaryCompiledContentCache < ::Nanoc::Int::Store
       include Nanoc::Core::ContractsSupport
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
