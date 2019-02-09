@@ -23,7 +23,7 @@ module Nanoc
         cached = file_for(rep)
         return nil unless File.directory?(cached)
 
-        Dir["#{cached}/*"]
+        Dir[File.join(cached, '*')]
           .select { |e| File.file?(e) }
           .each_with_object({}) do |f, memo|
             snapshot_name = File.basename(f).to_sym
