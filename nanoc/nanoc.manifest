@@ -23,7 +23,6 @@ lib/nanoc/base/repos.rb
 lib/nanoc/base/repos/action_sequence_store.rb
 lib/nanoc/base/repos/aggregate_data_source.rb
 lib/nanoc/base/repos/checksum_store.rb
-lib/nanoc/base/repos/compiled_content_cache.rb
 lib/nanoc/base/repos/config_loader.rb
 lib/nanoc/base/repos/dependency_store.rb
 lib/nanoc/base/repos/in_mem_data_source.rb
@@ -33,6 +32,7 @@ lib/nanoc/base/repos/prefixed_data_source.rb
 lib/nanoc/base/repos/site_loader.rb
 lib/nanoc/base/repos/compiled_content_store.rb
 lib/nanoc/base/repos/store.rb
+lib/nanoc/base/repos/textual_compiled_content_cache.rb
 lib/nanoc/base/services.rb
 lib/nanoc/base/services/action_provider.rb
 lib/nanoc/base/services/action_sequence_builder.rb

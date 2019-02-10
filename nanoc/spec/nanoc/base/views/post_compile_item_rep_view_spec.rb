@@ -37,7 +37,7 @@ describe Nanoc::PostCompileItemRepView do
   end
 
   let(:compiled_content_cache) do
-    Nanoc::Int::CompiledContentCache.new(config: config).tap do |ccc|
+    Nanoc::Int::TextualCompiledContentCache.new(config: config).tap do |ccc|
       ccc[item_rep] = snapshot_contents
     end
   end
