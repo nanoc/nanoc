@@ -1,5 +1,9 @@
 # guard-nanoc Release Notes
 
+## 2.1.5 (2019-02-14)
+
+* Fixed an incompatibility with Nanoc 4.11.1.
+
 ## 2.1.4 (2018-09-15)
 
 * Fixed issue which caused `--host` and `--port` options to be mandatory.
