@@ -41,6 +41,11 @@ module Nanoc
       def binary?
         raise NotImplementedError
       end
+
+      contract C::None => C::Bool
+      def textual?
+        !binary?
+      end
     end
   end
 end

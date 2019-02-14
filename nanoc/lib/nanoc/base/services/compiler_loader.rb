@@ -21,7 +21,7 @@ module Nanoc
           Nanoc::Int::OutdatednessStore.new(config: site.config)
 
         compiled_content_cache =
-          Nanoc::Int::TextualCompiledContentCache.new(config: site.config)
+          compiled_content_cache_class.new(config: site.config)
 
         params = {
           compiled_content_cache: compiled_content_cache,
@@ -33,6 +33,15 @@ module Nanoc
         }
 
         Nanoc::Int::Compiler.new(site, params)
+      end
+
+      def compiled_content_cache_class
+        feature_name = Nanoc::Feature::BINARY_COMPILED_CONTENT_CACHE
+        if Nanoc::Feature.enabled?(feature_name)
+          Nanoc::Int::CompiledContentCache
+        else
+          Nanoc::Int::TextualCompiledContentCache
+        end
       end
     end
   end
