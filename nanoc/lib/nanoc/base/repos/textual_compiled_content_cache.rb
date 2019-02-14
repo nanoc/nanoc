@@ -39,8 +39,11 @@ module Nanoc
       def prune(items:)
         item_identifiers = Set.new(items.map(&:identifier))
 
-        @cache.keys.each do |key|
-          @cache.delete(key) unless item_identifiers.include?(key)
+        @cache.each_key do |key|
+          # TODO: remove unused item reps
+          next if item_identifiers.include?(key)
+
+          @cache.delete(key)
         end
       end
 
