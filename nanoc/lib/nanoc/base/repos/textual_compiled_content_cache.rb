@@ -20,7 +20,7 @@ module Nanoc
       # Returns the cached compiled content for the given item representation.
       #
       # This cached compiled content is a hash where the keys are the snapshot
-      # names. and the values the compiled content at the given snapshot.
+      # names, and the values the compiled content at the given snapshot.
       def [](rep)
         item_cache = @cache[rep.item.identifier] || {}
         item_cache[rep.name]
@@ -30,7 +30,7 @@ module Nanoc
       # Sets the compiled content for the given representation.
       #
       # This cached compiled content is a hash where the keys are the snapshot
-      # names. and the values the compiled content at the given snapshot.
+      # names, and the values the compiled content at the given snapshot.
       def []=(rep, content)
         @cache[rep.item.identifier] ||= {}
         @cache[rep.item.identifier][rep.name] = content
