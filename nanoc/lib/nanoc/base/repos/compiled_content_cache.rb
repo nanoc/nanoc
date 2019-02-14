@@ -53,7 +53,7 @@ module Nanoc
       # True if there is cached compiled content available for this item, and
       # all entries are present (either textual or binary).
       def full_cache_available?(rep)
-        key?(rep)
+        @textual_cache.include?(rep) && @binary_cache.include?(rep)
       end
 
       def load(*args)

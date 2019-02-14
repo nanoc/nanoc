@@ -32,6 +32,12 @@ module Nanoc
         end
       end
 
+      contract Nanoc::Core::ItemRep => C::Bool
+      def include?(rep)
+        item_cache = @cache[rep.item.identifier] || {}
+        item_cache.key?(rep.name)
+      end
+
       contract Nanoc::Core::ItemRep, C::HashOf[Symbol => Nanoc::Core::BinaryContent] => C::HashOf[Symbol => Nanoc::Core::Content]
       # Sets the compiled content for the given representation.
       #
