@@ -35,8 +35,7 @@ module Nanoc
             if is_outdated
               false
             else
-              cache = @compiled_content_cache[rep]
-              cache ? cache.none? { |_snapshot_name, content| content.binary? } : false
+              @compiled_content_cache.full_cache_available?(rep)
             end
           end
         end
