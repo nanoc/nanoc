@@ -48,6 +48,10 @@ module Nanoc
         @thread.join
       end
 
+      def force_stop
+        @queue << DONE
+      end
+
       def on(name, id = nil, &block)
         @notifications[name] << { id: id, block: block }
       end
@@ -85,6 +89,11 @@ module Nanoc
 
         def reset
           instance.stop
+          @_instance = nil
+        end
+
+        def force_reset
+          instance.force_stop
           @_instance = nil
         end
 
