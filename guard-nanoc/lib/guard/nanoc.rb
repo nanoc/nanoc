@@ -56,6 +56,9 @@ module Guard
     end
 
     def recompile
+      # Necessary, because forking and threading don’t work together.
+      ::Nanoc::Core::NotificationCenter.force_reset
+
       Dir.chdir(@dir) do
         site = ::Nanoc::Int::SiteLoader.new.new_from_cwd
         ::Nanoc::Int::Compiler.compile(site)
