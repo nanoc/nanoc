@@ -68,18 +68,58 @@ describe Nanoc::Filters::SassCommon do
       )
     end
 
-    let(:item_partial) do
+    let(:item_partial_scss) do
       Nanoc::Core::Item.new(
-        content_partial,
+        content_partial_scss,
         { content_filename: 'content/style/_partial.scss' },
         '/style/_partial.scss',
       )
     end
 
-    let(:content_partial) do
+    let(:content_partial_scss) do
       Nanoc::Core::TextualContent.new(
         '* { margin: 0; }',
         filename: File.expand_path('content/style/_partial.scss'),
+      )
+    end
+
+    let(:item_partial_sass) do
+      Nanoc::Core::Item.new(
+        content_partial_sass,
+        { content_filename: 'content/style/_sass-partial.sass' },
+        '/style/_sass-partial.sass',
+      )
+    end
+
+    let(:content_partial_sass) do
+      sass = <<~SASS
+        *
+          margin: 0
+      SASS
+
+      Nanoc::Core::TextualContent.new(
+        sass,
+        filename: File.expand_path('content/style/_sass-partial.sass'),
+      )
+    end
+
+    let(:item_partial_sass_anonymous) do
+      Nanoc::Core::Item.new(
+        content_partial_sass_anonymous,
+        { content_filename: 'content/style/_anonymous-sass-partial' },
+        '/style/_anonymous-sass-partial',
+      )
+    end
+
+    let(:content_partial_sass_anonymous) do
+      sass = <<~SASS
+        *
+          margin: 0
+      SASS
+
+      Nanoc::Core::TextualContent.new(
+        sass,
+        filename: File.expand_path('content/style/_anonymous-sass-partial'),
       )
     end
 
@@ -99,7 +139,7 @@ describe Nanoc::Filters::SassCommon do
     let(:item_main_default_rep_view) { Nanoc::CompilationItemRepView.new(item_main_default_rep, view_context) }
     let(:item_main_sourcemap_rep_view) { Nanoc::CompilationItemRepView.new(item_main_sourcemap_rep, view_context) }
 
-    let(:items) { Nanoc::Core::ItemCollection.new(config, [item_main, item_blue, item_red, item_partial]) }
+    let(:items) { Nanoc::Core::ItemCollection.new(config, [item_main, item_blue, item_red, item_partial_scss, item_partial_sass, item_partial_sass_anonymous]) }
     let(:item_views) { Nanoc::ItemCollectionWithRepsView.new(items, view_context) }
 
     let(:view_context) do
@@ -114,7 +154,7 @@ describe Nanoc::Filters::SassCommon do
 
     let(:reps) do
       Nanoc::Int::ItemRepRepo.new.tap do |reps|
-        [item_blue, item_red, item_partial].each do |item|
+        [item_blue, item_red, item_partial_scss, item_partial_sass, item_partial_sass_anonymous].each do |item|
           reps << Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
             rep.compiled = true
             rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
@@ -131,9 +171,11 @@ describe Nanoc::Filters::SassCommon do
 
     let(:compiled_content_store) do
       Nanoc::Int::CompiledContentStore.new.tap do |repo|
-        repo.set(reps[item_blue].first, :last, Nanoc::Core::TextualContent.new('.blue { color: blue }'))
-        repo.set(reps[item_red].first, :last, Nanoc::Core::TextualContent.new('.red { color: red }'))
-        repo.set(reps[item_partial].first, :last, Nanoc::Core::TextualContent.new('* { margin: 0 }'))
+        repo.set(reps[item_blue].first, :last, content_blue)
+        repo.set(reps[item_red].first, :last, content_red)
+        repo.set(reps[item_partial_scss].first, :last, content_partial_scss)
+        repo.set(reps[item_partial_sass].first, :last, content_partial_sass)
+        repo.set(reps[item_partial_sass_anonymous].first, :last, content_partial_sass_anonymous)
       end
     end
 
@@ -162,6 +204,26 @@ describe Nanoc::Filters::SassCommon do
     it 'compacts when using style=compressed' do
       expect(sass.setup_and_run(".foo #bar\n  color: #f00", style: 'compressed'))
         .to match(/^\.foo #bar[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
+    end
+
+    it 'supports SASS' do
+      content = <<~SASS
+        .foo
+          color: #f00
+      SASS
+
+      expect(sass.setup_and_run(content, syntax: :sass))
+        .to match(/^\.foo[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
+    end
+
+    it 'supports SASS as default syntax' do
+      content = <<~SASS
+        .foo
+          color: #f00
+      SASS
+
+      expect(sass.setup_and_run(content))
+        .to match(/^\.foo[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
     end
 
     it 'supports SCSS' do
@@ -203,9 +265,19 @@ describe Nanoc::Filters::SassCommon do
           .to raise_error(::Sass::SyntaxError, /File to import not found/)
       end
 
-      it 'can import partials by relative path' do
+      it 'can import SCSS partials by relative path' do
         expect(sass.setup_and_run('@import partial'))
           .to match(/\A\*\s*\{\s*margin:\s+0;\s*\}\s*\z/)
+      end
+
+      it 'can import SASS partials by relative path' do
+        expect(sass.setup_and_run('@import sass-partial'))
+          .to match(/\A\*\s*\{\s*margin:\s+0;\s*\}\s*\z/)
+      end
+
+      it 'cannot import anonymous SASS partials by relative path' do
+        expect { sass.setup_and_run('@import anonymous-sass-partial') }
+          .to raise_error(::Sass::SyntaxError, /File to import not found/)
       end
 
       it 'cannot import partials by nested relative path' do
@@ -213,19 +285,39 @@ describe Nanoc::Filters::SassCommon do
           .to raise_error(::Sass::SyntaxError, /File to import not found/)
       end
 
-      it 'can import partials by relative path with extension' do
+      it 'can import partials by relative path with SCSS extension' do
         expect(sass.setup_and_run('@import partial.scss'))
           .to match(/\A\*\s*\{\s*margin:\s+0;\s*\}\s*\z/)
       end
 
-      it 'cannot import partials by nested relative path with extension' do
+      it 'can import partials by relative path with SASS extension' do
+        expect(sass.setup_and_run('@import sass-partial.sass'))
+          .to match(/\A\*\s*\{\s*margin:\s+0;\s*\}\s*\z/)
+      end
+
+      it 'cannot import partials by relative path without extension' do
+        expect { sass.setup_and_run('@import anonymous-sass-partial') }
+          .to raise_error(::Sass::SyntaxError, /File to import not found/)
+      end
+
+      it 'cannot import partials by nested relative path with SCSS extension' do
         expect { sass.setup_and_run('@import content/style/partial.scss') }
+          .to raise_error(::Sass::SyntaxError, /File to import not found/)
+      end
+
+      it 'cannot import partials by nested relative path with SASS extension' do
+        expect { sass.setup_and_run('@import content/style/sass-partial.sass') }
+          .to raise_error(::Sass::SyntaxError, /File to import not found/)
+      end
+
+      it 'cannot import partials by nested relative path without extension' do
+        expect { sass.setup_and_run('@import content/style/anonymous-sass-partial') }
           .to raise_error(::Sass::SyntaxError, /File to import not found/)
       end
 
       it 'creates a dependency' do
         expect { sass.setup_and_run('@import partial') }
-          .to create_dependency_on(item_views[item_partial.identifier])
+          .to create_dependency_on(item_views[item_partial_scss.identifier])
       end
     end
 
@@ -258,11 +350,19 @@ describe Nanoc::Filters::SassCommon do
     end
 
     context 'importing by identifier or pattern' do
-      it 'can import by identifier' do
-        expect(sass.setup_and_run('@import /style/colors/blue.*'))
+      it 'can import SASS by identifier' do
+        expect(sass.setup_and_run('@import /style/colors/blue.sass'))
           .to match(/\A\.blue\s+\{\s*color:\s+blue;?\s*\}\s*\z/)
-        expect(sass.setup_and_run('@import /style/colors/red.*'))
+      end
+
+      it 'can import SCSS by identifier' do
+        expect(sass.setup_and_run('@import /style/colors/red.scss'))
           .to match(/\A\.red\s+\{\s*color:\s+red;?\s*\}\s*\z/)
+      end
+
+      it 'can import SASS by identifier without extension' do
+        expect(sass.setup_and_run('@import /style/_anonymous-sass-partial'))
+          .to match(/\A\*\s+\{\s*margin:\s+0;?\s*\}\s*\z/)
       end
 
       it 'can import by pattern' do

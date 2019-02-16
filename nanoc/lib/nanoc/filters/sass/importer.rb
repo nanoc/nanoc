@@ -36,13 +36,9 @@ module Nanoc::Filters::SassCommon
       items = filter.items.find_all(identifier)
       return if items.empty?
 
-      content = if items.size == 1
-                  items.first.compiled_content
-                else
-                  items.map { |item| %(@import "#{item.identifier}";) }.join("\n")
-                end
+      content, syntax = import(items)
 
-      options[:syntax] = :scss
+      options[:syntax] = syntax
       options[:filename] = identifier.to_s
       options[:importer] = self
       ::Sass::Engine.new(content, options)
@@ -84,6 +80,38 @@ module Nanoc::Filters::SassCommon
 
       map = self.class.raw_filename_to_item_map_for_config(filter.config, filter.items)
       map[realpath]
+    end
+
+    private
+
+    def import(items)
+      if items.size == 1
+        import_single(items.first)
+      else
+        import_all(items)
+      end
+    end
+
+    def import_single(item)
+      syntax = if (ext = item.identifier.ext).nil?
+                 nil
+               else
+                 ext.downcase.to_sym
+               end
+
+      [
+        item.compiled_content,
+        syntax,
+      ]
+    end
+
+    def import_all(items)
+      import_all = items.map { |i| %(@import "#{i.identifier}";) }.join("\n")
+
+      [
+        import_all,
+        :scss,
+      ]
     end
   end
 end
