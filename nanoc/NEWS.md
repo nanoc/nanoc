@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.2 (2019-02-16)
+
+Fixes:
+
+* Fixed issue which prevented Sass (not SCSS) files from being imported (#1397, #1407) [Alexander Groß]
+
 ## 4.11.1 (2019-02-09)
 
 Fixes:
