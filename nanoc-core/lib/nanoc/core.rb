@@ -27,9 +27,7 @@ end
 loader = Zeitwerk::Loader.new
 loader.inflector = inflector_class.new
 loader.push_dir(__dir__ + '/..')
-loader.ignore(File.expand_path('core/core_ext/array.rb', __dir__))
-loader.ignore(File.expand_path('core/core_ext/hash.rb', __dir__))
-loader.ignore(File.expand_path('core/core_ext/string.rb', __dir__))
+loader.ignore(File.expand_path('core/core_ext', __dir__))
 loader.setup
 loader.eager_load
 
