@@ -53,6 +53,33 @@ describe Nanoc::Int::ActionSequence do
     end
   end
 
+  describe '#snapshot_actions' do
+    subject { action_sequence.snapshot_actions }
+
+    let(:action_sequence) do
+      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+        b.add_filter(:foo, {})
+        b.add_snapshot(:pre, '/page-pre.html')
+        b.add_layout('/default.erb', {})
+      end
+    end
+
+    it { is_expected.to contain_exactly(Nanoc::Core::ProcessingActions::Snapshot.new([:pre], ['/page-pre.html'])) }
+  end
+
+  describe '#paths' do
+    subject { action_sequence.paths }
+
+    let(:action_sequence) do
+      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+        b.add_snapshot(:pre, '/pre.html')
+        b.add_snapshot(:post, '/post.html')
+      end
+    end
+
+    it { is_expected.to contain_exactly([[:pre], ['/pre.html']], [[:post], ['/post.html']]) }
+  end
+
   describe '#each' do
     let(:action_sequence) do
       Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
