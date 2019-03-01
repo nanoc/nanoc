@@ -5,6 +5,16 @@ module Nanoc
     class ActionSequenceBuilder
       include Nanoc::Core::ContractsSupport
 
+      # Error that is raised when a snapshot with an existing name is made.
+      class CannotCreateMultipleSnapshotsWithSameNameError < ::Nanoc::Error
+        include Nanoc::Core::ContractsSupport
+
+        contract Nanoc::Core::ItemRep, Symbol => C::Any
+        def initialize(rep, snapshot)
+          super("Attempted to create a snapshot with a duplicate name #{snapshot.inspect} for the item rep #{rep}")
+        end
+      end
+
       def self.build(rep)
         builder = new(rep)
         yield(builder)
@@ -45,7 +55,7 @@ module Nanoc
       def will_add_snapshot(name)
         @_snapshot_names ||= Set.new
         if @_snapshot_names.include?(name)
-          raise Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName.new(@item_rep, name)
+          raise CannotCreateMultipleSnapshotsWithSameNameError.new(@item_rep, name)
         else
           @_snapshot_names << name
         end

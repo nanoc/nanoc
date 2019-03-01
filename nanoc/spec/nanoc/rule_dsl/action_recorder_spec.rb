@@ -69,7 +69,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
       it 'raises when creating same snapshot' do
         expect { recorder.snapshot(:foo) }
-          .to raise_error(Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName)
+          .to raise_error(Nanoc::Int::ActionSequenceBuilder::CannotCreateMultipleSnapshotsWithSameNameError)
       end
     end
 

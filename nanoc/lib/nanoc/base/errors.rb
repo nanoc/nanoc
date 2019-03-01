@@ -180,18 +180,6 @@ module Nanoc
         end
       end
 
-      # Error that is raised when a snapshot with an existing name is made.
-      class CannotCreateMultipleSnapshotsWithSameName < Generic
-        # @param [Nanoc::Core::ItemRep] rep The item representation for which a
-        #   snapshot was attempted to be made
-        #
-        # @param [Symbol] snapshot The name of the snapshot that was attempted to
-        #   be made
-        def initialize(rep, snapshot)
-          super("Attempted to create a snapshot with a duplicate name #{snapshot.inspect} for the item rep #{rep}")
-        end
-      end
-
       # Error that is raised when the compiled content of a binary item is attempted to be accessed.
       class CannotGetCompiledContentOfBinaryItem < Generic
         # @param [Nanoc::Core::ItemRep] rep The binary item representation whose compiled content was attempted to be accessed
