@@ -57,24 +57,6 @@ module Nanoc
           actions: @actions.map { |a| yield(a) },
         )
       end
-
-      def snapshots_defs
-        is_binary = @item_rep.item.content.binary?
-        snapshot_defs = []
-
-        each do |action|
-          case action
-          when Nanoc::Core::ProcessingActions::Snapshot
-            action.snapshot_names.each do |snapshot_name|
-              snapshot_defs << Nanoc::Core::SnapshotDef.new(snapshot_name, binary: is_binary)
-            end
-          when Nanoc::Core::ProcessingActions::Filter
-            is_binary = Nanoc::Filter.named!(action.filter_name).to_binary?
-          end
-        end
-
-        snapshot_defs
-      end
     end
   end
 end

@@ -4,6 +4,8 @@ module Nanoc
   module Int
     # @api private
     class ItemRepBuilder
+      include Nanoc::Core::ContractsSupport
+
       attr_reader :reps
 
       def initialize(site, action_provider, reps)
@@ -22,10 +24,29 @@ module Nanoc
         action_sequences = Nanoc::Int::ItemRepRouter.new(@reps, @action_provider, @site).run
 
         @reps.each do |rep|
-          rep.snapshot_defs = action_sequences[rep].snapshots_defs
+          rep.snapshot_defs = self.class.snapshot_defs_for(action_sequences[rep])
         end
 
         action_sequences
+      end
+
+      contract Nanoc::Int::ActionSequence => C::ArrayOf[Nanoc::Core::SnapshotDef]
+      def self.snapshot_defs_for(action_sequence)
+        is_binary = action_sequence.item_rep.item.content.binary?
+        snapshot_defs = []
+
+        action_sequence.each do |action|
+          case action
+          when Nanoc::Core::ProcessingActions::Snapshot
+            action.snapshot_names.each do |snapshot_name|
+              snapshot_defs << Nanoc::Core::SnapshotDef.new(snapshot_name, binary: is_binary)
+            end
+          when Nanoc::Core::ProcessingActions::Filter
+            is_binary = Nanoc::Filter.named!(action.filter_name).to_binary?
+          end
+        end
+
+        snapshot_defs
       end
     end
   end
