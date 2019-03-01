@@ -53,63 +53,6 @@ describe Nanoc::Int::ActionSequence do
     end
   end
 
-  describe '#add_filter' do
-    let(:action_sequence) do
-      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
-        b.add_filter(:foo, donkey: 123)
-      end
-    end
-
-    example do
-      expect(action_sequence.size).to eql(1)
-      expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Filter)
-      expect(action_sequence[0].filter_name).to eql(:foo)
-      expect(action_sequence[0].params).to eql(donkey: 123)
-    end
-  end
-
-  describe '#add_layout' do
-    let(:action_sequence) do
-      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
-        b.add_layout('/foo.*', donkey: 123)
-      end
-    end
-
-    example do
-      expect(action_sequence.size).to eql(1)
-      expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Layout)
-      expect(action_sequence[0].layout_identifier).to eql('/foo.*')
-      expect(action_sequence[0].params).to eql(donkey: 123)
-    end
-  end
-
-  describe '#add_snapshot' do
-    context 'snapshot does not yet exist' do
-      let(:action_sequence) do
-        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
-          b.add_snapshot(:before_layout, '/foo.md')
-        end
-      end
-
-      example do
-        expect(action_sequence.size).to eql(1)
-        expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
-        expect(action_sequence[0].snapshot_names).to eql([:before_layout])
-        expect(action_sequence[0].paths).to eql(['/foo.md'])
-      end
-    end
-
-    context 'snapshot already exist' do
-      it 'raises' do
-        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
-          b.add_snapshot(:before_layout, '/bar.md')
-          expect { b.add_snapshot(:before_layout, '/foo.md') }
-            .to raise_error(Nanoc::Int::Errors::CannotCreateMultipleSnapshotsWithSameName)
-        end
-      end
-    end
-  end
-
   describe '#each' do
     let(:action_sequence) do
       Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
