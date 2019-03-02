@@ -23,6 +23,7 @@ group :devel do
   gem 'rspec'
   gem 'rspec-its', '~> 1.2'
   gem 'rspec-mocks'
+  gem 'rspec_junit_formatter', '~> 0.4.1'
   gem 'rubocop', git: 'https://github.com/rubocop-hq/rubocop.git'
   gem 'timecop'
   gem 'vcr'
