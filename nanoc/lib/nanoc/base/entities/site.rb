@@ -4,6 +4,13 @@ module Nanoc
   module Int
     # @api private
     class Site
+      # Error that is raised when multiple items or layouts with the same identifier exist.
+      class DuplicateIdentifierError < ::Nanoc::Error
+        def initialize(identifier, type)
+          super("There are multiple #{type}s with the #{identifier} identifier.")
+        end
+      end
+
       include Nanoc::Core::ContractsSupport
 
       attr_reader :code_snippets
@@ -52,7 +59,7 @@ module Nanoc
         seen = Set.new
         objects.each do |obj|
           if seen.include?(obj.identifier)
-            raise Nanoc::Int::Errors::DuplicateIdentifier.new(obj.identifier, type)
+            raise DuplicateIdentifierError.new(obj.identifier, type)
           end
 
           seen << obj.identifier

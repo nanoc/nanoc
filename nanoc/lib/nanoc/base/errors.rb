@@ -188,13 +188,6 @@ module Nanoc
         end
       end
 
-      # Error that is raised when multiple items or layouts with the same identifier exist.
-      class DuplicateIdentifier < Generic
-        def initialize(identifier, type)
-          super("There are multiple #{type}s with the #{identifier} identifier.")
-        end
-      end
-
       # Error that is raised when attempting to call #parent or #children on an item with a legacy identifier.
       class CannotGetParentOrChildrenOfNonLegacyItem < Generic
         def initialize(identifier)
