@@ -8,6 +8,7 @@ lib/nanoc/core/version.rb
 lib/nanoc/core/action_sequence.rb
 lib/nanoc/core/action_sequence_builder.rb
 lib/nanoc/core/binary_content.rb
+lib/nanoc/core/checksum_collection.rb
 lib/nanoc/core/checksummer.rb
 lib/nanoc/core/code_snippet.rb
 lib/nanoc/core/configuration-schema.json

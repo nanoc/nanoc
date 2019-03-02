@@ -15,7 +15,7 @@ module Nanoc
             @action_sequences = action_sequences
           end
 
-          contract Nanoc::Int::ChecksumCollection => C::Any
+          contract Nanoc::Core::ChecksumCollection => C::Any
           def run(checksums)
             # Calculate action sequence
             (@reps.to_a + @layouts.to_a).each do |obj|

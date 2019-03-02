@@ -35,7 +35,7 @@ module Nanoc
             checksums[[@config.reference, :each_attribute]] =
               Nanoc::Core::Checksummer.calc_for_each_attribute_of(@config)
 
-            Nanoc::Int::ChecksumCollection.new(checksums)
+            Nanoc::Core::ChecksumCollection.new(checksums)
           end
         end
       end
