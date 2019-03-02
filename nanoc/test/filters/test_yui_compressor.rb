@@ -4,6 +4,7 @@ require 'helper'
 
 class Nanoc::Filters::YUICompressorTest < Nanoc::TestCase
   def test_filter_javascript
+    skip_unless_have_command 'java'
     if_have 'yuicompressor' do
       filter = ::Nanoc::Filters::YUICompressor.new
 
@@ -26,6 +27,7 @@ class Nanoc::Filters::YUICompressorTest < Nanoc::TestCase
   end
 
   def test_filter_css
+    skip_unless_have_command 'java'
     if_have 'yuicompressor' do
       filter = ::Nanoc::Filters::YUICompressor.new
 
