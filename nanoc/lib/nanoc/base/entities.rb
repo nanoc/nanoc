@@ -4,7 +4,6 @@
 Nanoc::Identifier = Nanoc::Core::Identifier
 
 require_relative 'entities/props'
-require_relative 'entities/action_sequence'
 require_relative 'entities/site'
 
 require_relative 'entities/checksum_collection'

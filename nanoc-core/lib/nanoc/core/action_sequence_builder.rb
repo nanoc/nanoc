@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     class ActionSequenceBuilder
       include Nanoc::Core::ContractsSupport
 
       # Error that is raised when a snapshot with an existing name is made.
-      class CannotCreateMultipleSnapshotsWithSameNameError < ::Nanoc::Error
+      class CannotCreateMultipleSnapshotsWithSameNameError < ::Nanoc::Core::Error
         include Nanoc::Core::ContractsSupport
 
         contract Nanoc::Core::ItemRep, Symbol => C::Any
@@ -45,9 +45,9 @@ module Nanoc
         self
       end
 
-      contract C::None => Nanoc::Int::ActionSequence
+      contract C::None => Nanoc::Core::ActionSequence
       def action_sequence
-        Nanoc::Int::ActionSequence.new(@item_rep, actions: @actions)
+        Nanoc::Core::ActionSequence.new(@item_rep, actions: @actions)
       end
 
       private

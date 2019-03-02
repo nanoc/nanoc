@@ -30,7 +30,7 @@ module Nanoc
         action_sequences
       end
 
-      contract Nanoc::Int::ActionSequence => C::ArrayOf[Nanoc::Core::SnapshotDef]
+      contract Nanoc::Core::ActionSequence => C::ArrayOf[Nanoc::Core::SnapshotDef]
       def self.snapshot_defs_for(action_sequence)
         is_binary = action_sequence.item_rep.item.content.binary?
         snapshot_defs = []

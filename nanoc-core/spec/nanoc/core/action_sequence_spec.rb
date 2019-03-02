@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::ActionSequence do
+describe Nanoc::Core::ActionSequence do
   let(:action_sequence) { raise 'override me' }
 
   let(:item) { Nanoc::Core::Item.new('foo', {}, '/foo.md') }
@@ -11,7 +11,7 @@ describe Nanoc::Int::ActionSequence do
 
     context 'no actions' do
       let(:action_sequence) do
-        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+        Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         end
       end
 
@@ -20,7 +20,7 @@ describe Nanoc::Int::ActionSequence do
 
     context 'some actions' do
       let(:action_sequence) do
-        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+        Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
           b.add_filter(:foo, {})
         end
       end
@@ -35,7 +35,7 @@ describe Nanoc::Int::ActionSequence do
 
     context 'no actions' do
       let(:action_sequence) do
-        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+        Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         end
       end
 
@@ -44,7 +44,7 @@ describe Nanoc::Int::ActionSequence do
 
     context 'some actions' do
       let(:action_sequence) do
-        Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+        Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
           b.add_filter(:foo, {})
         end
       end
@@ -57,7 +57,7 @@ describe Nanoc::Int::ActionSequence do
     subject { action_sequence.snapshot_actions }
 
     let(:action_sequence) do
-      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:foo, {})
         b.add_snapshot(:pre, '/page-pre.html')
         b.add_layout('/default.erb', {})
@@ -71,7 +71,7 @@ describe Nanoc::Int::ActionSequence do
     subject { action_sequence.paths }
 
     let(:action_sequence) do
-      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         b.add_snapshot(:pre, '/pre.html')
         b.add_snapshot(:post, '/post.html')
       end
@@ -82,7 +82,7 @@ describe Nanoc::Int::ActionSequence do
 
   describe '#each' do
     let(:action_sequence) do
-      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:erb, awesomeness: 'high')
         b.add_snapshot(:bar, '/foo.md')
         b.add_layout('/default.erb', somelayoutparam: 'yes')
@@ -98,7 +98,7 @@ describe Nanoc::Int::ActionSequence do
 
   describe '#map' do
     let(:action_sequence) do
-      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:erb, awesomeness: 'high')
         b.add_snapshot(:bar, '/foo.md')
         b.add_layout('/default.erb', somelayoutparam: 'yes')
@@ -116,7 +116,7 @@ describe Nanoc::Int::ActionSequence do
     subject { action_sequence.serialize }
 
     let(:action_sequence) do
-      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:erb, awesomeness: 'high')
         b.add_snapshot(:bar, '/foo.md')
         b.add_layout('/default.erb', somelayoutparam: 'yes')

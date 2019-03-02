@@ -9,7 +9,6 @@ lib/nanoc/base.rb
 lib/nanoc/base/assertions.rb
 lib/nanoc/base/changes_stream.rb
 lib/nanoc/base/entities.rb
-lib/nanoc/base/entities/action_sequence.rb
 lib/nanoc/base/entities/checksum_collection.rb
 lib/nanoc/base/entities/dependency.rb
 lib/nanoc/base/entities/outdatedness_reasons.rb
@@ -37,7 +36,6 @@ lib/nanoc/base/repos/store.rb
 lib/nanoc/base/repos/textual_compiled_content_cache.rb
 lib/nanoc/base/services.rb
 lib/nanoc/base/services/action_provider.rb
-lib/nanoc/base/services/action_sequence_builder.rb
 lib/nanoc/base/services/compilation_context.rb
 lib/nanoc/base/services/compiler_loader.rb
 lib/nanoc/base/services/compiler.rb

@@ -66,7 +66,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
         Nanoc::Core::ProcessingActions::Snapshot.new([:last], []),
       ]
 
-    Nanoc::Int::ActionSequence.new(nil, actions: actions)
+    Nanoc::Core::ActionSequence.new(nil, actions: actions)
   end
 
   before do

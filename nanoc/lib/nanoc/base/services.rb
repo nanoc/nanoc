@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'services/action_provider'
-require_relative 'services/action_sequence_builder'
 require_relative 'services/compilation_context'
 require_relative 'services/compiler'
 require_relative 'services/compiler_loader'

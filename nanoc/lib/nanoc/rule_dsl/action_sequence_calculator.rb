@@ -40,7 +40,7 @@ module Nanoc::RuleDSL
 
     # @param [#reference] obj
     #
-    # @return [Nanoc::Int::ActionSequence]
+    # @return [Nanoc::Core::ActionSequence]
     def [](obj)
       case obj
       when Nanoc::Core::ItemRep
@@ -78,7 +78,7 @@ module Nanoc::RuleDSL
 
     # @param [Nanoc::Core::Layout] layout
     #
-    # @return [Nanoc::Int::ActionSequence]
+    # @return [Nanoc::Core::ActionSequence]
     def new_action_sequence_for_layout(layout)
       res = @rules_collection.filter_for_layout(layout)
 
@@ -86,7 +86,7 @@ module Nanoc::RuleDSL
         raise NoActionSequenceForLayoutException.new(layout)
       end
 
-      Nanoc::Int::ActionSequenceBuilder.build(layout) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build(layout) do |b|
         b.add_filter(res[0], res[1])
       end
     end
@@ -100,7 +100,7 @@ module Nanoc::RuleDSL
           actions << action
         end
       end
-      Nanoc::Int::ActionSequence.new(seq.item_rep, actions: actions)
+      Nanoc::Core::ActionSequence.new(seq.item_rep, actions: actions)
     end
 
     def copy_paths_from_routing_rules(seq, snapshots_for_which_to_skip_routing_rule, rep:)

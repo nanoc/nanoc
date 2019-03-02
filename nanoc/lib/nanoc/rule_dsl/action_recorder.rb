@@ -7,7 +7,7 @@ module Nanoc
 
       contract Nanoc::Core::ItemRep => C::Any
       def initialize(rep)
-        @action_sequence_builder = Nanoc::Int::ActionSequenceBuilder.new(rep)
+        @action_sequence_builder = Nanoc::Core::ActionSequenceBuilder.new(rep)
 
         @any_layouts = false
         @last_snapshot = false
@@ -61,7 +61,7 @@ module Nanoc
         nil
       end
 
-      contract C::None => Nanoc::Int::ActionSequence
+      contract C::None => Nanoc::Core::ActionSequence
       def action_sequence
         @action_sequence_builder.action_sequence
       end

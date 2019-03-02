@@ -363,7 +363,7 @@ describe Nanoc::Int::Executor do
     end
 
     let(:action_sequence) do
-      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:erb, {})
       end
     end
@@ -477,7 +477,7 @@ describe Nanoc::Int::Executor do
 
     context 'no filter specified' do
       let(:action_sequence) do
-        Nanoc::Int::ActionSequence.new(rep)
+        Nanoc::Core::ActionSequence.new(rep)
       end
 
       it 'raises' do

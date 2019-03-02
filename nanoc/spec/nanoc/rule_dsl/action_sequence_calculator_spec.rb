@@ -191,7 +191,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
     subject { action_sequence_calculator.compact_snapshots(action_sequence) }
 
     let(:action_sequence) do
-      Nanoc::Int::ActionSequenceBuilder.build(rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         b.add_snapshot(:a1, nil)
         b.add_snapshot(:a2, '/a2.md')
         b.add_snapshot(:a3, nil)
