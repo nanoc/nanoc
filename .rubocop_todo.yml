@@ -25,14 +25,6 @@ RSpec/ContextWording:
 RSpec/DescribeClass:
   Enabled: false
 
-# Offense count: 32
-# Cop supports --auto-correct.
-# Configuration parameters: SkipBlocks, EnforcedStyle.
-# SupportedStyles: described_class, explicit
-RSpec/DescribedClass:
-  Exclude:
-    - 'nanoc/spec/nanoc/version_spec.rb'
-
 # Offense count: 8
 # Configuration parameters: CustomIncludeMethods.
 RSpec/EmptyExampleGroup:
