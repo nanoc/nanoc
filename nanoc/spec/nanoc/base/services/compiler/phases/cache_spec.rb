@@ -56,7 +56,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
 
       it 'marks rep as compiled' do
         expect { subject }
-          .to change { rep.compiled? }
+          .to change(rep, :compiled?)
           .from(false)
           .to(true)
       end
@@ -100,7 +100,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
         it 'marks rep as compiled' do
           expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
-            .to change { rep.compiled? }
+            .to change(rep, :compiled?)
             .from(false)
             .to(true)
         end
@@ -133,7 +133,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
         it 'marks rep as compiled' do
           expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
-            .to change { rep.compiled? }
+            .to change(rep, :compiled?)
             .from(false)
             .to(true)
         end

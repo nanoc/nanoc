@@ -45,7 +45,7 @@ describe Nanoc::Int::Compiler::Stages::Preprocess do
 
       it 'marks the site as preprocessed' do
         expect { subject }
-          .to change { site.preprocessed? }
+          .to change(site, :preprocessed?)
           .from(false)
           .to(true)
       end
@@ -73,7 +73,7 @@ describe Nanoc::Int::Compiler::Stages::Preprocess do
 
       it 'marks the site as preprocessed' do
         expect { subject }
-          .to change { site.preprocessed? }
+          .to change(site, :preprocessed?)
           .from(false)
           .to(true)
       end

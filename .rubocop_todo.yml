@@ -80,23 +80,6 @@ RSpec/ExpectActual:
     - 'nanoc-live/spec/manifest_spec.rb'
     - 'nanoc/spec/manifest_spec.rb'
 
-# Offense count: 43
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: method_call, block
-RSpec/ExpectChange:
-  Exclude:
-    - 'nanoc-core/spec/nanoc/core/configuration_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/document_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/identifier_spec.rb'
-    - 'nanoc/spec/nanoc/base/services/compiler/phases/cache_spec.rb'
-    - 'nanoc/spec/nanoc/base/services/compiler/phases/resume_spec.rb'
-    - 'nanoc/spec/nanoc/base/services/compiler/stages/determine_outdatedness_spec.rb'
-    - 'nanoc/spec/nanoc/base/services/compiler/stages/preprocess_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/support/mutable_document_view_examples.rb'
-    - 'nanoc/spec/nanoc/cli/stack_trace_writer_spec.rb'
-    - 'nanoc/spec/nanoc/rule_dsl/action_recorder_spec.rb'
-
 # Offense count: 46
 RSpec/ExpectInHook:
   Exclude:

@@ -74,7 +74,7 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
       context 'outdatedness checker thinks rep is not outdated' do
         it 'keeps the outdatedness store empty' do
           expect { subject }
-            .not_to change { outdatedness_store.empty? }
+            .not_to change(outdatedness_store, :empty?)
         end
 
         it 'returns an empty list' do

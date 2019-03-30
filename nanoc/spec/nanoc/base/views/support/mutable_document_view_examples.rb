@@ -36,21 +36,21 @@ shared_examples 'a mutable document view' do
 
       it 'unsets checksum_data' do
         expect { view.raw_content = 'donkey' }
-          .to change { document.checksum_data }
+          .to change(document, :checksum_data)
           .from('my checksum data')
           .to(nil)
       end
 
       it 'unsets content_checksum_data' do
         expect { view.raw_content = 'donkey' }
-          .to change { document.content_checksum_data }
+          .to change(document, :content_checksum_data)
           .from('my content checksum data')
           .to(nil)
       end
 
       it 'keeps attributes_checksum_data' do
         expect { view.raw_content = 'donkey' }
-          .not_to change { document.attributes_checksum_data }
+          .not_to change(document, :attributes_checksum_data)
       end
     end
   end
@@ -92,21 +92,21 @@ shared_examples 'a mutable document view' do
 
       it 'unsets checksum_data' do
         expect { view[:title] = 'Donkey' }
-          .to change { document.checksum_data }
+          .to change(document, :checksum_data)
           .from('my checksum data')
           .to(nil)
       end
 
       it 'unsets attributes_checksum_data' do
         expect { view[:title] = 'Donkey' }
-          .to change { document.attributes_checksum_data }
+          .to change(document, :attributes_checksum_data)
           .from('my attributes checksum data')
           .to(nil)
       end
 
       it 'keeps content_checksum_data' do
         expect { view[:title] = 'Donkey' }
-          .not_to change { document.content_checksum_data }
+          .not_to change(document, :content_checksum_data)
       end
     end
   end
@@ -167,21 +167,21 @@ shared_examples 'a mutable document view' do
 
       it 'unsets checksum_data' do
         expect { subject }
-          .to change { document.checksum_data }
+          .to change(document, :checksum_data)
           .from('my checksum data')
           .to(nil)
       end
 
       it 'unsets attributes_checksum_data' do
         expect { subject }
-          .to change { document.attributes_checksum_data }
+          .to change(document, :attributes_checksum_data)
           .from('my attributes checksum data')
           .to(nil)
       end
 
       it 'keeps content_checksum_data' do
         expect { subject }
-          .not_to change { document.content_checksum_data }
+          .not_to change(document, :content_checksum_data)
       end
     end
   end

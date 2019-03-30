@@ -37,21 +37,21 @@ describe Nanoc::CLI::StackTraceWriter do
 
         it 'starts with zero' do
           expect { subject }
-            .to change { io.string }
+            .to change(io, :string)
             .from('')
             .to(start_with('  0. '))
         end
 
         it 'has more recent stack frames at the top' do
           expect { subject }
-            .to change { io.string }
+            .to change(io, :string)
             .from('')
             .to(match(%r{^  0\. (C:)?/.+/spec/nanoc/cli/stack_trace_writer_spec\.rb:\d+.*$\n  1\. (C:)?/.+/spec/nanoc/cli/stack_trace_writer_spec\.rb:\d}m))
         end
 
         it 'has more than 10 stack frames' do
           expect { subject }
-            .to change { io.string }
+            .to change(io, :string)
             .from('')
             .to(match(%r{^  11\. }))
         end
@@ -67,14 +67,14 @@ describe Nanoc::CLI::StackTraceWriter do
 
         it 'starts with zero' do
           expect { subject }
-            .to change { io.string }
+            .to change(io, :string)
             .from('')
             .to(start_with('  0. '))
         end
 
         it 'has more recent stack frames at the top' do
           expect { subject }
-            .to change { io.string }
+            .to change(io, :string)
             .from('')
             .to(match(%r{^  0\. (C:)?/.+/spec/nanoc/cli/stack_trace_writer_spec\.rb:\d+.*$\n  1\. (C:)?/.+/spec/nanoc/cli/stack_trace_writer_spec\.rb:\d}m))
         end
@@ -99,21 +99,21 @@ describe Nanoc::CLI::StackTraceWriter do
 
         it 'ends with most recent line' do
           expect { subject }
-            .to change { io.string }
+            .to change(io, :string)
             .from('')
             .to(match(%r{^  1\. from (C:)?/.+/spec/nanoc/cli/stack_trace_writer_spec\.rb:\d+.*$\n  (C:)?/.+/spec/nanoc/cli}m))
         end
 
         it 'has more recent stack frames at the bottom' do
           expect { subject }
-            .to change { io.string }
+            .to change(io, :string)
             .from('')
             .to(match(%r{^  2\. from (C:)?/.+/spec/nanoc/cli/stack_trace_writer_spec\.rb:\d+.*$\n  1\. from (C:)?/.+/spec/nanoc/cli/stack_trace_writer_spec\.rb:\d}m))
         end
 
         it 'has more than 10 stack frames' do
           expect { subject }
-            .to change { io.string }
+            .to change(io, :string)
             .from('')
             .to(match(%r{^  11\. from }))
         end
@@ -129,14 +129,14 @@ describe Nanoc::CLI::StackTraceWriter do
 
         it 'ends with most recent line' do
           expect { subject }
-            .to change { io.string }
+            .to change(io, :string)
             .from('')
             .to(match(%r{^  1\. from (C:)?/.+/spec/nanoc/cli/stack_trace_writer_spec\.rb:\d+.*$\n  (C:)?/.+/spec/nanoc/cli}m))
         end
 
         it 'has more recent stack frames at the top' do
           expect { subject }
-            .to change { io.string }
+            .to change(io, :string)
             .from('')
             .to(match(%r{^  2\. from (C:)?/.+/spec/nanoc/cli/stack_trace_writer_spec\.rb:\d+.*$\n  1\. from (C:)?/.+/spec/nanoc/cli/stack_trace_writer_spec\.rb:\d}m))
         end

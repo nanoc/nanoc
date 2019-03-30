@@ -237,7 +237,7 @@ describe Nanoc::Core::Configuration do
 
     it 'freezes' do
       expect { subject }
-        .to change { config.frozen? }
+        .to change(config, :frozen?)
         .from(false)
         .to(true)
     end

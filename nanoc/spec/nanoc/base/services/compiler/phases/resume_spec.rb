@@ -51,7 +51,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       end
 
       it 'delegates to wrapped' do
-        expect { subject rescue nil }.to change { wrapped.count }.from(0).to(1)
+        expect { subject rescue nil }.to change(wrapped, :count).from(0).to(1)
       end
 
       it 'raises' do
@@ -102,7 +102,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       end
 
       it 'delegates to wrapped' do
-        expect { subject rescue nil }.to change { wrapped.count }.from(0).to(2)
+        expect { subject rescue nil }.to change(wrapped, :count).from(0).to(2)
       end
 
       it 'raises' do
@@ -154,7 +154,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       end
 
       it 'delegates to wrapped' do
-        expect { subject }.to change { wrapped.count }.from(0).to(3)
+        expect { subject }.to change(wrapped, :count).from(0).to(3)
       end
 
       it 'does not raise' do

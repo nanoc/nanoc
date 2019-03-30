@@ -275,21 +275,21 @@ shared_examples 'a document' do
 
     it 'clears checksum' do
       expect { subject }
-        .to change { document.checksum_data }
+        .to change(document, :checksum_data)
         .from('ch3cksum_d4t4')
         .to(nil)
     end
 
     it 'clears content checksum' do
       expect { subject }
-        .to change { document.content_checksum_data }
+        .to change(document, :content_checksum_data)
         .from('c0nt3nt_ch3cksum_d4t4')
         .to(nil)
     end
 
     it 'does not clear attributes checksum data' do
       expect { subject }
-        .not_to change { document.attributes_checksum_data }
+        .not_to change(document, :attributes_checksum_data)
     end
   end
 
@@ -312,21 +312,21 @@ shared_examples 'a document' do
 
     it 'clears checksum' do
       expect { subject }
-        .to change { document.checksum_data }
+        .to change(document, :checksum_data)
         .from('ch3cksum_d4t4')
         .to(nil)
     end
 
     it 'clears attributes checksum' do
       expect { subject }
-        .to change { document.attributes_checksum_data }
+        .to change(document, :attributes_checksum_data)
         .from('4ttr_ch3cksum_d4t4')
         .to(nil)
     end
 
     it 'does not clear content checksum data' do
       expect { subject }
-        .not_to change { document.content_checksum_data }
+        .not_to change(document, :content_checksum_data)
     end
   end
 end

@@ -263,14 +263,14 @@ describe Nanoc::Core::Identifier do
         let(:pat) { %r{\A/foo/bar} }
 
         it { is_expected.to be(true) }
-        example { expect { subject }.not_to change { Regexp.last_match } }
+        example { expect { subject }.not_to change(Regexp, :last_match) }
       end
 
       context 'non-matching regex' do
         let(:pat) { %r{\A/qux/monkey} }
 
         it { is_expected.to be(false) }
-        example { expect { subject }.not_to change { Regexp.last_match } }
+        example { expect { subject }.not_to change(Regexp, :last_match) }
       end
     end
 
@@ -279,14 +279,14 @@ describe Nanoc::Core::Identifier do
         let(:pat) { '/foo/*' }
 
         it { is_expected.to be(true) }
-        example { expect { subject }.not_to change { Regexp.last_match } }
+        example { expect { subject }.not_to change(Regexp, :last_match) }
       end
 
       context 'non-matching string' do
         let(:pat) { '/qux/*' }
 
         it { is_expected.to be(false) }
-        example { expect { subject }.not_to change { Regexp.last_match } }
+        example { expect { subject }.not_to change(Regexp, :last_match) }
       end
     end
   end

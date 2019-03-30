@@ -104,7 +104,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
           it 'keeps skip_routing_rule' do
             expect { subject }
-              .not_to change { recorder.snapshots_for_which_to_skip_routing_rule }
+              .not_to change(recorder, :snapshots_for_which_to_skip_routing_rule)
               .from(Set.new)
           end
         end
@@ -122,7 +122,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
           it 'sets skip_routing_rule' do
             expect { subject }
-              .to change { recorder.snapshots_for_which_to_skip_routing_rule }
+              .to change(recorder, :snapshots_for_which_to_skip_routing_rule)
               .from(Set.new)
               .to(Set.new([:foo]))
           end
@@ -141,7 +141,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
           it 'sets skip_routing_rule' do
             expect { subject }
-              .to change { recorder.snapshots_for_which_to_skip_routing_rule }
+              .to change(recorder, :snapshots_for_which_to_skip_routing_rule)
               .from(Set.new)
               .to(Set.new([:foo]))
           end
@@ -160,7 +160,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
           it 'sets skip_routing_rule' do
             expect { subject }
-              .to change { recorder.snapshots_for_which_to_skip_routing_rule }
+              .to change(recorder, :snapshots_for_which_to_skip_routing_rule)
               .from(Set.new)
               .to(Set.new([:foo]))
           end
