@@ -9,8 +9,14 @@ describe Nanoc::CompilationItemRepView do
     dependency_tracker.enter(base_item)
   end
 
-  it_behaves_like 'an item rep view'
-
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+  let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
+  let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
+  let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
+  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
+  let(:compilation_context) { double(:compilation_context) }
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
       reps: Nanoc::Int::ItemRepRepo.new,
@@ -21,17 +27,7 @@ describe Nanoc::CompilationItemRepView do
     )
   end
 
-  let(:compilation_context) { double(:compilation_context) }
-  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
-
-  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
-  let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
-  let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
-
-  let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
-  let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
-
-  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+  it_behaves_like 'an item rep view'
 
   describe '#raw_path' do
     subject { Fiber.new { view.raw_path }.resume }

@@ -1,6 +1,18 @@
 # frozen_string_literal: true
 
 describe Nanoc::Int::Store do
+  let(:test_store_klass) do
+    Class.new(Nanoc::Int::Store) do
+      def data
+        @data
+      end
+
+      def data=(new_data)
+        @data = new_data
+      end
+    end
+  end
+
   describe '#tmp_path_for' do
     context 'passing config' do
       subject { described_class.tmp_path_for(config: config, store_name: 'giraffes') }
@@ -72,18 +84,6 @@ describe Nanoc::Int::Store do
 
           it { is_expected.to eql(Dir.getwd + "/tmp/nanoc/#{hash_output}/giraffes") }
         end
-      end
-    end
-  end
-
-  let(:test_store_klass) do
-    Class.new(Nanoc::Int::Store) do
-      def data
-        @data
-      end
-
-      def data=(new_data)
-        @data = new_data
       end
     end
   end

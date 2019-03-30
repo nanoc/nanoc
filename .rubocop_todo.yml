@@ -119,21 +119,6 @@ RSpec/IteratedExpectation:
   Exclude:
     - 'nanoc/spec/nanoc/base/views/support/identifiable_collection_view_examples.rb'
 
-# Offense count: 40
-# Cop supports --auto-correct.
-RSpec/LetBeforeExamples:
-  Exclude:
-    - 'nanoc/spec/nanoc/base/repos/store_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/basic_item_rep_collection_view_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/compilation_item_rep_collection_view_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/compilation_item_rep_view_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/item_view_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/mutable_item_collection_view_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/mutable_item_view_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/mutable_layout_collection_view_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/post_compile_item_rep_collection_view_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/post_compile_item_rep_view_spec.rb'
-
 # Offense count: 144
 # Configuration parameters: .
 # SupportedStyles: have_received, receive

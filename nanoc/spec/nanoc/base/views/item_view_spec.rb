@@ -9,8 +9,16 @@ describe Nanoc::CompilationItemView do
     dependency_tracker.enter(base_item)
   end
 
-  it_behaves_like 'a document view'
-
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+  let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
+  let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
+  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
+  let(:compilation_context) { double(:compilation_context) }
+  let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
+  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+  let(:items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:reps) { Nanoc::Int::ItemRepRepo.new }
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
       reps: reps,
@@ -21,19 +29,7 @@ describe Nanoc::CompilationItemView do
     )
   end
 
-  let(:reps) { Nanoc::Int::ItemRepRepo.new }
-  let(:items) { Nanoc::Core::ItemCollection.new(config) }
-  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
-  let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
-  let(:compilation_context) { double(:compilation_context) }
-  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
-
-  let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
-
-  let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
-  let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
-
-  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+  it_behaves_like 'a document view'
 
   describe '#parent' do
     subject { view.parent }
