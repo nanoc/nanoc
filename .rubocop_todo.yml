@@ -162,14 +162,6 @@ RSpec/OverwritingSetup:
   Exclude:
     - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: Strict, EnforcedStyle.
-# SupportedStyles: inflected, explicit
-RSpec/PredicateMatcher:
-  Exclude:
-    - 'nanoc/spec/nanoc/base/item_rep_writer_spec.rb'
-
 # Offense count: 6
 RSpec/RepeatedDescription:
   Exclude:

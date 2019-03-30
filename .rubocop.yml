@@ -214,3 +214,16 @@ Style/FormatStringToken:
 RSpec/DescribedClass:
   Exclude:
     - 'nanoc/spec/nanoc/version_spec.rb'
+
+# This turns
+#
+#     expect(File.directory?('output')).to be_falsy
+#
+# into
+#
+#     expect(File).not_to be_directory('output')
+#
+# … which does not look right.
+RSpec/PredicateMatcher:
+  Exclude:
+    - 'nanoc/spec/nanoc/base/item_rep_writer_spec.rb'
