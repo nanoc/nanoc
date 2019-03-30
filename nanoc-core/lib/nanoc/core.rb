@@ -2,6 +2,7 @@
 
 # Ruby stdlib
 require 'singleton'
+require 'tmpdir'
 
 # External gems
 require 'json_schema'
