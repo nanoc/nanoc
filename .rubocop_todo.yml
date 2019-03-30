@@ -142,12 +142,6 @@ RSpec/MultipleDescribes:
 RSpec/MultipleExpectations:
   Max: 19
 
-# Offense count: 1
-# Cop supports --auto-correct.
-RSpec/MultipleSubjects:
-  Exclude:
-    - 'nanoc/spec/nanoc/filters/sass_spec.rb'
-
 # Offense count: 861
 # Configuration parameters: IgnoreSharedExamples.
 RSpec/NamedSubject:
