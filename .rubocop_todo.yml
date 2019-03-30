@@ -81,16 +81,6 @@ RSpec/ExpectOutput:
 RSpec/FilePath:
   Enabled: false
 
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: implicit, each, example
-RSpec/HookArgument:
-  Exclude:
-    - 'common/spec/spec_helper_foot.rb'
-    - 'common/spec/spec_helper_foot_core.rb'
-    - 'guard-nanoc/spec/spec_helper.rb'
-
 # Offense count: 12
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.

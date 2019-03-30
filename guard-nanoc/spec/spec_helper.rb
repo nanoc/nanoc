@@ -8,7 +8,7 @@ require_relative '../../common/spec/spec_helper_foot'
 
 RSpec.configure do |config|
   # Swallow stdout/stderr
-  config.around(:each) do |example|
+  config.around do |example|
     old_stdout = $stdout
     old_stderr = $stderr
 
@@ -24,7 +24,7 @@ RSpec.configure do |config|
   end
 
   # In temporary site
-  config.around(:each) do |example|
+  config.around do |example|
     Dir.mktmpdir('nanoc-test') do |dir|
       FileUtils.cd(dir) do
         Nanoc::CLI.run(%w[create-site foo])

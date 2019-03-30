@@ -17,11 +17,11 @@ RSpec.configure do |c|
     skip 'fork() is not supported on Windows' if Nanoc.on_windows?
   end
 
-  c.before(:each) do
+  c.before do
     Nanoc::Core::NotificationCenter.reset
   end
 
-  c.around(:each) do |example|
+  c.around do |example|
     should_chdir =
       !example.metadata.key?(:chdir) ||
       example.metadata[:chdir]

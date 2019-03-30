@@ -35,7 +35,7 @@ RSpec.configure do |c|
     File.write('Rules', 'passthrough "/**/*"')
   end
 
-  c.around(:each) do |example|
+  c.around do |example|
     Nanoc::CLI::ErrorHandler.disable
     example.run
     Nanoc::CLI::ErrorHandler.enable
