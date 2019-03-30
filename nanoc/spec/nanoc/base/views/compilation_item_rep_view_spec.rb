@@ -5,6 +5,10 @@ require_relative 'support/item_rep_view_examples'
 describe Nanoc::CompilationItemRepView do
   let(:expected_item_view_class) { Nanoc::CompilationItemView }
 
+  before do
+    dependency_tracker.enter(base_item)
+  end
+
   it_behaves_like 'an item rep view'
 
   let(:view_context) do
@@ -28,10 +32,6 @@ describe Nanoc::CompilationItemRepView do
   let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
-
-  before do
-    dependency_tracker.enter(base_item)
-  end
 
   describe '#raw_path' do
     subject { Fiber.new { view.raw_path }.resume }

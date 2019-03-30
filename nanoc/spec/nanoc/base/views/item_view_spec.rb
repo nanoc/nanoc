@@ -5,6 +5,10 @@ require_relative 'support/document_view_examples'
 describe Nanoc::CompilationItemView do
   let(:entity_class) { Nanoc::Core::Item }
   let(:other_view_class) { Nanoc::LayoutView }
+  before do
+    dependency_tracker.enter(base_item)
+  end
+
   it_behaves_like 'a document view'
 
   let(:view_context) do
@@ -30,10 +34,6 @@ describe Nanoc::CompilationItemView do
   let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
-
-  before do
-    dependency_tracker.enter(base_item)
-  end
 
   describe '#parent' do
     let(:item) do

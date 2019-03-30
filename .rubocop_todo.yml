@@ -118,13 +118,6 @@ RSpec/HookArgument:
     - 'common/spec/spec_helper_foot_core.rb'
     - 'guard-nanoc/spec/spec_helper.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-RSpec/HooksBeforeExamples:
-  Exclude:
-    - 'nanoc/spec/nanoc/base/views/compilation_item_rep_view_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/item_view_spec.rb'
-
 # Offense count: 12
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
