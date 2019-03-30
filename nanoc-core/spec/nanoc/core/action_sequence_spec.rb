@@ -31,6 +31,7 @@ describe Nanoc::Core::ActionSequence do
 
   describe '#[]' do
     subject { action_sequence[index] }
+
     let(:index) { 0 }
 
     context 'no actions' do

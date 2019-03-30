@@ -27,11 +27,13 @@ end
 describe Nanoc::Core::NotificationCenter do
   describe 'class' do
     subject { described_class }
+
     it_behaves_like 'a notification center'
   end
 
   describe 'instance' do
     subject { described_class.instance }
+
     it_behaves_like 'a notification center'
   end
 end

@@ -4,11 +4,13 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   let(:listener) { described_class.new(reps: reps) }
 
   before { Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0)) }
+
   after { Timecop.return }
 
   before { Nanoc::CLI.verbosity = 2 }
 
   before { listener.start_safely }
+
   after { listener.stop_safely }
 
   let(:reps) do

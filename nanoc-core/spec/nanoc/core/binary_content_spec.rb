@@ -19,7 +19,9 @@ describe Nanoc::Core::BinaryContent do
 
   describe '#binary?' do
     subject { content.binary? }
+
     let(:content) { described_class.new('/foo.dat') }
+
     it { is_expected.to be(true) }
   end
 

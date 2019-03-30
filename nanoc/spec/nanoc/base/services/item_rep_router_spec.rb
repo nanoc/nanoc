@@ -177,21 +177,25 @@ describe(Nanoc::Int::ItemRepRouter) do
 
     context 'basic path ends with /index.html' do
       let(:basic_path) { '/bar/index.html' }
+
       it { is_expected.to eql('/bar/') }
     end
 
     context 'basic path contains /index.html' do
       let(:basic_path) { '/bar/index.html/foo' }
+
       it { is_expected.to eql('/bar/index.html/foo') }
     end
 
     context 'basic path ends with xindex.html' do
       let(:basic_path) { '/bar/xindex.html' }
+
       it { is_expected.to eql('/bar/xindex.html') }
     end
 
     context 'basic path does not contain /index.html' do
       let(:basic_path) { '/bar/foo.html' }
+
       it { is_expected.to eql('/bar/foo.html') }
     end
   end

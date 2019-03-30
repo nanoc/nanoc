@@ -42,6 +42,7 @@ shared_examples 'an item rep view' do
 
     context 'frozen item rep' do
       before { item_rep.freeze }
+
       it { is_expected.to be(true) }
     end
   end

@@ -51,11 +51,13 @@ describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
         context 'checks disabled' do
           context '--no-check' do
             let(:command) { super() + ['--no-check'] }
+
             include_examples 'effective deploy'
           end
 
           context '--Ck' do
             let(:command) { super() + ['-C'] }
+
             include_examples 'effective deploy'
           end
         end
@@ -89,11 +91,13 @@ describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
 
       context '--list-deployers' do
         let(:command) { %w[deploy --list-deployers] }
+
         include_examples 'lists all deployers'
       end
 
       context '-D' do
         let(:command) { %w[deploy -D] }
+
         include_examples 'lists all deployers'
       end
     end
@@ -138,11 +142,13 @@ describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
 
       context '--list' do
         let(:command) { %w[deploy --list] }
+
         include_examples 'lists all deployment configurations'
       end
 
       context '-L' do
         let(:command) { %w[deploy -L] }
+
         include_examples 'lists all deployment configurations'
       end
     end
@@ -229,6 +235,7 @@ describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
 
             context 'dry run' do
               let(:command) { super() + ['--dry-run'] }
+
               include_examples 'no effective deploy'
             end
           end
@@ -249,6 +256,7 @@ describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
 
             context 'dry run' do
               let(:command) { super() + ['--dry-run'] }
+
               include_examples 'no effective deploy'
             end
           end
@@ -282,6 +290,7 @@ describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
 
             context 'dry run' do
               let(:command) { (super() + ['--dry-run']) }
+
               include_examples 'no effective deploy'
             end
           end
@@ -302,6 +311,7 @@ describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
 
             context 'dry run' do
               let(:command) { (super() + ['--dry-run']) }
+
               include_examples 'no effective deploy'
             end
           end
@@ -309,11 +319,13 @@ describe Nanoc::CLI::Commands::Deploy, site: true, stdio: true do
 
         context 'non-default target, specified as argument' do
           let(:command) { %w[deploy production] }
+
           include_examples 'deploy with non-default target'
         end
 
         context 'non-default target, specified as option (--target)' do
           let(:command) { %w[deploy --target production] }
+
           include_examples 'deploy with non-default target'
         end
 

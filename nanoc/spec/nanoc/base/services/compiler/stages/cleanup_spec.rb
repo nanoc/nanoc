@@ -45,26 +45,31 @@ describe Nanoc::Int::Compiler::Stages::Cleanup do
 
     context 'tmp/checksums' do
       let(:store_name) { 'checksums' }
+
       it_behaves_like 'an old store'
     end
 
     context 'tmp/compiled_content' do
       let(:store_name) { 'compiled_content' }
+
       it_behaves_like 'an old store'
     end
 
     context 'tmp/dependencies' do
       let(:store_name) { 'dependencies' }
+
       it_behaves_like 'an old store'
     end
 
     context 'tmp/outdatedness' do
       let(:store_name) { 'outdatedness' }
+
       it_behaves_like 'an old store'
     end
 
     context 'tmp/action_sequence' do
       let(:store_name) { 'action_sequence' }
+
       it_behaves_like 'an old store'
     end
 

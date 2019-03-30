@@ -156,6 +156,7 @@ describe Nanoc::PostCompileItemRepView do
     context 'textual' do
       context 'snapshot provided' do
         subject { view.compiled_content(snapshot: :donkey) }
+
         let(:expected_snapshot) { :donkey }
 
         context 'snapshot exists' do

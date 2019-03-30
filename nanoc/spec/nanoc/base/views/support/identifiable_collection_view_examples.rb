@@ -142,6 +142,7 @@ shared_examples 'an identifiable collection view' do
 
     context 'no objects found' do
       let(:arg) { '/donkey.*' }
+
       it { is_expected.to equal(nil) }
 
       it 'creates dependency' do

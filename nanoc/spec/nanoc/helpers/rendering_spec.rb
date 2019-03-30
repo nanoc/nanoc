@@ -41,6 +41,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
         context 'layout with instructions' do
           let(:layout_content) { 'blah <%= @layout.identifier %>' }
+
           it { is_expected.to eql('blah /partial/') }
         end
       end
@@ -50,11 +51,13 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
         context 'layout without instructions' do
           let(:layout_content) { 'blah' }
+
           it { is_expected.to eql('blah') }
         end
 
         context 'layout with instructions' do
           let(:layout_content) { 'blah <%= @layout.identifier %>' }
+
           it { is_expected.to eql('blah /partial/') }
         end
       end
@@ -65,21 +68,25 @@ describe Nanoc::Helpers::Rendering, helper: true do
 
       context 'layout without instructions' do
         let(:layout_content) { 'blah' }
+
         it { is_expected.to eql('blah') }
       end
 
       context 'layout with instructions' do
         let(:layout_content) { 'blah <%= @layout.identifier %>' }
+
         it { is_expected.to eql('blah /partial.erb') }
       end
 
       context 'printing wrapped layout class' do
         let(:layout_content) { 'blah <%= @layout.class %>' }
+
         it { is_expected.to eql('blah Nanoc::LayoutView') }
       end
 
       context 'printing unwrapped layout class' do
         let(:layout_content) { 'blah <%= @layout._unwrap.class %>' }
+
         it { is_expected.to eql('blah Nanoc::Core::Layout') }
       end
 

@@ -13,6 +13,7 @@ describe Nanoc::MutableConfigView do
 
   describe '#inspect' do
     subject { view.inspect }
+
     it { is_expected.to eql('<Nanoc::MutableConfigView>') }
   end
 end

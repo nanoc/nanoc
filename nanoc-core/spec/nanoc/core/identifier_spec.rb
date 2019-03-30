@@ -227,11 +227,13 @@ describe Nanoc::Core::Identifier do
     context 'given a regex' do
       context 'matching regex' do
         let(:pat) { %r{\A/foo/bar} }
+
         it { is_expected.to be(0) }
       end
 
       context 'non-matching regex' do
         let(:pat) { %r{\A/qux/monkey} }
+
         it { is_expected.to be(nil) }
       end
     end
@@ -239,11 +241,13 @@ describe Nanoc::Core::Identifier do
     context 'given a string' do
       context 'matching string' do
         let(:pat) { '/foo/*' }
+
         it { is_expected.to be(0) }
       end
 
       context 'non-matching string' do
         let(:pat) { '/qux/*' }
+
         it { is_expected.to be(nil) }
       end
     end
@@ -257,12 +261,14 @@ describe Nanoc::Core::Identifier do
     context 'given a regex' do
       context 'matching regex' do
         let(:pat) { %r{\A/foo/bar} }
+
         it { is_expected.to be(true) }
         example { expect { subject }.not_to change { Regexp.last_match } }
       end
 
       context 'non-matching regex' do
         let(:pat) { %r{\A/qux/monkey} }
+
         it { is_expected.to be(false) }
         example { expect { subject }.not_to change { Regexp.last_match } }
       end
@@ -271,12 +277,14 @@ describe Nanoc::Core::Identifier do
     context 'given a string' do
       context 'matching string' do
         let(:pat) { '/foo/*' }
+
         it { is_expected.to be(true) }
         example { expect { subject }.not_to change { Regexp.last_match } }
       end
 
       context 'non-matching string' do
         let(:pat) { '/qux/*' }
+
         it { is_expected.to be(false) }
         example { expect { subject }.not_to change { Regexp.last_match } }
       end
@@ -462,11 +470,13 @@ describe Nanoc::Core::Identifier do
 
     context 'legacy type' do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
+
       it { is_expected.to be(true) }
     end
 
     context 'full type' do
       let(:identifier) { described_class.new('/foo', type: :full) }
+
       it { is_expected.to be(false) }
     end
   end
@@ -476,11 +486,13 @@ describe Nanoc::Core::Identifier do
 
     context 'legacy type' do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
+
       it { is_expected.to be(false) }
     end
 
     context 'full type' do
       let(:identifier) { described_class.new('/foo', type: :full) }
+
       it { is_expected.to be(true) }
     end
   end
@@ -490,16 +502,19 @@ describe Nanoc::Core::Identifier do
 
     context 'no components' do
       let(:identifier) { described_class.new('/', type: :legacy) }
+
       it { is_expected.to eql([]) }
     end
 
     context 'one component' do
       let(:identifier) { described_class.new('/foo.md') }
+
       it { is_expected.to eql(['foo.md']) }
     end
 
     context 'two components' do
       let(:identifier) { described_class.new('/foo/bar.md') }
+
       it { is_expected.to eql(['foo', 'bar.md']) }
     end
   end

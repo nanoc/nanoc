@@ -23,6 +23,7 @@ describe Nanoc::Int::CompiledContentStore do
 
       context 'snapshot exists in repo' do
         before { repo.set(rep, :donkey, Nanoc::Core::TextualContent.new('donkey')) }
+
         it { is_expected.to be_some_textual_content('donkey') }
       end
     end
@@ -40,6 +41,7 @@ describe Nanoc::Int::CompiledContentStore do
 
     context 'rep exists in repo' do
       before { repo.set(rep, :foobar, Nanoc::Core::TextualContent.new('donkey')) }
+
       it { is_expected.to match(foobar: some_textual_content('donkey')) }
     end
   end
@@ -119,11 +121,13 @@ describe Nanoc::Int::CompiledContentStore do
 
           context 'content is textual' do
             let(:content) { Nanoc::Core::TextualContent.new('hellos') }
+
             it { is_expected.to eql('hellos') }
           end
 
           context 'content is binary' do
             before { File.write('donkey.dat', 'binary data') }
+
             let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('donkey.dat')) }
 
             it 'raises' do
@@ -136,37 +140,49 @@ describe Nanoc::Int::CompiledContentStore do
 
     context 'snapshot nil' do
       let(:expected_snapshot_name) { :last }
+
       subject { repo.compiled_content(rep: rep, snapshot: nil) }
+
       include_examples 'a snapshot'
     end
 
     context 'snapshot not specified' do
       let(:expected_snapshot_name) { :last }
+
       subject { repo.compiled_content(rep: rep) }
+
       include_examples 'a snapshot'
     end
 
     context 'snapshot :pre specified' do
       let(:expected_snapshot_name) { :pre }
+
       subject { repo.compiled_content(rep: rep, snapshot: :pre) }
+
       include_examples 'a snapshot'
     end
 
     context 'snapshot :post specified' do
       let(:expected_snapshot_name) { :post }
+
       subject { repo.compiled_content(rep: rep, snapshot: :post) }
+
       include_examples 'a snapshot'
     end
 
     context 'snapshot :last specified' do
       let(:expected_snapshot_name) { :last }
+
       subject { repo.compiled_content(rep: rep, snapshot: :last) }
+
       include_examples 'a snapshot'
     end
 
     context 'snapshot :donkey specified' do
       let(:expected_snapshot_name) { :donkey }
+
       subject { repo.compiled_content(rep: rep, snapshot: :donkey) }
+
       include_examples 'a snapshot'
     end
   end

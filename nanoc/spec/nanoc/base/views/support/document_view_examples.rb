@@ -37,6 +37,7 @@ shared_examples 'a document view' do
 
     context 'frozen document' do
       before { document.freeze }
+
       it { is_expected.to be(true) }
     end
   end

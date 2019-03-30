@@ -6,6 +6,7 @@ describe Nanoc::Helpers::HTMLEscape, helper: true do
 
     context 'given strings to escape' do
       let(:string) { '< > & "' }
+
       it { is_expected.to eql('&lt; &gt; &amp; &quot;') }
     end
 

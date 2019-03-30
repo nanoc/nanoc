@@ -30,6 +30,7 @@ describe Nanoc::ConfigView do
 
     context 'frozen config' do
       before { config.freeze }
+
       it { is_expected.to be(true) }
     end
   end
@@ -43,11 +44,13 @@ describe Nanoc::ConfigView do
 
     context 'with existing key' do
       let(:key) { :animal }
+
       it { is_expected.to eql('donkey') }
     end
 
     context 'with non-existing key' do
       let(:key) { :weapon }
+
       it { is_expected.to be(nil) }
     end
   end
@@ -70,11 +73,13 @@ describe Nanoc::ConfigView do
 
       context 'with fallback' do
         subject { view.fetch(key, 'nothing sorry') }
+
         it { is_expected.to eql('nothing sorry') }
       end
 
       context 'with block' do
         subject { view.fetch(key) { 'nothing sorry' } }
+
         it { is_expected.to eql('nothing sorry') }
       end
 
@@ -97,11 +102,13 @@ describe Nanoc::ConfigView do
 
     context 'with existing key' do
       let(:key) { :animal }
+
       it { is_expected.to be(true) }
     end
 
     context 'with non-existing key' do
       let(:key) { :weapon }
+
       it { is_expected.to be(false) }
     end
   end
@@ -128,17 +135,20 @@ describe Nanoc::ConfigView do
 
     context 'with existing keys' do
       let(:keys) { %i[foo bar] }
+
       it { is_expected.to be(:baz) }
     end
 
     context 'with non-existing keys' do
       let(:keys) { %i[foo baz bar] }
+
       it { is_expected.to be_nil }
     end
   end
 
   describe '#inspect' do
     subject { view.inspect }
+
     it { is_expected.to eql('<Nanoc::ConfigView>') }
   end
 end

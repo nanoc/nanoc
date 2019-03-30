@@ -4,7 +4,9 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
   let(:listener) { described_class.new(reps: reps) }
 
   before { Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0)) }
+
   after { Timecop.return }
+
   after { listener.stop_safely }
 
   let(:reps) do
@@ -74,6 +76,7 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
 
   context 'log level = high' do
     before { listener.start_safely }
+
     before { Nanoc::CLI::Logger.instance.level = :high }
 
     it 'does not print skipped (uncompiled) reps' do
@@ -101,6 +104,7 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
 
   context 'log level = low' do
     before { listener.start_safely }
+
     before { Nanoc::CLI::Logger.instance.level = :low }
 
     it 'prints skipped (uncompiled) reps' do

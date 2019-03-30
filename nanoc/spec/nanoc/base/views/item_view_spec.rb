@@ -89,6 +89,7 @@ describe Nanoc::CompilationItemView do
 
         context 'frozen parent' do
           before { parent_item.freeze }
+
           it { is_expected.to be_frozen }
         end
 

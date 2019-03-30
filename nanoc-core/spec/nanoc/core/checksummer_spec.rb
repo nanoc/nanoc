@@ -45,70 +45,84 @@ describe Nanoc::Core::Checksummer do
 
   context 'String' do
     let(:obj) { 'hello' }
+
     it { is_expected.to eql('String<hello>') }
   end
 
   context 'Symbol' do
     let(:obj) { :hello }
+
     it { is_expected.to eql('Symbol<hello>') }
   end
 
   context 'nil' do
     let(:obj) { nil }
+
     it { is_expected.to eql('NilClass<>') }
   end
 
   context 'true' do
     let(:obj) { true }
+
     it { is_expected.to eql('TrueClass<>') }
   end
 
   context 'false' do
     let(:obj) { false }
+
     it { is_expected.to eql('FalseClass<>') }
   end
 
   context 'Array' do
     let(:obj) { %w[hello goodbye] }
+
     it { is_expected.to eql('Array<String<hello>,String<goodbye>,>') }
 
     context 'different order' do
       let(:obj) { %w[goodbye hello] }
+
       it { is_expected.to eql('Array<String<goodbye>,String<hello>,>') }
     end
 
     context 'recursive' do
       let(:obj) { [].tap { |arr| arr << ['hello', arr] } }
+
       it { is_expected.to eql('Array<Array<String<hello>,Array<recur>,>,>') }
     end
 
     context 'non-serializable' do
       let(:obj) { [-> {}] }
+
       it { is_expected.to match(/\AArray<Proc<#<Proc:0x.*@.*:\d+.*>>,>\z/) }
     end
   end
 
   context 'Hash' do
     let(:obj) { { 'a' => 'foo', 'b' => 'bar' } }
+
     it { is_expected.to eql('Hash<String<a>=String<foo>,String<b>=String<bar>,>') }
 
     context 'different order' do
       let(:obj) { { 'b' => 'bar', 'a' => 'foo' } }
+
       it { is_expected.to eql('Hash<String<b>=String<bar>,String<a>=String<foo>,>') }
     end
 
     context 'non-serializable' do
       let(:obj) { { 'a' => -> {} } }
+
       it { is_expected.to match(/\AHash<String<a>=Proc<#<Proc:0x.*@.*:\d+.*>>,>\z/) }
     end
 
     context 'recursive values' do
       let(:obj) { {}.tap { |hash| hash['a'] = hash } }
+
       it { is_expected.to eql('Hash<String<a>=Hash<recur>,>') }
     end
 
     context 'recursive keys' do
       let(:obj) { {}.tap { |hash| hash[hash] = 'hello' } }
+
       it { is_expected.to eql('Hash<Hash<recur>=String<hello>,>') }
     end
   end
@@ -138,32 +152,38 @@ describe Nanoc::Core::Checksummer do
 
     context 'different data' do
       let(:data) { 'other stuffs :o' }
+
       it { is_expected.to eql('Pathname<15-200>') }
     end
   end
 
   context 'Time' do
     let(:obj) { Time.at(111_223) }
+
     it { is_expected.to eql('Time<111223>') }
   end
 
   context 'Float' do
     let(:obj) { 3.14 }
+
     it { is_expected.to eql('Float<3.14>') }
   end
 
   context 'Fixnum/Integer' do
     let(:obj) { 3 }
+
     it { is_expected.to match(/\A(Integer|Fixnum)<3>\z/) }
   end
 
   context 'Nanoc::Core::Identifier' do
     let(:obj) { Nanoc::Core::Identifier.new('/foo.md') }
+
     it { is_expected.to eql('Nanoc::Core::Identifier<String</foo.md>>') }
   end
 
   context 'Nanoc::Core::Configuration' do
     let(:obj) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
+
     it { is_expected.to eql('Nanoc::Core::Configuration<Symbol<foo>=String<bar>,>') }
   end
 
@@ -264,6 +284,7 @@ describe Nanoc::Core::Checksummer do
 
   context 'other non-marshal-able classes' do
     let(:obj) { proc {} }
+
     it { is_expected.to match(/\AProc<#<Proc:0x.*@.*:\d+.*>>\z/) }
   end
 end

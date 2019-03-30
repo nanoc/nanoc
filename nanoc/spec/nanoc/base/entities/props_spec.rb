@@ -16,16 +16,19 @@ describe Nanoc::Int::Props do
 
     context 'attributes active' do
       let(:props) { described_class.new(attributes: true) }
+
       it { is_expected.to eql('Props(_a__)') }
     end
 
     context 'attributes and compiled_content active' do
       let(:props) { described_class.new(attributes: true, compiled_content: true) }
+
       it { is_expected.to eql('Props(_ac_)') }
     end
 
     context 'compiled_content active' do
       let(:props) { described_class.new(compiled_content: true) }
+
       it { is_expected.to eql('Props(__c_)') }
     end
   end
@@ -39,16 +42,19 @@ describe Nanoc::Int::Props do
 
     context 'attributes active' do
       let(:props) { described_class.new(attributes: true) }
+
       it { is_expected.to eql('_a__') }
     end
 
     context 'attributes and compiled_content active' do
       let(:props) { described_class.new(attributes: true, compiled_content: true) }
+
       it { is_expected.to eql('_ac_') }
     end
 
     context 'compiled_content active' do
       let(:props) { described_class.new(compiled_content: true) }
+
       it { is_expected.to eql('__c_') }
     end
   end
@@ -62,31 +68,37 @@ describe Nanoc::Int::Props do
 
     context 'raw_content active' do
       let(:props) { described_class.new(raw_content: true) }
+
       it { is_expected.to be }
     end
 
     context 'raw_content and compiled_content active' do
       let(:props) { described_class.new(raw_content: true, compiled_content: true) }
+
       it { is_expected.to be }
     end
 
     context 'compiled_content active' do
       let(:props) { described_class.new(compiled_content: true) }
+
       it { is_expected.not_to be }
     end
 
     context 'all active' do
       let(:props) { described_class.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
+
       it { is_expected.to be }
     end
 
     context 'raw_content is empty list' do
       let(:props) { described_class.new(raw_content: []) }
+
       it { is_expected.not_to be }
     end
 
     context 'raw_content is non-empty list' do
       let(:props) { described_class.new(raw_content: ['/asdf.*']) }
+
       it { is_expected.to be }
     end
   end
@@ -100,31 +112,37 @@ describe Nanoc::Int::Props do
 
     context 'attributes active' do
       let(:props) { described_class.new(attributes: true) }
+
       it { is_expected.to be }
     end
 
     context 'attributes and compiled_content active' do
       let(:props) { described_class.new(attributes: true, compiled_content: true) }
+
       it { is_expected.to be }
     end
 
     context 'compiled_content active' do
       let(:props) { described_class.new(compiled_content: true) }
+
       it { is_expected.not_to be }
     end
 
     context 'all active' do
       let(:props) { described_class.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
+
       it { is_expected.to be }
     end
 
     context 'attributes is empty list' do
       let(:props) { described_class.new(attributes: []) }
+
       it { is_expected.not_to be }
     end
 
     context 'attributes is non-empty list' do
       let(:props) { described_class.new(attributes: [:donkey]) }
+
       it { is_expected.to be }
     end
   end
@@ -381,36 +399,43 @@ describe Nanoc::Int::Props do
 
     context 'nothing active' do
       let(:props) { described_class.new }
+
       it { is_expected.to eql(Set.new) }
     end
 
     context 'raw_content active' do
       let(:props) { described_class.new(raw_content: true) }
+
       it { is_expected.to eql(Set.new([:raw_content])) }
     end
 
     context 'attributes active' do
       let(:props) { described_class.new(attributes: true) }
+
       it { is_expected.to eql(Set.new([:attributes])) }
     end
 
     context 'compiled_content active' do
       let(:props) { described_class.new(compiled_content: true) }
+
       it { is_expected.to eql(Set.new([:compiled_content])) }
     end
 
     context 'path active' do
       let(:props) { described_class.new(path: true) }
+
       it { is_expected.to eql(Set.new([:path])) }
     end
 
     context 'attributes and compiled_content active' do
       let(:props) { described_class.new(attributes: true, compiled_content: true) }
+
       it { is_expected.to eql(Set.new(%i[attributes compiled_content])) }
     end
 
     context 'all active' do
       let(:props) { described_class.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
+
       it { is_expected.to eql(Set.new(%i[raw_content attributes compiled_content path])) }
     end
   end
@@ -420,16 +445,19 @@ describe Nanoc::Int::Props do
 
     context 'nothing' do
       let(:props) { described_class.new }
+
       it { is_expected.to eql(raw_content: false, attributes: false, compiled_content: false, path: false) }
     end
 
     context 'some' do
       let(:props) { described_class.new(attributes: true, compiled_content: true) }
+
       it { is_expected.to eql(raw_content: false, attributes: true, compiled_content: true, path: false) }
     end
 
     context 'all' do
       let(:props) { props_all }
+
       it { is_expected.to eql(raw_content: true, attributes: true, compiled_content: true, path: true) }
     end
   end

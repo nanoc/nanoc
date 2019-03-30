@@ -62,6 +62,7 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'no snippets' do
         let(:code_snippets) { [] }
+
         it { is_expected.not_to be }
       end
 
@@ -105,6 +106,7 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'written' do
           before { File.write(path, 'hello') }
+
           it { is_expected.not_to be }
         end
       end
@@ -120,6 +122,7 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'written' do
           before { File.write(path, 'hello') }
+
           it { is_expected.not_to be }
         end
       end
@@ -139,18 +142,23 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'checksum available and same' do
           before { checksum_store.add(item) }
+
           it { is_expected.not_to be }
         end
 
         context 'checksum available, but content different' do
           let(:old_item) { Nanoc::Core::Item.new('other stuff!!!!', {}, '/foo.md') }
+
           before { checksum_store.add(old_item) }
+
           it { is_expected.to be }
         end
 
         context 'checksum available, but attributes different' do
           let(:old_item) { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+
           before { checksum_store.add(old_item) }
+
           it { is_expected.not_to be }
         end
       end
@@ -164,18 +172,23 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'checksum available and same' do
           before { checksum_store.add(item) }
+
           it { is_expected.not_to be }
         end
 
         context 'checksum available, but content different' do
           let(:old_item) { Nanoc::Core::Item.new('other stuff!!!!', {}, '/foo.md') }
+
           before { checksum_store.add(old_item) }
+
           it { is_expected.to be }
         end
 
         context 'checksum available, but attributes different' do
           let(:old_item) { Nanoc::Core::Item.new('stuff', { greeting: 'hi' }, '/foo.md') }
+
           before { checksum_store.add(old_item) }
+
           it { is_expected.not_to be }
         end
       end
@@ -195,12 +208,15 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'checksum available and same' do
           before { checksum_store.add(item) }
+
           it { is_expected.not_to be }
         end
 
         context 'checksum available, but content different' do
           let(:old_item) { Nanoc::Core::Item.new('other stuff!!!!', {}, '/foo.md') }
+
           before { checksum_store.add(old_item) }
+
           it { is_expected.not_to be }
         end
 
@@ -270,12 +286,15 @@ describe Nanoc::Int::OutdatednessRules do
 
         context 'checksum available and same' do
           before { checksum_store.add(item) }
+
           it { is_expected.not_to be }
         end
 
         context 'checksum available, but content different' do
           let(:old_item) { Nanoc::Core::Item.new('other stuff!!!!', {}, '/foo.md') }
+
           before { checksum_store.add(old_item) }
+
           it { is_expected.not_to be }
         end
 
@@ -314,6 +333,7 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'memory is the same' do
         let(:new_mem) { old_mem }
+
         it { is_expected.not_to be }
       end
 
@@ -445,11 +465,13 @@ describe Nanoc::Int::OutdatednessRules do
 
             context 'but content changed afterwards' do
               let(:new_obj) { klass.new('aaaaaaaa', {}, '/foo.md') }
+
               it { is_expected.to eql([true, false]) }
             end
 
             context 'but attributes changed afterwards' do
               let(:new_obj) { klass.new('a', { animal: 'donkey' }, '/foo.md') }
+
               it { is_expected.to eql([false, true]) }
             end
 
@@ -474,6 +496,7 @@ describe Nanoc::Int::OutdatednessRules do
               # NOTE: ignored for attributes!
 
               let(:new_obj) { klass.new('a', {}, '/foo.md', checksum_data: 'cs-data-new') }
+
               it { is_expected.to eql([true, false]) }
             end
 
@@ -496,6 +519,7 @@ describe Nanoc::Int::OutdatednessRules do
 
             context 'but checksum data afterwards' do
               let(:new_obj) { klass.new('a', {}, '/foo.md', content_checksum_data: 'cs-data-new') }
+
               it { is_expected.to eql([true, false]) }
             end
 
@@ -520,6 +544,7 @@ describe Nanoc::Int::OutdatednessRules do
 
             context 'but checksum data afterwards' do
               let(:new_obj) { klass.new('a', {}, '/foo.md', attributes_checksum_data: 'cs-data-new') }
+
               it { is_expected.to eql([false, false]) }
             end
 
@@ -532,11 +557,13 @@ describe Nanoc::Int::OutdatednessRules do
 
       context 'item' do
         let(:klass) { Nanoc::Core::Item }
+
         it_behaves_like 'a document'
       end
 
       context 'layout' do
         let(:klass) { Nanoc::Core::Layout }
+
         it_behaves_like 'a document'
       end
 

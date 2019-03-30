@@ -20,6 +20,7 @@ describe Nanoc::Int::OutdatednessStore do
 
     context 'rep added' do
       before { store.add(rep) }
+
       it { is_expected.to be }
     end
 
@@ -56,6 +57,7 @@ describe Nanoc::Int::OutdatednessStore do
 
     context 'added' do
       before { store.add(rep) }
+
       it { is_expected.to be }
     end
   end

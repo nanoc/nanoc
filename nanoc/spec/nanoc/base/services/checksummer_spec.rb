@@ -17,6 +17,7 @@ describe Nanoc::Core::Checksummer do
 
   context 'Nanoc::Core::CodeSnippet' do
     let(:obj) { Nanoc::Core::CodeSnippet.new('asdf', '/bob.rb') }
+
     it { is_expected.to eql('Nanoc::Core::CodeSnippet<String<asdf>>') }
   end
 

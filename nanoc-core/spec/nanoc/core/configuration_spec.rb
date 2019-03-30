@@ -9,11 +9,13 @@ describe Nanoc::Core::Configuration do
 
     context 'non-existent key' do
       let(:key) { :donkey }
+
       it { is_expected.not_to be }
     end
 
     context 'existent key' do
       let(:key) { :foo }
+
       it { is_expected.to be }
     end
   end
@@ -41,11 +43,13 @@ describe Nanoc::Core::Configuration do
 
     context 'not explicitly defined' do
       let(:hash) { { foo: 'bar' } }
+
       it { is_expected.to eql(Dir.getwd + '/output') }
     end
 
     context 'explicitly defined, top-level' do
       let(:hash) { { foo: 'bar', output_dir: 'build' } }
+
       it { is_expected.to eql(Dir.getwd + '/build') }
     end
   end
@@ -106,6 +110,7 @@ describe Nanoc::Core::Configuration do
 
     context 'key exists' do
       subject { config.fetch(:foo) }
+
       it { is_expected.to eq(123) }
     end
 
@@ -119,11 +124,13 @@ describe Nanoc::Core::Configuration do
 
     context 'key does not exist, and called with fallback' do
       subject { config.fetch(:bar, 1000) }
+
       it { is_expected.to eq(1000) }
     end
 
     context 'key does not exist, and called with block' do
       subject { config.fetch(:bar) { 2000 } }
+
       it { is_expected.to eq(2000) }
     end
   end
@@ -134,11 +141,13 @@ describe Nanoc::Core::Configuration do
 
     context 'key exists' do
       subject { config[:foo] }
+
       it { is_expected.to eq(123) }
     end
 
     context 'key does not exist' do
       subject { config[:bar] }
+
       it { is_expected.to be_nil }
     end
   end
@@ -258,6 +267,7 @@ describe Nanoc::Core::Configuration do
 
     context 'action_provider key present' do
       let(:hash) { { foo: 123, action_provider: 'rulez' } }
+
       it { is_expected.to eq(:rulez) }
     end
   end

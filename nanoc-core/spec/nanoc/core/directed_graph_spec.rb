@@ -91,15 +91,18 @@ describe Nanoc::Core::DirectedGraph do
 
     context 'edge, but no props' do
       before { graph.add_edge('1', '2') }
+
       it { is_expected.to be_nil }
     end
 
     context 'edge with props' do
       before { graph.add_edge('1', '2', props: { name: 'Mr. C' }) }
+
       it { is_expected.to eq(name: 'Mr. C') }
 
       context 'deleted edge (#delete_edges_to)' do
         before { graph.delete_edges_to('2') }
+
         it { is_expected.to be_nil }
       end
     end
@@ -174,6 +177,7 @@ describe Nanoc::Core::DirectedGraph do
 
       context 'indirect predecessors' do
         before { graph.add_edge('3', '1') }
+
         it { is_expected.to match_array(%w[1 2 3]) }
       end
     end

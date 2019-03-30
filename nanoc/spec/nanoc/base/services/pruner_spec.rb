@@ -36,16 +36,19 @@ describe Nanoc::Pruner, stdio: true do
 
     context 'matching identifier component excluded' do
       let(:exclude) { ['foo'] }
+
       it { is_expected.to be(true) }
     end
 
     context 'non-matching identifier component excluded' do
       let(:exclude) { ['xyz'] }
+
       it { is_expected.to be(false) }
     end
 
     context 'output dir excluded' do
       let(:exclude) { ['output'] }
+
       it { is_expected.to be(false) }
     end
   end
@@ -317,6 +320,7 @@ describe Nanoc::Pruner, stdio: true do
 
     context 'regular path' do
       let(:pathname) { Pathname.new('/a/bb/ccc/dd/e') }
+
       it { is_expected.to eql(%w[/ a bb ccc dd e]) }
     end
   end

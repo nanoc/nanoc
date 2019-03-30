@@ -263,6 +263,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
     context 'with identifier' do
       context 'calling once' do
         subject { rule_context.write(identifier) }
+
         let(:identifier) { Nanoc::Core::Identifier.new('/foo.html') }
 
         it 'makes a request to the recorder' do

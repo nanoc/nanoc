@@ -27,6 +27,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
         context 'name and params given' do
           subject { subject_proc_with_params.call }
+
           let(:params) { raise 'overwrite me' }
 
           context 'no existing behavior specified' do

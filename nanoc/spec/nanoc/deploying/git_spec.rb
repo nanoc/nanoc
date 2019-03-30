@@ -103,6 +103,7 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
 
         context 'remote has other changes' do
           before { add_changes_to_remote }
+
           include_examples 'successful push'
         end
       end

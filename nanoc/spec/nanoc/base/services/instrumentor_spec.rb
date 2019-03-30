@@ -4,6 +4,7 @@ describe(Nanoc::Int::Instrumentor) do
   subject { described_class }
 
   before { Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0)) }
+
   after { Timecop.return }
 
   it 'sends notification' do

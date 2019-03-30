@@ -146,21 +146,25 @@ describe Nanoc::Helpers::Blogging, helper: true do
 
     context 'with Time instance' do
       let(:arg) { around_noon_utc }
+
       it { is_expected.to eql(around_noon_utc) }
     end
 
     context 'with Date instance' do
       let(:arg) { Date.new(2015, 11, 7) }
+
       it { is_expected.to eql(beginning_of_day_utc) }
     end
 
     context 'with DateTime instance' do
       let(:arg) { DateTime.new(2015, 11, 7, 13, 31, 16) }
+
       it { is_expected.to eql(around_noon_utc) }
     end
 
     context 'with string' do
       let(:arg) { '2015-11-7 13:31:16' }
+
       it { is_expected.to eql(around_noon_local) }
     end
   end
@@ -181,21 +185,25 @@ describe Nanoc::Helpers::Blogging, helper: true do
 
     context 'item with path' do
       let(:item_rep_path) { '/stuff.xml' }
+
       it { is_expected.to eql('tag:url.base,2015-05-19:/stuff.xml') }
     end
 
     context 'item without path' do
       let(:item_rep_path) { nil }
+
       it { is_expected.to eql('tag:url.base,2015-05-19:/stuff') }
     end
 
     context 'bare URL without subdir' do
       let(:base_url) { 'http://url.base' }
+
       it { is_expected.to eql('tag:url.base,2015-05-19:/stuff.xml') }
     end
 
     context 'bare URL with subdir' do
       let(:base_url) { 'http://url.base/sub' }
+
       it { is_expected.to eql('tag:url.base,2015-05-19:/sub/stuff.xml') }
     end
 
@@ -203,6 +211,7 @@ describe Nanoc::Helpers::Blogging, helper: true do
       let(:item_attributes) do
         { created_at: Date.parse('2015-05-19 12:34:56') }
       end
+
       it { is_expected.to eql('tag:url.base,2015-05-19:/stuff.xml') }
     end
 
@@ -210,6 +219,7 @@ describe Nanoc::Helpers::Blogging, helper: true do
       let(:item_attributes) do
         { created_at: Time.parse('2015-05-19 12:34:56') }
       end
+
       it { is_expected.to eql('tag:url.base,2015-05-19:/stuff.xml') }
     end
 

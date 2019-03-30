@@ -87,6 +87,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
     context 'final argument' do
       subject { recorder.snapshot(:foo, subject_params) }
+
       let(:subject_params) { {} }
 
       context 'routing rule does not exist' do

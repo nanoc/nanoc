@@ -6,6 +6,7 @@ describe Nanoc::Int::Compiler::Stage do
   let(:klass) { described_class }
 
   before { Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0)) }
+
   after { Timecop.return }
 
   describe '#call' do

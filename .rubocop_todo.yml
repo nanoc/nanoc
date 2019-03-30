@@ -52,27 +52,6 @@ RSpec/EmptyExampleGroup:
     - 'nanoc/spec/nanoc/cli/error_handler_spec.rb'
     - 'nanoc/spec/nanoc/helpers/text_spec.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-RSpec/EmptyLineAfterExampleGroup:
-  Exclude:
-    - 'nanoc/spec/nanoc/rule_dsl/rule_spec.rb'
-
-# Offense count: 234
-# Cop supports --auto-correct.
-RSpec/EmptyLineAfterFinalLet:
-  Enabled: false
-
-# Offense count: 74
-# Cop supports --auto-correct.
-RSpec/EmptyLineAfterHook:
-  Enabled: false
-
-# Offense count: 41
-# Cop supports --auto-correct.
-RSpec/EmptyLineAfterSubject:
-  Enabled: false
-
 # Offense count: 147
 # Configuration parameters: Max.
 RSpec/ExampleLength:

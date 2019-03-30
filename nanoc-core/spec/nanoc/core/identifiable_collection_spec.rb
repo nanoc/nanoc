@@ -124,22 +124,26 @@ describe Nanoc::Core::IdentifiableCollection do
 
       context 'with string' do
         let(:arg) { '/about.css' }
+
         it { is_expected.to eq(objects[0]) }
       end
 
       context 'with identifier' do
         let(:arg) { Nanoc::Core::Identifier.new('/about.css') }
+
         it { is_expected.to eq(objects[0]) }
       end
 
       context 'with glob string' do
         let(:arg) { '/about.*' }
+
         it { is_expected.to be_nil }
       end
     end
 
     describe '#reference' do
       subject { identifiable_collection.reference }
+
       it { is_expected.to eql(expected_reference) }
     end
 
@@ -199,11 +203,13 @@ describe Nanoc::Core::IdentifiableCollection do
 
   describe Nanoc::Core::ItemCollection do
     let(:expected_reference) { 'items' }
+
     it_behaves_like 'a generic identifiable collection'
   end
 
   describe Nanoc::Core::LayoutCollection do
     let(:expected_reference) { 'layouts' }
+
     it_behaves_like 'a generic identifiable collection'
   end
 end

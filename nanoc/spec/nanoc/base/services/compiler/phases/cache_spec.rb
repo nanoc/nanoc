@@ -75,6 +75,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
 
     context 'outdated' do
       let(:is_outdated) { true }
+
       include_examples 'calls wrapped'
     end
 

@@ -5,6 +5,7 @@ require_relative 'support/identifiable_collection_view_examples'
 describe Nanoc::ItemCollectionWithRepsView do
   let(:view_class) { Nanoc::CompilationItemView }
   let(:collection_class) { Nanoc::Core::ItemCollection }
+
   it_behaves_like 'an identifiable collection view'
 
   describe '#inspect' do

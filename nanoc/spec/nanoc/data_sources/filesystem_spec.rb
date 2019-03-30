@@ -6,6 +6,7 @@ describe Nanoc::DataSources::Filesystem, site: true do
   let(:site) { Nanoc::Int::SiteLoader.new.new_from_cwd }
 
   before { Timecop.freeze(now) }
+
   after { Timecop.return }
 
   let(:now) { Time.local(2008, 1, 2, 14, 5, 0) }

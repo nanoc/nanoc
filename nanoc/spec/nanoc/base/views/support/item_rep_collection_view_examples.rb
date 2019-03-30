@@ -28,6 +28,7 @@ shared_examples 'an item rep collection view' do
 
     context 'frozen collection' do
       before { wrapped.freeze }
+
       it { is_expected.to be(true) }
     end
   end

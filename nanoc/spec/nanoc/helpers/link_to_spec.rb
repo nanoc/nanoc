@@ -10,26 +10,31 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
     context 'with string path' do
       let(:target) { '/foo/' }
+
       it { is_expected.to eql('<a href="/foo/">Text</a>') }
 
       context 'with attributes' do
         let(:attributes) { { title: 'Donkey' } }
+
         it { is_expected.to eql('<a title="Donkey" href="/foo/">Text</a>') }
       end
 
       context 'special HTML characters in text' do
         let(:text) { 'Foo &amp; Bar' }
+
         it { is_expected.to eql('<a href="/foo/">Foo &amp; Bar</a>') }
         # Not escaped!
       end
 
       context 'special HTML characters in URL' do
         let(:target) { '/r&d/' }
+
         it { is_expected.to eql('<a href="/r&amp;d/">Text</a>') }
       end
 
       context 'special HTML characters in attribute' do
         let(:attributes) { { title: 'Research & Development' } }
+
         it { is_expected.to eql('<a title="Research &amp; Development" href="/foo/">Text</a>') }
       end
     end
@@ -145,6 +150,7 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
       context 'current' do
         let(:target) { ctx.item_rep }
+
         it { is_expected.to eql('<span class="active">Text</span>') }
       end
 
@@ -161,6 +167,7 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
       context 'item rep present, but not current' do
         let(:target) { some_item_rep }
+
         it { is_expected.to eql('<a href="/other.html">Text</a>') }
       end
     end
@@ -182,6 +189,7 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
       context 'current' do
         let(:target) { ctx.item }
+
         it { is_expected.to eql('<span class="active">Text</span>') }
       end
 
@@ -198,6 +206,7 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
       context 'item rep present, but not current' do
         let(:target) { some_item }
+
         it { is_expected.to eql('<a href="/other.html">Text</a>') }
       end
     end
@@ -229,21 +238,25 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
         context 'to path without trailing slash' do
           let(:target) { '/bar/target.html' }
+
           it { is_expected.to eql('../bar/target.html') }
         end
 
         context 'to path with trailing slash' do
           let(:target) { '/bar/target/' }
+
           it { is_expected.to eql('../bar/target/') }
         end
 
         context 'to Windows/UNC path (forward slashes)' do
           let(:target) { '//foo' }
+
           it { is_expected.to eql('//foo') }
         end
 
         context 'to Windows/UNC path (backslashes)' do
           let(:target) { '\\\\foo' }
+
           it { is_expected.to eql('\\\\foo') }
         end
       end
@@ -266,6 +279,7 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
           context 'self is a directory' do
             let(:self_path) { '/foo/self/' }
+
             it { is_expected.to eql('./') }
           end
         end
@@ -290,6 +304,7 @@ describe Nanoc::Helpers::LinkTo, helper: true do
 
           context 'self is a directory' do
             let(:self_path) { '/foo/self/' }
+
             it { is_expected.to eql('./') }
           end
         end

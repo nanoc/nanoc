@@ -118,16 +118,19 @@ describe Nanoc::Checking::Runner, site: true do
 
     context 'given one full name' do
       let(:names) { %w[internal_links] }
+
       it { is_expected.to eq([Nanoc::Checking::Checks::InternalLinks]) }
     end
 
     context 'given one full name with dash instead of underscore' do
       let(:names) { %w[internal-links] }
+
       it { is_expected.to eq([Nanoc::Checking::Checks::InternalLinks]) }
     end
 
     context 'given one abbreviated name' do
       let(:names) { %w[ilinks] }
+
       it { is_expected.to eq([Nanoc::Checking::Checks::InternalLinks]) }
     end
   end

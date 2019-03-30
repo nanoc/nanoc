@@ -5,6 +5,7 @@ describe Nanoc::Helpers::ChildParent, helper: true do
     subject { helper.children_of(item) }
 
     before { ctx.create_item('some content', {}, identifier) }
+
     let(:item) { ctx.items[identifier] }
 
     context 'legacy identifier' do
@@ -41,6 +42,7 @@ describe Nanoc::Helpers::ChildParent, helper: true do
     subject { helper.parent_of(item) }
 
     before { ctx.create_item('some content', {}, identifier) }
+
     let(:item) { ctx.items[identifier] }
 
     context 'legacy identifier' do

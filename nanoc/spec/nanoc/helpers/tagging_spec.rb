@@ -14,22 +14,26 @@ describe Nanoc::Helpers::Tagging, helper: true do
 
     context 'no tags' do
       let(:item_attributes) { {} }
+
       it { is_expected.to eql('(none)') }
     end
 
     context 'nil tag list' do
       let(:item_attributes) { { tags: nil } }
+
       it { is_expected.to eql('(none)') }
     end
 
     context 'empty tag list' do
       let(:item_attributes) { { tags: [] } }
+
       it { is_expected.to eql('(none)') }
     end
 
     context 'no tags, and custom none text' do
       let(:item_attributes) { {} }
       let(:params) { { none_text: 'no tags for you, fool' } }
+
       it { is_expected.to eql('no tags for you, fool') }
     end
 
@@ -42,27 +46,32 @@ describe Nanoc::Helpers::Tagging, helper: true do
 
       context 'explicit nil base_url' do
         let(:params) { { base_url: nil } }
+
         it { is_expected.to eql('donkey') }
       end
 
       context 'explicit other base_url' do
         let(:params) { { base_url: 'http://nanoc.ws/tag/' } }
+
         it { is_expected.to eql('<a href="http://nanoc.ws/tag/donkey" rel="tag">donkey</a>') }
       end
     end
 
     context 'two tags' do
       let(:item_attributes) { { tags: %w[donkey giraffe] } }
+
       it { is_expected.to eql('donkey, giraffe') }
     end
 
     context 'three tags' do
       let(:item_attributes) { { tags: %w[donkey giraffe zebra] } }
+
       it { is_expected.to eql('donkey, giraffe, zebra') }
 
       context 'custom separator' do
         let(:item_attributes) { { tags: %w[donkey giraffe zebra] } }
         let(:params) { { separator: ' / ' } }
+
         it { is_expected.to eql('donkey / giraffe / zebra') }
       end
     end
@@ -81,11 +90,13 @@ describe Nanoc::Helpers::Tagging, helper: true do
 
     context 'tag that exists' do
       let(:tag) { :foo }
+
       it { is_expected.to contain_exactly(ctx.items['/item1.md'], ctx.items['/item3.md']) }
     end
 
     context 'tag that does not exists' do
       let(:tag) { :other }
+
       it { is_expected.to be_empty }
     end
   end
@@ -100,6 +111,7 @@ describe Nanoc::Helpers::Tagging, helper: true do
 
     context 'tag with special HTML characters' do
       let(:tag) { 'R&D' }
+
       it { is_expected.to eql('<a href="http://nanoc.ws/tag/R&amp;D" rel="tag">R&amp;D</a>') }
     end
   end

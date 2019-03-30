@@ -17,16 +17,19 @@ describe Nanoc::Feature do
 
     context 'set to list not including feature' do
       before { ENV['NANOC_FEATURES'] = 'foo,bar' }
+
       it { is_expected.not_to be }
     end
 
     context 'set to all' do
       before { ENV['NANOC_FEATURES'] = 'all' }
+
       it { is_expected.to be }
     end
 
     context 'set to list including feature' do
       before { ENV['NANOC_FEATURES'] = 'foo,magic,bar' }
+
       it { is_expected.to be }
     end
   end
@@ -55,6 +58,7 @@ describe Nanoc::Feature do
 
     context 'set to list not including feature' do
       before { ENV['NANOC_FEATURES'] = 'foo,bar' }
+
       it { is_expected.to be }
 
       it 'unsets afterwards' do
@@ -64,11 +68,13 @@ describe Nanoc::Feature do
 
     context 'set to all' do
       before { ENV['NANOC_FEATURES'] = 'all' }
+
       it { is_expected.to be }
     end
 
     context 'set to list including feature' do
       before { ENV['NANOC_FEATURES'] = 'foo,magic,bar' }
+
       it { is_expected.to be }
     end
   end
@@ -83,6 +89,7 @@ describe Nanoc::Feature do
 
     describe 'fake outdated features' do
       before { Nanoc::Feature.define('abc', version: '4.2.x') }
+
       after { Nanoc::Feature.undefine('abc') }
 
       it 'detects outdated features' do
@@ -93,6 +100,7 @@ describe Nanoc::Feature do
 
   describe '.define and .undefine' do
     let(:feature_name) { 'testing123' }
+
     after { Nanoc::Feature.undefine(feature_name) if defined?(Nanoc::Feature::TESTING123) }
 
     it 'can define' do

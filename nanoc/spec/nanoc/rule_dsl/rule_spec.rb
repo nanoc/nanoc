@@ -13,11 +13,13 @@ shared_examples 'a generic rule' do
 
     context 'does not match' do
       let(:identifier) { Nanoc::Core::Identifier.new('/moo/', type: :legacy) }
+
       it { is_expected.to be_nil }
     end
 
     context 'matches' do
       let(:identifier) { Nanoc::Core::Identifier.new('/foo/bar/', type: :legacy) }
+
       it { is_expected.to eql(%w[foo bar]) }
     end
   end
@@ -36,11 +38,13 @@ shared_examples 'a generic rule' do
 
     context 'pattern matches' do
       let(:pattern) { Nanoc::Core::Pattern.from(%r{^/foo.*}) }
+
       it { is_expected.to be }
     end
 
     context 'pattern does not match' do
       let(:pattern) { Nanoc::Core::Pattern.from(%r{^/bar.*}) }
+
       it { is_expected.not_to be }
     end
   end
@@ -110,6 +114,7 @@ describe Nanoc::RuleDSL::RoutingRule do
       its(:pattern) { is_expected.to eql(pattern) }
       its(:snapshot_name) { is_expected.to be_nil }
     end
+
     context 'with snapshot_name' do
       subject { described_class.new(pattern, :xml, proc {}, snapshot_name: :donkey) }
 

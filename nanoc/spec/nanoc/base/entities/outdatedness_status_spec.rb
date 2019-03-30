@@ -68,17 +68,20 @@ describe Nanoc::Int::OutdatednessStatus do
     context 'some props' do
       context 'same props' do
         let(:props) { Nanoc::Int::Props.new(compiled_content: true, path: true) }
+
         it { is_expected.not_to be }
       end
 
       context 'different props' do
         let(:props) { Nanoc::Int::Props.new(attributes: true) }
+
         it { is_expected.to be }
       end
     end
 
     context 'all props' do
       let(:props) { Nanoc::Int::Props.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
+
       it { is_expected.not_to be }
     end
   end

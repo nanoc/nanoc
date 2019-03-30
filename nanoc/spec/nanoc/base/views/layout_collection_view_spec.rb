@@ -5,6 +5,7 @@ require_relative 'support/identifiable_collection_view_examples'
 describe Nanoc::LayoutCollectionView do
   let(:view_class) { Nanoc::LayoutView }
   let(:collection_class) { Nanoc::Core::LayoutCollection }
+
   it_behaves_like 'an identifiable collection view'
 
   describe '#inspect' do

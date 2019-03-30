@@ -23,21 +23,25 @@ describe Nanoc::Int::Store do
 
         context 'output dir is unspecified' do
           let(:config_hash) { {} }
+
           it { is_expected.to eql(Dir.getwd + "/tmp/nanoc/#{hash_output}/giraffes") }
         end
 
         context 'output dir at root is specified' do
           let(:config_hash) { { output_dir: 'output-default' } }
+
           it { is_expected.to eql(Dir.getwd + "/tmp/nanoc/#{hash_output_default}/giraffes") }
         end
 
         context 'output dir in default env is specified' do
           let(:config_hash) { { environments: { default: { output_dir: 'output-default' } } } }
+
           it { is_expected.to eql(Dir.getwd + "/tmp/nanoc/#{hash_output_default}/giraffes") }
         end
 
         context 'output dir in other env is specified' do
           let(:config_hash) { { environments: { production: { output_dir: 'output-production' } } } }
+
           it { is_expected.to eql(Dir.getwd + "/tmp/nanoc/#{hash_output}/giraffes") }
         end
       end
@@ -47,21 +51,25 @@ describe Nanoc::Int::Store do
 
         context 'output dir is unspecified' do
           let(:config_hash) { {} }
+
           it { is_expected.to eql(Dir.getwd + "/tmp/nanoc/#{hash_output}/giraffes") }
         end
 
         context 'output dir at root is specified' do
           let(:config_hash) { { output_dir: 'output-default' } }
+
           it { is_expected.to eql(Dir.getwd + "/tmp/nanoc/#{hash_output_default}/giraffes") }
         end
 
         context 'output dir in given env is specified' do
           let(:config_hash) { { environments: { staging: { output_dir: 'output-staging' } } } }
+
           it { is_expected.to eql(Dir.getwd + "/tmp/nanoc/#{hash_output_staging}/giraffes") }
         end
 
         context 'output dir in other env is specified' do
           let(:config_hash) { { environments: { production: { output_dir: 'output-production' } } } }
+
           it { is_expected.to eql(Dir.getwd + "/tmp/nanoc/#{hash_output}/giraffes") }
         end
       end

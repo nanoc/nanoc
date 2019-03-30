@@ -33,11 +33,13 @@ describe Nanoc::CLI::Commands::CompileListeners::DiffGenerator do
 
     context 'enabled in config' do
       let(:config_hash) { { enable_output_diff: true } }
+
       it { is_expected.to be }
     end
 
     context 'enabled on command line' do
       let(:options) { { diff: true } }
+
       it { is_expected.to be }
     end
   end
