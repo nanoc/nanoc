@@ -16,7 +16,7 @@ describe 'GH-1100', site: true, stdio: true do
 EOS
   end
 
-  it 'should not crash' do
+  it 'does not crash' do
     Nanoc::CLI.run(%w[compile])
   end
 end

@@ -42,18 +42,6 @@ RSpec/EmptyExampleGroup:
 RSpec/ExampleLength:
   Enabled: false
 
-# Offense count: 21
-# Cop supports --auto-correct.
-# Configuration parameters: CustomTransform, IgnoredWords.
-RSpec/ExampleWording:
-  Exclude:
-    - 'nanoc-core/spec/nanoc/core/core_ext/array_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/core_ext/hash_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/core_ext/string_spec.rb'
-    - 'nanoc/spec/contributors_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1100_spec.rb'
-    - 'nanoc/spec/regression_filenames_spec.rb'
-
 # Offense count: 6
 RSpec/ExpectActual:
   Exclude:
