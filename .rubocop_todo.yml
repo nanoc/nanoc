@@ -146,11 +146,6 @@ RSpec/IteratedExpectation:
   Exclude:
     - 'nanoc/spec/nanoc/base/views/support/identifiable_collection_view_examples.rb'
 
-# Offense count: 95
-# Cop supports --auto-correct.
-RSpec/LeadingSubject:
-  Enabled: false
-
 # Offense count: 40
 # Cop supports --auto-correct.
 RSpec/LetBeforeExamples:

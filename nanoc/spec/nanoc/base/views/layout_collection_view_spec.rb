@@ -9,6 +9,8 @@ describe Nanoc::LayoutCollectionView do
   it_behaves_like 'an identifiable collection view'
 
   describe '#inspect' do
+    subject { view.inspect }
+
     let(:wrapped) do
       Nanoc::Core::LayoutCollection.new(config)
     end
@@ -16,8 +18,6 @@ describe Nanoc::LayoutCollectionView do
     let(:view) { described_class.new(wrapped, view_context) }
     let(:view_context) { double(:view_context) }
     let(:config) { { string_pattern_type: 'glob' } }
-
-    subject { view.inspect }
 
     it { is_expected.to eql('<Nanoc::LayoutCollectionView>') }
   end

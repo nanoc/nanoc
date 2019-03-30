@@ -17,13 +17,13 @@ describe Nanoc::RuleDSL::RulesCollection do
   end
 
   describe '#compilation_rule_for' do
+    subject { rules_collection.compilation_rule_for(rep) }
+
     let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
 
     let(:rep) { Nanoc::Core::ItemRep.new(item, rep_name) }
 
     let(:rep_name) { :default }
-
-    subject { rules_collection.compilation_rule_for(rep) }
 
     context 'no rules' do
       it 'is nil' do
@@ -118,9 +118,9 @@ describe Nanoc::RuleDSL::RulesCollection do
   end
 
   describe '#item_compilation_rules_for' do
-    let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
-
     subject { rules_collection.item_compilation_rules_for(item) }
+
+    let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
 
     context 'no rules' do
       it 'is none' do
@@ -182,11 +182,11 @@ describe Nanoc::RuleDSL::RulesCollection do
   end
 
   describe '#routing_rules_for' do
+    subject { rules_collection.routing_rules_for(rep) }
+
     let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
 
     let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
-
-    subject { rules_collection.routing_rules_for(rep) }
 
     let(:rules) do
       [
@@ -247,9 +247,9 @@ describe Nanoc::RuleDSL::RulesCollection do
   end
 
   describe '#filter_for_layout' do
-    let(:layout) { Nanoc::Core::Layout.new('Some content', {}, '/foo.md') }
-
     subject { rules_collection.filter_for_layout(layout) }
+
+    let(:layout) { Nanoc::Core::Layout.new('Some content', {}, '/foo.md') }
 
     let(:mapping) { {} }
 

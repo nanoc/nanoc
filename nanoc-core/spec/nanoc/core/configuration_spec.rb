@@ -91,13 +91,13 @@ describe Nanoc::Core::Configuration do
   end
 
   describe '#dig' do
+    subject { config.dig(:foo, :bar, :baz) }
+
     let(:hash) do
       { foo: { bar: { baz: 1 } } }
     end
 
     let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
-
-    subject { config.dig(:foo, :bar, :baz) }
 
     it 'works like Hash#dig' do
       expect(subject).to eq(1)
@@ -153,10 +153,10 @@ describe Nanoc::Core::Configuration do
   end
 
   describe '#[]=' do
+    subject { config[:foo] = 234 }
+
     let(:hash) { { foo: 123 } }
     let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
-
-    subject { config[:foo] = 234 }
 
     it 'modifies' do
       expect { subject }
@@ -167,10 +167,10 @@ describe Nanoc::Core::Configuration do
   end
 
   describe '#attributes' do
+    subject { config.attributes }
+
     let(:hash) { { foo: 123 } }
     let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
-
-    subject { config.attributes }
 
     it 'returns itself as a hash' do
       expect(subject).to eq(foo: 123)
@@ -178,10 +178,10 @@ describe Nanoc::Core::Configuration do
   end
 
   describe '#without' do
+    subject { config.without(:foo) }
+
     let(:hash) { { foo: 123, bar: 234 } }
     let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
-
-    subject { config.without(:foo) }
 
     it 'returns a new config' do
       expect(subject).to be_a(described_class)
@@ -202,11 +202,11 @@ describe Nanoc::Core::Configuration do
   end
 
   describe '#update' do
+    subject { config.update(other_hash) }
+
     let(:hash) { { foo: 100, bar: 200 } }
     let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
     let(:other_hash) { { bar: 300, qux: 400 } }
-
-    subject { config.update(other_hash) }
 
     it 'retains :foo' do
       expect { subject }
@@ -230,10 +230,10 @@ describe Nanoc::Core::Configuration do
   end
 
   describe '#freeze' do
+    subject { config.freeze }
+
     let(:hash) { { foo: { bar: 100 } } }
     let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
-
-    subject { config.freeze }
 
     it 'freezes' do
       expect { subject }
@@ -251,10 +251,10 @@ describe Nanoc::Core::Configuration do
   end
 
   describe '#action_provider' do
+    subject { config.action_provider }
+
     let(:hash) { { foo: { bar: 100 } } }
     let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
-
-    subject { config.action_provider }
 
     context 'no action_provider key present' do
       let(:hash) { { foo: 123 } }
@@ -273,30 +273,30 @@ describe Nanoc::Core::Configuration do
   end
 
   describe '#reference' do
+    subject { config.reference }
+
     let(:hash) { { foo: { bar: 100 } } }
     let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
-
-    subject { config.reference }
 
     it { is_expected.to eq('configuration') }
   end
 
   describe '#inspect' do
+    subject { config.inspect }
+
     let(:hash) { { foo: { bar: 100 } } }
     let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
-
-    subject { config.inspect }
 
     it { is_expected.to eq('<Nanoc::Core::Configuration>') }
   end
 
   describe '#merge' do
+    subject { config1.merge(config2).to_h }
+
     let(:hash1) { { foo: { bar: 'baz', baz: ['biz'] } } }
     let(:hash2) { { foo: { bar: :boz, biz: 'buz' } } }
     let(:config1) { described_class.new(hash: hash1, dir: Dir.getwd) }
     let(:config2) { described_class.new(hash: hash2, dir: Dir.getwd) }
-
-    subject { config1.merge(config2).to_h }
 
     it 'contains the recursive merge of both configurations' do
       expect(subject).to include(foo: { bar: :boz, baz: ['biz'], biz: 'buz' })
@@ -304,10 +304,10 @@ describe Nanoc::Core::Configuration do
   end
 
   context 'with environments defined' do
+    subject { config }
+
     let(:hash) { { foo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } } }
     let(:config) { described_class.new(hash: hash, dir: Dir.getwd, env_name: env_name).with_environment }
-
-    subject { config }
 
     context 'with existing environment' do
       let(:env_name) { 'test' }

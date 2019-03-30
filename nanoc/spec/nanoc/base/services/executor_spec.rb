@@ -332,6 +332,8 @@ describe Nanoc::Int::Executor do
   end
 
   describe '#layout' do
+    subject { executor.layout('/default.*') }
+
     let(:site) { double(:site, config: config, layouts: layouts) }
 
     let(:config) do
@@ -379,8 +381,6 @@ describe Nanoc::Int::Executor do
 
       allow(action_provider).to receive(:action_sequence_for).with(layout).and_return(action_sequence)
     end
-
-    subject { executor.layout('/default.*') }
 
     context 'accessing layout attributes' do
       let(:layout_content) { 'head <%= @layout[:bug] %> foot' }
@@ -567,6 +567,8 @@ describe Nanoc::Int::Executor do
   end
 
   describe '#find_layout' do
+    subject { executor.find_layout(arg) }
+
     let(:site) { double(:site, config: config, layouts: layouts) }
 
     let(:config) { {} }
@@ -574,8 +576,6 @@ describe Nanoc::Int::Executor do
     before do
       allow(compilation_context).to receive(:site) { site }
     end
-
-    subject { executor.find_layout(arg) }
 
     context 'layout with cleaned identifier exists' do
       let(:arg) { '/default' }

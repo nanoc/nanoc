@@ -122,9 +122,9 @@ describe Nanoc::Core::StringPattern do
   end
 
   describe '#to_s' do
-    let(:pattern) { described_class.new('/foo/*/bar/**/*.animal') }
-
     subject { pattern.to_s }
+
+    let(:pattern) { described_class.new('/foo/*/bar/**/*.animal') }
 
     it 'returns the regex' do
       expect(subject).to eq('/foo/*/bar/**/*.animal')

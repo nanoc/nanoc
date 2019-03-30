@@ -2,6 +2,8 @@
 
 describe Nanoc::Int::ItemRepWriter do
   describe '#write' do
+    subject { described_class.new.write(item_rep, compiled_content_store, snapshot_name, written_paths) }
+
     let(:raw_path) { Dir.getwd + '/output/blah.dat' }
 
     let(:item) { Nanoc::Core::Item.new(orig_content, {}, '/foo') }
@@ -28,8 +30,6 @@ describe Nanoc::Int::ItemRepWriter do
     let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
 
     let(:written_paths) { [] }
-
-    subject { described_class.new.write(item_rep, compiled_content_store, snapshot_name, written_paths) }
 
     before do
       expect(File.directory?('output')).to be_falsy

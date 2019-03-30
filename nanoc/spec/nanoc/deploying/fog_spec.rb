@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 describe Nanoc::Deploying::Deployers::Fog, stdio: true do
+  subject { deployer.run }
+
   let(:deployer) do
     Nanoc::Deploying::Deployers::Fog.new(
       'output/',
@@ -29,8 +31,6 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
     # create local cloud
     FileUtils.mkdir_p('remote')
   end
-
-  subject { deployer.run }
 
   shared_examples 'no effective deploy' do
     it 'does not modify remote' do

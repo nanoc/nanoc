@@ -2,10 +2,10 @@
 
 describe Nanoc::Core::LazyValue do
   describe '#value' do
+    subject { lazy_value.value }
+
     let(:value_arg) { +'Hello world' }
     let(:lazy_value) { described_class.new(value_arg) }
-
-    subject { lazy_value.value }
 
     context 'object' do
       it { is_expected.to equal(value_arg) }
@@ -34,10 +34,10 @@ describe Nanoc::Core::LazyValue do
   end
 
   describe '#map' do
+    subject { lazy_value.map(&:upcase) }
+
     let(:value_arg) { -> { 'Hello world' } }
     let(:lazy_value) { described_class.new(value_arg) }
-
-    subject { lazy_value.map(&:upcase) }
 
     it 'does not call the proc immediately' do
       expect(value_arg).not_to receive(:call)
@@ -60,9 +60,9 @@ describe Nanoc::Core::LazyValue do
   end
 
   describe '#freeze' do
-    let(:value_arg) { 'Hello world' }
-
     subject { described_class.new(value_arg) }
+
+    let(:value_arg) { 'Hello world' }
 
     context 'freeze before calling #value' do
       before do

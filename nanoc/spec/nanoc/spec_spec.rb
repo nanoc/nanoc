@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 describe Nanoc::Spec::HelperContext do
+  subject(:ctx) { described_class.new(helper) }
+
   let(:helper) do
     Module.new {}
   end
-
-  subject(:ctx) { described_class.new(helper) }
 
   it 'has no items by default' do
     # TODO: Add #empty? to item collection view
@@ -51,11 +51,11 @@ describe Nanoc::Spec::HelperContext do
   end
 
   describe '#create_rep' do
+    subject { ctx.create_rep(ctx.items['/foo.md'], '/foo.html') }
+
     before do
       ctx.create_item('foo', {}, '/foo.md')
     end
-
-    subject { ctx.create_rep(ctx.items['/foo.md'], '/foo.html') }
 
     it 'creates rep' do
       expect { subject }

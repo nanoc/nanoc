@@ -36,6 +36,8 @@ describe Nanoc::CompilationItemView do
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
   describe '#parent' do
+    subject { view.parent }
+
     let(:item) do
       Nanoc::Core::Item.new('me', {}, identifier)
     end
@@ -51,8 +53,6 @@ describe Nanoc::CompilationItemView do
         ].compact,
       )
     end
-
-    subject { view.parent }
 
     context 'with parent' do
       context 'full identifier' do
@@ -137,6 +137,8 @@ describe Nanoc::CompilationItemView do
   end
 
   describe '#children' do
+    subject { view.children }
+
     let(:item) do
       Nanoc::Core::Item.new('me', {}, identifier)
     end
@@ -152,8 +154,6 @@ describe Nanoc::CompilationItemView do
         ],
       )
     end
-
-    subject { view.children }
 
     context 'full identifier' do
       let(:identifier) do
@@ -189,6 +189,8 @@ describe Nanoc::CompilationItemView do
   end
 
   describe '#reps' do
+    subject { view.reps }
+
     let(:item) { Nanoc::Core::Item.new('blah', {}, '/foo.md') }
     let(:rep_a) { Nanoc::Core::ItemRep.new(item, :a) }
     let(:rep_b) { Nanoc::Core::ItemRep.new(item, :b) }
@@ -201,8 +203,6 @@ describe Nanoc::CompilationItemView do
     end
 
     let(:view) { described_class.new(item, view_context) }
-
-    subject { view.reps }
 
     it 'returns a proper item rep collection' do
       expect(subject.size).to eq(2)
@@ -438,10 +438,10 @@ describe Nanoc::CompilationItemView do
   end
 
   describe '#inspect' do
+    subject { view.inspect }
+
     let(:item) { Nanoc::Core::Item.new('content', {}, '/asdf') }
     let(:view) { described_class.new(item, nil) }
-
-    subject { view.inspect }
 
     it { is_expected.to eql('<Nanoc::CompilationItemView identifier=/asdf>') }
   end

@@ -139,49 +139,49 @@ describe Nanoc::Int::CompiledContentStore do
     end
 
     context 'snapshot nil' do
-      let(:expected_snapshot_name) { :last }
-
       subject { repo.compiled_content(rep: rep, snapshot: nil) }
+
+      let(:expected_snapshot_name) { :last }
 
       include_examples 'a snapshot'
     end
 
     context 'snapshot not specified' do
-      let(:expected_snapshot_name) { :last }
-
       subject { repo.compiled_content(rep: rep) }
+
+      let(:expected_snapshot_name) { :last }
 
       include_examples 'a snapshot'
     end
 
     context 'snapshot :pre specified' do
-      let(:expected_snapshot_name) { :pre }
-
       subject { repo.compiled_content(rep: rep, snapshot: :pre) }
+
+      let(:expected_snapshot_name) { :pre }
 
       include_examples 'a snapshot'
     end
 
     context 'snapshot :post specified' do
-      let(:expected_snapshot_name) { :post }
-
       subject { repo.compiled_content(rep: rep, snapshot: :post) }
+
+      let(:expected_snapshot_name) { :post }
 
       include_examples 'a snapshot'
     end
 
     context 'snapshot :last specified' do
-      let(:expected_snapshot_name) { :last }
-
       subject { repo.compiled_content(rep: rep, snapshot: :last) }
+
+      let(:expected_snapshot_name) { :last }
 
       include_examples 'a snapshot'
     end
 
     context 'snapshot :donkey specified' do
-      let(:expected_snapshot_name) { :donkey }
-
       subject { repo.compiled_content(rep: rep, snapshot: :donkey) }
+
+      let(:expected_snapshot_name) { :donkey }
 
       include_examples 'a snapshot'
     end

@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 describe Nanoc::Int::AggregateDataSource, stdio: true do
+  subject(:data_source) do
+    described_class.new([data_source_1, data_source_2], {})
+  end
+
   let(:klass_1) do
     Class.new(Nanoc::DataSource) do
       def items
@@ -47,10 +51,6 @@ describe Nanoc::Int::AggregateDataSource, stdio: true do
 
   let(:data_source_2) do
     klass_2.new({}, nil, nil, {})
-  end
-
-  subject(:data_source) do
-    described_class.new([data_source_1, data_source_2], {})
   end
 
   describe '#items' do

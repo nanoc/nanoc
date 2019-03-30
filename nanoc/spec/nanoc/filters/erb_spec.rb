@@ -80,13 +80,13 @@ describe Nanoc::Filters::ERB do
   end
 
   context 'error' do
-    let(:filter) { described_class.new(layout: layout) }
-
-    let(:layout) { Nanoc::Core::Layout.new('asdf', {}, '/default.erb') }
-
     subject do
       filter.setup_and_run('<% raise "boom %>')
     end
+
+    let(:filter) { described_class.new(layout: layout) }
+
+    let(:layout) { Nanoc::Core::Layout.new('asdf', {}, '/default.erb') }
 
     example do
       error =
@@ -101,13 +101,13 @@ describe Nanoc::Filters::ERB do
   end
 
   context 'with trim mode' do
-    let(:filter) { described_class.new }
-
-    let(:res) { { success: false } }
-
     subject do
       filter.setup_and_run('% res[:success] = true', params)
     end
+
+    let(:filter) { described_class.new }
+
+    let(:res) { { success: false } }
 
     context 'trim mode unchanged' do
       let(:params) do
@@ -136,13 +136,13 @@ describe Nanoc::Filters::ERB do
   end
 
   context 'safe level' do
-    let(:filter) { described_class.new }
-
-    let(:res) { { success: false } }
-
     subject do
       filter.setup_and_run('<%= eval File.read("moo") %>', params)
     end
+
+    let(:filter) { described_class.new }
+
+    let(:res) { { success: false } }
 
     before do
       File.write('moo', '1+2')

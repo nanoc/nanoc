@@ -184,6 +184,8 @@ describe Nanoc::Core::DirectedGraph do
   end
 
   describe '#delete_edges_to' do
+    subject { graph.delete_edges_to('1') }
+
     before do
       graph.add_edge('1', '2')
       graph.add_edge('2', '1')
@@ -192,8 +194,6 @@ describe Nanoc::Core::DirectedGraph do
       graph.add_edge('1', '3')
       graph.add_edge('3', '1')
     end
-
-    subject { graph.delete_edges_to('1') }
 
     it 'deletes edges to 1' do
       expect { subject }

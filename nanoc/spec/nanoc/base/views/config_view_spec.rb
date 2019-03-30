@@ -61,9 +61,9 @@ describe Nanoc::ConfigView do
     end
 
     context 'with existing key' do
-      let(:key) { :animal }
-
       subject { view.fetch(key) }
+
+      let(:key) { :animal }
 
       it { is_expected.to eql('donkey') }
     end

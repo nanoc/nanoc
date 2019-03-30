@@ -23,6 +23,8 @@ shared_examples 'an identifiable collection view' do
   end
 
   describe '#frozen?' do
+    subject { view.frozen? }
+
     let(:wrapped) do
       collection_class.new(
         config,
@@ -32,8 +34,6 @@ shared_examples 'an identifiable collection view' do
         ],
       )
     end
-
-    subject { view.frozen? }
 
     context 'non-frozen collection' do
       it { is_expected.to be(false) }
@@ -50,6 +50,8 @@ shared_examples 'an identifiable collection view' do
   end
 
   describe '#_unwrap' do
+    subject { view._unwrap }
+
     let(:wrapped) do
       collection_class.new(
         config,
@@ -60,8 +62,6 @@ shared_examples 'an identifiable collection view' do
         ],
       )
     end
-
-    subject { view._unwrap }
 
     it { should equal(wrapped) }
 
@@ -98,6 +98,8 @@ shared_examples 'an identifiable collection view' do
   end
 
   describe '#size' do
+    subject { view.size }
+
     let(:wrapped) do
       collection_class.new(
         config,
@@ -109,8 +111,6 @@ shared_examples 'an identifiable collection view' do
       )
     end
 
-    subject { view.size }
-
     it 'creates dependency' do
       expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
       subject
@@ -120,6 +120,8 @@ shared_examples 'an identifiable collection view' do
   end
 
   describe '#[]' do
+    subject { view[arg] }
+
     let(:page_object) do
       double(:identifiable, identifier: Nanoc::Core::Identifier.new('/page.erb'))
     end
@@ -137,8 +139,6 @@ shared_examples 'an identifiable collection view' do
         ],
       )
     end
-
-    subject { view[arg] }
 
     context 'no objects found' do
       let(:arg) { '/donkey.*' }

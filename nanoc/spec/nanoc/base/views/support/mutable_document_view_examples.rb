@@ -112,9 +112,9 @@ shared_examples 'a mutable document view' do
   end
 
   describe '#identifier=' do
-    let(:document) { entity_class.new('content', {}, '/about.md') }
-
     subject { view.identifier = arg }
+
+    let(:document) { entity_class.new('content', {}, '/about.md') }
 
     context 'given a string' do
       let(:arg) { '/about.adoc' }
@@ -144,11 +144,11 @@ shared_examples 'a mutable document view' do
   end
 
   describe '#update_attributes' do
+    subject { view.update_attributes(update) }
+
     let(:document) { entity_class.new('content', {}, '/asdf') }
 
     let(:update) { { friend: 'Giraffe' } }
-
-    subject { view.update_attributes(update) }
 
     it 'sets attributes' do
       expect { subject }.to change { view[:friend] }.from(nil).to('Giraffe')

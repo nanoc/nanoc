@@ -61,12 +61,12 @@ describe Nanoc::Int::BinaryCompiledContentCache do
   end
 
   describe 'replacing existing content with itself' do
-    before do
-      cache[item_rep] = { last: content }
-    end
-
     subject do
       cache[item_rep] = cache[item_rep]
+    end
+
+    before do
+      cache[item_rep] = { last: content }
     end
 
     it 'does not crash' do

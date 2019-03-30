@@ -27,9 +27,9 @@ shared_examples 'a document view' do
   end
 
   describe '#frozen?' do
-    let(:document) { entity_class.new('content', {}, '/asdf') }
-
     subject { view.frozen? }
+
+    let(:document) { entity_class.new('content', {}, '/asdf') }
 
     context 'non-frozen document' do
       it { is_expected.to be(false) }
@@ -107,9 +107,9 @@ shared_examples 'a document view' do
   end
 
   describe '#[]' do
-    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
-
     subject { view[key] }
+
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
 
     context 'with existant key' do
       let(:key) { :animal }
@@ -155,9 +155,9 @@ shared_examples 'a document view' do
   end
 
   describe '#attributes' do
-    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
-
     subject { view.attributes }
+
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
 
     it 'creates a dependency' do
       expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
@@ -183,9 +183,9 @@ shared_examples 'a document view' do
     let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
 
     context 'with existant key' do
-      let(:key) { :animal }
-
       subject { view.fetch(key) }
+
+      let(:key) { :animal }
 
       it { is_expected.to eql('donkey') }
 
@@ -261,9 +261,9 @@ shared_examples 'a document view' do
   end
 
   describe '#key?' do
-    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
-
     subject { view.key?(key) }
+
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
 
     context 'with existant key' do
       let(:key) { :animal }
@@ -309,17 +309,17 @@ shared_examples 'a document view' do
   end
 
   describe '#hash' do
-    let(:document) { double(:document, identifier: '/foo') }
-
     subject { view.hash }
+
+    let(:document) { double(:document, identifier: '/foo') }
 
     it { should == described_class.hash ^ '/foo'.hash }
   end
 
   describe '#raw_content' do
-    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
-
     subject { view.raw_content }
+
+    let(:document) { entity_class.new('stuff', { animal: 'donkey' }, '/foo') }
 
     it { is_expected.to eql('stuff') }
 

@@ -484,6 +484,8 @@ describe Nanoc::Int::DependencyStore do
   end
 
   describe '#forget_dependencies_for' do
+    subject { store.forget_dependencies_for(item_b) }
+
     before do
       store.record_dependency(item_a, item_b)
       store.record_dependency(item_a, item_c)
@@ -492,8 +494,6 @@ describe Nanoc::Int::DependencyStore do
       store.record_dependency(item_c, item_a)
       store.record_dependency(item_c, item_b)
     end
-
-    subject { store.forget_dependencies_for(item_b) }
 
     it 'removes dependencies from item_a' do
       expect { subject }

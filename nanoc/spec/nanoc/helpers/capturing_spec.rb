@@ -199,9 +199,9 @@ describe Nanoc::Helpers::Capturing, helper: true do
 
   describe '#capture' do
     context 'with string' do
-      let(:_erbout) { +'existing content' }
-
       subject { helper.capture { _erbout << 'new content' } }
+
+      let(:_erbout) { +'existing content' }
 
       it 'returns the appended content' do
         expect(subject).to eql('new content')

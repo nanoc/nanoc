@@ -69,9 +69,9 @@ describe Nanoc::Int::Compiler do
   end
 
   describe '#compile_rep' do
-    let(:stage) { compiler.send(:compile_reps_stage, action_sequences, reps) }
-
     subject { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: is_outdated) }
+
+    let(:stage) { compiler.send(:compile_reps_stage, action_sequences, reps) }
 
     let(:is_outdated) { true }
     let(:phase_stack) { stage.send(:build_phase_stack) }

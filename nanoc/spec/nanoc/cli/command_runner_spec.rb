@@ -89,9 +89,9 @@ describe Nanoc::CLI::CommandRunner, stdio: true do
   end
 
   describe '#load_site' do
-    let(:command_runner) { described_class.new(nil, nil, nil) }
-
     subject { command_runner.load_site }
+
+    let(:command_runner) { described_class.new(nil, nil, nil) }
 
     before { File.write('nanoc.yaml', '{}') }
 

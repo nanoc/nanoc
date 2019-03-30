@@ -16,10 +16,10 @@ describe Nanoc::MutableItemView do
   end
 
   describe '#inspect' do
+    subject { view.inspect }
+
     let(:item) { Nanoc::Core::Item.new('content', {}, '/asdf') }
     let(:view) { described_class.new(item, nil) }
-
-    subject { view.inspect }
 
     it { is_expected.to eql('<Nanoc::MutableItemView identifier=/asdf>') }
   end

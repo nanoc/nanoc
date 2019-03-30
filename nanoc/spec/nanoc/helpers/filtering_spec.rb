@@ -2,6 +2,8 @@
 
 describe Nanoc::Helpers::Filtering, helper: true do
   describe '#filter' do
+    subject { ::ERB.new(content).result(helper.get_binding) }
+
     before do
       ctx.create_item('some content', { title: 'Hello!' }, '/about.md')
       ctx.create_rep(ctx.items['/about.md'], '/about.html')
@@ -13,8 +15,6 @@ describe Nanoc::Helpers::Filtering, helper: true do
     let(:content) do
       "A<% filter :erb do %><%%= 'X' %><% end %>B"
     end
-
-    subject { ::ERB.new(content).result(helper.get_binding) }
 
     context 'basic case' do
       it { is_expected.to eql('AXB') }
@@ -55,6 +55,8 @@ describe Nanoc::Helpers::Filtering, helper: true do
     end
 
     context 'with Haml' do
+      subject { ::Haml::Engine.new(content).render(helper.get_binding) }
+
       let(:content) do
         "%p Foo.\n" \
         "- filter(:erb) do\n" \
@@ -65,8 +67,6 @@ describe Nanoc::Helpers::Filtering, helper: true do
       before do
         require 'haml'
       end
-
-      subject { ::Haml::Engine.new(content).render(helper.get_binding) }
 
       it { is_expected.to match(%r{^<p>Foo.</p>\s*abcxyz\s*<p>Bar.</p>$}) }
     end

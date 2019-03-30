@@ -45,6 +45,8 @@ describe Nanoc::MutableItemCollectionView do
   end
 
   describe '#inspect' do
+    subject { view.inspect }
+
     let(:wrapped) do
       Nanoc::Core::ItemCollection.new(config)
     end
@@ -52,8 +54,6 @@ describe Nanoc::MutableItemCollectionView do
     let(:view) { described_class.new(wrapped, view_context) }
     let(:view_context) { double(:view_context) }
     let(:config) { { string_pattern_type: 'glob' } }
-
-    subject { view.inspect }
 
     it { is_expected.to eql('<Nanoc::MutableItemCollectionView>') }
   end

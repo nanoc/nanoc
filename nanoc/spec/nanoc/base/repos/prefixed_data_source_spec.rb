@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 describe Nanoc::Int::PrefixedDataSource, stdio: true do
+  subject(:data_source) do
+    described_class.new(original_data_source, '/itemz', '/layoutz')
+  end
+
   let(:klass) do
     Class.new(Nanoc::DataSource) do
       def item_changes
@@ -15,10 +19,6 @@ describe Nanoc::Int::PrefixedDataSource, stdio: true do
 
   let(:original_data_source) do
     klass.new({}, nil, nil, {})
-  end
-
-  subject(:data_source) do
-    described_class.new(original_data_source, '/itemz', '/layoutz')
   end
 
   describe '#item_changes' do

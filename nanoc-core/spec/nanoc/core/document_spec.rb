@@ -2,13 +2,6 @@
 
 shared_examples 'a document' do
   describe '#initialize' do
-    let(:content_arg) { 'Hello world' }
-    let(:attributes_arg) { { 'title' => 'Home' } }
-    let(:identifier_arg) { '/home.md' }
-    let(:checksum_data_arg) { 'abcdef' }
-    let(:content_checksum_data_arg) { 'con-cs' }
-    let(:attributes_checksum_data_arg) { 'attr-cs' }
-
     subject do
       described_class.new(
         content_arg,
@@ -19,6 +12,13 @@ shared_examples 'a document' do
         attributes_checksum_data: attributes_checksum_data_arg,
       )
     end
+
+    let(:content_arg) { 'Hello world' }
+    let(:attributes_arg) { { 'title' => 'Home' } }
+    let(:identifier_arg) { '/home.md' }
+    let(:checksum_data_arg) { 'abcdef' }
+    let(:content_checksum_data_arg) { 'con-cs' }
+    let(:attributes_checksum_data_arg) { 'attr-cs' }
 
     describe 'content arg' do
       context 'string' do
@@ -159,6 +159,8 @@ shared_examples 'a document' do
   end
 
   describe 'equality' do
+    subject { document_a == document_b }
+
     let(:content_arg_a) { 'Hello world' }
     let(:content_arg_b) { 'Bye world' }
 
@@ -170,8 +172,6 @@ shared_examples 'a document' do
 
     let(:document_a) { described_class.new(content_arg_a, attributes_arg_a, identifier_arg_a) }
     let(:document_b) { described_class.new(content_arg_b, attributes_arg_b, identifier_arg_b) }
-
-    subject { document_a == document_b }
 
     context 'same identifier' do
       let(:identifier_arg_a) { '/home.md' }
@@ -207,9 +207,9 @@ shared_examples 'a document' do
   end
 
   describe '#with_identifier_prefix' do
-    let(:document) { described_class.new('kontent', { at: 'ribut' }, '/donkey.md') }
-
     subject { document.with_identifier_prefix('/animals') }
+
+    let(:document) { described_class.new('kontent', { at: 'ribut' }, '/donkey.md') }
 
     it 'does not mutate the original' do
       document.freeze
@@ -257,6 +257,8 @@ shared_examples 'a document' do
   end
 
   describe '#content=' do
+    subject { document.content = Nanoc::Core::TextualContent.new('New!') }
+
     let(:document) do
       described_class.new(
         content_arg,
@@ -270,8 +272,6 @@ shared_examples 'a document' do
 
     let(:content_arg) { 'Hallo' }
     let(:attributes_arg) { { foo: { bar: 'asdf' } } }
-
-    subject { document.content = Nanoc::Core::TextualContent.new('New!') }
 
     it 'clears checksum' do
       expect { subject }
@@ -294,6 +294,8 @@ shared_examples 'a document' do
   end
 
   describe '#set_attribute' do
+    subject { document.set_attribute(:key, 'value') }
+
     let(:document) do
       described_class.new(
         content_arg,
@@ -307,8 +309,6 @@ shared_examples 'a document' do
 
     let(:content_arg) { 'Hallo' }
     let(:attributes_arg) { { foo: { bar: 'asdf' } } }
-
-    subject { document.set_attribute(:key, 'value') }
 
     it 'clears checksum' do
       expect { subject }

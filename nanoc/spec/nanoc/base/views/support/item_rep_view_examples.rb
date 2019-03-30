@@ -30,11 +30,11 @@ shared_examples 'an item rep view' do
   end
 
   describe '#frozen?' do
+    subject { view.frozen? }
+
     let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
-
-    subject { view.frozen? }
 
     context 'non-frozen item rep' do
       it { is_expected.to be(false) }
@@ -136,11 +136,11 @@ shared_examples 'an item rep view' do
   end
 
   describe '#hash' do
+    subject { view.hash }
+
     let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
-
-    subject { view.hash }
 
     it { should == described_class.hash ^ Nanoc::Core::Identifier.new('/foo').hash ^ :jacques.hash }
   end
@@ -248,11 +248,11 @@ shared_examples 'an item rep view' do
   end
 
   describe '#binary?' do
+    subject { view.binary? }
+
     let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
-
-    subject { view.binary? }
 
     context 'no :last snapshot' do
       before do
@@ -282,11 +282,11 @@ shared_examples 'an item rep view' do
   end
 
   describe '#item' do
+    subject { view.item }
+
     let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
-
-    subject { view.item }
 
     it 'returns an item view' do
       expect(subject).to be_a(expected_item_view_class)
@@ -298,11 +298,11 @@ shared_examples 'an item rep view' do
   end
 
   describe '#inspect' do
+    subject { view.inspect }
+
     let(:item_rep) { Nanoc::Core::ItemRep.new(item, :jacques) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
-
-    subject { view.inspect }
 
     it { is_expected.to eql('<' + described_class.to_s + ' item.identifier=/foo name=jacques>') }
   end

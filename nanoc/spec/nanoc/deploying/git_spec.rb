@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 describe Nanoc::Deploying::Deployers::Git, stdio: true do
-  let(:deployer) { described_class.new(output_dir, options, dry_run: dry_run) }
-
   subject { deployer.run }
+
+  let(:deployer) { described_class.new(output_dir, options, dry_run: dry_run) }
 
   let(:output_dir) { 'output/' }
   let(:options) { remote_options.merge(branch_options).merge(forced_options) }

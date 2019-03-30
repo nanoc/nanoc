@@ -55,6 +55,8 @@ describe Nanoc::Checking::Check do
   end
 
   describe '#output_html_filenames' do
+    subject { check.output_html_filenames }
+
     let(:check) do
       described_class.new(output_filenames: output_filenames)
     end
@@ -69,8 +71,6 @@ describe Nanoc::Checking::Check do
         'output/foo.yhtml',
       ]
     end
-
-    subject { check.output_html_filenames }
 
     it { is_expected.to include('output/foo.html') }
     it { is_expected.to include('output/foo.htm') }

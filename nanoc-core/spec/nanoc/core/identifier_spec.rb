@@ -128,9 +128,9 @@ describe Nanoc::Core::Identifier do
   end
 
   describe '#inspect' do
-    let(:identifier) { described_class.new('/foo/bar') }
-
     subject { identifier.inspect }
+
+    let(:identifier) { described_class.new('/foo/bar') }
 
     it { should == '<Nanoc::Core::Identifier type=full "/foo/bar">' }
   end
@@ -220,9 +220,9 @@ describe Nanoc::Core::Identifier do
   end
 
   describe '#=~' do
-    let(:identifier) { described_class.new('/foo/bar') }
-
     subject { identifier =~ pat }
+
+    let(:identifier) { described_class.new('/foo/bar') }
 
     context 'given a regex' do
       context 'matching regex' do
@@ -254,9 +254,9 @@ describe Nanoc::Core::Identifier do
   end
 
   describe '#match?' do
-    let(:identifier) { described_class.new('/foo/bar') }
-
     subject { identifier.match?(pat) }
+
+    let(:identifier) { described_class.new('/foo/bar') }
 
     context 'given a regex' do
       context 'matching regex' do
@@ -302,9 +302,9 @@ describe Nanoc::Core::Identifier do
   end
 
   describe '#prefix' do
-    let(:identifier) { described_class.new('/foo') }
-
     subject { identifier.prefix(prefix) }
+
+    let(:identifier) { described_class.new('/foo') }
 
     context 'prefix not ending nor starting with a slash' do
       let(:prefix) { 'asdf' }

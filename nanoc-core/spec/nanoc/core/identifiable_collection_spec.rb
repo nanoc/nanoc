@@ -76,6 +76,8 @@ describe Nanoc::Core::IdentifiableCollection do
     end
 
     describe '#find_all' do
+      subject { identifiable_collection.find_all(arg) }
+
       let(:objects) do
         [
           double(:identifiable, identifier: Nanoc::Core::Identifier.new('/about.css')),
@@ -85,8 +87,6 @@ describe Nanoc::Core::IdentifiableCollection do
       end
 
       let(:arg) { raise 'override me' }
-
-      subject { identifiable_collection.find_all(arg) }
 
       context 'with string' do
         let(:arg) { '/*.css' }
@@ -110,6 +110,8 @@ describe Nanoc::Core::IdentifiableCollection do
     end
 
     describe '#object_with_identifier' do
+      subject { identifiable_collection.object_with_identifier(arg) }
+
       let(:objects) do
         [
           Nanoc::Core::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.css')),
@@ -119,8 +121,6 @@ describe Nanoc::Core::IdentifiableCollection do
       end
 
       let(:arg) { raise 'override me' }
-
-      subject { identifiable_collection.object_with_identifier(arg) }
 
       context 'with string' do
         let(:arg) { '/about.css' }
@@ -148,13 +148,13 @@ describe Nanoc::Core::IdentifiableCollection do
     end
 
     describe 'changing identifiers' do
+      subject { objects[0].identifier = '/bar' }
+
       let(:objects) do
         [
           Nanoc::Core::Item.new('Foo', {}, '/foo'),
         ]
       end
-
-      subject { objects[0].identifier = '/bar' }
 
       it 'makes /foo nil' do
         expect { subject }

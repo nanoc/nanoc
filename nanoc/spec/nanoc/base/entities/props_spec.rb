@@ -223,6 +223,8 @@ describe Nanoc::Int::Props do
   end
 
   describe '#merge_attributes' do
+    subject { props.merge(other_props).attributes }
+
     let(:props_attrs_true) do
       described_class.new(attributes: true)
     end
@@ -238,8 +240,6 @@ describe Nanoc::Int::Props do
     let(:props_attrs_list_b) do
       described_class.new(attributes: %i[giraffe zebra])
     end
-
-    subject { props.merge(other_props).attributes }
 
     context 'false + false' do
       let(:props) { props_attrs_false }
@@ -309,6 +309,8 @@ describe Nanoc::Int::Props do
   end
 
   describe '#merge_raw_content' do
+    subject { props.merge(other_props).raw_content }
+
     let(:props_raw_content_true) do
       described_class.new(raw_content: true)
     end
@@ -324,8 +326,6 @@ describe Nanoc::Int::Props do
     let(:props_raw_content_list_b) do
       described_class.new(raw_content: %w[giraffe zebra])
     end
-
-    subject { props.merge(other_props).raw_content }
 
     context 'false + false' do
       let(:props) { props_raw_content_false }

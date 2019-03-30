@@ -9,6 +9,8 @@ describe Nanoc::CLI::StackTraceWriter do
   let(:forwards) { true }
 
   describe '#write' do
+    subject { writer.write(exception, verbose: verbose) }
+
     let(:exception) do
       backtrace_generator = lambda do |af|
         if af.zero?
@@ -24,8 +26,6 @@ describe Nanoc::CLI::StackTraceWriter do
         return e
       end
     end
-
-    subject { writer.write(exception, verbose: verbose) }
 
     let(:verbose) { false }
 
