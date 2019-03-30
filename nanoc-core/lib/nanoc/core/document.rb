@@ -8,11 +8,6 @@ module Nanoc
       # @return [Nanoc::Core::Content]
       attr_reader :content
 
-      # @return [Hash]
-      def attributes
-        @attributes.value
-      end
-
       # @return [Nanoc::Core::Identifier]
       attr_reader :identifier
 
@@ -54,6 +49,11 @@ module Nanoc
         @checksum_data = checksum_data
         @content_checksum_data = content_checksum_data
         @attributes_checksum_data = attributes_checksum_data
+      end
+
+      # @return [Hash]
+      def attributes
+        @attributes.value
       end
 
       contract C::None => self

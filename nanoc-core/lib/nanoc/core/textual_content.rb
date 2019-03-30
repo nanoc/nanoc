@@ -3,15 +3,15 @@
 module Nanoc
   module Core
     class TextualContent < Content
-      contract C::None => String
-      def string
-        @string.value
-      end
-
       contract C::Or[String, Proc], C::KeywordArgs[filename: C::Optional[C::Maybe[String]]] => C::Any
       def initialize(string, filename: nil)
         super(filename)
         @string = Nanoc::Core::LazyValue.new(string)
+      end
+
+      contract C::None => String
+      def string
+        @string.value
       end
 
       contract C::None => self

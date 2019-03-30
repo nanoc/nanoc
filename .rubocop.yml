@@ -38,6 +38,15 @@ Naming/UncommunicativeMethodParamName:
 
 
 
+# ----- CONFIGURED (enabled non-default cops) -----
+
+Layout/ClassStructure:
+  Enabled: true
+  Include:
+    - 'nanoc-core/**/*.rb'
+
+
+
 # ----- CONFIGURED (exceptions for tests) -----
 
 # This breaks RSpec on occasion, e.g. `expect { subject }.not_to change { foo }`,
