@@ -4,10 +4,10 @@ describe Nanoc::Filter do
   describe '.define' do
     context 'simple filter' do
       let(:filter_name) { :b5355bbb4d772b9853d21be57da614dba521dbbb }
-      let(:filter_class) { Nanoc::Filter.named(filter_name) }
+      let(:filter_class) { described_class.named(filter_name) }
 
       before do
-        Nanoc::Filter.define(filter_name) do |content, _params|
+        described_class.define(filter_name) do |content, _params|
           content.upcase
         end
       end
@@ -23,12 +23,12 @@ describe Nanoc::Filter do
 
     context 'filter that accesses assigns' do
       let(:filter_name) { :d7ed105d460e99a3d38f46af023d9490c140fdd9 }
-      let(:filter_class) { Nanoc::Filter.named(filter_name) }
+      let(:filter_class) { described_class.named(filter_name) }
       let(:filter) { filter_class.new(assigns) }
       let(:assigns) { { animal: 'Giraffe' } }
 
       before do
-        Nanoc::Filter.define(filter_name) do |_content, _params|
+        described_class.define(filter_name) do |_content, _params|
           @animal
         end
       end
@@ -41,12 +41,12 @@ describe Nanoc::Filter do
 
   describe '.named!' do
     it 'returns filter if exists' do
-      expect(Nanoc::Filter.named!(:erb)).not_to be_nil
-      expect(Nanoc::Filter.named!(:erb).identifier).to eq(:erb)
+      expect(described_class.named!(:erb)).not_to be_nil
+      expect(described_class.named!(:erb).identifier).to eq(:erb)
     end
 
     it 'raises if non-existent' do
-      expect { Nanoc::Filter.named!(:ajklsdfklasjflkd) }
+      expect { described_class.named!(:ajklsdfklasjflkd) }
         .to raise_error(
           Nanoc::Filter::UnknownFilterError,
           'The requested filter, “ajklsdfklasjflkd”, does not exist.',

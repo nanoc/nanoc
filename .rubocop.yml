@@ -204,3 +204,13 @@ Style/StderrPuts:
 # a letter is not always a format string.
 Style/FormatStringToken:
   Enabled: false
+
+
+
+# ----- DISABLED (buggy) -----
+
+# This cop attempts to replace Nanoc::VERSION with described_class, which makes
+# the spec fail.
+RSpec/DescribedClass:
+  Exclude:
+    - 'nanoc/spec/nanoc/version_spec.rb'

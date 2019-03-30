@@ -79,7 +79,7 @@ describe Nanoc::CompilationItemView do
         end
 
         it 'returns a view for the parent' do
-          expect(subject.class).to eql(Nanoc::CompilationItemView)
+          expect(subject.class).to eql(described_class)
           expect(subject._unwrap).to eql(parent_item)
         end
 
@@ -103,7 +103,7 @@ describe Nanoc::CompilationItemView do
           let(:parent_identifier) { Nanoc::Core::Identifier.new('/', type: :legacy) }
 
           it 'returns a view for the parent' do
-            expect(subject.class).to eql(Nanoc::CompilationItemView)
+            expect(subject.class).to eql(described_class)
             expect(subject._unwrap).to eql(parent_item)
           end
         end
@@ -180,7 +180,7 @@ describe Nanoc::CompilationItemView do
 
       it 'returns views for the children' do
         expect(subject.size).to be(1)
-        expect(subject[0].class).to eql(Nanoc::CompilationItemView)
+        expect(subject[0].class).to eql(described_class)
         expect(subject[0]._unwrap).to eql(children[0])
       end
 

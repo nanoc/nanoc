@@ -5,10 +5,10 @@ describe Nanoc::Core::Identifier do
     subject { described_class.from(arg) }
 
     context 'given an identifier' do
-      let(:arg) { Nanoc::Core::Identifier.new('/foo.md') }
+      let(:arg) { described_class.new('/foo.md') }
 
       it 'returns an identifier' do
-        expect(subject).to be_a(Nanoc::Core::Identifier)
+        expect(subject).to be_a(described_class)
         expect(subject.to_s).to eq('/foo.md')
         expect(subject).to be_full
       end
@@ -18,7 +18,7 @@ describe Nanoc::Core::Identifier do
       let(:arg) { '/foo.md' }
 
       it 'returns an identifier' do
-        expect(subject).to be_a(Nanoc::Core::Identifier)
+        expect(subject).to be_a(described_class)
         expect(subject.to_s).to eq('/foo.md')
         expect(subject).to be_full
       end
@@ -332,7 +332,7 @@ describe Nanoc::Core::Identifier do
       let(:prefix) { '/asdf/' }
 
       it 'returns a proper new identifier' do
-        expect(subject).to be_a(Nanoc::Core::Identifier)
+        expect(subject).to be_a(described_class)
         expect(subject.to_s).to eql('/asdf/foo')
       end
     end
@@ -341,7 +341,7 @@ describe Nanoc::Core::Identifier do
       let(:prefix) { '/asdf' }
 
       it 'returns a proper new identifier' do
-        expect(subject).to be_a(Nanoc::Core::Identifier)
+        expect(subject).to be_a(described_class)
         expect(subject.to_s).to eql('/asdf/foo')
       end
     end

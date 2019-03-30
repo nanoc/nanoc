@@ -31,13 +31,6 @@ RSpec/DescribeClass:
 # SupportedStyles: described_class, explicit
 RSpec/DescribedClass:
   Exclude:
-    - 'guard-nanoc/spec/lib/guard/nanoc_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/code_snippet_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/identifier_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/temp_filename_factory_spec.rb'
-    - 'nanoc/spec/nanoc/base/feature_spec.rb'
-    - 'nanoc/spec/nanoc/base/filter_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/item_view_spec.rb'
     - 'nanoc/spec/nanoc/version_spec.rb'
 
 # Offense count: 8

@@ -77,7 +77,7 @@ describe Nanoc::Core::TempFilenameFactory do
 
   describe 'other instance' do
     let(:other_instance) do
-      Nanoc::Core::TempFilenameFactory.new
+      described_class.new
     end
 
     it 'creates unique paths across instances' do
