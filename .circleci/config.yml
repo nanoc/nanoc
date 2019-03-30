@@ -362,12 +362,6 @@ jobs:
 workflows:
   version: 2
   test:
-    triggers:
-      - schedule:
-          cron: "0 0 * * *"
-          filters:
-            branches:
-              only: [master]
     jobs:
       # setup
       - setup_cruby24
