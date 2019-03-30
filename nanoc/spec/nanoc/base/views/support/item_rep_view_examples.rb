@@ -142,7 +142,7 @@ shared_examples 'an item rep view' do
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
-    it { should == described_class.hash ^ Nanoc::Core::Identifier.new('/foo').hash ^ :jacques.hash }
+    it { is_expected.to eq described_class.hash ^ Nanoc::Core::Identifier.new('/foo').hash ^ :jacques.hash }
   end
 
   describe '#snapshot?' do
@@ -244,7 +244,7 @@ shared_examples 'an item rep view' do
       expect(dep.props.compiled_content?).to eq(false)
     end
 
-    it { should eq('/about/') }
+    it { is_expected.to eq('/about/') }
   end
 
   describe '#binary?' do

@@ -62,7 +62,7 @@ describe Nanoc::CompilationItemRepView do
         expect(dep.props.path?).to eq(false)
       end
 
-      it { should be_a(Nanoc::Int::Errors::UnmetDependency) }
+      it { is_expected.to be_a(Nanoc::Int::Errors::UnmetDependency) }
     end
 
     context 'rep is compiled' do
@@ -95,7 +95,7 @@ describe Nanoc::CompilationItemRepView do
           expect(dep.props.path?).to eq(false)
         end
 
-        it { should eq(Dir.getwd + '/output/about/index.html') }
+        it { is_expected.to eq(Dir.getwd + '/output/about/index.html') }
       end
     end
   end
@@ -140,6 +140,6 @@ describe Nanoc::CompilationItemRepView do
       expect(dep.props.path?).to eq(false)
     end
 
-    it { should eq('Hallo') }
+    it { is_expected.to eq('Hallo') }
   end
 end

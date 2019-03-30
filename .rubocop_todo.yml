@@ -81,19 +81,6 @@ RSpec/ExpectOutput:
 RSpec/FilePath:
   Enabled: false
 
-# Offense count: 12
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: is_expected, should
-RSpec/ImplicitExpect:
-  Exclude:
-    - 'nanoc-core/spec/nanoc/core/identifier_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/compilation_item_rep_view_spec.rb'
-    - 'nanoc/spec/nanoc/base/views/support/document_view_examples.rb'
-    - 'nanoc/spec/nanoc/base/views/support/identifiable_collection_view_examples.rb'
-    - 'nanoc/spec/nanoc/base/views/support/item_rep_collection_view_examples.rb'
-    - 'nanoc/spec/nanoc/base/views/support/item_rep_view_examples.rb'
-
 # Offense count: 14
 # Configuration parameters: AssignmentOnly.
 RSpec/InstanceVariable:

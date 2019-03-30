@@ -16,7 +16,7 @@ shared_examples 'an item rep collection view' do
   describe '#_unwrap' do
     subject { view._unwrap }
 
-    it { should equal(wrapped) }
+    it { is_expected.to equal(wrapped) }
   end
 
   describe '#frozen?' do
@@ -51,7 +51,7 @@ shared_examples 'an item rep collection view' do
   describe '#size' do
     subject { view.size }
 
-    it { should == 3 }
+    it { is_expected.to eq 3 }
   end
 
   describe '#to_ary' do
@@ -75,7 +75,7 @@ shared_examples 'an item rep collection view' do
     context 'when not found' do
       let(:name) { :donkey }
 
-      it { should be_nil }
+      it { is_expected.to be_nil }
     end
 
     context 'when found' do

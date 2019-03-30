@@ -63,7 +63,7 @@ shared_examples 'an identifiable collection view' do
       )
     end
 
-    it { should equal(wrapped) }
+    it { is_expected.to equal(wrapped) }
 
     it 'does not create dependency' do
       expect(dependency_tracker).not_to receive(:bounce)
@@ -116,7 +116,7 @@ shared_examples 'an identifiable collection view' do
       subject
     end
 
-    it { should == 3 }
+    it { is_expected.to eq 3 }
   end
 
   describe '#[]' do

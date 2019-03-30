@@ -132,7 +132,7 @@ describe Nanoc::Core::Identifier do
 
     let(:identifier) { described_class.new('/foo/bar') }
 
-    it { should == '<Nanoc::Core::Identifier type=full "/foo/bar">' }
+    it { is_expected.to eq '<Nanoc::Core::Identifier type=full "/foo/bar">' }
   end
 
   describe '#== and #eql?' do
