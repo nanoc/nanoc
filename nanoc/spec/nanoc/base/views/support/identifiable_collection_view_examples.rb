@@ -41,7 +41,7 @@ shared_examples 'an identifiable collection view' do
 
     context 'frozen collection' do
       before do
-        wrapped.each { |o| expect(o).to receive(:freeze) }
+        expect(wrapped).to all(receive(:freeze))
         wrapped.freeze
       end
 

@@ -91,11 +91,6 @@ RSpec/InstanceVariable:
     - 'nanoc/spec/nanoc/checking/checks/external_links_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rule_spec.rb'
 
-# Offense count: 1
-RSpec/IteratedExpectation:
-  Exclude:
-    - 'nanoc/spec/nanoc/base/views/support/identifiable_collection_view_examples.rb'
-
 # Offense count: 144
 # Configuration parameters: .
 # SupportedStyles: have_received, receive
