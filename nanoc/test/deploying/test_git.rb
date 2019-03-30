@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'helper'
+
 class Nanoc::Deploying::Deployers::GitTest < Nanoc::TestCase
   def test_run_with_defaults_options
     # Create deployer
