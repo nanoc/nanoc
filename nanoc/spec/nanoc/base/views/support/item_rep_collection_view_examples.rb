@@ -60,7 +60,7 @@ shared_examples 'an item rep collection view' do
       expect(subject.class).to eq(Array)
       expect(subject.size).to eq(3)
       expect(subject[0].class).to eql(expected_view_class)
-      expect(subject[0].name).to eql(:foo)
+      expect(subject[0].name).to be(:foo)
     end
 
     it 'returns an array with correct contexts' do

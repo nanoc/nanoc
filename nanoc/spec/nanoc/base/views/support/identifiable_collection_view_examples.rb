@@ -247,7 +247,7 @@ shared_examples 'an identifiable collection view' do
       end
 
       it 'contains views' do
-        expect(subject.size).to eql(2)
+        expect(subject.size).to be(2)
         about_css = subject.find { |iv| iv.identifier == '/about.css' }
         style_css = subject.find { |iv| iv.identifier == '/style.css' }
         expect(about_css.class).to equal(view_class)
@@ -264,7 +264,7 @@ shared_examples 'an identifiable collection view' do
       end
 
       it 'contains views' do
-        expect(subject.size).to eql(2)
+        expect(subject.size).to be(2)
         about_css = subject.find { |iv| iv.identifier == '/about.css' }
         style_css = subject.find { |iv| iv.identifier == '/style.css' }
         expect(about_css.class).to equal(view_class)
@@ -281,7 +281,7 @@ shared_examples 'an identifiable collection view' do
       end
 
       it 'contains views' do
-        expect(subject.size).to eql(2)
+        expect(subject.size).to be(2)
         about_css = subject.find { |iv| iv.identifier == '/about.css' }
         style_css = subject.find { |iv| iv.identifier == '/style.css' }
         expect(about_css.class).to equal(view_class)

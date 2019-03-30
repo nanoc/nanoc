@@ -78,7 +78,7 @@ describe Nanoc::Core::ProcessingActions::Filter do
       let(:action_b) { described_class.new(:erb, foo: :bar) }
 
       it 'is the same' do
-        expect(action_a.hash == action_b.hash).to eql(true)
+        expect(action_a.hash == action_b.hash).to be(true)
       end
     end
 
@@ -87,7 +87,7 @@ describe Nanoc::Core::ProcessingActions::Filter do
       let(:action_b) { described_class.new(:haml, foo: :bar) }
 
       it 'is the same' do
-        expect(action_a.hash == action_b.hash).to eql(false)
+        expect(action_a.hash == action_b.hash).to be(false)
       end
     end
 
@@ -96,7 +96,7 @@ describe Nanoc::Core::ProcessingActions::Filter do
       let(:action_b) { described_class.new(:erb, foo: :oink) }
 
       it 'is the same' do
-        expect(action_a.hash == action_b.hash).to eql(false)
+        expect(action_a.hash == action_b.hash).to be(false)
       end
     end
 
@@ -105,7 +105,7 @@ describe Nanoc::Core::ProcessingActions::Filter do
       let(:action_b) { :woof }
 
       it 'is the same' do
-        expect(action_a.hash == action_b.hash).to eql(false)
+        expect(action_a.hash == action_b.hash).to be(false)
       end
     end
   end

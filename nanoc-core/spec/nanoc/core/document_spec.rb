@@ -58,7 +58,7 @@ shared_examples 'a document' do
         end
 
         it 'does not call the proc immediately' do
-          expect(call_count).to eql(0)
+          expect(call_count).to be(0)
         end
 
         it 'symbolizes attributes' do
@@ -68,7 +68,7 @@ shared_examples 'a document' do
         it 'only calls the proc once' do
           subject.attributes
           subject.attributes
-          expect(call_count).to eql(1)
+          expect(call_count).to be(1)
         end
       end
     end
@@ -177,7 +177,7 @@ shared_examples 'a document' do
       let(:identifier_arg_a) { '/home.md' }
       let(:identifier_arg_b) { '/home.md' }
 
-      it { is_expected.to eql(true) }
+      it { is_expected.to be(true) }
 
       it 'has same hashes' do
         expect(document_a.hash).to eql(document_b.hash)
@@ -188,7 +188,7 @@ shared_examples 'a document' do
       let(:identifier_arg_a) { '/home.md' }
       let(:identifier_arg_b) { '/about.md' }
 
-      it { is_expected.to eql(false) }
+      it { is_expected.to be(false) }
 
       it 'has different hashes' do
         expect(document_a.hash).not_to eql(document_b.hash)
@@ -198,7 +198,7 @@ shared_examples 'a document' do
     context 'comparing with non-document' do
       let(:document_b) { nil }
 
-      it { is_expected.to eql(false) }
+      it { is_expected.to be(false) }
 
       it 'has different hashes' do
         expect(document_a.hash).not_to eql(document_b.hash)

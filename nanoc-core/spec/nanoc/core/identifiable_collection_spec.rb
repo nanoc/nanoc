@@ -92,7 +92,7 @@ describe Nanoc::Core::IdentifiableCollection do
         let(:arg) { '/*.css' }
 
         it 'contains objects' do
-          expect(subject.size).to eql(2)
+          expect(subject.size).to be(2)
           expect(subject.find { |iv| iv.identifier == '/about.css' }).to eq(objects[0])
           expect(subject.find { |iv| iv.identifier == '/style.css' }).to eq(objects[2])
         end
@@ -102,7 +102,7 @@ describe Nanoc::Core::IdentifiableCollection do
         let(:arg) { %r{\.css\z} }
 
         it 'contains objects' do
-          expect(subject.size).to eql(2)
+          expect(subject.size).to be(2)
           expect(subject.find { |iv| iv.identifier == '/about.css' }).to eq(objects[0])
           expect(subject.find { |iv| iv.identifier == '/style.css' }).to eq(objects[2])
         end

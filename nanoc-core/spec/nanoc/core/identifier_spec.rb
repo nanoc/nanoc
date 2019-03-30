@@ -123,7 +123,7 @@ describe Nanoc::Core::Identifier do
 
   describe 'Comparable' do
     it 'can be compared' do
-      expect(described_class.new('/foo/bar') <= '/qux').to eql(true)
+      expect(described_class.new('/foo/bar') <= '/qux').to be(true)
     end
   end
 
@@ -205,7 +205,7 @@ describe Nanoc::Core::Identifier do
       let(:identifier_b) { described_class.new('/foo/bar//', type: :legacy) }
 
       it 'is the same' do
-        expect(identifier_a.hash == identifier_b.hash).to eql(true)
+        expect(identifier_a.hash == identifier_b.hash).to be(true)
       end
     end
 
@@ -214,7 +214,7 @@ describe Nanoc::Core::Identifier do
       let(:identifier_b) { described_class.new('/monkey/', type: :legacy) }
 
       it 'is different' do
-        expect(identifier_a.hash == identifier_b.hash).to eql(false)
+        expect(identifier_a.hash == identifier_b.hash).to be(false)
       end
     end
   end
@@ -227,24 +227,24 @@ describe Nanoc::Core::Identifier do
     context 'given a regex' do
       context 'matching regex' do
         let(:pat) { %r{\A/foo/bar} }
-        it { is_expected.to eql(0) }
+        it { is_expected.to be(0) }
       end
 
       context 'non-matching regex' do
         let(:pat) { %r{\A/qux/monkey} }
-        it { is_expected.to eql(nil) }
+        it { is_expected.to be(nil) }
       end
     end
 
     context 'given a string' do
       context 'matching string' do
         let(:pat) { '/foo/*' }
-        it { is_expected.to eql(0) }
+        it { is_expected.to be(0) }
       end
 
       context 'non-matching string' do
         let(:pat) { '/qux/*' }
-        it { is_expected.to eql(nil) }
+        it { is_expected.to be(nil) }
       end
     end
   end
@@ -287,9 +287,9 @@ describe Nanoc::Core::Identifier do
     let(:identifier) { described_class.new('/foo/bar') }
 
     it 'compares by string' do
-      expect(identifier <=> '/foo/aarghh').to eql(1)
-      expect(identifier <=> '/foo/bar').to eql(0)
-      expect(identifier <=> '/foo/qux').to eql(-1)
+      expect(identifier <=> '/foo/aarghh').to be(1)
+      expect(identifier <=> '/foo/bar').to be(0)
+      expect(identifier <=> '/foo/qux').to be(-1)
     end
   end
 
@@ -462,12 +462,12 @@ describe Nanoc::Core::Identifier do
 
     context 'legacy type' do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
-      it { is_expected.to eql(true) }
+      it { is_expected.to be(true) }
     end
 
     context 'full type' do
       let(:identifier) { described_class.new('/foo', type: :full) }
-      it { is_expected.to eql(false) }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -476,12 +476,12 @@ describe Nanoc::Core::Identifier do
 
     context 'legacy type' do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
-      it { is_expected.to eql(false) }
+      it { is_expected.to be(false) }
     end
 
     context 'full type' do
       let(:identifier) { described_class.new('/foo', type: :full) }
-      it { is_expected.to eql(true) }
+      it { is_expected.to be(true) }
     end
   end
 

@@ -15,7 +15,7 @@ describe Nanoc::Core::ActionSequence do
         end
       end
 
-      it { is_expected.to eql(0) }
+      it { is_expected.to be(0) }
     end
 
     context 'some actions' do
@@ -25,7 +25,7 @@ describe Nanoc::Core::ActionSequence do
         end
       end
 
-      it { is_expected.to eql(1) }
+      it { is_expected.to be(1) }
     end
   end
 

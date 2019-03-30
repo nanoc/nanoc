@@ -178,7 +178,7 @@ describe Nanoc::CompilationItemView do
       end
 
       it 'returns views for the children' do
-        expect(subject.size).to eql(1)
+        expect(subject.size).to be(1)
         expect(subject[0].class).to eql(Nanoc::CompilationItemView)
         expect(subject[0]._unwrap).to eql(children[0])
       end

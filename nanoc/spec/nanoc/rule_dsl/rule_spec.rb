@@ -25,7 +25,7 @@ shared_examples 'a generic rule' do
   describe '#initialize' do
     subject { rule }
 
-    its(:rep_name) { is_expected.to eql(:xml) }
+    its(:rep_name) { is_expected.to be(:xml) }
     its(:pattern) { is_expected.to eql(pattern) }
   end
 
@@ -106,16 +106,16 @@ describe Nanoc::RuleDSL::RoutingRule do
     context 'without snapshot_name' do
       subject { described_class.new(pattern, :xml, proc {}) }
 
-      its(:rep_name) { is_expected.to eql(:xml) }
+      its(:rep_name) { is_expected.to be(:xml) }
       its(:pattern) { is_expected.to eql(pattern) }
       its(:snapshot_name) { is_expected.to be_nil }
     end
     context 'with snapshot_name' do
       subject { described_class.new(pattern, :xml, proc {}, snapshot_name: :donkey) }
 
-      its(:rep_name) { is_expected.to eql(:xml) }
+      its(:rep_name) { is_expected.to be(:xml) }
       its(:pattern) { is_expected.to eql(pattern) }
-      its(:snapshot_name) { is_expected.to eql(:donkey) }
+      its(:snapshot_name) { is_expected.to be(:donkey) }
     end
   end
 

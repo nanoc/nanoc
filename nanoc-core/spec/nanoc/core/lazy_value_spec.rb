@@ -94,7 +94,7 @@ describe Nanoc::Core::LazyValue do
         end
 
         it 'does not call the proc immediately' do
-          expect(call_count).to eql(0)
+          expect(call_count).to be(0)
         end
 
         it 'returns proc return value' do
@@ -138,7 +138,7 @@ describe Nanoc::Core::LazyValue do
         end
 
         it 'does not call the proc immediately' do
-          expect(call_count).to eql(0)
+          expect(call_count).to be(0)
         end
 
         it 'returns proc return value' do

@@ -66,7 +66,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
           expect(subject[0].paths).to be_empty
 
           expect(subject[1]).to be_a(Nanoc::Core::ProcessingActions::Filter)
-          expect(subject[1].filter_name).to eql(:erb)
+          expect(subject[1].filter_name).to be(:erb)
           expect(subject[1].params).to eql(speed: :over_9000)
 
           expect(subject[2]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
@@ -78,14 +78,14 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
           expect(subject[3].params).to be_nil
 
           expect(subject[4]).to be_a(Nanoc::Core::ProcessingActions::Filter)
-          expect(subject[4].filter_name).to eql(:typohero)
+          expect(subject[4].filter_name).to be(:typohero)
           expect(subject[4].params).to eql({})
 
           expect(subject[5]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
           expect(subject[5].snapshot_names).to eql(%i[post last])
           expect(subject[5].paths).to be_empty
 
-          expect(subject.size).to eql(6)
+          expect(subject.size).to be(6)
         end
       end
 
@@ -103,7 +103,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
           expect(subject[0].snapshot_names).to eql(%i[raw last pre])
           expect(subject[0].paths).to be_empty
 
-          expect(subject.size).to eql(1)
+          expect(subject.size).to be(1)
         end
       end
 
@@ -125,7 +125,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
           expect(subject[0].snapshot_names).to eql(%i[raw last pre])
           expect(subject[0].paths).to eq(['/foo.md'])
 
-          expect(subject.size).to eql(1)
+          expect(subject.size).to be(1)
         end
       end
 
@@ -147,7 +147,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
           expect(subject[0].snapshot_names).to eql(%i[raw last pre])
           expect(subject[0].paths).to be_empty
 
-          expect(subject.size).to eql(1)
+          expect(subject.size).to be(1)
         end
       end
     end
@@ -169,9 +169,9 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
         end
 
         it 'contains memory for the rule' do
-          expect(subject.size).to eql(1)
+          expect(subject.size).to be(1)
           expect(subject[0]).to be_a(Nanoc::Core::ProcessingActions::Filter)
-          expect(subject[0].filter_name).to eql(:erb)
+          expect(subject[0].filter_name).to be(:erb)
           expect(subject[0].params).to eql(x: 123)
         end
       end
@@ -224,7 +224,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
       expect(subject[4].snapshot_names).to eql([:c])
       expect(subject[4].paths).to be_empty
 
-      expect(subject.size).to eql(5)
+      expect(subject.size).to be(5)
     end
   end
 end

@@ -11,18 +11,18 @@ describe Nanoc::RuleDSL::ActionRecorder do
     it 'records filter call without arguments' do
       recorder.filter(:erb)
 
-      expect(action_sequence.size).to eql(1)
+      expect(action_sequence.size).to be(1)
       expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Filter)
-      expect(action_sequence[0].filter_name).to eql(:erb)
+      expect(action_sequence[0].filter_name).to be(:erb)
       expect(action_sequence[0].params).to eql({})
     end
 
     it 'records filter call with arguments' do
       recorder.filter(:erb, x: 123)
 
-      expect(action_sequence.size).to eql(1)
+      expect(action_sequence.size).to be(1)
       expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Filter)
-      expect(action_sequence[0].filter_name).to eql(:erb)
+      expect(action_sequence[0].filter_name).to be(:erb)
       expect(action_sequence[0].params).to eql(x: 123)
     end
   end
@@ -31,7 +31,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
     it 'records layout call without arguments' do
       recorder.layout('/default.*')
 
-      expect(action_sequence.size).to eql(2)
+      expect(action_sequence.size).to be(2)
 
       expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
       expect(action_sequence[0].snapshot_names).to eql([:pre])
@@ -45,7 +45,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
     it 'records layout call with arguments' do
       recorder.layout('/default.*', donkey: 123)
 
-      expect(action_sequence.size).to eql(2)
+      expect(action_sequence.size).to be(2)
 
       expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
       expect(action_sequence[0].snapshot_names).to eql([:pre])
@@ -78,7 +78,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
       it 'records' do
         subject
-        expect(action_sequence.size).to eql(1)
+        expect(action_sequence.size).to be(1)
         expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
         expect(action_sequence[0].snapshot_names).to eql([:foo])
         expect(action_sequence[0].paths).to be_empty
@@ -95,7 +95,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
           it 'records' do
             subject
-            expect(action_sequence.size).to eql(1)
+            expect(action_sequence.size).to be(1)
             expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
             expect(action_sequence[0].snapshot_names).to eql([:foo])
             expect(action_sequence[0].paths).to be_empty
@@ -113,7 +113,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
           it 'records' do
             subject
-            expect(action_sequence.size).to eql(1)
+            expect(action_sequence.size).to be(1)
             expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
             expect(action_sequence[0].snapshot_names).to eql([:foo])
             expect(action_sequence[0].paths).to eql(['/routed-foo.html'])
@@ -132,7 +132,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
           it 'records' do
             subject
-            expect(action_sequence.size).to eql(1)
+            expect(action_sequence.size).to be(1)
             expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
             expect(action_sequence[0].snapshot_names).to eql([:foo])
             expect(action_sequence[0].paths).to eql(['/routed-foo.html'])
@@ -151,7 +151,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
 
           it 'records' do
             subject
-            expect(action_sequence.size).to eql(1)
+            expect(action_sequence.size).to be(1)
             expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
             expect(action_sequence[0].snapshot_names).to eql([:foo])
             expect(action_sequence[0].paths).to be_empty
@@ -176,7 +176,7 @@ describe Nanoc::RuleDSL::ActionRecorder do
       recorder.snapshot(:foo)
       recorder.snapshot(:bar)
 
-      expect(action_sequence.size).to eql(2)
+      expect(action_sequence.size).to be(2)
       expect(action_sequence[0]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)
       expect(action_sequence[0].snapshot_names).to eql([:foo])
       expect(action_sequence[1]).to be_a(Nanoc::Core::ProcessingActions::Snapshot)

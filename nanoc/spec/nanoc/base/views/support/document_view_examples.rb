@@ -134,7 +134,7 @@ shared_examples 'a document view' do
     context 'with non-existant key' do
       let(:key) { :weapon }
 
-      it { is_expected.to eql(nil) }
+      it { is_expected.to be(nil) }
 
       it 'creates a dependency' do
         expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
@@ -267,7 +267,7 @@ shared_examples 'a document view' do
     context 'with existant key' do
       let(:key) { :animal }
 
-      it { is_expected.to eql(true) }
+      it { is_expected.to be(true) }
 
       it 'creates a dependency' do
         expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
@@ -288,7 +288,7 @@ shared_examples 'a document view' do
     context 'with non-existant key' do
       let(:key) { :weapon }
 
-      it { is_expected.to eql(false) }
+      it { is_expected.to be(false) }
 
       it 'creates a dependency' do
         expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])

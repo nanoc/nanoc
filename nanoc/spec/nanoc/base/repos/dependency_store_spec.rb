@@ -39,7 +39,7 @@ describe Nanoc::Int::DependencyStore do
 
         it 'returns one dependency' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps.size).to eql(1)
+          expect(deps.size).to be(1)
         end
 
         it 'returns dependency from a onto config' do
@@ -106,7 +106,7 @@ describe Nanoc::Int::DependencyStore do
 
         it 'creates one dependency' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps.size).to eql(1)
+          expect(deps.size).to be(1)
         end
 
         it 'returns true for all props' do
@@ -125,7 +125,7 @@ describe Nanoc::Int::DependencyStore do
 
         it 'returns one dependency' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps.size).to eql(1)
+          expect(deps.size).to be(1)
         end
 
         it 'returns dependency from b to a' do
@@ -194,13 +194,13 @@ describe Nanoc::Int::DependencyStore do
 
       it 'returns one dependency for object A' do
         deps = store.dependencies_causing_outdatedness_of(item_a)
-        expect(deps.size).to eql(1)
+        expect(deps.size).to be(1)
         expect(deps[0].from).to eql(item_b)
       end
 
       it 'returns one dependency for object B' do
         deps = store.dependencies_causing_outdatedness_of(item_b)
-        expect(deps.size).to eql(1)
+        expect(deps.size).to be(1)
         expect(deps[0].from).to eql(item_c)
       end
 
@@ -227,7 +227,7 @@ describe Nanoc::Int::DependencyStore do
 
       it 'has the right dependencies for item A' do
         deps = reloaded_store.dependencies_causing_outdatedness_of(item_a)
-        expect(deps.size).to eql(1)
+        expect(deps.size).to be(1)
 
         expect(deps[0].from).to eql(item_b)
         expect(deps[0].to).to eql(item_a)
@@ -299,7 +299,7 @@ describe Nanoc::Int::DependencyStore do
 
     it 'has the right dependencies for item A' do
       deps = store.dependencies_causing_outdatedness_of(item_a)
-      expect(deps.size).to eql(1)
+      expect(deps.size).to be(1)
 
       expect(deps[0].from).to eql(config)
       expect(deps[0].to).to eql(item_a)

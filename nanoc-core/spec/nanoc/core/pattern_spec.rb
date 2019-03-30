@@ -4,27 +4,27 @@ describe Nanoc::Core::Pattern do
   describe '.from' do
     it 'converts from string' do
       pattern = described_class.from('/foo/x[ab]z/bar.*')
-      expect(pattern.match?('/foo/xaz/bar.html')).to eql(true)
-      expect(pattern.match?('/foo/xyz/bar.html')).to eql(false)
+      expect(pattern.match?('/foo/xaz/bar.html')).to be(true)
+      expect(pattern.match?('/foo/xyz/bar.html')).to be(false)
     end
 
     it 'converts from regex' do
       pattern = described_class.from(%r{\A/foo/x[ab]z/bar\..*\z})
-      expect(pattern.match?('/foo/xaz/bar.html')).to eql(true)
-      expect(pattern.match?('/foo/xyz/bar.html')).to eql(false)
+      expect(pattern.match?('/foo/xaz/bar.html')).to be(true)
+      expect(pattern.match?('/foo/xyz/bar.html')).to be(false)
     end
 
     it 'converts from pattern' do
       pattern = described_class.from('/foo/x[ab]z/bar.*')
       pattern = described_class.from(pattern)
-      expect(pattern.match?('/foo/xaz/bar.html')).to eql(true)
-      expect(pattern.match?('/foo/xyz/bar.html')).to eql(false)
+      expect(pattern.match?('/foo/xaz/bar.html')).to be(true)
+      expect(pattern.match?('/foo/xyz/bar.html')).to be(false)
     end
 
     it 'converts from symbol' do
       pattern = described_class.from(:'/foo/x[ab]z/bar.*')
-      expect(pattern.match?('/foo/xaz/bar.html')).to eql(true)
-      expect(pattern.match?('/foo/xyz/bar.html')).to eql(false)
+      expect(pattern.match?('/foo/xaz/bar.html')).to be(true)
+      expect(pattern.match?('/foo/xyz/bar.html')).to be(false)
     end
 
     it 'errors on other inputs' do
@@ -64,8 +64,8 @@ describe Nanoc::Core::RegexpPattern do
 
   describe '#match?' do
     it 'matches' do
-      expect(pattern.match?('the answer is 42')).to eql(true)
-      expect(pattern.match?('the answer is donkey')).to eql(false)
+      expect(pattern.match?('the answer is 42')).to be(true)
+      expect(pattern.match?('the answer is donkey')).to be(false)
     end
   end
 
@@ -93,24 +93,24 @@ describe Nanoc::Core::StringPattern do
     it 'matches simple strings' do
       pattern = described_class.new('d*key')
 
-      expect(pattern.match?('donkey')).to eql(true)
-      expect(pattern.match?('giraffe')).to eql(false)
+      expect(pattern.match?('donkey')).to be(true)
+      expect(pattern.match?('giraffe')).to be(false)
     end
 
     it 'matches with pathname option' do
       pattern = described_class.new('/foo/*/bar/**/*.animal')
 
-      expect(pattern.match?('/foo/x/bar/a/b/donkey.animal')).to eql(true)
-      expect(pattern.match?('/foo/x/bar/donkey.animal')).to eql(true)
-      expect(pattern.match?('/foo/x/railroad/donkey.animal')).to eql(false)
+      expect(pattern.match?('/foo/x/bar/a/b/donkey.animal')).to be(true)
+      expect(pattern.match?('/foo/x/bar/donkey.animal')).to be(true)
+      expect(pattern.match?('/foo/x/railroad/donkey.animal')).to be(false)
     end
 
     it 'matches with extglob option' do
       pattern = described_class.new('{b,gl}oat')
 
-      expect(pattern.match?('boat')).to eql(true)
-      expect(pattern.match?('gloat')).to eql(true)
-      expect(pattern.match?('stoat')).to eql(false)
+      expect(pattern.match?('boat')).to be(true)
+      expect(pattern.match?('gloat')).to be(true)
+      expect(pattern.match?('stoat')).to be(false)
     end
   end
 

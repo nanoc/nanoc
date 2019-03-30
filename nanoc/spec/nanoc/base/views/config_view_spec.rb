@@ -48,7 +48,7 @@ describe Nanoc::ConfigView do
 
     context 'with non-existing key' do
       let(:key) { :weapon }
-      it { is_expected.to eql(nil) }
+      it { is_expected.to be(nil) }
     end
   end
 
@@ -97,12 +97,12 @@ describe Nanoc::ConfigView do
 
     context 'with existing key' do
       let(:key) { :animal }
-      it { is_expected.to eql(true) }
+      it { is_expected.to be(true) }
     end
 
     context 'with non-existing key' do
       let(:key) { :weapon }
-      it { is_expected.to eql(false) }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -128,7 +128,7 @@ describe Nanoc::ConfigView do
 
     context 'with existing keys' do
       let(:keys) { %i[foo bar] }
-      it { is_expected.to eql(:baz) }
+      it { is_expected.to be(:baz) }
     end
 
     context 'with non-existing keys' do
