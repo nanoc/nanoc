@@ -55,9 +55,7 @@ module Nanoc::CLI::Commands::CompileListeners
         end
 
         # Generate diff
-        diff = diff_strings(old_content, new_content)
-        diff.sub!(/^--- .*/,    '--- ' + path)
-        diff.sub!(/^\+\+\+ .*/, '+++ ' + path)
+        diff = ['--- ' + path, '+++ ' + path, diff_strings(old_content, new_content)].join("\n")
 
         # Write diff
         @diff_lock.synchronize do
@@ -77,11 +75,7 @@ module Nanoc::CLI::Commands::CompileListeners
           new_file.flush
 
           # Diff
-          cmd = ['diff', '-u', old_file.path, new_file.path]
-          Open3.popen3(*cmd) do |_stdin, stdout, _stderr|
-            result = stdout.read
-            return (result == '' ? nil : result)
-          end
+          TTY::File.diff_files(old_file.path, new_file.path, verbose: false)
         end
       end
     rescue Errno::ENOENT
