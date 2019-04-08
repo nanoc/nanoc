@@ -53,6 +53,7 @@ require 'time'
 require 'timeout'
 require 'tomlrb'
 require 'tmpdir'
+require 'tty-which'
 require 'uri'
 require 'yaml'
 

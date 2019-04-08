@@ -17,8 +17,7 @@ module Nanoc
       end
 
       def command?(cmd)
-        which, null = on_windows? ? %w[where NUL] : ['which', '/dev/null']
-        system("#{which} #{cmd} > #{null} 2>&1")
+        TTY::Which.exist?(cmd)
       end
 
       def skip_unless_have_command(cmd)
