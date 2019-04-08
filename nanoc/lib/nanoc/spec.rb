@@ -12,10 +12,6 @@ module Nanoc
         Dir.chdir(here)
       end
 
-      def on_windows?
-        Nanoc.on_windows?
-      end
-
       def command?(cmd)
         TTY::Which.exist?(cmd)
       end

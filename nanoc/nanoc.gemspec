@@ -26,6 +26,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('slow_enumerator_tools', '~> 1.0')
   s.add_runtime_dependency('tomlrb', '~> 1.2')
   s.add_runtime_dependency('tty-file', '~> 0.7')
-
-  s.add_development_dependency('tty-which', '~> 0.4')
+  s.add_runtime_dependency('tty-platform', '~> 0.2')
+  s.add_runtime_dependency('tty-which', '~> 0.4')
 end

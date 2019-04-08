@@ -210,10 +210,6 @@ module Nanoc::TestHelpers
     orig_env_hash.each_pair { |k, v| ENV[k] = v }
   end
 
-  def on_windows?
-    Nanoc.on_windows?
-  end
-
   def command?(cmd)
     TTY::Which.exist?(cmd)
   end

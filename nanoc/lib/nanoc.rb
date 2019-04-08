@@ -21,7 +21,7 @@ module Nanoc
   #
   # @api private
   def self.on_windows?
-    RUBY_PLATFORM =~ /windows|bccwin|cygwin|djgpp|mingw|mswin|wince/i
+    @_on_windows ||= TTY::Platform.new.windows?
   end
 
   # Similar to `nil` except that it can only be compared against using
@@ -54,6 +54,7 @@ require 'timeout'
 require 'tomlrb'
 require 'tmpdir'
 require 'tty-file'
+require 'tty-platform'
 require 'tty-which'
 require 'uri'
 require 'yaml'
