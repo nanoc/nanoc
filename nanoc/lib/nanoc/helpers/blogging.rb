@@ -120,8 +120,8 @@ module Nanoc::Helpers
           xml.updated(updated.__nanoc_to_iso8601_time)
 
           # Add links
-          xml.link(rel: 'alternate', href: (alt_link || root_url))
-          xml.link(rel: 'self',      href: feed_url)
+          xml.link(rel: 'alternate', href: (alt_link || root_url), type: 'text/html')
+          xml.link(rel: 'self',      href: feed_url,               type: 'application/atom+xml')
 
           # Add author information
           xml.author do
@@ -163,7 +163,7 @@ module Nanoc::Helpers
           end
 
           # Add link
-          xml.link(rel: 'alternate', href: url)
+          xml.link(rel: 'alternate', href: url, type: 'text/html')
 
           # Add content
           summary = excerpt_proc.call(article)
