@@ -128,7 +128,7 @@ module Nanoc::CLI
       begin
         Bundler.require(:nanoc)
       rescue Bundler::GemfileNotFound
-        # When running nanoc with Bundler being defined but
+        # When running Nanoc with Bundler being defined but
         # no gemfile being present (rubygems automatically loads
         # Bundler when executing from command line), don't crash.
       end

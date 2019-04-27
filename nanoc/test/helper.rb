@@ -36,7 +36,7 @@ module Nanoc::TestHelpers
   def if_have(*libs)
     libs.each do |lib|
       if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby' && lib == 'nokogiri' && disable_nokogiri?
-        skip 'Pure Java Nokogiri has issues that cause problems with nanoc (see https://github.com/nanoc/nanoc/pull/422) -- run without DISABLE_NOKOGIRI to enable Nokogiri tests'
+        skip 'Pure Java Nokogiri has issues that cause problems with Nanoc (see https://github.com/nanoc/nanoc/pull/422) -- run without DISABLE_NOKOGIRI to enable Nokogiri tests'
       end
 
       begin

@@ -26,7 +26,7 @@ And then execute:
 
 ## Usage
 
-Enter the nanoc site directory for which you want to use guard-nanoc. Create a Guardfile using `guard init`:
+Enter the Nanoc site directory for which you want to use guard-nanoc. Create a Guardfile using `guard init`:
 
     $ bundle exec guard init nanoc
 

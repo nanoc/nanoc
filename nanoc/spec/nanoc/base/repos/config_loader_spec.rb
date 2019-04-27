@@ -154,7 +154,7 @@ describe Nanoc::Int::ConfigLoader do
 
   describe '.cwd_is_nanoc_site? + .config_filename_for_cwd' do
     context 'no config files' do
-      it 'is not considered a nanoc site dir' do
+      it 'is not considered a Nanoc site dir' do
         expect(described_class.cwd_is_nanoc_site?).to eq(false)
         expect(described_class.config_filename_for_cwd).to be_nil
       end
@@ -165,7 +165,7 @@ describe Nanoc::Int::ConfigLoader do
         File.write('nanoc.yaml', 'stuff')
       end
 
-      it 'is considered a nanoc site dir' do
+      it 'is considered a Nanoc site dir' do
         expect(described_class.cwd_is_nanoc_site?).to eq(true)
         expect(described_class.config_filename_for_cwd).to eq(File.expand_path('nanoc.yaml'))
       end
@@ -176,7 +176,7 @@ describe Nanoc::Int::ConfigLoader do
         File.write('config.yaml', 'stuff')
       end
 
-      it 'is considered a nanoc site dir' do
+      it 'is considered a Nanoc site dir' do
         expect(described_class.cwd_is_nanoc_site?).to eq(true)
         expect(described_class.config_filename_for_cwd).to eq(File.expand_path('config.yaml'))
       end

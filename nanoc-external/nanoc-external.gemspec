@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.name        = 'nanoc-external'
   s.version     = Nanoc::External::VERSION
   s.homepage    = 'https://nanoc.ws/'
-  s.summary     = 'External filter for nanoc'
-  s.description = 'Provides an :external filter for nanoc'
+  s.summary     = 'External filter for Nanoc'
+  s.description = 'Provides an :external filter for Nanoc'
   s.author      = 'Denis Defreyne'
   s.email       = 'denis+rubygems@denis.ws'
   s.license     = 'MIT'

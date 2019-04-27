@@ -242,7 +242,7 @@ module Nanoc::CLI::Commands
         write('layouts/default.html', DEFAULT_LAYOUT)
       end
 
-      puts "Created a blank nanoc site at '#{path}'. Enjoy!"
+      puts "Created a blank Nanoc site at '#{path}'. Enjoy!"
     end
 
     private
