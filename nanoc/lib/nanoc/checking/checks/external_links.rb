@@ -125,6 +125,7 @@ module ::Nanoc::Checking::Checks
 
     def request_url_once(url)
       req = Net::HTTP::Get.new(path_for_url(url))
+      req['User-Agent'] = "Mozilla/5.0 Nanoc/#{Nanoc::VERSION} (link rot checker)"
       http = Net::HTTP.new(url.host, url.port)
       if url.instance_of? URI::HTTPS
         http.use_ssl = true
