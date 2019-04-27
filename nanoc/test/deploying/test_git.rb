@@ -222,10 +222,8 @@ class Nanoc::Deploying::Deployers::GitTest < Nanoc::TestCase
 
     FileUtils.mkdir_p('output')
 
-    piper = Nanoc::Extra::Piper.new(stdout: $stdout, stderr: $stderr)
-
     Dir.chdir('output') do
-      piper.run('git init', nil)
+      TTY::Command.new.run('git', 'init')
       assert git.send(:clean_repo?)
     end
   end
@@ -239,9 +237,8 @@ class Nanoc::Deploying::Deployers::GitTest < Nanoc::TestCase
 
     FileUtils.mkdir_p('output')
 
-    piper = Nanoc::Extra::Piper.new(stdout: $stdout, stderr: $stderr)
     Dir.chdir('output') do
-      piper.run('git init', nil)
+      TTY::Command.new.run('git', 'init')
       FileUtils.touch('foobar')
       refute git.send(:clean_repo?)
     end
@@ -257,7 +254,7 @@ class Nanoc::Deploying::Deployers::GitTest < Nanoc::TestCase
     FileUtils.mkdir_p('output')
 
     Dir.chdir('output') do
-      assert_raises Nanoc::Extra::Piper::Error do
+      assert_raises TTY::Command::ExitError do
         git.send(:clean_repo?)
       end
     end

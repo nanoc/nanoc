@@ -13,8 +13,7 @@ module Nanoc::Filters::ColorizeSyntax::Colorizers
     private
 
     def check_availability(*cmd)
-      piper = Nanoc::Extra::Piper.new(stdout: StringIO.new, stderr: StringIO.new)
-      piper.run(cmd, nil)
+      TTY::Command.new(printer: :null).run!(*cmd).success?
     end
   end
 
@@ -66,12 +65,7 @@ module Nanoc::Filters::ColorizeSyntax::Colorizers
       cmd = ['pygmentize', '-l', language, '-f', 'html']
       cmd << '-O' << params.map { |k, v| "#{k}=#{v}" }.join(',') unless params.empty?
 
-      stdout = StringIO.new
-      stderr = $stderr
-      piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
-      piper.run(cmd, code)
-
-      stdout.string
+      TTY::Command.new(printer: :null).run(*cmd, input: code).out
     end
   end
 
@@ -116,12 +110,7 @@ module Nanoc::Filters::ColorizeSyntax::Colorizers
         end
       end
 
-      stdout = StringIO.new
-      stderr = $stderr
-      piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
-      piper.run(cmd, code)
-
-      stdout.string
+      TTY::Command.new(printer: :null).run(*cmd, input: code).out
     end
   end
 

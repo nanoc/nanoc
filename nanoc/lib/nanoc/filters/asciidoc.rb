@@ -12,11 +12,7 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, _params = {})
-      stdout = StringIO.new
-      stderr = $stderr
-      piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
-      piper.run(%w[asciidoc -o - -], content)
-      stdout.string
+      TTY::Command.new(printer: :null).run('asciidoc -o - -', input: content).out
     end
   end
 end
