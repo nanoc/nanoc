@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'tty-command'
+
 # @api private
 module Nanoc::Deploying::Deployers
 end

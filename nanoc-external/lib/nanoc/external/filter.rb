@@ -8,11 +8,8 @@ module Nanoc::External
       cmd   = params.fetch(:exec)
       opts  = params.fetch(:options, [])
 
-      cmd_with_opts = [cmd] + opts
-      out = StringIO.new
-      piper = Nanoc::Extra::Piper.new(stdout: out, stderr: $stderr)
-      piper.run(cmd_with_opts, content)
-      out.string
+      command = TTY::Command.new(printer: :null)
+      command.run(cmd, *opts, input: content).out
     end
   end
 end

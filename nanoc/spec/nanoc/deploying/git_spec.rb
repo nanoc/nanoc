@@ -14,11 +14,7 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
   let(:forced_options) { {} }
 
   def run_and_get_stdout(*args)
-    stdout = +''
-    stderr = +''
-    piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: stderr)
-    piper.run(args, '')
-    stdout
+    TTY::Command.new.run(*args).out
   end
 
   def add_changes_to_remote
@@ -119,7 +115,7 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
           before { add_changes_to_remote }
 
           it 'raises' do
-            expect { subject }.to raise_error(Nanoc::Extra::Piper::Error)
+            expect { subject }.to raise_error(TTY::Command::ExitError)
           end
         end
       end
@@ -135,7 +131,7 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
           before { add_changes_to_remote }
 
           it 'raises' do
-            expect { subject }.to raise_error(Nanoc::Extra::Piper::Error)
+            expect { subject }.to raise_error(TTY::Command::ExitError)
           end
         end
       end

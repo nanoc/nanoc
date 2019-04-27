@@ -2,8 +2,7 @@
 
 describe 'nanoc.gem', chdir: false, stdio: true do
   subject do
-    piper = Nanoc::Extra::Piper.new(stdout: $stdout, stderr: $stderr)
-    piper.run(%w[gem build nanoc.gemspec], nil)
+    TTY::Command.new.run('gem build nanoc.gemspec')
   end
 
   around do |ex|

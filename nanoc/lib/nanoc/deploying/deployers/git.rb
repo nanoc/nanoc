@@ -64,7 +64,7 @@ module Nanoc::Deploying::Deployers
         if remote_is_name?(remote)
           begin
             run_cmd(%W[git config --get remote.#{remote}.url])
-          rescue Nanoc::Extra::Piper::Error
+          rescue TTY::Command::ExitError
             raise Errors::RemoteDoesNotExist.new(remote)
           end
         end
@@ -72,7 +72,7 @@ module Nanoc::Deploying::Deployers
         # If the branch exists then switch to it, otherwise prompt the user to create one.
         begin
           run_cmd_unless_dry(%W[git checkout #{branch}])
-        rescue Nanoc::Extra::Piper::Error
+        rescue TTY::Command::ExitError
           raise Errors::BranchDoesNotExist.new(branch)
         end
 
@@ -97,24 +97,16 @@ module Nanoc::Deploying::Deployers
       remote !~ /:\/\/|@.+:/
     end
 
-    def run_cmd(cmd)
-      piper = Nanoc::Extra::Piper.new(stdout: $stdout, stderr: $stderr)
-      piper.run(cmd, nil)
+    def run_cmd(cmd, dry_run: false)
+      TTY::Command.new(printer: :null).run(*cmd, dry_run: dry_run)
     end
 
     def run_cmd_unless_dry(cmd)
-      if dry_run
-        puts cmd.join(' ')
-      else
-        run_cmd(cmd)
-      end
+      run_cmd(cmd, dry_run: dry_run)
     end
 
     def clean_repo?
-      stdout = StringIO.new
-      piper = Nanoc::Extra::Piper.new(stdout: stdout, stderr: $stderr)
-      piper.run(%w[git status --porcelain], nil)
-      stdout.string.empty?
+      TTY::Command.new(printer: :null).run('git status --porcelain').out.empty?
     end
   end
 end
