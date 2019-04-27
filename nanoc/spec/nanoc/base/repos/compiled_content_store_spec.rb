@@ -144,6 +144,26 @@ describe Nanoc::Int::CompiledContentStore do
       let(:expected_snapshot_name) { :last }
 
       include_examples 'a snapshot'
+
+      context 'when :pre and :last snapshot definitions exist' do
+        before do
+          rep.snapshot_defs = [
+            Nanoc::Core::SnapshotDef.new(:pre, binary: false),
+            Nanoc::Core::SnapshotDef.new(:last, binary: false),
+          ]
+        end
+
+        context 'when :last, but no :pre content is available' do
+          before do
+            content = Nanoc::Core::TextualContent.new('hellos')
+            repo.set_all(rep, last: content)
+          end
+
+          it 'does not use :last' do
+            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Int::Errors::UnmetDependency))
+          end
+        end
+      end
     end
 
     context 'snapshot not specified' do
@@ -152,6 +172,26 @@ describe Nanoc::Int::CompiledContentStore do
       let(:expected_snapshot_name) { :last }
 
       include_examples 'a snapshot'
+
+      context 'when :pre and :last snapshot definitions exist' do
+        before do
+          rep.snapshot_defs = [
+            Nanoc::Core::SnapshotDef.new(:pre, binary: false),
+            Nanoc::Core::SnapshotDef.new(:last, binary: false),
+          ]
+        end
+
+        context 'when :last, but no :pre content is available' do
+          before do
+            content = Nanoc::Core::TextualContent.new('hellos')
+            repo.set_all(rep, last: content)
+          end
+
+          it 'does not use :last' do
+            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Int::Errors::UnmetDependency))
+          end
+        end
+      end
     end
 
     context 'snapshot :pre specified' do

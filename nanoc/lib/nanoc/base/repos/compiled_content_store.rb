@@ -44,7 +44,8 @@ module Nanoc
       contract C::KeywordArgs[rep: Nanoc::Core::ItemRep, snapshot: C::Optional[C::Maybe[Symbol]]] => Nanoc::Core::Content
       def raw_compiled_content(rep:, snapshot: nil)
         # Get name of last pre-layout snapshot
-        snapshot_name = snapshot || (get(rep, :pre) ? :pre : :last)
+        has_pre = rep.snapshot_defs.any? { |sd| sd.name == :pre }
+        snapshot_name = snapshot || (has_pre ? :pre : :last)
 
         # Check existance of snapshot
         snapshot_def = rep.snapshot_defs.reverse.find { |sd| sd.name == snapshot_name }
