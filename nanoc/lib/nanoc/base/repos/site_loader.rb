@@ -20,7 +20,7 @@ module Nanoc
             end
           end
 
-        Nanoc::Int::AggregateDataSource.new(data_sources_to_aggregate, config)
+        Nanoc::Core::AggregateDataSource.new(data_sources_to_aggregate, config)
       end
 
       private

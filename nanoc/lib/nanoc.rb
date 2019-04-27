@@ -5,7 +5,6 @@ require 'addressable'
 require 'ddplugin'
 require 'json'
 require 'parallel'
-require 'slow_enumerator_tools'
 
 module Nanoc
   # @return [String] A string containing information about this Nanoc version

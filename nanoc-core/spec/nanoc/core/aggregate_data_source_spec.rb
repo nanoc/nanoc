@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::AggregateDataSource, stdio: true do
+describe Nanoc::Core::AggregateDataSource, stdio: true do
   subject(:data_source) do
     described_class.new([data_source_1, data_source_2], {})
   end
 
   let(:klass_1) do
-    Class.new(Nanoc::DataSource) do
+    Class.new(Nanoc::Core::DataSource) do
       def items
         [Nanoc::Core::Item.new('One', {}, '/one.md')]
       end
@@ -26,7 +26,7 @@ describe Nanoc::Int::AggregateDataSource, stdio: true do
   end
 
   let(:klass_2) do
-    Class.new(Nanoc::DataSource) do
+    Class.new(Nanoc::Core::DataSource) do
       def items
         [Nanoc::Core::Item.new('Two', {}, '/two.md')]
       end

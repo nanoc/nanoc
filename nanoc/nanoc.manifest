@@ -19,7 +19,6 @@ lib/nanoc/base/errors.rb
 lib/nanoc/base/feature.rb
 lib/nanoc/base/repos.rb
 lib/nanoc/base/repos/action_sequence_store.rb
-lib/nanoc/base/repos/aggregate_data_source.rb
 lib/nanoc/base/repos/binary_compiled_content_cache.rb
 lib/nanoc/base/repos/checksum_store.rb
 lib/nanoc/base/repos/compiled_content_cache.rb

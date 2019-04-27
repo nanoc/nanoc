@@ -10,6 +10,7 @@ require 'ddmemoize'
 require 'ddmetrics'
 require 'ddplugin'
 require 'hamster'
+require 'slow_enumerator_tools'
 require 'zeitwerk'
 
 module Nanoc

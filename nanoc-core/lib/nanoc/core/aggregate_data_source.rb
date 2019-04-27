@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
-    class AggregateDataSource < Nanoc::DataSource
+  module Core
+    class AggregateDataSource < ::Nanoc::Core::DataSource
       def initialize(data_sources, config)
         super({}, '/', '/', {})
 
