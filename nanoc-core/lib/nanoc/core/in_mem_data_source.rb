@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
-    class InMemDataSource < Nanoc::DataSource
+  module Core
+    class InMemDataSource < Nanoc::Core::DataSource
       attr_reader :items
       attr_reader :layouts
 

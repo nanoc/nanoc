@@ -14,7 +14,7 @@ describe Nanoc::CLI::Commands::CompileListeners::DiffGenerator do
       Nanoc::Int::Site.new(
         config: config,
         code_snippets: code_snippets,
-        data_source: Nanoc::Int::InMemDataSource.new(items, layouts),
+        data_source: Nanoc::Core::InMemDataSource.new(items, layouts),
       )
     end
 
