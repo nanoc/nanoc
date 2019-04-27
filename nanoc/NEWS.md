@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.11.3 (2019-04-27)
+
+Enhancements:
+
+* Set a User-Agent for HTTP requests made by the `external_links` check (#1417) [Daniel Aleksandersen]
+* Added `atom:link[type]` attributes (#1415) [Daniel Aleksandersen]
+
 ## 4.11.2 (2019-02-16)
 
 Fixes:
