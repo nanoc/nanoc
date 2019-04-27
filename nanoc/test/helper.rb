@@ -237,6 +237,12 @@ module Nanoc::TestHelpers
   def root_dir
     File.absolute_path(__dir__ + '/..')
   end
+
+  def path_to_file_uri(path, dir)
+    output_dir = dir.is_a?(String) ? dir : dir.config.output_dir
+    output_dir += '/' unless output_dir.end_with?('/')
+    URI.join("file://#{output_dir}", path).to_s
+  end
 end
 
 class Nanoc::TestCase < Minitest::Test

@@ -126,7 +126,6 @@ class Nanoc::Checking::Checks::MixedContentTest < Nanoc::TestCase
   def test_http_content
     with_site do |site|
       create_output_file('foo.html', [
-        '<img src="http://nanoc.ws/logo.png" />',
         '<img src="HTTP://nanoc.ws/logo.png" />',
         '<link href="http://nanoc.ws/style.css" />',
         '<script src="http://nanoc.ws/app.js"></script>',
@@ -139,7 +138,7 @@ class Nanoc::Checking::Checks::MixedContentTest < Nanoc::TestCase
       check.run
 
       issues = check.issues.to_a
-      assert_equal 8, issues.count
+      assert_equal 7, issues.count
 
       descriptions = issues.map(&:description)
       issues.each do |issue|
@@ -150,7 +149,7 @@ class Nanoc::Checking::Checks::MixedContentTest < Nanoc::TestCase
       # `assert_include` helper to avoid asserting those details
       assert_include descriptions, 'mixed content include: http://nanoc.ws/logo.png'
 
-      assert_include descriptions, 'mixed content include: HTTP://nanoc.ws/logo.png'
+      refute_includes descriptions, 'mixed content include: HTTP://nanoc.ws/logo.png'
 
       assert_include descriptions, 'mixed content include: http://nanoc.ws/style.css'
 
