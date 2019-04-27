@@ -22,5 +22,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('ddplugin', '~> 1.0')
   s.add_runtime_dependency('hamster', '~> 3.0')
   s.add_runtime_dependency('json_schema', '~> 0.19')
-  s.add_runtime_dependency('zeitwerk', '~> 1.0')
+  s.add_runtime_dependency('zeitwerk', '~> 2.1', '<= 2.1.4') # TODO: upgrade
 end
