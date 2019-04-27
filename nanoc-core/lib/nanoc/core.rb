@@ -26,7 +26,7 @@ inflector_class = Class.new(Zeitwerk::Inflector) do
     when 'version'
       'VERSION'
     else
-      super(basename.tr('-', '_'), abspath.tr('-', '_'))
+      super
     end
   end
 end
