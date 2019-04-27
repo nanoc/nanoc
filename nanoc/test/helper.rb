@@ -168,7 +168,7 @@ module Nanoc::TestHelpers
     $stderr = orig_stderr
   end
 
-  # Adapted from http://github.com/lsegal/yard-examples/tree/master/doctest
+  # Adapted from https://github.com/lsegal/yard-examples/tree/master/doctest
   def assert_examples_correct(object)
     P(object).tags(:example).each do |example|
       # Classify

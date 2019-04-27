@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Deploying::Deployers
-  # A deployer that deploys a site using [Git](http://git-scm.com).
+  # A deployer that deploys a site using [Git](https://git-scm.com).
   #
   # @example A deployment configuration for GitHub Pages:
   #

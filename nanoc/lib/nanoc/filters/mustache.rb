@@ -8,7 +8,7 @@ module Nanoc::Filters
     requires 'mustache'
 
     # Runs the content through
-    # [Mustache](http://github.com/defunkt/mustache). This method takes no
+    # [Mustache](https://github.com/defunkt/mustache). This method takes no
     # options.
     #
     # @param [String] content The content to filter

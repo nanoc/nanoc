@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see http://nanoc.ws/doc/reference/helpers/#blogging
+  # @see https://nanoc.ws/doc/reference/helpers/#blogging
   module Blogging
     # @return [Array]
     def articles

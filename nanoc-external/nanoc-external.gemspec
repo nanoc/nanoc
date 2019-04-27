@@ -5,7 +5,7 @@ require_relative 'lib/nanoc/external/version'
 Gem::Specification.new do |s|
   s.name        = 'nanoc-external'
   s.version     = Nanoc::External::VERSION
-  s.homepage    = 'http://nanoc.ws/'
+  s.homepage    = 'https://nanoc.ws/'
   s.summary     = 'External filter for nanoc'
   s.description = 'Provides an :external filter for nanoc'
   s.author      = 'Denis Defreyne'

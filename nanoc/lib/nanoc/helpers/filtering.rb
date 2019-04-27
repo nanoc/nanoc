@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see http://nanoc.ws/doc/reference/helpers/#filtering
+  # @see https://nanoc.ws/doc/reference/helpers/#filtering
   module Filtering
     require 'nanoc/helpers/capturing'
     include Nanoc::Helpers::Capturing

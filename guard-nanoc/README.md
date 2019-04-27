@@ -1,6 +1,6 @@
 # Guard::Nanoc
 
-This is a guard for [nanoc](http://nanoc.ws/).
+This is a guard for [nanoc](https://nanoc.ws/).
 
 `Guard` is a framework for listening to filesystem changes and acting upon them. `Guard::Nanoc` is a plugin for Guard that recompiles Nanoc sites on changes.
 

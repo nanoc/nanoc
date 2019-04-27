@@ -5,7 +5,7 @@ require_relative 'lib/nanoc/live/version'
 Gem::Specification.new do |s|
   s.name        = 'nanoc-live'
   s.version     = Nanoc::Live::VERSION
-  s.homepage    = 'http://nanoc.ws/'
+  s.homepage    = 'https://nanoc.ws/'
   s.summary     = 'Live recompilation support for Nanoc'
   s.description = 'Provides support for auto-recompiling Nanoc sites.'
   s.author      = 'Denis Defreyne'

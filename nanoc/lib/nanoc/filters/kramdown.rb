@@ -7,7 +7,7 @@ module Nanoc::Filters
 
     requires 'kramdown'
 
-    # Runs the content through [Kramdown](http://kramdown.gettalong.org/).
+    # Runs the content through [Kramdown](https://kramdown.gettalong.org/).
     # Parameters passed to this filter will be passed on to Kramdown.
     #
     # @param [String] content The content to filter

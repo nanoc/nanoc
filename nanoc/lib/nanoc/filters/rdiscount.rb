@@ -7,7 +7,7 @@ module Nanoc::Filters
 
     requires 'rdiscount'
 
-    # Runs the content through [RDiscount](http://github.com/rtomayko/rdiscount).
+    # Runs the content through [RDiscount](https://github.com/davidfstr/rdiscount).
     #
     # @option params [Array] :extensions ([]) A list of RDiscount extensions
     #

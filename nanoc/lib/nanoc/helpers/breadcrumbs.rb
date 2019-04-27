@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see http://nanoc.ws/doc/reference/helpers/#breadcrumbs
+  # @see https://nanoc.ws/doc/reference/helpers/#breadcrumbs
   module Breadcrumbs
     class AmbiguousAncestorError < Nanoc::Int::Errors::Generic
       def initialize(pattern, items)

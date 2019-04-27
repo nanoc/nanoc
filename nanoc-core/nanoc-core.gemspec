@@ -5,7 +5,7 @@ require_relative 'lib/nanoc/core/version'
 Gem::Specification.new do |s|
   s.name        = 'nanoc-core'
   s.version     = Nanoc::Core::VERSION
-  s.homepage    = 'http://nanoc.ws/'
+  s.homepage    = 'https://nanoc.ws/'
   s.summary     = 'Core of Nanoc'
   s.description = 'Contains the core of Nanoc'
   s.author      = 'Denis Defreyne'

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see http://nanoc.ws/doc/reference/helpers/#capturing
+  # @see https://nanoc.ws/doc/reference/helpers/#capturing
   module Capturing
     # @api private
     class SetContent

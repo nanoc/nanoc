@@ -201,14 +201,14 @@ module Nanoc::CLI::Commands
           <div id="sidebar">
             <h2>Documentation</h2>
             <ul>
-              <li><a href="http://nanoc.ws/doc/">Documentation</a></li>
-              <li><a href="http://nanoc.ws/doc/tutorial/">Tutorial</a></li>
+              <li><a href="https://nanoc.ws/doc/">Documentation</a></li>
+              <li><a href="https://nanoc.ws/doc/tutorial/">Tutorial</a></li>
             </ul>
             <h2>Community</h2>
             <ul>
               <li><a href="http://groups.google.com/group/nanoc/">Discussion group</a></li>
               <li><a href="https://gitter.im/nanoc/nanoc">Gitter channel</a></li>
-              <li><a href="http://nanoc.ws/contributing/">Contributing</a></li>
+              <li><a href="https://nanoc.ws/contributing/">Contributing</a></li>
             </ul>
           </div>
         </body>
