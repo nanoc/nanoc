@@ -12,6 +12,11 @@ require 'ddplugin'
 require 'hamster'
 require 'zeitwerk'
 
+module Nanoc
+  module Core
+  end
+end
+
 DDMemoize.enable_metrics
 
 inflector_class = Class.new(Zeitwerk::Inflector) do
@@ -28,7 +33,8 @@ end
 loader = Zeitwerk::Loader.new
 loader.inflector = inflector_class.new
 loader.push_dir(__dir__ + '/..')
-loader.ignore(File.expand_path('core/core_ext', __dir__))
+loader.ignore(__dir__ + '/../nanoc-core.rb')
+loader.ignore(__dir__ + '/core/core_ext')
 loader.setup
 loader.eager_load
 
