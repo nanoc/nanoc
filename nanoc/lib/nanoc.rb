@@ -13,7 +13,7 @@ module Nanoc
   #
   # @api private
   def self.version_information
-    "Nanoc #{Nanoc::VERSION} © 2007-2018 Denis Defreyne.\n" \
+    "Nanoc #{Nanoc::VERSION} © 2007–2019 Denis Defreyne.\n" \
     "Running #{RUBY_ENGINE} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} with RubyGems #{Gem::VERSION}.\n"
   end
 
