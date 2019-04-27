@@ -2,7 +2,7 @@
 
 module Nanoc::Checking
   # @api private
-  class OutputDirNotFoundError < Nanoc::Int::Errors::Generic
+  class OutputDirNotFoundError < ::Nanoc::Core::Error
     def initialize(directory_path)
       super("Unable to run check against output directory at “#{directory_path}”: directory does not exist.")
     end

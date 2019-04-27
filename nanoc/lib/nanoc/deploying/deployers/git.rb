@@ -16,7 +16,7 @@ module Nanoc::Deploying::Deployers
     identifier :git
 
     module Errors
-      class Generic < ::Nanoc::Error
+      class Generic < ::Nanoc::Core::Error
       end
 
       class OutputDirDoesNotExist < Generic

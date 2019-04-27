@@ -3,7 +3,7 @@
 module Nanoc::Helpers
   # @see https://nanoc.ws/doc/reference/helpers/#breadcrumbs
   module Breadcrumbs
-    class AmbiguousAncestorError < Nanoc::Int::Errors::Generic
+    class AmbiguousAncestorError < ::Nanoc::Core::Error
       def initialize(pattern, items)
         @pattern = pattern
         @items = items

@@ -38,7 +38,7 @@ module Nanoc
         layout = find_layout(layout_identifier)
         filter_name, filter_args = *@compilation_context.filter_name_and_args_for_layout(layout)
         if filter_name.nil?
-          raise Nanoc::Int::Errors::Generic, "Cannot find rule for layout matching #{layout_identifier}"
+          raise ::Nanoc::Core::Error, "Cannot find rule for layout matching #{layout_identifier}"
         end
 
         filter_args = filter_args.merge(extra_filter_args || {})
