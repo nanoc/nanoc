@@ -34,7 +34,6 @@ lib/nanoc/base/repos/compiled_content_store.rb
 lib/nanoc/base/repos/store.rb
 lib/nanoc/base/repos/textual_compiled_content_cache.rb
 lib/nanoc/base/services.rb
-lib/nanoc/base/services/action_provider.rb
 lib/nanoc/base/services/compilation_context.rb
 lib/nanoc/base/services/compiler_loader.rb
 lib/nanoc/base/services/compiler.rb

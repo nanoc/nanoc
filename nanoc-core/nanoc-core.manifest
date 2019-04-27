@@ -5,6 +5,7 @@ lib/nanoc-core.rb
 lib/nanoc/core.rb
 lib/nanoc/core/version.rb
 
+lib/nanoc/core/action_provider.rb
 lib/nanoc/core/action_sequence.rb
 lib/nanoc/core/action_sequence_builder.rb
 lib/nanoc/core/binary_content.rb

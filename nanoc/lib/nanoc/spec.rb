@@ -179,7 +179,7 @@ module Nanoc
       end
 
       def new_action_provider
-        Class.new(Nanoc::Int::ActionProvider) do
+        Class.new(Nanoc::Core::ActionProvider) do
           def self.for(_context)
             raise NotImplementedError
           end

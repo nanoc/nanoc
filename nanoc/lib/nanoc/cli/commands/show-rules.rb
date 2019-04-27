@@ -16,7 +16,7 @@ module Nanoc::CLI::Commands
       res = Nanoc::Int::Compiler.new_for(site).run_until_reps_built
       reps = res.fetch(:reps)
 
-      action_provider = Nanoc::Int::ActionProvider.named(site.config.action_provider).for(site)
+      action_provider = Nanoc::Core::ActionProvider.named(site.config.action_provider).for(site)
       rules = action_provider.rules_collection
 
       items = site.items.sort_by(&:identifier)
