@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe(Nanoc::Int::Instrumentor) do
+describe(Nanoc::Core::Instrumentor) do
   subject { described_class }
 
   before { Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0)) }

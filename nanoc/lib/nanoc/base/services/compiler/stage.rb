@@ -6,7 +6,7 @@ module Nanoc
       class Stage
         def call(*args)
           notify(:stage_started)
-          res = Nanoc::Int::Instrumentor.call(:stage_ran, self.class) do
+          res = Nanoc::Core::Instrumentor.call(:stage_ran, self.class) do
             run(*args)
           end
           notify(:stage_ended)

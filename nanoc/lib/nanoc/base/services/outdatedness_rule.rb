@@ -8,7 +8,7 @@ module Nanoc
       include Singleton
 
       def call(obj, outdatedness_checker)
-        Nanoc::Int::Instrumentor.call(:outdatedness_rule_ran, self.class) do
+        Nanoc::Core::Instrumentor.call(:outdatedness_rule_ran, self.class) do
           apply(obj, outdatedness_checker)
         end
       end

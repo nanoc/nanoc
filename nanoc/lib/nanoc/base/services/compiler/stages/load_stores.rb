@@ -26,7 +26,7 @@ module Nanoc
 
           contract Nanoc::Int::Store => C::Any
           def load_store(store)
-            Nanoc::Int::Instrumentor.call(:store_loaded, store.class) do
+            Nanoc::Core::Instrumentor.call(:store_loaded, store.class) do
               store.load
             end
           end
