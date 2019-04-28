@@ -21,12 +21,12 @@ module Nanoc
         @compiled_content_store = Nanoc::Int::CompiledContentStore.new
       end
 
-      contract Nanoc::Int::Site => C::Any
+      contract Nanoc::Core::Site => C::Any
       def self.compile(site)
         new_for(site).run_until_end
       end
 
-      contract Nanoc::Int::Site => Nanoc::Int::Compiler
+      contract Nanoc::Core::Site => Nanoc::Int::Compiler
       def self.new_for(site)
         Nanoc::Int::CompilerLoader.new.load(site)
       end

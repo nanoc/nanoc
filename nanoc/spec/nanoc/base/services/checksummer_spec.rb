@@ -108,7 +108,7 @@ describe Nanoc::Core::Checksummer do
     let(:item) { Nanoc::Core::Item.new('stuff', {}, '/stuff.md') }
 
     let(:site) do
-      Nanoc::Int::Site.new(
+      Nanoc::Core::Site.new(
         config: config,
         code_snippets: code_snippets,
         data_source: Nanoc::Core::InMemDataSource.new(items, layouts),

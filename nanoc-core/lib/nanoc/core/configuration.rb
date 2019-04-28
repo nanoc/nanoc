@@ -19,7 +19,7 @@ module Nanoc
       }.freeze
 
       # The default configuration for a site. A site's configuration overrides
-      # these options: when a {Nanoc::Int::Site} is created with a configuration
+      # these options: when a {Nanoc::Core::Site} is created with a configuration
       # that lacks some options, the default value will be taken from
       # `DEFAULT_CONFIG`.
       DEFAULT_CONFIG = {

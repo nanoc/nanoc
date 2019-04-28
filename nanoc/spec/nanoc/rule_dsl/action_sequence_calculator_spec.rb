@@ -29,7 +29,7 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
   end
 
   let(:site) do
-    Nanoc::Int::Site.new(config: config, code_snippets: [], data_source: data_source)
+    Nanoc::Core::Site.new(config: config, code_snippets: [], data_source: data_source)
   end
 
   describe '#[]' do

@@ -122,7 +122,7 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
       FileUtils.mkdir_p('content/sam')
       File.open('content/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
 
-      assert_raises(Nanoc::Int::Site::DuplicateIdentifierError) do
+      assert_raises(Nanoc::Core::Site::DuplicateIdentifierError) do
         Nanoc::Int::SiteLoader.new.new_from_cwd
       end
     end
@@ -134,7 +134,7 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
       FileUtils.mkdir_p('layouts/sam')
       File.open('layouts/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
 
-      assert_raises(Nanoc::Int::Site::DuplicateIdentifierError) do
+      assert_raises(Nanoc::Core::Site::DuplicateIdentifierError) do
         Nanoc::Int::SiteLoader.new.new_from_cwd
       end
     end

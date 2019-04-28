@@ -101,7 +101,7 @@ describe Nanoc::CLI::CommandRunner, stdio: true do
     end
 
     it 'returns site' do
-      expect(subject).to be_a(Nanoc::Int::Site)
+      expect(subject).to be_a(Nanoc::Core::Site)
     end
   end
 end

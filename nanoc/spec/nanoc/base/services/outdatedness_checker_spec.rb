@@ -34,7 +34,7 @@ describe Nanoc::Int::OutdatednessChecker do
   let(:code_snippets) { [] }
 
   let(:site) do
-    Nanoc::Int::Site.new(
+    Nanoc::Core::Site.new(
       config: config,
       code_snippets: code_snippets,
       data_source: Nanoc::Core::InMemDataSource.new([], []),

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Site do
+describe Nanoc::Core::Site do
   describe '#freeze' do
     let(:site) do
       described_class.new(

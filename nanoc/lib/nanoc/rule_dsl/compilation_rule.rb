@@ -5,7 +5,7 @@ module Nanoc::RuleDSL
     include Nanoc::Core::ContractsSupport
 
     contract Nanoc::Core::ItemRep, C::KeywordArgs[
-      site: Nanoc::Int::Site,
+      site: Nanoc::Core::Site,
       recorder: Nanoc::RuleDSL::ActionRecorder,
       view_context: Nanoc::ViewContextForPreCompilation,
     ] => C::Any

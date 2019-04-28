@@ -8,7 +8,7 @@ shared_examples 'a rule context' do
   let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:site) do
-    Nanoc::Int::Site.new(
+    Nanoc::Core::Site.new(
       config: config,
       code_snippets: [],
       data_source: data_source,
@@ -151,7 +151,7 @@ describe(Nanoc::RuleDSL::RoutingRuleContext) do
   let(:items) { Nanoc::Core::ItemCollection.new(config) }
 
   let(:site) do
-    Nanoc::Int::Site.new(
+    Nanoc::Core::Site.new(
       config: config,
       code_snippets: [],
       data_source: data_source,
@@ -178,7 +178,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
 
   let(:site) do
-    Nanoc::Int::Site.new(
+    Nanoc::Core::Site.new(
       config: config,
       code_snippets: [],
       data_source: data_source,

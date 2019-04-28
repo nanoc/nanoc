@@ -6,7 +6,7 @@ module Nanoc::RuleDSL
 
     contract C::KeywordArgs[
       rep: Nanoc::Core::ItemRep,
-      site: Nanoc::Int::Site,
+      site: Nanoc::Core::Site,
       recorder: Nanoc::RuleDSL::ActionRecorder,
       view_context: Nanoc::ViewContextForPreCompilation,
     ] => C::Any

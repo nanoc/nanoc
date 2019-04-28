@@ -15,7 +15,7 @@ module Nanoc::RuleDSL
     end
 
     contract Nanoc::Core::ItemRep, C::KeywordArgs[
-      site: Nanoc::Int::Site,
+      site: Nanoc::Core::Site,
       view_context: Nanoc::ViewContextForPreCompilation,
     ] => C::Any
     def apply_to(rep, site:, view_context:)

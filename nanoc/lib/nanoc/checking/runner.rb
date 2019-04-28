@@ -5,7 +5,7 @@ module Nanoc::Checking
   #
   # @api private
   class Runner
-    # @param [Nanoc::Int::Site] site The Nanoc site this runner is for
+    # @param [Nanoc::Core::Site] site The Nanoc site this runner is for
     def initialize(site)
       @site = site
     end

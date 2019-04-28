@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # @api private
     class Site
       # Error that is raised when multiple items or layouts with the same identifier exist.
-      class DuplicateIdentifierError < ::Nanoc::Error
+      class DuplicateIdentifierError < ::Nanoc::Core::Error
         def initialize(identifier, type)
           super("There are multiple #{type}s with the #{identifier} identifier.")
         end
@@ -17,7 +17,7 @@ module Nanoc
       attr_reader :config
       attr_accessor :data_source
 
-      contract C::KeywordArgs[config: Nanoc::Core::Configuration, code_snippets: C::IterOf[Nanoc::Core::CodeSnippet], data_source: C::Named['Nanoc::DataSource']] => C::Any
+      contract C::KeywordArgs[config: Nanoc::Core::Configuration, code_snippets: C::IterOf[Nanoc::Core::CodeSnippet], data_source: C::Named['Nanoc::Core::DataSource']] => C::Any
       def initialize(config:, code_snippets:, data_source:)
         @config = config
         @code_snippets = code_snippets

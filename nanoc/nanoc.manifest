@@ -13,7 +13,6 @@ lib/nanoc/base/entities/dependency.rb
 lib/nanoc/base/entities/outdatedness_reasons.rb
 lib/nanoc/base/entities/outdatedness_status.rb
 lib/nanoc/base/entities/props.rb
-lib/nanoc/base/entities/site.rb
 lib/nanoc/base/error.rb
 lib/nanoc/base/errors.rb
 lib/nanoc/base/feature.rb

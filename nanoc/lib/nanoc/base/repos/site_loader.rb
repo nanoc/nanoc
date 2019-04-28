@@ -31,7 +31,7 @@ module Nanoc
 
         data_source = gen_data_source_for_config(config)
 
-        Nanoc::Int::Site.new(
+        Nanoc::Core::Site.new(
           config: config,
           code_snippets: code_snippets,
           data_source: data_source,

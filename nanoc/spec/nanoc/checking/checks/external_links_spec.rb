@@ -10,7 +10,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
   end
 
   let(:site) do
-    Nanoc::Int::Site.new(
+    Nanoc::Core::Site.new(
       config: config,
       code_snippets: code_snippets,
       data_source: Nanoc::Core::InMemDataSource.new(items, layouts),
