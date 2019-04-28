@@ -3,9 +3,7 @@
 module Nanoc
   module Core
     # @api private
-    #
-    # TODO: Rename to DependencyProperties
-    class Props
+    class DependencyProps
       include Nanoc::Core::ContractsSupport
 
       attr_reader :attributes
@@ -92,9 +90,9 @@ module Nanoc
         @path
       end
 
-      contract Nanoc::Core::Props => Nanoc::Core::Props
+      contract Nanoc::Core::DependencyProps => Nanoc::Core::DependencyProps
       def merge(other)
-        Props.new(
+        DependencyProps.new(
           raw_content: merge_raw_content(other),
           attributes: merge_attributes(other),
           compiled_content: compiled_content? || other.compiled_content?,

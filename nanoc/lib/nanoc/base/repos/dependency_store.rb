@@ -38,7 +38,7 @@ module Nanoc
           Nanoc::Int::Dependency.new(
             other_object,
             object,
-            Nanoc::Core::Props.new(
+            Nanoc::Core::DependencyProps.new(
               raw_content: props.fetch(:raw_content, false),
               attributes: props.fetch(:attributes, false),
               compiled_content: props.fetch(:compiled_content, false),
@@ -114,8 +114,8 @@ module Nanoc
         src_ref = obj2ref(src)
         dst_ref = obj2ref(dst)
 
-        existing_props = Nanoc::Core::Props.new(@graph.props_for(dst_ref, src_ref) || {})
-        new_props = Nanoc::Core::Props.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
+        existing_props = Nanoc::Core::DependencyProps.new(@graph.props_for(dst_ref, src_ref) || {})
+        new_props = Nanoc::Core::DependencyProps.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
         props = existing_props.merge(new_props)
 
         @graph.add_edge(dst_ref, src_ref, props: props.to_h)
