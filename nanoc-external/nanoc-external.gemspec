@@ -17,5 +17,5 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '~> 2.4'
 
-  s.add_runtime_dependency('nanoc', '~> 4.8')
+  s.add_runtime_dependency('nanoc', '~> 4.11', '>= 4.11.3')
 end
