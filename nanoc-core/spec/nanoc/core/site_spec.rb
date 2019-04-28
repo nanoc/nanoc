@@ -6,7 +6,7 @@ describe Nanoc::Core::Site do
       described_class.new(
         config: config,
         code_snippets: code_snippets,
-        data_source: Nanoc::Core::InMemDataSource.new(items, layouts),
+        data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
       )
     end
 

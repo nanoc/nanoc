@@ -2,7 +2,7 @@
 
 module Nanoc
   module Core
-    class InMemDataSource < Nanoc::Core::DataSource
+    class InMemoryDataSource < Nanoc::Core::DataSource
       attr_reader :items
       attr_reader :layouts
 

@@ -18,7 +18,7 @@ describe Nanoc::Checking::Check do
       Nanoc::Core::Site.new(
         config: config,
         code_snippets: code_snippets,
-        data_source: Nanoc::Core::InMemDataSource.new(items, layouts),
+        data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
       )
     end
 

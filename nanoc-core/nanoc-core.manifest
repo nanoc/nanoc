@@ -27,7 +27,7 @@ lib/nanoc/core/document.rb
 lib/nanoc/core/error.rb
 lib/nanoc/core/identifiable_collection.rb
 lib/nanoc/core/identifier.rb
-lib/nanoc/core/in_mem_data_source.rb
+lib/nanoc/core/in_memory_data_source.rb
 lib/nanoc/core/instrumentor.rb
 lib/nanoc/core/item_collection.rb
 lib/nanoc/core/item_rep.rb

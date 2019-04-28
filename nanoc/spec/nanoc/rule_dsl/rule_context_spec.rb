@@ -16,7 +16,7 @@ shared_examples 'a rule context' do
   end
 
   let(:data_source) do
-    Nanoc::Core::InMemDataSource.new(items, layouts)
+    Nanoc::Core::InMemoryDataSource.new(items, layouts)
   end
 
   let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
@@ -186,7 +186,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   end
 
   let(:data_source) do
-    Nanoc::Core::InMemDataSource.new(items, layouts)
+    Nanoc::Core::InMemoryDataSource.new(items, layouts)
   end
 
   let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }

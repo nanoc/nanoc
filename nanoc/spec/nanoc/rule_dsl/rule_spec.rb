@@ -59,7 +59,7 @@ shared_examples 'Rule#apply_to' do
   let(:rep) { Nanoc::Core::ItemRep.new(item, :amazings) }
 
   let(:site) { Nanoc::Core::Site.new(config: config, data_source: data_source, code_snippets: []) }
-  let(:data_source) { Nanoc::Core::InMemDataSource.new(items, layouts) }
+  let(:data_source) { Nanoc::Core::InMemoryDataSource.new(items, layouts) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
   let(:view_context) { Nanoc::ViewContextForPreCompilation.new(items: items) }
   let(:items) { Nanoc::Core::ItemCollection.new(config, []) }
