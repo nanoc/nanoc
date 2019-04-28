@@ -1,5 +1,11 @@
 # nanoc-external news
 
+## 1.0.3 (2019-04-28)
+
+Fixes:
+
+* Restored compatibility with latest version of Nanoc
+
 ## 1.0.2 (2017-12-03)
 
 * Dropped support for Ruby 2.2 and older
