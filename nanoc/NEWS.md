@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.4 (2019-04-28)
+
+Fixes:
+
+* Fixed an issue which could cause `#compiled_content` to sometimes return compiled content that erroneously includes the layout (#1412, #1421)
+
 ## 4.11.3 (2019-04-27)
 
 Enhancements:
