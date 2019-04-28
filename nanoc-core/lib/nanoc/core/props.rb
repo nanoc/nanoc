@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # @api private
+    #
+    # TODO: Rename to DependencyProperties
     class Props
       include Nanoc::Core::ContractsSupport
 
@@ -90,7 +92,7 @@ module Nanoc
         @path
       end
 
-      contract Nanoc::Int::Props => Nanoc::Int::Props
+      contract Nanoc::Core::Props => Nanoc::Core::Props
       def merge(other)
         Props.new(
           raw_content: merge_raw_content(other),

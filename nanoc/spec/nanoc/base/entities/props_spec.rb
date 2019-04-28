@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Props do
+describe Nanoc::Core::Props do
   let(:props) { described_class.new }
 
   let(:props_all) do

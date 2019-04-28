@@ -45,7 +45,7 @@ describe Nanoc::Int::OutdatednessStatus do
 
     context 'specific one passed in' do
       let(:props) do
-        Nanoc::Int::Props.new(attributes: true)
+        Nanoc::Core::Props.new(attributes: true)
       end
 
       let(:status) { described_class.new(props: props) }
@@ -58,7 +58,7 @@ describe Nanoc::Int::OutdatednessStatus do
     subject { status.useful_to_apply?(rule) }
 
     let(:status) { described_class.new(props: props) }
-    let(:props) { Nanoc::Int::Props.new }
+    let(:props) { Nanoc::Core::Props.new }
     let(:rule) { Nanoc::Int::OutdatednessRules::RulesModified }
 
     context 'no props' do
@@ -67,20 +67,20 @@ describe Nanoc::Int::OutdatednessStatus do
 
     context 'some props' do
       context 'same props' do
-        let(:props) { Nanoc::Int::Props.new(compiled_content: true, path: true) }
+        let(:props) { Nanoc::Core::Props.new(compiled_content: true, path: true) }
 
         it { is_expected.not_to be }
       end
 
       context 'different props' do
-        let(:props) { Nanoc::Int::Props.new(attributes: true) }
+        let(:props) { Nanoc::Core::Props.new(attributes: true) }
 
         it { is_expected.to be }
       end
     end
 
     context 'all props' do
-      let(:props) { Nanoc::Int::Props.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
+      let(:props) { Nanoc::Core::Props.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
 
       it { is_expected.not_to be }
     end
@@ -108,7 +108,7 @@ describe Nanoc::Int::OutdatednessStatus do
     end
 
     context 'existing props' do
-      let(:status) { described_class.new(props: Nanoc::Int::Props.new(attributes: true)) }
+      let(:status) { described_class.new(props: Nanoc::Core::Props.new(attributes: true)) }
 
       it 'updates props' do
         expect(subject.props.active).to eql(Set.new(%i[raw_content attributes compiled_content]))

@@ -42,6 +42,7 @@ lib/nanoc/core/processing_actions.rb
 lib/nanoc/core/processing_actions/filter.rb
 lib/nanoc/core/processing_actions/layout.rb
 lib/nanoc/core/processing_actions/snapshot.rb
+lib/nanoc/core/props.rb
 lib/nanoc/core/regexp_pattern.rb
 lib/nanoc/core/site.rb
 lib/nanoc/core/snapshot_def.rb

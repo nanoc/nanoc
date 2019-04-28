@@ -16,10 +16,10 @@ module Nanoc
       contract C::None => C::Maybe[C_OBJ_TO]
       attr_reader :to
 
-      contract C::None => Nanoc::Int::Props
+      contract C::None => Nanoc::Core::Props
       attr_reader :props
 
-      contract C::Maybe[C_OBJ_FROM], C::Maybe[C_OBJ_TO], Nanoc::Int::Props => C::Any
+      contract C::Maybe[C_OBJ_FROM], C::Maybe[C_OBJ_TO], Nanoc::Core::Props => C::Any
       def initialize(from, to, props)
         @from  = from
         @to    = to

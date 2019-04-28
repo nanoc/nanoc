@@ -7,7 +7,7 @@ module Nanoc
       attr_reader :reasons
       attr_reader :props
 
-      def initialize(reasons: [], props: Props.new)
+      def initialize(reasons: [], props: Nanoc::Core::Props.new)
         @reasons = reasons
         @props = props
       end
