@@ -30,12 +30,12 @@ module Nanoc
       C_OBJ_SRC = Nanoc::Core::Item
       C_OBJ_DST = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Core::IdentifiableCollection]
 
-      contract C_OBJ_SRC => C::ArrayOf[Nanoc::Int::Dependency]
+      contract C_OBJ_SRC => C::ArrayOf[Nanoc::Core::Dependency]
       def dependencies_causing_outdatedness_of(object)
         objects_causing_outdatedness_of(object).map do |other_object|
           props = props_for(other_object, object)
 
-          Nanoc::Int::Dependency.new(
+          Nanoc::Core::Dependency.new(
             other_object,
             object,
             Nanoc::Core::DependencyProps.new(
