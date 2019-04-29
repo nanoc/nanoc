@@ -2,6 +2,7 @@
 
 # Load external dependencies
 require 'addressable'
+require 'colored'
 require 'ddplugin'
 require 'json'
 require 'parallel'
