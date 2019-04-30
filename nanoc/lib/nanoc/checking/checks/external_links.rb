@@ -78,7 +78,7 @@ module ::Nanoc::Checking::Checks
           return Result.new(href, 'redirection without a target location') if location.nil?
 
           if /^30[18]$/.match?(res.code)
-            return Result.new(href, "link have moved permanently to '#{location}'")
+            return Result.new(href, "link has moved permanently to '#{location}'")
           end
 
           url = URI.parse(location)
