@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.5 (2019-04-30)
+
+Fixes:
+
+* Fixed an incompatibility introduced in Cri 2.15.4 (#1423, #1426)
+
 ## 4.11.4 (2019-04-28)
 
 Fixes:
