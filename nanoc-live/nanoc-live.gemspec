@@ -20,5 +20,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('adsf-live', '~> 1.4')
   s.add_runtime_dependency('cri', '~> 2.13')
   s.add_runtime_dependency('listen', '~> 3.0')
-  s.add_runtime_dependency('nanoc', '~> 4.8', '>= 4.8.16')
+  s.add_runtime_dependency('nanoc', '~> 4.11', '>= 4.11.5')
 end
