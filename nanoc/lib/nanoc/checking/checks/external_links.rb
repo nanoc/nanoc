@@ -12,7 +12,7 @@ module ::Nanoc::Checking::Checks
       # TODO: de-duplicate this (duplicated in internal links check)
       filenames = output_html_filenames.reject { |f| excluded_file?(f) }
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :external).filenames_per_href
-      results = select_invalid(hrefs_with_filenames.keys)
+      results = select_invalid(hrefs_with_filenames.keys.shuffle)
 
       # Report them
       results.each do |res|
