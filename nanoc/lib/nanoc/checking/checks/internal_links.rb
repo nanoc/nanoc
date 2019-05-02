@@ -19,8 +19,7 @@ module Nanoc::Checking::Checks
       hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
       resource_uris_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_resource_uri
 
-      uris = hrefs_with_filenames.merge(resource_uris_with_filenames)
-      uris.each_pair do |href, fns|
+      deep_merge(hrefs_with_filenames, resource_uris_with_filenames).each_pair do |href, fns|
         fns.each do |filename|
           next if valid?(href, filename)
 
@@ -88,6 +87,18 @@ module Nanoc::Checking::Checks
       relative_origin = origin[@config.output_dir.size..-1]
       excludes = config.fetch(:exclude_origins, [])
       excludes.any? { |pattern| Regexp.new(pattern).match(relative_origin) }
+    end
+
+    private
+
+    def deep_merge(hrefs_with_filenames, resource_uris_with_filenames)
+      # hrefs_with_filenames.merge(resource_uris_with_filenames) is insufficient
+      # here because any filenames for a href in resource_uris_with_filenames
+      # will _override_ those in hrefs_with_filenames.
+      all_keys = hrefs_with_filenames.keys | resource_uris_with_filenames.keys
+      all_keys.each_with_object({}) do |key, all|
+        all[key] = (hrefs_with_filenames[key] || Set.new) | (resource_uris_with_filenames[key] || Set.new)
+      end
     end
   end
 end

@@ -35,6 +35,22 @@ class Nanoc::Checking::Checks::InternalLinksTest < Nanoc::TestCase
     end
   end
 
+  def test_merge_uris
+    with_site do |site|
+      # Create files
+      FileUtils.mkdir_p('output')
+      File.open('output/page.html', 'w') { |io| io.write('<a href="README.html">README</a>') }
+      File.open('output/index.html', 'w') { |io| io.write('<link rel="canonical" href="README.html">') }
+
+      # Create check
+      check = Nanoc::Checking::Checks::InternalLinks.create(site)
+      check.run
+
+      # Test
+      assert check.issues.size == 2
+    end
+  end
+
   def test_valid?
     with_site do |site|
       # Create files
