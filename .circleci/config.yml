@@ -102,7 +102,7 @@ jobs:
           command: bundle
       - run:
           name: Check style
-          command: bundle exec rake rubocop
+          command: bundle exec rake --trace rubocop
 
   test_nanoc_cruby24:
     <<: *defaults_cruby24
@@ -116,7 +116,7 @@ jobs:
           working_directory: ~/project/nanoc
       - run:
           name: Test nanoc
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc
       - store_test_results:
           path: ~/project/nanoc/test-results
@@ -133,7 +133,7 @@ jobs:
           working_directory: ~/project/nanoc-core
       - run:
           name: Test nanoc-core
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc-core
       - store_test_results:
           path: ~/project/nanoc-core/test-results
@@ -150,7 +150,7 @@ jobs:
           working_directory: ~/project/nanoc-external
       - run:
           name: Test nanoc-external
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc-external
       - store_test_results:
           path: ~/project/nanoc-external/test-results
@@ -167,7 +167,7 @@ jobs:
           working_directory: ~/project/nanoc-live
       - run:
           name: Test nanoc-live
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc-live
       - store_test_results:
           path: ~/project/nanoc-live/test-results
@@ -184,7 +184,7 @@ jobs:
           working_directory: ~/project/guard-nanoc
       - run:
           name: Test guard-nanoc
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/guard-nanoc
       - store_test_results:
           path: ~/project/guard-nanoc/test-results
@@ -201,7 +201,7 @@ jobs:
           working_directory: ~/project/nanoc
       - run:
           name: Test nanoc
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc
       - store_test_results:
           path: ~/project/nanoc/test-results
@@ -218,7 +218,7 @@ jobs:
           working_directory: ~/project/nanoc-core
       - run:
           name: Test nanoc-core
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc-core
       - store_test_results:
           path: ~/project/nanoc-core/test-results
@@ -235,7 +235,7 @@ jobs:
           working_directory: ~/project/nanoc-external
       - run:
           name: Test nanoc-external
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc-external
       - store_test_results:
           path: ~/project/nanoc-external/test-results
@@ -252,7 +252,7 @@ jobs:
           working_directory: ~/project/nanoc-live
       - run:
           name: Test nanoc-live
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc-live
       - store_test_results:
           path: ~/project/nanoc-live/test-results
@@ -269,7 +269,7 @@ jobs:
           working_directory: ~/project/guard-nanoc
       - run:
           name: Test guard-nanoc
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/guard-nanoc
       - store_test_results:
           path: ~/project/guard-nanoc/test-results
@@ -286,7 +286,7 @@ jobs:
           working_directory: ~/project/nanoc
       - run:
           name: Test nanoc
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc
       - store_test_results:
           path: ~/project/nanoc/test-results
@@ -303,7 +303,7 @@ jobs:
           working_directory: ~/project/nanoc-core
       - run:
           name: Test nanoc-core
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc-core
       - store_test_results:
           path: ~/project/nanoc-core/test-results
@@ -320,7 +320,7 @@ jobs:
           working_directory: ~/project/nanoc-external
       - run:
           name: Test nanoc-external
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc-external
       - store_test_results:
           path: ~/project/nanoc-external/test-results
@@ -337,7 +337,7 @@ jobs:
           working_directory: ~/project/nanoc-live
       - run:
           name: Test nanoc-live
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/nanoc-live
       - store_test_results:
           path: ~/project/nanoc-live/test-results
@@ -354,7 +354,7 @@ jobs:
           working_directory: ~/project/guard-nanoc
       - run:
           name: Test guard-nanoc
-          command: bundle exec rake test
+          command: bundle exec rake --trace test
           working_directory: ~/project/guard-nanoc
       - store_test_results:
           path: ~/project/guard-nanoc/test-results
