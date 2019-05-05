@@ -113,13 +113,23 @@ describe Nanoc::Int::Compiler::Phases::Cache do
       end
 
       context 'binary cached compiled content available' do
+        let!(:temp_dir) do
+          Dir.mktmpdir('nanoc-phase-cache-spec')
+        end
+
         let(:binary_content) { 'b1n4ry' }
-        let(:binary_filename) { Tempfile.open('test') { |fn| fn << binary_content }.path }
+        let(:binary_filename) { File.join(temp_dir, 'test') }
 
         before do
+          File.write(binary_filename, binary_content)
+
           rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: true)]
 
           compiled_content_cache[rep] = { last: Nanoc::Core::BinaryContent.new(binary_filename) }
+        end
+
+        after do
+          FileUtils.rm_rf(temp_dir)
         end
 
         it 'reads content from cache' do
