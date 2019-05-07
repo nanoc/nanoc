@@ -6,6 +6,28 @@ describe Nanoc::Core::ActionSequence do
   let(:item) { Nanoc::Core::Item.new('foo', {}, '/foo.md') }
   let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
+  describe '#initialize' do
+    context 'with actions' do
+      subject { described_class.new(rep, actions: actions) }
+
+      let(:actions) do
+        [
+          Nanoc::Core::ProcessingActions::Filter.new(:erb, {}),
+        ]
+      end
+
+      its(:item_rep) { is_expected.to be(rep) }
+      its(:actions) { is_expected.to be(actions) }
+    end
+
+    context 'without actions' do
+      subject { described_class.new(rep) }
+
+      its(:item_rep) { is_expected.to be(rep) }
+      its(:actions) { is_expected.to be_empty }
+    end
+  end
+
   describe '#size' do
     subject { action_sequence.size }
 
