@@ -38,7 +38,7 @@ describe Nanoc::Core::Identifier do
       it 'raises' do
         expect { subject }.to raise_error(
           Nanoc::Core::Identifier::NonCoercibleObjectError,
-          "this is #inspect cannot be converted into a Nanoc::Core::Identifier",
+          'this is #inspect cannot be converted into a Nanoc::Core::Identifier',
         )
       end
     end
