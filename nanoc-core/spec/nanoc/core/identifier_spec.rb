@@ -25,10 +25,21 @@ describe Nanoc::Core::Identifier do
     end
 
     context 'given something else' do
-      let(:arg) { 12_345 }
+      let(:klass) do
+        Class.new do
+          def inspect
+            'this is #inspect'
+          end
+        end
+      end
+
+      let(:arg) { klass.new }
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Core::Identifier::NonCoercibleObjectError)
+        expect { subject }.to raise_error(
+          Nanoc::Core::Identifier::NonCoercibleObjectError,
+          "this is #inspect cannot be converted into a Nanoc::Core::Identifier",
+        )
       end
     end
   end
@@ -64,17 +75,26 @@ describe Nanoc::Core::Identifier do
     context 'full type' do
       it 'refuses string not starting with a slash' do
         expect { described_class.new('foo') }
-          .to raise_error(Nanoc::Core::Identifier::InvalidIdentifierError)
+          .to raise_error(
+            Nanoc::Core::Identifier::InvalidIdentifierError,
+            'Invalid identifier (does not start with a slash): "foo"',
+          )
       end
 
       it 'refuses string ending with a slash' do
         expect { described_class.new('/foo/') }
-          .to raise_error(Nanoc::Core::Identifier::InvalidFullIdentifierError)
+          .to raise_error(
+            Nanoc::Core::Identifier::InvalidFullIdentifierError,
+            'Invalid full identifier (ends with a slash): "/foo/"',
+          )
       end
 
       it 'refuses string with only slash' do
         expect { described_class.new('/') }
-          .to raise_error(Nanoc::Core::Identifier::InvalidFullIdentifierError)
+          .to raise_error(
+            Nanoc::Core::Identifier::InvalidFullIdentifierError,
+            'Invalid full identifier (ends with a slash): "/"',
+          )
       end
 
       it 'has proper string representation' do
@@ -90,7 +110,10 @@ describe Nanoc::Core::Identifier do
     context 'other type' do
       it 'errors' do
         expect { described_class.new('foo', type: :donkey) }
-          .to raise_error(Nanoc::Core::Identifier::InvalidTypeError)
+          .to raise_error(
+            Nanoc::Core::Identifier::InvalidTypeError,
+            'Invalid type for identifier: :donkey (can be :full or :legacy)',
+          )
       end
     end
 
@@ -354,7 +377,10 @@ describe Nanoc::Core::Identifier do
       let(:identifier) { described_class.new('/foo/', type: :legacy) }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::Core::Identifier::UnsupportedLegacyOperationError)
+        expect { subject }.to raise_error(
+          Nanoc::Core::Identifier::UnsupportedLegacyOperationError,
+          'Cannot use this method on legacy identifiers',
+        )
       end
     end
 
