@@ -109,6 +109,25 @@ describe Nanoc::Core::IdentifiableCollection do
       end
     end
 
+    describe '#freeze' do
+      subject { identifiable_collection.freeze }
+
+      let(:objects) do
+        [
+          Nanoc::Core::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.css')),
+          Nanoc::Core::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.md')),
+          Nanoc::Core::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/style.css')),
+        ]
+      end
+
+      it 'freezes' do
+        expect { subject }
+          .to change(identifiable_collection, :frozen?)
+          .from(false)
+          .to(true)
+      end
+    end
+
     describe '#object_with_identifier' do
       subject { identifiable_collection.object_with_identifier(arg) }
 
@@ -199,6 +218,14 @@ describe Nanoc::Core::IdentifiableCollection do
         expect(res).to match_array(['/foo', '/bar'])
       end
     end
+  end
+
+  it 'cannot be instantiated' do
+    expect { described_class.new }
+      .to raise_error(
+        RuntimeError,
+        'IdentifiableCollection is abstract and cannot be instantiated',
+      )
   end
 
   describe Nanoc::Core::ItemCollection do

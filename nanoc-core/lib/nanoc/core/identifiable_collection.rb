@@ -13,7 +13,7 @@ module Nanoc
       def_delegator :@objects, :each
       def_delegator :@objects, :size
 
-      def initialize(*)
+      def initialize
         raise 'IdentifiableCollection is abstract and cannot be instantiated'
       end
 
@@ -32,7 +32,7 @@ module Nanoc
       contract C::None => self
       def freeze
         @objects.freeze
-        @objects.each(&:freeze)
+        each(&:freeze)
         build_mapping
         super
       end
@@ -80,7 +80,7 @@ module Nanoc
         if frozen?
           @mapping[identifier.to_s]
         else
-          @objects.find { |i| i.identifier == identifier }
+          find { |i| i.identifier == identifier }
         end
       end
 
@@ -94,7 +94,7 @@ module Nanoc
         when String
           object_with_identifier(arg) || object_matching_glob(arg)
         when Regexp
-          @objects.find { |i| i.identifier.to_s =~ arg }
+          find { |i| i.identifier.to_s =~ arg }
         else
           raise ArgumentError, "don’t know how to fetch objects by #{arg.inspect}"
         end
@@ -107,7 +107,7 @@ module Nanoc
 
       contract C::Any => C::IterOf[C::RespondTo[:identifier]]
       def find_all_unmemoized(arg)
-        pat = Nanoc::Core::Pattern.from(arg)
+        pat = Pattern.from(arg)
         select { |i| pat.match?(i.identifier) }
       end
 
@@ -118,19 +118,16 @@ module Nanoc
 
       def object_matching_glob(glob)
         if use_globs?
-          pat = Nanoc::Core::Pattern.from(glob)
-          @objects.find { |i| pat.match?(i.identifier) }
-        else
-          nil
+          pat = Pattern.from(glob)
+          find { |i| pat.match?(i.identifier) }
         end
       end
 
       def build_mapping
         @mapping = {}
-        @objects.each do |object|
+        each do |object|
           @mapping[object.identifier.to_s] = object
         end
-        @mapping.freeze
       end
 
       contract C::None => C::Bool
