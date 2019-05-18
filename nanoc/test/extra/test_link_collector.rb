@@ -9,23 +9,16 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     file_a = File.join(Dir.pwd, 'file-a.html')
     file_b = File.join(Dir.pwd, 'testdir', 'file-b.html')
     File.open(file_a, 'w') do |io|
-      io << %(<a href="http://example.com/">A 1</a>
-)
-      io << %(<a href="https://example.com/">A 2</a>
-)
-      io << %(<a href="stuff/"A 3></a>
-)
+      io << %(<a href="http://example.com/">A 1</a>)
+      io << %(<a href="https://example.com/">A 2</a>)
+      io << %(<a href="stuff/"A 3></a>)
       io << %(<a name="href-less-anchor">A 4</a>)
-      io << %(<a href="https://example.com/with-fragment#moo">A 5</a>
-)
+      io << %(<a href="https://example.com/with-fragment#moo">A 5</a>)
     end
     File.open(file_b, 'w') do |io|
-      io << %(<a href="mailto:bob@example.com">B 1</a>
-)
-      io << %(<a href="../stuff">B 2</a>
-)
-      io << %(<a href="/stuff">B 2</a>
-)
+      io << %(<a href="mailto:bob@example.com">B 1</a>)
+      io << %(<a href="../stuff">B 2</a>)
+      io << %(<a href="/stuff">B 2</a>)
     end
 
     # Create validator
@@ -51,20 +44,14 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     file_a = File.join(Dir.pwd, 'file-a.html')
     file_b = File.join(Dir.pwd, 'file-b.html')
     File.open(file_a, 'w') do |io|
-      io << %(<a href="http://example.com/">A 1</a>
-)
-      io << %(<a href="https://example.com/">A 2</a>
-)
-      io << %(<a href="stuff/"A 3></a>
-)
+      io << %(<a href="http://example.com/">A 1</a>)
+      io << %(<a href="https://example.com/">A 2</a>)
+      io << %(<a href="stuff/"A 3></a>)
     end
     File.open(file_b, 'w') do |io|
-      io << %(<a href="mailto:bob@example.com">B 1</a>
-)
-      io << %(<a href="../../../">B 2</a>
-)
-      io << %(<a href="/stuff">B 3</a>
-)
+      io << %(<a href="mailto:bob@example.com">B 1</a>)
+      io << %(<a href="../../../">B 2</a>)
+      io << %(<a href="/stuff">B 3</a>)
     end
 
     # Create validator
@@ -87,16 +74,12 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     file_a = File.join(output_dir, 'file-a.html')
     file_b = File.join(output_dir, 'file-b.html')
     File.open(file_a, 'w') do |io|
-      io << %(<a href="http://example.com/">A 1</a>
-)
-      io << %(<a href="https://example.com/">A 2</a>
-)
+      io << %(<a href="http://example.com/">A 1</a>)
+      io << %(<a href="https://example.com/">A 2</a>)
     end
     File.open(file_b, 'w') do |io|
-      io << %(<a href="mailto:bob@example.com">B 1</a>
-)
-      io << %(<a href="https://nanoc.ws">B 2</a>
-)
+      io << %(<a href="mailto:bob@example.com">B 1</a>)
+      io << %(<a href="https://nanoc.ws">B 2</a>)
     end
 
     # Create validator
@@ -114,13 +97,10 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
   def test_collect_links_from_space_separated_lists
     # The white-space variations in this file’s attributes are intentional
     File.open('file-a.html', 'w') do |io|
-      io << %(<img src="image.jpeg" srcset="image-large.jpeg 2000w,	image-medium.jpeg 1000w ,image-small.jpeg 300w">
-)
+      io << %(<img src="image.jpeg" srcset="image-large.jpeg 2000w,	image-medium.jpeg 1000w ,image-small.jpeg 300w">)
       io << %(<source srcset="image-large.webp 2000w,   image-medium.webp 1000w, image-small.webp
-300w" type="image/webp">
-)
-      io << %(<a ping="	ping1	ping2		http://example.com/ping3">A 1</a>
-)
+300w" type="image/webp">)
+      io << %(<a ping="	ping1	ping2		http://example.com/ping3">A 1</a>)
     end
 
     file_a = File.join(Dir.pwd, 'file-a.html')
@@ -147,14 +127,10 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
   def test_collects_exotic_links
     file_a = File.join(Dir.pwd, 'file-a.html')
     File.open(file_a, 'w') do |io|
-      io << %(<blockquote cite="urn:uuid:6650eb58-86e6-416c-906a-35336e5ac8b2">A 1</blockquote>
-)
-      io << %(<a href="ms-settings:windows-update" ping="https://tracking.nanoc.ws/ping">A 2</a>
-)
-      io << %(<div about="https://nanoc.ws/#static-generator">A 3</div>
-)
-      io << %(<base href="https://nanoc.ws/all-your-base-are-belong-to-us" />
-)
+      io << %(<blockquote cite="urn:uuid:6650eb58-86e6-416c-906a-35336e5ac8b2">A 1</blockquote>)
+      io << %(<a href="ms-settings:windows-update" ping="https://tracking.nanoc.ws/ping">A 2</a>)
+      io << %(<div about="https://nanoc.ws/#static-generator">A 3</div>)
+      io << %(<base href="https://nanoc.ws/all-your-base-are-belong-to-us" />)
     end
 
     collector = Nanoc::Extra::LinkCollector.new([file_a], :external)

@@ -789,7 +789,6 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 <!--[if lt IE 9]>
     <script src="/js/lib/html5shiv.js"></script>
 <![endif]-->
-
 )
 
       actual_content = filter.setup_and_run(raw_content.freeze, type: :xhtml)
@@ -822,7 +821,6 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 <!--[if lt IE 9]>
     <script src="/js/lib/html5shiv.js"></script>
 <![endif]-->
-
 )
 
       # Test
