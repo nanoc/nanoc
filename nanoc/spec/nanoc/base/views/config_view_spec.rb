@@ -113,6 +113,30 @@ describe Nanoc::ConfigView do
     end
   end
 
+  describe '#env_name' do
+    subject { view.env_name }
+
+    before do
+      expect(dependency_tracker).to receive(:bounce).with(config, attributes: true)
+    end
+
+    context 'when configuration is constructed with an env_name' do
+      let(:config) do
+        Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: hash, env_name: 'produx10n')
+      end
+
+      it { is_expected.to eql('produx10n') }
+    end
+
+    context 'when configuration is not constructed with an env_name' do
+      let(:config) do
+        Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: hash)
+      end
+
+      it { is_expected.to be_nil }
+    end
+  end
+
   describe '#each' do
     before do
       expect(dependency_tracker).to receive(:bounce).with(config, attributes: true)
