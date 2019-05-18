@@ -5,7 +5,10 @@ require 'helper'
 class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
   def test_all
     # Create dummy data
-    File.open('file-a.html', 'w') do |io|
+    FileUtils.mkdir_p('testdir')
+    file_a = File.join(Dir.pwd, 'file-a.html')
+    file_b = File.join(Dir.pwd, 'testdir', 'file-b.html')
+    File.open(file_a, 'w') do |io|
       io << %(<a href="http://example.com/">A 1</a>
 )
       io << %(<a href="https://example.com/">A 2</a>
@@ -16,35 +19,38 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
       io << %(<a href="https://example.com/with-fragment#moo">A 5</a>
 )
     end
-    File.open('file-b.html', 'w') do |io|
+    File.open(file_b, 'w') do |io|
       io << %(<a href="mailto:bob@example.com">B 1</a>
 )
       io << %(<a href="../stuff">B 2</a>
 )
-      io << %(<a href="/stuff">B 3</a>
+      io << %(<a href="/stuff">B 2</a>
 )
     end
 
     # Create validator
-    collector = Nanoc::Extra::LinkCollector.new(%w[file-a.html file-b.html])
+    collector = Nanoc::Extra::LinkCollector.new([file_a, file_b])
 
     # Test
     hrefs_with_filenames = collector.filenames_per_href
     hrefs = hrefs_with_filenames.keys
     assert_includes hrefs, 'http://example.com/'
     assert_includes hrefs, 'https://example.com/'
-    assert_includes hrefs, 'stuff/'
-    refute_includes hrefs, nil
-    assert_includes hrefs, 'mailto:bob@example.com'
-    assert_includes hrefs, '../stuff'
-    assert_includes hrefs, '/stuff'
+    assert_includes hrefs, path_to_file_uri('stuff/', Dir.pwd)
     refute_includes hrefs, 'https://example.com/with-fragment#moo'
     assert_includes hrefs, 'https://example.com/with-fragment'
+    refute_includes hrefs, nil
+    assert_includes hrefs, 'mailto:bob@example.com'
+    assert_includes hrefs, 'file:///stuff' if URI('file:///.').to_s == 'file:///.' # Ruby 2.4
+    assert_includes hrefs, 'file:/stuff' unless URI('file:///.').to_s == 'file:///.' # Ruby 2.5+
+    assert_includes hrefs, path_to_file_uri('stuff', Dir.pwd)
   end
 
   def test_external
     # Create dummy data
-    File.open('file-a.html', 'w') do |io|
+    file_a = File.join(Dir.pwd, 'file-a.html')
+    file_b = File.join(Dir.pwd, 'file-b.html')
+    File.open(file_a, 'w') do |io|
       io << %(<a href="http://example.com/">A 1</a>
 )
       io << %(<a href="https://example.com/">A 2</a>
@@ -52,59 +58,115 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
       io << %(<a href="stuff/"A 3></a>
 )
     end
-    File.open('file-b.html', 'w') do |io|
+    File.open(file_b, 'w') do |io|
       io << %(<a href="mailto:bob@example.com">B 1</a>
 )
-      io << %(<a href="../stuff">B 2</a>
+      io << %(<a href="../../../">B 2</a>
 )
       io << %(<a href="/stuff">B 3</a>
 )
     end
 
     # Create validator
-    collector = Nanoc::Extra::LinkCollector.new(%w[file-a.html file-b.html], :external)
+    collector = Nanoc::Extra::LinkCollector.new([file_a, file_b], :external)
 
     # Test
     hrefs_with_filenames = collector.filenames_per_href
     hrefs = hrefs_with_filenames.keys
     assert_includes hrefs, 'http://example.com/'
     assert_includes hrefs, 'https://example.com/'
-    refute_includes hrefs, 'stuff/'
+    refute_includes hrefs, path_to_file_uri('/', Dir.pwd)
     assert_includes hrefs, 'mailto:bob@example.com'
-    refute_includes hrefs, '../stuff'
-    refute_includes hrefs, '/stuff'
+    refute_includes hrefs, path_to_file_uri('/stuff', Dir.pwd)
+    refute_includes hrefs, path_to_file_uri('/stuff/', Dir.pwd)
   end
 
-  def test_internal
+  def test_internal_excludes_external
     # Create dummy data
-    File.open('file-a.html', 'w') do |io|
+    output_dir = Dir.pwd
+    file_a = File.join(output_dir, 'file-a.html')
+    file_b = File.join(output_dir, 'file-b.html')
+    File.open(file_a, 'w') do |io|
       io << %(<a href="http://example.com/">A 1</a>
 )
       io << %(<a href="https://example.com/">A 2</a>
 )
-      io << %(<a href="stuff/"A 3></a>
-)
     end
-    File.open('file-b.html', 'w') do |io|
+    File.open(file_b, 'w') do |io|
       io << %(<a href="mailto:bob@example.com">B 1</a>
 )
-      io << %(<a href="../stuff">B 2</a>
-)
-      io << %(<a href="/stuff">B 3</a>
+      io << %(<a href="https://nanoc.ws">B 2</a>
 )
     end
 
     # Create validator
-    collector = Nanoc::Extra::LinkCollector.new(%w[file-a.html file-b.html], :internal)
+    collector = Nanoc::Extra::LinkCollector.new([file_a, file_b], :internal)
 
     # Test
     hrefs_with_filenames = collector.filenames_per_href
     hrefs = hrefs_with_filenames.keys
     refute_includes hrefs, 'http://example.com/'
     refute_includes hrefs, 'https://example.com/'
-    assert_includes hrefs, 'stuff/'
+    refute_includes hrefs, 'https://nanoc.ws'
     refute_includes hrefs, 'mailto:bob@example.com'
-    assert_includes hrefs, '../stuff'
-    assert_includes hrefs, '/stuff'
+  end
+
+  def test_collect_links_from_space_separated_lists
+    # The white-space variations in this file’s attributes are intentional
+    File.open('file-a.html', 'w') do |io|
+      io << %(<img src="image.jpeg" srcset="image-large.jpeg 2000w,	image-medium.jpeg 1000w ,image-small.jpeg 300w">
+)
+      io << %(<source srcset="image-large.webp 2000w,   image-medium.webp 1000w, image-small.webp
+300w" type="image/webp">
+)
+      io << %(<a ping="	ping1	ping2		http://example.com/ping3">A 1</a>
+)
+    end
+
+    file_a = File.join(Dir.pwd, 'file-a.html')
+
+    collector = Nanoc::Extra::LinkCollector.new([file_a], :internal)
+
+    # Test
+    hrefs_with_filenames = collector.filenames_per_href
+    hrefs = hrefs_with_filenames.keys
+    assert_includes hrefs, path_to_file_uri('image.jpeg', Dir.pwd)
+    assert_includes hrefs, path_to_file_uri('image-large.jpeg', Dir.pwd)
+    assert_includes hrefs, path_to_file_uri('image-medium.jpeg', Dir.pwd)
+    assert_includes hrefs, path_to_file_uri('image-small.jpeg', Dir.pwd)
+    assert_includes hrefs, path_to_file_uri('image-large.webp', Dir.pwd)
+    assert_includes hrefs, path_to_file_uri('image-medium.webp', Dir.pwd)
+    assert_includes hrefs, path_to_file_uri('image-small.webp', Dir.pwd)
+    assert_includes hrefs, path_to_file_uri('ping1', Dir.pwd)
+    assert_includes hrefs, path_to_file_uri('ping2', Dir.pwd)
+    refute_includes hrefs, 'http://example.com/ping3'
+    refute_includes hrefs, nil
+    refute_includes hrefs, path_to_file_uri('/', Dir.pwd)
+  end
+
+  def test_collects_exotic_links
+    file_a = File.join(Dir.pwd, 'file-a.html')
+    File.open(file_a, 'w') do |io|
+      io << %(<blockquote cite="urn:uuid:6650eb58-86e6-416c-906a-35336e5ac8b2">A 1</blockquote>
+)
+      io << %(<a href="ms-settings:windows-update" ping="https://tracking.nanoc.ws/ping">A 2</a>
+)
+      io << %(<div about="https://nanoc.ws/#static-generator">A 3</div>
+)
+      io << %(<base href="https://nanoc.ws/all-your-base-are-belong-to-us" />
+)
+    end
+
+    collector = Nanoc::Extra::LinkCollector.new([file_a], :external)
+
+    # Test
+    hrefs_with_filenames = collector.filenames_per_href
+    hrefs = hrefs_with_filenames.keys
+    assert_includes hrefs, 'urn:uuid:6650eb58-86e6-416c-906a-35336e5ac8b2'
+    assert_includes hrefs, 'ms-settings:windows-update'
+    assert_includes hrefs, 'https://tracking.nanoc.ws/ping'
+    refute_includes hrefs, 'https://nanoc.ws/#static-generator'
+    assert_includes hrefs, 'https://nanoc.ws/'
+    assert_includes hrefs, 'https://nanoc.ws/all-your-base-are-belong-to-us'
   end
 end

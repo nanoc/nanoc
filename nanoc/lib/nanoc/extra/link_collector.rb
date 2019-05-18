@@ -3,16 +3,24 @@
 module ::Nanoc::Extra
   # @api private
   class LinkCollector
+    # HTML5 element attributes
     URI_ATTRS = {
-      'a' => :href,
-      'audio' => :src,
-      'form' => :action,
-      'iframe' => :src,
-      'img' => :src,
-      'link' => :href,
-      'script' => :src,
-      'video' => :src,
+      'a' => %i[href ping],
+      'area' => %i[href ping],
+      'audio' => %i[src],
+      'base' => %i[href],
+      'blockquote' => %i[cite],
+      'form' => %i[action],
+      'iframe' => %i[src],
+      'img' => %i[src srcset],
+      'link' => %i[href],
+      'object' => %i[data],
+      'script' => %i[src],
+      'source' => %i[src srcset],
+      'video' => %i[poster src],
     }.freeze
+    # HTML+RDFa global URI attributes
+    GLOBAL_ATTRS = %i[about resource].freeze
 
     def initialize(filenames, mode = nil)
       Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
@@ -25,7 +33,7 @@ module ::Nanoc::Extra
         when :external
           ->(h) { external_href?(h) }
         when :internal
-          ->(h) { !external_href?(h) }
+          ->(h) { internal_href?(h) }
         else
           raise ArgumentError, 'Expected mode argument to be :internal, :external or nil'
         end
@@ -40,15 +48,25 @@ module ::Nanoc::Extra
     end
 
     def external_href?(href)
+      return false if internal_href?(href)
+
       href =~ %r{^(\/\/|[a-z\-]+:)}
     end
 
-    def hrefs_in_file(filename)
-      uris_in_file filename, %w[a img]
+    def internal_href?(href)
+      return false if href.nil?
+
+      href.start_with?('file:/')
     end
 
+    # all links
+    def hrefs_in_file(filename)
+      uris_in_file filename, nil
+    end
+
+    # embedded resources, used by the mixed-content checker
     def resource_uris_in_file(filename)
-      uris_in_file filename, %w[audio form img iframe link script video]
+      uris_in_file filename, %w[audio base form iframe img link object script source video]
     end
 
     private
@@ -67,16 +85,40 @@ module ::Nanoc::Extra
 
     def uris_in_file(filename, tag_names)
       uris = Set.new
+      base_uri = URI("file://#{filename}")
       doc = Nokogiri::HTML(::File.read(filename))
-      tag_names.each do |tag_name|
-        attr = URI_ATTRS[tag_name]
-        doc.css(tag_name).each do |e|
-          uris << e[attr] unless e[attr].nil?
+      doc.traverse do |tag|
+        next unless tag_names.nil? || tag_names.include?(tag.name)
+
+        attrs = []
+        attrs += URI_ATTRS[tag.name] unless URI_ATTRS[tag.name].nil?
+        attrs += GLOBAL_ATTRS if tag_names.nil?
+        next if attrs.nil?
+
+        attrs.each do |attr_name|
+          next if tag[attr_name].nil?
+
+          if attr_name == :srcset
+            uris = uris.merge(tag[attr_name].split(',').map { |v| v.strip.split[0].strip }.compact)
+          elsif %i[about ping resource].include?(attr_name)
+            uris = uris.merge(tag[attr_name].split.map(&:strip).compact)
+          else
+            uris << tag[attr_name.to_s]
+          end
         end
       end
 
       # Strip fragment
-      uris.map! { |href| href.gsub(/#.*$/, '') }
+      uris.map! { |uri| uri.gsub(/#.*$/, '') }
+
+      # Resolve paths relative to the filename, return invalid URIs as-is
+      uris.map! do |uri|
+        begin
+          URI.join(base_uri, uri).to_s
+        rescue
+          uri
+        end
+      end
 
       uris.select(&@filter)
     end

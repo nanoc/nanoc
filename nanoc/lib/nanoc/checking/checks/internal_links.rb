@@ -16,10 +16,8 @@ module Nanoc::Checking::Checks
     def run
       # TODO: de-duplicate this (duplicated in external links check)
       filenames = output_html_filenames
-      hrefs_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
-      resource_uris_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_resource_uri
+      uris = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
 
-      uris = hrefs_with_filenames.merge(resource_uris_with_filenames)
       uris.each_pair do |href, fns|
         fns.each do |filename|
           next if valid?(href, filename)
@@ -39,11 +37,23 @@ module Nanoc::Checking::Checks
       # FIXME: this is ugly and won’t always be correct
       return true if href == '.'
 
-      # Skip hrefs that are specified in the exclude configuration
-      return true if excluded?(href, origin)
+      # Turn file: into output_dir-as-root relative paths
 
-      # Remove target
-      path = href.sub(/#.*$/, '')
+      output_dir = @config.output_dir
+      output_dir += '/' unless output_dir.end_with?('/')
+      base_uri = URI("file://#{output_dir}")
+      path = href.sub(/#{base_uri.to_s}/, '').sub(/file:\/{1,3}/, '')
+
+      path = "/#{path}" unless path.start_with?('/')
+
+      # Skip hrefs that are specified in the exclude configuration
+      return true if excluded?(path, origin)
+
+      # Make an absolute path
+      path = ::File.join(output_dir, path[1..path.length])
+
+      # Remove fragment
+      path = path.sub(/#.*$/, '')
       return true if path.empty?
 
       # Remove query string
@@ -52,14 +62,6 @@ module Nanoc::Checking::Checks
 
       # Decode URL (e.g. '%20' -> ' ')
       path = CGI.unescape(path)
-
-      # Make absolute
-      path =
-        if path[0, 1] == '/'
-          @config.output_dir + path
-        else
-          ::File.expand_path(path, ::File.dirname(origin))
-        end
 
       # Check whether file exists
       return true if File.file?(path)
