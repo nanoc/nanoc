@@ -53,6 +53,12 @@ module Nanoc
       @config.each(&block)
     end
 
+    # @see Configuration#env_name
+    def env_name
+      @context.dependency_tracker.bounce(_unwrap, attributes: true)
+      @config.env_name
+    end
+
     # @see Hash#dig
     def dig(*keys)
       @context.dependency_tracker.bounce(_unwrap, attributes: keys.take(1))
