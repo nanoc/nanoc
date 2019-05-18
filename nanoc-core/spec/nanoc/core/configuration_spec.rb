@@ -647,6 +647,26 @@ describe Nanoc::Core::Configuration do
       end
     end
 
+    context 'invalid checks (all has invalid type)' do
+      let(:hash) do
+        { checks: { all: 123 } }
+      end
+
+      it 'passes' do
+        expect { subject }.to raise_error(JsonSchema::Error)
+      end
+    end
+
+    context 'invalid checks (all.exclude_files has invalid type)' do
+      let(:hash) do
+        { checks: { all: { exclude_files: 'everything' } } }
+      end
+
+      it 'passes' do
+        expect { subject }.to raise_error(JsonSchema::Error)
+      end
+    end
+
     context 'invalid checks (internal_links has invalid type)' do
       let(:hash) do
         { checks: { internal_links: 123 } }

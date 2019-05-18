@@ -78,6 +78,18 @@
     "checks": {
       "type": "object",
       "properties": {
+        "all": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "exclude_files": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "internal_links": {
           "type": "object",
           "additionalProperties": false,
