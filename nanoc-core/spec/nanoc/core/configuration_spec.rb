@@ -436,7 +436,7 @@ describe Nanoc::Core::Configuration do
     context 'invalid prune (not a hash)' do
       let(:hash) { { prune: 'please' } }
 
-      it 'passes' do
+      it 'fails' do
         expect { subject }.to raise_error(JsonSchema::Error)
       end
     end
@@ -444,7 +444,7 @@ describe Nanoc::Core::Configuration do
     context 'invalid prune (auto_prune has incorrect type)' do
       let(:hash) { { prune: { auto_prune: 'please' } } }
 
-      it 'passes' do
+      it 'fails' do
         expect { subject }.to raise_error(JsonSchema::Error)
       end
     end
@@ -452,7 +452,7 @@ describe Nanoc::Core::Configuration do
     context 'invalid prune (exclude has incorrect type)' do
       let(:hash) { { prune: { exclude: 'nothing' } } }
 
-      it 'passes' do
+      it 'fails' do
         expect { subject }.to raise_error(JsonSchema::Error)
       end
     end
@@ -460,7 +460,7 @@ describe Nanoc::Core::Configuration do
     context 'invalid prune (exclude has items of incorrect type)' do
       let(:hash) { { prune: { exclude: [3000] } } }
 
-      it 'passes' do
+      it 'fails' do
         expect { subject }.to raise_error(JsonSchema::Error)
       end
     end
@@ -642,7 +642,7 @@ describe Nanoc::Core::Configuration do
         { checks: 123 }
       end
 
-      it 'passes' do
+      it 'fails' do
         expect { subject }.to raise_error(JsonSchema::Error)
       end
     end
@@ -652,7 +652,7 @@ describe Nanoc::Core::Configuration do
         { checks: { internal_links: 123 } }
       end
 
-      it 'passes' do
+      it 'fails' do
         expect { subject }.to raise_error(JsonSchema::Error)
       end
     end
@@ -662,7 +662,7 @@ describe Nanoc::Core::Configuration do
         { checks: { internal_links: { exclude: 'everything' } } }
       end
 
-      it 'passes' do
+      it 'fails' do
         expect { subject }.to raise_error(JsonSchema::Error)
       end
     end
@@ -672,7 +672,7 @@ describe Nanoc::Core::Configuration do
         { checks: { external_links: 123 } }
       end
 
-      it 'passes' do
+      it 'fails' do
         expect { subject }.to raise_error(JsonSchema::Error)
       end
     end
@@ -682,7 +682,7 @@ describe Nanoc::Core::Configuration do
         { checks: { external_links: { exclude: 'everything' } } }
       end
 
-      it 'passes' do
+      it 'fails' do
         expect { subject }.to raise_error(JsonSchema::Error)
       end
     end
@@ -692,7 +692,7 @@ describe Nanoc::Core::Configuration do
         { checks: { external_links: { exclude_files: 'everything' } } }
       end
 
-      it 'passes' do
+      it 'fails' do
         expect { subject }.to raise_error(JsonSchema::Error)
       end
     end
