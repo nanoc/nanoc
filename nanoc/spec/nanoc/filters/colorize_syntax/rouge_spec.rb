@@ -64,7 +64,8 @@ describe Nanoc::Filters::ColorizeSyntax, filter: true do
             2
             </pre></td>
             <td class="rouge-code"><pre>  <span class="k">def</span> <span class="nf">foo</span>
-              <span class="k">end</span></pre></td>
+              <span class="k">end</span>
+            </pre></td>
             </tr></tbody></table></code></pre>
             after
           EOS
@@ -143,7 +144,8 @@ describe Nanoc::Filters::ColorizeSyntax, filter: true do
             2
             </pre></td>
             <td class="rouge-code"><pre>  <span class="k">def</span> <span class="nf">foo</span>
-              <span class="k">end</span></pre></td>
+              <span class="k">end</span>
+            </pre></td>
             </tr></tbody></table></code></pre>
             after
           EOS
