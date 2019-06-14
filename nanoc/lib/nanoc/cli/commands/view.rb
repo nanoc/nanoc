@@ -31,8 +31,8 @@ module Nanoc::CLI::Commands
           root: File.absolute_path(config.output_dir),
           live: options[:'live-reload'],
           index_filenames: config[:index_filenames],
-          host: options.fetch(:host),
-          port: options.fetch(:port),
+          host: options[:host],
+          port: options[:port],
           handler: options[:handler],
         )
 
