@@ -1,5 +1,18 @@
 # Nanoc news
 
+## 4.11.6 (2019-07-06)
+
+Fixes:
+
+* Fixed crash in the `show-data` command when printing layout outdatedness (#1432)
+* Fixed crash in the `view` command when host/port is not specified
+
+Enhancements:
+
+* Added `#env_name` to `@config` (#1437)
+* Made the `external_links` checker detect more kinds of broken links (#1422) [Daniel Aleksandersen]
+* Made the `external_links` checker shuffle the list of links (#1429) [Daniel Aleksandersen]
+
 ## 4.11.5 (2019-04-30)
 
 Fixes:
