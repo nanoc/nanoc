@@ -5,7 +5,7 @@ module Nanoc::Filters
   class Handlebars < Nanoc::Filter
     identifier :handlebars
 
-    requires 'handlebars'
+    requires 'ruby-handlebars'
 
     # Runs the content through
     # [Handlebars](http://handlebarsjs.com/) using
@@ -24,7 +24,7 @@ module Nanoc::Filters
         context[:layout] = assigns[:layout].attributes
       end
 
-      handlebars = ::Handlebars::Context.new
+      handlebars = ::Handlebars::Handlebars.new
       template = handlebars.compile(content)
       template.call(context)
     end
