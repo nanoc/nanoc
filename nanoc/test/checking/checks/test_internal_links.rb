@@ -143,4 +143,18 @@ class Nanoc::Checking::Checks::InternalLinksTest < Nanoc::TestCase
       assert check.issues.empty?
     end
   end
+
+  def test_protocol_relative_url
+    # Protocol-relative URLs are not internal links.
+
+    with_site do |site|
+      FileUtils.mkdir_p('output')
+      File.write('output/a.html', '<a href="//example.com/broken">broken</a>')
+
+      check = Nanoc::Checking::Checks::InternalLinks.create(site)
+      check.run
+
+      assert check.issues.empty?
+    end
+  end
 end
