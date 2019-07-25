@@ -34,7 +34,7 @@ describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
       options = {}
       arguments = []
       cmd = nil
-      cmd_runner = Nanoc::CLI::Commands::Compile.new(options, arguments, cmd)
+      cmd_runner = described_class.new(options, arguments, cmd)
 
       cmd_runner.run
 
@@ -55,7 +55,7 @@ describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
           options = { watch: true }
           arguments = []
           cmd = nil
-          cmd_runner = Nanoc::CLI::Commands::Compile.new(options, arguments, cmd)
+          cmd_runner = described_class.new(options, arguments, cmd)
           cmd_runner.run
         end
         pipe_stdout_write.close

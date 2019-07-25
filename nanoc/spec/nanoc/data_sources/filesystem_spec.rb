@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::DataSources::Filesystem, site: true do
-  let(:data_source) { Nanoc::DataSources::Filesystem.new(site.config, nil, nil, params) }
+  let(:data_source) { described_class.new(site.config, nil, nil, params) }
   let(:params) { {} }
   let(:site) { Nanoc::Int::SiteLoader.new.new_from_cwd }
 

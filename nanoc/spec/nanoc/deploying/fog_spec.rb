@@ -4,7 +4,7 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
   subject { deployer.run }
 
   let(:deployer) do
-    Nanoc::Deploying::Deployers::Fog.new(
+    described_class.new(
       'output/',
       config,
       dry_run: is_dry_run,

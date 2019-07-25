@@ -22,7 +22,7 @@ describe Nanoc::Pruner, stdio: true do
   let(:item) { Nanoc::Core::Item.new('asdf', {}, '/a.md') }
 
   it 'is accessible through Nanoc::Extra::Pruner' do
-    expect(Nanoc::Extra::Pruner).to equal(Nanoc::Pruner)
+    expect(Nanoc::Extra::Pruner).to equal(described_class)
   end
 
   describe '#filename_excluded?' do
