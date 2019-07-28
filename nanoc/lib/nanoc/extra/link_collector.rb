@@ -113,10 +113,15 @@ module ::Nanoc::Extra
 
       # Resolve paths relative to the filename, return invalid URIs as-is
       uris.map! do |uri|
-        begin
-          URI.join(base_uri, uri).to_s
-        rescue
+        if uri.start_with?('//')
+          # Don’t modify protocol-relative URLs. They’re absolute!
           uri
+        else
+          begin
+            URI.join(base_uri, uri).to_s
+          rescue
+            uri
+          end
         end
       end
 

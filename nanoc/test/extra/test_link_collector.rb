@@ -145,4 +145,26 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     assert_includes hrefs, 'https://nanoc.ws/'
     assert_includes hrefs, 'https://nanoc.ws/all-your-base-are-belong-to-us'
   end
+
+  def test_protocol_relative_urls
+    File.write('a.html', '<a href="//example.com/broken">broken</a>')
+
+    external_collector =
+      Nanoc::Extra::LinkCollector.new(['a.html'], :external)
+
+    internal_collector =
+      Nanoc::Extra::LinkCollector.new(['a.html'], :internal)
+
+    hrefs = external_collector.filenames_per_href.keys
+    assert_includes hrefs, '//example.com/broken'
+    refute_includes hrefs, 'http://example.com/broken'
+    refute_includes hrefs, 'file:///example.com/broken'
+    refute_includes hrefs, 'file://example.com/broken'
+
+    hrefs = internal_collector.filenames_per_href.keys
+    refute_includes hrefs, '//example.com/broken'
+    refute_includes hrefs, 'http://example.com/broken'
+    refute_includes hrefs, 'file:///example.com/broken'
+    refute_includes hrefs, 'file://example.com/broken'
+  end
 end
