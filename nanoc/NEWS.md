@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.7 (2019-07-28)
+
+Fixes:
+
+* Fixed handling of protocol-relative URLs (#1444)
+
 ## 4.11.6 (2019-07-06)
 
 Fixes:
