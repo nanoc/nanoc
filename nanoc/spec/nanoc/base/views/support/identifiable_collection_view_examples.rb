@@ -274,7 +274,12 @@ shared_examples 'an identifiable collection view' do
     end
 
     context 'with block' do
-      subject { view.find_all { |iv| iv.identifier =~ /css/ } }
+      subject do
+        view.find_all do |iv|
+          expect(iv).to be_a(Nanoc::View)
+          iv.identifier =~ /css/
+        end
+      end
 
       it 'creates dependency' do
         expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: true)
