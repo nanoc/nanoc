@@ -34,8 +34,8 @@ module Nanoc::Filters
       # Render
       if with_toc
         renderer_toc = ::Redcarpet::Render::HTML_TOC.new
-        toc  = ::Redcarpet::Markdown.new(renderer_toc, options).render(content)
-        body = ::Redcarpet::Markdown.new(renderer,     options).render(content)
+        toc = ::Redcarpet::Markdown.new(renderer_toc, options).render(content)
+        body = ::Redcarpet::Markdown.new(renderer, options).render(content)
         toc + body
       else
         ::Redcarpet::Markdown.new(renderer, options).render(content)

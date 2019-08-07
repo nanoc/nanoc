@@ -42,7 +42,7 @@ module Nanoc::Checking::Checks
       output_dir = @config.output_dir
       output_dir += '/' unless output_dir.end_with?('/')
       base_uri = URI("file://#{output_dir}")
-      path = href.sub(/#{base_uri.to_s}/, '').sub(/file:\/{1,3}/, '')
+      path = href.sub(/#{base_uri}/, '').sub(/file:\/{1,3}/, '')
 
       path = "/#{path}" unless path.start_with?('/')
 

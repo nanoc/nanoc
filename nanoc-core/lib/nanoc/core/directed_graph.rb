@@ -43,7 +43,7 @@ module Nanoc
           @vertices[v] = @next_vertex_idx.tap { @next_vertex_idx += 1 }
         end
 
-        @to_graph   = {}
+        @to_graph = {}
 
         @edge_props = {}
 
