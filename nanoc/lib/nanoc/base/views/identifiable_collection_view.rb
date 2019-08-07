@@ -51,7 +51,7 @@ module Nanoc
     def find_all(arg = NOTHING, &block)
       if NOTHING.equal?(arg)
         @context.dependency_tracker.bounce(_unwrap, raw_content: true)
-        return @objects.select(&block).map { |i| view_class.new(i, @context) }
+        return @objects.map { |i| view_class.new(i, @context) }.select(&block)
       end
 
       prop_attribute =
