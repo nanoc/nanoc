@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.8 (2019-08-08)
+
+Fixes:
+
+* Fixed issue with `#find_all` yielding incorrect objects, causing a crash when attempting to access attributes (#1446, #1447)
+
 ## 4.11.7 (2019-07-28)
 
 Fixes:
