@@ -8,7 +8,7 @@ module Nanoc
 
         def apply(obj, _outdatedness_checker)
           if obj.raw_paths.values.flatten.compact.any? { |fn| !File.file?(fn) }
-            Nanoc::Int::OutdatednessReasons::NotWritten
+            Nanoc::Core::OutdatednessReasons::NotWritten
           end
         end
       end

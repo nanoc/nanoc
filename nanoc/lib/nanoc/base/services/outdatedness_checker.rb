@@ -109,7 +109,7 @@ module Nanoc
       attr_reader :action_sequences
       attr_reader :site
 
-      Reasons = Nanoc::Int::OutdatednessReasons
+      Reasons = Nanoc::Core::OutdatednessReasons
 
       C_OBJ = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep, Nanoc::Core::Configuration, Nanoc::Core::Layout, Nanoc::Core::ItemCollection]
       C_ITEM_OR_REP = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep]
@@ -202,12 +202,12 @@ module Nanoc
       end
 
       def attributes_unaffected?(status, dependency)
-        reason = status.reasons.find { |r| r.is_a?(Nanoc::Int::OutdatednessReasons::AttributesModified) }
+        reason = status.reasons.find { |r| r.is_a?(Nanoc::Core::OutdatednessReasons::AttributesModified) }
         reason && dependency.props.attributes.is_a?(Enumerable) && (dependency.props.attributes & reason.attributes).empty?
       end
 
       def raw_content_unaffected?(status, dependency)
-        reason = status.reasons.find { |r| r.is_a?(Nanoc::Int::OutdatednessReasons::DocumentCollectionExtended) }
+        reason = status.reasons.find { |r| r.is_a?(Nanoc::Core::OutdatednessReasons::DocumentCollectionExtended) }
         if reason.nil?
           false
         elsif !dependency.props.raw_content.is_a?(Enumerable)

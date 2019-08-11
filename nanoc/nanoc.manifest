@@ -9,7 +9,6 @@ lib/nanoc/base.rb
 lib/nanoc/base/assertions.rb
 lib/nanoc/base/changes_stream.rb
 lib/nanoc/base/entities.rb
-lib/nanoc/base/entities/outdatedness_reasons.rb
 lib/nanoc/base/entities/outdatedness_status.rb
 lib/nanoc/base/error.rb
 lib/nanoc/base/errors.rb

@@ -9,13 +9,13 @@ module Nanoc
         def apply(obj, outdatedness_checker)
           # Check rules of obj itself
           if rules_modified?(obj, outdatedness_checker)
-            return Nanoc::Int::OutdatednessReasons::RulesModified
+            return Nanoc::Core::OutdatednessReasons::RulesModified
           end
 
           # Check rules of layouts used by obj
           layouts = layouts_touched_by(obj, outdatedness_checker)
           if layouts.any? { |layout| rules_modified?(layout, outdatedness_checker) }
-            return Nanoc::Int::OutdatednessReasons::RulesModified
+            return Nanoc::Core::OutdatednessReasons::RulesModified
           end
 
           nil

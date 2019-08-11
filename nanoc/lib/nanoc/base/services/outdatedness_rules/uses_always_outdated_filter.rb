@@ -9,7 +9,7 @@ module Nanoc
         def apply(obj, outdatedness_checker)
           seq = outdatedness_checker.action_sequence_for(obj)
           if any_always_outdated?(seq)
-            Nanoc::Int::OutdatednessReasons::UsesAlwaysOutdatedFilter
+            Nanoc::Core::OutdatednessReasons::UsesAlwaysOutdatedFilter
           end
         end
 

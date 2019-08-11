@@ -13,7 +13,7 @@ describe Nanoc::Int::OutdatednessStatus do
     context 'one passed in' do
       let(:reasons) do
         [
-          Nanoc::Int::OutdatednessReasons::CodeSnippetsModified,
+          Nanoc::Core::OutdatednessReasons::CodeSnippetsModified,
         ]
       end
 
@@ -25,8 +25,8 @@ describe Nanoc::Int::OutdatednessStatus do
     context 'two passed in' do
       let(:reasons) do
         [
-          Nanoc::Int::OutdatednessReasons::CodeSnippetsModified,
-          Nanoc::Int::OutdatednessReasons::ContentModified,
+          Nanoc::Core::OutdatednessReasons::CodeSnippetsModified,
+          Nanoc::Core::OutdatednessReasons::ContentModified,
         ]
       end
 
@@ -89,7 +89,7 @@ describe Nanoc::Int::OutdatednessStatus do
   describe '#update' do
     subject { status.update(reason) }
 
-    let(:reason) { Nanoc::Int::OutdatednessReasons::ContentModified }
+    let(:reason) { Nanoc::Core::OutdatednessReasons::ContentModified }
 
     context 'no existing reason or props' do
       it 'adds a reason' do
@@ -100,7 +100,7 @@ describe Nanoc::Int::OutdatednessStatus do
     context 'existing reason' do
       let(:status) { described_class.new(reasons: [old_reason]) }
 
-      let(:old_reason) { Nanoc::Int::OutdatednessReasons::NotWritten }
+      let(:old_reason) { Nanoc::Core::OutdatednessReasons::NotWritten }
 
       it 'adds a reason' do
         expect(subject.reasons).to eql([old_reason, reason])

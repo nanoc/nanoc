@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # Module that contains all outdatedness reasons.
     #
     # @api private

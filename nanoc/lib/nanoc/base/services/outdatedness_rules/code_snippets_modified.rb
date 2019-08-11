@@ -12,7 +12,7 @@ module Nanoc
 
         def apply(_obj, outdatedness_checker)
           if any_snippets_modified?(outdatedness_checker)
-            Nanoc::Int::OutdatednessReasons::CodeSnippetsModified
+            Nanoc::Core::OutdatednessReasons::CodeSnippetsModified
           end
         end
 

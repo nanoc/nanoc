@@ -241,12 +241,12 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       before do
         reasons_about =
           [
-            Nanoc::Int::OutdatednessReasons::ContentModified,
-            Nanoc::Int::OutdatednessReasons::AttributesModified.new([:title]),
+            Nanoc::Core::OutdatednessReasons::ContentModified,
+            Nanoc::Core::OutdatednessReasons::AttributesModified.new([:title]),
           ]
 
         reasons_dog =
-          [Nanoc::Int::OutdatednessReasons::DependenciesOutdated]
+          [Nanoc::Core::OutdatednessReasons::DependenciesOutdated]
 
         allow(outdatedness_checker).to receive(:outdatedness_reasons_for)
           .with(item_rep_about).and_return(reasons_about)
@@ -301,8 +301,8 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       before do
         reasons =
           [
-            Nanoc::Int::OutdatednessReasons::ContentModified,
-            Nanoc::Int::OutdatednessReasons::AttributesModified.new([:title]),
+            Nanoc::Core::OutdatednessReasons::ContentModified,
+            Nanoc::Core::OutdatednessReasons::AttributesModified.new([:title]),
           ]
 
         allow(outdatedness_checker).to receive(:outdatedness_reasons_for)

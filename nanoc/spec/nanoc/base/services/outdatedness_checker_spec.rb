@@ -94,7 +94,7 @@ describe Nanoc::Int::OutdatednessChecker do
         end
 
         it 'is outdated due to rule differences' do
-          expect(subject).to eql(Nanoc::Int::OutdatednessReasons::RulesModified)
+          expect(subject).to eql(Nanoc::Core::OutdatednessReasons::RulesModified)
         end
       end
 
@@ -112,7 +112,7 @@ describe Nanoc::Int::OutdatednessChecker do
         end
 
         it 'is outdated due to rule differences' do
-          expect(subject).to eql(Nanoc::Int::OutdatednessReasons::RulesModified)
+          expect(subject).to eql(Nanoc::Core::OutdatednessReasons::RulesModified)
         end
       end
 
@@ -140,7 +140,7 @@ describe Nanoc::Int::OutdatednessChecker do
           dependency_store.load
         end
 
-        it { is_expected.to be_a(Nanoc::Int::OutdatednessReasons::ItemCollectionExtended) }
+        it { is_expected.to be_a(Nanoc::Core::OutdatednessReasons::ItemCollectionExtended) }
 
         it 'includes proper raw_content props' do
           expect(subject.objects.map(&:identifier).map(&:to_s)).to eq(['/newblahz.md'])
@@ -165,7 +165,7 @@ describe Nanoc::Int::OutdatednessChecker do
           dependency_store.load
         end
 
-        it { is_expected.to be_a(Nanoc::Int::OutdatednessReasons::LayoutCollectionExtended) }
+        it { is_expected.to be_a(Nanoc::Core::OutdatednessReasons::LayoutCollectionExtended) }
 
         it 'includes proper raw_content props' do
           expect(subject.objects.map(&:identifier).map(&:to_s)).to eq(['/newblahz.md'])
