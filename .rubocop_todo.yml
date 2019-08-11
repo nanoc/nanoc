@@ -29,7 +29,7 @@ RSpec/DescribeClass:
 # Configuration parameters: CustomIncludeMethods.
 RSpec/EmptyExampleGroup:
   Exclude:
-    - 'nanoc/spec/nanoc/base/entities/props_spec.rb'
+    - 'nanoc-core/spec/nanoc/core/dependency_props_spec.rb'
     - 'nanoc/spec/nanoc/base/filter_spec.rb'
     - 'nanoc/spec/nanoc/base/services/outdatedness_checker_spec.rb'
     - 'nanoc/spec/nanoc/base/services/outdatedness_rules_spec.rb'
