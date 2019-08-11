@@ -41,12 +41,13 @@ group :plugins do
   gem 'builder'
   gem 'coderay'
   gem 'coffee-script'
+  gem 'duktape', '~> 2.3'
   gem 'erubi'
   gem 'erubis'
+  gem 'execjs', '~> 2.7'
   gem 'fog-aws'
   gem 'fog-local', '~> 0.6'
   gem 'haml'
-  gem 'handlebars', platforms: :ruby
   gem 'kramdown'
   gem 'less', '~> 2.6', platforms: :ruby
   gem 'libv8', platforms: :ruby
@@ -65,10 +66,10 @@ group :plugins do
   gem 'redcarpet', '~> 3.4', platforms: :ruby
   gem 'RedCloth', platforms: :ruby
   gem 'rouge', '~> 3.1'
+  gem 'ruby-handlebars'
   gem 'rubypants'
   gem 'sass'
   gem 'slim', '~> 4.0'
-  gem 'therubyracer', '~> 0.12', platforms: :ruby
   gem 'typogruby'
   gem 'uglifier'
   gem 'w3c_validators'
