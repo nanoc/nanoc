@@ -10,7 +10,7 @@ describe Nanoc::CLI::Commands::CompileListeners::FileActionPrinter, stdio: true 
   after { listener.stop_safely }
 
   let(:reps) do
-    Nanoc::Int::ItemRepRepo.new.tap do |reps|
+    Nanoc::Core::ItemRepRepo.new.tap do |reps|
       reps << rep
     end
   end

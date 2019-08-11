@@ -104,7 +104,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
 
     Nanoc::ViewContextForCompilation.new(
-      reps: Nanoc::Int::ItemRepRepo.new,
+      reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: @dependency_tracker,
       compilation_context: :__irrelevat_compiler,

@@ -18,7 +18,7 @@ describe Nanoc::CompilationItemView do
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:items) { Nanoc::Core::ItemCollection.new(config) }
-  let(:reps) { Nanoc::Int::ItemRepRepo.new }
+  let(:reps) { Nanoc::Core::ItemRepRepo.new }
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
       reps: reps,
@@ -192,7 +192,7 @@ describe Nanoc::CompilationItemView do
     let(:rep_b) { Nanoc::Core::ItemRep.new(item, :b) }
 
     let(:reps) do
-      Nanoc::Int::ItemRepRepo.new.tap do |reps|
+      Nanoc::Core::ItemRepRepo.new.tap do |reps|
         reps << rep_a
         reps << rep_b
       end
@@ -220,7 +220,7 @@ describe Nanoc::CompilationItemView do
     end
 
     let(:reps) do
-      Nanoc::Int::ItemRepRepo.new.tap do |reps|
+      Nanoc::Core::ItemRepRepo.new.tap do |reps|
         reps << rep
       end
     end
@@ -299,7 +299,7 @@ describe Nanoc::CompilationItemView do
     end
 
     let(:reps) do
-      Nanoc::Int::ItemRepRepo.new.tap do |reps|
+      Nanoc::Core::ItemRepRepo.new.tap do |reps|
         reps << rep
       end
     end

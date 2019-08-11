@@ -10,7 +10,7 @@ describe Nanoc::Int::Compiler::Stages::DetermineOutdatedness do
   end
 
   let(:reps) do
-    Nanoc::Int::ItemRepRepo.new
+    Nanoc::Core::ItemRepRepo.new
   end
 
   let(:outdatedness_checker) do

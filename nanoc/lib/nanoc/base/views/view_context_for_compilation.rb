@@ -12,7 +12,7 @@ module Nanoc
     attr_reader :compiled_content_store
 
     contract C::KeywordArgs[
-      reps: Nanoc::Int::ItemRepRepo,
+      reps: Nanoc::Core::ItemRepRepo,
       items: Nanoc::Core::IdentifiableCollection,
       dependency_tracker: C::Any,
       compilation_context: C::Any,

@@ -154,7 +154,7 @@ describe Nanoc::Filters::SassCommon do
     end
 
     let(:reps) do
-      Nanoc::Int::ItemRepRepo.new.tap do |reps|
+      Nanoc::Core::ItemRepRepo.new.tap do |reps|
         [item_blue, item_red, item_partial_scss, item_partial_sass, item_partial_sass_anonymous].each do |item|
           reps << Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
             rep.compiled = true

@@ -36,7 +36,7 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true, site: true do
     end
 
     let(:reps) do
-      Nanoc::Int::ItemRepRepo.new.tap do |reps|
+      Nanoc::Core::ItemRepRepo.new.tap do |reps|
         reps << Nanoc::Core::ItemRep.new(items['/about.md'], :default)
         reps << Nanoc::Core::ItemRep.new(items['/about.md'], :text)
         reps << Nanoc::Core::ItemRep.new(items['/dog.md'], :default)

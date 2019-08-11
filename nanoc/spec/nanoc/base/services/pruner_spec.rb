@@ -8,7 +8,7 @@ describe Nanoc::Pruner, stdio: true do
   let(:exclude) { [] }
 
   let(:reps) do
-    Nanoc::Int::ItemRepRepo.new.tap do |reps|
+    Nanoc::Core::ItemRepRepo.new.tap do |reps|
       reps << Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
         rep.raw_paths = { last: [Dir.getwd + '/output/asdf.html'] }
       end
@@ -69,7 +69,7 @@ describe Nanoc::Pruner, stdio: true do
       end
 
       let(:reps) do
-        Nanoc::Int::ItemRepRepo.new.tap do |reps|
+        Nanoc::Core::ItemRepRepo.new.tap do |reps|
           reps << Nanoc::Core::ItemRep.new(item, :a).tap do |rep|
             rep.raw_paths = { last: [Dir.getwd + '/output/foo.html'] }
           end

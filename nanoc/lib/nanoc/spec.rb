@@ -54,7 +54,7 @@ module Nanoc
         @erbout = +''
         @action_sequence = {}
         @config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
-        @reps = Nanoc::Int::ItemRepRepo.new
+        @reps = Nanoc::Core::ItemRepRepo.new
         @items = Nanoc::Core::ItemCollection.new(@config)
         @layouts = Nanoc::Core::LayoutCollection.new(@config)
         @dependency_tracker = Nanoc::Int::DependencyTracker.new(Object.new)

@@ -10,7 +10,7 @@ module Nanoc
 
     # @param [Nanoc::Core::Configuration] config
     #
-    # @param [Nanoc::Int::ItemRepRepo] reps
+    # @param [Nanoc::Core::ItemRepRepo] reps
     #
     # @param [Boolean] dry_run true if the files to be deleted
     #   should only be printed instead of actually deleted, false if the files

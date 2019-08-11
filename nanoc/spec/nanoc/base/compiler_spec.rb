@@ -77,7 +77,7 @@ describe Nanoc::Int::Compiler do
     let(:phase_stack) { stage.send(:build_phase_stack) }
 
     let(:reps) do
-      Nanoc::Int::ItemRepRepo.new.tap do |rs|
+      Nanoc::Core::ItemRepRepo.new.tap do |rs|
         rs << rep
         rs << other_rep
 
@@ -88,7 +88,7 @@ describe Nanoc::Int::Compiler do
     end
 
     it 'generates expected output' do
-      reps = Nanoc::Int::ItemRepRepo.new
+      reps = Nanoc::Core::ItemRepRepo.new
       expect { subject }
         .to change { compiler.compilation_context(reps: reps).compiled_content_store.get_current(rep) }
         .from(nil)
@@ -108,7 +108,7 @@ describe Nanoc::Int::Compiler do
       let(:item) { Nanoc::Core::Item.new('other=<%= @items["/other.*"].compiled_content %>', {}, '/hi.md') }
 
       it 'generates expected output' do
-        reps = Nanoc::Int::ItemRepRepo.new
+        reps = Nanoc::Core::ItemRepRepo.new
         expect(compiler.compilation_context(reps: reps).compiled_content_store.get_current(rep)).to be_nil
 
         expect { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true) }

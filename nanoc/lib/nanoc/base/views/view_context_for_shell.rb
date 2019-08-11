@@ -11,7 +11,7 @@ module Nanoc
 
     contract C::KeywordArgs[
       items: Nanoc::Core::IdentifiableCollection,
-      reps: Nanoc::Int::ItemRepRepo,
+      reps: Nanoc::Core::ItemRepRepo,
     ] => C::Any
     def initialize(items:, reps:)
       @items = items

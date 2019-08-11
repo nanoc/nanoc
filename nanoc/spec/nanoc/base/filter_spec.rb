@@ -183,7 +183,7 @@ describe Nanoc::Filter do
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
-    let(:reps) { Nanoc::Int::ItemRepRepo.new }
+    let(:reps) { Nanoc::Core::ItemRepRepo.new }
 
     let(:assigns) do
       {

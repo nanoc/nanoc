@@ -58,7 +58,7 @@ describe Nanoc::Int::OutdatednessChecker do
   end
 
   let(:reps) do
-    Nanoc::Int::ItemRepRepo.new
+    Nanoc::Core::ItemRepRepo.new
   end
 
   let(:item_rep) { Nanoc::Core::ItemRep.new(item, :default) }

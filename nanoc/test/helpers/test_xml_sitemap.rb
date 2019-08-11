@@ -14,7 +14,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     dep_store = Nanoc::Int::DependencyStore.new(items, layouts, config)
     dependency_tracker = Nanoc::Int::DependencyTracker.new(dep_store)
 
-    @reps = Nanoc::Int::ItemRepRepo.new
+    @reps = Nanoc::Core::ItemRepRepo.new
     @view_context = Nanoc::ViewContextForCompilation.new(
       reps: @reps,
       items: Nanoc::Core::ItemCollection.new(config),

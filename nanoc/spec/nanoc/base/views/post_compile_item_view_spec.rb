@@ -6,7 +6,7 @@ describe Nanoc::PostCompileItemView do
   let(:rep_b) { Nanoc::Core::ItemRep.new(item, :modded).tap { |r| r.modified = true } }
 
   let(:reps) do
-    Nanoc::Int::ItemRepRepo.new.tap do |reps|
+    Nanoc::Core::ItemRepRepo.new.tap do |reps|
       reps << rep_a
       reps << rep_b
     end

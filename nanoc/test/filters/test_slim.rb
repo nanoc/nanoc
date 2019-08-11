@@ -31,7 +31,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
     config = Nanoc::Core::Configuration.new(dir: Dir.getwd)
 
     Nanoc::ViewContextForCompilation.new(
-      reps: Nanoc::Int::ItemRepRepo.new,
+      reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: :__irrelevant_dependency_tracker,
       compilation_context: :__irrelevat_compiler,

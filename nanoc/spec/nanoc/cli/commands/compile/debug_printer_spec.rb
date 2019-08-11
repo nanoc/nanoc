@@ -4,7 +4,7 @@ describe Nanoc::CLI::Commands::CompileListeners::DebugPrinter, stdio: true do
   let(:listener) { described_class.new(reps: reps) }
 
   let(:reps) do
-    Nanoc::Int::ItemRepRepo.new
+    Nanoc::Core::ItemRepRepo.new
   end
 
   let(:item) { Nanoc::Core::Item.new('item content', {}, '/donkey.md') }
