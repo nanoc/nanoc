@@ -6,12 +6,12 @@ module Nanoc
     # representations and layouts).
     #
     # @api private
-    class ActionSequenceStore < ::Nanoc::Int::Store
+    class ActionSequenceStore < ::Nanoc::Core::Store
       include Nanoc::Core::ContractsSupport
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
       def initialize(config:)
-        super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'rule_memory'), 1)
+        super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'rule_memory'), 1)
 
         @action_sequences = {}
       end
@@ -36,12 +36,12 @@ module Nanoc
 
       protected
 
-      # @see Nanoc::Int::Store#data
+      # @see Nanoc::Core::Store#data
       def data
         @action_sequences
       end
 
-      # @see Nanoc::Int::Store#data=
+      # @see Nanoc::Core::Store#data=
       def data=(new_data)
         @action_sequences = new_data
       end

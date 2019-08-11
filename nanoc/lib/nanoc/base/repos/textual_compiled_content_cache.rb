@@ -6,12 +6,12 @@ module Nanoc
     # to prevent it from being needlessly recompiled.
     #
     # @api private
-    class TextualCompiledContentCache < ::Nanoc::Int::Store
+    class TextualCompiledContentCache < ::Nanoc::Core::Store
       include Nanoc::Core::ContractsSupport
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
       def initialize(config:)
-        super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'compiled_content'), 2)
+        super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'compiled_content'), 2)
 
         @cache = {}
       end

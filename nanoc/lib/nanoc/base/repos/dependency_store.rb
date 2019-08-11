@@ -3,7 +3,7 @@
 module Nanoc
   module Int
     # @api private
-    class DependencyStore < ::Nanoc::Int::Store
+    class DependencyStore < ::Nanoc::Core::Store
       include Nanoc::Core::ContractsSupport
 
       attr_reader :items
@@ -11,7 +11,7 @@ module Nanoc
 
       contract Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection, Nanoc::Core::Configuration => C::Any
       def initialize(items, layouts, config)
-        super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'dependencies'), 5)
+        super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'dependencies'), 5)
 
         @items = items
         @layouts = layouts

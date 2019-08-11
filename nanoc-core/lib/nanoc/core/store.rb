@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # An abstract superclass for classes that need to store data to the
     # filesystem, such as checksums, cached compiled content and dependency
     # graphs.
@@ -60,7 +60,7 @@ module Nanoc
       #
       # @abstract This method must be implemented by the subclass.
       def data
-        raise NotImplementedError.new('Nanoc::Int::Store subclasses must implement #data and #data=')
+        raise NotImplementedError.new('Nanoc::Core::Store subclasses must implement #data and #data=')
       end
 
       # @param new_data The data that has been loaded from the disk
@@ -69,7 +69,7 @@ module Nanoc
       #
       # @return [void]
       def data=(new_data) # rubocop:disable Lint/UnusedMethodArgument
-        raise NotImplementedError.new('Nanoc::Int::Store subclasses must implement #data and #data=')
+        raise NotImplementedError.new('Nanoc::Core::Store subclasses must implement #data and #data=')
       end
 
       # Loads the data from the filesystem into memory. This method will set the

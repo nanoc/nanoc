@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # Ruby stdlib
+require 'pstore'
 require 'singleton'
 require 'tmpdir'
 

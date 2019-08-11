@@ -23,7 +23,7 @@ module Nanoc
           end
 
           def cleanup_unused_stores
-            used_paths = @output_dirs.map { |d| Nanoc::Int::Store.tmp_path_prefix(d) }
+            used_paths = @output_dirs.map { |d| Nanoc::Core::Store.tmp_path_prefix(d) }
             all_paths = Dir.glob('tmp/nanoc/*')
             (all_paths - used_paths).each do |obsolete_path|
               FileUtils.rm_rf(obsolete_path)

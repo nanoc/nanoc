@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Store do
+describe Nanoc::Core::Store do
   let(:test_store_klass) do
-    Class.new(Nanoc::Int::Store) do
+    Class.new(Nanoc::Core::Store) do
       def data
         @data
       end
@@ -17,13 +17,13 @@ describe Nanoc::Int::Store do
     context 'passing config' do
       subject { described_class.tmp_path_for(config: config, store_name: 'giraffes') }
 
-      let(:code_snippets) { [] }
-      let(:items) { [] }
-      let(:layouts) { [] }
-
       def gen_hash(path)
         Digest::SHA1.hexdigest(File.absolute_path(path))[0..12]
       end
+
+      let(:code_snippets) { [] }
+      let(:items) { [] }
+      let(:layouts) { [] }
 
       let(:hash_output) { gen_hash('output') }
       let(:hash_output_default) { gen_hash('output-default') }

@@ -6,7 +6,7 @@ module Nanoc
     # has changed since the last site compilation.
     #
     # @api private
-    class ChecksumStore < ::Nanoc::Int::Store
+    class ChecksumStore < ::Nanoc::Core::Store
       include Nanoc::Core::ContractsSupport
 
       attr_writer :checksums
@@ -16,7 +16,7 @@ module Nanoc
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration, objects: C::IterOf[c_obj]] => C::Any
       def initialize(config:, objects:)
-        super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'checksums'), 2)
+        super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'checksums'), 2)
 
         @objects = objects
 

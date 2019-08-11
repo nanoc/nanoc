@@ -3,12 +3,12 @@
 module Nanoc
   module Int
     # @api private
-    class OutdatednessStore < ::Nanoc::Int::Store
+    class OutdatednessStore < ::Nanoc::Core::Store
       include Nanoc::Core::ContractsSupport
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
       def initialize(config:)
-        super(Nanoc::Int::Store.tmp_path_for(config: config, store_name: 'outdatedness'), 1)
+        super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'outdatedness'), 1)
 
         @outdated_refs = Set.new
       end
