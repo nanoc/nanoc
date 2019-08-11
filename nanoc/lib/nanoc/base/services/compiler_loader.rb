@@ -5,7 +5,7 @@ module Nanoc
     # @api private
     class CompilerLoader
       def load(site, action_provider: nil)
-        action_sequence_store = Nanoc::Int::ActionSequenceStore.new(config: site.config)
+        action_sequence_store = Nanoc::Core::ActionSequenceStore.new(config: site.config)
 
         dependency_store =
           Nanoc::Int::DependencyStore.new(site.items, site.layouts, site.config)

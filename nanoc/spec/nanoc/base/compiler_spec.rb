@@ -14,7 +14,7 @@ describe Nanoc::Int::Compiler do
   end
 
   let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config: config, objects: items) }
-  let(:action_sequence_store) { Nanoc::Int::ActionSequenceStore.new(config: config) }
+  let(:action_sequence_store) { Nanoc::Core::ActionSequenceStore.new(config: config) }
 
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
 

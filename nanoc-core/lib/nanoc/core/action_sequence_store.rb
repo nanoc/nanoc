@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # Stores action sequences for objects that can be run through a rule (item
     # representations and layouts).
     #

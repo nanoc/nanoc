@@ -42,7 +42,7 @@ describe Nanoc::Int::OutdatednessChecker do
   end
 
   let(:action_sequence_store) do
-    Nanoc::Int::ActionSequenceStore.new(config: config)
+    Nanoc::Core::ActionSequenceStore.new(config: config)
   end
 
   let(:old_action_sequence_for_item_rep) do
