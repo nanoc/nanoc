@@ -6,7 +6,7 @@ describe Nanoc::Core::InMemoryDataSource, stdio: true do
   end
 
   let(:klass) do
-    Class.new(Nanoc::DataSource) do
+    Class.new(Nanoc::Core::DataSource) do
       def item_changes
         %i[one_foo one_bar]
       end
