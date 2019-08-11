@@ -32,7 +32,7 @@ describe Nanoc::Int::Compiler::Stages::Preprocess do
   end
 
   let(:checksum_store) do
-    Nanoc::Int::ChecksumStore.new(config: config, objects: items.to_a + layouts.to_a)
+    Nanoc::Core::ChecksumStore.new(config: config, objects: items.to_a + layouts.to_a)
   end
 
   describe '#run' do

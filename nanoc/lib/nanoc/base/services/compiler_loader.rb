@@ -13,7 +13,7 @@ module Nanoc
         objects = site.items.to_a + site.layouts.to_a + site.code_snippets + [site.config]
 
         checksum_store =
-          Nanoc::Int::ChecksumStore.new(config: site.config, objects: objects)
+          Nanoc::Core::ChecksumStore.new(config: site.config, objects: objects)
 
         action_provider ||= Nanoc::Core::ActionProvider.named(site.config.action_provider).for(site)
 

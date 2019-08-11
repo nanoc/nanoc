@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # Stores checksums for objects in order to be able to detect whether a file
     # has changed since the last site compilation.
     #

@@ -248,10 +248,10 @@ describe Nanoc::CLI::Commands::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'prints load store durations' do
-    Nanoc::Core::NotificationCenter.post(:store_loaded, 1.23, Nanoc::Int::ChecksumStore).sync
+    Nanoc::Core::NotificationCenter.post(:store_loaded, 1.23, Nanoc::Core::ChecksumStore).sync
 
     expect { listener.stop_safely }
-      .to output(/^\s*Nanoc::Int::ChecksumStore │ 1\.23s$/).to_stdout
+      .to output(/^\s*Nanoc::Core::ChecksumStore │ 1\.23s$/).to_stdout
   end
 
   it 'skips printing empty metrics' do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::ChecksumStore do
+describe Nanoc::Core::ChecksumStore do
   let(:store) { described_class.new(config: config, objects: objects) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
