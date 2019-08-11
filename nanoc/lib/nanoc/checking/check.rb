@@ -12,6 +12,8 @@ module Nanoc::Checking
   class Check < Nanoc::Core::Context
     extend DDPlugin::Plugin
 
+    DDMemoize.activate(self)
+
     attr_reader :issues
 
     def self.define(ident, &block)
@@ -64,6 +66,20 @@ module Nanoc::Checking
       end
 
       @issues << Issue.new(desc, subject, self.class)
+    end
+
+    # @private
+    def output_filenames
+      super.reject { |f| excluded_patterns.any? { |pat| pat.match?(f) } }
+    end
+
+    # @private
+    memoized def excluded_patterns
+      @config
+        .fetch(:checks, {})
+        .fetch(:all, {})
+        .fetch(:exclude_files, [])
+        .map { |pattern| Regexp.new(pattern) }
     end
 
     # @private
