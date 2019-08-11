@@ -61,7 +61,6 @@ lib/nanoc/base/services/item_rep_router.rb
 lib/nanoc/base/services/item_rep_selector.rb
 lib/nanoc/base/services/item_rep_writer.rb
 lib/nanoc/base/services/outdatedness_checker.rb
-lib/nanoc/base/services/outdatedness_rule.rb
 lib/nanoc/base/services/outdatedness_rules.rb
 lib/nanoc/base/services/outdatedness_rules/attributes_modified.rb
 lib/nanoc/base/services/outdatedness_rules/code_snippets_modified.rb

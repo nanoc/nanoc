@@ -11,7 +11,6 @@ require_relative 'services/item_rep_router'
 require_relative 'services/item_rep_selector'
 require_relative 'services/item_rep_writer'
 require_relative 'services/pruner'
-require_relative 'services/outdatedness_rule'
 require_relative 'services/outdatedness_rules'
 
 require_relative 'services/compiler/phases'

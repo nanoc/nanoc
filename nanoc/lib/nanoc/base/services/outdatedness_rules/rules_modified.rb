@@ -3,7 +3,7 @@
 module Nanoc
   module Int
     module OutdatednessRules
-      class RulesModified < Nanoc::Int::OutdatednessRule
+      class RulesModified < Nanoc::Core::OutdatednessRule
         affects_props :compiled_content, :path
 
         def apply(obj, outdatedness_checker)

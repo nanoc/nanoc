@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # @api private
     class OutdatednessRule
       include Nanoc::Core::ContractsSupport
@@ -14,7 +14,7 @@ module Nanoc
       end
 
       def apply(_obj, _outdatedness_checker)
-        raise NotImplementedError.new('Nanoc::Int::OutdatednessRule subclasses must implement #apply')
+        raise NotImplementedError.new('Nanoc::Core::OutdatednessRule subclasses must implement #apply')
       end
 
       contract C::None => String

@@ -3,7 +3,7 @@
 module Nanoc
   module Int
     module OutdatednessRules
-      class ItemCollectionExtended < Nanoc::Int::OutdatednessRule
+      class ItemCollectionExtended < Nanoc::Core::OutdatednessRule
         affects_props :raw_content
 
         contract Nanoc::Core::ItemCollection, C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Core::OutdatednessReasons::Generic]

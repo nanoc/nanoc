@@ -3,7 +3,7 @@
 module Nanoc
   module Int
     module OutdatednessRules
-      class AttributesModified < Nanoc::Int::OutdatednessRule
+      class AttributesModified < Nanoc::Core::OutdatednessRule
         include Nanoc::Core::ContractsSupport
 
         affects_props :attributes, :compiled_content

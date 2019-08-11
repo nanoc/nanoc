@@ -3,7 +3,7 @@
 module Nanoc
   module Int
     module OutdatednessRules
-      class LayoutCollectionExtended < Nanoc::Int::OutdatednessRule
+      class LayoutCollectionExtended < Nanoc::Core::OutdatednessRule
         affects_props :raw_content
 
         contract Nanoc::Core::LayoutCollection, C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Core::OutdatednessReasons::Generic]

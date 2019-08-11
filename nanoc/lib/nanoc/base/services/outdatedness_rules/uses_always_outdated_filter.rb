@@ -3,7 +3,7 @@
 module Nanoc
   module Int
     module OutdatednessRules
-      class UsesAlwaysOutdatedFilter < Nanoc::Int::OutdatednessRule
+      class UsesAlwaysOutdatedFilter < Nanoc::Core::OutdatednessRule
         affects_props :raw_content, :attributes, :path
 
         def apply(obj, outdatedness_checker)

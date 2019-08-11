@@ -3,7 +3,7 @@
 module Nanoc
   module Int
     module OutdatednessRules
-      class CodeSnippetsModified < Nanoc::Int::OutdatednessRule
+      class CodeSnippetsModified < Nanoc::Core::OutdatednessRule
         DDMemoize.activate(self)
 
         include Nanoc::Core::ContractsSupport
