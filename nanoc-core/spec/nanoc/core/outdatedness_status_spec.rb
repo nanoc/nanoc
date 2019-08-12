@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::OutdatednessStatus do
+describe Nanoc::Core::OutdatednessStatus do
   let(:status) { described_class.new }
 
   describe '#reasons' do
@@ -59,7 +59,14 @@ describe Nanoc::Int::OutdatednessStatus do
 
     let(:status) { described_class.new(props: props) }
     let(:props) { Nanoc::Core::DependencyProps.new }
-    let(:rule) { Nanoc::Int::OutdatednessRules::RulesModified }
+
+    let(:rule) do
+      Class.new(Nanoc::Core::OutdatednessRule) do
+        affects_props :compiled_content, :path
+
+        def apply(*args); end
+      end
+    end
 
     context 'no props' do
       it { is_expected.to be }

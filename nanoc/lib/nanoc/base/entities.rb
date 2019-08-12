@@ -2,5 +2,3 @@
 
 # Re-exported from Nanoc::Core
 Nanoc::Identifier = Nanoc::Core::Identifier
-
-require_relative 'entities/outdatedness_status'

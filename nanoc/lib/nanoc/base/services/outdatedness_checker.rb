@@ -54,7 +54,7 @@ module Nanoc
           @reps = reps
         end
 
-        contract C_OBJ_MAYBE_REP => C::Maybe[OutdatednessStatus]
+        contract C_OBJ_MAYBE_REP => C::Maybe[Nanoc::Core::OutdatednessStatus]
         memoized def outdatedness_status_for(obj)
           case obj
           when Nanoc::Core::ItemRep
@@ -76,8 +76,8 @@ module Nanoc
 
         private
 
-        contract C::ArrayOf[Class], C_OBJ_MAYBE_REP, OutdatednessStatus => C::Maybe[OutdatednessStatus]
-        def apply_rules(rules, obj, status = OutdatednessStatus.new)
+        contract C::ArrayOf[Class], C_OBJ_MAYBE_REP, Nanoc::Core::OutdatednessStatus => C::Maybe[Nanoc::Core::OutdatednessStatus]
+        def apply_rules(rules, obj, status = Nanoc::Core::OutdatednessStatus.new)
           rules.inject(status) do |acc, rule|
             if !acc.useful_to_apply?(rule)
               acc
@@ -92,9 +92,9 @@ module Nanoc
           end
         end
 
-        contract C::ArrayOf[Class], C::ArrayOf[C_OBJ_MAYBE_REP] => C::Maybe[OutdatednessStatus]
+        contract C::ArrayOf[Class], C::ArrayOf[C_OBJ_MAYBE_REP] => C::Maybe[Nanoc::Core::OutdatednessStatus]
         def apply_rules_multi(rules, objs)
-          objs.inject(OutdatednessStatus.new) { |acc, elem| apply_rules(rules, elem, acc) }
+          objs.inject(Nanoc::Core::OutdatednessStatus.new) { |acc, elem| apply_rules(rules, elem, acc) }
         end
       end
 

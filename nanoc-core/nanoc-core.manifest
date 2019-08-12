@@ -45,6 +45,7 @@ lib/nanoc/core/lazy_value.rb
 lib/nanoc/core/notification_center.rb
 lib/nanoc/core/outdatedness_reasons.rb
 lib/nanoc/core/outdatedness_rule.rb
+lib/nanoc/core/outdatedness_status.rb
 lib/nanoc/core/pattern.rb
 lib/nanoc/core/processing_action.rb
 lib/nanoc/core/processing_actions.rb
