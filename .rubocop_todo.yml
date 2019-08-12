@@ -132,7 +132,7 @@ RSpec/OverwritingSetup:
 RSpec/RepeatedDescription:
   Exclude:
     - 'nanoc-live/spec/nanoc/live/live_recompiler_spec.rb'
-    - 'nanoc/spec/nanoc/base/repos/binary_compiled_content_cache_spec.rb'
+    - 'nanoc-core/spec/nanoc/core/binary_compiled_content_cache_spec.rb'
     - 'nanoc/spec/nanoc/cli/commands/compile/file_action_printer_spec.rb'
 
 # Offense count: 2

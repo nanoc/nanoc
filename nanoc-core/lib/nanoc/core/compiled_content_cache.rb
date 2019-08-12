@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # Represents a cache than can be used to store already compiled content,
     # to prevent it from being needlessly recompiled.
     #
@@ -11,8 +11,8 @@ module Nanoc
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
       def initialize(config:)
-        @textual_cache = Nanoc::Int::TextualCompiledContentCache.new(config: config)
-        @binary_cache = Nanoc::Int::BinaryCompiledContentCache.new(config: config)
+        @textual_cache = Nanoc::Core::TextualCompiledContentCache.new(config: config)
+        @binary_cache = Nanoc::Core::BinaryCompiledContentCache.new(config: config)
 
         @wrapped_caches = [@textual_cache, @binary_cache]
       end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::BinaryCompiledContentCache do
+describe Nanoc::Core::BinaryCompiledContentCache do
   let(:cache) { described_class.new(config: config) }
 
   let(:items) { [item] }

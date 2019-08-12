@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # Represents a cache than can be used to store already compiled content,
     # to prevent it from being needlessly recompiled.
     #

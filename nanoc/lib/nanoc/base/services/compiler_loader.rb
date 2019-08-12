@@ -38,9 +38,9 @@ module Nanoc
       def compiled_content_cache_class
         feature_name = Nanoc::Feature::BINARY_COMPILED_CONTENT_CACHE
         if Nanoc::Feature.enabled?(feature_name)
-          Nanoc::Int::CompiledContentCache
+          Nanoc::Core::CompiledContentCache
         else
-          Nanoc::Int::TextualCompiledContentCache
+          Nanoc::Core::TextualCompiledContentCache
         end
       end
     end

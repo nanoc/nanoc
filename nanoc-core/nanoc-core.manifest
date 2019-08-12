@@ -10,11 +10,13 @@ lib/nanoc/core/action_sequence.rb
 lib/nanoc/core/action_sequence_builder.rb
 lib/nanoc/core/action_sequence_store.rb
 lib/nanoc/core/aggregate_data_source.rb
+lib/nanoc/core/binary_compiled_content_cache.rb
 lib/nanoc/core/binary_content.rb
 lib/nanoc/core/checksum_collection.rb
 lib/nanoc/core/checksum_store.rb
 lib/nanoc/core/checksummer.rb
 lib/nanoc/core/code_snippet.rb
+lib/nanoc/core/compiled_content_cache.rb
 lib/nanoc/core/configuration-schema.json
 lib/nanoc/core/configuration.rb
 lib/nanoc/core/content.rb
@@ -55,4 +57,5 @@ lib/nanoc/core/snapshot_def.rb
 lib/nanoc/core/store.rb
 lib/nanoc/core/string_pattern.rb
 lib/nanoc/core/temp_filename_factory.rb
+lib/nanoc/core/textual_compiled_content_cache.rb
 lib/nanoc/core/textual_content.rb
