@@ -67,8 +67,9 @@ module Nanoc::Filters::SassCommon
       @raw_filename_to_item_map[config.object_id] ||=
         {}.tap do |map|
           items.each do |item|
-            if item.raw_filename
-              path = Pathname.new(item.raw_filename).realpath.to_s
+            filename_without_registering_dependency = item._unwrap.content.filename
+            if filename_without_registering_dependency
+              path = Pathname.new(filename_without_registering_dependency).realpath.to_s
               map[path] = item
             end
           end
