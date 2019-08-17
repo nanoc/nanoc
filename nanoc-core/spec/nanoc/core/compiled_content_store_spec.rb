@@ -97,7 +97,7 @@ describe Nanoc::Core::CompiledContentStore do
     shared_examples 'a snapshot' do
       context 'no snapshot def' do
         it 'raises' do
-          expect { subject }.to raise_error(Nanoc::Int::Errors::NoSuchSnapshot)
+          expect { subject }.to raise_error(Nanoc::Core::Errors::NoSuchSnapshot)
         end
       end
 
@@ -109,7 +109,7 @@ describe Nanoc::Core::CompiledContentStore do
           end
 
           it 'errors' do
-            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Int::Errors::UnmetDependency))
+            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Core::Errors::UnmetDependency))
           end
         end
 
@@ -131,7 +131,7 @@ describe Nanoc::Core::CompiledContentStore do
             let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('donkey.dat')) }
 
             it 'raises' do
-              expect { subject }.to raise_error(Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem, 'You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is /foo.md (rep name :foo).')
+              expect { subject }.to raise_error(Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem, 'You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is /foo.md (rep name :foo).')
             end
           end
         end
@@ -160,7 +160,7 @@ describe Nanoc::Core::CompiledContentStore do
           end
 
           it 'does not use :last' do
-            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Int::Errors::UnmetDependency))
+            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Core::Errors::UnmetDependency))
           end
         end
       end
@@ -188,7 +188,7 @@ describe Nanoc::Core::CompiledContentStore do
           end
 
           it 'does not use :last' do
-            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Int::Errors::UnmetDependency))
+            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Core::Errors::UnmetDependency))
           end
         end
       end

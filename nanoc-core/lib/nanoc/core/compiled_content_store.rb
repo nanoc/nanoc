@@ -50,7 +50,7 @@ module Nanoc
         # Check existance of snapshot
         snapshot_def = rep.snapshot_defs.reverse.find { |sd| sd.name == snapshot_name }
         unless snapshot_def
-          raise Nanoc::Int::Errors::NoSuchSnapshot.new(rep, snapshot_name)
+          raise Nanoc::Core::Errors::NoSuchSnapshot.new(rep, snapshot_name)
         end
 
         # Return content if it is available
@@ -58,7 +58,7 @@ module Nanoc
         return content if content
 
         # Content is unavailable; notify and try again
-        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(rep, snapshot_name))
+        Fiber.yield(Nanoc::Core::Errors::UnmetDependency.new(rep, snapshot_name))
         get(rep, snapshot_name)
       end
 
@@ -67,7 +67,7 @@ module Nanoc
         snapshot_content = raw_compiled_content(rep: rep, snapshot: snapshot)
 
         if snapshot_content.binary?
-          raise Nanoc::Int::Errors::CannotGetCompiledContentOfBinaryItem.new(rep)
+          raise Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem.new(rep)
         end
 
         snapshot_content.string
