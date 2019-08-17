@@ -1,10 +1,16 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # @api private
     class DependencyStore < ::Nanoc::Core::Store
       include Nanoc::Core::ContractsSupport
+
+      C_KEYWORD_PROPS = C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
+      C_RAW_CONTENT = C::Or[C::IterOf[C::Or[String, Regexp]], C::Bool]
+      C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
+      C_OBJ_SRC = Nanoc::Core::Item
+      C_OBJ_DST = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Core::IdentifiableCollection]
 
       attr_reader :items
       attr_reader :layouts
@@ -26,9 +32,6 @@ module Nanoc
         @new_objects = []
         @graph = Nanoc::Core::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))
       end
-
-      C_OBJ_SRC = Nanoc::Core::Item
-      C_OBJ_DST = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Core::IdentifiableCollection]
 
       contract C_OBJ_SRC => C::ArrayOf[Nanoc::Core::Dependency]
       def dependencies_causing_outdatedness_of(object)
@@ -88,10 +91,6 @@ module Nanoc
       def objects_causing_outdatedness_of(object)
         refs2objs(@graph.direct_predecessors_of(obj2ref(object)))
       end
-
-      C_RAW_CONTENT = C::Or[C::IterOf[C::Or[String, Regexp]], C::Bool]
-      C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
-      C_KEYWORD_PROPS = C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
 
       contract C::Maybe[C_OBJ_SRC], C::Maybe[C_OBJ_DST], C_KEYWORD_PROPS => C::Any
       # Records a dependency from `src` to `dst` in the dependency graph. When

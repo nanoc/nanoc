@@ -3,7 +3,7 @@
 describe Nanoc::Int::DependencyTracker do
   let(:tracker) { described_class.new(store) }
 
-  let(:store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
+  let(:store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
 
   let(:item_a) { Nanoc::Core::Item.new('a', {}, '/a.md') }
   let(:item_b) { Nanoc::Core::Item.new('b', {}, '/b.md') }

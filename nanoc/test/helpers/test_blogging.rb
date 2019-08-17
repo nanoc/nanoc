@@ -34,7 +34,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
     items = Nanoc::Core::ItemCollection.new(config)
     layouts = Nanoc::Core::LayoutCollection.new(config)
-    dep_store = Nanoc::Int::DependencyStore.new(items, layouts, config)
+    dep_store = Nanoc::Core::DependencyStore.new(items, layouts, config)
     dependency_tracker = Nanoc::Int::DependencyTracker.new(dep_store)
 
     @view_context = Nanoc::ViewContextForCompilation.new(

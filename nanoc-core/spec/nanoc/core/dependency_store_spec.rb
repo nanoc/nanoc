@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::DependencyStore do
+describe Nanoc::Core::DependencyStore do
   let(:store) { described_class.new(items, layouts, config) }
 
   let(:item_a) { Nanoc::Core::Item.new('a', {}, '/a.md') }

@@ -16,7 +16,7 @@ describe Nanoc::Int::Compiler do
   let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config: config, objects: items) }
   let(:action_sequence_store) { Nanoc::Core::ActionSequenceStore.new(config: config) }
 
-  let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
+  let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
 
   let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(config: config) }
   let(:action_provider) { double(:action_provider) }

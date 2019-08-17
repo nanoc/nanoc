@@ -25,7 +25,7 @@ describe Nanoc::Int::OutdatednessChecker do
   end
 
   let(:dependency_store) do
-    Nanoc::Int::DependencyStore.new(items, layouts, config)
+    Nanoc::Core::DependencyStore.new(items, layouts, config)
   end
 
   let(:items) { Nanoc::Core::ItemCollection.new(config, [item]) }

@@ -29,7 +29,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
   let(:outdatedness_store) { Nanoc::Int::OutdatednessStore.new(config: config) }
-  let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
+  let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
 
   let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
   let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }

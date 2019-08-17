@@ -36,7 +36,7 @@ describe Nanoc::Int::OutdatednessRules do
 
     let(:action_sequences) { {} }
     let(:reps) { Nanoc::Core::ItemRepRepo.new }
-    let(:dependency_store) { Nanoc::Int::DependencyStore.new(items, layouts, config) }
+    let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
     let(:action_sequence_store) { Nanoc::Core::ActionSequenceStore.new(config: config) }
     let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config: config, objects: objects) }
 

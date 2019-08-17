@@ -30,7 +30,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
     let(:dependency_store) do
-      Nanoc::Int::DependencyStore.new(items, layouts, config)
+      Nanoc::Core::DependencyStore.new(items, layouts, config)
     end
 
     let(:layouts) do
