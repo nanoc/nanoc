@@ -31,6 +31,7 @@ lib/nanoc/core/dependency_props.rb
 lib/nanoc/core/directed_graph.rb
 lib/nanoc/core/document.rb
 lib/nanoc/core/error.rb
+lib/nanoc/core/errors.rb
 lib/nanoc/core/identifiable_collection.rb
 lib/nanoc/core/identifier.rb
 lib/nanoc/core/in_memory_data_source.rb

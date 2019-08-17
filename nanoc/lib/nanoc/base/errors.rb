@@ -8,6 +8,10 @@ module Nanoc
     module Errors
       Generic = ::Nanoc::Error
 
+      UnmetDependency = ::Nanoc::Core::Errors::UnmetDependency
+      NoSuchSnapshot = ::Nanoc::Core::Errors::NoSuchSnapshot
+      CannotGetCompiledContentOfBinaryItem = ::Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem
+
       # Generic trivial error. Superclass for all Nanoc-specific errors that are
       # considered "trivial", i.e. errors that do not require a full crash report.
       class GenericTrivial < Generic
@@ -106,26 +110,6 @@ module Nanoc
         end
       end
 
-      # Error that is raised when an rep cannot be compiled because it depends
-      # on other representations.
-      class UnmetDependency < Generic
-        # @return [Nanoc::Core::ItemRep] The item representation that cannot yet be
-        #   compiled
-        attr_reader :rep
-
-        # @return [Symbol] The name of the snapshot that cannot yet be compiled
-        attr_reader :snapshot_name
-
-        # @param [Nanoc::Core::ItemRep] rep The item representation that cannot yet be
-        #   compiled
-        def initialize(rep, snapshot_name)
-          @rep = rep
-          @snapshot_name = snapshot_name
-
-          super("The current item cannot be compiled yet because of an unmet dependency on the “#{rep.item.identifier}” item (rep “#{rep.name}”, snapshot “#{snapshot_name}”).")
-        end
-      end
-
       # Error that is raised when a binary item is attempted to be laid out.
       class CannotLayoutBinaryItem < Generic
         # @param [Nanoc::Core::ItemRep] rep The item representation that was attempted
@@ -156,35 +140,6 @@ module Nanoc
         # @param [Class] filter_class The filter class that was used
         def initialize(rep, filter_class)
           super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because binary filters cannot be used on textual items. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.")
-        end
-      end
-
-      # Error that is raised when the compiled content at a non-existing snapshot
-      # is requested.
-      class NoSuchSnapshot < Generic
-        # @return [Nanoc::Core::ItemRep] The item rep from which the compiled content
-        #   was requested
-        attr_reader :item_rep
-
-        # @return [Symbol] The requested snapshot
-        attr_reader :snapshot
-
-        # @param [Nanoc::Core::ItemRep] item_rep The item rep from which the compiled
-        #   content was requested
-        #
-        # @param [Symbol] snapshot The requested snapshot
-        def initialize(item_rep, snapshot)
-          @item_rep = item_rep
-          @snapshot = snapshot
-          super("The “#{item_rep.inspect}” item rep does not have a snapshot “#{snapshot.inspect}”")
-        end
-      end
-
-      # Error that is raised when the compiled content of a binary item is attempted to be accessed.
-      class CannotGetCompiledContentOfBinaryItem < Generic
-        # @param [Nanoc::Core::ItemRep] rep The binary item representation whose compiled content was attempted to be accessed
-        def initialize(rep)
-          super("You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is #{rep}.")
         end
       end
 
