@@ -3,22 +3,55 @@
 describe(Nanoc::Int::ItemRepRouter) do
   subject(:item_rep_router) { described_class.new(reps, action_provider, site) }
 
-  let(:reps) { double(:reps) }
-  let(:action_provider) { double(:action_provider) }
-  let(:site) { double(:site, config: config) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+
+  let(:site) do
+    Nanoc::Core::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: Nanoc::Core::InMemoryDataSource.new([], []),
+    )
+  end
+
+  let(:action_provider) do
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
+
+      def initialize
+        @map = {}
+      end
+
+      def []=(key, value)
+        @map[key] = value
+      end
+
+      def rep_names_for(_item)
+        raise NotImplementedError
+      end
+
+      def action_sequence_for(obj)
+        @map.fetch(obj)
+      end
+
+      def snapshots_defs_for(_rep)
+        raise NotImplementedError
+      end
+    end.new
+  end
+
+  let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
+
+  let(:reps) do
+    Nanoc::Core::ItemRepRepo.new.tap do |r|
+      r << Nanoc::Core::ItemRep.new(item, :default)
+      r << Nanoc::Core::ItemRep.new(item, :csv)
+    end
+  end
 
   describe '#run' do
     subject { item_rep_router.run }
-
-    let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
-
-    let(:reps) do
-      [
-        Nanoc::Core::ItemRep.new(item, :default),
-        Nanoc::Core::ItemRep.new(item, :csv),
-      ]
-    end
 
     let(:memory_without_paths) do
       actions =
@@ -51,31 +84,29 @@ describe(Nanoc::Int::ItemRepRouter) do
     end
 
     example do
-      allow(action_provider).to receive(:action_sequence_for).with(reps[0]).and_return(action_sequence_for_default)
-      allow(action_provider).to receive(:action_sequence_for).with(reps[1]).and_return(action_sequence_for_csv)
+      action_provider[reps[item][0]] = action_sequence_for_default
+      action_provider[reps[item][1]] = action_sequence_for_csv
 
       subject
 
-      expect(reps[0].raw_paths).to eql(last: [Dir.getwd + '/output/foo/index.html'])
-      expect(reps[0].paths).to eql(last: ['/foo/'])
+      expect(reps[item][0].raw_paths).to eql(last: [Dir.getwd + '/output/foo/index.html'])
+      expect(reps[item][0].paths).to eql(last: ['/foo/'])
 
-      expect(reps[1].raw_paths).to eql(last: [Dir.getwd + '/output/foo.csv'])
-      expect(reps[1].paths).to eql(last: ['/foo.csv'])
+      expect(reps[item][1].raw_paths).to eql(last: [Dir.getwd + '/output/foo.csv'])
+      expect(reps[item][1].paths).to eql(last: ['/foo.csv'])
     end
 
     it 'picks the paths last returned' do
-      allow(action_provider).to receive(:action_sequence_for)
-        .with(reps[0]).and_return(memory_without_paths, action_sequence_for_default)
-      allow(action_provider).to receive(:action_sequence_for)
-        .with(reps[1]).and_return(memory_without_paths, action_sequence_for_csv)
+      action_provider[reps[item][0]] = action_sequence_for_default
+      action_provider[reps[item][1]] = action_sequence_for_csv
 
       subject
 
-      expect(reps[0].raw_paths).to eql(last: [Dir.getwd + '/output/foo/index.html'])
-      expect(reps[0].paths).to eql(last: ['/foo/'])
+      expect(reps[item][0].raw_paths).to eql(last: [Dir.getwd + '/output/foo/index.html'])
+      expect(reps[item][0].paths).to eql(last: ['/foo/'])
 
-      expect(reps[1].raw_paths).to eql(last: [Dir.getwd + '/output/foo.csv'])
-      expect(reps[1].paths).to eql(last: ['/foo.csv'])
+      expect(reps[item][1].raw_paths).to eql(last: [Dir.getwd + '/output/foo.csv'])
+      expect(reps[item][1].paths).to eql(last: ['/foo.csv'])
     end
   end
 
@@ -83,9 +114,8 @@ describe(Nanoc::Int::ItemRepRouter) do
     subject { item_rep_router.route_rep(rep, paths, snapshot_names, paths_to_reps) }
 
     let(:snapshot_names) { [:foo] }
-    let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
-    let(:item) { Nanoc::Core::Item.new('content', {}, '/foo.md') }
     let(:paths_to_reps) { {} }
+    let(:rep) { reps[item][0] }
 
     context 'basic path is nil' do
       let(:paths) { [] }

@@ -8,6 +8,7 @@ module Nanoc
 
       attr_reader :reps
 
+      contract Nanoc::Core::Site, Nanoc::Core::ActionProvider, Nanoc::Core::ItemRepRepo => C::Any
       def initialize(site, action_provider, reps)
         @site = site
         @action_provider = action_provider
