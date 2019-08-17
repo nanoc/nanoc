@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # @api private
     class OutdatednessStore < ::Nanoc::Core::Store
       include Nanoc::Core::ContractsSupport

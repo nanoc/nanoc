@@ -18,7 +18,7 @@ module Nanoc
         action_provider ||= Nanoc::Core::ActionProvider.named(site.config.action_provider).for(site)
 
         outdatedness_store =
-          Nanoc::Int::OutdatednessStore.new(config: site.config)
+          Nanoc::Core::OutdatednessStore.new(config: site.config)
 
         compiled_content_cache =
           compiled_content_cache_class.new(config: site.config)

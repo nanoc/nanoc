@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::OutdatednessStore do
+describe Nanoc::Core::OutdatednessStore do
   subject(:store) { described_class.new(config: config) }
 
   let(:item) { Nanoc::Core::Item.new('foo', {}, '/foo.md') }
