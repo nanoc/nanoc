@@ -21,7 +21,7 @@ describe Nanoc::Int::Executor do
   let(:reps) { double(:reps) }
   let(:site) { double(:site) }
   let(:compiled_content_cache) { double(:compiled_content_cache) }
-  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
 

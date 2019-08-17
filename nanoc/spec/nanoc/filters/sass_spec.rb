@@ -171,7 +171,7 @@ describe Nanoc::Filters::SassCommon do
     let(:compilation_context) { double(:compilation_context) }
 
     let(:compiled_content_store) do
-      Nanoc::Int::CompiledContentStore.new.tap do |repo|
+      Nanoc::Core::CompiledContentStore.new.tap do |repo|
         repo.set(reps[item_blue].first, :last, content_blue)
         repo.set(reps[item_red].first, :last, content_red)
         repo.set(reps[item_partial_scss].first, :last, content_partial_scss)

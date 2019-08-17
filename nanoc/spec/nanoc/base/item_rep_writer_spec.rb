@@ -27,7 +27,7 @@ describe Nanoc::Int::ItemRepWriter do
       { snapshot_name => [raw_path] }
     end
 
-    let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
+    let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
     let(:written_paths) { [] }
 

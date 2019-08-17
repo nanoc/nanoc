@@ -13,7 +13,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
     Nanoc::Core::CompiledContentCache.new(config: config)
   end
 
-  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
   let(:wrapped_class) do
     Class.new(Nanoc::Int::Compiler::Phases::Abstract) do

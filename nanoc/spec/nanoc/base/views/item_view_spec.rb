@@ -13,7 +13,7 @@ describe Nanoc::CompilationItemView do
   let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
   let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
-  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
   let(:compilation_context) { double(:compilation_context) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }

@@ -14,7 +14,7 @@ shared_examples 'an item rep view' do
   end
 
   let(:compilation_context) { double(:compilation_context) }
-  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }

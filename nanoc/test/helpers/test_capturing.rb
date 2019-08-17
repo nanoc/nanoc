@@ -24,7 +24,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
   end
 
   def compiled_content_store
-    @_compiled_content_store ||= Nanoc::Int::CompiledContentStore.new
+    @_compiled_content_store ||= Nanoc::Core::CompiledContentStore.new
   end
 
   def before

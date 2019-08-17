@@ -18,7 +18,6 @@ lib/nanoc/base/repos/dependency_store.rb
 lib/nanoc/base/repos/outdatedness_store.rb
 lib/nanoc/base/repos/prefixed_data_source.rb
 lib/nanoc/base/repos/site_loader.rb
-lib/nanoc/base/repos/compiled_content_store.rb
 lib/nanoc/base/services.rb
 lib/nanoc/base/services/compilation_context.rb
 lib/nanoc/base/services/compiler_loader.rb

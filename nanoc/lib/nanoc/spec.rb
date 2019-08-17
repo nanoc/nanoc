@@ -58,7 +58,7 @@ module Nanoc
         @items = Nanoc::Core::ItemCollection.new(@config)
         @layouts = Nanoc::Core::LayoutCollection.new(@config)
         @dependency_tracker = Nanoc::Int::DependencyTracker.new(Object.new)
-        @compiled_content_store = Nanoc::Int::CompiledContentStore.new
+        @compiled_content_store = Nanoc::Core::CompiledContentStore.new
         @action_provider = new_action_provider
       end
 

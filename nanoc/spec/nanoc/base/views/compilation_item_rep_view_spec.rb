@@ -15,7 +15,7 @@ describe Nanoc::CompilationItemRepView do
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
   let(:dependency_store) { Nanoc::Int::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
-  let(:compiled_content_store) { Nanoc::Int::CompiledContentStore.new }
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
   let(:compilation_context) { double(:compilation_context) }
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(

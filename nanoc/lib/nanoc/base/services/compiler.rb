@@ -18,7 +18,7 @@ module Nanoc
         @action_provider        = action_provider
         @outdatedness_store     = outdatedness_store
 
-        @compiled_content_store = Nanoc::Int::CompiledContentStore.new
+        @compiled_content_store = Nanoc::Core::CompiledContentStore.new
       end
 
       contract Nanoc::Core::Site => C::Any
