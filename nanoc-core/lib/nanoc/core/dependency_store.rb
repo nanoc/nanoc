@@ -6,9 +6,9 @@ module Nanoc
     class DependencyStore < ::Nanoc::Core::Store
       include Nanoc::Core::ContractsSupport
 
-      C_KEYWORD_PROPS = C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
-      C_RAW_CONTENT = C::Or[C::IterOf[C::Or[String, Regexp]], C::Bool]
       C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
+      C_RAW_CONTENT = C::Or[C::IterOf[C::Or[String, Regexp]], C::Bool]
+      C_KEYWORD_PROPS = C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
       C_OBJ_SRC = Nanoc::Core::Item
       C_OBJ_DST = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Core::IdentifiableCollection]
 
