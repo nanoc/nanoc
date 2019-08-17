@@ -16,7 +16,7 @@ shared_examples 'an item rep view' do
   let(:compilation_context) { double(:compilation_context) }
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
-  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
 

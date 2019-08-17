@@ -175,7 +175,7 @@ describe Nanoc::Filter do
       )
     end
 
-    let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+    let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
     let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
 
     let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }

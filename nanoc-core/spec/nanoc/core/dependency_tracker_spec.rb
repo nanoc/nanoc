@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::DependencyTracker do
+describe Nanoc::Core::DependencyTracker do
   let(:tracker) { described_class.new(store) }
 
   let(:store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
@@ -15,7 +15,7 @@ describe Nanoc::Int::DependencyTracker do
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
   shared_examples 'a null dependency tracker' do
-    let(:tracker) { Nanoc::Int::DependencyTracker::Null.new }
+    let(:tracker) { Nanoc::Core::DependencyTracker::Null.new }
 
     example do
       expect { subject }.not_to change { store.objects_causing_outdatedness_of(item_a) }

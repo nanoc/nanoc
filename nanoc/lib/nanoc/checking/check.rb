@@ -36,7 +36,7 @@ module Nanoc::Checking
       res = compiler.run_until_reps_built
       reps = res.fetch(:reps)
       compilation_context = compiler.compilation_context(reps: reps)
-      view_context = compilation_context.create_view_context(Nanoc::Int::DependencyTracker::Null.new)
+      view_context = compilation_context.create_view_context(Nanoc::Core::DependencyTracker::Null.new)
 
       context = {
         items: Nanoc::PostCompileItemCollectionView.new(site.items, view_context),

@@ -35,7 +35,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     items = Nanoc::Core::ItemCollection.new(config)
     layouts = Nanoc::Core::LayoutCollection.new(config)
     dep_store = Nanoc::Core::DependencyStore.new(items, layouts, config)
-    dependency_tracker = Nanoc::Int::DependencyTracker.new(dep_store)
+    dependency_tracker = Nanoc::Core::DependencyTracker.new(dep_store)
 
     @view_context = Nanoc::ViewContextForCompilation.new(
       reps: Nanoc::Core::ItemRepRepo.new,

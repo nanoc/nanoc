@@ -13,7 +13,7 @@ shared_examples 'a document view' do
     )
   end
 
-  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
 

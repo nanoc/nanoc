@@ -571,7 +571,7 @@ describe Nanoc::Int::OutdatednessChecker do
     context 'only item collection dependency' do
       context 'dependency on any new item' do
         before do
-          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
           dependency_tracker.enter(item)
           dependency_tracker.bounce(items, raw_content: true)
           dependency_store.store
@@ -603,7 +603,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'dependency on specific new items (string)' do
         before do
-          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
           dependency_tracker.enter(item)
           dependency_tracker.bounce(items, raw_content: ['/new*'])
           dependency_store.store
@@ -645,7 +645,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'dependency on specific new items (regex)' do
         before do
-          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
           dependency_tracker.enter(item)
           dependency_tracker.bounce(items, raw_content: [%r{^/new.*}])
           dependency_store.store
@@ -689,7 +689,7 @@ describe Nanoc::Int::OutdatednessChecker do
     context 'only layout collection dependency' do
       context 'dependency on any new layout' do
         before do
-          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
           dependency_tracker.enter(item)
           dependency_tracker.bounce(layouts, raw_content: true)
           dependency_store.store
@@ -721,7 +721,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'dependency on specific new layouts (string)' do
         before do
-          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
           dependency_tracker.enter(item)
           dependency_tracker.bounce(layouts, raw_content: ['/new*'])
           dependency_store.store
@@ -763,7 +763,7 @@ describe Nanoc::Int::OutdatednessChecker do
 
       context 'dependency on specific new layouts (regex)' do
         before do
-          dependency_tracker = Nanoc::Int::DependencyTracker.new(dependency_store)
+          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
           dependency_tracker.enter(item)
           dependency_tracker.bounce(layouts, raw_content: [%r{^/new.*}])
           dependency_store.store

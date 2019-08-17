@@ -3,7 +3,6 @@
 require_relative 'services/compilation_context'
 require_relative 'services/compiler'
 require_relative 'services/compiler_loader'
-require_relative 'services/dependency_tracker'
 require_relative 'services/executor'
 require_relative 'services/filter'
 require_relative 'services/item_rep_builder'

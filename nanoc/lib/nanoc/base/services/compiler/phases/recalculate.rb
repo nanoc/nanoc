@@ -19,7 +19,7 @@ module Nanoc
 
           contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
           def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
-            dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
+            dependency_tracker = Nanoc::Core::DependencyTracker.new(@dependency_store)
             dependency_tracker.enter(rep.item)
 
             executor = Nanoc::Int::Executor.new(rep, @compilation_context, dependency_tracker)

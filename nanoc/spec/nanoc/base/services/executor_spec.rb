@@ -23,7 +23,7 @@ describe Nanoc::Int::Executor do
   let(:compiled_content_cache) { double(:compiled_content_cache) }
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
-  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(double(:dependency_store)) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store)) }
 
   describe '#filter' do
     let(:assigns) { {} }

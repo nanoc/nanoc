@@ -15,7 +15,7 @@ shared_examples 'an identifiable collection view' do
   end
 
   let(:dependency_tracker) do
-    Nanoc::Int::DependencyTracker::Null.new
+    Nanoc::Core::DependencyTracker::Null.new
   end
 
   let(:config) do

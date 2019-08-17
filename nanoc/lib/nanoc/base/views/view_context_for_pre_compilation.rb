@@ -12,7 +12,7 @@ module Nanoc
     def initialize(items:)
       @items = items
 
-      @dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
+      @dependency_tracker = Nanoc::Core::DependencyTracker::Null.new
     end
   end
 end

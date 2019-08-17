@@ -54,7 +54,7 @@ module Nanoc::RuleDSL
     end
 
     def postprocess(site, compiler)
-      dependency_tracker = Nanoc::Int::DependencyTracker::Null.new
+      dependency_tracker = Nanoc::Core::DependencyTracker::Null.new
 
       res = compiler.run_until_reps_built
       reps = res.fetch(:reps)

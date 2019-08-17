@@ -30,6 +30,7 @@ lib/nanoc/core/data_source.rb
 lib/nanoc/core/dependency.rb
 lib/nanoc/core/dependency_props.rb
 lib/nanoc/core/dependency_store.rb
+lib/nanoc/core/dependency_tracker.rb
 lib/nanoc/core/directed_graph.rb
 lib/nanoc/core/document.rb
 lib/nanoc/core/error.rb

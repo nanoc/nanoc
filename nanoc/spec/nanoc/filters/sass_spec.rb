@@ -166,7 +166,7 @@ describe Nanoc::Filters::SassCommon do
       end
     end
 
-    let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+    let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
     let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
     let(:compilation_context) { double(:compilation_context) }
 

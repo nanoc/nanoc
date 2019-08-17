@@ -16,7 +16,7 @@ describe Nanoc::CompilationItemView do
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
   let(:compilation_context) { double(:compilation_context) }
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
-  let(:dependency_tracker) { Nanoc::Int::DependencyTracker.new(dependency_store) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
   let(:items) { Nanoc::Core::ItemCollection.new(config) }
   let(:reps) { Nanoc::Core::ItemRepRepo.new }
   let(:view_context) do

@@ -93,7 +93,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     layouts = Nanoc::Core::LayoutCollection.new(config)
 
     @dependency_store = Nanoc::Core::DependencyStore.new(items, layouts, config)
-    @dependency_tracker = Nanoc::Int::DependencyTracker.new(@dependency_store)
+    @dependency_tracker = Nanoc::Core::DependencyTracker.new(@dependency_store)
 
     @base_item = Nanoc::Core::Item.new('base', {}, '/base.md')
 
