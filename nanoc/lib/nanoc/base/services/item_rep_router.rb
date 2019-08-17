@@ -20,6 +20,7 @@ module Nanoc
         end
       end
 
+      contract Nanoc::Core::ItemRepRepo, Nanoc::Core::ActionProvider, Nanoc::Core::Site => C::Any
       def initialize(reps, action_provider, site)
         @reps = reps
         @action_provider = action_provider
