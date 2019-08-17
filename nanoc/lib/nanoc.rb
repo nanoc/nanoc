@@ -61,6 +61,10 @@ require 'yaml'
 # Load extracted Nanoc dependencies
 require 'nanoc-core'
 
+# Re-export from Nanoc::Core
+Nanoc::Identifier = Nanoc::Core::Identifier
+Nanoc::DataSource = Nanoc::Core::DataSource
+
 # Load Nanoc
 require 'nanoc/version'
 require 'nanoc/base'

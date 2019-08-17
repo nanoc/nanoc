@@ -11,7 +11,6 @@ require_relative 'base/errors'
 require_relative 'base/changes_stream'
 require_relative 'base/assertions'
 
-require_relative 'base/entities'
 require_relative 'base/feature'
 require_relative 'base/repos'
 require_relative 'base/services'

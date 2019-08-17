@@ -8,7 +8,6 @@ lib/nanoc.rb
 lib/nanoc/base.rb
 lib/nanoc/base/assertions.rb
 lib/nanoc/base/changes_stream.rb
-lib/nanoc/base/entities.rb
 lib/nanoc/base/error.rb
 lib/nanoc/base/errors.rb
 lib/nanoc/base/feature.rb
