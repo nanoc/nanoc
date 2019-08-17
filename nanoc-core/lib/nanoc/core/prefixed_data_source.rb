@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
-    class PrefixedDataSource < Nanoc::DataSource
+  module Core
+    class PrefixedDataSource < Nanoc::Core::DataSource
       def initialize(data_source, items_prefix, layouts_prefix)
         super({}, '/', '/', {})
 
