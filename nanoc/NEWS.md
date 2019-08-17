@@ -1,5 +1,13 @@
 # Nanoc news
 
+## 4.11.9 (2019-08-17)
+
+Enhancements:
+
+* Allowed specifying excluded files across all checks (#1438)
+* Replace handlebars.rb with ruby-handlebars (#1443)
+* Improved dependency tracking for Sass imports (#1451, #1452) [Romain Goyet]
+
 ## 4.11.8 (2019-08-08)
 
 Fixes:
