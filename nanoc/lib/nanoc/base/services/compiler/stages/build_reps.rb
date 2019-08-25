@@ -5,6 +5,9 @@ module Nanoc
     class Compiler
       module Stages
         class BuildReps < Nanoc::Core::CompilationStage
+          include Nanoc::Core::ContractsSupport
+
+          contract C::KeywordArgs[site: Nanoc::Core::Site, action_provider: Nanoc::Core::ActionProvider] => C::Any
           def initialize(site:, action_provider:)
             @site = site
             @action_provider = action_provider
