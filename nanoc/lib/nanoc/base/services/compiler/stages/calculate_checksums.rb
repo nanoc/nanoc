@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class CalculateChecksums < Nanoc::Int::Compiler::Stage
+        class CalculateChecksums < Nanoc::Core::CompilationStage
           def initialize(items:, layouts:, code_snippets:, config:)
             @items = items
             @layouts = layouts

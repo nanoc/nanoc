@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class Cleanup < Nanoc::Int::Compiler::Stage
+        class Cleanup < Nanoc::Core::CompilationStage
           def initialize(output_dirs)
             @output_dirs = output_dirs
           end

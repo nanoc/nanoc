@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class Prune < Nanoc::Int::Compiler::Stage
+        class Prune < Nanoc::Core::CompilationStage
           def initialize(config:, reps:)
             @config = config
             @reps = reps

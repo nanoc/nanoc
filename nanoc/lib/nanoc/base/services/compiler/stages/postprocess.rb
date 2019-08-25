@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class Postprocess < Nanoc::Int::Compiler::Stage
+        class Postprocess < Nanoc::Core::CompilationStage
           include Nanoc::Core::ContractsSupport
 
           def initialize(action_provider:, site:)

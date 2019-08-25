@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Compiler::Stage do
+describe Nanoc::Core::CompilationStage do
   subject(:stage) { klass.new }
 
   let(:klass) { described_class }

@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class ForgetOutdatedDependencies < Nanoc::Int::Compiler::Stage
+        class ForgetOutdatedDependencies < Nanoc::Core::CompilationStage
           include Nanoc::Core::ContractsSupport
 
           def initialize(dependency_store:)

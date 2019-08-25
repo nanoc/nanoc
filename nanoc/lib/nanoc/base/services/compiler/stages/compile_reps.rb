@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class CompileReps < Nanoc::Int::Compiler::Stage
+        class CompileReps < Nanoc::Core::CompilationStage
           include Nanoc::Core::ContractsSupport
           include Nanoc::Assertions::Mixin
 

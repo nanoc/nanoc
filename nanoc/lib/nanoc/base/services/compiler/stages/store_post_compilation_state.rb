@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class StorePostCompilationState < Nanoc::Int::Compiler::Stage
+        class StorePostCompilationState < Nanoc::Core::CompilationStage
           include Nanoc::Core::ContractsSupport
 
           def initialize(dependency_store:)

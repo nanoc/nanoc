@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class LoadStores < Nanoc::Int::Compiler::Stage
+        class LoadStores < Nanoc::Core::CompilationStage
           include Nanoc::Core::ContractsSupport
 
           def initialize(checksum_store:, compiled_content_cache:, dependency_store:, action_sequence_store:, outdatedness_store:)

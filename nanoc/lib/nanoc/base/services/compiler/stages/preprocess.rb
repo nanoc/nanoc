@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class Preprocess < Nanoc::Int::Compiler::Stage
+        class Preprocess < Nanoc::Core::CompilationStage
           def initialize(action_provider:, site:, dependency_store:, checksum_store:)
             @action_provider = action_provider
             @site = site

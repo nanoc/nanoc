@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class DetermineOutdatedness < Nanoc::Int::Compiler::Stage
+        class DetermineOutdatedness < Nanoc::Core::CompilationStage
           include Nanoc::Core::ContractsSupport
 
           def initialize(reps:, outdatedness_checker:, outdatedness_store:)

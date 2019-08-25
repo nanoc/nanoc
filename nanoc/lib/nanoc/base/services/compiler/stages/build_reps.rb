@@ -4,7 +4,7 @@ module Nanoc
   module Int
     class Compiler
       module Stages
-        class BuildReps < Nanoc::Int::Compiler::Stage
+        class BuildReps < Nanoc::Core::CompilationStage
           def initialize(site:, action_provider:)
             @site = site
             @action_provider = action_provider

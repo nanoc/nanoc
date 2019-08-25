@@ -18,6 +18,7 @@ lib/nanoc/core/checksummer.rb
 lib/nanoc/core/code_snippet.rb
 lib/nanoc/core/compiled_content_cache.rb
 lib/nanoc/core/compiled_content_store.rb
+lib/nanoc/core/compilation_stage.rb
 lib/nanoc/core/configuration-schema.json
 lib/nanoc/core/configuration.rb
 lib/nanoc/core/content.rb
