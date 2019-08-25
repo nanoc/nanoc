@@ -5,7 +5,7 @@ module Nanoc
     # @api private
     class ItemRepWriter
       include Nanoc::Core::ContractsSupport
-      include Nanoc::Assertions::Mixin
+      include Nanoc::Core::Assertions::Mixin
 
       TMP_TEXT_ITEMS_DIR = 'text_items'
 
@@ -24,7 +24,7 @@ module Nanoc
       end
 
       def write_single(item_rep, compiled_content_store, snapshot_name, raw_path, written_paths)
-        assert Nanoc::Assertions::PathIsAbsolute.new(path: raw_path)
+        assert Nanoc::Core::Assertions::PathIsAbsolute.new(path: raw_path)
 
         # Don’t write twice
         # TODO: test written_paths behavior

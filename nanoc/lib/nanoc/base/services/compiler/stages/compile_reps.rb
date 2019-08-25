@@ -6,7 +6,7 @@ module Nanoc
       module Stages
         class CompileReps < Nanoc::Core::CompilationStage
           include Nanoc::Core::ContractsSupport
-          include Nanoc::Assertions::Mixin
+          include Nanoc::Core::Assertions::Mixin
 
           def initialize(reps:, outdatedness_store:, dependency_store:, action_sequences:, compilation_context:, compiled_content_cache:)
             @reps = reps
@@ -28,7 +28,7 @@ module Nanoc
               end
             end
 
-            assert Nanoc::Assertions::AllItemRepsHaveCompiledContent.new(
+            assert Nanoc::Core::Assertions::AllItemRepsHaveCompiledContent.new(
               compiled_content_cache: @compiled_content_cache,
               item_reps: @reps,
             )

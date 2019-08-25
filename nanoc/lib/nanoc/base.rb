@@ -9,7 +9,6 @@ end
 require_relative 'base/error'
 require_relative 'base/errors'
 require_relative 'base/changes_stream'
-require_relative 'base/assertions'
 
 require_relative 'base/feature'
 require_relative 'base/repos'

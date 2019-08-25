@@ -11,6 +11,7 @@ describe 'meta', chdir: false do
     # TODO: don’t ignore anything
     ignored = %w[
       action_provider
+      assertions
       checksum_collection
       contracts_support
       dependency
