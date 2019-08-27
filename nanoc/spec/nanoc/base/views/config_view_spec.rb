@@ -19,7 +19,7 @@ describe Nanoc::ConfigView do
     )
   end
 
-  let(:dependency_tracker) { double(:dependency_tracker) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
 
   describe '#frozen?' do
     subject { view.frozen? }

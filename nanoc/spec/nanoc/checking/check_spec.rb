@@ -77,11 +77,7 @@ describe Nanoc::Checking::Check do
       double(:view_context, dependency_tracker: dependency_tracker)
     end
 
-    let(:dependency_tracker) do
-      double(:dependency_tracker).tap do |dt|
-        allow(dt).to receive(:bounce)
-      end
-    end
+    let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
 
     let(:output_filenames) do
       [
@@ -141,11 +137,7 @@ describe Nanoc::Checking::Check do
       double(:view_context, dependency_tracker: dependency_tracker)
     end
 
-    let(:dependency_tracker) do
-      double(:dependency_tracker).tap do |dt|
-        allow(dt).to receive(:bounce)
-      end
-    end
+    let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
 
     let(:output_filenames) do
       [

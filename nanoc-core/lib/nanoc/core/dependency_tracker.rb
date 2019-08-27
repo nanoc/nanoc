@@ -11,19 +11,6 @@ module Nanoc
       C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
       C_ARGS = C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
 
-      class Null
-        include Nanoc::Core::ContractsSupport
-
-        contract C_OBJ, C_ARGS => C::Any
-        def enter(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
-
-        contract C_OBJ => C::Any
-        def exit; end
-
-        contract C_OBJ, C_ARGS => C::Any
-        def bounce(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
-      end
-
       attr_reader :dependency_store
 
       def initialize(dependency_store)
@@ -57,6 +44,21 @@ module Nanoc
       def bounce(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
         enter(obj, raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
         exit
+      end
+
+      class Null < DependencyTracker
+        include Nanoc::Core::ContractsSupport
+
+        def initialize; end
+
+        contract C_OBJ, C_ARGS => C::Any
+        def enter(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
+
+        contract C_OBJ => C::Any
+        def exit; end
+
+        contract C_OBJ, C_ARGS => C::Any
+        def bounce(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
       end
     end
   end

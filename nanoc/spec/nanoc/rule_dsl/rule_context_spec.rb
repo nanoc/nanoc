@@ -27,7 +27,7 @@ shared_examples 'a rule context' do
     Nanoc::ViewContextForPreCompilation.new(items: items)
   end
 
-  let(:dependency_tracker) { double(:dependency_tracker) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
 
   describe '#initialize' do
     it 'wraps objects in view classes' do

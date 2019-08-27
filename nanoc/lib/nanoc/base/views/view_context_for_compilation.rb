@@ -14,7 +14,7 @@ module Nanoc
     contract C::KeywordArgs[
       reps: Nanoc::Core::ItemRepRepo,
       items: Nanoc::Core::IdentifiableCollection,
-      dependency_tracker: C::Any,
+      dependency_tracker: Nanoc::Core::DependencyTracker,
       compilation_context: C::Any,
       compiled_content_store: C::Any,
     ] => C::Any
