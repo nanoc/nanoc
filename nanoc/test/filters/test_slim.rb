@@ -35,7 +35,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: Nanoc::Core::DependencyTracker::Null.new,
       compilation_context: :__irrelevat_compiler,
-      compiled_content_store: :__irrelevant_compiled_content_store,
+      compiled_content_store: Nanoc::Core::CompiledContentStore.new,
     )
   end
 

@@ -9,7 +9,7 @@ shared_examples 'a document view' do
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
       compilation_context: double(:compilation_context),
-      compiled_content_store: double(:compiled_content_store),
+      compiled_content_store: Nanoc::Core::CompiledContentStore.new,
     )
   end
 

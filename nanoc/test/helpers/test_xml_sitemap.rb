@@ -20,7 +20,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
       compilation_context: :__irrelevant__,
-      compiled_content_store: :__irrelevant_compiled_content_store,
+      compiled_content_store: Nanoc::Core::CompiledContentStore.new,
     )
 
     @items = nil

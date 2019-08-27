@@ -27,7 +27,7 @@ describe Nanoc::PostCompileItemRepView do
       donkey: Nanoc::Core::TextualContent.new('content-donkey'),
     }
   end
-  let(:compiled_content_store) { double(:compiled_content_store) }
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
   let(:compilation_context) { double(:compilation_context, compiled_content_cache: compiled_content_cache) }
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store)) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }

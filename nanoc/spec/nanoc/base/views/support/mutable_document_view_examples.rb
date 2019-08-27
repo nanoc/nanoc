@@ -14,7 +14,7 @@ shared_examples 'a mutable document view' do
   end
 
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store)) }
-  let(:compiled_content_store) { double(:compiled_content_store) }
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
 
   describe '#raw_content=' do
