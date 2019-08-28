@@ -72,9 +72,12 @@ module Nanoc
           def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
             yield
 
-            @queue << rep
-
+            # Caution: Notification must be posted before enqueueing the rep,
+            # or we risk a race condition where the :rep_write_ended
+            # notification happens before the :rep_write_enqueued one.
             Nanoc::Core::NotificationCenter.post(:rep_write_enqueued, rep)
+
+            @queue << rep
           end
         end
       end
