@@ -22,7 +22,16 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
     )
   end
 
-  let(:action_provider) { double(:action_provider) }
+  let(:action_provider) do
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
+
+      def initialize; end
+    end.new
+  end
+
   let(:action_sequences) { double(:action_sequences) }
   let(:reps) { Nanoc::Core::ItemRepRepo.new }
   let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config: config) }

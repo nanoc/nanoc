@@ -58,7 +58,20 @@ describe Nanoc::CLI::Commands::ShowRules, stdio: true, site: true do
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
-    let(:action_provider) { double(:action_provider, rules_collection: rules_collection) }
+    let(:action_provider) do
+      Class.new(Nanoc::Core::ActionProvider) do
+        attr_reader :rules_collection
+
+        def self.for(_context)
+          raise NotImplementedError
+        end
+
+        def initialize(rules_collection)
+          @rules_collection = rules_collection
+        end
+      end.new(rules_collection)
+    end
+
     let(:compiler) { double(:compiler) }
 
     let(:rules_collection) do

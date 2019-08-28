@@ -11,9 +11,14 @@ describe Nanoc::Int::Compiler::Stages::Preprocess do
   end
 
   let(:action_provider) do
-    double(:action_provider)
-  end
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
 
+      def initialize; end
+    end.new
+  end
   let(:site) do
     Nanoc::Core::Site.new(
       config: config,

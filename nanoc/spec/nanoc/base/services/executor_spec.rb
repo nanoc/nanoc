@@ -17,7 +17,16 @@ describe Nanoc::Int::Executor do
   let(:rep) { Nanoc::Core::ItemRep.new(item, :donkey) }
   let(:content) { Nanoc::Core::TextualContent.new('Donkey Power').tap(&:freeze) }
 
-  let(:action_provider) { double(:action_provider) }
+  let(:action_provider) do
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
+
+      def initialize; end
+    end.new
+  end
+
   let(:reps) { double(:reps) }
   let(:site) { double(:site) }
   let(:compiled_content_cache) { double(:compiled_content_cache) }

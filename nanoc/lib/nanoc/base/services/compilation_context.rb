@@ -3,10 +3,19 @@
 module Nanoc
   module Int
     class CompilationContext
+      include Nanoc::Core::ContractsSupport
+
       attr_reader :site
       attr_reader :compiled_content_cache
       attr_reader :compiled_content_store
 
+      contract C::KeywordArgs[
+        action_provider: Nanoc::Core::ActionProvider,
+        reps: C::Any, # Nanoc::Core::ItemRepRepo,
+        site: C::Any, # Nanoc::Core::Site,
+        compiled_content_cache: C::Any, # Nanoc::Core::CompiledContentCache,
+        compiled_content_store: C::Any, # Nanoc::Core::CompiledContentStore,
+      ] => C::Any
       def initialize(action_provider:, reps:, site:, compiled_content_cache:, compiled_content_store:)
         @action_provider = action_provider
         @reps = reps

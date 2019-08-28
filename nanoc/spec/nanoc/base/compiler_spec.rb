@@ -19,7 +19,16 @@ describe Nanoc::Int::Compiler do
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
 
   let(:outdatedness_store) { Nanoc::Core::OutdatednessStore.new(config: config) }
-  let(:action_provider) { double(:action_provider) }
+
+  let(:action_provider) do
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
+
+      def initialize; end
+    end.new
+  end
 
   let(:compiled_content_cache) do
     Nanoc::Core::CompiledContentCache.new(config: config)
