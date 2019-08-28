@@ -11,7 +11,7 @@ module Nanoc
 
       contract C::KeywordArgs[
         action_provider: Nanoc::Core::ActionProvider,
-        reps: C::Any, # Nanoc::Core::ItemRepRepo,
+        reps: Nanoc::Core::ItemRepRepo,
         site: C::Any, # Nanoc::Core::Site,
         compiled_content_cache: C::Any, # Nanoc::Core::CompiledContentCache,
         compiled_content_store: C::Any, # Nanoc::Core::CompiledContentStore,

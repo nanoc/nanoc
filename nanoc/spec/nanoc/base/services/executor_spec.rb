@@ -27,7 +27,10 @@ describe Nanoc::Int::Executor do
     end.new
   end
 
-  let(:reps) { double(:reps) }
+  let(:reps) do
+    Nanoc::Core::ItemRepRepo.new
+  end
+
   let(:site) { double(:site) }
   let(:compiled_content_cache) { double(:compiled_content_cache) }
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
