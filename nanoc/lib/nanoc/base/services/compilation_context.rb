@@ -21,7 +21,7 @@ module Nanoc
         reps: Nanoc::Core::ItemRepRepo,
         site: Nanoc::Core::Site,
         compiled_content_cache: C_COMPILED_CONTENT_CACHE,
-        compiled_content_store: C::Any, # Nanoc::Core::CompiledContentStore,
+        compiled_content_store: Nanoc::Core::CompiledContentStore,
       ] => C::Any
       def initialize(action_provider:, reps:, site:, compiled_content_cache:, compiled_content_store:)
         @action_provider = action_provider
