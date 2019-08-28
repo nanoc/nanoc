@@ -31,6 +31,8 @@ module Nanoc
         @compiled_content_store = compiled_content_store
       end
 
+      # FIXME: Expand contract
+      contract Nanoc::Core::Layout => C::Any
       def filter_name_and_args_for_layout(layout)
         seq = @action_provider.action_sequence_for(layout)
         if seq.nil? || seq.size != 1 || !seq[0].is_a?(Nanoc::Core::ProcessingActions::Filter)
@@ -40,6 +42,7 @@ module Nanoc
         [seq[0].filter_name, seq[0].params]
       end
 
+      contract Nanoc::Core::DependencyTracker => C::Named['Nanoc::ViewContextForCompilation']
       def create_view_context(dependency_tracker)
         Nanoc::ViewContextForCompilation.new(
           reps: @reps,
@@ -50,6 +53,7 @@ module Nanoc
         )
       end
 
+      contract Nanoc::Core::ItemRep, Nanoc::Core::DependencyTracker => Hash
       def assigns_for(rep, dependency_tracker)
         last_content = @compiled_content_store.get_current(rep)
         content_or_filename_assigns =
