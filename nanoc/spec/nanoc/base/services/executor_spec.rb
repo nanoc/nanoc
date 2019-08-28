@@ -31,7 +31,25 @@ describe Nanoc::Int::Executor do
     Nanoc::Core::ItemRepRepo.new
   end
 
-  let(:site) { double(:site) }
+  let(:site) do
+    Nanoc::Core::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: Nanoc::Core::InMemoryDataSource.new([], layouts),
+    )
+  end
+
+  let(:layout) do
+    Nanoc::Core::Layout.new(layout_content, { bug: 'Gum Emperor' }, '/default.erb')
+  end
+
+  let(:layouts) { [layout] }
+
+  let(:layout_content) { 'head <%= @foo %> foot' }
+
+  let(:config_hash) { { string_pattern_type: 'glob' } }
+  let(:config) { Nanoc::Core::Configuration.new(hash: config_hash, dir: Dir.getwd).with_defaults }
+
   let(:compiled_content_cache) { double(:compiled_content_cache) }
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
@@ -346,22 +364,6 @@ describe Nanoc::Int::Executor do
   describe '#layout' do
     subject { executor.layout('/default.*') }
 
-    let(:site) { double(:site, config: config, layouts: layouts) }
-
-    let(:config) do
-      {
-        string_pattern_type: 'glob',
-      }
-    end
-
-    let(:layout) do
-      Nanoc::Core::Layout.new(layout_content, { bug: 'Gum Emperor' }, '/default.erb')
-    end
-
-    let(:layouts) { [layout] }
-
-    let(:layout_content) { 'head <%= @foo %> foot' }
-
     let(:assigns) do
       { foo: 'hallo' }
     end
@@ -581,10 +583,6 @@ describe Nanoc::Int::Executor do
   describe '#find_layout' do
     subject { executor.find_layout(arg) }
 
-    let(:site) { double(:site, config: config, layouts: layouts) }
-
-    let(:config) { {} }
-
     before do
       allow(compilation_context).to receive(:site) { site }
     end
@@ -605,7 +603,7 @@ describe Nanoc::Int::Executor do
       end
 
       context 'globs' do
-        let(:config) { { string_pattern_type: 'glob' } }
+        let(:config_hash) { { string_pattern_type: 'glob' } }
 
         let(:arg) { '/default.*' }
 
@@ -613,7 +611,7 @@ describe Nanoc::Int::Executor do
       end
 
       context 'no globs' do
-        let(:config) { { string_pattern_type: 'legacy' } }
+        let(:config_hash) { { string_pattern_type: 'legacy' } }
 
         let(:arg) { '/default.*' }
 

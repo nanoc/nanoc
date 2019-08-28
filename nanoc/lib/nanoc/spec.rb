@@ -164,7 +164,7 @@ module Nanoc
           Nanoc::Int::CompilationContext.new(
             action_provider: @action_provider,
             reps: @reps,
-            site: @site,
+            site: site,
             compiled_content_cache: Nanoc::Core::CompiledContentCache,
             compiled_content_store: @compiled_content_store,
           )
