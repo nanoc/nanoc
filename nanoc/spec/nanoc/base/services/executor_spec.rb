@@ -50,7 +50,10 @@ describe Nanoc::Int::Executor do
   let(:config_hash) { { string_pattern_type: 'glob' } }
   let(:config) { Nanoc::Core::Configuration.new(hash: config_hash, dir: Dir.getwd).with_defaults }
 
-  let(:compiled_content_cache) { double(:compiled_content_cache) }
+  let(:compiled_content_cache) do
+    Nanoc::Core::CompiledContentCache.new(config: config)
+  end
+
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store)) }

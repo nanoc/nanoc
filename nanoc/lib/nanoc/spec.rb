@@ -165,7 +165,7 @@ module Nanoc
             action_provider: @action_provider,
             reps: @reps,
             site: site,
-            compiled_content_cache: Nanoc::Core::CompiledContentCache,
+            compiled_content_cache: Nanoc::Core::CompiledContentCache.new(config: @config),
             compiled_content_store: @compiled_content_store,
           )
 

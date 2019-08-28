@@ -9,11 +9,18 @@ module Nanoc
       attr_reader :compiled_content_cache
       attr_reader :compiled_content_store
 
+      C_COMPILED_CONTENT_CACHE =
+        C::Or[
+          Nanoc::Core::CompiledContentCache,
+          Nanoc::Core::TextualCompiledContentCache,
+          Nanoc::Core::BinaryCompiledContentCache,
+        ]
+
       contract C::KeywordArgs[
         action_provider: Nanoc::Core::ActionProvider,
         reps: Nanoc::Core::ItemRepRepo,
         site: Nanoc::Core::Site,
-        compiled_content_cache: C::Any, # Nanoc::Core::CompiledContentCache,
+        compiled_content_cache: C_COMPILED_CONTENT_CACHE,
         compiled_content_store: C::Any, # Nanoc::Core::CompiledContentStore,
       ] => C::Any
       def initialize(action_provider:, reps:, site:, compiled_content_cache:, compiled_content_store:)
