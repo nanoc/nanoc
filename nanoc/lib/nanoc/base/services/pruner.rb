@@ -8,15 +8,7 @@ module Nanoc
   class Pruner
     include Nanoc::Core::ContractsSupport
 
-    # @param [Nanoc::Core::Configuration] config
-    #
-    # @param [Nanoc::Core::ItemRepRepo] reps
-    #
-    # @param [Boolean] dry_run true if the files to be deleted
-    #   should only be printed instead of actually deleted, false if the files
-    #   should actually be deleted.
-    #
-    # @param [Enumerable<String>] exclude
+    contract Nanoc::Core::Configuration, Nanoc::Core::ItemRepRepo, C::KeywordArgs[dry_run: C::Optional[C::Bool], exclude: C::Optional[C::IterOf[String]]] => C::Any
     def initialize(config, reps, dry_run: false, exclude: [])
       @config  = config
       @reps    = reps

@@ -33,8 +33,9 @@ module Nanoc::Checking::Checks
 
     def pruner
       exclude_config = @config.fetch(:prune, {}).fetch(:exclude, [])
-      # FIXME: reps=nil is icky
-      @pruner ||= Nanoc::Pruner.new(@config, nil, exclude: exclude_config)
+      # FIXME: specifying reps this way is icky
+      reps = Nanoc::Core::ItemRepRepo.new
+      @pruner ||= Nanoc::Pruner.new(@config._unwrap, reps, exclude: exclude_config)
     end
   end
 end
