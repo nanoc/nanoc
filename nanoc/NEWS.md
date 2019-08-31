@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.10 (2019-08-31)
+
+Fixes:
+
+* Fixed problem with sporadic `DDMetrics::Stopwatch::AlreadyRunningError` (#1445)
+
 ## 4.11.9 (2019-08-17)
 
 Enhancements:
