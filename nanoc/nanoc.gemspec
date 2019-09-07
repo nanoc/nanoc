@@ -22,11 +22,11 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('addressable', '~> 2.5')
   s.add_runtime_dependency('colored', '~> 1.2')
   s.add_runtime_dependency('cri', '~> 2.15')
+  s.add_runtime_dependency('diff-lcs', '~> 1.3')
   s.add_runtime_dependency('nanoc-core', "= #{Nanoc::VERSION}")
   s.add_runtime_dependency('parallel', '~> 1.12')
   s.add_runtime_dependency('tomlrb', '~> 1.2')
   s.add_runtime_dependency('tty-command', '~> 0.8')
-  s.add_runtime_dependency('tty-file', '~> 0.7')
   s.add_runtime_dependency('tty-platform', '~> 0.2')
   s.add_runtime_dependency('tty-which', '~> 0.4')
 end
