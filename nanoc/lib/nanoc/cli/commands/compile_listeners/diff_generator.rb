@@ -2,6 +2,53 @@
 
 module Nanoc::CLI::Commands::CompileListeners
   class DiffGenerator < Abstract
+    class Differ
+      def initialize(path, str_a, str_b)
+        @path = path
+        @str_a = str_a
+        @str_b = str_b
+      end
+
+      def call
+        run
+      end
+
+      private
+
+      def run
+        lines_a = @str_a.lines.map(&:chomp)
+        lines_b = @str_b.lines.map(&:chomp)
+
+        diffs = Diff::LCS.diff(lines_a, lines_b)
+
+        # Find hunks
+        hunks = []
+        file_length_difference = 0
+        diffs.each do |piece|
+          hunk = Diff::LCS::Hunk.new(lines_a, lines_b, piece, 3, file_length_difference)
+          file_length_difference = hunk.file_length_difference
+          hunks << hunk
+        end
+
+        # Merge hunks
+        merged_hunks = []
+        hunks.each do |hunk|
+          merged = merged_hunks.any? && hunk.merge(merged_hunks.last)
+          merged_hunks << hunk unless merged
+        end
+
+        # Output hunks
+        output = +''
+        output << "--- #{@path}\n"
+        output << "+++ #{@path}\n"
+        merged_hunks.each do |hunk|
+          output << hunk.diff(:unified) << "\n"
+        end
+
+        output
+      end
+    end
+
     # @see Listener#enable_for?
     def self.enable_for?(command_runner, site)
       site.config[:enable_output_diff] || command_runner.options[:diff]
@@ -55,33 +102,13 @@ module Nanoc::CLI::Commands::CompileListeners
         end
 
         # Generate diff
-        diff = ['--- ' + path, '+++ ' + path, diff_strings(old_content, new_content)].join("\n")
+        diff = Differ.new(path, old_content, new_content).call
 
         # Write diff
         @diff_lock.synchronize do
           File.open('output.diff', 'a') { |io| io.write(diff) }
         end
       end
-    end
-
-    def diff_strings(str_a, str_b)
-      # Create files
-      Tempfile.open('old') do |old_file|
-        Tempfile.open('new') do |new_file|
-          # Write files
-          old_file.write(str_a)
-          old_file.flush
-          new_file.write(str_b)
-          new_file.flush
-
-          # Diff
-          TTY::File.diff_files(old_file.path, new_file.path, verbose: false)
-        end
-      end
-    rescue Errno::ENOENT
-      warn 'Failed to run `diff`, so no diff with the previously compiled ' \
-           'content will be available.'
-      nil
     end
   end
 end

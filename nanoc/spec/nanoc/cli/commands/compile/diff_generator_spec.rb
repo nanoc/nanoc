@@ -43,4 +43,43 @@ describe Nanoc::CLI::Commands::CompileListeners::DiffGenerator do
       it { is_expected.to be }
     end
   end
+
+  describe Nanoc::CLI::Commands::CompileListeners::DiffGenerator::Differ do
+    subject { differ.call }
+
+    let(:differ) { described_class.new('content/foo.md', str_a, str_b) }
+
+    let(:str_a) do
+      %w[a b c d e f g h i j k l m n o p q r s].join("\n")
+    end
+
+    let(:str_b) do
+      # remove c, d
+      # add !!!
+      %w[a b e f g h i j k l m !!! n o p q r s].join("\n")
+    end
+
+    it 'generates the proper diff' do
+      expect(subject).to eq(<<~EOS)
+        --- content/foo.md
+        +++ content/foo.md
+        @@ -1,7 +1,5 @@
+         a
+         b
+        -c
+        -d
+         e
+         f
+         g
+        @@ -11,6 +9,7 @@
+         k
+         l
+         m
+        +!!!
+         n
+         o
+         p
+      EOS
+    end
+  end
 end
