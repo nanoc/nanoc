@@ -57,20 +57,9 @@ module Nanoc::CLI::Commands::CompileListeners
     # @see Listener#start
     def start
       setup_diffs
-      old_contents = {}
 
-      on(:rep_write_started) do |rep, path|
-        old_contents[rep] = File.file?(path) ? File.read(path) : nil
-      end
-
-      on(:rep_write_ended) do |rep, binary, path, _is_created, _is_modified|
-        unless binary
-          new_contents = File.file?(path) ? File.read(path) : nil
-          if old_contents[rep] && new_contents
-            generate_diff_for(path, old_contents[rep], new_contents)
-          end
-          old_contents.delete(rep)
-        end
+      on(:rep_ready_for_diff) do |raw_path, old_content, new_content|
+        generate_diff_for(raw_path, old_content, new_content)
       end
     end
 

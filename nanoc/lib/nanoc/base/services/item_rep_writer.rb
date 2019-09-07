@@ -43,9 +43,6 @@ module Nanoc
           :rep_write_started, item_rep, raw_path
         )
 
-        # Sync (needed so that diff generator can read the old contents)
-        Nanoc::Core::NotificationCenter.sync
-
         content = compiled_content_store.get(item_rep, snapshot_name)
         if content.binary?
           temp_path = content.filename
@@ -56,6 +53,13 @@ module Nanoc
 
         # Check whether content was modified
         is_modified = is_created || !FileUtils.identical?(raw_path, temp_path)
+
+        # Notify ready for diff generation
+        if !is_created && is_modified && !content.binary?
+          Nanoc::Core::NotificationCenter.post(
+            :rep_ready_for_diff, raw_path, File.read(raw_path), content.string
+          )
+        end
 
         # Write
         if is_modified
