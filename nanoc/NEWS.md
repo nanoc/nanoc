@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.11 (2019-09-07)
+
+Fixes:
+
+* Made output diff more reliable (#1455, #1456)
+
 ## 4.11.10 (2019-08-31)
 
 Fixes:
