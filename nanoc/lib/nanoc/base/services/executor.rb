@@ -36,11 +36,13 @@ module Nanoc
 
       def layout(layout_identifier, extra_filter_args = nil)
         layout = find_layout(layout_identifier)
-        filter_name, filter_args = *@compilation_context.filter_name_and_args_for_layout(layout)
+        filter_name_and_args = @compilation_context.filter_name_and_args_for_layout(layout)
+        filter_name = filter_name_and_args.name
         if filter_name.nil?
           raise ::Nanoc::Core::Error, "Cannot find rule for layout matching #{layout_identifier}"
         end
 
+        filter_args = filter_name_and_args.args
         filter_args = filter_args.merge(extra_filter_args || {})
         filter_args.freeze
 

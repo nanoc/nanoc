@@ -4,6 +4,8 @@ module Nanoc
   module Core
     module ProcessingActions
       class Filter < Nanoc::Core::ProcessingAction
+        # TODO: rename params to args
+
         # filter :foo
         # filter :foo, params
 

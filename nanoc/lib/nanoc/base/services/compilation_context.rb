@@ -3,6 +3,19 @@
 module Nanoc
   module Int
     class CompilationContext
+      class FilterNameAndArgs
+        include Nanoc::Core::ContractsSupport
+
+        attr_reader :name
+        attr_reader :args
+
+        contract C::KeywordArgs[name: C::Maybe[Symbol], args: Hash] => C::Any
+        def initialize(name:, args:)
+          @name = name
+          @args = args
+        end
+      end
+
       include Nanoc::Core::ContractsSupport
 
       attr_reader :site
@@ -31,15 +44,14 @@ module Nanoc
         @compiled_content_store = compiled_content_store
       end
 
-      # FIXME: Expand contract
-      contract Nanoc::Core::Layout => C::Any
+      contract Nanoc::Core::Layout => FilterNameAndArgs
       def filter_name_and_args_for_layout(layout)
         seq = @action_provider.action_sequence_for(layout)
         if seq.nil? || seq.size != 1 || !seq[0].is_a?(Nanoc::Core::ProcessingActions::Filter)
           raise Nanoc::Int::Errors::UndefinedFilterForLayout.new(layout)
         end
 
-        [seq[0].filter_name, seq[0].params]
+        FilterNameAndArgs.new(name: seq[0].filter_name, args: seq[0].params)
       end
 
       contract Nanoc::Core::DependencyTracker => C::Named['Nanoc::ViewContextForCompilation']

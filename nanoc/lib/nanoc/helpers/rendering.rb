@@ -40,7 +40,9 @@ module Nanoc::Helpers
       }.merge(other_assigns)
 
       # Get filter name
-      filter_name, filter_args = *@config._context.compilation_context.filter_name_and_args_for_layout(layout)
+      filter_name_and_args = @config._context.compilation_context.filter_name_and_args_for_layout(layout)
+      filter_name = filter_name_and_args.name
+      filter_args = filter_name_and_args.args
       raise Nanoc::Int::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class
