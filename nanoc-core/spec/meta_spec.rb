@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'meta', chdir: false do
-  example do
+  it 'is covered by specs' do
     regular_files = Dir['lib/nanoc/core/**/*.rb']
     regular_file_base_names = regular_files.map { |fn| fn.gsub(/^lib\/nanoc\/core\/|\.rb$/, '') }
 
@@ -28,5 +28,15 @@ describe 'meta', chdir: false do
     ]
 
     expect(regular_file_base_names - ignored).to match_array(spec_file_base_names)
+  end
+
+  it 'doesn’t log anything' do
+    # TODO: don’t have any exceptions
+    regular_files = Dir['lib/nanoc/core/**/*.rb'] - ['lib/nanoc/core/data_source.rb']
+
+    expect(regular_files).to all(satisfy do |fn|
+      content = File.read(fn)
+      !content.match?(/\b(puts|warn)\b/) && !content.match?(/\$std(err|out)/)
+    end)
   end
 end
