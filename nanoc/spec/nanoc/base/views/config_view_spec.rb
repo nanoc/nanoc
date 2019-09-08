@@ -5,7 +5,7 @@ describe Nanoc::ConfigView do
     Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: hash)
   end
 
-  let(:hash) { { amount: 9000, animal: 'donkey', foo: { bar: :baz } } }
+  let(:hash) { { output_dir: 'ootpoot/', amount: 9000, animal: 'donkey', foo: { bar: :baz } } }
 
   let(:view) { described_class.new(config, view_context) }
 
@@ -14,12 +14,47 @@ describe Nanoc::ConfigView do
       reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
-      compilation_context: double(:compilation_context),
-      compiled_content_store: Nanoc::Core::CompiledContentStore.new,
+      compilation_context: compilation_context,
+      compiled_content_store: compiled_content_store,
     )
   end
 
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
+
+  let(:compilation_context) do
+    Nanoc::Int::CompilationContext.new(
+      action_provider: action_provider,
+      reps: reps,
+      site: site,
+      compiled_content_cache: compiled_content_cache,
+      compiled_content_store: compiled_content_store,
+    )
+  end
+
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config: config) }
+
+  let(:site) do
+    Nanoc::Core::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+    )
+  end
+
+  let(:items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
+  let(:reps) { Nanoc::Core::ItemRepRepo.new }
+
+  let(:action_provider) do
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
+
+      def initialize; end
+    end.new
+  end
 
   describe '#frozen?' do
     subject { view.frozen? }
@@ -146,7 +181,7 @@ describe Nanoc::ConfigView do
       res = []
       view.each { |k, v| res << [k, v] }
 
-      expect(res).to eql([[:amount, 9000], [:animal, 'donkey'], [:foo, { bar: :baz }]])
+      expect(res).to eql([[:output_dir, 'ootpoot/'], [:amount, 9000], [:animal, 'donkey'], [:foo, { bar: :baz }]])
     end
   end
 

@@ -5,20 +5,17 @@ require_relative 'support/document_view_examples'
 describe Nanoc::CompilationItemView do
   let(:entity_class) { Nanoc::Core::Item }
   let(:other_view_class) { Nanoc::LayoutView }
-  before do
-    dependency_tracker.enter(base_item)
-  end
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
   let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
   let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
-  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
-  let(:compilation_context) { double(:compilation_context) }
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
   let(:items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
   let(:reps) { Nanoc::Core::ItemRepRepo.new }
+
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
       reps: reps,
@@ -27,6 +24,41 @@ describe Nanoc::CompilationItemView do
       compilation_context: compilation_context,
       compiled_content_store: compiled_content_store,
     )
+  end
+
+  let(:compilation_context) do
+    Nanoc::Int::CompilationContext.new(
+      action_provider: action_provider,
+      reps: reps,
+      site: site,
+      compiled_content_cache: compiled_content_cache,
+      compiled_content_store: compiled_content_store,
+    )
+  end
+
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config: config) }
+
+  let(:site) do
+    Nanoc::Core::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+    )
+  end
+
+  let(:action_provider) do
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
+
+      def initialize; end
+    end.new
+  end
+
+  before do
+    dependency_tracker.enter(base_item)
   end
 
   it_behaves_like 'a document view'

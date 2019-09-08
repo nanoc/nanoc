@@ -376,7 +376,7 @@ describe Nanoc::Int::Executor do
         reps: Nanoc::Core::ItemRepRepo.new,
         items: Nanoc::Core::ItemCollection.new(config),
         dependency_tracker: dependency_tracker,
-        compilation_context: double(:compilation_context),
+        compilation_context: compilation_context,
         compiled_content_store: compiled_content_store,
       )
     end
@@ -392,7 +392,6 @@ describe Nanoc::Int::Executor do
 
       compiled_content_store.set_current(rep, content)
 
-      allow(compilation_context).to receive(:site) { site }
       allow(compilation_context).to receive(:assigns_for).with(rep, dependency_tracker) { assigns }
       allow(compilation_context).to receive(:create_view_context).with(dependency_tracker).and_return(view_context)
 

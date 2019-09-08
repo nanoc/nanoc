@@ -12,13 +12,44 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
   end
 
   def view_context_for(item)
-    config = Nanoc::Core::Configuration.new(dir: Dir.getwd)
+    config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
+
+    items = Nanoc::Core::ItemCollection.new(config)
+    layouts = Nanoc::Core::LayoutCollection.new(config)
+    reps = item_rep_repo_for(item)
+
+    site =
+      Nanoc::Core::Site.new(
+        config: config,
+        code_snippets: [],
+        data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+      )
+
+    compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config: config)
+
+    action_provider =
+      Class.new(Nanoc::Core::ActionProvider) do
+        def self.for(_context)
+          raise NotImplementedError
+        end
+
+        def initialize; end
+      end.new
+
+    compilation_context =
+      Nanoc::Int::CompilationContext.new(
+        action_provider: action_provider,
+        reps: reps,
+        site: site,
+        compiled_content_cache: compiled_content_cache,
+        compiled_content_store: compiled_content_store,
+      )
 
     Nanoc::ViewContextForCompilation.new(
-      reps: item_rep_repo_for(item),
-      items: Nanoc::Core::ItemCollection.new(config),
+      reps: reps,
+      items: items,
       dependency_tracker: Nanoc::Core::DependencyTracker::Null.new,
-      compilation_context: :__irrelevant__,
+      compilation_context: compilation_context,
       compiled_content_store: compiled_content_store,
     )
   end

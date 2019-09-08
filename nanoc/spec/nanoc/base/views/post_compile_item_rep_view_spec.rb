@@ -20,6 +20,7 @@ describe Nanoc::PostCompileItemRepView do
       ccc[item_rep] = snapshot_contents
     end
   end
+
   let(:snapshot_contents) do
     {
       last: Nanoc::Core::TextualContent.new('content-last'),
@@ -27,12 +28,14 @@ describe Nanoc::PostCompileItemRepView do
       donkey: Nanoc::Core::TextualContent.new('content-donkey'),
     }
   end
-  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
-  let(:compilation_context) { double(:compilation_context, compiled_content_cache: compiled_content_cache) }
+
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store)) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+
   let(:items) { Nanoc::Core::ItemCollection.new(config) }
-  let(:reps) { double(:reps) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
+  let(:reps) { Nanoc::Core::ItemRepRepo.new }
+
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
       reps: Nanoc::Core::ItemRepRepo.new,
@@ -42,14 +45,46 @@ describe Nanoc::PostCompileItemRepView do
       compiled_content_store: compiled_content_store,
     )
   end
+
   let(:view) { described_class.new(item_rep, view_context) }
   let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
+
   let(:item_rep) do
     Nanoc::Core::ItemRep.new(item, :jacques).tap do |rep|
       rep.snapshot_defs = snapshot_contents.map do |name, content|
         Nanoc::Core::SnapshotDef.new(name, binary: content.binary?)
       end
     end
+  end
+
+  let(:compilation_context) do
+    Nanoc::Int::CompilationContext.new(
+      action_provider: action_provider,
+      reps: reps,
+      site: site,
+      compiled_content_cache: compiled_content_cache,
+      compiled_content_store: compiled_content_store,
+    )
+  end
+
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+
+  let(:site) do
+    Nanoc::Core::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+    )
+  end
+
+  let(:action_provider) do
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
+
+      def initialize; end
+    end.new
   end
 
   it_behaves_like 'an item rep view'

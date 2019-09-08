@@ -32,16 +32,47 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     super
 
     config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
+
     items = Nanoc::Core::ItemCollection.new(config)
     layouts = Nanoc::Core::LayoutCollection.new(config)
+    reps = Nanoc::Core::ItemRepRepo.new
+
+    site =
+      Nanoc::Core::Site.new(
+        config: config,
+        code_snippets: [],
+        data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+      )
+
     dep_store = Nanoc::Core::DependencyStore.new(items, layouts, config)
     dependency_tracker = Nanoc::Core::DependencyTracker.new(dep_store)
 
+    compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config: config)
+    compiled_content_store = Nanoc::Core::CompiledContentStore.new
+
+    action_provider =
+      Class.new(Nanoc::Core::ActionProvider) do
+        def self.for(_context)
+          raise NotImplementedError
+        end
+
+        def initialize; end
+      end.new
+
+    compilation_context =
+      Nanoc::Int::CompilationContext.new(
+        action_provider: action_provider,
+        reps: reps,
+        site: site,
+        compiled_content_cache: compiled_content_cache,
+        compiled_content_store: compiled_content_store,
+      )
+
     @view_context = Nanoc::ViewContextForCompilation.new(
-      reps: Nanoc::Core::ItemRepRepo.new,
-      items: Nanoc::Core::ItemCollection.new(config),
+      reps: reps,
+      items: items,
       dependency_tracker: dependency_tracker,
-      compilation_context: :__irrelevant__,
+      compilation_context: compilation_context,
       compiled_content_store: Nanoc::Core::CompiledContentStore.new,
     )
   end

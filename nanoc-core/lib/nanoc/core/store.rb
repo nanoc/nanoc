@@ -49,6 +49,7 @@ module Nanoc
         )
       end
 
+      contract String => String
       def self.tmp_path_prefix(output_dir)
         dir = Digest::SHA1.hexdigest(output_dir)[0..12]
         File.join('tmp', 'nanoc', dir)

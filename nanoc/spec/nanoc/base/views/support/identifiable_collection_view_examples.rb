@@ -6,11 +6,39 @@ shared_examples 'an identifiable collection view' do
 
   let(:view_context) do
     Nanoc::ViewContextForCompilation.new(
-      reps: Nanoc::Core::ItemRepRepo.new,
+      reps: reps,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
-      compilation_context: double(:__compilation_context),
-      compiled_content_store: Nanoc::Core::CompiledContentStore.new,
+      compilation_context: compilation_context,
+      compiled_content_store: compiled_content_store,
+    )
+  end
+
+  let(:compilation_context) do
+    Nanoc::Int::CompilationContext.new(
+      action_provider: action_provider,
+      reps: reps,
+      site: site,
+      compiled_content_cache: compiled_content_cache,
+      compiled_content_store: compiled_content_store,
+    )
+  end
+
+  let(:action_provider) do
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
+
+      def initialize; end
+    end.new
+  end
+
+  let(:site) do
+    Nanoc::Core::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: Nanoc::Core::InMemoryDataSource.new([], []),
     )
   end
 
@@ -18,9 +46,11 @@ shared_examples 'an identifiable collection view' do
     Nanoc::Core::DependencyTracker::Null.new
   end
 
-  let(:config) do
-    { string_pattern_type: 'glob' }
-  end
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config: config) }
+
+  let(:reps) { Nanoc::Core::ItemRepRepo.new }
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
   describe '#frozen?' do
     subject { view.frozen? }
@@ -187,7 +217,7 @@ shared_examples 'an identifiable collection view' do
       let(:arg) { '/home.*' }
 
       context 'globs not enabled' do
-        let(:config) { { string_pattern_type: 'legacy' } }
+        let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { string_pattern_type: 'legacy' }).with_defaults }
 
         it 'creates dependency' do
           expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/home.*'])

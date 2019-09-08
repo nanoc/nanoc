@@ -13,13 +13,41 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     layouts = Nanoc::Core::LayoutCollection.new(config)
     dep_store = Nanoc::Core::DependencyStore.new(items, layouts, config)
     dependency_tracker = Nanoc::Core::DependencyTracker.new(dep_store)
-
     @reps = Nanoc::Core::ItemRepRepo.new
+
+    site =
+      Nanoc::Core::Site.new(
+        config: config,
+        code_snippets: [],
+        data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+      )
+
+    compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config: config)
+    compiled_content_store = Nanoc::Core::CompiledContentStore.new
+
+    action_provider =
+      Class.new(Nanoc::Core::ActionProvider) do
+        def self.for(_context)
+          raise NotImplementedError
+        end
+
+        def initialize; end
+      end.new
+
+    compilation_context =
+      Nanoc::Int::CompilationContext.new(
+        action_provider: action_provider,
+        reps: @reps,
+        site: site,
+        compiled_content_cache: compiled_content_cache,
+        compiled_content_store: compiled_content_store,
+      )
+
     @view_context = Nanoc::ViewContextForCompilation.new(
       reps: @reps,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
-      compilation_context: :__irrelevant__,
+      compilation_context: compilation_context,
       compiled_content_store: Nanoc::Core::CompiledContentStore.new,
     )
 

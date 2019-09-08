@@ -2,7 +2,9 @@
 
 describe Nanoc::Filters::SassCommon do
   context 'with item, items, config context' do
-    subject(:sass_sourcemap) { ::Nanoc::Filter.named(:sass_sourcemap).new(sass_sourcemap_params) }
+    subject(:sass_sourcemap) do
+      ::Nanoc::Filter.named(:sass_sourcemap).new(sass_sourcemap_params)
+    end
 
     let(:sass) { ::Nanoc::Filter.named(:sass).new(sass_params) }
 
@@ -141,6 +143,7 @@ describe Nanoc::Filters::SassCommon do
     let(:item_main_sourcemap_rep_view) { Nanoc::CompilationItemRepView.new(item_main_sourcemap_rep, view_context) }
 
     let(:items) { Nanoc::Core::ItemCollection.new(config, [item_main, item_blue, item_red, item_partial_scss, item_partial_sass, item_partial_sass_anonymous]) }
+    let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
     let(:item_views) { Nanoc::ItemCollectionWithRepsView.new(items, view_context) }
 
     let(:view_context) do
@@ -168,7 +171,28 @@ describe Nanoc::Filters::SassCommon do
 
     let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
     let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
-    let(:compilation_context) { double(:compilation_context) }
+
+    let(:compilation_context) do
+      Nanoc::Int::CompilationContext.new(
+        action_provider: action_provider,
+        reps: reps,
+        site: site,
+        compiled_content_cache: compiled_content_cache,
+        compiled_content_store: compiled_content_store,
+      )
+    end
+
+    let(:action_provider) do
+      Class.new(Nanoc::Core::ActionProvider) do
+        def self.for(_context)
+          raise NotImplementedError
+        end
+
+        def initialize; end
+      end.new
+    end
+
+    let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config: config) }
 
     let(:compiled_content_store) do
       Nanoc::Core::CompiledContentStore.new.tap do |repo|
@@ -178,6 +202,14 @@ describe Nanoc::Filters::SassCommon do
         repo.set(reps[item_partial_sass].first, :last, content_partial_sass)
         repo.set(reps[item_partial_sass_anonymous].first, :last, content_partial_sass_anonymous)
       end
+    end
+
+    let(:site) do
+      Nanoc::Core::Site.new(
+        config: config,
+        code_snippets: [],
+        data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+      )
     end
 
     let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }

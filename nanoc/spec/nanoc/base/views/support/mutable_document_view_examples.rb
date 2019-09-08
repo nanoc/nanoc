@@ -8,14 +8,48 @@ shared_examples 'a mutable document view' do
       reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,
-      compilation_context: double(:compilation_context),
+      compilation_context: compilation_context,
       compiled_content_store: compiled_content_store,
     )
   end
 
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store)) }
+
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+  let(:items) { Nanoc::Core::ItemCollection.new(config) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
+  let(:reps) { Nanoc::Core::ItemRepRepo.new }
+
+  let(:compilation_context) do
+    Nanoc::Int::CompilationContext.new(
+      action_provider: action_provider,
+      reps: reps,
+      site: site,
+      compiled_content_cache: compiled_content_cache,
+      compiled_content_store: compiled_content_store,
+    )
+  end
+
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
-  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
+  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config: config) }
+
+  let(:site) do
+    Nanoc::Core::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+    )
+  end
+
+  let(:action_provider) do
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
+
+      def initialize; end
+    end.new
+  end
 
   describe '#raw_content=' do
     let(:document) { entity_class.new('content', {}, '/asdf') }

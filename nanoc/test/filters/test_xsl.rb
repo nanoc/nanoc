@@ -103,11 +103,43 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
   def new_view_context
     config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
 
+    items = Nanoc::Core::ItemCollection.new(config)
+    layouts = Nanoc::Core::LayoutCollection.new(config)
+    reps = Nanoc::Core::ItemRepRepo.new
+
+    site =
+      Nanoc::Core::Site.new(
+        config: config,
+        code_snippets: [],
+        data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+      )
+
+    compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config: config)
+    compiled_content_store = Nanoc::Core::CompiledContentStore.new
+
+    action_provider =
+      Class.new(Nanoc::Core::ActionProvider) do
+        def self.for(_context)
+          raise NotImplementedError
+        end
+
+        def initialize; end
+      end.new
+
+    compilation_context =
+      Nanoc::Int::CompilationContext.new(
+        action_provider: action_provider,
+        reps: reps,
+        site: site,
+        compiled_content_cache: compiled_content_cache,
+        compiled_content_store: compiled_content_store,
+      )
+
     Nanoc::ViewContextForCompilation.new(
       reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: @dependency_tracker,
-      compilation_context: :__irrelevat_compiler,
+      compilation_context: compilation_context,
       compiled_content_store: Nanoc::Core::CompiledContentStore.new,
     )
   end
