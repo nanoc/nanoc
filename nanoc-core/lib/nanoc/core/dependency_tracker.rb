@@ -6,10 +6,33 @@ module Nanoc
     class DependencyTracker
       include Nanoc::Core::ContractsSupport
 
-      C_OBJ = C::Or[Nanoc::Core::Item, Nanoc::Core::Layout, Nanoc::Core::Configuration, Nanoc::Core::IdentifiableCollection]
-      C_RAW_CONTENT = C::Or[C::IterOf[C::Or[String, Regexp]], C::Bool]
-      C_ATTR = C::Or[C::IterOf[Symbol], C::Bool]
-      C_ARGS = C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTR], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]]
+      C_OBJ =
+        C::Or[
+          Nanoc::Core::Item,
+          Nanoc::Core::Layout,
+          Nanoc::Core::Configuration,
+          Nanoc::Core::IdentifiableCollection
+        ]
+
+      C_RAW_CONTENT =
+        C::Or[
+          C::IterOf[C::Or[String, Regexp]],
+          C::Bool
+        ]
+
+      C_ATTR =
+        C::Or[
+          C::IterOf[Symbol],
+          C::Bool
+        ]
+
+      C_ARGS =
+        C::KeywordArgs[
+          raw_content: C::Optional[C_RAW_CONTENT],
+          attributes: C::Optional[C_ATTR],
+          compiled_content: C::Optional[C::Bool],
+          path: C::Optional[C::Bool]
+        ]
 
       attr_reader :dependency_store
 
