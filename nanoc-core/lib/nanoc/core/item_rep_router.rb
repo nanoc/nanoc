@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # Assigns paths to reps.
     #
     # @api private
     class ItemRepRouter
       include Nanoc::Core::ContractsSupport
 
-      class IdenticalRoutesError < ::Nanoc::Error
+      class IdenticalRoutesError < ::Nanoc::Core::Error
         def initialize(output_path, rep_a, rep_b)
           super("The item representations #{rep_a} and #{rep_b} are both routed to #{output_path}.")
         end
       end
 
-      class RouteWithoutSlashError < ::Nanoc::Error
+      class RouteWithoutSlashError < ::Nanoc::Core::Error
         def initialize(output_path, rep)
           super("The item representation #{rep} is routed to #{output_path}, which does not start with a slash, as required.")
         end

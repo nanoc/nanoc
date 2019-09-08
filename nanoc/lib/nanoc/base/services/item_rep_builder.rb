@@ -22,7 +22,7 @@ module Nanoc
           end
         end
 
-        action_sequences = Nanoc::Int::ItemRepRouter.new(@reps, @action_provider, @site).run
+        action_sequences = Nanoc::Core::ItemRepRouter.new(@reps, @action_provider, @site).run
 
         @reps.each do |rep|
           rep.snapshot_defs = self.class.snapshot_defs_for(action_sequences[rep])

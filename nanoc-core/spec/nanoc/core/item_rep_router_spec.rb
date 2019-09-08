@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe(Nanoc::Int::ItemRepRouter) do
+describe(Nanoc::Core::ItemRepRouter) do
   subject(:item_rep_router) { described_class.new(reps, action_provider, site) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
@@ -133,7 +133,7 @@ describe(Nanoc::Int::ItemRepRouter) do
         let(:paths_to_reps) { { '/foo/index.html' => Nanoc::Core::ItemRep.new(item, :other) } }
 
         it 'errors' do
-          expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::IdenticalRoutesError, 'The item representations /foo.md (rep name :default) and /foo.md (rep name :other) are both routed to /foo/index.html.')
+          expect { subject }.to raise_error(Nanoc::Core::ItemRepRouter::IdenticalRoutesError, 'The item representations /foo.md (rep name :default) and /foo.md (rep name :other) are both routed to /foo/index.html.')
         end
       end
 
@@ -158,7 +158,7 @@ describe(Nanoc::Int::ItemRepRouter) do
             let(:paths) { ['foo/index.html'] }
 
             it 'errors' do
-              expect { subject }.to raise_error(Nanoc::Int::ItemRepRouter::RouteWithoutSlashError, 'The item representation /foo.md (rep name :default) is routed to foo/index.html, which does not start with a slash, as required.')
+              expect { subject }.to raise_error(Nanoc::Core::ItemRepRouter::RouteWithoutSlashError, 'The item representation /foo.md (rep name :default) is routed to foo/index.html, which does not start with a slash, as required.')
             end
           end
 

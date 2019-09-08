@@ -44,6 +44,7 @@ lib/nanoc/core/instrumentor.rb
 lib/nanoc/core/item_collection.rb
 lib/nanoc/core/item_rep.rb
 lib/nanoc/core/item_rep_repo.rb
+lib/nanoc/core/item_rep_router.rb
 lib/nanoc/core/item.rb
 lib/nanoc/core/layout_collection.rb
 lib/nanoc/core/layout.rb

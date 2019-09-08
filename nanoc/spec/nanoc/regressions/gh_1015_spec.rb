@@ -13,7 +13,7 @@ EOS
   end
 
   it 'errors' do
-    expect { Nanoc::CLI.run(%w[compile --verbose]) }.to raise_exception(Nanoc::Int::ItemRepRouter::RouteWithoutSlashError)
+    expect { Nanoc::CLI.run(%w[compile --verbose]) }.to raise_exception(Nanoc::Core::ItemRepRouter::RouteWithoutSlashError)
     expect(File.file?('outputfoo.html')).not_to be
   end
 end
