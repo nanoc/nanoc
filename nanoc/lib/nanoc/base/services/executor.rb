@@ -120,7 +120,14 @@ module Nanoc
       end
 
       def view_context
-        @_view_context ||= @compilation_context.create_view_context(@dependency_tracker)
+        @_view_context ||=
+          Nanoc::ViewContextForCompilation.new(
+            reps: @compilation_context.reps,
+            items: @compilation_context.site.items,
+            dependency_tracker: @dependency_tracker,
+            compilation_context: @compilation_context,
+            compiled_content_store: @compilation_context.compiled_content_store,
+          )
       end
     end
   end

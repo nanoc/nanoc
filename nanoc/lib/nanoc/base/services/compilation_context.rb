@@ -25,6 +25,7 @@ module Nanoc
       include Nanoc::Core::ContractsSupport
 
       attr_reader :site
+      attr_reader :reps
       attr_reader :compiled_content_cache
       attr_reader :compiled_content_store
 
@@ -58,17 +59,6 @@ module Nanoc
         end
 
         FilterNameAndArgs.new(name: seq[0].filter_name, args: seq[0].params)
-      end
-
-      contract Nanoc::Core::DependencyTracker => C::Named['Nanoc::ViewContextForCompilation']
-      def create_view_context(dependency_tracker)
-        Nanoc::ViewContextForCompilation.new(
-          reps: @reps,
-          items: @site.items,
-          dependency_tracker: dependency_tracker,
-          compilation_context: self,
-          compiled_content_store: @compiled_content_store,
-        )
       end
     end
   end
