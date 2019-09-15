@@ -46,7 +46,7 @@ describe Nanoc::Int::Executor do
   let(:layouts) { Nanoc::Core::LayoutCollection.new(config, [layout]) }
   let(:items) { Nanoc::Core::ItemCollection.new(config, []) }
 
-  let(:layout_content) { 'head <%= @foo %> foot' }
+  let(:layout_content) { 'head <%= @content %> foot' }
 
   let(:config_hash) { { string_pattern_type: 'glob' } }
   let(:config) { Nanoc::Core::Configuration.new(hash: config_hash, dir: Dir.getwd).with_defaults }
@@ -368,20 +368,6 @@ describe Nanoc::Int::Executor do
   describe '#layout' do
     subject { executor.layout('/default.*') }
 
-    let(:assigns) do
-      { foo: 'hallo' }
-    end
-
-    let(:view_context) do
-      Nanoc::ViewContextForCompilation.new(
-        reps: Nanoc::Core::ItemRepRepo.new,
-        items: Nanoc::Core::ItemCollection.new(config),
-        dependency_tracker: dependency_tracker,
-        compilation_context: compilation_context,
-        compiled_content_store: compiled_content_store,
-      )
-    end
-
     let(:action_sequence) do
       Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         b.add_filter(:erb, {})
@@ -392,9 +378,6 @@ describe Nanoc::Int::Executor do
       rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:pre, binary: false)]
 
       compiled_content_store.set_current(rep, content)
-
-      allow(compilation_context).to receive(:assigns_for).with(rep, dependency_tracker) { assigns }
-      allow(compilation_context).to receive(:create_view_context).with(dependency_tracker).and_return(view_context)
 
       allow(action_provider).to receive(:action_sequence_for).with(layout).and_return(action_sequence)
     end
@@ -418,7 +401,7 @@ describe Nanoc::Int::Executor do
         expect { subject }
           .to change { compiled_content_store.get_current(rep) }
           .from(some_textual_content('Donkey Power'))
-          .to(some_textual_content('head hallo foot'))
+          .to(some_textual_content('head Donkey Power foot'))
       end
 
       it 'sets frozen content' do
