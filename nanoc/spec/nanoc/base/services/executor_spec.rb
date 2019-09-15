@@ -4,7 +4,7 @@ describe Nanoc::Int::Executor do
   let(:executor) { described_class.new(rep, compilation_context, dependency_tracker) }
 
   let(:compilation_context) do
-    Nanoc::Int::CompilationContext.new(
+    Nanoc::Core::CompilationContext.new(
       action_provider: action_provider,
       reps: reps,
       site: site,
@@ -480,7 +480,7 @@ describe Nanoc::Int::Executor do
       end
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Int::CompilationContext::UndefinedFilterForLayoutError)
+        expect { subject }.to raise_error(Nanoc::Core::CompilationContext::UndefinedFilterForLayoutError)
       end
     end
 

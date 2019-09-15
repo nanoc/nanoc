@@ -176,7 +176,7 @@ describe Nanoc::Filter do
     end
 
     let(:compilation_context) do
-      Nanoc::Int::CompilationContext.new(
+      Nanoc::Core::CompilationContext.new(
         action_provider: action_provider,
         reps: reps,
         site: site,

@@ -93,7 +93,7 @@ module Nanoc
       end
 
       def compilation_context(reps:)
-        Nanoc::Int::CompilationContext.new(
+        Nanoc::Core::CompilationContext.new(
           action_provider: @action_provider,
           reps: reps,
           site: @site,

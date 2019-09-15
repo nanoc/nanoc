@@ -14,7 +14,6 @@ lib/nanoc/base/repos.rb
 lib/nanoc/base/repos/config_loader.rb
 lib/nanoc/base/repos/site_loader.rb
 lib/nanoc/base/services.rb
-lib/nanoc/base/services/compilation_context.rb
 lib/nanoc/base/services/compiler_loader.rb
 lib/nanoc/base/services/compiler.rb
 lib/nanoc/base/services/compiler/phases.rb

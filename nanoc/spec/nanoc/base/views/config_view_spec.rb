@@ -22,7 +22,7 @@ describe Nanoc::ConfigView do
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
 
   let(:compilation_context) do
-    Nanoc::Int::CompilationContext.new(
+    Nanoc::Core::CompilationContext.new(
       action_provider: action_provider,
       reps: reps,
       site: site,

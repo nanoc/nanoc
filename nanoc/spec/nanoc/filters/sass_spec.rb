@@ -173,7 +173,7 @@ describe Nanoc::Filters::SassCommon do
     let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
 
     let(:compilation_context) do
-      Nanoc::Int::CompilationContext.new(
+      Nanoc::Core::CompilationContext.new(
         action_provider: action_provider,
         reps: reps,
         site: site,

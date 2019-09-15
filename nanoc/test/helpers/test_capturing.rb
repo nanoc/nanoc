@@ -37,7 +37,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       end.new
 
     compilation_context =
-      Nanoc::Int::CompilationContext.new(
+      Nanoc::Core::CompilationContext.new(
         action_provider: action_provider,
         reps: reps,
         site: site,

@@ -15,7 +15,7 @@ module Nanoc
       reps: Nanoc::Core::ItemRepRepo,
       items: Nanoc::Core::IdentifiableCollection,
       dependency_tracker: Nanoc::Core::DependencyTracker,
-      compilation_context: Nanoc::Int::CompilationContext,
+      compilation_context: Nanoc::Core::CompilationContext,
       compiled_content_store: Nanoc::Core::CompiledContentStore,
     ] => C::Any
     def initialize(reps:, items:, dependency_tracker:, compilation_context:, compiled_content_store:)
