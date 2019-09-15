@@ -2,8 +2,13 @@
 
 describe Nanoc::Core::InMemoryDataSource, stdio: true do
   subject(:data_source) do
-    described_class.new([], [], original_data_source)
+    described_class.new(items, layouts, original_data_source)
   end
+
+  let(:items) { Nanoc::Core::ItemCollection.new(config, []) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config, []) }
+
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
 
   let(:klass) do
     Class.new(Nanoc::Core::DataSource) do

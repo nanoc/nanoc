@@ -19,8 +19,8 @@ describe Nanoc::CLI::Commands::CompileListeners::DiffGenerator do
     end
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: config_hash).with_defaults }
-    let(:items) { [] }
-    let(:layouts) { [] }
+    let(:items) { Nanoc::Core::ItemCollection.new(config, []) }
+    let(:layouts) { Nanoc::Core::LayoutCollection.new(config, []) }
     let(:code_snippets) { [] }
 
     let(:command_runner) do

@@ -118,7 +118,7 @@ describe Nanoc::Core::Checksummer do
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
     let(:code_snippets) { [Nanoc::Core::CodeSnippet.new('asdf', '/bob.rb')] }
     let(:items) { Nanoc::Core::ItemCollection.new(config, [item]) }
-    let(:layouts) { [Nanoc::Core::Layout.new('asdf', {}, '/foo.md')] }
+    let(:layouts) { Nanoc::Core::LayoutCollection.new(config, [Nanoc::Core::Layout.new('asdf', {}, '/foo.md')]) }
 
     let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
     let(:view_context) { Nanoc::ViewContextForPreCompilation.new(items: items) }
@@ -138,7 +138,7 @@ describe Nanoc::Core::Checksummer do
         ',items=',
         'Nanoc::ItemCollectionWithoutRepsView<Nanoc::Core::ItemCollection<' + expected_item_checksum + ',>>',
         ',layouts=',
-        'Nanoc::LayoutCollectionView<Array<' + expected_layout_checksum + ',>>',
+        'Nanoc::LayoutCollectionView<Nanoc::Core::LayoutCollection<' + expected_layout_checksum + ',>>',
         ',config=',
         'Nanoc::ConfigView<' + expected_config_checksum + '>',
         '>',

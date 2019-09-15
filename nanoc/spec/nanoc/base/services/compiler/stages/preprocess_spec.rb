@@ -19,6 +19,7 @@ describe Nanoc::Int::Compiler::Stages::Preprocess do
       def initialize; end
     end.new
   end
+
   let(:site) do
     Nanoc::Core::Site.new(
       config: config,

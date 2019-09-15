@@ -35,7 +35,7 @@ describe Nanoc::Int::Executor do
     Nanoc::Core::Site.new(
       config: config,
       code_snippets: [],
-      data_source: Nanoc::Core::InMemoryDataSource.new([], layouts),
+      data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
     )
   end
 
@@ -43,7 +43,8 @@ describe Nanoc::Int::Executor do
     Nanoc::Core::Layout.new(layout_content, { bug: 'Gum Emperor' }, '/default.erb')
   end
 
-  let(:layouts) { [layout] }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config, [layout]) }
+  let(:items) { Nanoc::Core::ItemCollection.new(config, []) }
 
   let(:layout_content) { 'head <%= @foo %> foot' }
 
@@ -483,7 +484,10 @@ describe Nanoc::Int::Executor do
 
     context 'no layout found' do
       let(:layouts) do
-        [Nanoc::Core::Layout.new('head <%= @foo %> foot', {}, '/other.erb')]
+        Nanoc::Core::LayoutCollection.new(
+          config,
+          [Nanoc::Core::Layout.new('head <%= @foo %> foot', {}, '/other.erb')],
+        )
       end
 
       it 'raises' do
@@ -593,15 +597,21 @@ describe Nanoc::Int::Executor do
       let(:arg) { '/default' }
 
       let(:layouts) do
-        [Nanoc::Core::Layout.new('head <%= @foo %> foot', {}, Nanoc::Core::Identifier.new('/default/', type: :legacy))]
+        Nanoc::Core::LayoutCollection.new(
+          config,
+          [Nanoc::Core::Layout.new('head <%= @foo %> foot', {}, Nanoc::Core::Identifier.new('/default/', type: :legacy))],
+        )
       end
 
-      it { is_expected.to eq(layouts[0]) }
+      it { is_expected.to eq(layouts.to_a[0]) }
     end
 
     context 'no layout with cleaned identifier exists' do
       let(:layouts) do
-        [Nanoc::Core::Layout.new('head <%= @foo %> foot', {}, '/default.erb')]
+        Nanoc::Core::LayoutCollection.new(
+          config,
+          [Nanoc::Core::Layout.new('head <%= @foo %> foot', {}, '/default.erb')],
+        )
       end
 
       context 'globs' do
@@ -609,7 +619,7 @@ describe Nanoc::Int::Executor do
 
         let(:arg) { '/default.*' }
 
-        it { is_expected.to eq(layouts[0]) }
+        it { is_expected.to eq(layouts.to_a[0]) }
       end
 
       context 'no globs' do

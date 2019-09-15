@@ -38,9 +38,12 @@ shared_examples 'an identifiable collection view' do
     Nanoc::Core::Site.new(
       config: config,
       code_snippets: [],
-      data_source: Nanoc::Core::InMemoryDataSource.new([], []),
+      data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
     )
   end
+
+  let(:items) { Nanoc::Core::ItemCollection.new(config, []) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config, []) }
 
   let(:dependency_tracker) do
     Nanoc::Core::DependencyTracker::Null.new

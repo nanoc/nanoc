@@ -212,7 +212,7 @@ describe Nanoc::Filter do
       Nanoc::Core::Site.new(
         config: config,
         code_snippets: [],
-        data_source: Nanoc::Core::InMemoryDataSource.new([], []),
+        data_source: Nanoc::Core::InMemoryDataSource.new(empty_items, empty_layouts),
       )
     end
 
