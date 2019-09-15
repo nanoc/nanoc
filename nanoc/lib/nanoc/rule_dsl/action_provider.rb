@@ -60,7 +60,7 @@ module Nanoc::RuleDSL
       reps = res.fetch(:reps)
 
       view_context =
-        Nanoc::ViewContextForCompilation.new(
+        Nanoc::Core::ViewContextForCompilation.new(
           reps: reps,
           items: site.items,
           dependency_tracker: dependency_tracker,
@@ -77,7 +77,7 @@ module Nanoc::RuleDSL
     # @api private
     def new_preprocessor_context(site)
       view_context =
-        Nanoc::ViewContextForPreCompilation.new(items: site.items)
+        Nanoc::Core::ViewContextForPreCompilation.new(items: site.items)
 
       Nanoc::Core::Context.new(
         config: Nanoc::MutableConfigView.new(site.config, view_context),

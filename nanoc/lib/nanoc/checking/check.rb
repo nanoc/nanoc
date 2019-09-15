@@ -36,7 +36,7 @@ module Nanoc::Checking
       res = compiler.run_until_reps_built
       reps = res.fetch(:reps)
       view_context =
-        Nanoc::ViewContextForShell.new(
+        Nanoc::Core::ViewContextForShell.new(
           items: site.items,
           reps: reps,
         )

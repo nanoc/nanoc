@@ -135,7 +135,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
         compiled_content_store: compiled_content_store,
       )
 
-    Nanoc::ViewContextForCompilation.new(
+    Nanoc::Core::ViewContextForCompilation.new(
       reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: @dependency_tracker,

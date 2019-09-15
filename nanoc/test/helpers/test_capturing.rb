@@ -45,7 +45,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
         compiled_content_store: compiled_content_store,
       )
 
-    Nanoc::ViewContextForCompilation.new(
+    Nanoc::Core::ViewContextForCompilation.new(
       reps: reps,
       items: items,
       dependency_tracker: Nanoc::Core::DependencyTracker::Null.new,

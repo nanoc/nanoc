@@ -10,7 +10,7 @@ describe Nanoc::ConfigView do
   let(:view) { described_class.new(config, view_context) }
 
   let(:view_context) do
-    Nanoc::ViewContextForCompilation.new(
+    Nanoc::Core::ViewContextForCompilation.new(
       reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,

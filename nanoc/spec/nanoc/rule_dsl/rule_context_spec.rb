@@ -24,7 +24,7 @@ shared_examples 'a rule context' do
   let(:compilation_context) { double(:compilation_context) }
 
   let(:view_context) do
-    Nanoc::ViewContextForPreCompilation.new(items: items)
+    Nanoc::Core::ViewContextForPreCompilation.new(items: items)
   end
 
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
@@ -159,7 +159,7 @@ describe(Nanoc::RuleDSL::RoutingRuleContext) do
   end
 
   let(:view_context) do
-    Nanoc::ViewContextForPreCompilation.new(items: items)
+    Nanoc::Core::ViewContextForPreCompilation.new(items: items)
   end
 
   it_behaves_like 'a rule context'
@@ -192,7 +192,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
   let(:view_context) do
-    Nanoc::ViewContextForPreCompilation.new(items: items)
+    Nanoc::Core::ViewContextForPreCompilation.new(items: items)
   end
 
   let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }

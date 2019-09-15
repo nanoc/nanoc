@@ -14,7 +14,7 @@ shared_examples 'a document view' do
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
   let(:view_context) do
-    Nanoc::ViewContextForCompilation.new(
+    Nanoc::Core::ViewContextForCompilation.new(
       reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,

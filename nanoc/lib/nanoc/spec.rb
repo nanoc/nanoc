@@ -169,7 +169,7 @@ module Nanoc
             compiled_content_store: @compiled_content_store,
           )
 
-        Nanoc::ViewContextForCompilation.new(
+        Nanoc::Core::ViewContextForCompilation.new(
           reps: @reps,
           items: @items,
           dependency_tracker: @dependency_tracker,

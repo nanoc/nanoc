@@ -7,7 +7,7 @@ module Nanoc::RuleDSL
     contract C::KeywordArgs[
       rep: Nanoc::Core::ItemRep,
       site: Nanoc::Core::Site,
-      view_context: Nanoc::ViewContextForPreCompilation,
+      view_context: Nanoc::Core::ViewContextForPreCompilation,
     ] => C::Any
     def initialize(rep:, site:, view_context:)
       super({

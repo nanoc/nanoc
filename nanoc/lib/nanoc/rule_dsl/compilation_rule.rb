@@ -7,7 +7,7 @@ module Nanoc::RuleDSL
     contract Nanoc::Core::ItemRep, C::KeywordArgs[
       site: Nanoc::Core::Site,
       recorder: Nanoc::RuleDSL::ActionRecorder,
-      view_context: Nanoc::ViewContextForPreCompilation,
+      view_context: Nanoc::Core::ViewContextForPreCompilation,
     ] => C::Any
     def apply_to(rep, site:, recorder:, view_context:)
       context = Nanoc::RuleDSL::CompilationRuleContext.new(

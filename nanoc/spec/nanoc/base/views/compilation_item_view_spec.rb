@@ -17,7 +17,7 @@ describe Nanoc::CompilationItemView do
   let(:reps) { Nanoc::Core::ItemRepRepo.new }
 
   let(:view_context) do
-    Nanoc::ViewContextForCompilation.new(
+    Nanoc::Core::ViewContextForCompilation.new(
       reps: reps,
       items: items,
       dependency_tracker: dependency_tracker,

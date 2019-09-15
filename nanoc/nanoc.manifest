@@ -78,9 +78,6 @@ lib/nanoc/base/views/post_compile_item_collection_view.rb
 lib/nanoc/base/views/post_compile_item_rep_collection_view.rb
 lib/nanoc/base/views/post_compile_item_rep_view.rb
 lib/nanoc/base/views/post_compile_item_view.rb
-lib/nanoc/base/views/view_context_for_compilation.rb
-lib/nanoc/base/views/view_context_for_pre_compilation.rb
-lib/nanoc/base/views/view_context_for_shell.rb
 lib/nanoc/base/views/view.rb
 lib/nanoc/checking.rb
 lib/nanoc/checking/check.rb

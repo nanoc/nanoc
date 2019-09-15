@@ -8,7 +8,7 @@ module Nanoc::RuleDSL
       rep: Nanoc::Core::ItemRep,
       site: Nanoc::Core::Site,
       recorder: Nanoc::RuleDSL::ActionRecorder,
-      view_context: Nanoc::ViewContextForPreCompilation,
+      view_context: Nanoc::Core::ViewContextForPreCompilation,
     ] => C::Any
     def initialize(rep:, site:, recorder:, view_context:)
       @_recorder = recorder

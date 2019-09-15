@@ -36,7 +36,7 @@ module Nanoc::CLI::Commands
     end
 
     def self.view_context_for(site)
-      Nanoc::ViewContextForShell.new(
+      Nanoc::Core::ViewContextForShell.new(
         items: site.items,
         reps: reps_for(site),
       )

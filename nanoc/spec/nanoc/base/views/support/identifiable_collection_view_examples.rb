@@ -5,7 +5,7 @@ shared_examples 'an identifiable collection view' do
   let(:view) { described_class.new(wrapped, view_context) }
 
   let(:view_context) do
-    Nanoc::ViewContextForCompilation.new(
+    Nanoc::Core::ViewContextForCompilation.new(
       reps: reps,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,

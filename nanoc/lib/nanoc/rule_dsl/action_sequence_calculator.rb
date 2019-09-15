@@ -54,7 +54,7 @@ module Nanoc::RuleDSL
 
     def new_action_sequence_for_rep(rep)
       view_context =
-        Nanoc::ViewContextForPreCompilation.new(items: @site.items)
+        Nanoc::Core::ViewContextForPreCompilation.new(items: @site.items)
 
       recorder = Nanoc::RuleDSL::ActionRecorder.new(rep)
       rule = @rules_collection.compilation_rule_for(rep)
@@ -132,7 +132,7 @@ module Nanoc::RuleDSL
       return nil if routing_rule.nil?
 
       view_context =
-        Nanoc::ViewContextForPreCompilation.new(items: @site.items)
+        Nanoc::Core::ViewContextForPreCompilation.new(items: @site.items)
 
       basic_path =
         routing_rule.apply_to(

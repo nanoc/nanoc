@@ -121,7 +121,7 @@ describe Nanoc::Core::Checksummer do
     let(:layouts) { Nanoc::Core::LayoutCollection.new(config, [Nanoc::Core::Layout.new('asdf', {}, '/foo.md')]) }
 
     let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
-    let(:view_context) { Nanoc::ViewContextForPreCompilation.new(items: items) }
+    let(:view_context) { Nanoc::Core::ViewContextForPreCompilation.new(items: items) }
 
     let(:expected_item_checksum) { 'Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<stuff>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</stuff.md>>>' }
     let(:expected_item_rep_checksum) { 'Nanoc::Core::ItemRep<item=' + expected_item_checksum + ',name=Symbol<pdf>>' }

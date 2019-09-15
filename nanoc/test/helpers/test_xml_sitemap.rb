@@ -43,7 +43,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
         compiled_content_store: compiled_content_store,
       )
 
-    @view_context = Nanoc::ViewContextForCompilation.new(
+    @view_context = Nanoc::Core::ViewContextForCompilation.new(
       reps: @reps,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,

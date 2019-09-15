@@ -4,7 +4,7 @@ shared_examples 'a mutable document view' do
   let(:view) { described_class.new(document, view_context) }
 
   let(:view_context) do
-    Nanoc::ViewContextForCompilation.new(
+    Nanoc::Core::ViewContextForCompilation.new(
       reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: dependency_tracker,

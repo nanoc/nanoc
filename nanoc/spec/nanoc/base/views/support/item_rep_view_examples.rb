@@ -4,7 +4,7 @@ shared_examples 'an item rep view' do
   # needs expected_item_view_class
 
   let(:view_context) do
-    Nanoc::ViewContextForCompilation.new(
+    Nanoc::Core::ViewContextForCompilation.new(
       reps: reps,
       items: items,
       dependency_tracker: dependency_tracker,
