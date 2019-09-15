@@ -81,7 +81,7 @@ module Nanoc
       end
 
       def assigns
-        @compilation_context.assigns_for(@rep, @dependency_tracker)
+        view_context.assigns_for(@rep, site: @compilation_context.site)
       end
 
       def layouts

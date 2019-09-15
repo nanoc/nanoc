@@ -70,11 +70,6 @@ module Nanoc
           compiled_content_store: @compiled_content_store,
         )
       end
-
-      contract Nanoc::Core::ItemRep, Nanoc::Core::DependencyTracker => Hash
-      def assigns_for(rep, dependency_tracker)
-        create_view_context(dependency_tracker).assigns_for(rep, site: @site)
-      end
     end
   end
 end

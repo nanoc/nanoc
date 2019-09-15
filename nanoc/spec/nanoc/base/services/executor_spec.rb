@@ -64,10 +64,6 @@ describe Nanoc::Int::Executor do
 
     let(:content) { Nanoc::Core::TextualContent.new('<%= "Donkey" %> Power') }
 
-    before do
-      allow(compilation_context).to receive(:assigns_for) { assigns }
-    end
-
     context 'normal flow with textual rep' do
       subject { executor.filter(:erb) }
 
