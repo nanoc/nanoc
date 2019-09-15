@@ -2,7 +2,15 @@
 
 module Nanoc
   class View
+    include Nanoc::Core::ContractsSupport
+
     # @api private
+    # TODO: disallow nil
+    contract C::Maybe[C::Or[
+      Nanoc::Core::ViewContextForCompilation,
+      Nanoc::Core::ViewContextForPreCompilation,
+      Nanoc::Core::ViewContextForShell
+    ]] => C::Any
     def initialize(context)
       @context = context
     end

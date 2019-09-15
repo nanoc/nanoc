@@ -16,7 +16,7 @@ describe Nanoc::ItemCollectionWithoutRepsView do
     end
 
     let(:view) { described_class.new(wrapped, view_context) }
-    let(:view_context) { double(:view_context) }
+    let(:view_context) { nil }
     let(:config) { { string_pattern_type: 'glob' } }
 
     it { is_expected.to eql('<Nanoc::ItemCollectionWithoutRepsView>') }

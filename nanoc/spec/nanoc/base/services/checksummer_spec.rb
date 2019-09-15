@@ -29,7 +29,7 @@ describe Nanoc::Core::Checksummer do
   end
 
   context 'Nanoc::BasicItemRepView' do
-    let(:obj) { Nanoc::BasicItemRepView.new(rep, :_unused_context) }
+    let(:obj) { Nanoc::BasicItemRepView.new(rep, nil) }
     let(:rep) { Nanoc::Core::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
 
@@ -37,7 +37,7 @@ describe Nanoc::Core::Checksummer do
   end
 
   context 'Nanoc::CompilationItemRepView' do
-    let(:obj) { Nanoc::CompilationItemRepView.new(rep, :_unused_context) }
+    let(:obj) { Nanoc::CompilationItemRepView.new(rep, nil) }
     let(:rep) { Nanoc::Core::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
 

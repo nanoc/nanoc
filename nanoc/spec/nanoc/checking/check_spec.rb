@@ -7,27 +7,69 @@ describe Nanoc::Check do
 end
 
 describe Nanoc::Checking::Check do
+  let(:config) do
+    Nanoc::Core::Configuration.new(
+      dir: Dir.getwd,
+      hash: config_hash,
+    ).with_defaults
+  end
+
+  let(:config_hash) { {} }
+
+  let(:reps) { Nanoc::Core::ItemRepRepo.new }
+
+  let(:site) do
+    Nanoc::Core::Site.new(
+      config: config,
+      code_snippets: [],
+      data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+    )
+  end
+
+  let(:items) { Nanoc::Core::ItemCollection.new(config, []) }
+  let(:layouts) { Nanoc::Core::LayoutCollection.new(config, []) }
+
+  let(:view_context) do
+    Nanoc::Core::ViewContextForCompilation.new(
+      reps: reps,
+      items: items,
+      dependency_tracker: dependency_tracker,
+      compilation_context: compilation_context,
+      compiled_content_store: compiled_content_store,
+    )
+  end
+
+  let(:compilation_context) do
+    Nanoc::Core::CompilationContext.new(
+      action_provider: action_provider,
+      reps: reps,
+      site: site,
+      compiled_content_cache: compiled_content_cache,
+      compiled_content_store: compiled_content_store,
+    )
+  end
+
+  let(:action_provider) do
+    Class.new(Nanoc::Core::ActionProvider) do
+      def self.for(_context)
+        raise NotImplementedError
+      end
+
+      def initialize; end
+    end.new
+  end
+
+  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config: config) }
+  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
+
   describe '.define' do
     before do
       described_class.define(:spec_check_example_1) do
         add_issue('it’s totes bad')
       end
-    end
 
-    let(:site) do
-      Nanoc::Core::Site.new(
-        config: config,
-        code_snippets: code_snippets,
-        data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
-      )
-    end
-
-    let(:config)        { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
-    let(:code_snippets) { [] }
-    let(:items)         { Nanoc::Core::ItemCollection.new(config, []) }
-    let(:layouts)       { Nanoc::Core::LayoutCollection.new(config, []) }
-
-    before do
       FileUtils.mkdir_p('output')
       File.write('Rules', 'passthrough "/**/*"')
     end
@@ -63,21 +105,6 @@ describe Nanoc::Checking::Check do
         config: Nanoc::ConfigView.new(config, view_context),
       )
     end
-
-    let(:config) do
-      Nanoc::Core::Configuration.new(
-        dir: Dir.getwd,
-        hash: config_hash,
-      )
-    end
-
-    let(:config_hash) { {} }
-
-    let(:view_context) do
-      double(:view_context, dependency_tracker: dependency_tracker)
-    end
-
-    let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
 
     let(:output_filenames) do
       [
@@ -123,21 +150,6 @@ describe Nanoc::Checking::Check do
         config: Nanoc::ConfigView.new(config, view_context),
       )
     end
-
-    let(:config) do
-      Nanoc::Core::Configuration.new(
-        dir: Dir.getwd,
-        hash: config_hash,
-      )
-    end
-
-    let(:config_hash) { {} }
-
-    let(:view_context) do
-      double(:view_context, dependency_tracker: dependency_tracker)
-    end
-
-    let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
 
     let(:output_filenames) do
       [

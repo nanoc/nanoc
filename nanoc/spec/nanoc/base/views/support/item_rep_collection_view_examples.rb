@@ -3,7 +3,7 @@
 shared_examples 'an item rep collection view' do
   let(:view) { described_class.new(wrapped, view_context) }
 
-  let(:view_context) { double(:view_context) }
+  let(:view_context) { nil }
 
   let(:wrapped) do
     [
