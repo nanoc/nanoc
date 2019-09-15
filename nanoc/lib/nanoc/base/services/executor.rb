@@ -10,7 +10,7 @@ module Nanoc
       end
 
       def filter(filter_name, filter_args = {})
-        filter = filter_for_filtering(@rep, filter_name)
+        filter = filter_for_filtering(filter_name)
 
         begin
           Nanoc::Core::NotificationCenter.post(:filtering_started, @rep, filter_name)
@@ -102,14 +102,14 @@ module Nanoc
         raise Nanoc::Int::Errors::UnknownLayout.new(arg)
       end
 
-      def filter_for_filtering(rep, filter_name)
+      def filter_for_filtering(filter_name)
         klass = Nanoc::Filter.named!(filter_name)
 
         last = @compilation_context.compiled_content_store.get_current(@rep)
         if klass.from_binary? && !last.binary?
-          raise Nanoc::Int::Errors::CannotUseBinaryFilter.new(rep, klass)
+          raise Nanoc::Int::Errors::CannotUseBinaryFilter.new(@rep, klass)
         elsif !klass.from_binary? && last.binary?
-          raise Nanoc::Int::Errors::CannotUseTextualFilter.new(rep, klass)
+          raise Nanoc::Int::Errors::CannotUseTextualFilter.new(@rep, klass)
         end
 
         klass.new(assigns)
