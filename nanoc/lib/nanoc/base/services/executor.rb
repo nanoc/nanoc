@@ -53,7 +53,7 @@ module Nanoc
         # Create filter
         klass = Nanoc::Filter.named!(filter_name)
         layout_view = Nanoc::LayoutView.new(layout, view_context)
-        filter = klass.new(assigns_for(@rep).merge(layout: layout_view))
+        filter = klass.new(assigns.merge(layout: layout_view))
 
         # Visit
         @dependency_tracker.bounce(layout, raw_content: true)
@@ -80,8 +80,8 @@ module Nanoc
         Nanoc::Core::NotificationCenter.post(:snapshot_created, @rep, snapshot_name)
       end
 
-      def assigns_for(rep)
-        @compilation_context.assigns_for(rep, @dependency_tracker)
+      def assigns
+        @compilation_context.assigns_for(@rep, @dependency_tracker)
       end
 
       def layouts
@@ -112,7 +112,7 @@ module Nanoc
           raise Nanoc::Int::Errors::CannotUseTextualFilter.new(rep, klass)
         end
 
-        klass.new(assigns_for(rep))
+        klass.new(assigns)
       end
 
       def use_globs?
