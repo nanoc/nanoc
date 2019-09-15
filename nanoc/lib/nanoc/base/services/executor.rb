@@ -52,7 +52,6 @@ module Nanoc
 
         # Create filter
         klass = Nanoc::Filter.named!(filter_name)
-        view_context = @compilation_context.create_view_context(@dependency_tracker)
         layout_view = Nanoc::LayoutView.new(layout, view_context)
         filter = klass.new(assigns_for(@rep).merge(layout: layout_view))
 
@@ -118,6 +117,10 @@ module Nanoc
 
       def use_globs?
         @compilation_context.site.config[:string_pattern_type] == 'glob'
+      end
+
+      def view_context
+        @_view_context ||= @compilation_context.create_view_context(@dependency_tracker)
       end
     end
   end
