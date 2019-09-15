@@ -150,12 +150,6 @@ module Nanoc
         end
       end
 
-      class UndefinedFilterForLayout < Generic
-        def initialize(layout)
-          super("There is no filter defined for the layout #{layout.identifier}")
-        end
-      end
-
       class AmbiguousMetadataAssociation < Generic
         def initialize(content_filenames, meta_filename)
           super("There are multiple content files (#{content_filenames.sort.join(', ')}) that could match the file containing metadata (#{meta_filename}).")

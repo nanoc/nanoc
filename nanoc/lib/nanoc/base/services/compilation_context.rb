@@ -16,6 +16,12 @@ module Nanoc
         end
       end
 
+      class UndefinedFilterForLayoutError < ::Nanoc::Core::Error
+        def initialize(layout)
+          super("There is no filter defined for the layout #{layout.identifier}")
+        end
+      end
+
       include Nanoc::Core::ContractsSupport
 
       attr_reader :site
@@ -48,7 +54,7 @@ module Nanoc
       def filter_name_and_args_for_layout(layout)
         seq = @action_provider.action_sequence_for(layout)
         if seq.nil? || seq.size != 1 || !seq[0].is_a?(Nanoc::Core::ProcessingActions::Filter)
-          raise Nanoc::Int::Errors::UndefinedFilterForLayout.new(layout)
+          raise UndefinedFilterForLayoutError.new(layout)
         end
 
         FilterNameAndArgs.new(name: seq[0].filter_name, args: seq[0].params)
