@@ -90,7 +90,7 @@ module Nanoc
 
       def find_layout(arg)
         req_id = arg.__nanoc_cleaned_identifier
-        layout = layouts.find { |l| l.identifier == req_id }
+        layout = layouts[req_id]
         return layout if layout
 
         if use_globs?
