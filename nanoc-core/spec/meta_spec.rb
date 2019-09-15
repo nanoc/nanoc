@@ -13,6 +13,7 @@ describe 'meta', chdir: false do
       action_provider
       assertions
       checksum_collection
+      compilation_context
       contracts_support
       dependency
       error
@@ -25,6 +26,9 @@ describe 'meta', chdir: false do
       processing_actions
       snapshot_def
       version
+      view_context_for_compilation
+      view_context_for_pre_compilation
+      view_context_for_shell
     ]
 
     expect(regular_file_base_names - ignored).to match_array(spec_file_base_names)
