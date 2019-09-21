@@ -81,5 +81,46 @@ describe Nanoc::CLI::Commands::CompileListeners::DiffGenerator do
          p
       EOS
     end
+
+    context 'when hunks are overlapping' do
+      let(:str_a) do
+        <<~EOS
+          A
+          B
+          MOVED
+          D
+          E
+          F
+          DELETED
+        EOS
+      end
+
+      let(:str_b) do
+        <<~EOS
+          A
+          B
+          D
+          E
+          F
+          MOVED
+        EOS
+      end
+
+      it 'correctly merges hunks' do
+        expect(subject).to eq(<<~EOS)
+          --- content/foo.md
+          +++ content/foo.md
+          @@ -1,8 +1,7 @@
+           A
+           B
+          -MOVED
+           D
+           E
+           F
+          -DELETED
+          +MOVED
+        EOS
+      end
+    end
   end
 end
