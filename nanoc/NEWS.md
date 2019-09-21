@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.12 (2019-09-21)
+
+Fixes:
+
+* Fixed an issue with the output diff, where some hunks would not appear (#1457)
+
 ## 4.11.11 (2019-09-07)
 
 Fixes:
