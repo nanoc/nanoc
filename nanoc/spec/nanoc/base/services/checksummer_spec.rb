@@ -21,70 +21,52 @@ describe Nanoc::Core::Checksummer do
     it { is_expected.to eql('Nanoc::Core::CodeSnippet<String<asdf>>') }
   end
 
-  context 'Nanoc::Base::CompilationItemView' do
-    let(:obj) { Nanoc::Base::CompilationItemView.new(item, nil) }
+  context 'Nanoc::Core::CompilationItemView' do
+    let(:obj) { Nanoc::Core::CompilationItemView.new(item, nil) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::Base::CompilationItemView<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>>') }
+    it { is_expected.to eql('Nanoc::Core::CompilationItemView<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>>') }
   end
 
-  context 'Nanoc::Base::BasicItemRepView' do
-    let(:obj) { Nanoc::Base::BasicItemRepView.new(rep, nil) }
+  context 'Nanoc::Core::BasicItemRepView' do
+    let(:obj) { Nanoc::Core::BasicItemRepView.new(rep, nil) }
     let(:rep) { Nanoc::Core::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::Base::BasicItemRepView<Nanoc::Core::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
+    it { is_expected.to eql('Nanoc::Core::BasicItemRepView<Nanoc::Core::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
   end
 
-  context 'Nanoc::Base::CompilationItemRepView' do
-    let(:obj) { Nanoc::Base::CompilationItemRepView.new(rep, nil) }
+  context 'Nanoc::Core::CompilationItemRepView' do
+    let(:obj) { Nanoc::Core::CompilationItemRepView.new(rep, nil) }
     let(:rep) { Nanoc::Core::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::Base::CompilationItemRepView<Nanoc::Core::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
+    it { is_expected.to eql('Nanoc::Core::CompilationItemRepView<Nanoc::Core::ItemRep<item=Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,name=Symbol<pdf>>>') }
   end
 
-  context 'Nanoc::Base::BasicItemView' do
-    let(:obj) { Nanoc::Base::BasicItemView.new(item, nil) }
+  context 'Nanoc::Core::BasicItemView' do
+    let(:obj) { Nanoc::Core::BasicItemView.new(item, nil) }
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::Base::BasicItemView<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>>') }
+    it { is_expected.to eql('Nanoc::Core::BasicItemView<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>>') }
   end
 
-  context 'Nanoc::Base::LayoutView' do
-    let(:obj) { Nanoc::Base::LayoutView.new(layout, nil) }
+  context 'Nanoc::Core::LayoutView' do
+    let(:obj) { Nanoc::Core::LayoutView.new(layout, nil) }
     let(:layout) { Nanoc::Core::Layout.new('asdf', {}, '/foo.md') }
 
-    it { is_expected.to eql('Nanoc::Base::LayoutView<Nanoc::Core::Layout<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>>') }
+    it { is_expected.to eql('Nanoc::Core::LayoutView<Nanoc::Core::Layout<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>>') }
   end
 
-  context 'Nanoc::Base::ConfigView' do
-    let(:obj) { Nanoc::Base::ConfigView.new(config, nil) }
+  context 'Nanoc::Core::ConfigView' do
+    let(:obj) { Nanoc::Core::ConfigView.new(config, nil) }
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
 
-    it { is_expected.to eql('Nanoc::Base::ConfigView<Nanoc::Core::Configuration<Symbol<foo>=String<bar>,>>') }
+    it { is_expected.to eql('Nanoc::Core::ConfigView<Nanoc::Core::Configuration<Symbol<foo>=String<bar>,>>') }
   end
 
-  context 'Nanoc::Base::ItemCollectionWithRepsView' do
-    let(:obj) { Nanoc::Base::ItemCollectionWithRepsView.new(wrapped, nil) }
-
-    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
-
-    let(:wrapped) do
-      Nanoc::Core::ItemCollection.new(
-        config,
-        [
-          Nanoc::Core::Item.new('foo', {}, '/foo.md'),
-          Nanoc::Core::Item.new('bar', {}, '/foo.md'),
-        ],
-      )
-    end
-
-    it { is_expected.to eql('Nanoc::Base::ItemCollectionWithRepsView<Nanoc::Core::ItemCollection<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,>>') }
-  end
-
-  context 'Nanoc::Base::ItemCollectionWithoutRepsView' do
-    let(:obj) { Nanoc::Base::ItemCollectionWithoutRepsView.new(wrapped, nil) }
+  context 'Nanoc::Core::ItemCollectionWithRepsView' do
+    let(:obj) { Nanoc::Core::ItemCollectionWithRepsView.new(wrapped, nil) }
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
 
@@ -98,7 +80,25 @@ describe Nanoc::Core::Checksummer do
       )
     end
 
-    it { is_expected.to eql('Nanoc::Base::ItemCollectionWithoutRepsView<Nanoc::Core::ItemCollection<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,>>') }
+    it { is_expected.to eql('Nanoc::Core::ItemCollectionWithRepsView<Nanoc::Core::ItemCollection<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,>>') }
+  end
+
+  context 'Nanoc::Core::ItemCollectionWithoutRepsView' do
+    let(:obj) { Nanoc::Core::ItemCollectionWithoutRepsView.new(wrapped, nil) }
+
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { 'foo' => 'bar' }) }
+
+    let(:wrapped) do
+      Nanoc::Core::ItemCollection.new(
+        config,
+        [
+          Nanoc::Core::Item.new('foo', {}, '/foo.md'),
+          Nanoc::Core::Item.new('bar', {}, '/foo.md'),
+        ],
+      )
+    end
+
+    it { is_expected.to eql('Nanoc::Core::ItemCollectionWithoutRepsView<Nanoc::Core::ItemCollection<Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<foo>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<bar>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>,>>') }
   end
 
   context 'Nanoc::RuleDSL::CompilationRuleContext' do
@@ -132,15 +132,15 @@ describe Nanoc::Core::Checksummer do
       [
         'Nanoc::RuleDSL::CompilationRuleContext<',
         'item=',
-        'Nanoc::Base::BasicItemView<' + expected_item_checksum + '>',
+        'Nanoc::Core::BasicItemView<' + expected_item_checksum + '>',
         ',rep=',
-        'Nanoc::Base::BasicItemRepView<' + expected_item_rep_checksum + '>',
+        'Nanoc::Core::BasicItemRepView<' + expected_item_rep_checksum + '>',
         ',items=',
-        'Nanoc::Base::ItemCollectionWithoutRepsView<Nanoc::Core::ItemCollection<' + expected_item_checksum + ',>>',
+        'Nanoc::Core::ItemCollectionWithoutRepsView<Nanoc::Core::ItemCollection<' + expected_item_checksum + ',>>',
         ',layouts=',
-        'Nanoc::Base::LayoutCollectionView<Nanoc::Core::LayoutCollection<' + expected_layout_checksum + ',>>',
+        'Nanoc::Core::LayoutCollectionView<Nanoc::Core::LayoutCollection<' + expected_layout_checksum + ',>>',
         ',config=',
-        'Nanoc::Base::ConfigView<' + expected_config_checksum + '>',
+        'Nanoc::Core::ConfigView<' + expected_config_checksum + '>',
         '>',
       ].join('')
     end

@@ -17,7 +17,7 @@ module Nanoc::Helpers
         case target
         when String
           target
-        when Nanoc::Base::CompilationItemView, Nanoc::Base::BasicItemView, Nanoc::Base::BasicItemRepView
+        when Nanoc::Core::CompilationItemView, Nanoc::Core::BasicItemView, Nanoc::Core::BasicItemRepView
           raise "Cannot create a link to #{target.inspect} because this target is not outputted (its routing rule returns nil)" if target.path.nil?
 
           target.path

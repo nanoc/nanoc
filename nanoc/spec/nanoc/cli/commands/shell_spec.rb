@@ -68,9 +68,9 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
     end
 
     it 'returns views' do
-      expect(subject[:items]).to be_a(Nanoc::Base::ItemCollectionWithRepsView)
-      expect(subject[:layouts]).to be_a(Nanoc::Base::LayoutCollectionView)
-      expect(subject[:config]).to be_a(Nanoc::Base::ConfigView)
+      expect(subject[:items]).to be_a(Nanoc::Core::ItemCollectionWithRepsView)
+      expect(subject[:layouts]).to be_a(Nanoc::Core::LayoutCollectionView)
+      expect(subject[:config]).to be_a(Nanoc::Core::ConfigView)
     end
 
     it 'returns correct items' do

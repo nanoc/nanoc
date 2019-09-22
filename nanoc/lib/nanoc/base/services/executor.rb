@@ -52,7 +52,7 @@ module Nanoc
 
         # Create filter
         klass = Nanoc::Filter.named!(filter_name)
-        layout_view = Nanoc::Base::LayoutView.new(layout, view_context)
+        layout_view = Nanoc::Core::LayoutView.new(layout, view_context)
         filter = klass.new(assigns.merge(layout: layout_view))
 
         # Visit

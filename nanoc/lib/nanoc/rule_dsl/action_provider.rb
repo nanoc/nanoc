@@ -80,17 +80,17 @@ module Nanoc::RuleDSL
         Nanoc::Core::ViewContextForPreCompilation.new(items: site.items)
 
       Nanoc::Core::Context.new(
-        config: Nanoc::Base::MutableConfigView.new(site.config, view_context),
-        items: Nanoc::Base::MutableItemCollectionView.new(site.items, view_context),
-        layouts: Nanoc::Base::MutableLayoutCollectionView.new(site.layouts, view_context),
+        config: Nanoc::Core::MutableConfigView.new(site.config, view_context),
+        items: Nanoc::Core::MutableItemCollectionView.new(site.items, view_context),
+        layouts: Nanoc::Core::MutableLayoutCollectionView.new(site.layouts, view_context),
       )
     end
 
     # @api private
     def new_postprocessor_context(site, view_context)
       Nanoc::Core::Context.new(
-        config: Nanoc::Base::ConfigView.new(site.config, view_context),
-        items: Nanoc::Base::PostCompileItemCollectionView.new(site.items, view_context),
+        config: Nanoc::Core::ConfigView.new(site.config, view_context),
+        items: Nanoc::Core::PostCompileItemCollectionView.new(site.items, view_context),
       )
     end
   end

@@ -148,9 +148,9 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     if_have 'nokogiri' do
       # Create our data objects
       item = Nanoc::Core::Item.new(SAMPLE_XML_IN, {}, '/content')
-      item = Nanoc::Base::CompilationItemView.new(item, new_view_context)
+      item = Nanoc::Core::CompilationItemView.new(item, new_view_context)
       layout = Nanoc::Core::Layout.new(SAMPLE_XSL, {}, '/layout')
-      layout = Nanoc::Base::LayoutView.new(layout, new_view_context)
+      layout = Nanoc::Core::LayoutView.new(layout, new_view_context)
 
       # Create an instance of the filter
       assigns = {
@@ -174,9 +174,9 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     if_have 'nokogiri' do
       # Create our data objects
       item = Nanoc::Core::Item.new(SAMPLE_XML_IN_WITH_PARAMS, {}, '/content')
-      item = Nanoc::Base::CompilationItemView.new(item, new_view_context)
+      item = Nanoc::Core::CompilationItemView.new(item, new_view_context)
       layout = Nanoc::Core::Layout.new(SAMPLE_XSL_WITH_PARAMS, {}, '/layout')
-      layout = Nanoc::Base::LayoutView.new(layout, new_view_context)
+      layout = Nanoc::Core::LayoutView.new(layout, new_view_context)
 
       # Create an instance of the filter
       assigns = {
@@ -200,9 +200,9 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     if_have 'nokogiri' do
       # Create our data objects
       item = Nanoc::Core::Item.new(SAMPLE_XML_IN_WITH_OMIT_XML_DECL, {}, '/content')
-      item = Nanoc::Base::CompilationItemView.new(item, new_view_context)
+      item = Nanoc::Core::CompilationItemView.new(item, new_view_context)
       layout = Nanoc::Core::Layout.new(SAMPLE_XSL_WITH_OMIT_XML_DECL, {}, '/layout')
-      layout = Nanoc::Base::LayoutView.new(layout, new_view_context)
+      layout = Nanoc::Core::LayoutView.new(layout, new_view_context)
 
       # Create an instance of the filter
       assigns = {

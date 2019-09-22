@@ -162,7 +162,7 @@ describe Nanoc::Filter do
     let(:item_views) { [item_view] }
 
     let(:item) { Nanoc::Core::Item.new('foo', {}, '/stuff.md') }
-    let(:item_view) { Nanoc::Base::CompilationItemView.new(item, view_context) }
+    let(:item_view) { Nanoc::Core::CompilationItemView.new(item, view_context) }
     let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
     let(:view_context) do

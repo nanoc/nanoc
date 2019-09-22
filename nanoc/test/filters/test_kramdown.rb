@@ -15,9 +15,9 @@ class Nanoc::Filters::KramdownTest < Nanoc::TestCase
   def test_warnings
     # Create item
     item = Nanoc::Core::Item.new('foo', {}, '/foo.md')
-    item_view = Nanoc::Base::CompilationItemView.new(item, nil)
+    item_view = Nanoc::Core::CompilationItemView.new(item, nil)
     item_rep = Nanoc::Core::ItemRep.new(item, :default)
-    item_rep_view = Nanoc::Base::CompilationItemRepView.new(item_rep, nil)
+    item_rep_view = Nanoc::Core::CompilationItemRepView.new(item_rep, nil)
 
     # Create filter
     filter = ::Nanoc::Filters::Kramdown.new(item: item_view, item_rep: item_rep_view)
@@ -33,9 +33,9 @@ class Nanoc::Filters::KramdownTest < Nanoc::TestCase
   def test_warning_filters
     # Create item
     item = Nanoc::Core::Item.new('foo', {}, '/foo.md')
-    item_view = Nanoc::Base::CompilationItemView.new(item, nil)
+    item_view = Nanoc::Core::CompilationItemView.new(item, nil)
     item_rep = Nanoc::Core::ItemRep.new(item, :default)
-    item_rep_view = Nanoc::Base::CompilationItemRepView.new(item_rep, nil)
+    item_rep_view = Nanoc::Core::CompilationItemRepView.new(item_rep, nil)
 
     # Create filter
     filter = ::Nanoc::Filters::Kramdown.new(item: item_view, item_rep: item_rep_view)

@@ -11,6 +11,8 @@ module Nanoc
       UnmetDependency = ::Nanoc::Core::Errors::UnmetDependency
       NoSuchSnapshot = ::Nanoc::Core::Errors::NoSuchSnapshot
       CannotGetCompiledContentOfBinaryItem = ::Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem
+      CannotGetParentOrChildrenOfNonLegacyItem = ::Nanoc::Core::Errors::CannotGetParentOrChildrenOfNonLegacyItem
+      InternalInconsistency = ::Nanoc::Core::Errors::InternalInconsistency
 
       # Generic trivial error. Superclass for all Nanoc-specific errors that are
       # considered "trivial", i.e. errors that do not require a full crash report.
@@ -143,20 +145,10 @@ module Nanoc
         end
       end
 
-      # Error that is raised when attempting to call #parent or #children on an item with a legacy identifier.
-      class CannotGetParentOrChildrenOfNonLegacyItem < Generic
-        def initialize(identifier)
-          super("You cannot get the parent or children of an item that has a “full” identifier (#{identifier}). Getting the parent or children of an item is only possible for items that have a legacy identifier.")
-        end
-      end
-
       class AmbiguousMetadataAssociation < Generic
         def initialize(content_filenames, meta_filename)
           super("There are multiple content files (#{content_filenames.sort.join(', ')}) that could match the file containing metadata (#{meta_filename}).")
         end
-      end
-
-      class InternalInconsistency < Generic
       end
     end
   end

@@ -31,11 +31,11 @@ shared_examples 'a rule context' do
 
   describe '#initialize' do
     it 'wraps objects in view classes' do
-      expect(subject.rep.class).to eql(Nanoc::Base::BasicItemRepView)
-      expect(subject.item.class).to eql(Nanoc::Base::BasicItemView)
-      expect(subject.config.class).to eql(Nanoc::Base::ConfigView)
-      expect(subject.layouts.class).to eql(Nanoc::Base::LayoutCollectionView)
-      expect(subject.items.class).to eql(Nanoc::Base::ItemCollectionWithoutRepsView)
+      expect(subject.rep.class).to eql(Nanoc::Core::BasicItemRepView)
+      expect(subject.item.class).to eql(Nanoc::Core::BasicItemView)
+      expect(subject.config.class).to eql(Nanoc::Core::ConfigView)
+      expect(subject.layouts.class).to eql(Nanoc::Core::LayoutCollectionView)
+      expect(subject.items.class).to eql(Nanoc::Core::ItemCollectionWithoutRepsView)
     end
 
     it 'contains the right objects' do
@@ -51,7 +51,7 @@ shared_examples 'a rule context' do
     subject { rule_context.item }
 
     it 'is a view without reps access' do
-      expect(subject.class).to eql(Nanoc::Base::BasicItemView)
+      expect(subject.class).to eql(Nanoc::Core::BasicItemView)
     end
 
     it 'contains the right item' do
@@ -76,7 +76,7 @@ shared_examples 'a rule context' do
       end
 
       it 'wraps the parent in a view without reps access' do
-        expect(subject.parent.class).to eql(Nanoc::Base::BasicItemView)
+        expect(subject.parent.class).to eql(Nanoc::Core::BasicItemView)
         expect(subject.parent).not_to respond_to(:compiled_content)
         expect(subject.parent).not_to respond_to(:path)
         expect(subject.parent).not_to respond_to(:reps)
@@ -87,7 +87,7 @@ shared_examples 'a rule context' do
       end
 
       it 'wraps the children in a view without reps access' do
-        expect(subject.children.map(&:class)).to eql([Nanoc::Base::BasicItemView])
+        expect(subject.children.map(&:class)).to eql([Nanoc::Core::BasicItemView])
         expect(subject.children[0]).not_to respond_to(:compiled_content)
         expect(subject.children[0]).not_to respond_to(:path)
         expect(subject.children[0]).not_to respond_to(:reps)
@@ -111,7 +111,7 @@ shared_examples 'a rule context' do
     end
 
     it 'is a view without reps access' do
-      expect(subject.class).to eql(Nanoc::Base::ItemCollectionWithoutRepsView)
+      expect(subject.class).to eql(Nanoc::Core::ItemCollectionWithoutRepsView)
     end
 
     it 'contains all items' do

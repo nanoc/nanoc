@@ -11,12 +11,12 @@ module Nanoc::RuleDSL
     ] => C::Any
     def initialize(rep:, site:, view_context:)
       super({
-        item: Nanoc::Base::BasicItemView.new(rep.item, view_context),
-        rep: Nanoc::Base::BasicItemRepView.new(rep, view_context),
-        item_rep: Nanoc::Base::BasicItemRepView.new(rep, view_context),
-        items: Nanoc::Base::ItemCollectionWithoutRepsView.new(site.items, view_context),
-        layouts: Nanoc::Base::LayoutCollectionView.new(site.layouts, view_context),
-        config: Nanoc::Base::ConfigView.new(site.config, view_context),
+        item: Nanoc::Core::BasicItemView.new(rep.item, view_context),
+        rep: Nanoc::Core::BasicItemRepView.new(rep, view_context),
+        item_rep: Nanoc::Core::BasicItemRepView.new(rep, view_context),
+        items: Nanoc::Core::ItemCollectionWithoutRepsView.new(site.items, view_context),
+        layouts: Nanoc::Core::LayoutCollectionView.new(site.layouts, view_context),
+        config: Nanoc::Core::ConfigView.new(site.config, view_context),
       })
     end
   end

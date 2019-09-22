@@ -12,20 +12,27 @@ describe 'meta', chdir: false do
     ignored = %w[
       action_provider
       assertions
+      basic_item_view
       checksum_collection
       compilation_context
       contracts_support
       dependency
+      document_view_mixin
       error
       errors
+      identifiable_collection_view
       item_collection
       item_rep_repo
       layout_collection
+      mutable_document_view_mixin
+      mutable_identifiable_collection_view
       outdatedness_reasons
       outdatedness_rule
+      post_compile_item_collection_view
       processing_actions
       snapshot_def
       version
+      view
       view_context_for_compilation
       view_context_for_pre_compilation
       view_context_for_shell

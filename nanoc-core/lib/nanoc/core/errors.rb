@@ -51,6 +51,16 @@ module Nanoc
           super("You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is #{rep}.")
         end
       end
+
+      # Error that is raised when attempting to call #parent or #children on an item with a legacy identifier.
+      class CannotGetParentOrChildrenOfNonLegacyItem < ::Nanoc::Core::Error
+        def initialize(identifier)
+          super("You cannot get the parent or children of an item that has a “full” identifier (#{identifier}). Getting the parent or children of an item is only possible for items that have a legacy identifier.")
+        end
+      end
+
+      class InternalInconsistency < ::Nanoc::Core::Error
+      end
     end
   end
 end

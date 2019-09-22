@@ -63,24 +63,24 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       items = []
 
       # Create item 1
-      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/item-one'), @view_context)
+      item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/item-one'), @view_context)
       items << item
       create_item_rep(item._unwrap, :one_a, '/item-one/a/')
       create_item_rep(item._unwrap, :one_b, '/item-one/b/')
 
       # Create item 2
-      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('some content 2', { is_hidden: true }, '/item-two'), @view_context)
+      item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('some content 2', { is_hidden: true }, '/item-two'), @view_context)
       items << item
 
       # Create item 3
       attrs = { mtime: Time.parse('2004-07-12 00:00:00 +02:00'), changefreq: 'daily', priority: 0.5 }
-      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('some content 3', attrs, '/item-three'), @view_context)
+      item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('some content 3', attrs, '/item-three'), @view_context)
       items << item
       create_item_rep(item._unwrap, :three_a, '/item-three/a/')
       create_item_rep(item._unwrap, :three_b, '/item-three/b/')
 
       # Create item 4
-      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('some content 4', {}, '/item-four'), @view_context)
+      item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('some content 4', {}, '/item-four'), @view_context)
       items << item
       create_item_rep(item._unwrap, :four_a, nil)
 
@@ -88,11 +88,11 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       @items = Nanoc::Core::ItemCollection.new({}, items)
 
       # Create sitemap item
-      @item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
+      @item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
 
       # Create site
       config = Nanoc::Core::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
-      @config = Nanoc::Base::ConfigView.new(config, @view_context)
+      @config = Nanoc::Core::ConfigView.new(config, @view_context)
 
       # Build sitemap
       res = xml_sitemap
@@ -127,7 +127,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Create items
       items = []
       items << nil
-      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/item-one'), @view_context)
+      item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/item-one'), @view_context)
       items << item
       create_item_rep(item._unwrap, :one_a, '/item-one/a/')
       create_item_rep(item._unwrap, :one_b, '/item-one/b/')
@@ -139,7 +139,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
 
       # Create site
       config = Nanoc::Core::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
-      @config = Nanoc::Base::ConfigView.new(config, @view_context)
+      @config = Nanoc::Core::ConfigView.new(config, @view_context)
 
       # Build sitemap
       res = xml_sitemap(items: [item])
@@ -164,17 +164,17 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_filter
     if_have 'nokogiri' do
       # Create items
-      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/item-one'), @view_context)
+      item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/item-one'), @view_context)
       @items = Nanoc::Core::ItemCollection.new({}, [item])
       create_item_rep(item._unwrap, :one_a, '/item-one/a/')
       create_item_rep(item._unwrap, :one_b, '/item-one/b/')
 
       # Create sitemap item
-      @item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
+      @item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
 
       # Create site
       config = Nanoc::Core::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
-      @config = Nanoc::Base::ConfigView.new(config, @view_context)
+      @config = Nanoc::Core::ConfigView.new(config, @view_context)
 
       # Build sitemap
       res = xml_sitemap(rep_select: ->(rep) { rep.name == :one_a })
@@ -196,26 +196,26 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
     if_have 'nokogiri' do
       # Create items
       items = []
-      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/george'), @view_context)
+      item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/george'), @view_context)
       items << item
       create_item_rep(item._unwrap, :a_alice,   '/george/alice/')
       create_item_rep(item._unwrap, :b_zoey,    '/george/zoey/')
-      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/walton'), @view_context)
+      item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/walton'), @view_context)
       items << item
       create_item_rep(item._unwrap, :a_eve,     '/walton/eve/')
       create_item_rep(item._unwrap, :b_bob,     '/walton/bob/')
-      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/lucas'), @view_context)
+      item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/lucas'), @view_context)
       items << item
       create_item_rep(item._unwrap, :a_trudy,   '/lucas/trudy/')
       create_item_rep(item._unwrap, :b_mallory, '/lucas/mallory/')
       @items = Nanoc::Core::ItemCollection.new({}, items)
 
       # Create sitemap item
-      @item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
+      @item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
 
       # Create site
       config = Nanoc::Core::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
-      @config = Nanoc::Base::ConfigView.new(config, @view_context)
+      @config = Nanoc::Core::ConfigView.new(config, @view_context)
 
       # Build sitemap
       res = xml_sitemap(items: @items)
@@ -238,16 +238,16 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def test_url_escape
     if_have 'nokogiri' do
       # Create items
-      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/george'), @view_context)
+      item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('some content 1', {}, '/george'), @view_context)
       @items = Nanoc::Core::ItemCollection.new({}, [item])
       create_item_rep(item._unwrap, :default, '/cool projects/проверка')
 
       # Create sitemap item
-      @item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
+      @item = Nanoc::Core::CompilationItemView.new(Nanoc::Core::Item.new('sitemap content', {}, '/sitemap'), @view_context)
 
       # Create site
       config = Nanoc::Core::Configuration.new(hash: { base_url: 'http://example.com' }, dir: Dir.getwd)
-      @config = Nanoc::Base::ConfigView.new(config, @view_context)
+      @config = Nanoc::Core::ConfigView.new(config, @view_context)
 
       # Build sitemap
       res = xml_sitemap(items: @items)

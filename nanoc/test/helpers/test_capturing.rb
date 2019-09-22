@@ -115,8 +115,8 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
     item = Nanoc::Core::Item.new('content', {}, '/asdf')
     view_context = view_context_for(item)
-    @item = Nanoc::Base::CompilationItemView.new(item, view_context_for(item))
-    @config = Nanoc::Base::ConfigView.new(Nanoc::Core::Configuration.new(dir: Dir.getwd), view_context)
+    @item = Nanoc::Core::CompilationItemView.new(item, view_context_for(item))
+    @config = Nanoc::Core::ConfigView.new(Nanoc::Core::Configuration.new(dir: Dir.getwd), view_context)
 
     result = ::ERB.new(content).result(binding)
 
