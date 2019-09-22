@@ -101,6 +101,7 @@ module Nanoc
           define_behavior(Nanoc::Core::ItemRep, ItemRepUpdateBehavior)
           define_behavior(Nanoc::Core::Layout, DocumentUpdateBehavior)
           define_behavior(Nanoc::Core::TextualContent, StringUpdateBehavior)
+          define_behavior(Nanoc::Core::View, UnwrapUpdateBehavior)
 
           @behaviors
         end

@@ -53,7 +53,6 @@ lib/nanoc/base/services/outdatedness_rules/not_written.rb
 lib/nanoc/base/services/outdatedness_rules/rules_modified.rb
 lib/nanoc/base/services/outdatedness_rules/uses_always_outdated_filter.rb
 lib/nanoc/base/services/pruner.rb
-lib/nanoc/base/views.rb
 lib/nanoc/checking.rb
 lib/nanoc/checking/check.rb
 lib/nanoc/checking/checks.rb
