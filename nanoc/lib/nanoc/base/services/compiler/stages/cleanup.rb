@@ -11,7 +11,7 @@ module Nanoc
 
           def run
             cleanup_temps(Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
-            cleanup_temps(Nanoc::Int::ItemRepWriter::TMP_TEXT_ITEMS_DIR)
+            cleanup_temps(Nanoc::Core::ItemRepWriter::TMP_TEXT_ITEMS_DIR)
             cleanup_unused_stores
             cleanup_old_stores
           end

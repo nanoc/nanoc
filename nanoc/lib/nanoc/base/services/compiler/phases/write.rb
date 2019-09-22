@@ -18,7 +18,7 @@ module Nanoc
                 Thread.current.abort_on_exception = true
                 Thread.current.priority = -1 # schedule I/O work ASAP
 
-                writer = Nanoc::Int::ItemRepWriter.new
+                writer = Nanoc::Core::ItemRepWriter.new
 
                 while rep = @queue.pop # rubocop:disable Lint/AssignmentInCondition
                   writer.write_all(rep, @compiled_content_store)

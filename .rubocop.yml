@@ -226,4 +226,4 @@ RSpec/DescribedClass:
 # … which does not look right.
 RSpec/PredicateMatcher:
   Exclude:
-    - 'nanoc/spec/nanoc/base/item_rep_writer_spec.rb'
+    - 'nanoc-core/spec/nanoc/core/item_rep_writer_spec.rb'

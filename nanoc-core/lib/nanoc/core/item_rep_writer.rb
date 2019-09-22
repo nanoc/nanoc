@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
-    # @api private
+  module Core
     class ItemRepWriter
       include Nanoc::Core::ContractsSupport
       include Nanoc::Core::Assertions::Mixin

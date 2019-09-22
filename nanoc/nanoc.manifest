@@ -40,7 +40,6 @@ lib/nanoc/base/services/executor.rb
 lib/nanoc/base/services/filter.rb
 lib/nanoc/base/services/item_rep_builder.rb
 lib/nanoc/base/services/item_rep_selector.rb
-lib/nanoc/base/services/item_rep_writer.rb
 lib/nanoc/base/services/outdatedness_checker.rb
 lib/nanoc/base/services/outdatedness_rules.rb
 lib/nanoc/base/services/outdatedness_rules/attributes_modified.rb

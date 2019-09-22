@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::ItemRepWriter do
+describe Nanoc::Core::ItemRepWriter do
   describe '#write' do
     subject { described_class.new.write(item_rep, compiled_content_store, snapshot_name, written_paths) }
 
