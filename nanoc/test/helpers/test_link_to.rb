@@ -59,9 +59,9 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
 
     # Mock
     @items = [
-      Nanoc::CompilationItemRepView.new(mock, @view_context),
-      Nanoc::CompilationItemRepView.new(mock, @view_context),
-      Nanoc::CompilationItemRepView.new(mock, @view_context),
+      Nanoc::Base::CompilationItemRepView.new(mock, @view_context),
+      Nanoc::Base::CompilationItemRepView.new(mock, @view_context),
+      Nanoc::Base::CompilationItemRepView.new(mock, @view_context),
     ]
     @items[0].stubs(:identifier).returns('/about/')
     @items[0].stubs(:path).returns('/about.html')
@@ -69,7 +69,7 @@ class Nanoc::Helpers::LinkToTest < Nanoc::TestCase
     @items[1].stubs(:path).returns('/software.html')
     @items[2].stubs(:identifier).returns('/software/nanoc/')
     @items[2].stubs(:path).returns('/software/nanoc.html')
-    about_rep_vcard = Nanoc::CompilationItemRepView.new(mock, @view_context)
+    about_rep_vcard = Nanoc::Base::CompilationItemRepView.new(mock, @view_context)
     about_rep_vcard.stubs(:path).returns('/about.vcf')
     @items[0].stubs(:rep).with(:vcard).returns(about_rep_vcard)
 

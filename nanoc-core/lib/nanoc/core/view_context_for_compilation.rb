@@ -37,12 +37,12 @@ module Nanoc
           end
 
         content_or_filename_assigns.merge(
-          item: Nanoc::CompilationItemView.new(rep.item, self),
-          rep: Nanoc::CompilationItemRepView.new(rep, self),
-          item_rep: Nanoc::CompilationItemRepView.new(rep, self),
-          items: Nanoc::ItemCollectionWithRepsView.new(site.items, self),
-          layouts: Nanoc::LayoutCollectionView.new(site.layouts, self),
-          config: Nanoc::ConfigView.new(site.config, self),
+          item: Nanoc::Base::CompilationItemView.new(rep.item, self),
+          rep: Nanoc::Base::CompilationItemRepView.new(rep, self),
+          item_rep: Nanoc::Base::CompilationItemRepView.new(rep, self),
+          items: Nanoc::Base::ItemCollectionWithRepsView.new(site.items, self),
+          layouts: Nanoc::Base::LayoutCollectionView.new(site.layouts, self),
+          config: Nanoc::Base::ConfigView.new(site.config, self),
         )
       end
     end

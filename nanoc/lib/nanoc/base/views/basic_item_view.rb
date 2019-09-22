@@ -1,52 +1,54 @@
 # frozen_string_literal: true
 
 module Nanoc
-  class BasicItemView < ::Nanoc::View
-    include Nanoc::DocumentViewMixin
+  module Base
+    class BasicItemView < ::Nanoc::Base::View
+      include Nanoc::Base::DocumentViewMixin
 
-    # Returns the children of this item. For items with identifiers that have
-    # extensions, returns an empty collection.
-    #
-    # @return [Enumerable<Nanoc::CompilationItemView>]
-    def children
-      unless _unwrap.identifier.legacy?
-        raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(_unwrap.identifier)
+      # Returns the children of this item. For items with identifiers that have
+      # extensions, returns an empty collection.
+      #
+      # @return [Enumerable<Nanoc::Base::CompilationItemView>]
+      def children
+        unless _unwrap.identifier.legacy?
+          raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(_unwrap.identifier)
+        end
+
+        children_pattern = Nanoc::Core::Pattern.from(_unwrap.identifier.to_s + '*/')
+        children = @context.items.select { |i| children_pattern.match?(i.identifier) }
+
+        children.map { |i| self.class.new(i, @context) }.freeze
       end
 
-      children_pattern = Nanoc::Core::Pattern.from(_unwrap.identifier.to_s + '*/')
-      children = @context.items.select { |i| children_pattern.match?(i.identifier) }
+      # Returns the parent of this item, if one exists. For items with identifiers
+      # that have extensions, returns nil.
+      #
+      # @return [Nanoc::Base::CompilationItemView] if the item has a parent
+      #
+      # @return [nil] if the item has no parent
+      def parent
+        unless _unwrap.identifier.legacy?
+          raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(_unwrap.identifier)
+        end
 
-      children.map { |i| self.class.new(i, @context) }.freeze
-    end
+        parent_identifier = '/' + _unwrap.identifier.components[0..-2].join('/') + '/'
+        parent_identifier = '/' if parent_identifier == '//'
 
-    # Returns the parent of this item, if one exists. For items with identifiers
-    # that have extensions, returns nil.
-    #
-    # @return [Nanoc::CompilationItemView] if the item has a parent
-    #
-    # @return [nil] if the item has no parent
-    def parent
-      unless _unwrap.identifier.legacy?
-        raise Nanoc::Int::Errors::CannotGetParentOrChildrenOfNonLegacyItem.new(_unwrap.identifier)
+        parent = @context.items[parent_identifier]
+
+        parent && self.class.new(parent, @context)
       end
 
-      parent_identifier = '/' + _unwrap.identifier.components[0..-2].join('/') + '/'
-      parent_identifier = '/' if parent_identifier == '//'
+      # @return [Boolean] True if the item is binary, false otherwise
+      def binary?
+        _unwrap.content.binary?
+      end
 
-      parent = @context.items[parent_identifier]
-
-      parent && self.class.new(parent, @context)
-    end
-
-    # @return [Boolean] True if the item is binary, false otherwise
-    def binary?
-      _unwrap.content.binary?
-    end
-
-    # @return [String, nil] The path to the file containing the uncompiled content of this item.
-    def raw_filename
-      @context.dependency_tracker.bounce(_unwrap, raw_content: true)
-      _unwrap.content.filename
+      # @return [String, nil] The path to the file containing the uncompiled content of this item.
+      def raw_filename
+        @context.dependency_tracker.bounce(_unwrap, raw_content: true)
+        _unwrap.content.filename
+      end
     end
   end
 end

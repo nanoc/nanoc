@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::PostCompileItemView do
+describe Nanoc::Base::PostCompileItemView do
   let(:item) { Nanoc::Core::Item.new('blah', {}, '/foo.md') }
   let(:rep_a) { Nanoc::Core::ItemRep.new(item, :no_mod) }
   let(:rep_b) { Nanoc::Core::ItemRep.new(item, :modded).tap { |r| r.modified = true } }
@@ -73,7 +73,7 @@ describe Nanoc::PostCompileItemView do
 
   shared_examples 'a method that returns PostCompileItemRepViews' do
     it 'returns PostCompileItemRepViews' do
-      expect(subject).to all(be_a(Nanoc::PostCompileItemRepView))
+      expect(subject).to all(be_a(Nanoc::Base::PostCompileItemRepView))
     end
   end
 
@@ -97,7 +97,7 @@ describe Nanoc::PostCompileItemView do
     it_behaves_like 'a method that returns PostCompileItemRepViews'
 
     it 'returns a PostCompileItemRepCollectionView' do
-      expect(subject).to be_a(Nanoc::PostCompileItemRepCollectionView)
+      expect(subject).to be_a(Nanoc::Base::PostCompileItemRepCollectionView)
     end
   end
 end

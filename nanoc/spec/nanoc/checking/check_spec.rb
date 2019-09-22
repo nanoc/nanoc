@@ -102,7 +102,7 @@ describe Nanoc::Checking::Check do
     let(:check) do
       described_class.new(
         output_filenames: output_filenames,
-        config: Nanoc::ConfigView.new(config, view_context),
+        config: Nanoc::Base::ConfigView.new(config, view_context),
       )
     end
 
@@ -147,7 +147,7 @@ describe Nanoc::Checking::Check do
     let(:check) do
       described_class.new(
         output_filenames: output_filenames,
-        config: Nanoc::ConfigView.new(config, view_context),
+        config: Nanoc::Base::ConfigView.new(config, view_context),
       )
     end
 

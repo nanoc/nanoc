@@ -115,7 +115,7 @@ shared_examples 'an item rep collection view' do
       let(:name) { :donkey }
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::BasicItemRepCollectionView::NoSuchItemRepError)
+        expect { subject }.to raise_error(Nanoc::Base::BasicItemRepCollectionView::NoSuchItemRepError)
       end
     end
 

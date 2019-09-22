@@ -2,9 +2,9 @@
 
 require_relative 'support/document_view_examples'
 
-describe Nanoc::CompilationItemView do
+describe Nanoc::Base::CompilationItemView do
   let(:entity_class) { Nanoc::Core::Item }
-  let(:other_view_class) { Nanoc::LayoutView }
+  let(:other_view_class) { Nanoc::Base::LayoutView }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
   let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
@@ -234,7 +234,7 @@ describe Nanoc::CompilationItemView do
 
     it 'returns a proper item rep collection' do
       expect(subject.size).to eq(2)
-      expect(subject.class).to eql(Nanoc::CompilationItemRepCollectionView)
+      expect(subject.class).to eql(Nanoc::Base::CompilationItemRepCollectionView)
     end
 
     it 'returns a view with the right context' do
@@ -316,7 +316,7 @@ describe Nanoc::CompilationItemView do
       let(:params) { { rep: :other } }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::BasicItemRepCollectionView::NoSuchItemRepError)
+        expect { subject }.to raise_error(Nanoc::Base::BasicItemRepCollectionView::NoSuchItemRepError)
       end
     end
   end
@@ -381,7 +381,7 @@ describe Nanoc::CompilationItemView do
       let(:params) { { rep: :other } }
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::BasicItemRepCollectionView::NoSuchItemRepError)
+        expect { subject }.to raise_error(Nanoc::Base::BasicItemRepCollectionView::NoSuchItemRepError)
       end
     end
   end
@@ -471,6 +471,6 @@ describe Nanoc::CompilationItemView do
     let(:item) { Nanoc::Core::Item.new('content', {}, '/asdf') }
     let(:view) { described_class.new(item, nil) }
 
-    it { is_expected.to eql('<Nanoc::CompilationItemView identifier=/asdf>') }
+    it { is_expected.to eql('<Nanoc::Base::CompilationItemView identifier=/asdf>') }
   end
 end

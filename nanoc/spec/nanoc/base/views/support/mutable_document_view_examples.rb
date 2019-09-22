@@ -99,22 +99,22 @@ shared_examples 'a mutable document view' do
 
     it 'disallows items' do
       item = Nanoc::Core::Item.new('content', {}, '/foo.md')
-      expect { view[:item] = item }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
+      expect { view[:item] = item }.to raise_error(Nanoc::Base::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
 
     it 'disallows layouts' do
       layout = Nanoc::Core::Layout.new('content', {}, '/foo.md')
-      expect { view[:layout] = layout }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
+      expect { view[:layout] = layout }.to raise_error(Nanoc::Base::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
 
     it 'disallows item views' do
-      item = Nanoc::CompilationItemView.new(Nanoc::Core::Item.new('content', {}, '/foo.md'), nil)
-      expect { view[:item] = item }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
+      item = Nanoc::Base::CompilationItemView.new(Nanoc::Core::Item.new('content', {}, '/foo.md'), nil)
+      expect { view[:item] = item }.to raise_error(Nanoc::Base::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
 
     it 'disallows layout views' do
-      layout = Nanoc::LayoutView.new(Nanoc::Core::Layout.new('content', {}, '/foo.md'), nil)
-      expect { view[:layout] = layout }.to raise_error(Nanoc::MutableDocumentViewMixin::DisallowedAttributeValueError)
+      layout = Nanoc::Base::LayoutView.new(Nanoc::Core::Layout.new('content', {}, '/foo.md'), nil)
+      expect { view[:layout] = layout }.to raise_error(Nanoc::Base::MutableDocumentViewMixin::DisallowedAttributeValueError)
     end
 
     context 'checksum_data set' do

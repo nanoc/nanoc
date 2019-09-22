@@ -4,6 +4,9 @@
 module Nanoc
   module Int
   end
+
+  module Base
+  end
 end
 
 require_relative 'base/error'

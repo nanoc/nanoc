@@ -138,13 +138,13 @@ describe Nanoc::Filters::SassCommon do
       end
     end
 
-    let(:item_main_view) { Nanoc::CompilationItemView.new(item_main, view_context) }
-    let(:item_main_default_rep_view) { Nanoc::CompilationItemRepView.new(item_main_default_rep, view_context) }
-    let(:item_main_sourcemap_rep_view) { Nanoc::CompilationItemRepView.new(item_main_sourcemap_rep, view_context) }
+    let(:item_main_view) { Nanoc::Base::CompilationItemView.new(item_main, view_context) }
+    let(:item_main_default_rep_view) { Nanoc::Base::CompilationItemRepView.new(item_main_default_rep, view_context) }
+    let(:item_main_sourcemap_rep_view) { Nanoc::Base::CompilationItemRepView.new(item_main_sourcemap_rep, view_context) }
 
     let(:items) { Nanoc::Core::ItemCollection.new(config, [item_main, item_blue, item_red, item_partial_scss, item_partial_sass, item_partial_sass_anonymous]) }
     let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
-    let(:item_views) { Nanoc::ItemCollectionWithRepsView.new(items, view_context) }
+    let(:item_views) { Nanoc::Base::ItemCollectionWithRepsView.new(items, view_context) }
 
     let(:view_context) do
       Nanoc::Core::ViewContextForCompilation.new(

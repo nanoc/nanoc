@@ -2,7 +2,7 @@
 
 require_relative 'support/mutable_document_view_examples'
 
-describe Nanoc::MutableItemView do
+describe Nanoc::Base::MutableItemView do
   let(:entity_class) { Nanoc::Core::Item }
   let(:view) { described_class.new(item, nil) }
   let(:item) { entity_class.new('content', {}, '/asdf') }
@@ -21,6 +21,6 @@ describe Nanoc::MutableItemView do
     let(:item) { Nanoc::Core::Item.new('content', {}, '/asdf') }
     let(:view) { described_class.new(item, nil) }
 
-    it { is_expected.to eql('<Nanoc::MutableItemView identifier=/asdf>') }
+    it { is_expected.to eql('<Nanoc::Base::MutableItemView identifier=/asdf>') }
   end
 end

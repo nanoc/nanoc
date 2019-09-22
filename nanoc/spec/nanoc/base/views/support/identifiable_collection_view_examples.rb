@@ -309,7 +309,7 @@ shared_examples 'an identifiable collection view' do
     context 'with block' do
       subject do
         view.find_all do |iv|
-          expect(iv).to be_a(Nanoc::View)
+          expect(iv).to be_a(Nanoc::Base::View)
           iv.identifier =~ /css/
         end
       end

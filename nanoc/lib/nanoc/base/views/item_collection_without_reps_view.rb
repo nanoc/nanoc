@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 module Nanoc
-  class ItemCollectionWithoutRepsView < ::Nanoc::IdentifiableCollectionView
-    # @api private
-    def view_class
-      Nanoc::BasicItemView
+  module Base
+    class ItemCollectionWithoutRepsView < ::Nanoc::Base::IdentifiableCollectionView
+      # @api private
+      def view_class
+        Nanoc::Base::BasicItemView
+      end
     end
   end
 end

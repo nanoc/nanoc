@@ -3,8 +3,8 @@
 require_relative 'support/identifiable_collection_view_examples'
 require_relative 'support/mutable_identifiable_collection_view_examples'
 
-describe Nanoc::MutableLayoutCollectionView do
-  let(:view_class) { Nanoc::MutableLayoutView }
+describe Nanoc::Base::MutableLayoutCollectionView do
+  let(:view_class) { Nanoc::Base::MutableLayoutView }
   let(:collection_class) { Nanoc::Core::LayoutCollection }
   let(:config) do
     { string_pattern_type: 'glob' }
@@ -55,6 +55,6 @@ describe Nanoc::MutableLayoutCollectionView do
     let(:view_context) { nil }
     let(:config) { { string_pattern_type: 'glob' } }
 
-    it { is_expected.to eql('<Nanoc::MutableLayoutCollectionView>') }
+    it { is_expected.to eql('<Nanoc::Base::MutableLayoutCollectionView>') }
   end
 end

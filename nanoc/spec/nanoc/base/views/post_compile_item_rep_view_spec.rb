@@ -2,8 +2,8 @@
 
 require_relative 'support/item_rep_view_examples'
 
-describe Nanoc::PostCompileItemRepView do
-  let(:expected_item_view_class) { Nanoc::PostCompileItemView }
+describe Nanoc::Base::PostCompileItemRepView do
+  let(:expected_item_view_class) { Nanoc::Base::PostCompileItemView }
 
   let(:compiled_content_cache) do
     # Pretend binary snapshots exist on disk so the binary cache can cache them.

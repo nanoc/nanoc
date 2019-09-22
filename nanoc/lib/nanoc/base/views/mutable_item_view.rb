@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Nanoc
-  class MutableItemView < Nanoc::BasicItemView
-    include Nanoc::MutableDocumentViewMixin
+  module Base
+    class MutableItemView < Nanoc::Base::BasicItemView
+      include Nanoc::Base::MutableDocumentViewMixin
+    end
   end
 end

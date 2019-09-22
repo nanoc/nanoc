@@ -2,8 +2,8 @@
 
 require_relative 'support/identifiable_collection_view_examples'
 
-describe Nanoc::ItemCollectionWithRepsView do
-  let(:view_class) { Nanoc::CompilationItemView }
+describe Nanoc::Base::ItemCollectionWithRepsView do
+  let(:view_class) { Nanoc::Base::CompilationItemView }
   let(:collection_class) { Nanoc::Core::ItemCollection }
 
   it_behaves_like 'an identifiable collection view'
@@ -19,6 +19,6 @@ describe Nanoc::ItemCollectionWithRepsView do
     let(:view_context) { nil }
     let(:config) { { string_pattern_type: 'glob' } }
 
-    it { is_expected.to eql('<Nanoc::ItemCollectionWithRepsView>') }
+    it { is_expected.to eql('<Nanoc::Base::ItemCollectionWithRepsView>') }
   end
 end

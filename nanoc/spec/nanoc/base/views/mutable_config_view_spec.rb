@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::MutableConfigView do
+describe Nanoc::Base::MutableConfigView do
   let(:config) { {} }
   let(:view) { described_class.new(config, nil) }
 
@@ -14,6 +14,6 @@ describe Nanoc::MutableConfigView do
   describe '#inspect' do
     subject { view.inspect }
 
-    it { is_expected.to eql('<Nanoc::MutableConfigView>') }
+    it { is_expected.to eql('<Nanoc::Base::MutableConfigView>') }
   end
 end

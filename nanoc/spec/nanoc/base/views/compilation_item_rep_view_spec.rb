@@ -2,8 +2,8 @@
 
 require_relative 'support/item_rep_view_examples'
 
-describe Nanoc::CompilationItemRepView do
-  let(:expected_item_view_class) { Nanoc::CompilationItemView }
+describe Nanoc::Base::CompilationItemRepView do
+  let(:expected_item_view_class) { Nanoc::Base::CompilationItemView }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
   let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }

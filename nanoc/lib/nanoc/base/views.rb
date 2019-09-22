@@ -35,6 +35,6 @@ require_relative 'views/post_compile_item_rep_collection_view'
 # TODO: Move this, once the load order is improved (i.e. the checksummer is
 # loded after the views are).
 Nanoc::Core::Checksummer.define_behavior(
-  Nanoc::View,
+  Nanoc::Base::View,
   Nanoc::Core::Checksummer::UnwrapUpdateBehavior,
 )

@@ -46,9 +46,9 @@ module Nanoc::CLI::Commands
       view_context = view_context_for(site)
 
       {
-        items: Nanoc::ItemCollectionWithRepsView.new(site.items, view_context),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
-        config: Nanoc::ConfigView.new(site.config, view_context),
+        items: Nanoc::Base::ItemCollectionWithRepsView.new(site.items, view_context),
+        layouts: Nanoc::Base::LayoutCollectionView.new(site.layouts, view_context),
+        config: Nanoc::Base::ConfigView.new(site.config, view_context),
       }
     end
   end

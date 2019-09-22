@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::ConfigView do
+describe Nanoc::Base::ConfigView do
   let(:config) do
     Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: hash)
   end
@@ -208,6 +208,6 @@ describe Nanoc::ConfigView do
   describe '#inspect' do
     subject { view.inspect }
 
-    it { is_expected.to eql('<Nanoc::ConfigView>') }
+    it { is_expected.to eql('<Nanoc::Base::ConfigView>') }
   end
 end

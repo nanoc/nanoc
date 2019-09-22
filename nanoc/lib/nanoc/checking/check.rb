@@ -42,9 +42,9 @@ module Nanoc::Checking
         )
 
       context = {
-        items: Nanoc::PostCompileItemCollectionView.new(site.items, view_context),
-        layouts: Nanoc::LayoutCollectionView.new(site.layouts, view_context),
-        config: Nanoc::ConfigView.new(site.config, view_context),
+        items: Nanoc::Base::PostCompileItemCollectionView.new(site.items, view_context),
+        layouts: Nanoc::Base::LayoutCollectionView.new(site.layouts, view_context),
+        config: Nanoc::Base::ConfigView.new(site.config, view_context),
         output_filenames: output_filenames,
       }
 

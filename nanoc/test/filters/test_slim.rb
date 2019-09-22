@@ -73,7 +73,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
 
   def test_filter_slim_reports_filename
     layout = Nanoc::Core::Layout.new('', {}, '/layout.slim')
-    layout = Nanoc::LayoutView.new(layout, new_view_context)
+    layout = Nanoc::Base::LayoutView.new(layout, new_view_context)
 
     assigns = { layout: layout }
 

@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 module Nanoc
-  class LayoutView < ::Nanoc::View
-    include Nanoc::DocumentViewMixin
+  module Base
+    class LayoutView < ::Nanoc::Base::View
+      include Nanoc::Base::DocumentViewMixin
+    end
   end
 end

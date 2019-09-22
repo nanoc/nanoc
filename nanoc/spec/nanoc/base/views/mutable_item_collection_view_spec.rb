@@ -3,8 +3,8 @@
 require_relative 'support/identifiable_collection_view_examples'
 require_relative 'support/mutable_identifiable_collection_view_examples'
 
-describe Nanoc::MutableItemCollectionView do
-  let(:view_class) { Nanoc::MutableItemView }
+describe Nanoc::Base::MutableItemCollectionView do
+  let(:view_class) { Nanoc::Base::MutableItemView }
   let(:collection_class) { Nanoc::Core::ItemCollection }
   let(:config) do
     { string_pattern_type: 'glob' }
@@ -55,6 +55,6 @@ describe Nanoc::MutableItemCollectionView do
     let(:view_context) { nil }
     let(:config) { { string_pattern_type: 'glob' } }
 
-    it { is_expected.to eql('<Nanoc::MutableItemCollectionView>') }
+    it { is_expected.to eql('<Nanoc::Base::MutableItemCollectionView>') }
   end
 end

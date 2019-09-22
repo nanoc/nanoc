@@ -2,8 +2,8 @@
 
 require_relative 'support/identifiable_collection_view_examples'
 
-describe Nanoc::LayoutCollectionView do
-  let(:view_class) { Nanoc::LayoutView }
+describe Nanoc::Base::LayoutCollectionView do
+  let(:view_class) { Nanoc::Base::LayoutView }
   let(:collection_class) { Nanoc::Core::LayoutCollection }
 
   it_behaves_like 'an identifiable collection view'
@@ -19,6 +19,6 @@ describe Nanoc::LayoutCollectionView do
     let(:view_context) { nil }
     let(:config) { { string_pattern_type: 'glob' } }
 
-    it { is_expected.to eql('<Nanoc::LayoutCollectionView>') }
+    it { is_expected.to eql('<Nanoc::Base::LayoutCollectionView>') }
   end
 end
