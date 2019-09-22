@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Feature do
+describe Nanoc::Core::Feature do
   describe '.enabled?' do
     subject { described_class.enabled?(feature_name) }
 
@@ -101,17 +101,17 @@ describe Nanoc::Feature do
   describe '.define and .undefine' do
     let(:feature_name) { 'testing123' }
 
-    after { described_class.undefine(feature_name) if defined?(Nanoc::Feature::TESTING123) }
+    after { described_class.undefine(feature_name) if defined?(Nanoc::Core::Feature::TESTING123) }
 
     it 'can define' do
       described_class.define(feature_name, version: '4.3.x')
-      expect(Nanoc::Feature::TESTING123).not_to be_nil
+      expect(Nanoc::Core::Feature::TESTING123).not_to be_nil
     end
 
     it 'can undefine' do
       described_class.define(feature_name, version: '4.3.x')
       described_class.undefine(feature_name)
-      expect { Nanoc::Feature::TESTING123 }.to raise_error(NameError)
+      expect { Nanoc::Core::Feature::TESTING123 }.to raise_error(NameError)
     end
   end
 end

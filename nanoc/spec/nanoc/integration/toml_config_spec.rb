@@ -16,7 +16,7 @@ describe 'TOML configuration', site: true, stdio: true do
       animal = "donkey"
     EOS
 
-    Nanoc::Feature.enable(Nanoc::Feature::TOML) do
+    Nanoc::Core::Feature.enable(Nanoc::Core::Feature::TOML) do
       Nanoc::CLI.run(%w[compile])
     end
 

@@ -9,7 +9,6 @@ lib/nanoc/base.rb
 lib/nanoc/base/changes_stream.rb
 lib/nanoc/base/error.rb
 lib/nanoc/base/errors.rb
-lib/nanoc/base/feature.rb
 lib/nanoc/base/repos.rb
 lib/nanoc/base/repos/config_loader.rb
 lib/nanoc/base/repos/site_loader.rb

@@ -30,7 +30,7 @@ module Nanoc
       # @return [String]
       def self.config_filename_for_cwd
         filenames =
-          if Nanoc::Feature.enabled?(Nanoc::Feature::TOML)
+          if Nanoc::Core::Feature.enabled?(Nanoc::Core::Feature::TOML)
             %w[nanoc.yaml config.yaml nanoc.toml]
           else
             %w[nanoc.yaml config.yaml]

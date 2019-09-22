@@ -34,7 +34,7 @@ describe Nanoc::Int::ConfigLoader do
 
     context 'TOML config file present' do
       around do |ex|
-        Nanoc::Feature.enable(Nanoc::Feature::TOML) do
+        Nanoc::Core::Feature.enable(Nanoc::Core::Feature::TOML) do
           ex.run
         end
       end
@@ -81,7 +81,7 @@ describe Nanoc::Int::ConfigLoader do
 
     context 'TOML config file and TOML parent present' do
       around do |ex|
-        Nanoc::Feature.enable(Nanoc::Feature::TOML) do
+        Nanoc::Core::Feature.enable(Nanoc::Core::Feature::TOML) do
           ex.run
         end
       end

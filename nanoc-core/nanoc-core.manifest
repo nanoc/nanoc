@@ -46,6 +46,7 @@ lib/nanoc/core/document_view_mixin.rb
 lib/nanoc/core/document.rb
 lib/nanoc/core/error.rb
 lib/nanoc/core/errors.rb
+lib/nanoc/core/feature.rb
 lib/nanoc/core/identifiable_collection_view.rb
 lib/nanoc/core/identifiable_collection.rb
 lib/nanoc/core/identifier.rb
