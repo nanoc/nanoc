@@ -100,7 +100,7 @@ module Nanoc::CLI::Commands
             when Nanoc::Core::LayoutCollection
               'layouts'
             else
-              raise Nanoc::Int::Errors::InternalInconsistency, "unexpected pred type #{pred}"
+              raise Nanoc::Core::Errors::InternalInconsistency, "unexpected pred type #{pred}"
             end
 
           pred_identifier =
@@ -117,7 +117,7 @@ module Nanoc::CLI::Commands
                 "matching any of #{dep.props.raw_content.sort.join(', ')}"
               end
             else
-              raise Nanoc::Int::Errors::InternalInconsistency, "unexpected pred type #{pred}"
+              raise Nanoc::Core::Errors::InternalInconsistency, "unexpected pred type #{pred}"
             end
 
           if pred

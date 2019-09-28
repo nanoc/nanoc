@@ -25,7 +25,7 @@ module Nanoc
               when DONE # rubocop:disable Lint/EmptyWhen
                 # ignore
               else
-                raise Nanoc::Int::Errors::InternalInconsistency.new(
+                raise Nanoc::Core::Errors::InternalInconsistency.new(
                   "Fiber yielded object of unexpected type #{res.class}",
                 )
               end
