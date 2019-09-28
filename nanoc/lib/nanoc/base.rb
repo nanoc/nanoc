@@ -15,3 +15,7 @@ require_relative 'base/changes_stream'
 
 require_relative 'base/repos'
 require_relative 'base/services'
+
+module Nanoc
+  Filter = Nanoc::Base::Filter
+end
