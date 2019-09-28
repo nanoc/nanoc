@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     class SiteLoader
+      ENCODING_REGEX = /\A#\s+(-\*-\s+)?(en)?coding: (?<encoding>[^\s]+)(\s+-\*-\s*)?\n{0,2}/.freeze
+
       def new_from_cwd
         site_from_config(Nanoc::Core::ConfigLoader.new.new_from_cwd)
       end
@@ -52,7 +54,7 @@ module Nanoc
       def create_data_sources(config)
         config[:data_sources].map do |data_source_hash|
           # Get data source class
-          data_source_class = Nanoc::DataSource.named(data_source_hash[:type].to_sym)
+          data_source_class = Nanoc::Core::DataSource.named(data_source_hash[:type].to_sym)
           if data_source_class.nil?
             raise Nanoc::Core::Errors::UnknownDataSource.new(data_source_hash[:type])
           end
@@ -77,8 +79,6 @@ module Nanoc
           end
         end
       end
-
-      ENCODING_REGEX = /\A#\s+(-\*-\s+)?(en)?coding: (?<encoding>[^\s]+)(\s+-\*-\s*)?\n{0,2}/.freeze
 
       def encoding_from_magic_comment(raw)
         match = ENCODING_REGEX.match(raw)

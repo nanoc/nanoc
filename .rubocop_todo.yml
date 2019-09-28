@@ -60,7 +60,7 @@ RSpec/ExpectInHook:
     - 'nanoc-core/spec/nanoc/core/support/identifiable_collection_view_examples.rb'
     - 'nanoc-core/spec/nanoc/core/item_rep_writer_spec.rb'
     - 'nanoc-core/spec/nanoc/core/config_loader_spec.rb'
-    - 'nanoc/spec/nanoc/base/repos/site_loader_spec.rb'
+    - 'nanoc-core/spec/nanoc/core/site_loader_spec.rb'
     - 'nanoc/spec/nanoc/base/services/compiler/stages/determine_outdatedness_spec.rb'
     - 'nanoc/spec/nanoc/base/services/compiler/stages/preprocess_spec.rb'
     - 'nanoc/spec/nanoc/base/services/executor_spec.rb'

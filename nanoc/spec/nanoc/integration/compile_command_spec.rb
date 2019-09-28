@@ -51,7 +51,7 @@ describe 'Compile command', site: true, stdio: true do
     end
 
     # Compile
-    site = Nanoc::Int::SiteLoader.new.new_from_cwd
+    site = Nanoc::Core::SiteLoader.new.new_from_cwd
     Nanoc::Int::Compiler.compile(site)
 
     # Check
@@ -68,7 +68,7 @@ describe 'Compile command', site: true, stdio: true do
     end
 
     # Compile
-    site = Nanoc::Int::SiteLoader.new.new_from_cwd
+    site = Nanoc::Core::SiteLoader.new.new_from_cwd
     Nanoc::Int::Compiler.compile(site)
 
     # Check

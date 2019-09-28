@@ -27,7 +27,7 @@ module Nanoc::Live
     def run_child(pipe_write, pipe_read)
       pipe_write.close
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       changes_enum = gen_changes_for_child(site)
       yield(site)
 
@@ -43,7 +43,7 @@ module Nanoc::Live
 
         $stderr.print 'Reloading site… '
         $stderr.flush
-        site_loader = Nanoc::Int::SiteLoader.new
+        site_loader = Nanoc::Core::SiteLoader.new
         site = Nanoc::Core::Site.new(
           config: Nanoc::Core::ConfigLoader.new.new_from_cwd,
           data_source: site_loader.gen_data_source_for_config(site.config),

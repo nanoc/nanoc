@@ -64,7 +64,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
     end
 
     let(:site) do
-      Nanoc::Int::SiteLoader.new.new_from_cwd
+      Nanoc::Core::SiteLoader.new.new_from_cwd
     end
 
     it 'returns views' do

@@ -18,14 +18,14 @@ module Nanoc::CLI
     # @return [Boolean] true if the current working directory is a Nanoc site
     #   directory, false otherwise
     def in_site_dir?
-      Nanoc::Int::SiteLoader.cwd_is_nanoc_site?
+      Nanoc::Core::SiteLoader.cwd_is_nanoc_site?
     end
 
     def self.find_site_dir
       start_here = Dir.pwd
 
       here = start_here
-      until Nanoc::Int::SiteLoader.cwd_is_nanoc_site?
+      until Nanoc::Core::SiteLoader.cwd_is_nanoc_site?
         Dir.chdir('..')
         return nil if Dir.pwd == here
 
@@ -56,7 +56,7 @@ module Nanoc::CLI
 
       $stderr.print 'Loading site… '
       $stderr.flush
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
 
       $stderr.puts 'done'
       site

@@ -1,7 +1,19 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::SiteLoader do
+describe Nanoc::Core::SiteLoader do
   let(:loader) { described_class.new }
+
+  Class.new(Nanoc::Core::DataSource) do
+    identifier :iyf5eeqefhzyu6vdda7cibfbhou1mnm7
+
+    def items
+      [Nanoc::Core::Item.new('I am Denis!', {}, '/about.md')]
+    end
+
+    def layouts
+      [Nanoc::Core::Layout.new('<html><%= yield %></html>', {}, '/page.erb')]
+    end
+  end
 
   describe '#new_from_cwd' do
     subject { loader.new_from_cwd }
@@ -25,70 +37,40 @@ describe Nanoc::Int::SiteLoader do
         expect(subject.code_snippets).to be_empty
       end
 
-      it 'has no items' do
-        expect(subject.items).to be_empty
+      it 'has an item' do
+        expect(subject.items.size).to eq(1)
+        expect(subject.items['/about.md'].content).to be_a(Nanoc::Core::TextualContent)
+        expect(subject.items['/about.md'].content.string).to eq('I am Denis!')
+        expect(subject.items['/about.md'].identifier.to_s).to eq('/about.md')
       end
 
-      it 'has no layouts' do
-        expect(subject.layouts).to be_empty
+      it 'has a layout' do
+        expect(subject.layouts.size).to eq(1)
+        expect(subject.layouts['/page.erb'].content).to be_a(Nanoc::Core::TextualContent)
+        expect(subject.layouts['/page.erb'].content.string).to eq('<html><%= yield %></html>')
+        expect(subject.layouts['/page.erb'].identifier.to_s).to eq('/page.erb')
       end
 
       context 'some items, layouts, and code snippets' do
         before do
           FileUtils.mkdir_p('lib')
           File.write('lib/foo.rb', '$spirit_animal = :donkey')
-
-          FileUtils.mkdir_p('content')
-          File.write('content/about.md', 'I am Denis!')
-
-          FileUtils.mkdir_p('layouts')
-          File.write('layouts/page.erb', '<html><%= yield %></html>')
         end
 
         it 'has a code snippet' do
           expect(subject.code_snippets.size).to eq(1)
           expect(subject.code_snippets[0].data).to eq('$spirit_animal = :donkey')
         end
-
-        it 'has an item' do
-          expect(subject.items.size).to eq(1)
-          expect(subject.items['/about.md'].content).to be_a(Nanoc::Core::TextualContent)
-          expect(subject.items['/about.md'].content.string).to eq('I am Denis!')
-          expect(subject.items['/about.md'].attributes[:content_filename])
-            .to eq('content/about.md')
-          expect(subject.items['/about.md'].attributes[:extension])
-            .to eq('md')
-          expect(subject.items['/about.md'].attributes[:filename])
-            .to eq('content/about.md')
-          expect(subject.items['/about.md'].attributes[:meta_filename])
-            .to be_nil
-          expect(subject.items['/about.md'].attributes[:mtime])
-            .to be > Time.now - 5
-          expect(subject.items['/about.md'].identifier.to_s).to eq('/about.md')
-        end
-
-        it 'has a layout' do
-          expect(subject.layouts.size).to eq(1)
-          expect(subject.layouts['/page.erb'].content).to be_a(Nanoc::Core::TextualContent)
-          expect(subject.layouts['/page.erb'].content.string).to eq('<html><%= yield %></html>')
-          expect(subject.layouts['/page.erb'].attributes[:content_filename])
-            .to eq('layouts/page.erb')
-          expect(subject.layouts['/page.erb'].attributes[:extension])
-            .to eq('erb')
-          expect(subject.layouts['/page.erb'].attributes[:filename])
-            .to eq('layouts/page.erb')
-          expect(subject.layouts['/page.erb'].attributes[:meta_filename])
-            .to be_nil
-          expect(subject.layouts['/page.erb'].attributes[:mtime])
-            .to be > Time.now - 5
-          expect(subject.layouts['/page.erb'].identifier.to_s).to eq('/page.erb')
-        end
       end
     end
 
     context 'nanoc.yaml config file' do
       before do
-        File.write('nanoc.yaml', "---\nfoo: bar\n")
+        File.write('nanoc.yaml', <<~EOS)
+          foo: bar
+          data_sources:
+            - type: iyf5eeqefhzyu6vdda7cibfbhou1mnm7
+        EOS
       end
 
       it_behaves_like 'a directory with a config file'
@@ -96,7 +78,11 @@ describe Nanoc::Int::SiteLoader do
 
     context 'config.yaml config file' do
       before do
-        File.write('config.yaml', "---\nfoo: bar\n")
+        File.write('config.yaml', <<~EOS)
+          foo: bar
+          data_sources:
+            - type: iyf5eeqefhzyu6vdda7cibfbhou1mnm7
+        EOS
       end
 
       it_behaves_like 'a directory with a config file'
@@ -119,6 +105,8 @@ describe Nanoc::Int::SiteLoader do
       before do
         File.write('nanoc.yaml', <<-EOS.gsub(/^ {10}/, ''))
           animal: donkey
+          data_sources:
+            - type: iyf5eeqefhzyu6vdda7cibfbhou1mnm7
           environments:
             staging:
               animal: giraffe
@@ -138,7 +126,7 @@ describe Nanoc::Int::SiteLoader do
       before do
         FileUtils.mkdir_p('lib')
         File.write('lib/foo_data_source.rb', <<-EOS.gsub(/^ {10}/, ''))
-          class FooDataSource < Nanoc::DataSource
+          class FooDataSource < Nanoc::Core::DataSource
             identifier :site_loader_spec_sample
 
             def items

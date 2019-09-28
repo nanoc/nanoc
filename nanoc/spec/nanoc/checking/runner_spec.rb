@@ -3,7 +3,7 @@
 describe Nanoc::Checking::Runner, site: true do
   subject(:runner) { described_class.new(site) }
 
-  let(:site) { Nanoc::Int::SiteLoader.new.new_from_cwd }
+  let(:site) { Nanoc::Core::SiteLoader.new.new_from_cwd }
 
   describe '#any_enabled_checks?' do
     subject { runner.any_enabled_checks? }

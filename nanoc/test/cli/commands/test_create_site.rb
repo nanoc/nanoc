@@ -14,7 +14,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     Nanoc::CLI.run %w[create_site foo]
 
     FileUtils.cd('foo') do
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
     end
   end
@@ -24,7 +24,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       Nanoc::CLI.run %w[create_site ./]
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
     end
   end
@@ -34,7 +34,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       File.open('content/blah', 'w') { |io| io << 'asdf' }
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
 
       assert File.file?('output/blah')
@@ -47,7 +47,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     Nanoc::CLI.run %w[create_site foo --force]
 
     FileUtils.cd('foo') do
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
     end
   end
@@ -58,7 +58,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     Nanoc::CLI.run %w[create_site foo --force]
 
     FileUtils.cd('foo') do
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
 
       assert File.file?('output/index.html')
@@ -80,7 +80,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
       # Try with encoding = default encoding = utf-8
       File.open('content/index.html', 'w') { |io| io.write('Hello ' + 0xD6.chr + "!\n") }
       exception = assert_raises(Nanoc::DataSources::Filesystem::Errors::InvalidEncoding) do
-        Nanoc::Int::SiteLoader.new.new_from_cwd
+        Nanoc::Core::SiteLoader.new.new_from_cwd
       end
       assert_equal 'Could not read content/index.html because the file is not valid UTF-8.', exception.message
 
@@ -92,7 +92,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
         io.write("    type: filesystem\n")
         io.write("    identifier_type: full\n")
       end
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
     end
     FileUtils

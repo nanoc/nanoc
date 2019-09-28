@@ -15,7 +15,7 @@ describe 'GH-776', site: true do
 EOS
   end
 
-  let(:site) { Nanoc::Int::SiteLoader.new.new_from_cwd }
+  let(:site) { Nanoc::Core::SiteLoader.new.new_from_cwd }
 
   before do
     Nanoc::Int::Compiler.compile(site)

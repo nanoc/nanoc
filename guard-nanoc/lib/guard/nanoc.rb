@@ -60,7 +60,7 @@ module Guard
       ::Nanoc::Core::NotificationCenter.force_reset
 
       Dir.chdir(@dir) do
-        site = ::Nanoc::Int::SiteLoader.new.new_from_cwd
+        site = ::Nanoc::Core::SiteLoader.new.new_from_cwd
         ::Nanoc::Int::Compiler.compile(site)
       end
       notify_success

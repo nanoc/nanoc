@@ -71,7 +71,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
 
       io = capturing_stdio do
-        site = Nanoc::Int::SiteLoader.new.new_from_cwd
+        site = Nanoc::Core::SiteLoader.new.new_from_cwd
         Nanoc::Int::Compiler.compile(site)
       end
 
@@ -99,7 +99,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       File.write('content/index.html', 'hello!')
 
       # Compile
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
 
       # Check
@@ -126,7 +126,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
 
       # Check paths
@@ -150,7 +150,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
 
       # Check paths
@@ -182,7 +182,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
 
       # Check paths
@@ -213,7 +213,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
 
       # Check paths
@@ -243,7 +243,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
 
       # Check paths
@@ -275,7 +275,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       end
 
       # Compile
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Int::Compiler.compile(site)
 
       # Check paths

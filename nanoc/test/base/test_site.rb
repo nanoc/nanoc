@@ -5,25 +5,25 @@ require 'helper'
 class Nanoc::Int::SiteTest < Nanoc::TestCase
   def test_initialize_with_dir_without_config_yaml
     assert_raises(Nanoc::Core::ConfigLoader::NoConfigFileFoundError) do
-      Nanoc::Int::SiteLoader.new.new_from_cwd
+      Nanoc::Core::SiteLoader.new.new_from_cwd
     end
   end
 
   def test_initialize_with_dir_with_config_yaml
     File.open('config.yaml', 'w') { |io| io.write('output_dir: public_html') }
-    site = Nanoc::Int::SiteLoader.new.new_from_cwd
+    site = Nanoc::Core::SiteLoader.new.new_from_cwd
     assert_equal Dir.getwd + '/public_html', site.config.output_dir
   end
 
   def test_initialize_with_dir_with_nanoc_yaml
     File.open('nanoc.yaml', 'w') { |io| io.write('output_dir: public_html') }
-    site = Nanoc::Int::SiteLoader.new.new_from_cwd
+    site = Nanoc::Core::SiteLoader.new.new_from_cwd
     assert_equal Dir.getwd + '/public_html', site.config.output_dir
   end
 
   def test_initialize_with_incomplete_data_source_config
     File.open('nanoc.yaml', 'w') { |io| io.write('data_sources: [{ items_root: "/bar/" }]') }
-    site = Nanoc::Int::SiteLoader.new.new_from_cwd
+    site = Nanoc::Core::SiteLoader.new.new_from_cwd
     assert_equal('filesystem', site.config[:data_sources][0][:type])
     assert_equal('/bar/', site.config[:data_sources][0][:items_root])
     assert_equal('/',     site.config[:data_sources][0][:layouts_root])
@@ -56,7 +56,7 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
       end
     end
 
-    site = Nanoc::Int::SiteLoader.new.new_from_cwd
+    site = Nanoc::Core::SiteLoader.new.new_from_cwd
     assert_nil site.config[:parent_config_file]
     assert site.config[:enable_output_diff]
     assert_equal 'bar', site.config[:foo]
@@ -71,7 +71,7 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
     end
 
     assert_raises(Nanoc::Core::ConfigLoader::NoParentConfigFileFoundError) do
-      Nanoc::Int::SiteLoader.new.new_from_cwd
+      Nanoc::Core::SiteLoader.new.new_from_cwd
     end
   end
 
@@ -91,7 +91,7 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
     end
 
     assert_raises(Nanoc::Core::ConfigLoader::CyclicalConfigFileError) do
-      Nanoc::Int::SiteLoader.new.new_from_cwd
+      Nanoc::Core::SiteLoader.new.new_from_cwd
     end
   end
 
@@ -104,7 +104,7 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
       File.open('content/foo_bar.md', 'w') { |io| io << 'asdf' }
       File.open('layouts/detail.erb', 'w') { |io| io << 'asdf' }
 
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
 
       site.items.each do |item|
         assert_equal Nanoc::Core::Identifier, item.identifier.class
@@ -123,7 +123,7 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
       File.open('content/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
 
       assert_raises(Nanoc::Core::Site::DuplicateIdentifierError) do
-        Nanoc::Int::SiteLoader.new.new_from_cwd
+        Nanoc::Core::SiteLoader.new.new_from_cwd
       end
     end
   end
@@ -135,7 +135,7 @@ class Nanoc::Int::SiteTest < Nanoc::TestCase
       File.open('layouts/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
 
       assert_raises(Nanoc::Core::Site::DuplicateIdentifierError) do
-        Nanoc::Int::SiteLoader.new.new_from_cwd
+        Nanoc::Core::SiteLoader.new.new_from_cwd
       end
     end
   end

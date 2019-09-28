@@ -37,7 +37,7 @@ class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
       )
 
       # Create site and compiler
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       action_provider = new_action_provider(site)
 
       # Check that the two preprocess blocks have been added
@@ -68,7 +68,7 @@ class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
       )
 
       # Create site and compiler
-      site = Nanoc::Int::SiteLoader.new.new_from_cwd
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
       action_provider = new_action_provider(site)
 
       # Check that the two postprocess blocks have been added

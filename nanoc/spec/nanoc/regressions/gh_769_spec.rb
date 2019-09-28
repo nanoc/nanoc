@@ -24,7 +24,7 @@ EOS
   end
 
   it 'finds the parent if the parent is root' do
-    site = Nanoc::Int::SiteLoader.new.new_from_cwd
+    site = Nanoc::Core::SiteLoader.new.new_from_cwd
     Nanoc::Int::Compiler.compile(site)
 
     expect(File.read('output/donkey/index.html')).to eql('Donkey! [/]')
