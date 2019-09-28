@@ -65,6 +65,7 @@ require 'nanoc-core'
 # Re-export from Nanoc::Core
 Nanoc::Identifier = Nanoc::Core::Identifier
 Nanoc::DataSource = Nanoc::Core::DataSource
+Nanoc::Filter = Nanoc::Core::Filter
 
 # Load Nanoc
 require 'nanoc/version'

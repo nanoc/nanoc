@@ -31,7 +31,7 @@ RSpec/EmptyExampleGroup:
   Exclude:
     - 'nanoc-core/spec/nanoc/core/compilation_item_view_spec.rb'
     - 'nanoc-core/spec/nanoc/core/dependency_props_spec.rb'
-    - 'nanoc/spec/nanoc/base/filter_spec.rb'
+    - 'nanoc-core/spec/nanoc/core/filter_spec.rb'
     - 'nanoc/spec/nanoc/base/services/outdatedness_checker_spec.rb'
     - 'nanoc/spec/nanoc/base/services/outdatedness_rules_spec.rb'
     - 'nanoc/spec/nanoc/cli/error_handler_spec.rb'
@@ -87,7 +87,7 @@ RSpec/InstanceVariable:
   Exclude:
     - 'guard-nanoc/spec/lib/guard/nanoc_spec.rb'
     - 'nanoc-core/spec/nanoc/core/code_snippet_spec.rb'
-    - 'nanoc/spec/nanoc/base/filter_spec.rb'
+    - 'nanoc-core/spec/nanoc/core/filter_spec.rb'
     - 'nanoc/spec/nanoc/checking/checks/external_links_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rule_spec.rb'
 

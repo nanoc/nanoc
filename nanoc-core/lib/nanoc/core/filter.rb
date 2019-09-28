@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Base
-    # Nanoc::Filter is responsible for filtering items. It is the superclass
+  module Core
+    # Nanoc::Core::Filter is responsible for filtering items. It is the superclass
     # for all textual filters.
     #
     # A filter instance should only be used once. Filters should not be reused
@@ -27,12 +27,12 @@ module Nanoc
     #
     # @abstract Subclass and override {#run} to implement a custom filter.
     class Filter < Nanoc::Core::Context
-      # @api private
-      TMP_BINARY_ITEMS_DIR = 'binary_items'
-
       extend DDPlugin::Plugin
 
       include Nanoc::Core::ContractsSupport
+
+      # @api private
+      TMP_BINARY_ITEMS_DIR = 'binary_items'
 
       class UnknownFilterError < Nanoc::Core::Error
         include Nanoc::Core::ContractsSupport
@@ -63,7 +63,7 @@ module Nanoc
 
       class << self
         def define(ident, &block)
-          filter_class = Class.new(::Nanoc::Filter) { identifier(ident) }
+          filter_class = Class.new(::Nanoc::Core::Filter) { identifier(ident) }
           filter_class.send(:define_method, :run) do |content, params = {}|
             instance_exec(content, params, &block)
           end
@@ -203,17 +203,17 @@ module Nanoc
       #   value is undefined; if the filter outputs textual content, the return
       #   value will be the filtered content.
       def run(content_or_filename, params = {}) # rubocop:disable Lint/UnusedMethodArgument
-        raise NotImplementedError.new('Nanoc::Filter subclasses must implement #run')
+        raise NotImplementedError.new('Nanoc::Core::Filter subclasses must implement #run')
       end
 
       def verify(res)
         if self.class.to_binary?
           unless File.file?(output_filename)
-            raise Nanoc::Filter::OutputNotWrittenError.new(self.class.identifier, output_filename)
+            raise Nanoc::Core::Filter::OutputNotWrittenError.new(self.class.identifier, output_filename)
           end
         elsif self.class.to_text?
           unless res
-            raise Nanoc::Filter::FilterReturnedNilError.new(self.class.identifier)
+            raise Nanoc::Core::Filter::FilterReturnedNilError.new(self.class.identifier)
           end
         end
       end

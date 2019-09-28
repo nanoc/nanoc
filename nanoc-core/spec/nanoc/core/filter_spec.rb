@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Filter do
+describe Nanoc::Core::Filter do
   describe '.define' do
     context 'simple filter' do
       let(:filter_name) { :b5355bbb4d772b9853d21be57da614dba521dbbb }
@@ -40,15 +40,24 @@ describe Nanoc::Filter do
   end
 
   describe '.named!' do
+    let(:filter_name) { :ipk5rpblmorrrgkiodzuuanfujokae2g }
+    let(:filter_class) { described_class.named(filter_name) }
+
+    before do
+      described_class.define(filter_name) do |content, _params|
+        content.upcase
+      end
+    end
+
     it 'returns filter if exists' do
-      expect(described_class.named!(:erb)).not_to be_nil
-      expect(described_class.named!(:erb).identifier).to eq(:erb)
+      expect(described_class.named!(filter_name)).not_to be_nil
+      expect(described_class.named!(filter_name).identifier).to eq(filter_name)
     end
 
     it 'raises if non-existent' do
       expect { described_class.named!(:ajklsdfklasjflkd) }
         .to raise_error(
-          Nanoc::Filter::UnknownFilterError,
+          Nanoc::Core::Filter::UnknownFilterError,
           'The requested filter, “ajklsdfklasjflkd”, does not exist.',
         )
     end
@@ -122,7 +131,7 @@ describe Nanoc::Filter do
   describe '.always_outdated? + .always_outdated' do
     context 'not always outdated' do
       let(:filter_class) do
-        Class.new(Nanoc::Filter) do
+        Class.new(Nanoc::Core::Filter) do
           identifier :bea22a356b6b031cea1e615087179803818c6a53
 
           def run(content, _params)
@@ -138,7 +147,7 @@ describe Nanoc::Filter do
 
     context 'always outdated' do
       let(:filter_class) do
-        Class.new(Nanoc::Filter) do
+        Class.new(Nanoc::Core::Filter) do
           identifier :d7413fa71223e5e69b03a0abfa25806e07e14f3a
 
           always_outdated
@@ -158,7 +167,16 @@ describe Nanoc::Filter do
   describe '#depend_on' do
     subject { filter.depend_on(item_views) }
 
-    let(:filter) { Nanoc::Filters::ERB.new(assigns) }
+    before do
+      described_class.define(filter_name) do |content, _params|
+        content.upcase
+      end
+    end
+
+    let(:filter_name) { :z3xe2lejsgmuaa57jrfapvlkitgi1vwl }
+    let(:filter_class) { described_class.named(filter_name) }
+
+    let(:filter) { filter_class.new(assigns) }
     let(:item_views) { [item_view] }
 
     let(:item) { Nanoc::Core::Item.new('foo', {}, '/stuff.md') }
