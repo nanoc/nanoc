@@ -95,6 +95,7 @@ module Nanoc
           define_behavior(Nanoc::Core::BinaryContent, BinaryContentUpdateBehavior)
           define_behavior(Nanoc::Core::Configuration, HashUpdateBehavior)
           define_behavior(Nanoc::Core::Context, ContextUpdateBehavior)
+          define_behavior(Nanoc::Core::CodeSnippet, DataUpdateBehavior)
           define_behavior(Nanoc::Core::IdentifiableCollection, ArrayUpdateBehavior)
           define_behavior(Nanoc::Core::Identifier, ToSUpdateBehavior)
           define_behavior(Nanoc::Core::Item, DocumentUpdateBehavior)
