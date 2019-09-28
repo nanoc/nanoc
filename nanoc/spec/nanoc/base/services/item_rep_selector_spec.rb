@@ -118,7 +118,7 @@ describe Nanoc::Int::ItemRepSelector do
       end
 
       example do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::DependencyCycle, <<~EOS)
+        expect { subject }.to raise_error(Nanoc::Core::Errors::DependencyCycle, <<~EOS)
           The site cannot be compiled because there is a dependency cycle:
 
               (1) item /foo.md, rep :a, uses compiled content of (1)
@@ -141,7 +141,7 @@ describe Nanoc::Int::ItemRepSelector do
       end
 
       example do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::DependencyCycle, <<~EOS)
+        expect { subject }.to raise_error(Nanoc::Core::Errors::DependencyCycle, <<~EOS)
           The site cannot be compiled because there is a dependency cycle:
 
               (1) item /foo.md, rep :a, uses compiled content of

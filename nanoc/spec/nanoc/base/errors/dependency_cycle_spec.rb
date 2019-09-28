@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Errors::DependencyCycle do
+describe Nanoc::Core::Errors::DependencyCycle do
   subject(:error) { described_class.new(stack) }
 
   let(:stack) do

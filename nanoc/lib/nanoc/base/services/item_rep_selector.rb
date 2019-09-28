@@ -35,7 +35,7 @@ module Nanoc
 
         def mark_failed(dep)
           if @stack.include?(dep)
-            raise Nanoc::Int::Errors::DependencyCycle.new(@stack + [dep])
+            raise Nanoc::Core::Errors::DependencyCycle.new(@stack + [dep])
           end
 
           @reps.delete(dep)
