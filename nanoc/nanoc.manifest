@@ -33,7 +33,6 @@ lib/nanoc/base/services/compiler/stages/preprocess.rb
 lib/nanoc/base/services/compiler/stages/prune.rb
 lib/nanoc/base/services/compiler/stages/store_post_compilation_state.rb
 lib/nanoc/base/services/compiler/stages/store_pre_compilation_state.rb
-lib/nanoc/base/services/executor.rb
 lib/nanoc/base/services/pruner.rb
 lib/nanoc/checking.rb
 lib/nanoc/checking/check.rb

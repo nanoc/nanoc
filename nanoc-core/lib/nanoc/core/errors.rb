@@ -103,6 +103,49 @@ module Nanoc
         end
       end
 
+      # Error that is raised during site compilation when an item uses a layout
+      # that is not present in the site.
+      class UnknownLayout < ::Nanoc::Core::Error
+        # @param [String] layout_identifier The layout identifier for which no
+        #   layout could be found
+        def initialize(layout_identifier)
+          super("The site does not have a layout with identifier “#{layout_identifier}”.")
+        end
+      end
+
+      # Error that is raised when a binary item is attempted to be laid out.
+      class CannotLayoutBinaryItem < ::Nanoc::Core::Error
+        # @param [Nanoc::Core::ItemRep] rep The item representation that was attempted
+        #   to be laid out
+        def initialize(rep)
+          super("The “#{rep.item.identifier}” item (rep “#{rep.name}”) cannot be laid out because it is a binary item. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.")
+        end
+      end
+
+      # Error that is raised when a textual filter is attempted to be applied to
+      # a binary item representation.
+      class CannotUseTextualFilter < ::Nanoc::Core::Error
+        # @param [Nanoc::Core::ItemRep] rep The item representation that was
+        #   attempted to be filtered
+        #
+        # @param [Class] filter_class The filter class that was used
+        def initialize(rep, filter_class)
+          super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because textual filters cannot be used on binary items.")
+        end
+      end
+
+      # Error that is raised when a binary filter is attempted to be applied to
+      # a textual item representation.
+      class CannotUseBinaryFilter < ::Nanoc::Core::Error
+        # @param [Nanoc::Core::ItemRep] rep The item representation that was
+        #   attempted to be filtered
+        #
+        # @param [Class] filter_class The filter class that was used
+        def initialize(rep, filter_class)
+          super("The “#{filter_class.inspect}” filter cannot be used to filter the “#{rep.item.identifier}” item (rep “#{rep.name}”), because binary filters cannot be used on textual items. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.")
+        end
+      end
+
       class InternalInconsistency < ::Nanoc::Core::Error
       end
     end

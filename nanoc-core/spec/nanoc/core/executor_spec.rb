@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Executor do
+describe Nanoc::Core::Executor do
+  Class.new(Nanoc::Core::Filter) do
+    identifier :simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei
+
+    def run(content, _params = {})
+      context = ::Nanoc::Core::Context.new(assigns)
+      ERB.new(content).result(context.get_binding)
+    end
+  end
+
   let(:executor) { described_class.new(rep, compilation_context, dependency_tracker) }
 
   let(:compilation_context) do
@@ -65,13 +74,13 @@ describe Nanoc::Int::Executor do
     let(:content) { Nanoc::Core::TextualContent.new('<%= "Donkey" %> Power') }
 
     context 'normal flow with textual rep' do
-      subject { executor.filter(:erb) }
+      subject { executor.filter(:simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei) }
 
       before do
         expect(Nanoc::Core::NotificationCenter)
-          .to receive(:post).with(:filtering_started, rep, :erb)
+          .to receive(:post).with(:filtering_started, rep, :simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei)
         expect(Nanoc::Core::NotificationCenter)
-          .to receive(:post).with(:filtering_ended, rep, :erb)
+          .to receive(:post).with(:filtering_ended, rep, :simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei)
 
         compiled_content_store.set_current(rep, content)
       end
@@ -99,7 +108,7 @@ describe Nanoc::Int::Executor do
       end
 
       it 'returns frozen data' do
-        executor.filter(:erb)
+        executor.filter(:simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei)
 
         expect(compiled_content_store.get_current(rep)).to be_frozen
       end
@@ -118,7 +127,7 @@ describe Nanoc::Int::Executor do
 
         File.write(content.filename, 'Foo Data')
 
-        filter_class = Class.new(::Nanoc::Filter) do
+        filter_class = Class.new(::Nanoc::Core::Filter) do
           type :binary
 
           def run(filename, _params = {})
@@ -126,7 +135,7 @@ describe Nanoc::Int::Executor do
           end
         end
 
-        expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
+        expect(Nanoc::Core::Filter).to receive(:named).with(:whatever) { filter_class }
 
         compiled_content_store.set_current(rep, content)
       end
@@ -173,7 +182,7 @@ describe Nanoc::Int::Executor do
 
         File.write(content.filename, 'Foo Data')
 
-        filter_class = Class.new(::Nanoc::Filter) do
+        filter_class = Class.new(::Nanoc::Core::Filter) do
           type binary: :text
 
           def run(filename, _params = {})
@@ -181,7 +190,7 @@ describe Nanoc::Int::Executor do
           end
         end
 
-        expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
+        expect(Nanoc::Core::Filter).to receive(:named).with(:whatever) { filter_class }
 
         compiled_content_store.set_current(rep, content)
       end
@@ -218,7 +227,7 @@ describe Nanoc::Int::Executor do
         expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :whatever)
 
-        filter_class = Class.new(::Nanoc::Filter) do
+        filter_class = Class.new(::Nanoc::Core::Filter) do
           type text: :binary
 
           def run(content, _params = {})
@@ -226,7 +235,7 @@ describe Nanoc::Int::Executor do
           end
         end
 
-        expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
+        expect(Nanoc::Core::Filter).to receive(:named).with(:whatever) { filter_class }
 
         compiled_content_store.set_current(rep, content)
       end
@@ -257,26 +266,26 @@ describe Nanoc::Int::Executor do
     context 'non-existant filter' do
       it 'raises' do
         expect { executor.filter(:ajlsdfjklaskldfj) }
-          .to raise_error(Nanoc::Filter::UnknownFilterError)
+          .to raise_error(Nanoc::Core::Filter::UnknownFilterError)
       end
     end
 
     context 'non-binary rep, binary-to-something filter' do
       before do
-        filter_class = Class.new(::Nanoc::Filter) do
+        filter_class = Class.new(::Nanoc::Core::Filter) do
           type :binary
 
           def run(_content, _params = {}); end
         end
 
-        expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
+        expect(Nanoc::Core::Filter).to receive(:named).with(:whatever) { filter_class }
 
         compiled_content_store.set_current(rep, content)
       end
 
       it 'raises' do
         expect { executor.filter(:whatever) }
-          .to raise_error(Nanoc::Int::Errors::CannotUseBinaryFilter)
+          .to raise_error(Nanoc::Core::Errors::CannotUseBinaryFilter)
       end
     end
 
@@ -288,8 +297,8 @@ describe Nanoc::Int::Executor do
       end
 
       it 'raises' do
-        expect { executor.filter(:erb) }
-          .to raise_error(Nanoc::Int::Errors::CannotUseTextualFilter)
+        expect { executor.filter(:simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei) }
+          .to raise_error(Nanoc::Core::Errors::CannotUseTextualFilter)
       end
     end
 
@@ -304,7 +313,7 @@ describe Nanoc::Int::Executor do
 
         File.write(content.filename, 'Foo Data')
 
-        filter_class = Class.new(::Nanoc::Filter) do
+        filter_class = Class.new(::Nanoc::Core::Filter) do
           identifier :executor_spec_Toing1Oowoa3aewoop0k
           type :binary
 
@@ -313,12 +322,12 @@ describe Nanoc::Int::Executor do
 
         compiled_content_store.set_current(rep, content)
 
-        expect(Nanoc::Filter).to receive(:named).with(:whatever) { filter_class }
+        expect(Nanoc::Core::Filter).to receive(:named).with(:whatever) { filter_class }
       end
 
       example do
         expect { executor.filter(:whatever) }
-          .to raise_error(Nanoc::Filter::OutputNotWrittenError)
+          .to raise_error(Nanoc::Core::Filter::OutputNotWrittenError)
       end
     end
 
@@ -332,7 +341,7 @@ describe Nanoc::Int::Executor do
       end
 
       let(:filter_that_modifies_content) do
-        Class.new(::Nanoc::Filter) do
+        Class.new(::Nanoc::Core::Filter) do
           def run(content, _params = {})
             content.gsub!('foo', 'moo')
             content
@@ -341,7 +350,7 @@ describe Nanoc::Int::Executor do
       end
 
       let(:filter_that_modifies_params) do
-        Class.new(::Nanoc::Filter) do
+        Class.new(::Nanoc::Core::Filter) do
           def run(_content, params = {})
             params[:foo] = 'bar'
             'asdf'
@@ -350,12 +359,12 @@ describe Nanoc::Int::Executor do
       end
 
       it 'errors when attempting to modify content' do
-        expect(Nanoc::Filter).to receive(:named).with(:whatever).and_return(filter_that_modifies_content)
+        expect(Nanoc::Core::Filter).to receive(:named).with(:whatever).and_return(filter_that_modifies_content)
         expect { executor.filter(:whatever) }.to raise_frozen_error
       end
 
       it 'receives frozen filter args' do
-        expect(Nanoc::Filter).to receive(:named).with(:whatever).and_return(filter_that_modifies_params)
+        expect(Nanoc::Core::Filter).to receive(:named).with(:whatever).and_return(filter_that_modifies_params)
         expect { executor.filter(:whatever) }.to raise_frozen_error
       end
     end
@@ -366,7 +375,7 @@ describe Nanoc::Int::Executor do
 
     let(:action_sequence) do
       Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
-        b.add_filter(:erb, {})
+        b.add_filter(:simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei, {})
       end
     end
 
@@ -414,8 +423,8 @@ describe Nanoc::Int::Executor do
       end
 
       it 'sends notifications' do
-        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_started, rep, :erb).ordered
-        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :erb).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_started, rep, :simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei).ordered
 
         subject
       end
@@ -470,7 +479,7 @@ describe Nanoc::Int::Executor do
       end
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::UnknownLayout)
+        expect { subject }.to raise_error(Nanoc::Core::Errors::UnknownLayout)
       end
     end
 
@@ -489,21 +498,21 @@ describe Nanoc::Int::Executor do
 
       it 'raises' do
         expect { subject }.to raise_error(
-          Nanoc::Int::Errors::CannotLayoutBinaryItem,
+          Nanoc::Core::Errors::CannotLayoutBinaryItem,
           'The “/index.md” item (rep “donkey”) cannot be laid out because it is a binary item. If you are getting this error for an item that should be textual instead of binary, make sure that its extension is included in the text_extensions array in the site configuration.',
         )
       end
     end
 
     it 'receives frozen filter args' do
-      filter_class = Class.new(::Nanoc::Filter) do
+      filter_class = Class.new(::Nanoc::Core::Filter) do
         def run(_content, params = {})
           params[:foo] = 'bar'
           'asdf'
         end
       end
 
-      expect(Nanoc::Filter).to receive(:named).with(:erb) { filter_class }
+      expect(Nanoc::Core::Filter).to receive(:named).with(:simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei) { filter_class }
 
       expect { subject }.to raise_frozen_error
     end
@@ -607,7 +616,7 @@ describe Nanoc::Int::Executor do
         let(:arg) { '/default.*' }
 
         it 'raises' do
-          expect { subject }.to raise_error(Nanoc::Int::Errors::UnknownLayout)
+          expect { subject }.to raise_error(Nanoc::Core::Errors::UnknownLayout)
         end
       end
     end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     class Executor
       def initialize(rep, compilation_context, dependency_tracker)
         @rep = rep
@@ -48,10 +48,10 @@ module Nanoc
 
         # Check whether item can be laid out
         last = @compilation_context.compiled_content_store.get_current(@rep)
-        raise Nanoc::Int::Errors::CannotLayoutBinaryItem.new(@rep) if last.binary?
+        raise Nanoc::Core::Errors::CannotLayoutBinaryItem.new(@rep) if last.binary?
 
         # Create filter
-        klass = Nanoc::Filter.named!(filter_name)
+        klass = Nanoc::Core::Filter.named!(filter_name)
         layout_view = Nanoc::Core::LayoutView.new(layout, view_context)
         filter = klass.new(assigns.merge(layout: layout_view))
 
@@ -99,17 +99,17 @@ module Nanoc
           return layout if layout
         end
 
-        raise Nanoc::Int::Errors::UnknownLayout.new(arg)
+        raise Nanoc::Core::Errors::UnknownLayout.new(arg)
       end
 
       def filter_for_filtering(filter_name)
-        klass = Nanoc::Filter.named!(filter_name)
+        klass = Nanoc::Core::Filter.named!(filter_name)
 
         last = @compilation_context.compiled_content_store.get_current(@rep)
         if klass.from_binary? && !last.binary?
-          raise Nanoc::Int::Errors::CannotUseBinaryFilter.new(@rep, klass)
+          raise Nanoc::Core::Errors::CannotUseBinaryFilter.new(@rep, klass)
         elsif !klass.from_binary? && last.binary?
-          raise Nanoc::Int::Errors::CannotUseTextualFilter.new(@rep, klass)
+          raise Nanoc::Core::Errors::CannotUseTextualFilter.new(@rep, klass)
         end
 
         klass.new(assigns)

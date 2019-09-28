@@ -22,7 +22,7 @@ module Nanoc
             dependency_tracker = Nanoc::Core::DependencyTracker.new(@dependency_store)
             dependency_tracker.enter(rep.item)
 
-            executor = Nanoc::Int::Executor.new(rep, @compilation_context, dependency_tracker)
+            executor = Nanoc::Core::Executor.new(rep, @compilation_context, dependency_tracker)
 
             @compilation_context.compiled_content_store.set_current(rep, rep.item.content)
 
