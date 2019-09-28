@@ -38,7 +38,7 @@ module Nanoc
                   executor.snapshot(snapshot_name)
                 end
               else
-                raise Nanoc::Int::Errors::InternalInconsistency, "unknown action #{action.inspect}"
+                raise Nanoc::Core::Errors::InternalInconsistency, "unknown action #{action.inspect}"
               end
             end
           ensure

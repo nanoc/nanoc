@@ -11,7 +11,6 @@ module Nanoc
       NoSuchSnapshot = ::Nanoc::Core::Errors::NoSuchSnapshot
       CannotGetCompiledContentOfBinaryItem = ::Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem
       CannotGetParentOrChildrenOfNonLegacyItem = ::Nanoc::Core::Errors::CannotGetParentOrChildrenOfNonLegacyItem
-      InternalInconsistency = ::Nanoc::Core::Errors::InternalInconsistency
       CannotLayoutBinaryItem = ::Nanoc::Core::Errors::CannotLayoutBinaryItem
       UnknownLayout = ::Nanoc::Core::Errors::UnknownLayout
       CannotUseBinaryFilter = ::Nanoc::Core::Errors::CannotUseBinaryFilter
