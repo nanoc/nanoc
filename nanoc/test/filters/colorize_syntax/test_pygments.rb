@@ -4,7 +4,7 @@ require 'helper'
 
 class Nanoc::Filters::ColorizeSyntax::PygmentsTest < Nanoc::TestCase
   def test_pygmentsrb
-    skip 'pygments.rb does not support Windows' if Nanoc.on_windows?
+    skip 'pygments.rb does not support Windows' if Nanoc::Core.on_windows?
     if_have 'pygments', 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new

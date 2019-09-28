@@ -32,7 +32,7 @@ module Nanoc::Checking
       output_filenames = Dir[output_dir + '/**/*'].select { |f| File.file?(f) }
 
       # FIXME: ugly
-      compiler = Nanoc::Int::Compiler.new_for(site)
+      compiler = Nanoc::Core::Compiler.new_for(site)
       res = compiler.run_until_reps_built
       reps = res.fetch(:reps)
       view_context =

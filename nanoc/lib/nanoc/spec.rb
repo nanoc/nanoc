@@ -203,7 +203,7 @@ module Nanoc
       end
 
       def new_compiler_for(site)
-        Nanoc::Int::CompilerLoader.new.load(site, action_provider: @action_provider)
+        Nanoc::Core::CompilerLoader.new.load(site, action_provider: @action_provider)
       end
 
       def site

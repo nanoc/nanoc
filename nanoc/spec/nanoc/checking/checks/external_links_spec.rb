@@ -60,7 +60,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
 
   context 'redirect' do
     before do
-      skip 'Known failure on Windows' if Nanoc.on_windows?
+      skip 'Known failure on Windows' if Nanoc::Core.on_windows?
     end
 
     let(:check) do
@@ -85,7 +85,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
 
   context 'redirect without location' do
     before do
-      skip 'Known failure on Windows' if Nanoc.on_windows?
+      skip 'Known failure on Windows' if Nanoc::Core.on_windows?
     end
 
     let(:check) do
@@ -109,7 +109,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
 
   context 'invalid URL component' do
     before do
-      skip 'Known failure on Windows' if Nanoc.on_windows?
+      skip 'Known failure on Windows' if Nanoc::Core.on_windows?
     end
 
     let(:check) do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     class Compiler
       include Nanoc::Core::ContractsSupport
 
@@ -26,9 +26,9 @@ module Nanoc
         new_for(site).run_until_end
       end
 
-      contract Nanoc::Core::Site => Nanoc::Int::Compiler
+      contract Nanoc::Core::Site => Nanoc::Core::Compiler
       def self.new_for(site)
-        Nanoc::Int::CompilerLoader.new.load(site)
+        Nanoc::Core::CompilerLoader.new.load(site)
       end
 
       def run_until_preprocessed

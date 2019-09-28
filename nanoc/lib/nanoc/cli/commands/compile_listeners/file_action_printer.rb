@@ -55,6 +55,10 @@ module Nanoc::CLI::Commands::CompileListeners
 
         log(level, action, path, duration)
       end
+
+      on(:file_pruned) do |path|
+        Nanoc::CLI::Logger.instance.file(:high, :delete, path)
+      end
     end
 
     # @see Listener#stop

@@ -46,6 +46,8 @@ lib/nanoc/core/compilation_stages/store_post_compilation_state.rb
 lib/nanoc/core/compilation_stages/store_pre_compilation_state.rb
 lib/nanoc/core/compiled_content_cache.rb
 lib/nanoc/core/compiled_content_store.rb
+lib/nanoc/core/compiler_loader.rb
+lib/nanoc/core/compiler.rb
 lib/nanoc/core/config_loader.rb
 lib/nanoc/core/config_view.rb
 lib/nanoc/core/configuration-schema.json
@@ -121,6 +123,7 @@ lib/nanoc/core/processing_actions.rb
 lib/nanoc/core/processing_actions/filter.rb
 lib/nanoc/core/processing_actions/layout.rb
 lib/nanoc/core/processing_actions/snapshot.rb
+lib/nanoc/core/pruner.rb
 lib/nanoc/core/regexp_pattern.rb
 lib/nanoc/core/site_loader.rb
 lib/nanoc/core/site.rb

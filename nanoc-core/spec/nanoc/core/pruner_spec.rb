@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Pruner, stdio: true do
+describe Nanoc::Core::Pruner, stdio: true do
   subject(:pruner) { described_class.new(config, reps, dry_run: dry_run, exclude: exclude) }
 
   let(:config) { Nanoc::Core::Configuration.new(hash: {}, dir: Dir.getwd).with_defaults }
@@ -20,10 +20,6 @@ describe Nanoc::Pruner, stdio: true do
   end
 
   let(:item) { Nanoc::Core::Item.new('asdf', {}, '/a.md') }
-
-  it 'is accessible through Nanoc::Extra::Pruner' do
-    expect(Nanoc::Extra::Pruner).to equal(described_class)
-  end
 
   describe '#filename_excluded?' do
     subject { pruner.filename_excluded?(filename) }
@@ -408,7 +404,7 @@ describe Nanoc::Pruner, stdio: true do
       end
 
       before do
-        if Nanoc.on_windows?
+        if Nanoc::Core.on_windows?
           skip 'Symlinks to output dirs are currently not supported on Windows.'
         end
       end

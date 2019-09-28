@@ -52,7 +52,7 @@ describe 'Compile command', site: true, stdio: true do
 
     # Compile
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
-    Nanoc::Int::Compiler.compile(site)
+    Nanoc::Core::Compiler.compile(site)
 
     # Check
     expect(File.read('output/index.html')).to eq('<h1>A</h1>')
@@ -69,7 +69,7 @@ describe 'Compile command', site: true, stdio: true do
 
     # Compile
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
-    Nanoc::Int::Compiler.compile(site)
+    Nanoc::Core::Compiler.compile(site)
 
     # Check
     expect(File.read('output/index.html')).to eq('<h1>B</h1>')

@@ -14,7 +14,7 @@ RSpec.configure do |c|
   }
 
   c.before(:each, fork: true) do
-    skip 'fork() is not supported on Windows' if Nanoc.on_windows?
+    skip 'fork() is not supported on Windows' if Nanoc::Core.on_windows?
   end
 
   c.before do

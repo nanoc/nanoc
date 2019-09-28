@@ -2,7 +2,7 @@
 
 require 'helper'
 
-class Nanoc::Int::CompilerTest < Nanoc::TestCase
+class Nanoc::Core::CompilerTest < Nanoc::TestCase
   def test_compile_rep_should_write_proper_snapshots_real
     with_site do |_site|
       File.write('content/moo.txt', '<%= 1 %> <%%= 2 %> <%%%= 3 %>')
@@ -36,7 +36,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
 
       assert File.file?('output/moo-raw.txt')
       assert File.file?('output/moo-pre.txt')
@@ -51,7 +51,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
   def test_compile_with_no_reps
     with_site do |site|
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
 
       assert Dir['output/*'].empty?
     end
@@ -62,7 +62,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       File.open('content/index.html', 'w') { |io| io.write('o hello') }
 
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
 
       assert Dir['output/*'].size == 1
       assert File.file?('output/index.html')
@@ -76,7 +76,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       File.open('content/bar.html', 'w') { |io| io.write('o bai') }
 
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
 
       assert Dir['output/*'].size == 2
       assert File.file?('output/foo/index.html')
@@ -96,7 +96,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       end
 
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
 
       assert Dir['output/*'].size == 2
       assert File.file?('output/foo/index.html')
@@ -117,7 +117,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
       assert_raises Nanoc::Core::Errors::DependencyCycle do
-        Nanoc::Int::Compiler.compile(site)
+        Nanoc::Core::Compiler.compile(site)
       end
     end
   end
@@ -143,7 +143,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
       # Create site
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
       error = assert_raises(Nanoc::Error) do
-        Nanoc::Int::Compiler.compile(site)
+        Nanoc::Core::Compiler.compile(site)
       end
       assert_match(/^The path returned for the.*does not start with a slash. Please ensure that all routing rules return a path that starts with a slash./, error.message)
     end
@@ -173,7 +173,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
       # Compile
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
 
       # Check
       assert_equal '[[[<%= @item.compiled_content(:snapshot => :aaa) %>]]]', File.read('output/index.html')
@@ -206,7 +206,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
       # Compile
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
 
       # Check
       assert_equal '[stuff]', File.read('output/a/index.html')
@@ -223,7 +223,7 @@ class Nanoc::Int::CompilerTest < Nanoc::TestCase
 
       # Compile
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
 
       # Check
       assert Dir['tmp/text_items/*'].empty?

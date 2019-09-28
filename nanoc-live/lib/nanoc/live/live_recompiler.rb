@@ -91,7 +91,7 @@ module Nanoc::Live
       time_before = Time.now
 
       puts 'Compiling site…'
-      compiler = Nanoc::Int::Compiler.new_for(site)
+      compiler = Nanoc::Core::Compiler.new_for(site)
       listener = Nanoc::CLI::Commands::CompileListeners::Aggregate.new(
         command_runner: command_runner,
         site: site,

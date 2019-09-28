@@ -15,7 +15,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
     end
   end
 
@@ -25,7 +25,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     FileUtils.cd('foo') do
       Nanoc::CLI.run %w[create_site ./]
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
     end
   end
 
@@ -35,7 +35,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
     FileUtils.cd('foo') do
       File.open('content/blah', 'w') { |io| io << 'asdf' }
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
 
       assert File.file?('output/blah')
     end
@@ -48,7 +48,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
     end
   end
 
@@ -59,7 +59,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
 
       assert File.file?('output/index.html')
     end
@@ -93,7 +93,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
         io.write("    identifier_type: full\n")
       end
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
-      Nanoc::Int::Compiler.compile(site)
+      Nanoc::Core::Compiler.compile(site)
     end
     FileUtils
   ensure

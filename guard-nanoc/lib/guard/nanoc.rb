@@ -61,7 +61,7 @@ module Guard
 
       Dir.chdir(@dir) do
         site = ::Nanoc::Core::SiteLoader.new.new_from_cwd
-        ::Nanoc::Int::Compiler.compile(site)
+        ::Nanoc::Core::Compiler.compile(site)
       end
       notify_success
     rescue => e

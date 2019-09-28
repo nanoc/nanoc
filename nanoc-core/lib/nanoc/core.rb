@@ -2,6 +2,7 @@
 
 # Ruby stdlib
 require 'fiber'
+require 'find'
 require 'pstore'
 require 'singleton'
 require 'tmpdir'
@@ -15,6 +16,7 @@ require 'ddplugin'
 require 'hamster'
 require 'slow_enumerator_tools'
 require 'tomlrb'
+require 'tty-platform'
 require 'zeitwerk'
 
 module Nanoc
@@ -23,6 +25,13 @@ module Nanoc
     # `UNDEFINED.equal?(x)`. Used in places where `nil` already has meaning, and
     # thus cannot be used to mean the presence of nothing.
     UNDEFINED = Object.new
+
+    # @return [Boolean] True if the current platform is Windows, false otherwise.
+    #
+    # @api private
+    def self.on_windows?
+      @_on_windows ||= TTY::Platform.new.windows?
+    end
   end
 end
 

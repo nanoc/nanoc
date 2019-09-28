@@ -35,7 +35,7 @@ module Nanoc::Checking::Checks
       exclude_config = @config.fetch(:prune, {}).fetch(:exclude, [])
       # FIXME: specifying reps this way is icky
       reps = Nanoc::Core::ItemRepRepo.new
-      @pruner ||= Nanoc::Pruner.new(@config._unwrap, reps, exclude: exclude_config)
+      @pruner ||= Nanoc::Core::Pruner.new(@config._unwrap, reps, exclude: exclude_config)
     end
   end
 end

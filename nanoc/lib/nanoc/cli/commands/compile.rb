@@ -37,7 +37,7 @@ module Nanoc::CLI::Commands
       @site = load_site
 
       puts 'Compiling site…'
-      compiler = Nanoc::Int::Compiler.new_for(@site)
+      compiler = Nanoc::Core::Compiler.new_for(@site)
       listener = Nanoc::CLI::Commands::CompileListeners::Aggregate.new(
         command_runner: self,
         site: @site,

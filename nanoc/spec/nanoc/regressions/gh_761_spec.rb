@@ -18,7 +18,7 @@ EOS
 
   it 'supports #compiled_content instead of yield' do
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
-    Nanoc::Int::Compiler.compile(site)
+    Nanoc::Core::Compiler.compile(site)
 
     expect(File.read('output/donkey.html')).to eql('[Compiled content donkey!]')
   end

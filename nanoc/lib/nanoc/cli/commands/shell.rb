@@ -18,7 +18,7 @@ module Nanoc::CLI::Commands
       Signal.trap('SIGINT') { raise Interrupt }
 
       @site = load_site
-      Nanoc::Int::Compiler.new_for(@site).run_until_preprocessed if options[:preprocess]
+      Nanoc::Core::Compiler.new_for(@site).run_until_preprocessed if options[:preprocess]
 
       Nanoc::Core::Context.new(env).pry
     end

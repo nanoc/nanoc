@@ -115,7 +115,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       skip 'JRuby has buggy File.find behavior (see https://github.com/jruby/jruby/issues/1647)'
     end
 
-    if Nanoc.on_windows?
+    if Nanoc::Core.on_windows?
       skip 'Symlinks to output dirs are currently not supported on Windows.'
     end
 

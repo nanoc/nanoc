@@ -13,7 +13,7 @@ module Nanoc::CLI::Commands
   class ShowData < ::Nanoc::CLI::CommandRunner
     def run
       site = load_site
-      res = Nanoc::Int::Compiler.new_for(site).run_until_precompiled
+      res = Nanoc::Core::Compiler.new_for(site).run_until_precompiled
 
       items                = site.items
       layouts              = site.layouts

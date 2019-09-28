@@ -4,7 +4,7 @@ require_relative '../../common/spec/spec_helper_head'
 
 require 'nanoc'
 
-if Nanoc.on_windows?
+if Nanoc::Core.on_windows?
   warn 'nanoc-live is not currently supported on Windows'
   exit 0
 end

@@ -18,7 +18,7 @@ EOS
   let(:site) { Nanoc::Core::SiteLoader.new.new_from_cwd }
 
   before do
-    Nanoc::Int::Compiler.compile(site)
+    Nanoc::Core::Compiler.compile(site)
   end
 
   context 'without pruning' do
@@ -30,8 +30,8 @@ EOS
 
   context 'with pruning' do
     before do
-      res = Nanoc::Int::Compiler.new_for(site).run_until_reps_built
-      Nanoc::Pruner.new(site.config, res.fetch(:reps)).run
+      res = Nanoc::Core::Compiler.new_for(site).run_until_reps_built
+      Nanoc::Core::Pruner.new(site.config, res.fetch(:reps)).run
     end
 
     it 'does not prune written snapshots' do

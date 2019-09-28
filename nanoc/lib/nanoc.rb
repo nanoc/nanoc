@@ -16,13 +16,6 @@ module Nanoc
     "Nanoc #{Nanoc::VERSION} © 2007–2019 Denis Defreyne.\n" \
     "Running #{RUBY_ENGINE} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} with RubyGems #{Gem::VERSION}.\n"
   end
-
-  # @return [Boolean] True if the current platform is Windows, false otherwise.
-  #
-  # @api private
-  def self.on_windows?
-    @_on_windows ||= TTY::Platform.new.windows?
-  end
 end
 
 # Load general requirements
@@ -33,7 +26,6 @@ require 'diff/lcs/hunk'
 require 'digest'
 require 'English'
 require 'fileutils'
-require 'find'
 require 'forwardable'
 require 'logger'
 require 'net/http'
@@ -47,7 +39,6 @@ require 'tempfile'
 require 'time'
 require 'timeout'
 require 'tmpdir'
-require 'tty-platform'
 require 'tty-which'
 require 'uri'
 

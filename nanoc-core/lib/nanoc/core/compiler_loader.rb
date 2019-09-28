@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # @api private
     class CompilerLoader
       def load(site, action_provider: nil)
@@ -32,7 +32,7 @@ module Nanoc
           outdatedness_store: outdatedness_store,
         }
 
-        Nanoc::Int::Compiler.new(site, params)
+        Nanoc::Core::Compiler.new(site, params)
       end
 
       def compiled_content_cache_class

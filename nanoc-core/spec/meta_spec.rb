@@ -19,6 +19,7 @@ describe 'meta', chdir: false do
       compilation_phases/notify
       compilation_phases/recalculate
       compilation_phases/write
+      compiler_loader
       contracts_support
       dependency
       document_view_mixin

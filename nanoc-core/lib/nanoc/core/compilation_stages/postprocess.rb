@@ -11,8 +11,7 @@ module Nanoc
           @site = site
         end
 
-        # FIXME: readd contract: Nanoc::Int::Compiler
-        contract C::Any => C::Any
+        contract Nanoc::Core::Compiler => C::Any
         def run(compiler)
           @action_provider.postprocess(@site, compiler)
         end
