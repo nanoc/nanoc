@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
-    class Compiler
-      module Stages
-      end
+  module Base
+    module CompilationStages
     end
   end
 end

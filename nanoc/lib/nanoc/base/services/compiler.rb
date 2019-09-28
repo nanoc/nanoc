@@ -117,7 +117,7 @@ module Nanoc
       end
 
       def preprocess_stage
-        @_preprocess_stage ||= Stages::Preprocess.new(
+        @_preprocess_stage ||= ::Nanoc::Base::CompilationStages::Preprocess.new(
           action_provider: @action_provider,
           site: @site,
           dependency_store: @dependency_store,
@@ -126,21 +126,21 @@ module Nanoc
       end
 
       def build_reps_stage
-        @_build_reps_stage ||= Stages::BuildReps.new(
+        @_build_reps_stage ||= ::Nanoc::Base::CompilationStages::BuildReps.new(
           site: @site,
           action_provider: @action_provider,
         )
       end
 
       def prune_stage(reps)
-        @_prune_stage ||= Stages::Prune.new(
+        @_prune_stage ||= ::Nanoc::Base::CompilationStages::Prune.new(
           config: @site.config,
           reps: reps,
         )
       end
 
       def load_stores_stage
-        @_load_stores_stage ||= Stages::LoadStores.new(
+        @_load_stores_stage ||= ::Nanoc::Base::CompilationStages::LoadStores.new(
           checksum_store: @checksum_store,
           compiled_content_cache: @compiled_content_cache,
           dependency_store: @dependency_store,
@@ -150,7 +150,7 @@ module Nanoc
       end
 
       def calculate_checksums_stage
-        @_calculate_checksums_stage ||= Stages::CalculateChecksums.new(
+        @_calculate_checksums_stage ||= ::Nanoc::Base::CompilationStages::CalculateChecksums.new(
           items: @site.items,
           layouts: @site.layouts,
           code_snippets: @site.code_snippets,
@@ -159,7 +159,7 @@ module Nanoc
       end
 
       def determine_outdatedness_stage(outdatedness_checker, reps)
-        @_determine_outdatedness_stage ||= Stages::DetermineOutdatedness.new(
+        @_determine_outdatedness_stage ||= ::Nanoc::Base::CompilationStages::DetermineOutdatedness.new(
           reps: reps,
           outdatedness_checker: outdatedness_checker,
           outdatedness_store: @outdatedness_store,
@@ -167,7 +167,7 @@ module Nanoc
       end
 
       def store_pre_compilation_state_stage(action_sequences, reps)
-        @_store_pre_compilation_state_stage ||= Stages::StorePreCompilationState.new(
+        @_store_pre_compilation_state_stage ||= ::Nanoc::Base::CompilationStages::StorePreCompilationState.new(
           reps: reps,
           layouts: @site.layouts,
           checksum_store: @checksum_store,
@@ -177,7 +177,7 @@ module Nanoc
       end
 
       def compile_reps_stage(action_sequences, reps)
-        @_compile_reps_stage ||= Stages::CompileReps.new(
+        @_compile_reps_stage ||= ::Nanoc::Base::CompilationStages::CompileReps.new(
           reps: reps,
           outdatedness_store: @outdatedness_store,
           dependency_store: @dependency_store,
@@ -188,24 +188,24 @@ module Nanoc
       end
 
       def store_post_compilation_state_stage
-        @_store_post_compilation_state_stage ||= Stages::StorePostCompilationState.new(
+        @_store_post_compilation_state_stage ||= ::Nanoc::Base::CompilationStages::StorePostCompilationState.new(
           dependency_store: @dependency_store,
         )
       end
 
       def postprocess_stage
-        @_postprocess_stage ||= Stages::Postprocess.new(
+        @_postprocess_stage ||= ::Nanoc::Base::CompilationStages::Postprocess.new(
           action_provider: @action_provider,
           site: @site,
         )
       end
 
       def cleanup_stage
-        @_cleanup_stage ||= Stages::Cleanup.new(@output_dirs)
+        @_cleanup_stage ||= ::Nanoc::Base::CompilationStages::Cleanup.new(@output_dirs)
       end
 
       def forget_outdated_dependencies_stage
-        @_forget_outdated_dependencies_stage ||= Stages::ForgetOutdatedDependencies.new(
+        @_forget_outdated_dependencies_stage ||= ::Nanoc::Base::CompilationStages::ForgetOutdatedDependencies.new(
           dependency_store: @dependency_store,
         )
       end

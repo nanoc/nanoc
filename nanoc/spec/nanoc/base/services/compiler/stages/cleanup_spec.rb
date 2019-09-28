@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Compiler::Stages::Cleanup do
+describe Nanoc::Base::CompilationStages::Cleanup do
   let(:stage) { described_class.new(config.output_dirs) }
 
   let(:config) do

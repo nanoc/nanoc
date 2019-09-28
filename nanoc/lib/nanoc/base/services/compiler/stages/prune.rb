@@ -1,30 +1,28 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
-    class Compiler
-      module Stages
-        class Prune < Nanoc::Core::CompilationStage
-          def initialize(config:, reps:)
-            @config = config
-            @reps = reps
-          end
+  module Base
+    module CompilationStages
+      class Prune < Nanoc::Core::CompilationStage
+        def initialize(config:, reps:)
+          @config = config
+          @reps = reps
+        end
 
-          def run
-            if @config[:prune][:auto_prune]
-              Nanoc::Pruner.new(@config, @reps, exclude: prune_config_exclude).run
-            end
+        def run
+          if @config[:prune][:auto_prune]
+            Nanoc::Pruner.new(@config, @reps, exclude: prune_config_exclude).run
           end
+        end
 
-          private
+        private
 
-          def prune_config
-            @config[:prune] || {}
-          end
+        def prune_config
+          @config[:prune] || {}
+        end
 
-          def prune_config_exclude
-            prune_config[:exclude] || {}
-          end
+        def prune_config_exclude
+          prune_config[:exclude] || {}
         end
       end
     end

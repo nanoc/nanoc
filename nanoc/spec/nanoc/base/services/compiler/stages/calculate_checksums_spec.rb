@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Compiler::Stages::CalculateChecksums do
+describe Nanoc::Base::CompilationStages::CalculateChecksums do
   let(:stage) do
     described_class.new(items: items, layouts: layouts, code_snippets: code_snippets, config: config)
   end

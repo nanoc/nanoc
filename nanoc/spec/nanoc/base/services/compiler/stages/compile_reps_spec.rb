@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Compiler::Stages::CompileReps do
+describe Nanoc::Base::CompilationStages::CompileReps do
   let(:stage) do
     described_class.new(
       reps: reps,
