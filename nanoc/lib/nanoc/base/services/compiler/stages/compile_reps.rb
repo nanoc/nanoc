@@ -59,33 +59,33 @@ module Nanoc
           end
 
           def build_phase_stack
-            recalculate_phase = Nanoc::Int::Compiler::Phases::Recalculate.new(
+            recalculate_phase = Nanoc::Core::CompilationPhases::Recalculate.new(
               action_sequences: @action_sequences,
               dependency_store: @dependency_store,
               compilation_context: @compilation_context,
             )
 
-            cache_phase = Nanoc::Int::Compiler::Phases::Cache.new(
+            cache_phase = Nanoc::Core::CompilationPhases::Cache.new(
               compiled_content_cache: @compiled_content_cache,
               compiled_content_store: @compilation_context.compiled_content_store,
               wrapped: recalculate_phase,
             )
 
-            resume_phase = Nanoc::Int::Compiler::Phases::Resume.new(
+            resume_phase = Nanoc::Core::CompilationPhases::Resume.new(
               wrapped: cache_phase,
             )
 
-            write_phase = Nanoc::Int::Compiler::Phases::Write.new(
+            write_phase = Nanoc::Core::CompilationPhases::Write.new(
               compiled_content_store: @compilation_context.compiled_content_store,
               wrapped: resume_phase,
             )
 
-            mark_done_phase = Nanoc::Int::Compiler::Phases::MarkDone.new(
+            mark_done_phase = Nanoc::Core::CompilationPhases::MarkDone.new(
               wrapped: write_phase,
               outdatedness_store: @outdatedness_store,
             )
 
-            notify_phrase = Nanoc::Int::Compiler::Phases::Notify.new(
+            notify_phrase = Nanoc::Core::CompilationPhases::Notify.new(
               wrapped: mark_done_phase,
             )
 

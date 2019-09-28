@@ -15,6 +15,10 @@ describe 'meta', chdir: false do
       basic_item_view
       checksum_collection
       compilation_context
+      compilation_phases/mark_done
+      compilation_phases/notify
+      compilation_phases/recalculate
+      compilation_phases/write
       contracts_support
       dependency
       document_view_mixin

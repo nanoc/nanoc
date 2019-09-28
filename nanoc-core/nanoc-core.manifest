@@ -24,6 +24,13 @@ lib/nanoc/core/compilation_context.rb
 lib/nanoc/core/compilation_item_rep_collection_view.rb
 lib/nanoc/core/compilation_item_rep_view.rb
 lib/nanoc/core/compilation_item_view.rb
+lib/nanoc/core/compilation_phases/abstract.rb
+lib/nanoc/core/compilation_phases/cache.rb
+lib/nanoc/core/compilation_phases/mark_done.rb
+lib/nanoc/core/compilation_phases/notify.rb
+lib/nanoc/core/compilation_phases/recalculate.rb
+lib/nanoc/core/compilation_phases/resume.rb
+lib/nanoc/core/compilation_phases/write.rb
 lib/nanoc/core/compilation_stage.rb
 lib/nanoc/core/compiled_content_cache.rb
 lib/nanoc/core/compiled_content_store.rb

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Compiler::Phases::Cache do
+describe Nanoc::Core::CompilationPhases::Cache do
   subject(:phase) do
     described_class.new(
       compiled_content_cache: compiled_content_cache,
@@ -16,7 +16,7 @@ describe Nanoc::Int::Compiler::Phases::Cache do
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
   let(:wrapped_class) do
-    Class.new(Nanoc::Int::Compiler::Phases::Abstract) do
+    Class.new(Nanoc::Core::CompilationPhases::Abstract) do
       def initialize(compiled_content_store)
         @compiled_content_store = compiled_content_store
       end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::Compiler::Phases::Resume do
+describe Nanoc::Core::CompilationPhases::Resume do
   subject(:phase) do
     described_class.new(
       wrapped: wrapped,
@@ -8,7 +8,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
   end
 
   let(:wrapped_class) do
-    Class.new(Nanoc::Int::Compiler::Phases::Abstract) do
+    Class.new(Nanoc::Core::CompilationPhases::Abstract) do
       attr_reader :count
 
       def self.to_s
@@ -73,7 +73,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
 
       context 'wrapped in Notify' do
         let(:phase) do
-          Nanoc::Int::Compiler::Phases::Notify.new(wrapped: super())
+          Nanoc::Core::CompilationPhases::Notify.new(wrapped: super())
         end
 
         it 'posts correct notifications' do
@@ -124,7 +124,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
 
       context 'wrapped in Notify' do
         let(:phase) do
-          Nanoc::Int::Compiler::Phases::Notify.new(wrapped: super())
+          Nanoc::Core::CompilationPhases::Notify.new(wrapped: super())
         end
 
         it 'posts correct notifications' do
@@ -176,7 +176,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
 
       context 'wrapped in Notify' do
         let(:phase) do
-          Nanoc::Int::Compiler::Phases::Notify.new(wrapped: super())
+          Nanoc::Core::CompilationPhases::Notify.new(wrapped: super())
         end
 
         it 'posts correct notifications' do

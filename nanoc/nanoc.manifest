@@ -12,14 +12,6 @@ lib/nanoc/base/errors.rb
 lib/nanoc/base/services.rb
 lib/nanoc/base/services/compiler_loader.rb
 lib/nanoc/base/services/compiler.rb
-lib/nanoc/base/services/compiler/phases.rb
-lib/nanoc/base/services/compiler/phases/abstract.rb
-lib/nanoc/base/services/compiler/phases/cache.rb
-lib/nanoc/base/services/compiler/phases/mark_done.rb
-lib/nanoc/base/services/compiler/phases/notify.rb
-lib/nanoc/base/services/compiler/phases/recalculate.rb
-lib/nanoc/base/services/compiler/phases/resume.rb
-lib/nanoc/base/services/compiler/phases/write.rb
 lib/nanoc/base/services/compiler/stages.rb
 lib/nanoc/base/services/compiler/stages/build_reps.rb
 lib/nanoc/base/services/compiler/stages/calculate_checksums.rb
