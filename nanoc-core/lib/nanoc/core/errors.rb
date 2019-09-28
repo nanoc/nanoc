@@ -24,6 +24,21 @@ module Nanoc
         end
       end
 
+      # Error that is raised when compilation of an item rep fails. The
+      # underlying error is available by calling `#unwrap`.
+      class CompilationError < ::Nanoc::Core::Error
+        attr_reader :item_rep
+
+        def initialize(wrapped, item_rep)
+          @wrapped = wrapped
+          @item_rep = item_rep
+        end
+
+        def unwrap
+          @wrapped
+        end
+      end
+
       # Error that is raised when an rep cannot be compiled because it depends
       # on other representations.
       class UnmetDependency < ::Nanoc::Core::Error

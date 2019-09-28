@@ -54,7 +54,7 @@ module Nanoc
             yield(rep)
             mg.mark_ok
           rescue => e
-            actual_error = e.is_a?(Nanoc::Int::Errors::CompilationError) ? e.unwrap : e
+            actual_error = e.is_a?(Nanoc::Core::Errors::CompilationError) ? e.unwrap : e
 
             if actual_error.is_a?(Nanoc::Core::Errors::UnmetDependency)
               mg.mark_failed(actual_error.rep)

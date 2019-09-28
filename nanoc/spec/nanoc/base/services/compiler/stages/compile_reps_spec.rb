@@ -136,7 +136,7 @@ describe Nanoc::Int::Compiler::Stages::CompileReps do
         let(:item) { Nanoc::Core::Item.new('<%= \'invalid_ruby %>', {}, '/hi.md') }
 
         it 'wraps exception' do
-          expect { subject }.to raise_error(Nanoc::Int::Errors::CompilationError)
+          expect { subject }.to raise_error(Nanoc::Core::Errors::CompilationError)
         end
 
         it 'contains the right item rep in the wrapped exception' do

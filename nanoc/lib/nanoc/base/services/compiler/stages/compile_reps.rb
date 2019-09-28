@@ -43,7 +43,7 @@ module Nanoc
           def handle_errors_while(item_rep)
             yield
           rescue Exception => e # rubocop:disable Lint/RescueException
-            raise Nanoc::Int::Errors::CompilationError.new(e, item_rep)
+            raise Nanoc::Core::Errors::CompilationError.new(e, item_rep)
           end
 
           def compile_rep(rep, phase_stack:, is_outdated:)

@@ -78,13 +78,13 @@ describe Nanoc::Int::ItemRepSelector do
           begin
             raise 'heh'
           rescue => e
-            raise Nanoc::Int::Errors::CompilationError.new(e, rep)
+            raise Nanoc::Core::Errors::CompilationError.new(e, rep)
           end
         end
       end
 
       it 'raises original error' do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::CompilationError) do |err|
+        expect { subject }.to raise_error(Nanoc::Core::Errors::CompilationError) do |err|
           expect(err.unwrap).to be_a(RuntimeError)
           expect(err.unwrap.message).to eq('heh')
         end
@@ -100,7 +100,7 @@ describe Nanoc::Int::ItemRepSelector do
           begin
             raise Nanoc::Core::Errors::UnmetDependency.new(reps_array[2], :foo) if idx == 1
           rescue => e
-            raise Nanoc::Int::Errors::CompilationError.new(e, rep)
+            raise Nanoc::Core::Errors::CompilationError.new(e, rep)
           end
         end
       end

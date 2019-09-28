@@ -54,7 +54,7 @@ RSpec::Matchers.define :raise_wrapped_error do |expected|
   match do |actual|
     begin
       actual.call
-    rescue Nanoc::Int::Errors::CompilationError => e
+    rescue Nanoc::Core::Errors::CompilationError => e
       values_match?(expected, e.unwrap)
     end
   end

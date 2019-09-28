@@ -305,7 +305,7 @@ module Nanoc::CLI
     end
 
     def write_item_rep(stream, error, verbose: false)
-      return unless error.is_a?(Nanoc::Int::Errors::CompilationError)
+      return unless error.is_a?(Nanoc::Core::Errors::CompilationError)
 
       write_section_header(stream, 'Item being compiled', verbose: verbose)
 
@@ -355,7 +355,7 @@ module Nanoc::CLI
 
     def unwrap_error(e)
       case e
-      when Nanoc::Int::Errors::CompilationError
+      when Nanoc::Core::Errors::CompilationError
         e.unwrap
       else
         e

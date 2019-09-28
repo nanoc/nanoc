@@ -19,7 +19,7 @@ EOS
 
     File.write('content/foo.md', 'I am foo!')
     File.write('content/bar.md', '<%= @items["/foo.*"].compiled_content %><%= raise "boom" %>')
-    expect { Nanoc::CLI.run(%w[compile]) }.to raise_error(Nanoc::Int::Errors::CompilationError)
+    expect { Nanoc::CLI.run(%w[compile]) }.to raise_error(Nanoc::Core::Errors::CompilationError)
     expect(File.read('output/foo.md')).to eql('I am foo!')
 
     File.write('content/bar.md', '[<%= @items["/foo.*"].compiled_content %>]')
