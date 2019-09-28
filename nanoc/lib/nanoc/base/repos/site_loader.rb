@@ -4,12 +4,12 @@ module Nanoc
   module Int
     class SiteLoader
       def new_from_cwd
-        site_from_config(Nanoc::Int::ConfigLoader.new.new_from_cwd)
+        site_from_config(Nanoc::Core::ConfigLoader.new.new_from_cwd)
       end
 
       # @return [Boolean]
       def self.cwd_is_nanoc_site?
-        Nanoc::Int::ConfigLoader.cwd_is_nanoc_site?
+        Nanoc::Core::ConfigLoader.cwd_is_nanoc_site?
       end
 
       def gen_data_source_for_config(config)

@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # @api private
     class ConfigLoader
-      class NoConfigFileFoundError < ::Nanoc::Error
+      class NoConfigFileFoundError < ::Nanoc::Core::Error
         def initialize
           super('No configuration file found')
         end
       end
 
-      class NoParentConfigFileFoundError < ::Nanoc::Error
+      class NoParentConfigFileFoundError < ::Nanoc::Core::Error
         def initialize(filename)
           super("There is no parent configuration file at #{filename}")
         end
       end
 
-      class CyclicalConfigFileError < ::Nanoc::Error
+      class CyclicalConfigFileError < ::Nanoc::Core::Error
         def initialize(filename)
           super("The parent configuration file at #{filename} includes one of its descendants")
         end
@@ -65,7 +65,7 @@ module Nanoc
         when '.toml'
           Tomlrb.load_file(filename)
         else
-          raise Nanoc::Int::Errors::InternalInconsistency, 'Unhandled config file extension'
+          raise Nanoc::Core::Errors::InternalInconsistency, 'Unhandled config file extension'
         end
       end
 

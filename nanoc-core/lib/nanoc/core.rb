@@ -4,6 +4,7 @@
 require 'pstore'
 require 'singleton'
 require 'tmpdir'
+require 'yaml'
 
 # External gems
 require 'json_schema'
@@ -12,6 +13,7 @@ require 'ddmetrics'
 require 'ddplugin'
 require 'hamster'
 require 'slow_enumerator_tools'
+require 'tomlrb'
 require 'zeitwerk'
 
 module Nanoc

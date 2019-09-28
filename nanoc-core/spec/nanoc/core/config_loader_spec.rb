@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::ConfigLoader do
+describe Nanoc::Core::ConfigLoader do
   let(:loader) { described_class.new }
 
   describe '#new_from_cwd' do
@@ -9,7 +9,7 @@ describe Nanoc::Int::ConfigLoader do
     context 'no config file present' do
       it 'errors' do
         expect { subject }.to raise_error(
-          Nanoc::Int::ConfigLoader::NoConfigFileFoundError,
+          Nanoc::Core::ConfigLoader::NoConfigFileFoundError,
         )
       end
     end
@@ -204,7 +204,7 @@ describe Nanoc::Int::ConfigLoader do
       context 'parent config file is not present' do
         it 'errors' do
           expect { subject }.to raise_error(
-            Nanoc::Int::ConfigLoader::NoParentConfigFileFoundError,
+            Nanoc::Core::ConfigLoader::NoParentConfigFileFoundError,
           )
         end
       end
@@ -218,7 +218,7 @@ describe Nanoc::Int::ConfigLoader do
 
           it 'errors' do
             expect { subject }.to raise_error(
-              Nanoc::Int::ConfigLoader::CyclicalConfigFileError,
+              Nanoc::Core::ConfigLoader::CyclicalConfigFileError,
             )
           end
         end
@@ -230,7 +230,7 @@ describe Nanoc::Int::ConfigLoader do
 
           it 'errors' do
             expect { subject }.to raise_error(
-              Nanoc::Int::ConfigLoader::CyclicalConfigFileError,
+              Nanoc::Core::ConfigLoader::CyclicalConfigFileError,
             )
           end
         end

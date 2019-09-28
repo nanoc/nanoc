@@ -9,7 +9,7 @@ describe Nanoc::Int::SiteLoader do
     context 'no config file' do
       it 'errors' do
         expect { subject }.to raise_error(
-          Nanoc::Int::ConfigLoader::NoConfigFileFoundError,
+          Nanoc::Core::ConfigLoader::NoConfigFileFoundError,
         )
       end
     end

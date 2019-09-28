@@ -21,7 +21,7 @@ module Nanoc::CLI::Commands
     def run
       load_adsf
 
-      config = Nanoc::Int::ConfigLoader.new.new_from_cwd
+      config = Nanoc::Core::ConfigLoader.new.new_from_cwd
 
       # Create output dir so that viewer/watcher doesn’t explode.
       FileUtils.mkdir_p(config.output_dir)

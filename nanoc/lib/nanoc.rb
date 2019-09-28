@@ -52,12 +52,10 @@ require 'stringio'
 require 'tempfile'
 require 'time'
 require 'timeout'
-require 'tomlrb'
 require 'tmpdir'
 require 'tty-platform'
 require 'tty-which'
 require 'uri'
-require 'yaml'
 
 # Load extracted Nanoc dependencies
 require 'nanoc-core'

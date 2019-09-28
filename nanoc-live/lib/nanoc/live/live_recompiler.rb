@@ -45,7 +45,7 @@ module Nanoc::Live
         $stderr.flush
         site_loader = Nanoc::Int::SiteLoader.new
         site = Nanoc::Core::Site.new(
-          config: Nanoc::Int::ConfigLoader.new.new_from_cwd,
+          config: Nanoc::Core::ConfigLoader.new.new_from_cwd,
           data_source: site_loader.gen_data_source_for_config(site.config),
           code_snippets: site.code_snippets,
         )

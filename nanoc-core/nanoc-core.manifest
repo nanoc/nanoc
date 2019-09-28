@@ -27,6 +27,7 @@ lib/nanoc/core/compilation_item_view.rb
 lib/nanoc/core/compilation_stage.rb
 lib/nanoc/core/compiled_content_cache.rb
 lib/nanoc/core/compiled_content_store.rb
+lib/nanoc/core/config_loader.rb
 lib/nanoc/core/config_view.rb
 lib/nanoc/core/configuration-schema.json
 lib/nanoc/core/configuration.rb
