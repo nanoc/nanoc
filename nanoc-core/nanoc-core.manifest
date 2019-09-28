@@ -57,6 +57,7 @@ lib/nanoc/core/item_collection_without_reps_view.rb
 lib/nanoc/core/item_collection.rb
 lib/nanoc/core/item_rep_repo.rb
 lib/nanoc/core/item_rep_router.rb
+lib/nanoc/core/item_rep_selector.rb
 lib/nanoc/core/item_rep_writer.rb
 lib/nanoc/core/item_rep.rb
 lib/nanoc/core/item.rb

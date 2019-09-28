@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # Yields item reps to compile.
-    #
-    # @api private
     class ItemRepSelector
       def initialize(reps)
         @reps = reps
