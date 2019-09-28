@@ -105,7 +105,7 @@ module Nanoc
       private
 
       def create_outdatedness_checker(checksums:, action_sequences:, reps:)
-        Nanoc::Int::OutdatednessChecker.new(
+        Nanoc::Core::OutdatednessChecker.new(
           site: @site,
           checksum_store: @checksum_store,
           dependency_store: @dependency_store,

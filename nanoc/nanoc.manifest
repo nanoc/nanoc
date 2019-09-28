@@ -34,16 +34,6 @@ lib/nanoc/base/services/compiler/stages/prune.rb
 lib/nanoc/base/services/compiler/stages/store_post_compilation_state.rb
 lib/nanoc/base/services/compiler/stages/store_pre_compilation_state.rb
 lib/nanoc/base/services/executor.rb
-lib/nanoc/base/services/outdatedness_checker.rb
-lib/nanoc/base/services/outdatedness_rules.rb
-lib/nanoc/base/services/outdatedness_rules/attributes_modified.rb
-lib/nanoc/base/services/outdatedness_rules/code_snippets_modified.rb
-lib/nanoc/base/services/outdatedness_rules/content_modified.rb
-lib/nanoc/base/services/outdatedness_rules/item_collection_extended.rb
-lib/nanoc/base/services/outdatedness_rules/layout_collection_extended.rb
-lib/nanoc/base/services/outdatedness_rules/not_written.rb
-lib/nanoc/base/services/outdatedness_rules/rules_modified.rb
-lib/nanoc/base/services/outdatedness_rules/uses_always_outdated_filter.rb
 lib/nanoc/base/services/pruner.rb
 lib/nanoc/checking.rb
 lib/nanoc/checking/check.rb

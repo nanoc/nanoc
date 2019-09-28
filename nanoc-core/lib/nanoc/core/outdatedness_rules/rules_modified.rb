@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     module OutdatednessRules
       class RulesModified < Nanoc::Core::OutdatednessRule
         affects_props :compiled_content, :path

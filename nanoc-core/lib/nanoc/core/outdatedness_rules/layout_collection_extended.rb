@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     module OutdatednessRules
       class LayoutCollectionExtended < Nanoc::Core::OutdatednessRule
         affects_props :raw_content
 
-        contract Nanoc::Core::LayoutCollection, C::Named['Nanoc::Int::OutdatednessChecker'] => C::Maybe[Nanoc::Core::OutdatednessReasons::Generic]
+        contract Nanoc::Core::LayoutCollection, C::Named['Nanoc::Core::OutdatednessChecker'] => C::Maybe[Nanoc::Core::OutdatednessReasons::Generic]
         def apply(_obj, outdatedness_checker)
           new_layouts = outdatedness_checker.dependency_store.new_layouts
 

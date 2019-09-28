@@ -1,13 +1,22 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::OutdatednessRules do
+describe Nanoc::Core::OutdatednessRules do
+  Class.new(Nanoc::Core::Filter) do
+    identifier :always_outdated_voibwz9nhgf6gbpkdznrxcwkqgzlwnif
+    always_outdated
+
+    def run(content, _params)
+      content.upcase
+    end
+  end
+
   describe '#apply' do
     subject { rule_class.instance.apply(obj, outdatedness_checker) }
 
     let(:obj) { item_rep }
 
     let(:outdatedness_checker) do
-      Nanoc::Int::OutdatednessChecker.new(
+      Nanoc::Core::OutdatednessChecker.new(
         site: site,
         checksum_store: checksum_store,
         checksums: checksums,
@@ -41,12 +50,30 @@ describe Nanoc::Int::OutdatednessRules do
     let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config: config, objects: objects) }
 
     let(:checksums) do
-      Nanoc::Int::Compiler::Stages::CalculateChecksums.new(
-        items: items,
-        layouts: layouts,
-        code_snippets: code_snippets,
-        config: config,
-      ).run
+      checksums = {}
+
+      [items, layouts].each do |documents|
+        documents.each do |document|
+          checksums[[document.reference, :content]] =
+            Nanoc::Core::Checksummer.calc_for_content_of(document)
+          checksums[[document.reference, :each_attribute]] =
+            Nanoc::Core::Checksummer.calc_for_each_attribute_of(document)
+        end
+      end
+
+      [items, layouts, code_snippets].each do |objs|
+        objs.each do |obj|
+          checksums[obj.reference] =
+            Nanoc::Core::Checksummer.calc(obj)
+        end
+      end
+
+      checksums[config.reference] =
+        Nanoc::Core::Checksummer.calc(config)
+      checksums[[config.reference, :each_attribute]] =
+        Nanoc::Core::Checksummer.calc_for_each_attribute_of(config)
+
+      Nanoc::Core::ChecksumCollection.new(checksums)
     end
 
     let(:items) { Nanoc::Core::ItemCollection.new(config, [item]) }
@@ -58,7 +85,7 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     describe 'CodeSnippetsModified' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::CodeSnippetsModified }
+      let(:rule_class) { Nanoc::Core::OutdatednessRules::CodeSnippetsModified }
 
       context 'no snippets' do
         let(:code_snippets) { [] }
@@ -87,7 +114,7 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     describe 'NotWritten' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::NotWritten }
+      let(:rule_class) { Nanoc::Core::OutdatednessRules::NotWritten }
 
       context 'no path' do
         before { item_rep.paths = {} }
@@ -129,7 +156,7 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     describe 'ContentModified' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::ContentModified }
+      let(:rule_class) { Nanoc::Core::OutdatednessRules::ContentModified }
 
       context 'item' do
         let(:obj) { item }
@@ -195,7 +222,7 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     describe 'AttributesModified' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::AttributesModified }
+      let(:rule_class) { Nanoc::Core::OutdatednessRules::AttributesModified }
 
       context 'item' do
         let(:obj) { item }
@@ -317,7 +344,7 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     describe 'RulesModified' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::RulesModified }
+      let(:rule_class) { Nanoc::Core::OutdatednessRules::RulesModified }
 
       let(:old_mem) do
         Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
@@ -441,8 +468,8 @@ describe Nanoc::Int::OutdatednessRules do
     describe 'ContentModified, AttributesModified' do
       subject do
         [
-          Nanoc::Int::OutdatednessRules::ContentModified,
-          Nanoc::Int::OutdatednessRules::AttributesModified,
+          Nanoc::Core::OutdatednessRules::ContentModified,
+          Nanoc::Core::OutdatednessRules::AttributesModified,
         ].map { |c| !!c.instance.apply(new_obj, outdatedness_checker) } # rubocop:disable Style/DoubleNegation
       end
 
@@ -571,7 +598,7 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     describe 'UsesAlwaysOutdatedFilter' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::UsesAlwaysOutdatedFilter }
+      let(:rule_class) { Nanoc::Core::OutdatednessRules::UsesAlwaysOutdatedFilter }
 
       let(:action_sequences) { { item_rep => mem } }
 
@@ -601,7 +628,7 @@ describe Nanoc::Int::OutdatednessRules do
         let(:mem) do
           Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
             b.add_snapshot(:donkey, '/foo.md')
-            b.add_filter(:xsl, {})
+            b.add_filter(:always_outdated_voibwz9nhgf6gbpkdznrxcwkqgzlwnif, {})
           end
         end
 
@@ -610,7 +637,7 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     describe 'ItemCollectionExtended' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::ItemCollectionExtended }
+      let(:rule_class) { Nanoc::Core::OutdatednessRules::ItemCollectionExtended }
 
       let(:obj) { items }
 
@@ -632,7 +659,7 @@ describe Nanoc::Int::OutdatednessRules do
     end
 
     describe 'LayoutCollectionExtended' do
-      let(:rule_class) { Nanoc::Int::OutdatednessRules::LayoutCollectionExtended }
+      let(:rule_class) { Nanoc::Core::OutdatednessRules::LayoutCollectionExtended }
 
       let(:obj) { layouts }
 

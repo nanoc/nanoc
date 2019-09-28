@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::OutdatednessChecker do
+describe Nanoc::Core::OutdatednessChecker do
   let(:outdatedness_checker) do
     described_class.new(
       site: site,
@@ -16,12 +16,30 @@ describe Nanoc::Int::OutdatednessChecker do
   let(:checksum_store) { double(:checksum_store) }
 
   let(:checksums) do
-    Nanoc::Int::Compiler::Stages::CalculateChecksums.new(
-      items: items,
-      layouts: layouts,
-      code_snippets: code_snippets,
-      config: config,
-    ).run
+    checksums = {}
+
+    [items, layouts].each do |documents|
+      documents.each do |document|
+        checksums[[document.reference, :content]] =
+          Nanoc::Core::Checksummer.calc_for_content_of(document)
+        checksums[[document.reference, :each_attribute]] =
+          Nanoc::Core::Checksummer.calc_for_each_attribute_of(document)
+      end
+    end
+
+    [items, layouts, code_snippets].each do |objs|
+      objs.each do |obj|
+        checksums[obj.reference] =
+          Nanoc::Core::Checksummer.calc(obj)
+      end
+    end
+
+    checksums[config.reference] =
+      Nanoc::Core::Checksummer.calc(config)
+    checksums[[config.reference, :each_attribute]] =
+      Nanoc::Core::Checksummer.calc_for_each_attribute_of(config)
+
+    Nanoc::Core::ChecksumCollection.new(checksums)
   end
 
   let(:dependency_store) do

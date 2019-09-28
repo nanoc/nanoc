@@ -77,8 +77,17 @@ lib/nanoc/core/mutable_item_view.rb
 lib/nanoc/core/mutable_layout_collection_view.rb
 lib/nanoc/core/mutable_layout_view.rb
 lib/nanoc/core/notification_center.rb
+lib/nanoc/core/outdatedness_checker.rb
 lib/nanoc/core/outdatedness_reasons.rb
 lib/nanoc/core/outdatedness_rule.rb
+lib/nanoc/core/outdatedness_rules/attributes_modified.rb
+lib/nanoc/core/outdatedness_rules/code_snippets_modified.rb
+lib/nanoc/core/outdatedness_rules/content_modified.rb
+lib/nanoc/core/outdatedness_rules/item_collection_extended.rb
+lib/nanoc/core/outdatedness_rules/layout_collection_extended.rb
+lib/nanoc/core/outdatedness_rules/not_written.rb
+lib/nanoc/core/outdatedness_rules/rules_modified.rb
+lib/nanoc/core/outdatedness_rules/uses_always_outdated_filter.rb
 lib/nanoc/core/outdatedness_status.rb
 lib/nanoc/core/outdatedness_store.rb
 lib/nanoc/core/pattern.rb

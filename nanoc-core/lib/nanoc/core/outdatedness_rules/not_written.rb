@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     module OutdatednessRules
       class NotWritten < Nanoc::Core::OutdatednessRule
         affects_props :raw_content, :attributes, :compiled_content, :path

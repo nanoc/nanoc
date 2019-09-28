@@ -9,7 +9,7 @@ describe 'meta', chdir: false do
     spec_file_base_names = spec_files.map { |fn| fn.gsub(/^spec\/nanoc\/core\/|_spec\.rb$/, '') }
 
     # TODO: don’t ignore anything
-    ignored = %w[
+    ignored_regular_file_base_names = %w[
       action_provider
       assertions
       basic_item_view
@@ -28,6 +28,14 @@ describe 'meta', chdir: false do
       mutable_identifiable_collection_view
       outdatedness_reasons
       outdatedness_rule
+      outdatedness_rules/attributes_modified
+      outdatedness_rules/code_snippets_modified
+      outdatedness_rules/content_modified
+      outdatedness_rules/item_collection_extended
+      outdatedness_rules/layout_collection_extended
+      outdatedness_rules/not_written
+      outdatedness_rules/rules_modified
+      outdatedness_rules/uses_always_outdated_filter
       post_compile_item_collection_view
       processing_actions
       snapshot_def
@@ -38,7 +46,18 @@ describe 'meta', chdir: false do
       view_context_for_shell
     ]
 
-    expect(regular_file_base_names - ignored).to match_array(spec_file_base_names)
+    ignored_spec_file_base_names = %w[
+      outdatedness_rules
+    ]
+
+    effective_regular_file_base_names =
+      regular_file_base_names - ignored_regular_file_base_names
+
+    effective_spec_file_base_names =
+      spec_file_base_names - ignored_spec_file_base_names
+
+    expect(effective_regular_file_base_names)
+      .to match_array(effective_spec_file_base_names)
   end
 
   it 'doesn’t log anything' do

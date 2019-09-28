@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # Responsible for determining whether an item or a layout is outdated.
     #
     # @api private
@@ -11,7 +11,7 @@ module Nanoc
 
         include Nanoc::Core::ContractsSupport
 
-        Rules = Nanoc::Int::OutdatednessRules
+        Rules = Nanoc::Core::OutdatednessRules
 
         RULES_FOR_ITEM_REP =
           [
@@ -70,7 +70,7 @@ module Nanoc
           when Nanoc::Core::LayoutCollection
             apply_rules(RULES_FOR_LAYOUT_COLLECTION, obj)
           else
-            raise Nanoc::Int::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
+            raise Nanoc::Core::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
           end
         end
 
