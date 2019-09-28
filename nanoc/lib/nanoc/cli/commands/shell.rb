@@ -30,7 +30,7 @@ module Nanoc::CLI::Commands
     def self.reps_for(site)
       Nanoc::Core::ItemRepRepo.new.tap do |reps|
         action_provider = Nanoc::Core::ActionProvider.named(site.config.action_provider).for(site)
-        builder = Nanoc::Int::ItemRepBuilder.new(site, action_provider, reps)
+        builder = Nanoc::Core::ItemRepBuilder.new(site, action_provider, reps)
         builder.run
       end
     end

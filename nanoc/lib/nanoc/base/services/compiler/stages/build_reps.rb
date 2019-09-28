@@ -16,7 +16,7 @@ module Nanoc
           def run
             reps = Nanoc::Core::ItemRepRepo.new
 
-            builder = Nanoc::Int::ItemRepBuilder.new(
+            builder = Nanoc::Core::ItemRepBuilder.new(
               @site, @action_provider, reps
             )
 

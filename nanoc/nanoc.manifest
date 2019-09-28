@@ -37,7 +37,6 @@ lib/nanoc/base/services/compiler/stages/prune.rb
 lib/nanoc/base/services/compiler/stages/store_post_compilation_state.rb
 lib/nanoc/base/services/compiler/stages/store_pre_compilation_state.rb
 lib/nanoc/base/services/executor.rb
-lib/nanoc/base/services/item_rep_builder.rb
 lib/nanoc/base/services/outdatedness_checker.rb
 lib/nanoc/base/services/outdatedness_rules.rb
 lib/nanoc/base/services/outdatedness_rules/attributes_modified.rb

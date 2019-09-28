@@ -1,32 +1,32 @@
 # frozen_string_literal: true
 
-describe Nanoc::Int::ItemRepBuilder do
+describe Nanoc::Core::ItemRepBuilder do
   describe '.snapshot_defs' do
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo.md') }
     let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
-    Class.new(Nanoc::Filter) do
+    Class.new(Nanoc::Core::Filter) do
       identifier :RuleMemSpec_filter_b2b
       type :binary => :binary # rubocop:disable Style/HashSyntax
 
       def run(content, params = {}); end
     end
 
-    Class.new(Nanoc::Filter) do
+    Class.new(Nanoc::Core::Filter) do
       identifier :RuleMemSpec_filter_b2t
       type :binary => :text # rubocop:disable Style/HashSyntax
 
       def run(content, params = {}); end
     end
 
-    Class.new(Nanoc::Filter) do
+    Class.new(Nanoc::Core::Filter) do
       identifier :RuleMemSpec_filter_t2t
       type :text => :text # rubocop:disable Style/HashSyntax
 
       def run(content, params = {}); end
     end
 
-    Class.new(Nanoc::Filter) do
+    Class.new(Nanoc::Core::Filter) do
       identifier :RuleMemSpec_filter_t2b
       type :text => :binary # rubocop:disable Style/HashSyntax
 

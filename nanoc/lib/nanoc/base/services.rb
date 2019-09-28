@@ -3,7 +3,6 @@
 require_relative 'services/compiler'
 require_relative 'services/compiler_loader'
 require_relative 'services/executor'
-require_relative 'services/item_rep_builder'
 require_relative 'services/pruner'
 require_relative 'services/outdatedness_rules'
 

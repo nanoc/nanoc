@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Int
+  module Core
     # @api private
     class ItemRepBuilder
       include Nanoc::Core::ContractsSupport
@@ -43,7 +43,7 @@ module Nanoc
               snapshot_defs << Nanoc::Core::SnapshotDef.new(snapshot_name, binary: is_binary)
             end
           when Nanoc::Core::ProcessingActions::Filter
-            is_binary = Nanoc::Filter.named!(action.filter_name).to_binary?
+            is_binary = Nanoc::Core::Filter.named!(action.filter_name).to_binary?
           end
         end
 
