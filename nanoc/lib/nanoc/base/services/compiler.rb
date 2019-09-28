@@ -117,7 +117,7 @@ module Nanoc
       end
 
       def preprocess_stage
-        @_preprocess_stage ||= ::Nanoc::Base::CompilationStages::Preprocess.new(
+        @_preprocess_stage ||= ::Nanoc::Core::CompilationStages::Preprocess.new(
           action_provider: @action_provider,
           site: @site,
           dependency_store: @dependency_store,
@@ -126,21 +126,21 @@ module Nanoc
       end
 
       def build_reps_stage
-        @_build_reps_stage ||= ::Nanoc::Base::CompilationStages::BuildReps.new(
+        @_build_reps_stage ||= ::Nanoc::Core::CompilationStages::BuildReps.new(
           site: @site,
           action_provider: @action_provider,
         )
       end
 
       def prune_stage(reps)
-        @_prune_stage ||= ::Nanoc::Base::CompilationStages::Prune.new(
+        @_prune_stage ||= ::Nanoc::Core::CompilationStages::Prune.new(
           config: @site.config,
           reps: reps,
         )
       end
 
       def load_stores_stage
-        @_load_stores_stage ||= ::Nanoc::Base::CompilationStages::LoadStores.new(
+        @_load_stores_stage ||= ::Nanoc::Core::CompilationStages::LoadStores.new(
           checksum_store: @checksum_store,
           compiled_content_cache: @compiled_content_cache,
           dependency_store: @dependency_store,
@@ -150,7 +150,7 @@ module Nanoc
       end
 
       def calculate_checksums_stage
-        @_calculate_checksums_stage ||= ::Nanoc::Base::CompilationStages::CalculateChecksums.new(
+        @_calculate_checksums_stage ||= ::Nanoc::Core::CompilationStages::CalculateChecksums.new(
           items: @site.items,
           layouts: @site.layouts,
           code_snippets: @site.code_snippets,
@@ -159,7 +159,7 @@ module Nanoc
       end
 
       def determine_outdatedness_stage(outdatedness_checker, reps)
-        @_determine_outdatedness_stage ||= ::Nanoc::Base::CompilationStages::DetermineOutdatedness.new(
+        @_determine_outdatedness_stage ||= ::Nanoc::Core::CompilationStages::DetermineOutdatedness.new(
           reps: reps,
           outdatedness_checker: outdatedness_checker,
           outdatedness_store: @outdatedness_store,
@@ -167,7 +167,7 @@ module Nanoc
       end
 
       def store_pre_compilation_state_stage(action_sequences, reps)
-        @_store_pre_compilation_state_stage ||= ::Nanoc::Base::CompilationStages::StorePreCompilationState.new(
+        @_store_pre_compilation_state_stage ||= ::Nanoc::Core::CompilationStages::StorePreCompilationState.new(
           reps: reps,
           layouts: @site.layouts,
           checksum_store: @checksum_store,
@@ -177,7 +177,7 @@ module Nanoc
       end
 
       def compile_reps_stage(action_sequences, reps)
-        @_compile_reps_stage ||= ::Nanoc::Base::CompilationStages::CompileReps.new(
+        @_compile_reps_stage ||= ::Nanoc::Core::CompilationStages::CompileReps.new(
           reps: reps,
           outdatedness_store: @outdatedness_store,
           dependency_store: @dependency_store,
@@ -188,24 +188,24 @@ module Nanoc
       end
 
       def store_post_compilation_state_stage
-        @_store_post_compilation_state_stage ||= ::Nanoc::Base::CompilationStages::StorePostCompilationState.new(
+        @_store_post_compilation_state_stage ||= ::Nanoc::Core::CompilationStages::StorePostCompilationState.new(
           dependency_store: @dependency_store,
         )
       end
 
       def postprocess_stage
-        @_postprocess_stage ||= ::Nanoc::Base::CompilationStages::Postprocess.new(
+        @_postprocess_stage ||= ::Nanoc::Core::CompilationStages::Postprocess.new(
           action_provider: @action_provider,
           site: @site,
         )
       end
 
       def cleanup_stage
-        @_cleanup_stage ||= ::Nanoc::Base::CompilationStages::Cleanup.new(@output_dirs)
+        @_cleanup_stage ||= ::Nanoc::Core::CompilationStages::Cleanup.new(@output_dirs)
       end
 
       def forget_outdated_dependencies_stage
-        @_forget_outdated_dependencies_stage ||= ::Nanoc::Base::CompilationStages::ForgetOutdatedDependencies.new(
+        @_forget_outdated_dependencies_stage ||= ::Nanoc::Core::CompilationStages::ForgetOutdatedDependencies.new(
           dependency_store: @dependency_store,
         )
       end

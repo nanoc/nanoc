@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Base
+  module Core
     module CompilationStages
       class Cleanup < Nanoc::Core::CompilationStage
         def initialize(output_dirs)
@@ -9,7 +9,7 @@ module Nanoc
         end
 
         def run
-          cleanup_temps(Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
+          cleanup_temps(Nanoc::Core::Filter::TMP_BINARY_ITEMS_DIR)
           cleanup_temps(Nanoc::Core::ItemRepWriter::TMP_TEXT_ITEMS_DIR)
           cleanup_unused_stores
           cleanup_old_stores

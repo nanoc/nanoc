@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
-describe Nanoc::Base::CompilationStages::CompileReps do
+describe Nanoc::Core::CompilationStages::CompileReps do
+  Class.new(Nanoc::Core::Filter) do
+    identifier :simple_erb_vcn3np2ayqmv6ayqp8su2crbusonmgwh
+
+    def run(content, _params = {})
+      context = ::Nanoc::Core::Context.new(assigns)
+      ERB.new(content).result(context.get_binding)
+    end
+  end
+
   let(:stage) do
     described_class.new(
       reps: reps,
@@ -71,7 +80,7 @@ describe Nanoc::Base::CompilationStages::CompileReps do
   let(:memory) do
     actions =
       [
-        Nanoc::Core::ProcessingActions::Filter.new(:erb, {}),
+        Nanoc::Core::ProcessingActions::Filter.new(:simple_erb_vcn3np2ayqmv6ayqp8su2crbusonmgwh, {}),
         Nanoc::Core::ProcessingActions::Snapshot.new([:last], []),
       ]
 
@@ -148,7 +157,7 @@ describe Nanoc::Base::CompilationStages::CompileReps do
         it 'contains the right wrapped exception' do
           expect { subject }.to raise_error do |err|
             expect(err.unwrap).to be_a(SyntaxError)
-            expect(err.unwrap.message).to start_with('item /hi.md (rep default):1: unterminated string meets end of file')
+            expect(err.unwrap.message).to start_with('(erb):1: unterminated string meets end of file')
           end
         end
 

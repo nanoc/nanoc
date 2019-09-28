@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Base::CompilationStages::DetermineOutdatedness do
+describe Nanoc::Core::CompilationStages::DetermineOutdatedness do
   let(:stage) do
     described_class.new(
       reps: reps,

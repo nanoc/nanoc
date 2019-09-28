@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Base::CompilationStages::Cleanup do
+describe Nanoc::Core::CompilationStages::Cleanup do
   let(:stage) { described_class.new(config.output_dirs) }
 
   let(:config) do
@@ -15,7 +15,7 @@ describe Nanoc::Base::CompilationStages::Cleanup do
     end
 
     it 'removes temporary binary items' do
-      a = Nanoc::Core::TempFilenameFactory.instance.create(Nanoc::Filter::TMP_BINARY_ITEMS_DIR)
+      a = Nanoc::Core::TempFilenameFactory.instance.create(Nanoc::Core::Filter::TMP_BINARY_ITEMS_DIR)
       File.write(a, 'hello there')
 
       expect { subject }

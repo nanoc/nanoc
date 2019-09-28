@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Base
+  module Core
     module CompilationStages
       class Postprocess < Nanoc::Core::CompilationStage
         include Nanoc::Core::ContractsSupport
@@ -11,7 +11,8 @@ module Nanoc
           @site = site
         end
 
-        contract Nanoc::Int::Compiler => C::Any
+        # FIXME: readd contract: Nanoc::Int::Compiler
+        contract C::Any => C::Any
         def run(compiler)
           @action_provider.postprocess(@site, compiler)
         end

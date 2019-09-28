@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Base::CompilationStages::Preprocess do
+describe Nanoc::Core::CompilationStages::Preprocess do
   let(:stage) do
     described_class.new(
       action_provider: action_provider,

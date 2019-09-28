@@ -48,6 +48,13 @@ describe 'meta', chdir: false do
       view_context_for_compilation
       view_context_for_pre_compilation
       view_context_for_shell
+      compilation_stages/build_reps
+      compilation_stages/forget_outdated_dependencies
+      compilation_stages/load_stores
+      compilation_stages/postprocess
+      compilation_stages/prune
+      compilation_stages/store_post_compilation_state
+      compilation_stages/store_pre_compilation_state
     ]
 
     ignored_spec_file_base_names = %w[

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc
-  module Base
+  module Core
     module CompilationStages
       class Prune < Nanoc::Core::CompilationStage
         def initialize(config:, reps:)
