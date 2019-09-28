@@ -184,7 +184,7 @@ describe Nanoc::Int::SiteLoader do
       end
     end
 
-    context '# encoding: x specified' do
+    context 'comment # encoding: x specified' do
       example do
         File.write('lib/asdf.rb', "# encoding: iso-8859-1\n\nBRØKEN", encoding: 'iso-8859-1')
         expect(subject.size).to eq(1)
@@ -192,7 +192,7 @@ describe Nanoc::Int::SiteLoader do
       end
     end
 
-    context '# coding: x specified' do
+    context 'comment # coding: x specified' do
       example do
         File.write('lib/asdf.rb', "# coding: iso-8859-1\n\nBRØKEN", encoding: 'iso-8859-1')
         expect(subject.size).to eq(1)
@@ -200,7 +200,7 @@ describe Nanoc::Int::SiteLoader do
       end
     end
 
-    context '# -*- encoding: x -*- specified' do
+    context 'comment # -*- encoding: x -*- specified' do
       example do
         File.write('lib/asdf.rb', "# -*- encoding: iso-8859-1 -*-\n\nBRØKEN", encoding: 'iso-8859-1')
         expect(subject.size).to eq(1)
@@ -208,7 +208,7 @@ describe Nanoc::Int::SiteLoader do
       end
     end
 
-    context '# -*- coding: x -*- specified' do
+    context 'comment # -*- coding: x -*- specified' do
       example do
         File.write('lib/asdf.rb', "# -*- coding: iso-8859-1 -*-\n\nBRØKEN", encoding: 'iso-8859-1')
         expect(subject.size).to eq(1)
