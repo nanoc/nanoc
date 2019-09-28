@@ -121,7 +121,7 @@ describe Nanoc::Int::Compiler do
         expect(compiler.compilation_context(reps: reps).compiled_content_store.get_current(rep)).to be_nil
 
         expect { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true) }
-          .to raise_error(Nanoc::Int::Errors::UnmetDependency)
+          .to raise_error(Nanoc::Core::Errors::UnmetDependency)
         stage.send(:compile_rep, other_rep, phase_stack: phase_stack, is_outdated: true)
         stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true)
 
@@ -147,7 +147,7 @@ describe Nanoc::Int::Compiler do
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
 
         expect { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true) }
-          .to raise_error(Nanoc::Int::Errors::UnmetDependency)
+          .to raise_error(Nanoc::Core::Errors::UnmetDependency)
         stage.send(:compile_rep, other_rep, phase_stack: phase_stack, is_outdated: true)
         stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true)
       end

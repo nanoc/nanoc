@@ -17,7 +17,7 @@ module Nanoc
               res = fiber.resume
 
               case res
-              when Nanoc::Int::Errors::UnmetDependency
+              when Nanoc::Core::Errors::UnmetDependency
                 Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, res.rep, res.snapshot_name)
                 raise(res)
               when Proc

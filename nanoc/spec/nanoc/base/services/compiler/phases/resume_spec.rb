@@ -24,10 +24,10 @@ describe Nanoc::Int::Compiler::Phases::Resume do
 
       def run(_rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
         @count += 1
-        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(@other_rep, :last))
+        Fiber.yield(Nanoc::Core::Errors::UnmetDependency.new(@other_rep, :last))
 
         @count += 1
-        Fiber.yield(Nanoc::Int::Errors::UnmetDependency.new(@other_rep, :last))
+        Fiber.yield(Nanoc::Core::Errors::UnmetDependency.new(@other_rep, :last))
 
         @count += 1
       end
@@ -55,7 +55,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       end
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::UnmetDependency)
+        expect { subject }.to raise_error(Nanoc::Core::Errors::UnmetDependency)
       end
 
       it 'posts correct notifications' do
@@ -106,7 +106,7 @@ describe Nanoc::Int::Compiler::Phases::Resume do
       end
 
       it 'raises' do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::UnmetDependency)
+        expect { subject }.to raise_error(Nanoc::Core::Errors::UnmetDependency)
       end
 
       it 'posts correct notifications' do

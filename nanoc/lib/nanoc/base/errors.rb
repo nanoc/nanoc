@@ -8,7 +8,6 @@ module Nanoc
     module Errors
       Generic = ::Nanoc::Error
 
-      UnmetDependency = ::Nanoc::Core::Errors::UnmetDependency
       NoSuchSnapshot = ::Nanoc::Core::Errors::NoSuchSnapshot
       CannotGetCompiledContentOfBinaryItem = ::Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem
       CannotGetParentOrChildrenOfNonLegacyItem = ::Nanoc::Core::Errors::CannotGetParentOrChildrenOfNonLegacyItem

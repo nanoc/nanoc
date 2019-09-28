@@ -231,7 +231,7 @@ describe Nanoc::Filter do
         end
 
         example do
-          expect { subject }.not_to yield_from_fiber(an_instance_of(Nanoc::Int::Errors::UnmetDependency))
+          expect { subject }.not_to yield_from_fiber(an_instance_of(Nanoc::Core::Errors::UnmetDependency))
         end
 
         it 'creates dependency' do
@@ -246,11 +246,11 @@ describe Nanoc::Filter do
 
           # resume 1
           res = fiber.resume
-          expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
+          expect(res).to be_a(Nanoc::Core::Errors::UnmetDependency)
           expect(res.rep).to eql(rep)
 
           # resume 2
-          expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
+          expect(fiber.resume).not_to be_a(Nanoc::Core::Errors::UnmetDependency)
         end
       end
 
@@ -268,16 +268,16 @@ describe Nanoc::Filter do
 
           # resume 1
           res = fiber.resume
-          expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
+          expect(res).to be_a(Nanoc::Core::Errors::UnmetDependency)
           expect(res.rep).to eql(rep)
 
           # resume 2
           res = fiber.resume
-          expect(res).to be_a(Nanoc::Int::Errors::UnmetDependency)
+          expect(res).to be_a(Nanoc::Core::Errors::UnmetDependency)
           expect(res.rep).to eql(other_rep)
 
           # resume 3
-          expect(fiber.resume).not_to be_a(Nanoc::Int::Errors::UnmetDependency)
+          expect(fiber.resume).not_to be_a(Nanoc::Core::Errors::UnmetDependency)
         end
       end
     end

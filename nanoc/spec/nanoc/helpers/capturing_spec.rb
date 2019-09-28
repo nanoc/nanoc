@@ -166,7 +166,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
             expect(ctx.dependency_tracker).to receive(:bounce).with(item._unwrap, compiled_content: true).twice
 
             fiber = Fiber.new { subject }
-            expect(fiber.resume).to be_a(Nanoc::Int::Errors::UnmetDependency)
+            expect(fiber.resume).to be_a(Nanoc::Core::Errors::UnmetDependency)
 
             item.reps[:default]._unwrap.compiled = true
             ctx.compiled_content_store.set(

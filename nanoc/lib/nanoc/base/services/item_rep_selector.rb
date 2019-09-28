@@ -56,7 +56,7 @@ module Nanoc
           rescue => e
             actual_error = e.is_a?(Nanoc::Int::Errors::CompilationError) ? e.unwrap : e
 
-            if actual_error.is_a?(Nanoc::Int::Errors::UnmetDependency)
+            if actual_error.is_a?(Nanoc::Core::Errors::UnmetDependency)
               mg.mark_failed(actual_error.rep)
             else
               raise(e)
