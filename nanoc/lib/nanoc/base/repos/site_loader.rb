@@ -54,7 +54,7 @@ module Nanoc
           # Get data source class
           data_source_class = Nanoc::DataSource.named(data_source_hash[:type].to_sym)
           if data_source_class.nil?
-            raise Nanoc::Int::Errors::UnknownDataSource.new(data_source_hash[:type])
+            raise Nanoc::Core::Errors::UnknownDataSource.new(data_source_hash[:type])
           end
 
           # Create data source

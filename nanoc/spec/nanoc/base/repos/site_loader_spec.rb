@@ -111,7 +111,7 @@ describe Nanoc::Int::SiteLoader do
       end
 
       it 'raises an error' do
-        expect { subject }.to raise_error(Nanoc::Int::Errors::UnknownDataSource)
+        expect { subject }.to raise_error(Nanoc::Core::Errors::UnknownDataSource)
       end
     end
 

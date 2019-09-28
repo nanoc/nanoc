@@ -18,16 +18,6 @@ module Nanoc
       class GenericTrivial < Generic
       end
 
-      # Error that is raised when a site is loaded that uses a data source with
-      # an unknown identifier.
-      class UnknownDataSource < Generic
-        # @param [String] data_source_name The data source name for which no
-        #   data source could be found
-        def initialize(data_source_name)
-          super("The data source specified in the site’s configuration file, “#{data_source_name}”, does not exist.")
-        end
-      end
-
       # Error that is raised during site compilation when an item uses a layout
       # that is not present in the site.
       class UnknownLayout < Generic

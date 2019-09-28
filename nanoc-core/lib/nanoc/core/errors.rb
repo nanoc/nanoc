@@ -39,6 +39,16 @@ module Nanoc
         end
       end
 
+      # Error that is raised when a site is loaded that uses a data source with
+      # an unknown identifier.
+      class UnknownDataSource < ::Nanoc::Core::Error
+        # @param [String] data_source_name The data source name for which no
+        #   data source could be found
+        def initialize(data_source_name)
+          super("The data source specified in the site’s configuration file, “#{data_source_name}”, does not exist.")
+        end
+      end
+
       # Error that is raised when an rep cannot be compiled because it depends
       # on other representations.
       class UnmetDependency < ::Nanoc::Core::Error
