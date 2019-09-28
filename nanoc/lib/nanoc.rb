@@ -23,11 +23,6 @@ module Nanoc
   def self.on_windows?
     @_on_windows ||= TTY::Platform.new.windows?
   end
-
-  # Similar to `nil` except that it can only be compared against using
-  # `UNDEFINED.equal?(x)`. Used in places where `nil` already has meaning, and
-  # thus cannot be used to mean the presence of nothing.
-  UNDEFINED = Object.new
 end
 
 # Load general requirements

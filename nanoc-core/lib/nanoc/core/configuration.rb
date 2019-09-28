@@ -6,8 +6,6 @@ module Nanoc
     class Configuration
       include Nanoc::Core::ContractsSupport
 
-      NONE = Object.new.freeze
-
       # The default configuration for a data source. A data source's
       # configuration overrides these options.
       DEFAULT_DATA_SOURCE_CONFIG = {
@@ -104,9 +102,9 @@ module Nanoc
       end
 
       contract C::Any, C::Maybe[C::Any], C::Maybe[C::Func[C::None => C::Any]] => C::Any
-      def fetch(key, fallback = NONE, &_block)
+      def fetch(key, fallback = Nanoc::Core::UNDEFINED, &_block)
         @wrapped.fetch(key) do
-          if !fallback.equal?(NONE)
+          if !Nanoc::Core::UNDEFINED.equal?(fallback)
             fallback
           elsif block_given?
             yield(key)

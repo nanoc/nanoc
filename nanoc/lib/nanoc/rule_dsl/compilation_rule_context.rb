@@ -55,7 +55,7 @@ module Nanoc::RuleDSL
     # @param [String, nil] path
     #
     # @return [void]
-    def snapshot(snapshot_name, path: Nanoc::UNDEFINED)
+    def snapshot(snapshot_name, path: Nanoc::Core::UNDEFINED)
       @_recorder.snapshot(snapshot_name, path: path)
     end
 

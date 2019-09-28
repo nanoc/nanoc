@@ -4,9 +4,6 @@ module Nanoc
   module Core
     class ConfigView < ::Nanoc::Core::View
       # @api private
-      NONE = Object.new.freeze
-
-      # @api private
       def initialize(config, context)
         super(context)
         @config = config
@@ -23,10 +20,10 @@ module Nanoc
       end
 
       # @see Hash#fetch
-      def fetch(key, fallback = NONE, &_block)
+      def fetch(key, fallback = Nanoc::Core::UNDEFINED, &_block)
         @context.dependency_tracker.bounce(_unwrap, attributes: [key])
         @config.fetch(key) do
-          if !fallback.equal?(NONE)
+          if !Nanoc::Core::UNDEFINED.equal?(fallback)
             fallback
           elsif block_given?
             yield(key)

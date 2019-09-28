@@ -19,6 +19,10 @@ require 'zeitwerk'
 
 module Nanoc
   module Core
+    # Similar to `nil` except that it can only be compared against using
+    # `UNDEFINED.equal?(x)`. Used in places where `nil` already has meaning, and
+    # thus cannot be used to mean the presence of nothing.
+    UNDEFINED = Object.new
   end
 end
 

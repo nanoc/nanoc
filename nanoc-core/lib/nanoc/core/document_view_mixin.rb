@@ -4,9 +4,6 @@ module Nanoc
   module Core
     module DocumentViewMixin
       # @api private
-      NONE = Object.new.freeze
-
-      # @api private
       def initialize(document, context)
         super(context)
         @document = document
@@ -51,12 +48,12 @@ module Nanoc
       end
 
       # @see Hash#fetch
-      def fetch(key, fallback = NONE, &_block)
+      def fetch(key, fallback = Nanoc::Core::UNDEFINED, &_block)
         @context.dependency_tracker.bounce(_unwrap, attributes: [key])
 
         if _unwrap.attributes.key?(key)
           _unwrap.attributes[key]
-        elsif !fallback.equal?(NONE)
+        elsif !Nanoc::Core::UNDEFINED.equal?(fallback)
           fallback
         elsif block_given?
           yield(key)

@@ -37,15 +37,15 @@ module Nanoc
         @any_layouts = true
       end
 
-      MaybePathlike = C::Or[nil, Nanoc::UNDEFINED, String, Nanoc::Core::Identifier]
+      MaybePathlike = C::Or[nil, Nanoc::Core::UNDEFINED, String, Nanoc::Core::Identifier]
       contract Symbol, C::KeywordArgs[path: C::Optional[MaybePathlike]] => nil
-      def snapshot(snapshot_name, path: Nanoc::UNDEFINED)
-        unless Nanoc::UNDEFINED.equal?(path)
+      def snapshot(snapshot_name, path: Nanoc::Core::UNDEFINED)
+        unless Nanoc::Core::UNDEFINED.equal?(path)
           @snapshots_for_which_to_skip_routing_rule << snapshot_name
         end
 
         path =
-          if Nanoc::UNDEFINED.equal?(path) || path.nil?
+          if Nanoc::Core::UNDEFINED.equal?(path) || path.nil?
             nil
           else
             path.to_s
