@@ -5,8 +5,8 @@ summary 'Nanoc, a static site compiler written in Ruby'
 default_subcommand 'compile'
 
 opt :l, :color, 'enable color' do
-  $stdout.remove_stream_cleaner(Nanoc::OrigCLI::StreamCleaners::ANSIColors)
-  $stderr.remove_stream_cleaner(Nanoc::OrigCLI::StreamCleaners::ANSIColors)
+  $stdout.remove_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
+  $stderr.remove_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
 end
 
 opt :d, :debug, 'enable debugging' do
@@ -23,8 +23,8 @@ opt :h, :help, 'show the help message and quit' do |_value, cmd|
 end
 
 opt :C, :'no-color', 'disable color' do
-  $stdout.add_stream_cleaner(Nanoc::OrigCLI::StreamCleaners::ANSIColors)
-  $stderr.add_stream_cleaner(Nanoc::OrigCLI::StreamCleaners::ANSIColors)
+  $stdout.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
+  $stderr.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
 end
 
 opt :V, :verbose, 'make output more detailed', multiple: true do |val|

@@ -8,6 +8,8 @@ rescue LoadError => e
   exit 1
 end
 
+require 'nanoc-cli'
+
 # @api private
 module Nanoc::OrigCLI
   module Commands
@@ -17,8 +19,6 @@ end
 require_relative 'orig_cli/ansi_string_colorizer'
 require_relative 'orig_cli/logger'
 require_relative 'orig_cli/command_runner'
-require_relative 'orig_cli/cleaning_stream'
-require_relative 'orig_cli/stream_cleaners'
 require_relative 'orig_cli/error_handler'
 require_relative 'orig_cli/stack_trace_writer'
 require_relative 'orig_cli/transform'
@@ -195,16 +195,16 @@ module Nanoc::OrigCLI
   #
   # @param [IO] io The stream to wrap
   #
-  # @return [::Nanoc::OrigCLI::CleaningStream]
+  # @return [::Nanoc::CLI::CleaningStream]
   def self.wrap_in_cleaning_stream(io)
-    cio = ::Nanoc::OrigCLI::CleaningStream.new(io)
+    cio = ::Nanoc::CLI::CleaningStream.new(io)
 
     unless enable_utf8?(io)
-      cio.add_stream_cleaner(Nanoc::OrigCLI::StreamCleaners::UTF8)
+      cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
     end
 
     unless enable_ansi_colors?(io)
-      cio.add_stream_cleaner(Nanoc::OrigCLI::StreamCleaners::ANSIColors)
+      cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
     end
 
     cio
@@ -237,5 +237,96 @@ module Nanoc::OrigCLI
   def self.add_after_setup_proc(proc)
     @after_setup_procs ||= []
     @after_setup_procs << proc
+  end
+end
+
+# @api private
+module Nanoc::CLI
+  # Re-export (for now)
+
+  ANSIStringColorizer = Nanoc::OrigCLI::ANSIStringColorizer
+  Logger = Nanoc::OrigCLI::Logger
+  CommandRunner = Nanoc::OrigCLI::CommandRunner
+  ErrorHandler = Nanoc::OrigCLI::ErrorHandler
+  StackTraceWriter = Nanoc::OrigCLI::StackTraceWriter
+
+  def self.debug?
+    Nanoc::OrigCLI.debug?
+  end
+
+  def self.debug=(boolean)
+    Nanoc::OrigCLI.debug = boolean
+  end
+
+  def self.verbosity
+    Nanoc::OrigCLI.verbosity
+  end
+
+  def self.verbosity=(val)
+    Nanoc::OrigCLI.verbosity = val
+  end
+
+  def self.run(args)
+    Nanoc::OrigCLI.run(args)
+  end
+
+  def self.root_command
+    Nanoc::OrigCLI.root_command
+  end
+
+  def self.add_command(cmd)
+    Nanoc::OrigCLI.add_command(cmd)
+  end
+
+  def self.after_setup(&block)
+    Nanoc::OrigCLI.after_setup(&block)
+  end
+
+  def self.setup
+    Nanoc::OrigCLI.setup
+  end
+
+  def self.setup_commands
+    Nanoc::OrigCLI.setup_commands
+  end
+
+  def self.load_custom_commands
+    Nanoc::OrigCLI.load_custom_commands
+  end
+
+  def self.load_commands_at(path)
+    Nanoc::OrigCLI.load_commands_at(path)
+  end
+
+  def self.load_command_at(filename)
+    Nanoc::OrigCLI.load_command_at(filename)
+  end
+
+  def self.recursive_contents_of(path)
+    Nanoc::OrigCLI.recursive_contents_of(path)
+  end
+
+  def self.wrap_in_cleaning_stream(io)
+    Nanoc::OrigCLI.wrap_in_cleaning_stream(io)
+  end
+
+  def self.setup_cleaning_streams
+    Nanoc::OrigCLI.setup_cleaning_streams
+  end
+
+  def self.enable_utf8?(io)
+    Nanoc::OrigCLI.enable_utf8?(io)
+  end
+
+  def self.enable_ansi_colors?(io)
+    Nanoc::OrigCLI.enable_ansi_colors?(io)
+  end
+
+  def self.after_setup_procs
+    Nanoc::OrigCLI.after_setup_procs
+  end
+
+  def self.add_after_setup_proc(proc)
+    Nanoc::OrigCLI.add_after_setup_proc(proc)
   end
 end

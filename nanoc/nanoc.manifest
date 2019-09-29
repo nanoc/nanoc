@@ -25,7 +25,6 @@ lib/nanoc/checking/loader.rb
 lib/nanoc/checking/runner.rb
 lib/nanoc/orig_cli.rb
 lib/nanoc/orig_cli/ansi_string_colorizer.rb
-lib/nanoc/orig_cli/cleaning_stream.rb
 lib/nanoc/orig_cli/command_runner.rb
 lib/nanoc/orig_cli/commands/check.rb
 lib/nanoc/orig_cli/commands/compile_listeners/abstract.rb
@@ -47,10 +46,6 @@ lib/nanoc/orig_cli/commands/view.rb
 lib/nanoc/orig_cli/error_handler.rb
 lib/nanoc/orig_cli/logger.rb
 lib/nanoc/orig_cli/stack_trace_writer.rb
-lib/nanoc/orig_cli/stream_cleaners.rb
-lib/nanoc/orig_cli/stream_cleaners/abstract.rb
-lib/nanoc/orig_cli/stream_cleaners/ansi_colors.rb
-lib/nanoc/orig_cli/stream_cleaners/utf8.rb
 lib/nanoc/orig_cli/transform.rb
 lib/nanoc/data_sources.rb
 lib/nanoc/data_sources/filesystem.rb

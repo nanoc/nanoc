@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 gemspec path: 'nanoc'
 gemspec path: 'nanoc-core'
+gemspec path: 'nanoc-cli'
 gemspec path: 'nanoc-external'
 gemspec path: 'nanoc-live'
 gemspec path: 'guard-nanoc'
