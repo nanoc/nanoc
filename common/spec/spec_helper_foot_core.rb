@@ -34,6 +34,21 @@ RSpec.configure do |c|
       example.run
     end
   end
+
+  c.around(:each, stdio: true) do |example|
+    orig_stdout = $stdout
+    orig_stderr = $stderr
+
+    unless ENV['QUIET'] == 'false'
+      $stdout = StringIO.new
+      $stderr = StringIO.new
+    end
+
+    example.run
+
+    $stdout = orig_stdout
+    $stderr = orig_stderr
+  end
 end
 
 RSpec::Matchers.define_negated_matcher :not_match, :match
