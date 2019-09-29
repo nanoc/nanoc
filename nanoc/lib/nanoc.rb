@@ -41,6 +41,7 @@ require 'nanoc-core'
 Nanoc::Identifier = Nanoc::Core::Identifier
 Nanoc::DataSource = Nanoc::Core::DataSource
 Nanoc::Filter = Nanoc::Core::Filter
+Nanoc::Error = Nanoc::Core::Error
 
 # Load Nanoc
 require 'nanoc/version'

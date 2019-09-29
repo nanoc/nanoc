@@ -172,7 +172,7 @@ describe Nanoc::OrigCLI::Commands::Deploy, site: true, stdio: true do
       context 'no deploy configs' do
         it 'errors' do
           expect { run }.to raise_error(
-            Nanoc::Int::Errors::GenericTrivial,
+            Nanoc::Core::TrivialError,
             'The site has no deployment configurations.',
           )
         end
@@ -211,7 +211,7 @@ describe Nanoc::OrigCLI::Commands::Deploy, site: true, stdio: true do
           context 'requested deploy config does not exist' do
             it 'errors' do
               expect { run }.to raise_error(
-                Nanoc::Int::Errors::GenericTrivial,
+                Nanoc::Core::TrivialError,
                 'The site has no deployment configuration named `default`.',
               )
             end
@@ -266,7 +266,7 @@ describe Nanoc::OrigCLI::Commands::Deploy, site: true, stdio: true do
           context 'requested deploy config does not exist' do
             it 'errors' do
               expect { run }.to raise_error(
-                Nanoc::Int::Errors::GenericTrivial,
+                Nanoc::Core::TrivialError,
                 'The site has no deployment configuration named `production`.',
               )
             end
@@ -334,7 +334,7 @@ describe Nanoc::OrigCLI::Commands::Deploy, site: true, stdio: true do
 
           it 'errors' do
             expect { run }.to raise_error(
-              Nanoc::Int::Errors::GenericTrivial,
+              Nanoc::Core::TrivialError,
               'Only one deployment target can be specified on the command line.',
             )
           end

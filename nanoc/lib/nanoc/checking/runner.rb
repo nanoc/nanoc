@@ -80,7 +80,7 @@ module Nanoc::Checking
       names.map do |name|
         name = name.to_s.tr('-', '_').to_sym
         klass = Nanoc::Checking::Check.named(name)
-        raise Nanoc::Int::Errors::GenericTrivial, "Unknown check: #{name}" if klass.nil?
+        raise Nanoc::Core::TrivialError, "Unknown check: #{name}" if klass.nil?
 
         klass
       end

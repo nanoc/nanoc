@@ -139,7 +139,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
 
     pattern = { dotfiles: '**/.other' }
 
-    assert_raises Nanoc::Int::Errors::GenericTrivial, "Do not know how to handle extra_files: #{pattern.inspect}" do
+    assert_raises Nanoc::Core::TrivialError, "Do not know how to handle extra_files: #{pattern.inspect}" do
       Nanoc::DataSources::Filesystem::Tools.all_files_in('dir0', pattern)
     end
   end

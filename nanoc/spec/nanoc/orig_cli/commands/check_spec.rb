@@ -22,7 +22,7 @@ describe Nanoc::OrigCLI::Commands::Check, site: true, stdio: true do
         end
 
         it 'fails' do
-          expect { subject }.to raise_error(Nanoc::Int::Errors::GenericTrivial, 'One or more checks failed')
+          expect { subject }.to raise_error(Nanoc::Core::TrivialError, 'One or more checks failed')
         end
       end
 

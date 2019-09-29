@@ -287,7 +287,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   def test_create_pattern_with_string_with_no_config
     compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, {})
 
-    err = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+    err = assert_raises(Nanoc::Core::TrivialError) do
       compiler_dsl.create_pattern('/foo/*')
     end
     assert_equal 'Invalid string_pattern_type: ', err.message
@@ -312,7 +312,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   def test_create_pattern_with_string_with_unknown_string_pattern_type
     compiler_dsl = Nanoc::RuleDSL::CompilerDSL.new(nil, string_pattern_type: 'donkey')
 
-    err = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+    err = assert_raises(Nanoc::Core::TrivialError) do
       compiler_dsl.create_pattern('/foo/*')
     end
     assert_equal 'Invalid string_pattern_type: donkey', err.message

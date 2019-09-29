@@ -34,7 +34,7 @@ module Nanoc::OrigCLI::Commands
         end
 
       unless success
-        raise Nanoc::Int::Errors::GenericTrivial, 'One or more checks failed'
+        raise Nanoc::Core::TrivialError, 'One or more checks failed'
       end
     end
   end

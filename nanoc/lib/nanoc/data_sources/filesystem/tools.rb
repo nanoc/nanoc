@@ -6,7 +6,7 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
   # @api private
   module Tools
     # Error that is raised when too many symlink indirections are encountered.
-    class MaxSymlinkDepthExceededError < ::Nanoc::Int::Errors::GenericTrivial
+    class MaxSymlinkDepthExceededError < ::Nanoc::Core::TrivialError
       # @return [String] The last filename that was attempted to be
       #   resolved before giving up
       attr_reader :filename
@@ -21,7 +21,7 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
 
     # Error that is raised when a file of an unknown type is encountered
     # (something other than file, directory or link).
-    class UnsupportedFileTypeError < ::Nanoc::Int::Errors::GenericTrivial
+    class UnsupportedFileTypeError < ::Nanoc::Core::TrivialError
       # @return [String] The filename of the file whose type is not supported
       attr_reader :filename
 
@@ -93,7 +93,7 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
     #
     # @return [Array<String>] A list of files and directories
     #
-    # @raise [GenericTrivial] when pattern can not be handled
+    # @raise [Nanoc::Core::TrivialError] when pattern can not be handled
     def all_files_and_dirs_in(dir_name, extra_files)
       base_patterns = ["#{dir_name}/**/*"]
 
@@ -107,7 +107,7 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
           extra_files.map { |extra_file| "#{dir_name}/#{extra_file}" }
         else
           raise(
-            Nanoc::Int::Errors::GenericTrivial,
+            Nanoc::Core::TrivialError,
             "Do not know how to handle extra_files: #{extra_files.inspect}",
           )
         end

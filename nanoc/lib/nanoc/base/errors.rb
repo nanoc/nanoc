@@ -6,7 +6,7 @@ module Nanoc
     #
     # @api private
     module Errors
-      Generic = ::Nanoc::Error
+      Generic = ::Nanoc::Core::Error
 
       NoSuchSnapshot = ::Nanoc::Core::Errors::NoSuchSnapshot
       CannotGetCompiledContentOfBinaryItem = ::Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem
@@ -15,11 +15,6 @@ module Nanoc
       UnknownLayout = ::Nanoc::Core::Errors::UnknownLayout
       CannotUseBinaryFilter = ::Nanoc::Core::Errors::CannotUseBinaryFilter
       CannotUseTextualFilter = ::Nanoc::Core::Errors::CannotUseTextualFilter
-
-      # Generic trivial error. Superclass for all Nanoc-specific errors that are
-      # considered "trivial", i.e. errors that do not require a full crash report.
-      class GenericTrivial < Generic
-      end
 
       # Error that is raised during site compilation when a layout is compiled
       # for which the filter cannot be determined. This is similar to the

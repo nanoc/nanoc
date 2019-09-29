@@ -133,6 +133,7 @@ lib/nanoc/core/string_pattern.rb
 lib/nanoc/core/temp_filename_factory.rb
 lib/nanoc/core/textual_compiled_content_cache.rb
 lib/nanoc/core/textual_content.rb
+lib/nanoc/core/trivial_error.rb
 lib/nanoc/core/view_context_for_compilation.rb
 lib/nanoc/core/view_context_for_pre_compilation.rb
 lib/nanoc/core/view_context_for_shell.rb

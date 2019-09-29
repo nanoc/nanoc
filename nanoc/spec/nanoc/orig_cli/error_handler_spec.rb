@@ -74,10 +74,10 @@ describe Nanoc::OrigCLI::ErrorHandler, stdio: true do
       it { is_expected.to be(true) }
     end
 
-    context 'GenericTrivial' do
+    context 'TrivialError' do
       let(:error) do
         begin
-          raise Nanoc::Int::Errors::GenericTrivial, 'oh just a tiny thing'
+          raise Nanoc::Core::TrivialError, 'oh just a tiny thing'
         rescue => e
           return e
         end
@@ -122,7 +122,7 @@ describe Nanoc::OrigCLI::ErrorHandler, stdio: true do
       context 'trivial error with no resolution' do
         let(:error) do
           begin
-            raise Nanoc::Int::Errors::GenericTrivial, 'asdf'
+            raise Nanoc::Core::TrivialError, 'asdf'
           rescue => e
             return e
           end

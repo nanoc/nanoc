@@ -259,7 +259,7 @@ module Nanoc::RuleDSL
         Nanoc::Core::Pattern.from(identifier_to_regex(arg))
       else
         raise(
-          Nanoc::Int::Errors::GenericTrivial,
+          Nanoc::Core::TrivialError,
           "Invalid string_pattern_type: #{@config[:string_pattern_type]}",
         )
       end

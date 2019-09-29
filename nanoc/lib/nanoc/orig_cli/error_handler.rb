@@ -156,7 +156,7 @@ module Nanoc::OrigCLI
     # @api private
     def trivial?(error)
       case error
-      when Nanoc::Int::Errors::GenericTrivial, Errno::EADDRINUSE
+      when Nanoc::Core::TrivialError, Errno::EADDRINUSE
         true
       when LoadError
         GEM_NAMES.key?(gem_name_from_load_error(error))

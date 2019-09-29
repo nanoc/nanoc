@@ -9,6 +9,5 @@ module Nanoc
   end
 end
 
-require_relative 'base/error'
 require_relative 'base/errors'
 require_relative 'base/changes_stream'

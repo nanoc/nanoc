@@ -60,22 +60,22 @@ module Nanoc::OrigCLI::Commands
 
     def deploy_config
       if deploy_configs.empty?
-        raise Nanoc::Int::Errors::GenericTrivial, 'The site has no deployment configurations.'
+        raise Nanoc::Core::TrivialError, 'The site has no deployment configurations.'
       end
 
       if arguments.length > 1
-        raise Nanoc::Int::Errors::GenericTrivial, "usage: #{command.usage}"
+        raise Nanoc::Core::TrivialError, "usage: #{command.usage}"
       end
 
       target_from_arguments = arguments[0]
       target_from_options = options.fetch(:target, nil)
       if target_from_arguments && target_from_options
-        raise Nanoc::Int::Errors::GenericTrivial, 'Only one deployment target can be specified on the command line.'
+        raise Nanoc::Core::TrivialError, 'Only one deployment target can be specified on the command line.'
       end
 
       target = target_from_arguments || target_from_options || :default
       deploy_configs.fetch(target.to_sym) do
-        raise Nanoc::Int::Errors::GenericTrivial, "The site has no deployment configuration named `#{target}`."
+        raise Nanoc::Core::TrivialError, "The site has no deployment configuration named `#{target}`."
       end
     end
 
@@ -116,7 +116,7 @@ module Nanoc::OrigCLI::Commands
       deployer_class = Nanoc::Deploying::Deployer.named(name.to_sym)
       if deployer_class.nil?
         names = Nanoc::Deploying::Deployer.all.map(&:identifier)
-        raise Nanoc::Int::Errors::GenericTrivial, "The specified deploy target has an unrecognised kind “#{name}” (expected one of #{names.join(', ')})."
+        raise Nanoc::Core::TrivialError, "The specified deploy target has an unrecognised kind “#{name}” (expected one of #{names.join(', ')})."
       end
       deployer_class
     end

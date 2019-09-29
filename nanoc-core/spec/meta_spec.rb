@@ -44,6 +44,7 @@ describe 'meta', chdir: false do
       post_compile_item_collection_view
       processing_actions
       snapshot_def
+      trivial_error
       version
       view
       view_context_for_compilation

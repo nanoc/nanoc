@@ -5,7 +5,7 @@ require 'helper'
 class Nanoc::OrigCLI::Commands::CreateSiteTest < Nanoc::TestCase
   def test_create_site_with_existing_name
     Nanoc::OrigCLI.run %w[create_site foo]
-    assert_raises(::Nanoc::Int::Errors::GenericTrivial) do
+    assert_raises(::Nanoc::Core::TrivialError) do
       Nanoc::OrigCLI.run %w[create_site foo]
     end
   end

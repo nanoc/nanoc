@@ -219,7 +219,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
     # Check
-    error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+    error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
     assert_equal(
@@ -243,7 +243,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
     # Check
-    error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+    error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
     assert_equal(
@@ -267,7 +267,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
     # Check
-    error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+    error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
     assert_equal(
@@ -291,7 +291,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
     # Check
-    error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+    error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
     assert_equal(
@@ -349,7 +349,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @item.stubs(:[]).with(:author_uri).returns(nil)
 
     # Check
-    error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+    error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
     assert_equal(
@@ -375,7 +375,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     @item.stubs(:[]).with(:author_uri).returns('http://example.com/~jdoe')
 
     # Check
-    error = assert_raises(Nanoc::Int::Errors::GenericTrivial) do
+    error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
     assert_equal(
