@@ -8,7 +8,8 @@ if ENV['CI'] == 'true'
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
-require 'timecop'
-require 'rspec/its'
 require 'fuubar'
+require 'rspec/its'
+require 'timecop'
+require 'tty-command'
 require 'yard'

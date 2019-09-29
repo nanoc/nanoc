@@ -27,6 +27,7 @@ group :devel do
   gem 'rubocop'
   gem 'rubocop-rspec'
   gem 'timecop'
+  gem 'tty-command', '~> 0.8'
   gem 'vcr'
   gem 'webmock'
   gem 'yard'

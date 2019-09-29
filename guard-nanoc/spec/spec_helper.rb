@@ -22,17 +22,4 @@ RSpec.configure do |config|
       $stderr = old_stderr
     end
   end
-
-  # In temporary site
-  config.around do |example|
-    Dir.mktmpdir('nanoc-test') do |dir|
-      FileUtils.cd(dir) do
-        Nanoc::OrigCLI.run(%w[create-site foo])
-
-        FileUtils.cd('foo') do
-          example.run
-        end
-      end
-    end
-  end
 end

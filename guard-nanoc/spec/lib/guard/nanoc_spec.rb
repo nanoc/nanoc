@@ -4,6 +4,17 @@ require 'guard/compat/test/helper'
 require 'guard/nanoc'
 
 RSpec.describe Guard::Nanoc do
+  around do |example|
+    Dir.mktmpdir('nanoc-test') do |dir|
+      __nanoc_core_chdir(dir) do
+        Nanoc::OrigCLI.run(%w[create-site foo])
+        __nanoc_core_chdir('foo') do
+          example.run
+        end
+      end
+    end
+  end
+
   before do
     allow(Process).to receive(:fork) do |_args, &block|
       @_fork_block = block
