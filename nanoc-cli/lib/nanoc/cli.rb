@@ -75,6 +75,8 @@ inflector_class = Class.new(Zeitwerk::Inflector) do
       basename.upcase
     when 'ansi_colors'
       'ANSIColors'
+    when 'ansi_string_colorizer'
+      'ANSIStringColorizer'
     else
       super
     end

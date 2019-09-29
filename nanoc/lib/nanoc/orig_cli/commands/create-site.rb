@@ -249,7 +249,7 @@ module Nanoc::OrigCLI::Commands
 
     def write(filename, content)
       File.write(filename, content)
-      Nanoc::OrigCLI::Logger.instance.file(:high, :create, filename)
+      Nanoc::CLI::Logger.instance.file(:high, :create, filename)
     end
   end
 end

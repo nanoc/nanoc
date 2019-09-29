@@ -57,7 +57,7 @@ module Nanoc::OrigCLI::Commands::CompileListeners
       end
 
       on(:file_pruned) do |path|
-        Nanoc::OrigCLI::Logger.instance.file(:high, :delete, path)
+        Nanoc::CLI::Logger.instance.file(:high, :delete, path)
       end
     end
 
@@ -74,7 +74,7 @@ module Nanoc::OrigCLI::Commands::CompileListeners
     private
 
     def log(level, action, path, duration)
-      Nanoc::OrigCLI::Logger.instance.file(level, action, path, duration)
+      Nanoc::CLI::Logger.instance.file(level, action, path, duration)
     end
   end
 end

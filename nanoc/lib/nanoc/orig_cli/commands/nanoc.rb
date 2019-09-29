@@ -28,7 +28,7 @@ opt :C, :'no-color', 'disable color' do
 end
 
 opt :V, :verbose, 'make output more detailed', multiple: true do |val|
-  Nanoc::OrigCLI::Logger.instance.level = :low
+  Nanoc::CLI::Logger.instance.level = :low
   Nanoc::CLI.verbosity = val.size
 end
 

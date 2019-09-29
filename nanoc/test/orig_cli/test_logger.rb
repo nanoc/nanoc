@@ -2,6 +2,6 @@
 
 require 'helper'
 
-class Nanoc::OrigCLI::LoggerTest < Nanoc::TestCase
+class Nanoc::CLI::LoggerTest < Nanoc::TestCase
   def test_stub; end
 end

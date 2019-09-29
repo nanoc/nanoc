@@ -23,7 +23,6 @@ lib/nanoc/checking/issue.rb
 lib/nanoc/checking/loader.rb
 lib/nanoc/checking/runner.rb
 lib/nanoc/orig_cli.rb
-lib/nanoc/orig_cli/ansi_string_colorizer.rb
 lib/nanoc/orig_cli/commands/check.rb
 lib/nanoc/orig_cli/commands/compile_listeners/abstract.rb
 lib/nanoc/orig_cli/commands/compile_listeners/aggregate.rb
@@ -41,8 +40,6 @@ lib/nanoc/orig_cli/commands/show-data.rb
 lib/nanoc/orig_cli/commands/show-plugins.rb
 lib/nanoc/orig_cli/commands/show-rules.rb
 lib/nanoc/orig_cli/commands/view.rb
-lib/nanoc/orig_cli/logger.rb
-lib/nanoc/orig_cli/transform.rb
 lib/nanoc/data_sources.rb
 lib/nanoc/data_sources/filesystem.rb
 lib/nanoc/data_sources/filesystem/errors.rb

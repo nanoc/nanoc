@@ -77,7 +77,7 @@ describe Nanoc::OrigCLI::Commands::CompileListeners::FileActionPrinter, stdio: t
   context 'log level = high' do
     before { listener.start_safely }
 
-    before { Nanoc::OrigCLI::Logger.instance.level = :high }
+    before { Nanoc::CLI::Logger.instance.level = :high }
 
     it 'does not print skipped (uncompiled) reps' do
       expect { listener.stop_safely }
@@ -105,7 +105,7 @@ describe Nanoc::OrigCLI::Commands::CompileListeners::FileActionPrinter, stdio: t
   context 'log level = low' do
     before { listener.start_safely }
 
-    before { Nanoc::OrigCLI::Logger.instance.level = :low }
+    before { Nanoc::CLI::Logger.instance.level = :low }
 
     it 'prints skipped (uncompiled) reps' do
       expect { listener.stop_safely }

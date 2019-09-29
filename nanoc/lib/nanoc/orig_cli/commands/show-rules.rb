@@ -56,7 +56,7 @@ module Nanoc::OrigCLI::Commands
     end
 
     def fmt_heading(str)
-      Nanoc::OrigCLI::ANSIStringColorizer.c(str, :bold, :yellow)
+      Nanoc::CLI::ANSIStringColorizer.c(str, :bold, :yellow)
     end
   end
 end

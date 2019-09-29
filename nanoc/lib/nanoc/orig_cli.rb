@@ -16,10 +16,6 @@ module Nanoc::OrigCLI
   end
 end
 
-require_relative 'orig_cli/ansi_string_colorizer'
-require_relative 'orig_cli/logger'
-require_relative 'orig_cli/transform'
-
 require_relative 'orig_cli/commands/compile_listeners/abstract'
 require_relative 'orig_cli/commands/compile_listeners/debug_printer'
 require_relative 'orig_cli/commands/compile_listeners/diff_generator'
@@ -167,9 +163,6 @@ end
 # @api private
 module Nanoc::CLI
   # Re-export (for now)
-
-  ANSIStringColorizer = Nanoc::OrigCLI::ANSIStringColorizer
-  Logger = Nanoc::OrigCLI::Logger
 
   def self.run(args)
     Nanoc::OrigCLI.run(args)
