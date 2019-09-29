@@ -19,7 +19,7 @@ describe 'GH-1342', site: true, stdio: true do
   end
 
   example do
-    Nanoc::CLI.run([])
-    Nanoc::CLI.run([])
+    Nanoc::OrigCLI.run([])
+    Nanoc::OrigCLI.run([])
   end
 end

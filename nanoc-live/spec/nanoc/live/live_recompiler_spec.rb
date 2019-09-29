@@ -2,12 +2,12 @@
 
 describe Nanoc::Live::LiveRecompiler, site: true, stdio: true, fork: true do
   before do
-    Nanoc::CLI::ErrorHandler.enable
+    Nanoc::OrigCLI::ErrorHandler.enable
   end
 
   it 'detects content changes' do
     command = nil
-    command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
+    command_runner = Nanoc::OrigCLI::CommandRunner.new({}, [], command)
     live_recompiler = described_class.new(command_runner: command_runner)
 
     pid = fork do
@@ -33,7 +33,7 @@ describe Nanoc::Live::LiveRecompiler, site: true, stdio: true, fork: true do
 
   it 'detects rules changes' do
     command = nil
-    command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
+    command_runner = Nanoc::OrigCLI::CommandRunner.new({}, [], command)
     live_recompiler = described_class.new(command_runner: command_runner)
 
     pid = fork do
@@ -64,7 +64,7 @@ describe Nanoc::Live::LiveRecompiler, site: true, stdio: true, fork: true do
 
   it 'detects lib changes' do
     command = nil
-    command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
+    command_runner = Nanoc::OrigCLI::CommandRunner.new({}, [], command)
     live_recompiler = described_class.new(command_runner: command_runner)
 
     File.write('nanoc.yaml', 'site_name: Oldz')
@@ -98,7 +98,7 @@ describe Nanoc::Live::LiveRecompiler, site: true, stdio: true, fork: true do
 
   it 'detects lib changes' do
     command = nil
-    command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
+    command_runner = Nanoc::OrigCLI::CommandRunner.new({}, [], command)
     live_recompiler = described_class.new(command_runner: command_runner)
 
     FileUtils.mkdir_p('lib')
@@ -144,7 +144,7 @@ describe Nanoc::Live::LiveRecompiler, site: true, stdio: true, fork: true do
       $stderr = stderr_w
 
       command = nil
-      command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
+      command_runner = Nanoc::OrigCLI::CommandRunner.new({}, [], command)
       live_recompiler = described_class.new(command_runner: command_runner)
 
       live_recompiler.run

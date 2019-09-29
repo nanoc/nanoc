@@ -3,5 +3,5 @@
 require_relative 'spec_helper_head_core'
 
 require 'nanoc'
-require 'nanoc/cli'
+require 'nanoc/orig_cli'
 require 'nanoc/spec'

@@ -10,11 +10,11 @@ EOS
 
 required :H, :handler, 'specify the handler to use (webrick/mongrel/...)'
 required :o, :host,    'specify the host to listen on (default: 127.0.0.1)', default: '127.0.0.1'
-required :p, :port,    'specify the port to listen on (default: 3000)', transform: Nanoc::CLI::Transform::Port, default: 3000
+required :p, :port,    'specify the port to listen on (default: 3000)', transform: Nanoc::OrigCLI::Transform::Port, default: 3000
 no_params
 
 module Nanoc::Live::Commands
-  class Live < ::Nanoc::CLI::CommandRunner
+  class Live < ::Nanoc::OrigCLI::CommandRunner
     def run
       self.class.enter_site_dir
 
@@ -25,7 +25,7 @@ module Nanoc::Live::Commands
         end
 
         view_options = options.merge('live-reload': true)
-        Nanoc::CLI::Commands::View.new(view_options, [], self).run
+        Nanoc::OrigCLI::Commands::View.new(view_options, [], self).run
       end
 
       Nanoc::Live::LiveRecompiler.new(command_runner: self).run

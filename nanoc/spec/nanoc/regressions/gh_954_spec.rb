@@ -24,7 +24,7 @@ describe 'GH-954', site: true, stdio: true do
   end
 
   it 'properly filters foo.md' do
-    Nanoc::CLI.run(%w[compile])
+    Nanoc::OrigCLI.run(%w[compile])
 
     # Path is relativized
     expect(File.read('output/foo.html')).to eq('foo <a href="./">root</a>')

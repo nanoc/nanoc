@@ -17,10 +17,10 @@ describe 'GH-1358', site: true, stdio: true do
   end
 
   example do
-    Nanoc::CLI.run([])
+    Nanoc::OrigCLI.run([])
     File.write('content/foo.dat', 'hello')
 
-    expect { Nanoc::CLI.run([]) }
+    expect { Nanoc::OrigCLI.run([]) }
       .to change { File.read('output/home.html') }
       .from('hi')
       .to('hello')

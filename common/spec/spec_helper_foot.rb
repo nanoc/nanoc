@@ -2,7 +2,7 @@
 
 require_relative 'spec_helper_foot_core'
 
-Nanoc::CLI.setup
+Nanoc::OrigCLI.setup
 
 RSpec.configure do |c|
   c.include(Nanoc::Spec::Helper)
@@ -36,9 +36,9 @@ RSpec.configure do |c|
   end
 
   c.around do |example|
-    Nanoc::CLI::ErrorHandler.disable
+    Nanoc::OrigCLI::ErrorHandler.disable
     example.run
-    Nanoc::CLI::ErrorHandler.enable
+    Nanoc::OrigCLI::ErrorHandler.enable
   end
 
   c.before(:each, fork: true) do

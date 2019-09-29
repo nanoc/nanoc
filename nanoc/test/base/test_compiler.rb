@@ -124,7 +124,7 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
 
   def test_disallow_routes_not_starting_with_slash
     # Create site
-    Nanoc::CLI.run %w[create_site bar]
+    Nanoc::OrigCLI.run %w[create_site bar]
 
     FileUtils.cd('bar') do
       # Create routes

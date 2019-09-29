@@ -7,7 +7,7 @@ describe Nanoc::Live::Commands::Live, site: true, stdio: true, fork: true do
       trap(:INT) { exit(0) }
       pipe_stdout_read.close
       $stdout = pipe_stdout_write
-      Nanoc::CLI.run(['live'])
+      Nanoc::OrigCLI.run(['live'])
     end
     pipe_stdout_write.close
 

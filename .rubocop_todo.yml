@@ -9,7 +9,7 @@
 # Offense count: 4
 RSpec/AnyInstance:
   Exclude:
-    - 'nanoc/spec/nanoc/cli/commands/shell_spec.rb'
+    - 'nanoc/spec/nanoc/orig_cli/commands/shell_spec.rb'
 
 # Offense count: 200
 RSpec/Be:
@@ -34,7 +34,7 @@ RSpec/EmptyExampleGroup:
     - 'nanoc-core/spec/nanoc/core/filter_spec.rb'
     - 'nanoc-core/spec/nanoc/core/outdatedness_checker_spec.rb'
     - 'nanoc-core/spec/nanoc/core/outdatedness_rules_spec.rb'
-    - 'nanoc/spec/nanoc/cli/error_handler_spec.rb'
+    - 'nanoc/spec/nanoc/orig_cli/error_handler_spec.rb'
     - 'nanoc/spec/nanoc/helpers/text_spec.rb'
 
 # Offense count: 150
@@ -65,16 +65,16 @@ RSpec/ExpectInHook:
     - 'nanoc-core/spec/nanoc/core/compilation_stages/preprocess_spec.rb'
     - 'nanoc-core/spec/nanoc/core/executor_spec.rb'
     - 'nanoc-core/spec/nanoc/core/outdatedness_rules_spec.rb'
-    - 'nanoc/spec/nanoc/cli/commands/deploy_spec.rb'
-    - 'nanoc/spec/nanoc/cli/commands/shell_spec.rb'
-    - 'nanoc/spec/nanoc/cli/error_handler_spec.rb'
+    - 'nanoc/spec/nanoc/orig_cli/commands/deploy_spec.rb'
+    - 'nanoc/spec/nanoc/orig_cli/commands/shell_spec.rb'
+    - 'nanoc/spec/nanoc/orig_cli/error_handler_spec.rb'
     - 'nanoc/spec/nanoc/deploying/fog_spec.rb'
 
 # Offense count: 3
 RSpec/ExpectOutput:
   Exclude:
     - 'nanoc-live/spec/nanoc/live/live_recompiler_spec.rb'
-    - 'nanoc/spec/nanoc/cli/commands/compile_spec.rb'
+    - 'nanoc/spec/nanoc/orig_cli/commands/compile_spec.rb'
 
 # Offense count: 35
 # Configuration parameters: CustomTransform, IgnoreMethods.
@@ -131,7 +131,7 @@ RSpec/RepeatedDescription:
   Exclude:
     - 'nanoc-core/spec/nanoc/core/binary_compiled_content_cache_spec.rb'
     - 'nanoc-live/spec/nanoc/live/live_recompiler_spec.rb'
-    - 'nanoc/spec/nanoc/cli/commands/compile/file_action_printer_spec.rb'
+    - 'nanoc/spec/nanoc/orig_cli/commands/compile/file_action_printer_spec.rb'
 
 # Offense count: 2
 RSpec/RepeatedExample:
@@ -141,9 +141,9 @@ RSpec/RepeatedExample:
 # Offense count: 9
 RSpec/ScatteredLet:
   Exclude:
-    - 'nanoc/spec/nanoc/cli/commands/compile/abstract_spec.rb'
-    - 'nanoc/spec/nanoc/cli/commands/compile/file_action_printer_spec.rb'
-    - 'nanoc/spec/nanoc/cli/commands/compile/timing_recorder_spec.rb'
+    - 'nanoc/spec/nanoc/orig_cli/commands/compile/abstract_spec.rb'
+    - 'nanoc/spec/nanoc/orig_cli/commands/compile/file_action_printer_spec.rb'
+    - 'nanoc/spec/nanoc/orig_cli/commands/compile/timing_recorder_spec.rb'
     - 'nanoc/spec/nanoc/data_sources/filesystem_spec.rb'
 
 # Offense count: 61

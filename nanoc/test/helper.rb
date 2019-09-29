@@ -22,9 +22,9 @@ VCR.configure do |c|
 end
 
 require 'nanoc'
-require 'nanoc/cli'
+require 'nanoc/orig_cli'
 
-Nanoc::CLI.setup
+Nanoc::OrigCLI.setup
 
 module Nanoc::TestHelpers
   LIB_DIR = File.expand_path(__dir__ + '/../lib')
@@ -134,12 +134,12 @@ module Nanoc::TestHelpers
     FileUtils.cd(@tmp_dir)
 
     # Let us get to the raw errors
-    Nanoc::CLI::ErrorHandler.disable
+    Nanoc::OrigCLI::ErrorHandler.disable
   end
 
   def teardown
     # Restore normal error handling
-    Nanoc::CLI::ErrorHandler.enable
+    Nanoc::OrigCLI::ErrorHandler.enable
 
     # Exit tmp
     FileUtils.cd(@orig_wd)

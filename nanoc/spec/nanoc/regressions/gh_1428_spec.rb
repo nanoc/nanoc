@@ -12,7 +12,7 @@ describe 'GH-1428', site: true, stdio: true do
   end
 
   example do
-    Nanoc::CLI.run([])
-    Nanoc::CLI.run(['show-data'])
+    Nanoc::OrigCLI.run([])
+    Nanoc::OrigCLI.run(['show-data'])
   end
 end

@@ -18,10 +18,10 @@ describe 'GH-937', site: true, stdio: true do
   end
 
   it 'does not use cache when switching environments' do
-    Nanoc::CLI.run(%w[compile])
+    Nanoc::OrigCLI.run(%w[compile])
     expect(File.read('output/style.css')).to eq(".test { color: red; }\n")
 
-    Nanoc::CLI.run(%w[compile --env=staging])
+    Nanoc::OrigCLI.run(%w[compile --env=staging])
     expect(File.read('output/style.css')).to eq(".test {\n  color: red;\n}\n")
   end
 end

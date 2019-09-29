@@ -21,17 +21,17 @@ describe 'Partial recompilation', site: true, stdio: true do
     expect(File.file?('output/foo.html')).not_to be
     expect(File.file?('output/bar.html')).not_to be
 
-    expect { Nanoc::CLI.run(%w[show-data --no-color]) }
+    expect { Nanoc::OrigCLI.run(%w[show-data --no-color]) }
       .to(output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout)
-    expect { Nanoc::CLI.run(%w[show-data --no-color]) }
+    expect { Nanoc::OrigCLI.run(%w[show-data --no-color]) }
       .to(output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout)
 
-    expect { Nanoc::CLI.run(%w[compile --verbose]) rescue nil }
+    expect { Nanoc::OrigCLI.run(%w[compile --verbose]) rescue nil }
       .to output(/create.*output\/foo\.html/).to_stdout
 
-    expect { Nanoc::CLI.run(%w[show-data --no-color]) }
+    expect { Nanoc::OrigCLI.run(%w[show-data --no-color]) }
       .to(output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout)
-    expect { Nanoc::CLI.run(%w[show-data --no-color]) }
+    expect { Nanoc::OrigCLI.run(%w[show-data --no-color]) }
       .to(output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout)
 
     expect(File.file?('output/foo.html')).to be
@@ -39,12 +39,12 @@ describe 'Partial recompilation', site: true, stdio: true do
 
     File.write('content/bar.md', '<% raise "boom" %>')
 
-    expect { Nanoc::CLI.run(%w[compile --verbose --debug]) rescue nil }
+    expect { Nanoc::OrigCLI.run(%w[compile --verbose --debug]) rescue nil }
       .to output(/skip.*output\/foo\.html/).to_stdout
 
-    expect { Nanoc::CLI.run(%w[show-data --no-color]) }
+    expect { Nanoc::OrigCLI.run(%w[show-data --no-color]) }
       .to(output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout)
-    expect { Nanoc::CLI.run(%w[show-data --no-color]) }
+    expect { Nanoc::OrigCLI.run(%w[show-data --no-color]) }
       .to(output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout)
   end
 end

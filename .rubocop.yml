@@ -10,7 +10,7 @@ require: rubocop-rspec
 # We use filenames such as “create-site.rb” that translate to method names.
 Naming/FileName:
   Exclude:
-    - 'nanoc/lib/nanoc/cli/commands/*.rb'
+    - 'nanoc/lib/nanoc/orig_cli/commands/*.rb'
     - 'nanoc-*/lib/nanoc-*.rb'
     - 'guard-nanoc/lib/guard-nanoc.rb'
     - '*/*.gemspec'

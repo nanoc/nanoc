@@ -3,14 +3,14 @@
 require 'guard/compat/plugin'
 
 require 'nanoc'
-require 'nanoc/cli'
+require 'nanoc/orig_cli'
 
 module Guard
   class Nanoc < Plugin
     def self.live_cmd
       @_live_cmd ||= begin
-        path = File.join(File.dirname(__FILE__), '..', 'nanoc', 'cli', 'commands', 'live.rb')
-        ::Nanoc::CLI.load_command_at(path)
+        path = File.join(File.dirname(__FILE__), '..', 'nanoc', 'orig_cli', 'commands', 'live.rb')
+        ::Nanoc::OrigCLI.load_command_at(path)
       end
     end
 
@@ -39,9 +39,9 @@ module Guard
     protected
 
     def setup_listeners
-      ::Nanoc::CLI.setup
+      ::Nanoc::OrigCLI.setup
 
-      ::Nanoc::CLI::Commands::CompileListeners::FileActionPrinter
+      ::Nanoc::OrigCLI::Commands::CompileListeners::FileActionPrinter
         .new(reps: [])
         .start_safely
     end
@@ -66,7 +66,7 @@ module Guard
       notify_success
     rescue => e
       notify_failure
-      ::Nanoc::CLI::ErrorHandler.print_error(e)
+      ::Nanoc::OrigCLI::ErrorHandler.print_error(e)
     end
 
     def notify_success
@@ -81,6 +81,6 @@ module Guard
   end
 end
 
-::Nanoc::CLI.after_setup do
-  ::Nanoc::CLI.add_command(Guard::Nanoc.live_cmd)
+::Nanoc::OrigCLI.after_setup do
+  ::Nanoc::OrigCLI.add_command(Guard::Nanoc.live_cmd)
 end

@@ -17,7 +17,7 @@ describe 'TOML configuration', site: true, stdio: true do
     EOS
 
     Nanoc::Core::Feature.enable(Nanoc::Core::Feature::TOML) do
-      Nanoc::CLI.run(%w[compile])
+      Nanoc::OrigCLI.run(%w[compile])
     end
 
     expect(File.read('output/foo.html')).to eq('donkey')

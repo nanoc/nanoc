@@ -14,7 +14,7 @@ describe 'GH-1134', site: true, stdio: true do
   end
 
   it 'detects missing output file of non-default rep' do
-    Nanoc::CLI.run(%w[compile])
+    Nanoc::OrigCLI.run(%w[compile])
     expect(File.file?('output/first.html')).to be
     expect(File.file?('output/last.html')).to be
 
@@ -22,7 +22,7 @@ describe 'GH-1134', site: true, stdio: true do
     expect(File.file?('output/first.html')).not_to be
     expect(File.file?('output/last.html')).to be
 
-    Nanoc::CLI.run(%w[compile])
+    Nanoc::OrigCLI.run(%w[compile])
     expect(File.file?('output/first.html')).to be
     expect(File.file?('output/last.html')).to be
   end

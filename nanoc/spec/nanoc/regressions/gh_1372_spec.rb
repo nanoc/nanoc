@@ -19,7 +19,7 @@ describe 'GH-1372', site: true, stdio: true do
   end
 
   example do
-    Nanoc::CLI.run(['--verbose'])
+    Nanoc::OrigCLI.run(['--verbose'])
 
     File.write('Rules', <<~EOS)
       compile '/*' do
@@ -30,7 +30,7 @@ describe 'GH-1372', site: true, stdio: true do
       layout '/**/*', :haml, remove_whitespace: true
     EOS
 
-    expect { Nanoc::CLI.run(['--verbose']) }
+    expect { Nanoc::OrigCLI.run(['--verbose']) }
       .to output(%r{update.*output/home\.html$}).to_stdout
   end
 end
