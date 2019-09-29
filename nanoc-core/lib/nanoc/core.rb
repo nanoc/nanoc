@@ -26,6 +26,15 @@ module Nanoc
     # thus cannot be used to mean the presence of nothing.
     UNDEFINED = Object.new
 
+    # @return [String] A string containing information about this Nanoc version
+    #   and its environment (Ruby engine and version, Rubygems version if any).
+    #
+    # @api private
+    def self.version_information
+      "Nanoc #{Nanoc::VERSION} © 2007–2019 Denis Defreyne.\n" \
+      "Running #{RUBY_ENGINE} #{RUBY_VERSION} (#{RUBY_RELEASE_DATE}) on #{RUBY_PLATFORM} with RubyGems #{Gem::VERSION}.\n"
+    end
+
     # @return [Boolean] True if the current platform is Windows, false otherwise.
     #
     # @api private

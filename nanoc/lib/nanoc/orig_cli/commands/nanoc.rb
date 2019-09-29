@@ -33,7 +33,7 @@ opt :V, :verbose, 'make output more detailed', multiple: true do |val|
 end
 
 opt :v, :version, 'show version information and quit' do
-  puts Nanoc.version_information
+  puts Nanoc::Core.version_information
   exit 0
 end
 

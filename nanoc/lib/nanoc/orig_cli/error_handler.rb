@@ -322,7 +322,7 @@ module Nanoc::OrigCLI
 
     def write_version_information(stream, verbose: false)
       write_section_header(stream, 'Version information', verbose: verbose)
-      stream.puts Nanoc.version_information
+      stream.puts Nanoc::Core.version_information
     end
 
     def write_system_information(stream, verbose: false)
