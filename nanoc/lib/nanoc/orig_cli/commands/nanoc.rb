@@ -10,7 +10,7 @@ opt :l, :color, 'enable color' do
 end
 
 opt :d, :debug, 'enable debugging' do
-  Nanoc::OrigCLI.debug = true
+  Nanoc::CLI.debug = true
 end
 
 opt :e, :env, 'set environment', argument: :required do |value|
@@ -29,7 +29,7 @@ end
 
 opt :V, :verbose, 'make output more detailed', multiple: true do |val|
   Nanoc::OrigCLI::Logger.instance.level = :low
-  Nanoc::OrigCLI.verbosity = val.size
+  Nanoc::CLI.verbosity = val.size
 end
 
 opt :v, :version, 'show version information and quit' do

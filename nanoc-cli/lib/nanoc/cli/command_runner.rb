@@ -65,9 +65,9 @@ module Nanoc
 
       # @return [Boolean] true if debug output is enabled, false if not
       #
-      # @see Nanoc::OrigCLI.debug?
+      # @see Nanoc::CLI.debug?
       def debug?
-        Nanoc::OrigCLI.debug?
+        Nanoc::CLI.debug?
       end
     end
   end

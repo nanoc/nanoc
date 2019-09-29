@@ -7,7 +7,7 @@ describe Nanoc::OrigCLI::Commands::CompileListeners::TimingRecorder, stdio: true
 
   after { Timecop.return }
 
-  before { Nanoc::OrigCLI.verbosity = 2 }
+  before { Nanoc::CLI.verbosity = 2 }
 
   before { listener.start_safely }
 

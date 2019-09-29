@@ -29,27 +29,6 @@ require_relative 'orig_cli/commands/compile_listeners/aggregate'
 
 # @api private
 module Nanoc::OrigCLI
-  # @return [Boolean] true if debug output is enabled, false if not
-  def self.debug?
-    @debug || false
-  end
-
-  # @param [Boolean] boolean true if debug output should be enabled,
-  #   false if it should not
-  #
-  # @return [void]
-  def self.debug=(boolean)
-    @debug = boolean
-  end
-
-  def self.verbosity
-    @verbosity || 0
-  end
-
-  def self.verbosity=(val)
-    @verbosity = val
-  end
-
   # Invokes the Nanoc command-line tool with the given arguments.
   #
   # @param [Array<String>] args An array of command-line arguments
@@ -203,22 +182,6 @@ module Nanoc::CLI
 
   ANSIStringColorizer = Nanoc::OrigCLI::ANSIStringColorizer
   Logger = Nanoc::OrigCLI::Logger
-
-  def self.debug?
-    Nanoc::OrigCLI.debug?
-  end
-
-  def self.debug=(boolean)
-    Nanoc::OrigCLI.debug = boolean
-  end
-
-  def self.verbosity
-    Nanoc::OrigCLI.verbosity
-  end
-
-  def self.verbosity=(val)
-    Nanoc::OrigCLI.verbosity = val
-  end
 
   def self.run(args)
     Nanoc::OrigCLI.run(args)

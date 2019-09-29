@@ -5,6 +5,27 @@ require 'nanoc/core'
 module Nanoc
   # @api private
   module CLI
+    # @return [Boolean] true if debug output is enabled, false if not
+    def self.debug?
+      @debug || false
+    end
+
+    # @param [Boolean] boolean true if debug output should be enabled,
+    #   false if it should not
+    #
+    # @return [void]
+    def self.debug=(boolean)
+      @debug = boolean
+    end
+
+    def self.verbosity
+      @verbosity || 0
+    end
+
+    def self.verbosity=(val)
+      @verbosity = val
+    end
+
     # Wraps `$stdout` and `$stderr` in appropriate cleaning streams.
     #
     # @return [void]

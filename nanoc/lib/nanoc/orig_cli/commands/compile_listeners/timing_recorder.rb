@@ -9,7 +9,7 @@ module Nanoc::OrigCLI::Commands::CompileListeners
 
     # @see Listener#enable_for?
     def self.enable_for?(_command_runner, _site)
-      Nanoc::OrigCLI.verbosity >= 1
+      Nanoc::CLI.verbosity >= 1
     end
 
     # @param [Enumerable<Nanoc::Core::ItemRep>] reps
@@ -137,11 +137,11 @@ module Nanoc::OrigCLI::Commands::CompileListeners
 
     def print_profiling_feedback
       print_table_for_summary(:filters, @filters_summary)
-      print_table_for_summary(:phases, @phases_summary) if Nanoc::OrigCLI.verbosity >= 2
-      print_table_for_summary_duration(:stages, @stages_summary) if Nanoc::OrigCLI.verbosity >= 2
-      print_table_for_summary(:outdatedness_rules, @outdatedness_rules_summary) if Nanoc::OrigCLI.verbosity >= 2
-      print_table_for_summary_duration(:load_stores, @load_stores_summary) if Nanoc::OrigCLI.verbosity >= 2
-      print_ddmemoize_metrics if Nanoc::OrigCLI.verbosity >= 2
+      print_table_for_summary(:phases, @phases_summary) if Nanoc::CLI.verbosity >= 2
+      print_table_for_summary_duration(:stages, @stages_summary) if Nanoc::CLI.verbosity >= 2
+      print_table_for_summary(:outdatedness_rules, @outdatedness_rules_summary) if Nanoc::CLI.verbosity >= 2
+      print_table_for_summary_duration(:load_stores, @load_stores_summary) if Nanoc::CLI.verbosity >= 2
+      print_ddmemoize_metrics if Nanoc::CLI.verbosity >= 2
     end
 
     def print_table_for_summary(name, summary)
