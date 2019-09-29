@@ -90,7 +90,7 @@ module Nanoc::OrigCLI
   #
   # @return [void]
   def self.setup
-    setup_cleaning_streams
+    Nanoc::CLI.setup_cleaning_streams
     setup_commands
     load_custom_commands
     after_setup_procs.each(&:call)
@@ -189,46 +189,6 @@ module Nanoc::OrigCLI
     files
   end
 
-  # Wraps the given stream in a cleaning stream. The cleaning streams will
-  # have the proper stream cleaners configured.
-  #
-  # @param [IO] io The stream to wrap
-  #
-  # @return [::Nanoc::CLI::CleaningStream]
-  def self.wrap_in_cleaning_stream(io)
-    cio = ::Nanoc::CLI::CleaningStream.new(io)
-
-    unless enable_utf8?(io)
-      cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
-    end
-
-    unless enable_ansi_colors?(io)
-      cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
-    end
-
-    cio
-  end
-
-  # Wraps `$stdout` and `$stderr` in appropriate cleaning streams.
-  #
-  # @return [void]
-  def self.setup_cleaning_streams
-    $stdout = wrap_in_cleaning_stream($stdout)
-    $stderr = wrap_in_cleaning_stream($stderr)
-  end
-
-  # @return [Boolean] true if UTF-8 support is present, false if not
-  def self.enable_utf8?(io)
-    return true unless io.tty?
-
-    %w[LC_ALL LC_CTYPE LANG].any? { |e| ENV[e] =~ /UTF/i }
-  end
-
-  # @return [Boolean] true if color support is present, false if not
-  def self.enable_ansi_colors?(io)
-    io.tty? && !ENV.key?('NO_COLOR')
-  end
-
   def self.after_setup_procs
     @after_setup_procs || []
   end
@@ -303,22 +263,6 @@ module Nanoc::CLI
 
   def self.recursive_contents_of(path)
     Nanoc::OrigCLI.recursive_contents_of(path)
-  end
-
-  def self.wrap_in_cleaning_stream(io)
-    Nanoc::OrigCLI.wrap_in_cleaning_stream(io)
-  end
-
-  def self.setup_cleaning_streams
-    Nanoc::OrigCLI.setup_cleaning_streams
-  end
-
-  def self.enable_utf8?(io)
-    Nanoc::OrigCLI.enable_utf8?(io)
-  end
-
-  def self.enable_ansi_colors?(io)
-    Nanoc::OrigCLI.enable_ansi_colors?(io)
   end
 
   def self.after_setup_procs

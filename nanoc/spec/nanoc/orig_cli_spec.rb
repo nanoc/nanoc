@@ -41,40 +41,4 @@ describe Nanoc::OrigCLI do
       )
     end
   end
-
-  describe '#enable_ansi_colors?' do
-    subject { described_class.enable_ansi_colors?(io) }
-
-    context 'TTY' do
-      let(:io) { double(:io, tty?: true) }
-
-      context 'NO_COLOR set' do
-        before do
-          allow(ENV).to receive(:key?).with('NO_COLOR').and_return(true)
-        end
-
-        it { is_expected.to be(false) }
-      end
-
-      context 'NO_COLOR not set' do
-        it { is_expected.to be(true) }
-      end
-    end
-
-    context 'no TTY' do
-      let(:io) { double(:io, tty?: false) }
-
-      context 'NO_COLOR set' do
-        before do
-          allow(ENV).to receive(:key?).with('NO_COLOR').and_return(true)
-        end
-
-        it { is_expected.to be(false) }
-      end
-
-      context 'NO_COLOR not set' do
-        it { is_expected.to be(false) }
-      end
-    end
-  end
 end

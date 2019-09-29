@@ -96,7 +96,7 @@ module Nanoc::OrigCLI
       write_compact_error(error, $stderr)
 
       File.open('crash.log', 'w') do |io|
-        cio = Nanoc::OrigCLI.wrap_in_cleaning_stream(io)
+        cio = Nanoc::CLI.wrap_in_cleaning_stream(io)
         cio.add_stream_cleaner(::Nanoc::CLI::StreamCleaners::ANSIColors)
         write_verbose_error(error, cio)
       end

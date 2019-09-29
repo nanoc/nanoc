@@ -202,14 +202,6 @@ module Nanoc::TestHelpers
     end
   end
 
-  def with_env_vars(hash, &_block)
-    orig_env_hash = ENV.to_hash
-    hash.each_pair { |k, v| ENV[k] = v }
-    yield
-  ensure
-    orig_env_hash.each_pair { |k, v| ENV[k] = v }
-  end
-
   def command?(cmd)
     TTY::Which.exist?(cmd)
   end

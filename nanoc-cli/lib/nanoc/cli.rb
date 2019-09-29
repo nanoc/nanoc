@@ -5,6 +5,45 @@ require 'nanoc/core'
 module Nanoc
   # @api private
   module CLI
+    # Wraps `$stdout` and `$stderr` in appropriate cleaning streams.
+    #
+    # @return [void]
+    def self.setup_cleaning_streams
+      $stdout = wrap_in_cleaning_stream($stdout)
+      $stderr = wrap_in_cleaning_stream($stderr)
+    end
+
+    # Wraps the given stream in a cleaning stream. The cleaning streams will
+    # have the proper stream cleaners configured.
+    #
+    # @param [IO] io The stream to wrap
+    #
+    # @return [::Nanoc::CLI::CleaningStream]
+    def self.wrap_in_cleaning_stream(io)
+      cio = ::Nanoc::CLI::CleaningStream.new(io)
+
+      unless enable_utf8?(io)
+        cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
+      end
+
+      unless enable_ansi_colors?(io)
+        cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
+      end
+
+      cio
+    end
+
+    # @return [Boolean] true if UTF-8 support is present, false if not
+    def self.enable_utf8?(io)
+      return true unless io.tty?
+
+      %w[LC_ALL LC_CTYPE LANG].any? { |e| ENV[e] =~ /UTF/i }
+    end
+
+    # @return [Boolean] true if color support is present, false if not
+    def self.enable_ansi_colors?(io)
+      io.tty? && !ENV.key?('NO_COLOR')
+    end
   end
 end
 
