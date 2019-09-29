@@ -316,7 +316,7 @@ module Nanoc::OrigCLI
     def write_stack_trace(stream, error, verbose: false)
       write_section_header(stream, 'Stack trace', verbose: verbose)
 
-      writer = StackTraceWriter.new(stream, forwards: forwards_stack_trace?)
+      writer = Nanoc::CLI::StackTraceWriter.new(stream, forwards: forwards_stack_trace?)
       writer.write(unwrap_error(error), verbose: verbose)
     end
 

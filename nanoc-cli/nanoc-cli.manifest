@@ -5,6 +5,7 @@ lib/nanoc-cli.rb
 lib/nanoc/cli.rb
 lib/nanoc/cli/version.rb
 lib/nanoc/cli/cleaning_stream.rb
+lib/nanoc/cli/stack_trace_writer.rb
 lib/nanoc/cli/stream_cleaners/abstract.rb
 lib/nanoc/cli/stream_cleaners/ansi_colors.rb
 lib/nanoc/cli/stream_cleaners/utf8.rb

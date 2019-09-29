@@ -45,7 +45,6 @@ lib/nanoc/orig_cli/commands/show-rules.rb
 lib/nanoc/orig_cli/commands/view.rb
 lib/nanoc/orig_cli/error_handler.rb
 lib/nanoc/orig_cli/logger.rb
-lib/nanoc/orig_cli/stack_trace_writer.rb
 lib/nanoc/orig_cli/transform.rb
 lib/nanoc/data_sources.rb
 lib/nanoc/data_sources/filesystem.rb
