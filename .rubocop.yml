@@ -213,7 +213,7 @@ Style/FormatStringToken:
 # the spec fail.
 RSpec/DescribedClass:
   Exclude:
-    - 'nanoc/spec/nanoc/version_spec.rb'
+    - '**/version_spec.rb'
 
 # This turns
 #
