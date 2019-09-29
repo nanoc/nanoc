@@ -26,6 +26,8 @@ version_constant =
     'Nanoc::VERSION'
   when 'nanoc-core'
     'Nanoc::Core::VERSION'
+  when 'nanoc-cli'
+    'Nanoc::CLI::VERSION'
   when 'nanoc-live'
     'Nanoc::Live::VERSION'
   when 'nanoc-external'
@@ -43,6 +45,8 @@ gem_dir =
     'nanoc'
   when 'nanoc-core'
     'nanoc-core'
+  when 'nanoc-cli'
+    'nanoc-cli'
   when 'nanoc-live'
     'nanoc-live'
   when 'nanoc-external'
@@ -60,6 +64,8 @@ gem_path =
     'nanoc'
   when 'nanoc-core'
     'nanoc/core'
+  when 'nanoc-cli'
+    'nanoc/cli'
   when 'nanoc-live'
     'nanoc/live'
   when 'nanoc-external'
@@ -87,7 +93,7 @@ Dir['*.gem'].each do |fn|
 end
 puts
 
-unless gem_name == 'nanoc-core'
+unless %w[nanoc-core nanoc-cli].include?(gem_name)
   puts '=== Verifying presence of release date…'
   release_line = File.readlines('NEWS.md').drop(2).first
   unless / \(\d{4}-\d{2}-\d{2}\)$/.match?(release_line)
