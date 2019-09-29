@@ -10,7 +10,7 @@ module Guard
     def self.live_cmd
       @_live_cmd ||= begin
         path = File.join(File.dirname(__FILE__), '..', 'nanoc', 'orig_cli', 'commands', 'live.rb')
-        ::Nanoc::OrigCLI.load_command_at(path)
+        Cri::Command.load_file(path, infer_name: true)
       end
     end
 

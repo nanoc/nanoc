@@ -145,18 +145,6 @@ module Nanoc::OrigCLI
     end
   end
 
-  # Loads the command in the file with the given filename.
-  #
-  # @param [String] filename The name of the file that contains the command
-  #
-  # @return [Cri::Command] The loaded command
-  #
-  # @deprecated
-  def self.load_command_at(filename)
-    # TODO: remove me one guard-nanoc is in this repo
-    Cri::Command.load_file(filename, infer_name: true)
-  end
-
   # @return [Array] The directory contents
   def self.recursive_contents_of(path)
     return [] unless File.directory?(path)
@@ -213,10 +201,6 @@ module Nanoc::CLI
 
   def self.load_commands_at(path)
     Nanoc::OrigCLI.load_commands_at(path)
-  end
-
-  def self.load_command_at(filename)
-    Nanoc::OrigCLI.load_command_at(filename)
   end
 
   def self.recursive_contents_of(path)
