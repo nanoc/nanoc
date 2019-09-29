@@ -10,7 +10,7 @@ module Nanoc::OrigCLI
     #
     # @return [void]
     def call
-      Nanoc::OrigCLI::ErrorHandler.handle_while do
+      Nanoc::CLI::ErrorHandler.handle_while do
         run
       end
     end

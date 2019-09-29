@@ -19,7 +19,6 @@ end
 require_relative 'orig_cli/ansi_string_colorizer'
 require_relative 'orig_cli/logger'
 require_relative 'orig_cli/command_runner'
-require_relative 'orig_cli/error_handler'
 require_relative 'orig_cli/transform'
 
 require_relative 'orig_cli/commands/compile_listeners/abstract'
@@ -58,7 +57,7 @@ module Nanoc::OrigCLI
   #
   # @return [void]
   def self.run(args)
-    Nanoc::OrigCLI::ErrorHandler.handle_while do
+    Nanoc::CLI::ErrorHandler.handle_while do
       setup
       root_command.run(args)
     end
@@ -206,8 +205,6 @@ module Nanoc::CLI
   ANSIStringColorizer = Nanoc::OrigCLI::ANSIStringColorizer
   Logger = Nanoc::OrigCLI::Logger
   CommandRunner = Nanoc::OrigCLI::CommandRunner
-  ErrorHandler = Nanoc::OrigCLI::ErrorHandler
-  StackTraceWriter = Nanoc::CLI::StackTraceWriter
 
   def self.debug?
     Nanoc::OrigCLI.debug?

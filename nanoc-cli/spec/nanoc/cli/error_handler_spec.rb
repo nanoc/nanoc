@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::ErrorHandler, stdio: true do
+describe Nanoc::CLI::ErrorHandler, stdio: true do
   subject(:error_handler) { described_class.new }
 
   describe '#forwards_stack_trace?' do
@@ -178,9 +178,9 @@ describe Nanoc::OrigCLI::ErrorHandler, stdio: true do
 
   describe 'GEM_NAMES' do
     example do
-      requires = Nanoc::Filter.all.flat_map(&:requires)
+      requires = Nanoc::Core::Filter.all.flat_map(&:requires)
       described =
-        Nanoc::OrigCLI::ErrorHandler::GEM_NAMES.keys +
+        Nanoc::CLI::ErrorHandler::GEM_NAMES.keys +
         ['erb', 'rdoc', 'nanoc/filters/sass/importer', 'nanoc/filters/sass/functions']
 
       missing = requires - described

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Nanoc::OrigCLI
+module Nanoc::CLI
   # Catches errors and prints nice diagnostic messages, then exits.
   #
   # @api private
@@ -30,7 +30,7 @@ module Nanoc::OrigCLI
     end
 
     # Enables error handling in the given block. This method should not be
-    # called directly; use {Nanoc::OrigCLI::ErrorHandler.handle_while} instead.
+    # called directly; use {Nanoc::CLI::ErrorHandler.handle_while} instead.
     #
     # @return [void]
     def handle_while(exit_on_error:)

@@ -112,11 +112,11 @@ class Nanoc::OrigCLITest < Nanoc::TestCase
 
       # Run command
       position_before = $stderr.tell
-      Nanoc::OrigCLI::ErrorHandler.disable
+      Nanoc::CLI::ErrorHandler.disable
       assert_raises RuntimeError do
         Nanoc::OrigCLI.run %w[_test]
       end
-      Nanoc::OrigCLI::ErrorHandler.enable
+      Nanoc::CLI::ErrorHandler.enable
       assert_raises SystemExit do
         Nanoc::OrigCLI.run %w[_test]
       end

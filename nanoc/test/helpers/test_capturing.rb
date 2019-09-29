@@ -60,7 +60,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
   def before
     super
-    Nanoc::OrigCLI::ErrorHandler.enable
+    Nanoc::CLI::ErrorHandler.enable
   end
 
   def test_dependencies

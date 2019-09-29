@@ -2,10 +2,10 @@
 
 require 'helper'
 
-class Nanoc::OrigCLI::ErrorHandlerTest < Nanoc::TestCase
+class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
   def setup
     super
-    @handler = Nanoc::OrigCLI::ErrorHandler.new
+    @handler = Nanoc::CLI::ErrorHandler.new
   end
 
   def test_resolution_for_with_unknown_gem

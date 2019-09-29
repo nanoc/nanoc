@@ -66,7 +66,7 @@ module Guard
       notify_success
     rescue => e
       notify_failure
-      ::Nanoc::OrigCLI::ErrorHandler.print_error(e)
+      ::Nanoc::CLI::ErrorHandler.print_error(e)
     end
 
     def notify_success

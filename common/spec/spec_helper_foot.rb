@@ -21,9 +21,9 @@ RSpec.configure do |c|
   end
 
   c.around do |example|
-    Nanoc::OrigCLI::ErrorHandler.disable
+    Nanoc::CLI::ErrorHandler.disable
     example.run
-    Nanoc::OrigCLI::ErrorHandler.enable
+    Nanoc::CLI::ErrorHandler.enable
   end
 
   c.before(:each, fork: true) do

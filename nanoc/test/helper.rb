@@ -134,12 +134,12 @@ module Nanoc::TestHelpers
     FileUtils.cd(@tmp_dir)
 
     # Let us get to the raw errors
-    Nanoc::OrigCLI::ErrorHandler.disable
+    Nanoc::CLI::ErrorHandler.disable
   end
 
   def teardown
     # Restore normal error handling
-    Nanoc::OrigCLI::ErrorHandler.enable
+    Nanoc::CLI::ErrorHandler.enable
 
     # Exit tmp
     FileUtils.cd(@orig_wd)

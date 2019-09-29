@@ -2,7 +2,7 @@
 
 describe Nanoc::Live::LiveRecompiler, site: true, stdio: true, fork: true do
   before do
-    Nanoc::OrigCLI::ErrorHandler.enable
+    Nanoc::CLI::ErrorHandler.enable
   end
 
   it 'detects content changes' do
