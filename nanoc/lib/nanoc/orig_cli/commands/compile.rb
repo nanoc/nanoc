@@ -13,7 +13,7 @@ if Nanoc::Core::Feature.enabled?(Nanoc::Core::Feature::LIVE_CMD)
 end
 
 module Nanoc::OrigCLI::Commands
-  class Compile < ::Nanoc::OrigCLI::CommandRunner
+  class Compile < ::Nanoc::CLI::CommandRunner
     attr_accessor :listener_classes
 
     def run

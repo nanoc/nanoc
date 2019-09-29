@@ -15,7 +15,7 @@ flag :L, :'live-reload', 'reload on changes'
 no_params
 
 module Nanoc::OrigCLI::Commands
-  class View < ::Nanoc::OrigCLI::CommandRunner
+  class View < ::Nanoc::CLI::CommandRunner
     DEFAULT_HANDLER_NAME = :thin
 
     def run

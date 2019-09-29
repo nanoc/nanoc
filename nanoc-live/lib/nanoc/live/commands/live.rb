@@ -14,7 +14,7 @@ required :p, :port,    'specify the port to listen on (default: 3000)', transfor
 no_params
 
 module Nanoc::Live::Commands
-  class Live < ::Nanoc::OrigCLI::CommandRunner
+  class Live < ::Nanoc::CLI::CommandRunner
     def run
       self.class.enter_site_dir
 

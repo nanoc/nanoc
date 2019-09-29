@@ -11,7 +11,7 @@ flag :L, :list,   'list all checks'
 flag :d, :deploy, '(deprecated)'
 
 module Nanoc::OrigCLI::Commands
-  class Check < ::Nanoc::OrigCLI::CommandRunner
+  class Check < ::Nanoc::CLI::CommandRunner
     def run
       site = load_site
 

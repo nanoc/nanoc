@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::CommandRunner, stdio: true do
+describe Nanoc::CLI::CommandRunner, stdio: true do
   describe '.find_site_dir' do
     subject { described_class.find_site_dir }
 

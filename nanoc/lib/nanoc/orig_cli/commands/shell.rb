@@ -10,7 +10,7 @@ flag :p, :preprocess, 'run preprocessor'
 no_params
 
 module Nanoc::OrigCLI::Commands
-  class Shell < ::Nanoc::OrigCLI::CommandRunner
+  class Shell < ::Nanoc::CLI::CommandRunner
     def run
       require 'pry'
 

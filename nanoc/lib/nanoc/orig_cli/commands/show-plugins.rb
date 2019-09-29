@@ -10,7 +10,7 @@ EOS
 no_params
 
 module Nanoc::OrigCLI::Commands
-  class ShowPlugins < ::Nanoc::OrigCLI::CommandRunner
+  class ShowPlugins < ::Nanoc::CLI::CommandRunner
     def run
       # Get list of plugins (before and after)
       plugins_before = PLUGIN_CLASSES.keys.each_with_object({}) { |c, acc| acc[c] = c.all }

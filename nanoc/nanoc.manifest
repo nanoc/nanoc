@@ -24,7 +24,6 @@ lib/nanoc/checking/loader.rb
 lib/nanoc/checking/runner.rb
 lib/nanoc/orig_cli.rb
 lib/nanoc/orig_cli/ansi_string_colorizer.rb
-lib/nanoc/orig_cli/command_runner.rb
 lib/nanoc/orig_cli/commands/check.rb
 lib/nanoc/orig_cli/commands/compile_listeners/abstract.rb
 lib/nanoc/orig_cli/commands/compile_listeners/aggregate.rb

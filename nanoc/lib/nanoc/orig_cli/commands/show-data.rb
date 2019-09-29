@@ -10,7 +10,7 @@ EOS
 no_params
 
 module Nanoc::OrigCLI::Commands
-  class ShowData < ::Nanoc::OrigCLI::CommandRunner
+  class ShowData < ::Nanoc::CLI::CommandRunner
     def run
       site = load_site
       res = Nanoc::Core::Compiler.new_for(site).run_until_precompiled

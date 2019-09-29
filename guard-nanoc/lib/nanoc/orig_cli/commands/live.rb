@@ -14,7 +14,7 @@ required :p, :port,          'specify the port to listen on (default: 3000)', tr
 flag     :L, :'live-reload', 'reload on changes'
 
 module Nanoc::OrigCLI::Commands
-  class Live < ::Nanoc::OrigCLI::CommandRunner
+  class Live < ::Nanoc::CLI::CommandRunner
     def run
       require 'guard'
       require 'guard/commander'

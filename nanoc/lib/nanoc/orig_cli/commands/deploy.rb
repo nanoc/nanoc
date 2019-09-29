@@ -13,7 +13,7 @@ flag :D, :'list-deployers', 'list available deployers'
 option :n, :'dry-run',      'show what would be deployed'
 
 module Nanoc::OrigCLI::Commands
-  class Deploy < ::Nanoc::OrigCLI::CommandRunner
+  class Deploy < ::Nanoc::CLI::CommandRunner
     def run
       @site = load_site
       Nanoc::Core::Compiler.new_for(@site).run_until_preprocessed

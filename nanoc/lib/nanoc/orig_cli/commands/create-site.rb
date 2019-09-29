@@ -8,7 +8,7 @@ flag nil, :force, 'force creation of new site'
 param :path
 
 module Nanoc::OrigCLI::Commands
-  class CreateSite < ::Nanoc::OrigCLI::CommandRunner
+  class CreateSite < ::Nanoc::CLI::CommandRunner
     class << self
       protected
 
