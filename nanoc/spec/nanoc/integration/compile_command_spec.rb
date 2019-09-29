@@ -16,7 +16,7 @@ describe 'Compile command', site: true, stdio: true do
       FileUtils.mkdir_p('output')
       File.write('output/foo.html', "I am old foo!\n")
 
-      Nanoc::CLI.run(%w[compile])
+      Nanoc::OrigCLI.run(%w[compile])
 
       expect(File.file?('output.diff')).not_to be
     end
@@ -25,7 +25,7 @@ describe 'Compile command', site: true, stdio: true do
       FileUtils.mkdir_p('output')
       File.write('output/foo.html', "I am old foo!\n")
 
-      Nanoc::CLI.run(%w[compile --diff])
+      Nanoc::OrigCLI.run(%w[compile --diff])
 
       expect(File.file?('output.diff')).to be
     end

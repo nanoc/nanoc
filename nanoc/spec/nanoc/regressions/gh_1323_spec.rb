@@ -18,7 +18,7 @@ describe 'GH-1323', site: true, stdio: true do
   end
 
   example do
-    expect { Nanoc::CLI.run(%w[compile]) }
+    expect { Nanoc::OrigCLI.run(%w[compile]) }
       .to raise_error { |e| e.unwrap.is_a?(Nanoc::Filter::FilterReturnedNilError) }
   end
 end

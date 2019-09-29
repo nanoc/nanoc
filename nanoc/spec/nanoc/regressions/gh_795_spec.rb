@@ -13,7 +13,7 @@ EOS
   end
 
   it 'freezes @items' do
-    Nanoc::CLI.run(['compile'])
+    Nanoc::OrigCLI.run(['compile'])
 
     expect(File.read('output/items.html')).to eql('Frozen? true!')
     expect(File.read('output/items-view.html')).to eql('Frozen? true!')

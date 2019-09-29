@@ -60,7 +60,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
   def before
     super
-    Nanoc::CLI::ErrorHandler.enable
+    Nanoc::OrigCLI::ErrorHandler.enable
   end
 
   def test_dependencies
@@ -81,14 +81,14 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       File.open('content/includee.erb', 'w') do |io|
         io.write '{<% content_for :blah do %>Old content<% end %>}'
       end
-      Nanoc::CLI.run(%w[compile])
+      Nanoc::OrigCLI.run(%w[compile])
       assert_equal '[Old content]', File.read('output/includer/index.html')
 
       # Compile again
       File.open('content/includee.erb', 'w') do |io|
         io.write '{<% content_for :blah do %>New content<% end %>}'
       end
-      Nanoc::CLI.run(%w[compile])
+      Nanoc::OrigCLI.run(%w[compile])
       assert_equal '[New content]', File.read('output/includer/index.html')
     end
   end
@@ -148,14 +148,14 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       File.open('content/includee.erb', 'w') do |io|
         io.write '{<% content_for :blah do %>Old content<% end %>}'
       end
-      Nanoc::CLI.run(%w[compile])
+      Nanoc::OrigCLI.run(%w[compile])
       assert_equal '{[nil-Old content]}', File.read('output/includer/index.html')
 
       # Compile again
       File.open('content/includee.erb', 'w') do |io|
         io.write '{<% content_for :blah do %>New content<% end %>}'
       end
-      Nanoc::CLI.run(%w[compile])
+      Nanoc::OrigCLI.run(%w[compile])
       assert_equal '{[nil-New content]}', File.read('output/includer/index.html')
     end
   end
@@ -176,7 +176,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
         io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
       end
 
-      Nanoc::CLI.run(%w[compile])
+      Nanoc::OrigCLI.run(%w[compile])
       assert_equal 'Foo!', File.read('output/self/index.html')
     end
   end
@@ -199,7 +199,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       File.open('content/includer.erb', 'w') do |io|
         io.write 'Old-<%= content_for(@items["/includee/"], :blah) %>'
       end
-      Nanoc::CLI.run(%w[compile])
+      Nanoc::OrigCLI.run(%w[compile])
       assert_equal '{}', File.read('output/includee/index.html')
       assert_equal 'Old-Content', File.read('output/includer/index.html')
 
@@ -207,7 +207,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       File.open('content/includer.erb', 'w') do |io|
         io.write 'New-<%= content_for(@items["/includee/"], :blah) %>'
       end
-      Nanoc::CLI.run(%w[compile])
+      Nanoc::OrigCLI.run(%w[compile])
       assert_equal '{}', File.read('output/includee/index.html')
       assert_equal 'New-Content', File.read('output/includer/index.html')
     end

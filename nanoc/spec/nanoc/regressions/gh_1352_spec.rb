@@ -11,6 +11,6 @@ describe 'GH-1352', site: true, stdio: true do
   end
 
   example do
-    expect { Nanoc::CLI.run([]) }.to raise_error(JsonSchema::Error)
+    expect { Nanoc::OrigCLI.run([]) }.to raise_error(JsonSchema::Error)
   end
 end

@@ -19,7 +19,7 @@ EOS
 
   example do
     2.times do
-      Nanoc::CLI.run(%w[compile])
+      Nanoc::OrigCLI.run(%w[compile])
       expect(File.read('output/hello.html')).to eq('hi!')
     end
   end

@@ -50,7 +50,7 @@ RSpec.describe Guard::Nanoc do
 
   describe 'command' do
     it 'has an option set that is a superset of the view command’s options' do
-      view_cmd = Nanoc::CLI.root_command.command_named('view')
+      view_cmd = Nanoc::OrigCLI.root_command.command_named('view')
       live_cmd = described_class.live_cmd
 
       expect(live_cmd.option_definitions).not_to eq(view_cmd.option_definitions)

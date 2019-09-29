@@ -82,7 +82,7 @@ module Nanoc::Live
     end
 
     def handle_changes(site, command_runner)
-      Nanoc::CLI::ErrorHandler.handle_while(exit_on_error: false) do
+      Nanoc::OrigCLI::ErrorHandler.handle_while(exit_on_error: false) do
         unsafe_handle_changes(site, command_runner)
       end
     end
@@ -92,7 +92,7 @@ module Nanoc::Live
 
       puts 'Compiling site…'
       compiler = Nanoc::Core::Compiler.new_for(site)
-      listener = Nanoc::CLI::Commands::CompileListeners::Aggregate.new(
+      listener = Nanoc::OrigCLI::Commands::CompileListeners::Aggregate.new(
         command_runner: command_runner,
         site: site,
         compiler: compiler,

@@ -58,7 +58,7 @@ describe 'GH-924', site: true, stdio: true do
   end
 
   before do
-    Nanoc::CLI.run(%w[compile])
+    Nanoc::OrigCLI.run(%w[compile])
   end
 
   example do
@@ -83,7 +83,7 @@ describe 'GH-924', site: true, stdio: true do
       </xsl:stylesheet>
     EOS
 
-    expect { Nanoc::CLI.run(%w[compile]) }
+    expect { Nanoc::OrigCLI.run(%w[compile]) }
       .to change { File.read('output/index.xhtml') }
       .from(/<title>Original Title/)
       .to(/<title>Changed Title/)

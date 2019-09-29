@@ -27,7 +27,7 @@ RSpec.configure do |config|
   config.around do |example|
     Dir.mktmpdir('nanoc-test') do |dir|
       FileUtils.cd(dir) do
-        Nanoc::CLI.run(%w[create-site foo])
+        Nanoc::OrigCLI.run(%w[create-site foo])
 
         FileUtils.cd('foo') do
           example.run

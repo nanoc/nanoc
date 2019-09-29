@@ -21,7 +21,7 @@ describe 'GH-1412', site: true, stdio: true do
   end
 
   example do
-    Nanoc::CLI.run([])
+    Nanoc::OrigCLI.run([])
 
     expect(File.file?('output/a.html')).to be(true)
     expect(File.read('output/a.html')).to eq('[A B <%= @items["/a.*"].compiled_content %>]')

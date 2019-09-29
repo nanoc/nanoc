@@ -11,9 +11,9 @@ EOS
   end
 
   specify 'stale check does not consider output/greeting.tmp as stale' do
-    Nanoc::CLI.run(['compile'])
+    Nanoc::OrigCLI.run(['compile'])
 
     regex = /Running check stale…   (\e\[32m)?ok(\e\[0m)?/
-    expect { Nanoc::CLI.run(%w[check stale]) }.to output(regex).to_stdout
+    expect { Nanoc::OrigCLI.run(%w[check stale]) }.to output(regex).to_stdout
   end
 end

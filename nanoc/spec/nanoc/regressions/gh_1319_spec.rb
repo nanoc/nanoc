@@ -13,7 +13,7 @@ describe 'GH-1319', site: true, stdio: true do
   end
 
   before do
-    Nanoc::CLI.run(%w[compile])
+    Nanoc::OrigCLI.run(%w[compile])
   end
 
   example do
