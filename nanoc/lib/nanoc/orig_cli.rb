@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-begin
-  require 'cri'
-rescue LoadError => e
-  $stderr.puts e
-  $stderr.puts "If you are using a Gemfile, make sure that the Gemfile contains Nanoc ('gem \"nanoc\"')."
-  exit 1
-end
-
 require 'nanoc-cli'
 
 # @api private

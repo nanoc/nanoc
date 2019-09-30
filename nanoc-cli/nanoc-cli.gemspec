@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '~> 2.4'
 
+  s.add_runtime_dependency('cri', '~> 2.15')
   s.add_runtime_dependency('nanoc-core', "= #{Nanoc::CLI::VERSION}")
   s.add_runtime_dependency('zeitwerk', '~> 2.1')
 end

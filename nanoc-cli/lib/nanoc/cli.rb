@@ -2,6 +2,14 @@
 
 require 'nanoc/core'
 
+begin
+  require 'cri'
+rescue LoadError => e
+  $stderr.puts e
+  $stderr.puts "If you are using a Gemfile, make sure that the Gemfile contains Nanoc ('gem \"nanoc\"')."
+  exit 1
+end
+
 module Nanoc
   # @api private
   module CLI
