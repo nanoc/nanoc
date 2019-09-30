@@ -12,7 +12,7 @@ if Nanoc::Core::Feature.enabled?(Nanoc::Core::Feature::LIVE_CMD)
   flag :w, :watch, 'watch for changes and recompile when needed'
 end
 
-module Nanoc::OrigCLI::Commands
+module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
     attr_accessor :listener_classes
 
@@ -38,7 +38,7 @@ module Nanoc::OrigCLI::Commands
 
       puts 'Compiling site…'
       compiler = Nanoc::Core::Compiler.new_for(@site)
-      listener = Nanoc::OrigCLI::Commands::CompileListeners::Aggregate.new(
+      listener = Nanoc::CLI::CompileListeners::Aggregate.new(
         command_runner: self,
         site: @site,
         compiler: compiler,
@@ -54,4 +54,4 @@ module Nanoc::OrigCLI::Commands
   end
 end
 
-runner Nanoc::OrigCLI::Commands::Compile
+runner Nanoc::CLI::Commands::Compile

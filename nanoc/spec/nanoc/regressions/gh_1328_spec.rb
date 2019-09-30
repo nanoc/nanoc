@@ -24,23 +24,23 @@ describe 'GH-1328', site: true, stdio: true do
   end
 
   before do
-    Nanoc::OrigCLI.run([])
+    Nanoc::CLI.run([])
   end
 
   it 'fails check for foo.html' do
-    expect { Nanoc::OrigCLI.run(%w[check ilinks]) }
+    expect { Nanoc::CLI.run(%w[check ilinks]) }
       .to raise_error(Nanoc::Core::TrivialError, 'One or more checks failed')
       .and output(%r{output/foo\.html:}).to_stdout
   end
 
   it 'fails check for foo.xhtml' do
-    expect { Nanoc::OrigCLI.run(%w[check ilinks]) }
+    expect { Nanoc::CLI.run(%w[check ilinks]) }
       .to raise_error(Nanoc::Core::TrivialError, 'One or more checks failed')
       .and output(%r{output/foo\.xhtml:}).to_stdout
   end
 
   it 'fails check for foo.htm' do
-    expect { Nanoc::OrigCLI.run(%w[check ilinks]) }
+    expect { Nanoc::CLI.run(%w[check ilinks]) }
       .to raise_error(Nanoc::Core::TrivialError, 'One or more checks failed')
       .and output(%r{output/foo\.htm:}).to_stdout
   end

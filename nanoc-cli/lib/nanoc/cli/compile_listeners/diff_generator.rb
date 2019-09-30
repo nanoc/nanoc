@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Nanoc::OrigCLI::Commands::CompileListeners
+module Nanoc::CLI::CompileListeners
   class DiffGenerator < Abstract
     class Differ
       def initialize(path, str_a, str_b)

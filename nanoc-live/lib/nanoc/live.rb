@@ -13,8 +13,8 @@ end
 require_relative 'live/version'
 require_relative 'live/live_recompiler'
 
-Nanoc::OrigCLI.after_setup do
+Nanoc::CLI.after_setup do
   root = File.dirname(__FILE__)
   live_command_path = File.join(root, 'live', 'commands', 'live.rb')
-  Nanoc::OrigCLI.add_command(Cri::Command.load_file(live_command_path, infer_name: true))
+  Nanoc::CLI.add_command(Cri::Command.load_file(live_command_path, infer_name: true))
 end

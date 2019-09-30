@@ -15,7 +15,7 @@ no_params
 flag :y, :yes,       'confirm deletion'
 flag :n, :'dry-run', 'print files to be deleted instead of actually deleting them'
 
-module Nanoc::OrigCLI::Commands
+module Nanoc::CLI::Commands
   class Prune < ::Nanoc::CLI::CommandRunner
     def run
       @site = load_site
@@ -46,4 +46,4 @@ module Nanoc::OrigCLI::Commands
   end
 end
 
-runner Nanoc::OrigCLI::Commands::Prune
+runner Nanoc::CLI::Commands::Prune

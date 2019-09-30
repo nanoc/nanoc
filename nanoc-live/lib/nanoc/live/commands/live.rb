@@ -25,7 +25,7 @@ module Nanoc::Live::Commands
         end
 
         view_options = options.merge('live-reload': true)
-        Nanoc::OrigCLI::Commands::View.new(view_options, [], self).run
+        Nanoc::CLI::Commands::View.new(view_options, [], self).run
       end
 
       Nanoc::Live::LiveRecompiler.new(command_runner: self).run

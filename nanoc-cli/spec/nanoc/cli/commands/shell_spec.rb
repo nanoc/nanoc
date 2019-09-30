@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::Commands::Shell, site: true, stdio: true do
+describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
   describe '#run' do
     before do
       # Prevent double-loading
-      expect(Nanoc::OrigCLI).to receive(:setup)
+      expect(Nanoc::CLI).to receive(:setup)
 
       File.write('content/hello.md', 'Hello!')
 
@@ -24,7 +24,7 @@ describe Nanoc::OrigCLI::Commands::Shell, site: true, stdio: true do
         expect(ctx.items.to_a[0]._unwrap.content.string).to eq('Hello!')
       end
 
-      Nanoc::OrigCLI.run(['shell'])
+      Nanoc::CLI.run(['shell'])
     end
 
     it 'can be invoked as sh' do
@@ -33,7 +33,7 @@ describe Nanoc::OrigCLI::Commands::Shell, site: true, stdio: true do
         expect(ctx.items.to_a[0]._unwrap.content.string).to eq('Hello!')
       end
 
-      Nanoc::OrigCLI.run(['sh'])
+      Nanoc::CLI.run(['sh'])
     end
 
     it 'can be invoked as console' do
@@ -42,7 +42,7 @@ describe Nanoc::OrigCLI::Commands::Shell, site: true, stdio: true do
         expect(ctx.items.to_a[0]._unwrap.content.string).to eq('Hello!')
       end
 
-      Nanoc::OrigCLI.run(['console'])
+      Nanoc::CLI.run(['console'])
     end
 
     it 'will preprocess if requested' do
@@ -51,7 +51,7 @@ describe Nanoc::OrigCLI::Commands::Shell, site: true, stdio: true do
         expect(ctx.items.to_a[0]._unwrap.content.string).to eq('Better hello!')
       end
 
-      Nanoc::OrigCLI.run(['shell', '--preprocess'])
+      Nanoc::CLI.run(['shell', '--preprocess'])
     end
   end
 

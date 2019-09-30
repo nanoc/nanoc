@@ -16,6 +16,6 @@ EOS
   end
 
   it 'runs the preprocessor only once' do
-    expect { Nanoc::OrigCLI.run(['compile']) }.not_to raise_error
+    expect { Nanoc::CLI.run(['compile']) }.not_to raise_error
   end
 end

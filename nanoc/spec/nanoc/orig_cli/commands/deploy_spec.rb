@@ -10,7 +10,7 @@ describe Nanoc::OrigCLI::Commands::Deploy, site: true, stdio: true do
 
     before do
       # Prevent double-loading
-      expect(Nanoc::OrigCLI).to receive(:setup)
+      expect(Nanoc::CLI).to receive(:setup)
 
       File.write('nanoc.yaml', YAML.dump(config))
     end
@@ -80,7 +80,7 @@ describe Nanoc::OrigCLI::Commands::Deploy, site: true, stdio: true do
 
     describe 'listing deployers' do
       shared_examples 'lists all deployers' do
-        let(:run) { Nanoc::OrigCLI.run(command) }
+        let(:run) { Nanoc::CLI.run(command) }
 
         it 'lists all deployers' do
           expect { run }.to output(/Available deployers:\n  fog\n  git\n  rsync/).to_stdout
@@ -104,7 +104,7 @@ describe Nanoc::OrigCLI::Commands::Deploy, site: true, stdio: true do
 
     describe 'listing deployment configurations' do
       shared_examples 'lists all deployment configurations' do
-        let(:run) { Nanoc::OrigCLI.run(command) }
+        let(:run) { Nanoc::CLI.run(command) }
 
         context 'no deployment configurations' do
           let(:config) { { donkeys: 'lots' } }
@@ -154,7 +154,7 @@ describe Nanoc::OrigCLI::Commands::Deploy, site: true, stdio: true do
     end
 
     describe 'deploying' do
-      let(:run) { Nanoc::OrigCLI.run(command) }
+      let(:run) { Nanoc::CLI.run(command) }
       let(:command) { %w[deploy] }
 
       before do

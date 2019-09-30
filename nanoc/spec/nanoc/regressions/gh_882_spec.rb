@@ -20,12 +20,12 @@ EOS
   end
 
   example do
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
 
     File.write('content/bar.md', 'I am bar! Modified!')
-    expect { Nanoc::OrigCLI.run(%w[compile]) }.to output(%r{^Modified: /bar.md - default$}).to_stdout
+    expect { Nanoc::CLI.run(%w[compile]) }.to output(%r{^Modified: /bar.md - default$}).to_stdout
 
     File.write('content/bar.md', 'I am bar! Modified again!')
-    expect { Nanoc::OrigCLI.run(%w[compile]) }.not_to output(%r{^Modified: /foo.md - default$}).to_stdout
+    expect { Nanoc::CLI.run(%w[compile]) }.not_to output(%r{^Modified: /foo.md - default$}).to_stdout
   end
 end

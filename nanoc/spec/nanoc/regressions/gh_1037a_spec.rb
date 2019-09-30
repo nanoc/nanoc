@@ -19,13 +19,13 @@ EOS
   end
 
   it 'writes two files' do
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/giraffe.txt')).to eql('I am a giraffe!')
     expect(File.read('output/giraffe.md')).to eql('I am a giraffe!')
   end
 
   it 'has the right :last snapshot' do
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/donkey.txt')).to eql('[I am a giraffe!]')
   end
 end

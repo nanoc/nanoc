@@ -22,15 +22,15 @@ EOS
 
   it 'recompiles when env changes' do
     ENV['NANOC_ENV'] = nil
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/foo.erb')).to eql('build=dev')
 
     ENV['NANOC_ENV'] = nil
-    Nanoc::OrigCLI.run(%w[compile -e prod])
+    Nanoc::CLI.run(%w[compile -e prod])
     expect(File.read('output/foo.erb')).to eql('build=prod')
 
     ENV['NANOC_ENV'] = nil
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/foo.erb')).to eql('build=dev')
   end
 end

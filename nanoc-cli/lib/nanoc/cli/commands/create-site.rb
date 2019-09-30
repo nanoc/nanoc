@@ -7,7 +7,7 @@ description 'Create a new site at the given path. The site will use the `filesys
 flag nil, :force, 'force creation of new site'
 param :path
 
-module Nanoc::OrigCLI::Commands
+module Nanoc::CLI::Commands
   class CreateSite < ::Nanoc::CLI::CommandRunner
     class << self
       protected
@@ -254,4 +254,4 @@ module Nanoc::OrigCLI::Commands
   end
 end
 
-runner Nanoc::OrigCLI::Commands::CreateSite
+runner Nanoc::CLI::Commands::CreateSite

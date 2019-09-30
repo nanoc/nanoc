@@ -9,7 +9,7 @@ description <<~EOS
 EOS
 no_params
 
-module Nanoc::OrigCLI::Commands
+module Nanoc::CLI::Commands
   class ShowPlugins < ::Nanoc::CLI::CommandRunner
     def run
       # Get list of plugins (before and after)
@@ -86,4 +86,4 @@ module Nanoc::OrigCLI::Commands
   end
 end
 
-runner Nanoc::OrigCLI::Commands::ShowPlugins
+runner Nanoc::CLI::Commands::ShowPlugins

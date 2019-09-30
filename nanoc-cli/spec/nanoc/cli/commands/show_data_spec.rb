@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::Commands::ShowData, stdio: true do
+describe Nanoc::CLI::Commands::ShowData, stdio: true do
   describe '#print_item_dependencies' do
     subject { runner.send(:print_item_dependencies, items, dependency_store) }
 

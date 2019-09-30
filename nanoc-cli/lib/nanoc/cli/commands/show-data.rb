@@ -9,7 +9,7 @@ description <<~EOS
 EOS
 no_params
 
-module Nanoc::OrigCLI::Commands
+module Nanoc::CLI::Commands
   class ShowData < ::Nanoc::CLI::CommandRunner
     def run
       site = load_site
@@ -182,4 +182,4 @@ module Nanoc::OrigCLI::Commands
   end
 end
 
-runner Nanoc::OrigCLI::Commands::ShowData
+runner Nanoc::CLI::Commands::ShowData

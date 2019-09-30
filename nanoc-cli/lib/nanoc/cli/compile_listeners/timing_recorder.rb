@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Nanoc::OrigCLI::Commands::CompileListeners
+module Nanoc::CLI::CompileListeners
   class TimingRecorder < Abstract
     attr_reader :stages_summary
     attr_reader :phases_summary

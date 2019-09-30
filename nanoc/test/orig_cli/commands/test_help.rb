@@ -2,9 +2,9 @@
 
 require 'helper'
 
-class Nanoc::OrigCLI::Commands::HelpTest < Nanoc::TestCase
+class Nanoc::CLI::Commands::HelpTest < Nanoc::TestCase
   def test_run
-    Nanoc::OrigCLI.run %w[help]
-    Nanoc::OrigCLI.run %w[help co]
+    Nanoc::CLI.run %w[help]
+    Nanoc::CLI.run %w[help co]
   end
 end

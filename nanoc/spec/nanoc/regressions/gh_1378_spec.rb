@@ -15,7 +15,7 @@ describe 'GH-1378', site: true, stdio: true do
   end
 
   example do
-    expect { Nanoc::OrigCLI.run([]) }
+    expect { Nanoc::CLI.run([]) }
       .to change { File.file?('output/style.css') }
       .from(false)
       .to(true)

@@ -2,7 +2,7 @@
 
 require 'helper'
 
-class Nanoc::OrigCLI::Commands::CompileTest < Nanoc::TestCase
+class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
   def test_profiling_information
     with_site do |_site|
       File.open('content/foo.md', 'w') { |io| io << 'asdf' }
@@ -25,7 +25,7 @@ class Nanoc::OrigCLI::Commands::CompileTest < Nanoc::TestCase
         io.write "layout '*', :erb\n"
       end
 
-      Nanoc::OrigCLI.run %w[compile --verbose]
+      Nanoc::CLI.run %w[compile --verbose]
     end
   end
 
@@ -62,7 +62,7 @@ class Nanoc::OrigCLI::Commands::CompileTest < Nanoc::TestCase
       end
 
       assert File.file?('output/stray.html')
-      Nanoc::OrigCLI.run %w[compile]
+      Nanoc::CLI.run %w[compile]
       assert File.file?('output/stray.html')
 
       File.open('nanoc.yaml', 'w') do |io|
@@ -72,7 +72,7 @@ class Nanoc::OrigCLI::Commands::CompileTest < Nanoc::TestCase
       end
 
       assert File.file?('output/stray.html')
-      Nanoc::OrigCLI.run %w[compile]
+      Nanoc::CLI.run %w[compile]
       refute File.file?('output/stray.html')
     end
   end
@@ -112,7 +112,7 @@ class Nanoc::OrigCLI::Commands::CompileTest < Nanoc::TestCase
       end
 
       assert File.file?('output/stray.html')
-      Nanoc::OrigCLI.run %w[compile]
+      Nanoc::CLI.run %w[compile]
       assert File.file?('output/stray.html')
 
       File.open('nanoc.yaml', 'w') do |io|
@@ -123,7 +123,7 @@ class Nanoc::OrigCLI::Commands::CompileTest < Nanoc::TestCase
       end
 
       assert File.file?('output/stray.html')
-      Nanoc::OrigCLI.run %w[compile]
+      Nanoc::CLI.run %w[compile]
       refute File.file?('output/stray.html')
       assert File.directory?('output/excluded_dir'), 'excluded_dir should still be there'
     end
@@ -174,11 +174,11 @@ class Nanoc::OrigCLI::Commands::CompileTest < Nanoc::TestCase
   def new_file_action_printer(reps)
     # Ensure CLI is loaded
     begin
-      Nanoc::OrigCLI.run(%w[help %])
+      Nanoc::CLI.run(%w[help %])
     rescue SystemExit
     end
 
-    listener = Nanoc::OrigCLI::Commands::CompileListeners::FileActionPrinter.new(reps: reps)
+    listener = Nanoc::CLI::CompileListeners::FileActionPrinter.new(reps: reps)
 
     def listener.log(level, action, path, duration)
       @events ||= []

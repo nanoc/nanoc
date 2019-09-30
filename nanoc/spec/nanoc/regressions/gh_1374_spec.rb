@@ -15,7 +15,7 @@ describe 'GH-1374', site: true, stdio: true do
   end
 
   example do
-    expect { Nanoc::OrigCLI.run([]) }
+    expect { Nanoc::CLI.run([]) }
       .not_to change { File.file?('output/test.md') }
       .from(false)
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Nanoc::OrigCLI::Commands::CompileListeners
+module Nanoc::CLI::CompileListeners
   class DebugPrinter < Abstract
     # @see Listener#enable_for?
     def self.enable_for?(command_runner, _site)

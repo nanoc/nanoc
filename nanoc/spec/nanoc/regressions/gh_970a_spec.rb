@@ -12,7 +12,7 @@ describe 'GH-970 (show-rules)', site: true, stdio: true do
   end
 
   it 'shows reps' do
-    expect { Nanoc::OrigCLI.run(%w[show-rules --no-color]) }.to(
+    expect { Nanoc::CLI.run(%w[show-rules --no-color]) }.to(
       output(/^Item \/foo\.md:\n  Rep default: \/foo\.\*$/).to_stdout,
     )
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::Commands::CompileListeners::Abstract do
+describe Nanoc::CLI::CompileListeners::Abstract do
   subject { klass.new }
 
   context 'abstract class' do

@@ -12,7 +12,7 @@ EOS
   end
 
   it 'does not crash' do
-    Nanoc::OrigCLI.run(['compile'])
+    Nanoc::CLI.run(['compile'])
 
     expect(File.read('output/item.html')).to eql('Stuff!')
   end

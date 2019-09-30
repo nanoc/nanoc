@@ -13,11 +13,11 @@ EOS
   end
 
   it 'creates at first' do
-    expect { Nanoc::OrigCLI.run(%w[compile --verbose]) }.to output(%r{create.*output/foo\.html$}).to_stdout
+    expect { Nanoc::CLI.run(%w[compile --verbose]) }.to output(%r{create.*output/foo\.html$}).to_stdout
   end
 
   it 'skips the item on second try' do
-    Nanoc::OrigCLI.run(%w[compile])
-    expect { Nanoc::OrigCLI.run(%w[compile --verbose]) }.to output(%r{skip.*output/foo\.html$}).to_stdout
+    Nanoc::CLI.run(%w[compile])
+    expect { Nanoc::CLI.run(%w[compile --verbose]) }.to output(%r{skip.*output/foo\.html$}).to_stdout
   end
 end

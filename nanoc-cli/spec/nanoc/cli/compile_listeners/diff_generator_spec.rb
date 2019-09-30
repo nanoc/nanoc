@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::Commands::CompileListeners::DiffGenerator do
+describe Nanoc::CLI::CompileListeners::DiffGenerator do
   describe '.enable_for?' do
     subject { described_class.enable_for?(command_runner, site) }
 
@@ -24,7 +24,7 @@ describe Nanoc::OrigCLI::Commands::CompileListeners::DiffGenerator do
     let(:code_snippets) { [] }
 
     let(:command_runner) do
-      Nanoc::OrigCLI::Commands::Compile.new(options, arguments, command)
+      Nanoc::CLI::Commands::Compile.new(options, arguments, command)
     end
 
     context 'default' do
@@ -44,7 +44,7 @@ describe Nanoc::OrigCLI::Commands::CompileListeners::DiffGenerator do
     end
   end
 
-  describe Nanoc::OrigCLI::Commands::CompileListeners::DiffGenerator::Differ do
+  describe Nanoc::CLI::CompileListeners::DiffGenerator::Differ do
     subject { differ.call }
 
     let(:differ) { described_class.new('content/foo.md', str_a, str_b) }

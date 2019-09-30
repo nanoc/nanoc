@@ -20,11 +20,11 @@ EOS
   end
 
   example do
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     before = File.read('output/index.html')
 
     sleep(0.1)
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     after = File.read('output/index.html')
     expect(after).to eql(before)
     expect(after).to match(/\Ahi! - \d+/)

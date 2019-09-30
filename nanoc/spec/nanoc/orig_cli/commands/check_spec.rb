@@ -7,7 +7,7 @@ describe Nanoc::OrigCLI::Commands::Check, site: true, stdio: true do
     end
 
     context 'without options and arguments' do
-      subject { Nanoc::OrigCLI.run(['check']) }
+      subject { Nanoc::CLI.run(['check']) }
 
       context 'no issues for any checks' do
         it 'succeeds' do
@@ -41,7 +41,7 @@ describe Nanoc::OrigCLI::Commands::Check, site: true, stdio: true do
   end
 
   describe 'help' do
-    subject { Nanoc::OrigCLI.run(%w[help check]) }
+    subject { Nanoc::CLI.run(%w[help check]) }
 
     it 'shows --deploy as deprecated' do
       expect { subject }.to output(/--deploy.*\(deprecated\)/).to_stdout
