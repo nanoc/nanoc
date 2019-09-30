@@ -25,6 +25,7 @@ lib/nanoc/checking/runner.rb
 lib/nanoc/orig_cli.rb
 lib/nanoc/orig_cli/commands/check.rb
 lib/nanoc/orig_cli/commands/deploy.rb
+lib/nanoc/orig_cli/commands/show-rules.rb
 lib/nanoc/data_sources.rb
 lib/nanoc/data_sources/filesystem.rb
 lib/nanoc/data_sources/filesystem/errors.rb
@@ -100,5 +101,4 @@ lib/nanoc/rule_dsl/rule.rb
 lib/nanoc/rule_dsl/rule_context.rb
 lib/nanoc/rule_dsl/rules_collection.rb
 lib/nanoc/rule_dsl/rules_loader.rb
-lib/nanoc/spec.rb
 lib/nanoc/version.rb

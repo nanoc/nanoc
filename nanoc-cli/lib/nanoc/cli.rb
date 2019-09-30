@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'nanoc/core'
+require 'diff/lcs'
+require 'diff/lcs/hunk'
 
 begin
   require 'cri'

@@ -16,6 +16,7 @@ end
 packages = %w[
   nanoc
   nanoc-core
+  nanoc-cli
   nanoc-external
   nanoc-live
   guard-nanoc

@@ -13,8 +13,6 @@ end
 # Load general requirements
 require 'base64'
 require 'cgi'
-require 'diff/lcs'
-require 'diff/lcs/hunk'
 require 'digest'
 require 'English'
 require 'fileutils'

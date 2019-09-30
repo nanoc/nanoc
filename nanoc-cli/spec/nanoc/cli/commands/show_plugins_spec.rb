@@ -8,7 +8,7 @@ describe Nanoc::CLI::Commands::ShowPlugins, site: true, stdio: true do
 
     context 'site with plugins' do
       before do
-        File.write('lib/default.rb', 'Nanoc::Filter.define(:show_plugins_x) {}')
+        File.write('lib/default.rb', 'Nanoc::Core::Filter.define(:show_plugins_x) {}')
       end
 
       it 'outputs show_plugins_x under the right section' do

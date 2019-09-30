@@ -11,6 +11,21 @@ no_params
 
 module Nanoc::CLI::Commands
   class ShowPlugins < ::Nanoc::CLI::CommandRunner
+    # rubocop:disable Style/MutableConstant
+    # These constants are intended to be mutated (through #add_plugin_class)
+
+    PLUGIN_CLASS_ORDER = [
+      Nanoc::Core::Filter,
+      Nanoc::Core::DataSource,
+    ]
+
+    PLUGIN_CLASSES = {
+      Nanoc::Core::Filter => 'Filters',
+      Nanoc::Core::DataSource => 'Data Sources',
+    }
+
+    # rubocop:enable Style/MutableConstant
+
     def run
       # Get list of plugins (before and after)
       plugins_before = PLUGIN_CLASSES.keys.each_with_object({}) { |c, acc| acc[c] = c.all }
@@ -66,22 +81,15 @@ module Nanoc::CLI::Commands
       end
     end
 
+    def self.add_plugin_class(klass, name)
+      PLUGIN_CLASS_ORDER << klass
+      PLUGIN_CLASSES[klass] = name
+    end
+
     private
 
-    PLUGIN_CLASS_ORDER = [
-      Nanoc::Filter,
-      Nanoc::DataSource,
-      Nanoc::Deploying::Deployer,
-    ].freeze
-
-    PLUGIN_CLASSES = {
-      Nanoc::Filter => 'Filters',
-      Nanoc::DataSource => 'Data Sources',
-      Nanoc::Deploying::Deployer => 'Deployers',
-    }.freeze
-
     def name_for_plugin_class(klass)
-      PLUGIN_CLASSES[klass]
+      PLUGIN_CLASSES[klass.to_s]
     end
   end
 end

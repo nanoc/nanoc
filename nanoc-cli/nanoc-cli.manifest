@@ -13,7 +13,6 @@ lib/nanoc/cli/commands/prune.rb
 lib/nanoc/cli/commands/shell.rb
 lib/nanoc/cli/commands/show-data.rb
 lib/nanoc/cli/commands/show-plugins.rb
-lib/nanoc/cli/commands/show-rules.rb
 lib/nanoc/cli/commands/view.rb
 lib/nanoc/cli/compile_listeners/abstract.rb
 lib/nanoc/cli/compile_listeners/aggregate.rb

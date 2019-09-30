@@ -5,21 +5,6 @@ require_relative 'spec_helper_foot_core'
 Nanoc::CLI.setup
 
 RSpec.configure do |c|
-  c.include(Nanoc::Spec::Helper)
-
-  c.include(Nanoc::Spec::HelperHelper, helper: true)
-
-  c.before(:each, site: true) do
-    FileUtils.mkdir_p('content')
-    FileUtils.mkdir_p('layouts')
-    FileUtils.mkdir_p('lib')
-    FileUtils.mkdir_p('output')
-
-    File.write('nanoc.yaml', '{}')
-
-    File.write('Rules', 'passthrough "/**/*"')
-  end
-
   c.around do |example|
     Nanoc::CLI::ErrorHandler.disable
     example.run

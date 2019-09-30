@@ -2,6 +2,19 @@
 
 describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
   describe '#run' do
+    let(:site) do
+      Nanoc::Core::Site.new(
+        config: config,
+        code_snippets: code_snippets,
+        data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
+      )
+    end
+
+    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: {}).with_defaults }
+    let(:items) { Nanoc::Core::ItemCollection.new(config, []) }
+    let(:layouts) { Nanoc::Core::LayoutCollection.new(config, []) }
+    let(:code_snippets) { [] }
+
     it 'starts and stops listeners as needed' do
       test_listener_class = Class.new(::Nanoc::CLI::CompileListeners::Abstract) do
         def start
