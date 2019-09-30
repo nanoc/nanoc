@@ -17,6 +17,6 @@ EOS
   end
 
   it 'does not crash' do
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
   end
 end

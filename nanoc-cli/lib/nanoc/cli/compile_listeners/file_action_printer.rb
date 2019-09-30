@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Nanoc::OrigCLI::Commands::CompileListeners
+module Nanoc::CLI::CompileListeners
   class FileActionPrinter < Abstract
     def initialize(reps:)
       @reps = reps

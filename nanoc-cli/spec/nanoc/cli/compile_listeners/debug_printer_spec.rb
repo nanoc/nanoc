@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::Commands::CompileListeners::DebugPrinter, stdio: true do
+describe Nanoc::CLI::CompileListeners::DebugPrinter, stdio: true do
   let(:listener) { described_class.new(reps: reps) }
 
   let(:reps) do

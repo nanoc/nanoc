@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::Commands::Compile, site: true, stdio: true do
+describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
   describe '#run' do
     it 'starts and stops listeners as needed' do
-      test_listener_class = Class.new(::Nanoc::OrigCLI::Commands::CompileListeners::Abstract) do
+      test_listener_class = Class.new(::Nanoc::CLI::CompileListeners::Abstract) do
         def start
           @started = true
         end
@@ -21,7 +21,7 @@ describe Nanoc::OrigCLI::Commands::Compile, site: true, stdio: true do
         end
       end
 
-      expect(Nanoc::OrigCLI::Commands::CompileListeners::Aggregate)
+      expect(Nanoc::CLI::CompileListeners::Aggregate)
         .to receive(:default_listener_classes)
         .and_return([test_listener_class])
 
@@ -51,7 +51,7 @@ describe Nanoc::OrigCLI::Commands::Compile, site: true, stdio: true do
           pipe_stdout_read.close
           $stdout = pipe_stdout_write
 
-          # TODO: Use Nanoc::OrigCLI.run instead (when --watch is no longer experimental)
+          # TODO: Use Nanoc::CLI.run instead (when --watch is no longer experimental)
           options = { watch: true }
           arguments = []
           cmd = nil

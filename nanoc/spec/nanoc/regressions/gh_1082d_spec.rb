@@ -13,7 +13,7 @@ EOS
   end
 
   it 'does not require any items to be compiled' do
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/a.txt')).to eql('false')
   end
 end

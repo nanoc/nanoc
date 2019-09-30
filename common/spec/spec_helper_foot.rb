@@ -2,7 +2,7 @@
 
 require_relative 'spec_helper_foot_core'
 
-Nanoc::OrigCLI.setup
+Nanoc::CLI.setup
 
 RSpec.configure do |c|
   c.include(Nanoc::Spec::Helper)

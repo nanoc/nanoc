@@ -13,7 +13,7 @@ EOS
   end
 
   it 'handles #key? properly' do
-    Nanoc::OrigCLI.run(['compile'])
+    Nanoc::CLI.run(['compile'])
 
     expect(File.read('output/foo.txt')).to eql('true')
   end

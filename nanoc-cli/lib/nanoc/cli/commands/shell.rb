@@ -9,7 +9,7 @@ Open an IRB shell on a context that contains @items, @layouts, and @config.
 flag :p, :preprocess, 'run preprocessor'
 no_params
 
-module Nanoc::OrigCLI::Commands
+module Nanoc::CLI::Commands
   class Shell < ::Nanoc::CLI::CommandRunner
     def run
       require 'pry'
@@ -54,4 +54,4 @@ module Nanoc::OrigCLI::Commands
   end
 end
 
-runner Nanoc::OrigCLI::Commands::Shell
+runner Nanoc::CLI::Commands::Shell

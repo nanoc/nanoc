@@ -17,7 +17,7 @@ EOS
   end
 
   it 'generates dependency on all reps' do
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/index.html')).to eql('true')
   end
 end

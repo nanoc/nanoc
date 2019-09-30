@@ -92,7 +92,7 @@ module Nanoc::Live
 
       puts 'Compiling site…'
       compiler = Nanoc::Core::Compiler.new_for(site)
-      listener = Nanoc::OrigCLI::Commands::CompileListeners::Aggregate.new(
+      listener = Nanoc::CLI::CompileListeners::Aggregate.new(
         command_runner: command_runner,
         site: site,
         compiler: compiler,

@@ -18,11 +18,11 @@ EOS
   end
 
   example do
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/hello.html')).to include('giraffes?')
 
     File.write('layouts/foo.erb', 'donkeys? <%= yield %>')
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     expect(File.read('output/hello.html')).to include('donkeys?')
   end
 end

@@ -2,10 +2,10 @@
 
 require 'net/http'
 
-describe Nanoc::OrigCLI::Commands::View, site: true, stdio: true, fork: true do
+describe Nanoc::CLI::Commands::View, site: true, stdio: true, fork: true do
   describe '#run' do
     def run_nanoc_cmd(cmd)
-      pid = fork { Nanoc::OrigCLI.run(cmd) }
+      pid = fork { Nanoc::CLI.run(cmd) }
 
       # Wait for server to start up
       20.times do |i|

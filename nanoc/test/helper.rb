@@ -24,7 +24,7 @@ end
 require 'nanoc'
 require 'nanoc/orig_cli'
 
-Nanoc::OrigCLI.setup
+Nanoc::CLI.setup
 
 module Nanoc::TestHelpers
   LIB_DIR = File.expand_path(__dir__ + '/../lib')

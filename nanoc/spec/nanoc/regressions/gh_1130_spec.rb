@@ -16,6 +16,6 @@ describe 'GH-1130', site: true, stdio: true do
   end
 
   it 'does not raise fiber error' do
-    Nanoc::OrigCLI.run(%w[check wat])
+    Nanoc::CLI.run(%w[check wat])
   end
 end

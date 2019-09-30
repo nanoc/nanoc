@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::Commands::CompileListeners::TimingRecorder, stdio: true do
+describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   let(:listener) { described_class.new(reps: reps) }
 
   before { Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0)) }

@@ -13,7 +13,7 @@ required :o, :host,          'specify the host to listen on (default: 0.0.0.0)',
 required :p, :port,          'specify the port to listen on (default: 3000)', transform: Nanoc::CLI::Transform::Port, default: 3000
 flag     :L, :'live-reload', 'reload on changes'
 
-module Nanoc::OrigCLI::Commands
+module Nanoc::CLI::Commands
   class Live < ::Nanoc::CLI::CommandRunner
     def run
       require 'guard'
@@ -23,7 +23,7 @@ module Nanoc::OrigCLI::Commands
         # Crash the entire process if the viewer dies for some reason (e.g.
         # the port is already bound).
         Thread.current.abort_on_exception = true
-        Nanoc::OrigCLI::Commands::View.new(options, arguments, command).run
+        Nanoc::CLI::Commands::View.new(options, arguments, command).run
       end
 
       Guard.start(no_interactions: true)
@@ -31,4 +31,4 @@ module Nanoc::OrigCLI::Commands
   end
 end
 
-runner Nanoc::OrigCLI::Commands::Live
+runner Nanoc::CLI::Commands::Live

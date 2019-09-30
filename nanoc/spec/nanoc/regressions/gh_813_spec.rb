@@ -11,12 +11,12 @@ describe 'GH-813', site: true, stdio: true do
   end
 EOS
 
-    Nanoc::OrigCLI.run(['compile'])
+    Nanoc::CLI.run(['compile'])
   end
 
   specify 'Nanoc generates diff for proper path' do
     File.write('content/greeting.md', 'Hellosies!')
-    Nanoc::OrigCLI.run(['compile'])
+    Nanoc::CLI.run(['compile'])
 
     diff = File.read('output.diff')
     expect(diff).to start_with("--- output/donkey.html\n+++ output/donkey.html\n")

@@ -13,6 +13,6 @@ describe 'GH-1145', site: true, stdio: true do
   end
 
   it 'detects missing output file of non-default rep' do
-    expect { Nanoc::OrigCLI.run(%w[--verbose]) }.to output(/erb /).to_stdout
+    expect { Nanoc::CLI.run(%w[--verbose]) }.to output(/erb /).to_stdout
   end
 end

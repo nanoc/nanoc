@@ -11,6 +11,7 @@ require: rubocop-rspec
 Naming/FileName:
   Exclude:
     - 'nanoc/lib/nanoc/orig_cli/commands/*.rb'
+    - 'nanoc-cli/lib/nanoc/cli/commands/*.rb'
     - 'nanoc-*/lib/nanoc-*.rb'
     - 'guard-nanoc/lib/guard-nanoc.rb'
     - '*/*.gemspec'

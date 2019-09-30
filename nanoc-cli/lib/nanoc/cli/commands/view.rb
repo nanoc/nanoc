@@ -14,7 +14,7 @@ required :p, :port,    'specify the port to listen on (default: 3000)', transfor
 flag :L, :'live-reload', 'reload on changes'
 no_params
 
-module Nanoc::OrigCLI::Commands
+module Nanoc::CLI::Commands
   class View < ::Nanoc::CLI::CommandRunner
     DEFAULT_HANDLER_NAME = :thin
 
@@ -65,4 +65,4 @@ module Nanoc::OrigCLI::Commands
   end
 end
 
-runner Nanoc::OrigCLI::Commands::View
+runner Nanoc::CLI::Commands::View

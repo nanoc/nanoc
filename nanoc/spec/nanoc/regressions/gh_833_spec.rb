@@ -11,6 +11,6 @@ EOS
   end
 
   it 'runs show-data without crashing' do
-    Nanoc::OrigCLI.run(['show-data'])
+    Nanoc::CLI.run(['show-data'])
   end
 end

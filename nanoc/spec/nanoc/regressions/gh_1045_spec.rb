@@ -28,7 +28,7 @@ describe 'GH-1045', site: true, stdio: true do
   end
 
   it 'creates the sitemap' do
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
 
     expect(File.file?('output/sitemap.xml')).to be
     contents = File.read('output/sitemap.xml')
@@ -37,10 +37,10 @@ describe 'GH-1045', site: true, stdio: true do
   end
 
   it 'updates the sitemap' do
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
     File.write('content/foo.txt', 'foo 2')
     FileUtils.touch('content/foo.txt', mtime: Time.parse('2016-04-03 10:00:00Z'))
-    Nanoc::OrigCLI.run(%w[compile])
+    Nanoc::CLI.run(%w[compile])
 
     expect(File.file?('output/sitemap.xml')).to be
     contents = File.read('output/sitemap.xml')

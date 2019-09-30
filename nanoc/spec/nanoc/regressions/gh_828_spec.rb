@@ -17,7 +17,7 @@ EOS
   end
 
   it 'only writes good page' do
-    Nanoc::OrigCLI.run(['compile'])
+    Nanoc::CLI.run(['compile'])
 
     expect(File.file?('output/good.txt')).to be
     expect(File.file?('output/bad.txt')).not_to be

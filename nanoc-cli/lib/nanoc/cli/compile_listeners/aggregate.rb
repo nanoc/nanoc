@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Nanoc::OrigCLI::Commands::CompileListeners
+module Nanoc::CLI::CompileListeners
   class Aggregate < Abstract
     def initialize(command_runner:, site:, compiler:)
       @site = site
@@ -20,10 +20,10 @@ module Nanoc::OrigCLI::Commands::CompileListeners
 
     def self.default_listener_classes
       [
-        Nanoc::OrigCLI::Commands::CompileListeners::DiffGenerator,
-        Nanoc::OrigCLI::Commands::CompileListeners::DebugPrinter,
-        Nanoc::OrigCLI::Commands::CompileListeners::TimingRecorder,
-        Nanoc::OrigCLI::Commands::CompileListeners::FileActionPrinter,
+        Nanoc::CLI::CompileListeners::DiffGenerator,
+        Nanoc::CLI::CompileListeners::DebugPrinter,
+        Nanoc::CLI::CompileListeners::TimingRecorder,
+        Nanoc::CLI::CompileListeners::FileActionPrinter,
       ]
     end
 

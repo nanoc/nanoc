@@ -31,7 +31,7 @@ describe 'GH-1171', site: true, stdio: true do
     end
 
     it 'does not crash' do
-      Nanoc::OrigCLI.run(%w[compile])
+      Nanoc::CLI.run(%w[compile])
       expect(File.read('output/last.html')).to eql('hot')
     end
   end
@@ -50,7 +50,7 @@ describe 'GH-1171', site: true, stdio: true do
     end
 
     it 'detects manually specified encodings' do
-      Nanoc::OrigCLI.run(%w[compile])
+      Nanoc::CLI.run(%w[compile])
       expect(File.read('output/last.html')).to eql('1')
     end
   end

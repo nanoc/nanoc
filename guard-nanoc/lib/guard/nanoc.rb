@@ -39,9 +39,9 @@ module Guard
     protected
 
     def setup_listeners
-      ::Nanoc::OrigCLI.setup
+      ::Nanoc::CLI.setup
 
-      ::Nanoc::OrigCLI::Commands::CompileListeners::FileActionPrinter
+      ::Nanoc::CLI::CompileListeners::FileActionPrinter
         .new(reps: [])
         .start_safely
     end
@@ -81,6 +81,6 @@ module Guard
   end
 end
 
-::Nanoc::OrigCLI.after_setup do
-  ::Nanoc::OrigCLI.add_command(Guard::Nanoc.live_cmd)
+::Nanoc::CLI.after_setup do
+  ::Nanoc::CLI.add_command(Guard::Nanoc.live_cmd)
 end
