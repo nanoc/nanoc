@@ -17,6 +17,13 @@ describe Nanoc::CLI::CompileListeners::DebugPrinter, stdio: true do
       .to output(%r{Snapshot last created for /donkey.md \(rep name :latex\)}).to_stdout
   end
 
+  it 'prints with timestamp' do
+    listener.start_safely
+
+    expect { Nanoc::Core::NotificationCenter.post(:snapshot_created, rep, :last).sync }
+      .to output(%r{^\*\*\* \d{2}:\d{2}:\d{2}\.\d{3} .*Snapshot last created for /donkey.md \(rep name :latex\)}).to_stdout
+  end
+
   it 'records cached_content_used' do
     listener.start_safely
 

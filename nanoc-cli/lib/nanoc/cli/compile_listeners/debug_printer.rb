@@ -91,8 +91,8 @@ module Nanoc::CLI::CompileListeners
     def logger
       @_logger ||=
         Logger.new($stdout).tap do |l|
-          l.formatter = proc do |_severity, _datetime, progname, msg|
-            "*** #{COLOR_MAP[progname]}#{msg}\e[0m\n"
+          l.formatter = proc do |_severity, datetime, progname, msg|
+            "*** #{datetime.strftime('%H:%M:%S.%L')} #{COLOR_MAP[progname]}#{msg}\e[0m\n"
           end
         end
     end
