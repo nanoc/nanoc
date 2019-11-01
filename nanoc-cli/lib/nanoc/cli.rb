@@ -3,6 +3,7 @@
 require 'nanoc/core'
 require 'diff/lcs'
 require 'diff/lcs/hunk'
+require 'logger'
 
 begin
   require 'cri'
