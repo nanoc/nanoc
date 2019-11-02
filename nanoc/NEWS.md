@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.13 (2019-11-01)
+
+Fixes:
+
+* Fixed an issue which could cause Nanoc to freeze when generating the output diff on Windows
+
 ## 4.11.12 (2019-09-21)
 
 Fixes:
