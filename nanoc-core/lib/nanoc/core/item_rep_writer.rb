@@ -56,7 +56,7 @@ module Nanoc
         # Notify ready for diff generation
         if !is_created && is_modified && !content.binary?
           Nanoc::Core::NotificationCenter.post(
-            :rep_ready_for_diff, raw_path, File.read(raw_path), content.string
+            :rep_ready_for_diff, raw_path, File.read(raw_path, encoding: 'UTF-8'), content.string
           )
         end
 
