@@ -184,8 +184,8 @@ module Nanoc
         @graph = Nanoc::Core::DirectedGraph.new([nil] + refs)
 
         # Load vertices
-        previous_refs = new_data[:vertices]
-        previous_objects = Set.new(refs2objs(previous_refs))
+        previous_objects = refs2objs(new_data[:vertices])
+        previous_refs = objs2refs(previous_objects)
 
         # Load edges
         new_data[:edges].each do |edge|
