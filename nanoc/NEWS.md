@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.14 (2019-11-10)
+
+Fixes:
+
+* Fixed an issue where removing and re-adding an item would not cause dependent items to be recompiled (#1463, #1464)
+
 ## 4.11.13 (2019-11-02)
 
 Fixes:
