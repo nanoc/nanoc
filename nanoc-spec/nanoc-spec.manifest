@@ -1,0 +1,6 @@
+NEWS.md
+README.md
+
+lib/nanoc-spec.rb
+lib/nanoc/spec.rb
+lib/nanoc/spec/version.rb

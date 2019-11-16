@@ -19,6 +19,7 @@ packages = %w[
   nanoc-cli
   nanoc-external
   nanoc-live
+  nanoc-spec
   guard-nanoc
 ]
 

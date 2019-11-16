@@ -7,6 +7,7 @@ gemspec path: 'nanoc-core'
 gemspec path: 'nanoc-cli'
 gemspec path: 'nanoc-external'
 gemspec path: 'nanoc-live'
+gemspec path: 'nanoc-spec'
 gemspec path: 'guard-nanoc'
 
 group :devel do

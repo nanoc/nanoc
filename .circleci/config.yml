@@ -189,6 +189,23 @@ jobs:
       - store_test_results:
           path: ~/project/nanoc-live/test-results
 
+  test_nanoc_spec_cruby24:
+    <<: *defaults_cruby24
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-spec
+      - run:
+          name: Test nanoc-spec
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-spec
+      - store_test_results:
+          path: ~/project/nanoc-spec/test-results
+
   test_guard_nanoc_cruby24:
     <<: *defaults_cruby24
     steps:
@@ -290,6 +307,23 @@ jobs:
           working_directory: ~/project/nanoc-live
       - store_test_results:
           path: ~/project/nanoc-live/test-results
+
+  test_nanoc_spec_cruby25:
+    <<: *defaults_cruby25
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-spec
+      - run:
+          name: Test nanoc-spec
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-spec
+      - store_test_results:
+          path: ~/project/nanoc-spec/test-results
 
   test_guard_nanoc_cruby25:
     <<: *defaults_cruby25
@@ -393,6 +427,23 @@ jobs:
       - store_test_results:
           path: ~/project/nanoc-live/test-results
 
+  test_nanoc_spec_cruby26:
+    <<: *defaults_cruby26
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-spec
+      - run:
+          name: Test nanoc-spec
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-spec
+      - store_test_results:
+          path: ~/project/nanoc-spec/test-results
+
   test_guard_nanoc_cruby26:
     <<: *defaults_cruby26
     steps:
@@ -437,6 +488,9 @@ workflows:
       - test_nanoc_live_cruby24:
           requires:
             - setup_cruby24
+      - test_nanoc_spec_cruby24:
+          requires:
+            - setup_cruby24
       - test_guard_nanoc_cruby24:
           requires:
             - setup_cruby24
@@ -454,6 +508,9 @@ workflows:
       - test_nanoc_live_cruby25:
           requires:
             - setup_cruby25
+      - test_nanoc_spec_cruby25:
+          requires:
+            - setup_cruby25
       - test_guard_nanoc_cruby25:
           requires:
             - setup_cruby25
@@ -469,6 +526,9 @@ workflows:
           requires:
             - setup_cruby26
       - test_nanoc_live_cruby26:
+          requires:
+            - setup_cruby26
+      - test_nanoc_spec_cruby26:
           requires:
             - setup_cruby26
       - test_guard_nanoc_cruby26:

@@ -46,13 +46,9 @@ RSpec/ExampleLength:
 RSpec/ExpectActual:
   Exclude:
     - 'spec/routing/**/*'
-    - 'nanoc-cli/spec/manifest_spec.rb'
-    - 'nanoc-core/spec/manifest_spec.rb'
+    - '*/spec/manifest_spec.rb'
     - 'nanoc-core/spec/nanoc/core/context_spec.rb'
     - 'nanoc-core/spec/nanoc/core/directed_graph_spec.rb'
-    - 'nanoc-external/spec/manifest_spec.rb'
-    - 'nanoc-live/spec/manifest_spec.rb'
-    - 'nanoc/spec/manifest_spec.rb'
 
 # Offense count: 47
 RSpec/ExpectInHook:
