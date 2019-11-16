@@ -138,6 +138,23 @@ jobs:
       - store_test_results:
           path: ~/project/nanoc-core/test-results
 
+  test_nanoc_cli_cruby24:
+    <<: *defaults_cruby24
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-cli
+      - run:
+          name: Test nanoc-cli
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-cli
+      - store_test_results:
+          path: ~/project/nanoc-cli/test-results
+
   test_nanoc_external_cruby24:
     <<: *defaults_cruby24
     steps:
@@ -223,6 +240,23 @@ jobs:
       - store_test_results:
           path: ~/project/nanoc-core/test-results
 
+  test_nanoc_cli_cruby25:
+    <<: *defaults_cruby25
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-cli
+      - run:
+          name: Test nanoc-cli
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-cli
+      - store_test_results:
+          path: ~/project/nanoc-cli/test-results
+
   test_nanoc_external_cruby25:
     <<: *defaults_cruby25
     steps:
@@ -307,6 +341,23 @@ jobs:
           working_directory: ~/project/nanoc-core
       - store_test_results:
           path: ~/project/nanoc-core/test-results
+
+  test_nanoc_cli_cruby26:
+    <<: *defaults_cruby26
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-cli
+      - run:
+          name: Test nanoc-cli
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-cli
+      - store_test_results:
+          path: ~/project/nanoc-cli/test-results
 
   test_nanoc_external_cruby26:
     <<: *defaults_cruby26
