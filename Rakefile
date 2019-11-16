@@ -17,6 +17,7 @@ packages = %w[
   nanoc
   nanoc-core
   nanoc-cli
+  nanoc-deploying
   nanoc-external
   nanoc-live
   nanoc-spec

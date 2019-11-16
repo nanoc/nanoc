@@ -1,0 +1,12 @@
+NEWS.md
+README.md
+
+lib/nanoc-deploying.rb
+lib/nanoc/deploying.rb
+lib/nanoc/deploying/commands/deploy.rb
+lib/nanoc/deploying/deployer.rb
+lib/nanoc/deploying/deployers.rb
+lib/nanoc/deploying/deployers/fog.rb
+lib/nanoc/deploying/deployers/git.rb
+lib/nanoc/deploying/deployers/rsync.rb
+lib/nanoc/deploying/version.rb

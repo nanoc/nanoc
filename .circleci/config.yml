@@ -155,6 +155,23 @@ jobs:
       - store_test_results:
           path: ~/project/nanoc-cli/test-results
 
+  test_nanoc_deploying_cruby24:
+    <<: *defaults_cruby24
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-deploying
+      - run:
+          name: Test nanoc-deploying
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-deploying
+      - store_test_results:
+          path: ~/project/nanoc-deploying/test-results
+
   test_nanoc_external_cruby24:
     <<: *defaults_cruby24
     steps:
@@ -273,6 +290,23 @@ jobs:
           working_directory: ~/project/nanoc-cli
       - store_test_results:
           path: ~/project/nanoc-cli/test-results
+
+  test_nanoc_deploying_cruby25:
+    <<: *defaults_cruby25
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-deploying
+      - run:
+          name: Test nanoc-deploying
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-deploying
+      - store_test_results:
+          path: ~/project/nanoc-deploying/test-results
 
   test_nanoc_external_cruby25:
     <<: *defaults_cruby25
@@ -393,6 +427,23 @@ jobs:
       - store_test_results:
           path: ~/project/nanoc-cli/test-results
 
+  test_nanoc_deploying_cruby26:
+    <<: *defaults_cruby26
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-deploying
+      - run:
+          name: Test nanoc-deploying
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-deploying
+      - store_test_results:
+          path: ~/project/nanoc-deploying/test-results
+
   test_nanoc_external_cruby26:
     <<: *defaults_cruby26
     steps:
@@ -482,6 +533,9 @@ workflows:
       - test_nanoc_core_cruby24:
           requires:
             - setup_cruby24
+      - test_nanoc_deploying_cruby24:
+          requires:
+            - setup_cruby24
       - test_nanoc_external_cruby24:
           requires:
             - setup_cruby24
@@ -502,6 +556,9 @@ workflows:
       - test_nanoc_core_cruby25:
           requires:
             - setup_cruby25
+      - test_nanoc_deploying_cruby25:
+          requires:
+            - setup_cruby25
       - test_nanoc_external_cruby25:
           requires:
             - setup_cruby25
@@ -520,6 +577,9 @@ workflows:
           requires:
             - setup_cruby26
       - test_nanoc_core_cruby26:
+          requires:
+            - setup_cruby26
+      - test_nanoc_deploying_cruby26:
           requires:
             - setup_cruby26
       - test_nanoc_external_cruby26:
