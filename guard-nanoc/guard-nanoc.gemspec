@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'guard', '~> 2.8'
   s.add_dependency 'guard-compat', '~> 1.0'
-  s.add_dependency 'nanoc', '>= 4.3.8', '< 5.0'
+  s.add_dependency 'nanoc', '>= 4.11.13', '< 5.0'
 
   s.files         = Dir['[A-Z]*'] + Dir['lib/**/*'] + ['guard-nanoc.gemspec']
   s.require_paths = ['lib']
