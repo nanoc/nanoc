@@ -1,5 +1,11 @@
 # Release notes for nanoc-live
 
+## 1.0.0b5 (2019-11-16)
+
+Fixes:
+
+* Restored compatibility with Nanoc 4.11.13.
+
 ## 1.0.0b4 (2019-04-30)
 
 Fixes:
