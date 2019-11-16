@@ -32,6 +32,8 @@ version_constant =
     'Nanoc::Live::VERSION'
   when 'nanoc-external'
     'Nanoc::External::VERSION'
+  when 'nanoc-spec'
+    'Nanoc::Spec::VERSION'
   when 'guard-nanoc'
     'Guard::GUARD_NANOC_VERSION'
   else
@@ -51,6 +53,8 @@ gem_dir =
     'nanoc-live'
   when 'nanoc-external'
     'nanoc-external'
+  when 'nanoc-spec'
+    'nanoc-spec'
   when 'guard-nanoc'
     'guard-nanoc'
   else
@@ -70,6 +74,8 @@ gem_path =
     'nanoc/live'
   when 'nanoc-external'
     'nanoc/external'
+  when 'nanoc-spec'
+    'nanoc/spec'
   when 'guard-nanoc'
     'guard/nanoc'
   else
