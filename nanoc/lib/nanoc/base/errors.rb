@@ -27,24 +27,6 @@ module Nanoc
         end
       end
 
-      # Error that is raised when no rules file can be found in the current
-      # working directory.
-      class NoRulesFileFound < Generic
-        def initialize
-          super('This site does not have a rules file, which is required for Nanoc sites.')
-        end
-      end
-
-      # Error that is raised when no compilation rule that can be applied to the
-      # current item can be found.
-      class NoMatchingCompilationRuleFound < Generic
-        # @param [Nanoc::Core::Item] item The item for which no compilation rule
-        #   could be found
-        def initialize(item)
-          super("No compilation rules were found for the “#{item.identifier}” item.")
-        end
-      end
-
       class AmbiguousMetadataAssociation < Generic
         def initialize(content_filenames, meta_filename)
           super("There are multiple content files (#{content_filenames.sort.join(', ')}) that could match the file containing metadata (#{meta_filename}).")

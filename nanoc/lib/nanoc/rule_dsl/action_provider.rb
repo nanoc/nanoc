@@ -29,7 +29,7 @@ module Nanoc::RuleDSL
 
     def rep_names_for(item)
       matching_rules = @rules_collection.item_compilation_rules_for(item)
-      raise Nanoc::Int::Errors::NoMatchingCompilationRuleFound.new(item) if matching_rules.empty?
+      raise Nanoc::RuleDSL::Errors::NoMatchingCompilationRuleFound.new(item) if matching_rules.empty?
 
       matching_rules.map(&:rep_name).uniq
     end

@@ -10,7 +10,7 @@ module Nanoc::RuleDSL
       # Find rules file
       rules_filenames = ['Rules', 'rules', 'Rules.rb', 'rules.rb']
       rules_filename = rules_filenames.find { |f| File.file?(f) }
-      raise Nanoc::Int::Errors::NoRulesFileFound.new if rules_filename.nil?
+      raise Nanoc::RuleDSL::Errors::NoRulesFileFound.new if rules_filename.nil?
 
       parse(rules_filename)
     end

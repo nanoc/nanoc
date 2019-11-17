@@ -6,6 +6,7 @@ module Nanoc
   end
 end
 
+require_relative 'rule_dsl/errors'
 require_relative 'rule_dsl/compiler_dsl'
 require_relative 'rule_dsl/action_provider'
 require_relative 'rule_dsl/action_recorder'

@@ -88,6 +88,7 @@ lib/nanoc/rule_dsl/action_sequence_calculator.rb
 lib/nanoc/rule_dsl/compiler_dsl.rb
 lib/nanoc/rule_dsl/compilation_rule_context.rb
 lib/nanoc/rule_dsl/compilation_rule.rb
+lib/nanoc/rule_dsl/errors.rb
 lib/nanoc/rule_dsl/routing_rule_context.rb
 lib/nanoc/rule_dsl/routing_rule.rb
 lib/nanoc/rule_dsl/rule.rb
