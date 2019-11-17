@@ -16,6 +16,18 @@ no_params
 module Nanoc::Live::Commands
   class Live < ::Nanoc::CLI::CommandRunner
     def run
+      if defined?(Guard::Nanoc)
+        $stderr.puts '-' * 40
+        $stderr.puts 'NOTE:'
+        $stderr.puts 'You are using the `nanoc live` command provided by `nanoc-live`, but the `guard-nanoc` gem is also installed, which also provides a `nanoc live` command.'
+        if defined?(Bundler)
+          $stderr.puts 'Recommendation: Remove `guard-nanoc` from your Gemfile.'
+        else
+          $stderr.puts 'Recommendation: Uninstall `guard-nanoc`.'
+        end
+        $stderr.puts '-' * 40
+      end
+
       self.class.enter_site_dir
 
       Thread.new do
