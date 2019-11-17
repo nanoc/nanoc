@@ -21,67 +21,51 @@ end
 gem_name = ARGV[0]
 
 version_constant =
-  case gem_name
-  when 'nanoc'
-    'Nanoc::VERSION'
-  when 'nanoc-core'
-    'Nanoc::Core::VERSION'
-  when 'nanoc-cli'
-    'Nanoc::CLI::VERSION'
-  when 'nanoc-live'
-    'Nanoc::Live::VERSION'
-  when 'nanoc-external'
-    'Nanoc::External::VERSION'
-  when 'nanoc-spec'
-    'Nanoc::Spec::VERSION'
-  when 'guard-nanoc'
-    'Guard::GUARD_NANOC_VERSION'
-  else
+  {
+    'nanoc' => 'Nanoc::VERSION',
+    'nanoc-core' => 'Nanoc::Core::VERSION',
+    'nanoc-cli' => 'Nanoc::CLI::VERSION',
+    'nanoc-external' => 'Nanoc::External::VERSION',
+    'nanoc-live' => 'Nanoc::Live::VERSION',
+    'nanoc-spec' => 'Nanoc::Spec::VERSION',
+    'guard-nanoc' => 'Guard::GUARD_NANOC_VERSION',
+  }.fetch(gem_name) do
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
     exit 1
   end
 
 gem_dir =
-  case gem_name
-  when 'nanoc'
-    'nanoc'
-  when 'nanoc-core'
-    'nanoc-core'
-  when 'nanoc-cli'
-    'nanoc-cli'
-  when 'nanoc-live'
-    'nanoc-live'
-  when 'nanoc-external'
-    'nanoc-external'
-  when 'nanoc-spec'
-    'nanoc-spec'
-  when 'guard-nanoc'
-    'guard-nanoc'
-  else
+  {
+    'nanoc' => 'nanoc',
+    'nanoc-core' => 'nanoc-core',
+    'nanoc-cli' => 'nanoc-cli',
+    'nanoc-external' => 'nanoc-external',
+    'nanoc-live' => 'nanoc-live',
+    'nanoc-spec' => 'nanoc-spec',
+    'guard-nanoc' => 'guard-nanoc',
+  }.fetch(gem_name) do
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
     exit 1
   end
 
 gem_path =
-  case gem_name
-  when 'nanoc'
-    'nanoc'
-  when 'nanoc-core'
-    'nanoc/core'
-  when 'nanoc-cli'
-    'nanoc/cli'
-  when 'nanoc-live'
-    'nanoc/live'
-  when 'nanoc-external'
-    'nanoc/external'
-  when 'nanoc-spec'
-    'nanoc/spec'
-  when 'guard-nanoc'
-    'guard/nanoc'
-  else
+  {
+    'nanoc' => 'nanoc',
+    'nanoc-core' => 'nanoc/core',
+    'nanoc-cli' => 'nanoc/cli',
+    'nanoc-external' => 'nanoc/external',
+    'nanoc-live' => 'nanoc/live',
+    'nanoc-spec' => 'nanoc/spec',
+    'guard-nanoc' => 'guard/nanoc',
+  }.fetch(gem_name) do
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
     exit 1
   end
+
+puts "version_constant = #{version_constant}"
+puts "gem_dir = #{gem_dir}"
+puts "gem_path = #{gem_path}"
+puts
 
 puts "=== Entering gem dir (#{gem_dir})…"
 Dir.chdir(gem_dir)
