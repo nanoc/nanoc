@@ -34,6 +34,8 @@ require 'uri'
 
 # Load extracted Nanoc dependencies
 require 'nanoc-core'
+require 'nanoc-cli'
+require 'nanoc-deploying'
 
 # Re-export from Nanoc::Core
 Nanoc::Identifier = Nanoc::Core::Identifier
@@ -45,7 +47,6 @@ Nanoc::Error = Nanoc::Core::Error
 require 'nanoc/version'
 require 'nanoc/base'
 require 'nanoc/checking'
-require 'nanoc/deploying'
 require 'nanoc/extra'
 require 'nanoc/data_sources'
 require 'nanoc/filters'
