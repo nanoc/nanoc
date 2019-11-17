@@ -110,7 +110,7 @@ module Nanoc::Live
       Nanoc::ChangesStream.new do |cl|
         opts = {
           latency: 0.1,
-          wait_for_delay: 0.1,
+          wait_for_delay: 0.0,
         }
 
         listener = Listen.to('lib', opts) { |*| cl.lib }
@@ -124,7 +124,7 @@ module Nanoc::Live
         opts = {
           only: /(\/|\A)(nanoc\.yaml|config\.yaml|rules|Rules|rules\.rb|Rules\.rb)\z/,
           latency: 0.1,
-          wait_for_delay: 0.1,
+          wait_for_delay: 0.0,
         }
 
         listener = Listen.to('.', opts) { |*| cl.unknown }
