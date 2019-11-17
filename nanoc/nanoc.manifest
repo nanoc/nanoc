@@ -32,7 +32,6 @@ lib/nanoc/data_sources/filesystem/tools.rb
 lib/nanoc/data_sources/filesystem/parser.rb
 lib/nanoc/extra.rb
 lib/nanoc/extra/core_ext.rb
-lib/nanoc/extra/core_ext/pathname.rb
 lib/nanoc/extra/core_ext/time.rb
 lib/nanoc/extra/jruby_nokogiri_warner.rb
 lib/nanoc/extra/link_collector.rb
