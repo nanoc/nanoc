@@ -1,3 +1,3 @@
 # nanoc-cli
 
-TODO
+This package contains the command-line interface for [Nanoc](https://nanoc.ws/).

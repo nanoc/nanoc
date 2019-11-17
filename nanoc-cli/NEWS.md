@@ -1,3 +1,3 @@
 # nanoc-cli news
 
-TODO
+See the release notes for Nanoc for details.
