@@ -45,16 +45,6 @@ module Nanoc
         end
       end
 
-      # Error that is raised when no routing rule that can be applied to the
-      # current item can be found.
-      class NoMatchingRoutingRuleFound < Generic
-        # @param [Nanoc::Core::ItemRep] rep The item repiresentation for which no
-        #   routing rule could be found
-        def initialize(rep)
-          super("No routing rules were found for the “#{rep.item.identifier}” item (rep “#{rep.name}”).")
-        end
-      end
-
       class AmbiguousMetadataAssociation < Generic
         def initialize(content_filenames, meta_filename)
           super("There are multiple content files (#{content_filenames.sort.join(', ')}) that could match the file containing metadata (#{meta_filename}).")
