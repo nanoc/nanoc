@@ -6,20 +6,10 @@ module Nanoc
     #
     # @api private
     module Errors
-      Generic = ::Nanoc::Core::Error
-
-      NoSuchSnapshot = ::Nanoc::Core::Errors::NoSuchSnapshot
-      CannotGetCompiledContentOfBinaryItem = ::Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem
-      CannotGetParentOrChildrenOfNonLegacyItem = ::Nanoc::Core::Errors::CannotGetParentOrChildrenOfNonLegacyItem
-      CannotLayoutBinaryItem = ::Nanoc::Core::Errors::CannotLayoutBinaryItem
-      UnknownLayout = ::Nanoc::Core::Errors::UnknownLayout
-      CannotUseBinaryFilter = ::Nanoc::Core::Errors::CannotUseBinaryFilter
-      CannotUseTextualFilter = ::Nanoc::Core::Errors::CannotUseTextualFilter
-
       # Error that is raised during site compilation when a layout is compiled
       # for which the filter cannot be determined. This is similar to the
       # {UnknownFilter} error, but specific for filters for layouts.
-      class CannotDetermineFilter < Generic
+      class CannotDetermineFilter < ::Nanoc::Core::Error
         # @param [String] layout_identifier The identifier of the layout for
         #   which the filter could not be determined
         def initialize(layout_identifier)
@@ -27,7 +17,7 @@ module Nanoc
         end
       end
 
-      class AmbiguousMetadataAssociation < Generic
+      class AmbiguousMetadataAssociation < ::Nanoc::Core::Error
         def initialize(content_filenames, meta_filename)
           super("There are multiple content files (#{content_filenames.sort.join(', ')}) that could match the file containing metadata (#{meta_filename}).")
         end

@@ -8,7 +8,7 @@ module Nanoc::Helpers
     # @param [String] identifier
     # @param [Hash] other_assigns
     #
-    # @raise [Nanoc::Int::Errors::UnknownLayout]
+    # @raise [Nanoc::Core::Errors::UnknownLayout]
     # @raise [Nanoc::Int::Errors::CannotDetermineFilter]
     # @raise [Nanoc::Filter::UnknownFilter]
     #
@@ -17,7 +17,7 @@ module Nanoc::Helpers
       # Find layout
       layout_view = @layouts[identifier]
       layout_view ||= @layouts[identifier.__nanoc_cleaned_identifier]
-      raise Nanoc::Int::Errors::UnknownLayout.new(identifier) if layout_view.nil?
+      raise Nanoc::Core::Errors::UnknownLayout.new(identifier) if layout_view.nil?
 
       layout = layout_view._unwrap
 

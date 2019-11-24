@@ -96,7 +96,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
         let(:layout_content) { 'blah' }
 
         it 'raises' do
-          expect { subject }.to raise_error(Nanoc::Int::Errors::UnknownLayout)
+          expect { subject }.to raise_error(Nanoc::Core::Errors::UnknownLayout)
         end
       end
 
