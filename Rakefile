@@ -7,8 +7,11 @@ RuboCop::RakeTask.new(:rubocop)
 def sub_sh(dir, cmd)
   Bundler.with_clean_env do
     Dir.chdir(dir) do
-      puts "(in #{Dir.getwd})"
+      puts "======= entering ./#{dir}/"
+      puts
       sh(cmd)
+      puts
+      puts "======= exiting ./#{dir}/"
     end
   end
 end
