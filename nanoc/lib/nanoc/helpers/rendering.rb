@@ -9,7 +9,7 @@ module Nanoc::Helpers
     # @param [Hash] other_assigns
     #
     # @raise [Nanoc::Core::Errors::UnknownLayout]
-    # @raise [Nanoc::Int::Errors::CannotDetermineFilter]
+    # @raise [Nanoc::Core::Errors::CannotDetermineFilter]
     # @raise [Nanoc::Filter::UnknownFilter]
     #
     # @return [String, nil]
@@ -43,7 +43,7 @@ module Nanoc::Helpers
       filter_name_and_args = @config._context.compilation_context.filter_name_and_args_for_layout(layout)
       filter_name = filter_name_and_args.name
       filter_args = filter_name_and_args.args
-      raise Nanoc::Int::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
+      raise Nanoc::Core::Errors::CannotDetermineFilter.new(layout.identifier) if filter_name.nil?
 
       # Get filter class
       filter_class = Nanoc::Filter.named!(filter_name)

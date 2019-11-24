@@ -120,7 +120,7 @@ describe Nanoc::Helpers::Rendering, helper: true do
         let(:layout_content) { 'blah' }
 
         it 'raises' do
-          expect { subject }.to raise_error(Nanoc::Int::Errors::CannotDetermineFilter)
+          expect { subject }.to raise_error(Nanoc::Core::Errors::CannotDetermineFilter)
         end
       end
 
