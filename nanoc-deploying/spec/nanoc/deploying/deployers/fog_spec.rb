@@ -16,10 +16,12 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
   let(:config) do
     {
       bucket: 'bucky',
-      provider: 'local',
+      provider: provider,
       local_root: 'remote',
     }
   end
+
+  let(:provider) { 'local' }
 
   before do
     # create output
@@ -190,6 +192,95 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
       let(:file_stray) { double(:file_stray) }
 
       include_examples 'effective deploy'
+    end
+  end
+
+  describe '#read_etags' do
+    subject { deployer.send(:read_etags, files) }
+
+    context 'when using local provider' do
+      let(:provider) { 'local' }
+
+      let(:files) do
+        [
+          double('file_a'),
+          double('file_b'),
+        ]
+      end
+
+      it { is_expected.to eq({}) }
+    end
+
+    context 'when using aws provider' do
+      let(:provider) { 'aws' }
+
+      let(:files) do
+        [
+          double('file_a', key: 'key_a', etag: 'etag_a'),
+          double('file_b', key: 'key_b', etag: 'etag_b'),
+        ]
+      end
+
+      let(:expected) do
+        {
+          'key_a' => 'etag_a',
+          'key_b' => 'etag_b',
+        }
+      end
+
+      it { is_expected.to eq(expected) }
+    end
+  end
+
+  describe '#calc_local_etag' do
+    subject { deployer.send(:calc_local_etag, file_path) }
+
+    let(:file_path) { 'blah.tmp' }
+
+    before do
+      File.write(file_path, 'hallo')
+    end
+
+    context 'when using local provider' do
+      let(:provider) { 'local' }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'when using aws provider' do
+      let(:provider) { 'aws' }
+
+      it { is_expected.to eq('598d4c200461b81522a3328565c25f7c') }
+    end
+  end
+
+  describe '#needs_upload?' do
+    subject { deployer.send(:needs_upload?, key, file_path, etags) }
+
+    let(:file_path) { 'blah.tmp' }
+    let(:key) { '/moo/remote/blah.tmp.123' }
+    let(:provider) { 'aws' }
+
+    before do
+      File.write(file_path, 'hallo')
+    end
+
+    context 'missing remote etag' do
+      let(:etags) { {} }
+
+      it { is_expected.to be true }
+    end
+
+    context 'different etags' do
+      let(:etags) { { key => 'some-other-etag' } }
+
+      it { is_expected.to be true }
+    end
+
+    context 'identical etags' do
+      let(:etags) { { key => '598d4c200461b81522a3328565c25f7c' } }
+
+      it { is_expected.to be false }
     end
   end
 end
