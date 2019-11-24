@@ -10,7 +10,7 @@ flag :a, :all,    'run all checks'
 flag :L, :list,   'list all checks'
 flag :d, :deploy, '(deprecated)'
 
-module Nanoc::OrigCLI::Commands
+module Nanoc::Checking::Commands
   class Check < ::Nanoc::CLI::CommandRunner
     def run
       site = load_site
@@ -40,4 +40,4 @@ module Nanoc::OrigCLI::Commands
   end
 end
 
-runner Nanoc::OrigCLI::Commands::Check
+runner Nanoc::Checking::Commands::Check

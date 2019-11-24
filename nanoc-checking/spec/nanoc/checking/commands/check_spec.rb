@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::Commands::Check, site: true, stdio: true do
+describe Nanoc::Checking::Commands::Check, site: true, stdio: true do
   describe '#run' do
     before do
       File.write('Checks', "deploy_check :stale\n")

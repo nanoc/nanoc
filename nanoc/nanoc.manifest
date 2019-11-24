@@ -5,22 +5,7 @@ README.md
 bin/nanoc
 
 lib/nanoc.rb
-lib/nanoc/checking.rb
-lib/nanoc/checking/check.rb
-lib/nanoc/checking/checks.rb
-lib/nanoc/checking/checks/css.rb
-lib/nanoc/checking/checks/external_links.rb
-lib/nanoc/checking/checks/html.rb
-lib/nanoc/checking/checks/internal_links.rb
-lib/nanoc/checking/checks/mixed_content.rb
-lib/nanoc/checking/checks/stale.rb
-lib/nanoc/checking/checks/w3c_validator.rb
-lib/nanoc/checking/dsl.rb
-lib/nanoc/checking/issue.rb
-lib/nanoc/checking/loader.rb
-lib/nanoc/checking/runner.rb
 lib/nanoc/orig_cli.rb
-lib/nanoc/orig_cli/commands/check.rb
 lib/nanoc/orig_cli/commands/show-rules.rb
 lib/nanoc/data_sources.rb
 lib/nanoc/data_sources/filesystem.rb

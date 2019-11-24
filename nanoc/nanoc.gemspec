@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('addressable', '~> 2.5')
   s.add_runtime_dependency('colored', '~> 1.2')
+  s.add_runtime_dependency('nanoc-checking', '~> 1.0')
   s.add_runtime_dependency('nanoc-cli', "= #{Nanoc::VERSION}")
   s.add_runtime_dependency('nanoc-core', "= #{Nanoc::VERSION}")
   s.add_runtime_dependency('nanoc-deploying', '~> 1.0')

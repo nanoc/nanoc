@@ -5,6 +5,30 @@ describe Nanoc::Checking::Runner, site: true do
 
   let(:site) { Nanoc::Core::SiteLoader.new.new_from_cwd }
 
+  describe '#run_specific' do
+    it 'can run a predefined check' do
+      File.write('output/blah', 'I am stale! Haha!')
+      expect { runner.run_specific(%w[stale]) }
+        .to output(%r{output/blah:.*stale - file without matching item}m).to_stdout
+    end
+
+    it 'can run custom checks' do
+      File.write('Checks', 'check :my_foo_check do ; puts "I AM FOO!" ; end')
+      expect { runner.run_specific(%w[my_foo_check]) }.to output(/I AM FOO!/).to_stdout
+    end
+  end
+
+  describe '#list_checks' do
+    before do
+      File.write('Checks', 'check :my_foo_check do ; end')
+    end
+
+    it 'lists all checks' do
+      expect { runner.list_checks }
+        .to output(%r{Available checks:$.*^  css$.*^  my_foo_check$}m).to_stdout
+    end
+  end
+
   describe '#any_enabled_checks?' do
     subject { runner.any_enabled_checks? }
 
