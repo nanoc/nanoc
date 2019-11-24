@@ -48,6 +48,12 @@ module Nanoc::DataSources
   #
   # @api private
   class Filesystem < Nanoc::DataSource
+    class AmbiguousMetadataAssociationError < ::Nanoc::Core::Error
+      def initialize(content_filenames, meta_filename)
+        super("There are multiple content files (#{content_filenames.sort.join(', ')}) that could match the file containing metadata (#{meta_filename}).")
+      end
+    end
+
     identifiers :filesystem, :filesystem_unified
 
     # See {Nanoc::DataSource#up}.
@@ -203,7 +209,7 @@ module Nanoc::DataSources
 
         have_possible_ambiguity = meta_filename && content_filenames.size > 1
         if have_possible_ambiguity && content_filenames.count { |fn| !parser.frontmatter?(fn) } != 1
-          raise Nanoc::Int::Errors::AmbiguousMetadataAssociation.new(content_filenames, meta_filename)
+          raise Nanoc::DataSources::Filesystem::AmbiguousMetadataAssociationError.new(content_filenames, meta_filename)
         end
 
         content_filenames.each do |content_filename|
