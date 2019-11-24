@@ -2,7 +2,7 @@
 
 require 'helper'
 
-class Nanoc::Int::SiteTest < Nanoc::TestCase
+class Nanoc::Core::SiteTest < Nanoc::TestCase
   def test_initialize_with_dir_without_config_yaml
     assert_raises(Nanoc::Core::ConfigLoader::NoConfigFileFoundError) do
       Nanoc::Core::SiteLoader.new.new_from_cwd

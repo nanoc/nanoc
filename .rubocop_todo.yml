@@ -79,9 +79,6 @@ RSpec/FilePath:
   Exclude:
     - 'nanoc-external/spec/filter_spec.rb'
     - 'nanoc-live/spec/nanoc/live_spec.rb'
-    - 'nanoc/spec/nanoc/base/changes_stream_spec.rb'
-    - 'nanoc/spec/nanoc/base/errors/dependency_cycle_spec.rb'
-    - 'nanoc/spec/nanoc/base/services/checksummer_spec.rb'
     - 'nanoc/spec/nanoc/deploying/fog_spec.rb'
     - 'nanoc/spec/nanoc/deploying/git_spec.rb'
     - 'nanoc/spec/nanoc/filters/asciidoc_spec.rb'

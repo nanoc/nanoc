@@ -5,8 +5,6 @@ README.md
 bin/nanoc
 
 lib/nanoc.rb
-lib/nanoc/base.rb
-lib/nanoc/base/changes_stream.rb
 lib/nanoc/checking.rb
 lib/nanoc/checking/check.rb
 lib/nanoc/checking/checks.rb

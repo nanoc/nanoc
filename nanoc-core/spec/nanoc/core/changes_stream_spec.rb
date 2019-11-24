@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::ChangesStream do
+describe Nanoc::Core::ChangesStream do
   let(:simple_stream) do
     described_class.new do |cl|
       cl.unknown

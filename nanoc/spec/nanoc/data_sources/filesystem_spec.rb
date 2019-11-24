@@ -255,7 +255,7 @@ describe Nanoc::DataSources::Filesystem, site: true do
     end
 
     it 'returns a stream' do
-      expect(subject).to be_a(Nanoc::ChangesStream)
+      expect(subject).to be_a(Nanoc::Core::ChangesStream)
     end
 
     it 'contains one element after changing' do
@@ -284,7 +284,7 @@ describe Nanoc::DataSources::Filesystem, site: true do
     end
 
     it 'returns a stream' do
-      expect(subject).to be_a(Nanoc::ChangesStream)
+      expect(subject).to be_a(Nanoc::Core::ChangesStream)
     end
 
     it 'contains one element after changing' do

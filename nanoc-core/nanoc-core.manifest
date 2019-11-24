@@ -16,6 +16,7 @@ lib/nanoc/core/basic_item_rep_view.rb
 lib/nanoc/core/basic_item_view.rb
 lib/nanoc/core/binary_compiled_content_cache.rb
 lib/nanoc/core/binary_content.rb
+lib/nanoc/core/changes_stream.rb
 lib/nanoc/core/checksum_collection.rb
 lib/nanoc/core/checksum_store.rb
 lib/nanoc/core/checksummer.rb
