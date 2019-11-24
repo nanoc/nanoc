@@ -60,6 +60,7 @@ describe 'meta', chdir: false do
     ]
 
     ignored_spec_file_base_names = %w[
+      errors/dependency_cycle
       outdatedness_rules
     ]
 
