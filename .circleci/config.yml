@@ -155,6 +155,23 @@ jobs:
       - store_test_results:
           path: ~/project/nanoc-cli/test-results
 
+  test_nanoc_checking_cruby24:
+    <<: *defaults_cruby24
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-checking
+      - run:
+          name: Test nanoc-checking
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-checking
+      - store_test_results:
+          path: ~/project/nanoc-checking/test-results
+
   test_nanoc_deploying_cruby24:
     <<: *defaults_cruby24
     steps:
@@ -291,6 +308,23 @@ jobs:
       - store_test_results:
           path: ~/project/nanoc-cli/test-results
 
+  test_nanoc_checking_cruby25:
+    <<: *defaults_cruby25
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-checking
+      - run:
+          name: Test nanoc-checking
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-checking
+      - store_test_results:
+          path: ~/project/nanoc-checking/test-results
+
   test_nanoc_deploying_cruby25:
     <<: *defaults_cruby25
     steps:
@@ -426,6 +460,23 @@ jobs:
           working_directory: ~/project/nanoc-cli
       - store_test_results:
           path: ~/project/nanoc-cli/test-results
+
+  test_nanoc_checking_cruby26:
+    <<: *defaults_cruby26
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install dependencies
+          command: bundle
+          working_directory: ~/project/nanoc-checking
+      - run:
+          name: Test nanoc-checking
+          command: bundle exec rake test
+          working_directory: ~/project/nanoc-checking
+      - store_test_results:
+          path: ~/project/nanoc-checking/test-results
 
   test_nanoc_deploying_cruby26:
     <<: *defaults_cruby26

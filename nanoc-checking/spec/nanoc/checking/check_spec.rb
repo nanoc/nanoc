@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-describe Nanoc::Check do
-  it 'is an alias' do
-    expect(described_class).to equal(Nanoc::Checking::Check)
-  end
-end
-
 describe Nanoc::Checking::Check do
   let(:config) do
     Nanoc::Core::Configuration.new(
@@ -63,6 +57,31 @@ describe Nanoc::Checking::Check do
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
+
+  describe '.create' do
+    let(:check_class) { described_class.named(:internal_links) }
+
+    before do
+      File.write('Rules', 'passthrough "/**/*"')
+    end
+
+    context 'output dir exists' do
+      before do
+        FileUtils.mkdir_p('output')
+      end
+
+      it 'does nor raise' do
+        expect { check_class.create(site) }.not_to raise_error
+      end
+    end
+
+    context 'output dir does not exist' do
+      it 'raises' do
+        expect { check_class.create(site) }
+          .to raise_error(Nanoc::Checking::OutputDirNotFoundError)
+      end
+    end
+  end
 
   describe '.define' do
     before do
