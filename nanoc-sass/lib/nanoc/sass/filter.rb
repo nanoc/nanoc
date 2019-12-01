@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module Nanoc::Filters
+module Nanoc::Sass
   module SassCommon
-    REQUIRES = %w[sass nanoc/filters/sass/importer nanoc/filters/sass/functions].freeze
+    REQUIRES = %w[sass nanoc/sass/importer nanoc/sass/functions].freeze
 
     def css(filter, rep, content, params)
       css, = render(filter, rep, content, params)
@@ -17,7 +17,7 @@ module Nanoc::Filters
     private
 
     def render(filter, rep, content, params = {})
-      importer = Nanoc::Filters::SassCommon::Importer.new(filter)
+      importer = Nanoc::Sass::Importer.new(filter)
 
       options = params.merge(
         load_paths: [importer, *params[:load_paths]&.reject { |p| p.is_a?(String) && %r{^content/} =~ p }],
@@ -47,7 +47,7 @@ module Nanoc::Filters
     end
   end
 
-  class SassFilter < Nanoc::Filter
+  class SassFilter < Nanoc::Core::Filter
     identifier :sass
 
     include SassCommon
@@ -58,7 +58,7 @@ module Nanoc::Filters
     end
   end
 
-  class SassSourcemapFilter < Nanoc::Filter
+  class SassSourcemapFilter < Nanoc::Core::Filter
     identifier :sass_sourcemap
 
     include SassCommon

@@ -412,7 +412,7 @@ RSpec/RepeatedDescription:
 # Offense count: 2
 RSpec/RepeatedExample:
   Exclude:
-    - 'nanoc/spec/nanoc/filters/sass_spec.rb'
+    - 'nanoc-sass/spec/nanoc/sass_spec.rb'
 
 # Offense count: 9
 RSpec/ScatteredLet:

@@ -37,6 +37,7 @@ require 'nanoc-core'
 require 'nanoc-cli'
 require 'nanoc-checking'
 require 'nanoc-deploying'
+require 'nanoc-sass'
 
 # Re-export from Nanoc::Core
 Nanoc::Identifier = Nanoc::Core::Identifier

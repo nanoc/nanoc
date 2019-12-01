@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Nanoc::Filters::SassCommon
+module Nanoc::Sass
   # @api private
   class Importer < ::Sass::Importers::Filesystem
     attr_reader :filter

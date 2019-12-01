@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Filters::SassCommon do
+describe Nanoc::Sass do
   context 'with item, items, config context' do
     subject(:sass_sourcemap) do
       ::Nanoc::Filter.named(:sass_sourcemap).new(sass_sourcemap_params)

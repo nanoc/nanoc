@@ -9,6 +9,7 @@ gemspec path: 'nanoc-checking'
 gemspec path: 'nanoc-deploying'
 gemspec path: 'nanoc-external'
 gemspec path: 'nanoc-live'
+gemspec path: 'nanoc-sass'
 gemspec path: 'nanoc-spec'
 gemspec path: 'guard-nanoc'
 

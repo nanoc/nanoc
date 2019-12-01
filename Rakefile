@@ -24,6 +24,7 @@ packages = %w[
   nanoc-deploying
   nanoc-external
   nanoc-live
+  nanoc-sass
   nanoc-spec
   guard-nanoc
 ]
