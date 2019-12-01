@@ -38,6 +38,33 @@ end
 task test: packages.map { |p| p.tr('-', '_') + ':test' }
 task gem: packages.map { |p| p.tr('-', '_') + ':gem' }
 
+task :needs_release do
+  tags = `git tags`.lines.map(&:chomp).map { |t| t.match?(/\A\d/) ? 'nanoc-v' + t : t }
+  tags_by_base_name = tags.group_by { |t| t[/\A.*(?=-v\d)/] }.select { |(base_name, _tags)| base_name }
+  versions_by_base_name = tags_by_base_name.transform_values { |list| list.map { |nv| nv.match(/\A.*-v(\d.*)/) }.compact.map { |m| Gem::Version.new(m[1]) } }
+  last_version_by_base_name = versions_by_base_name.transform_values(&:max)
+
+  name_length = last_version_by_base_name.keys.map(&:size).max
+  last_version_by_base_name.keys.sort.each do |base_name|
+    last_version = last_version_by_base_name[base_name]
+    dir = base_name
+    tag = base_name == 'nanoc' ? last_version.to_s : base_name + '-v' + last_version.to_s
+    diff = `git diff --stat #{tag} #{dir}`
+    needs_release = diff.match?(/\d+ files changed/)
+
+    text = needs_release ? 'needs release' : 'up to date'
+    color = needs_release ? "\e[33m" : "\e[32m"
+    puts(
+      format(
+        "%-#{name_length}s   \e[1m%s%s\e[0m",
+        base_name,
+        color,
+        text,
+      ),
+    )
+  end
+end
+
 task :summary do
   versions = {}
   dependencies = {}
