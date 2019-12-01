@@ -44,16 +44,29 @@ task :needs_release do
   versions_by_base_name = tags_by_base_name.transform_values { |list| list.map { |nv| nv.match(/\A.*-v(\d.*)/) }.compact.map { |m| Gem::Version.new(m[1]) } }
   last_version_by_base_name = versions_by_base_name.transform_values(&:max)
 
-  name_length = last_version_by_base_name.keys.map(&:size).max
-  last_version_by_base_name.keys.sort.each do |base_name|
-    last_version = last_version_by_base_name[base_name]
-    dir = base_name
-    tag = base_name == 'nanoc' ? last_version.to_s : base_name + '-v' + last_version.to_s
-    diff = `git diff --stat #{tag} #{dir}`
-    needs_release = diff.match?(/\d+ files changed/)
+  names =
+    packages
+    .partition { |name| %w[nanoc nanoc-core nanoc-cli].include?(name) }
+    .map(&:sort)
+    .flatten
 
-    text = needs_release ? 'needs release' : 'up to date'
-    color = needs_release ? "\e[33m" : "\e[32m"
+  name_length = names.map(&:size).max
+  names.sort.each do |base_name|
+    last_version = last_version_by_base_name[base_name]
+
+    if last_version
+      dir = base_name
+      tag = base_name == 'nanoc' ? last_version.to_s : base_name + '-v' + last_version.to_s
+      diff = `git diff --stat #{tag} #{dir}`
+      needs_release = diff.match?(/\d+ files changed/)
+
+      text = needs_release ? 'needs release' : 'up to date'
+      color = needs_release ? "\e[33m" : "\e[32m"
+    else
+      text = 'needs initial release'
+      color = "\e[31m"
+    end
+
     puts(
       format(
         "%-#{name_length}s   \e[1m%s%s\e[0m",
