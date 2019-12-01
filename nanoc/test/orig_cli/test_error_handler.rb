@@ -96,7 +96,7 @@ class Nanoc::CLI::ErrorHandlerTest < Nanoc::TestCase
     begin
       backtrace_generator.call(amount_factor)
     rescue => e
-      return e
+      e
     end
   end
 end

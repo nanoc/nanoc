@@ -25,10 +25,10 @@ Style/TrailingCommaInArrayLiteral:
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 
-Layout/IndentFirstArrayElement:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   AllowedNames:
     - "to" # destination
     - "e"  # element
@@ -170,7 +170,7 @@ Style/Documentation:
   Enabled: false
 
 # Nanoc suppresses exceptions for valid reasons in a few cases.
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Enabled: false
 
 # if/unless at the end of the line makes it too easy to oversee.

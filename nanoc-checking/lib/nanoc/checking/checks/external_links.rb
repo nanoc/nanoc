@@ -88,8 +88,9 @@ module ::Nanoc::Checking::Checks
           return Result.new(href, res.code)
         end
       end
+
       if last_err
-        return Result.new(href, last_err.message)
+        Result.new(href, last_err.message)
       else
         raise Nanoc::Core::Errors::InternalInconsistency, 'last_err cannot be nil'
       end
