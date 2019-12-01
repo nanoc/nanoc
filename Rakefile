@@ -28,6 +28,12 @@ packages = %w[
   guard-nanoc
 ]
 
+def name_sets(packages)
+  packages
+    .partition { |name| %w[nanoc nanoc-core nanoc-cli].include?(name) }
+    .map(&:sort)
+end
+
 packages.each do |package|
   namespace(package.tr('-', '_')) do
     task(:test) { sub_sh(package, 'bundle exec rake test') }
@@ -44,37 +50,34 @@ task :needs_release do
   versions_by_base_name = tags_by_base_name.transform_values { |list| list.map { |nv| nv.match(/\A.*-v(\d.*)/) }.compact.map { |m| Gem::Version.new(m[1]) } }
   last_version_by_base_name = versions_by_base_name.transform_values(&:max)
 
-  names =
-    packages
-    .partition { |name| %w[nanoc nanoc-core nanoc-cli].include?(name) }
-    .map(&:sort)
-    .flatten
+  name_length = name_sets(packages).flatten.map(&:size).max
+  name_sets(packages).each_with_index do |names, idx|
+    puts if idx.positive?
+    names.each do |name|
+      last_version = last_version_by_base_name[name]
 
-  name_length = names.map(&:size).max
-  names.sort.each do |base_name|
-    last_version = last_version_by_base_name[base_name]
+      if last_version
+        dir = name
+        tag = name == 'nanoc' ? last_version.to_s : name + '-v' + last_version.to_s
+        diff = `git diff --stat #{tag} #{dir}`
+        needs_release = diff.match?(/\d+ files changed/)
 
-    if last_version
-      dir = base_name
-      tag = base_name == 'nanoc' ? last_version.to_s : base_name + '-v' + last_version.to_s
-      diff = `git diff --stat #{tag} #{dir}`
-      needs_release = diff.match?(/\d+ files changed/)
+        text = needs_release ? 'needs release' : 'up to date'
+        color = needs_release ? "\e[33m" : "\e[32m"
+      else
+        text = 'needs initial release'
+        color = "\e[31m"
+      end
 
-      text = needs_release ? 'needs release' : 'up to date'
-      color = needs_release ? "\e[33m" : "\e[32m"
-    else
-      text = 'needs initial release'
-      color = "\e[31m"
+      puts(
+        format(
+          "%-#{name_length}s   \e[1m%s%s\e[0m",
+          name,
+          color,
+          text,
+        ),
+      )
     end
-
-    puts(
-      format(
-        "%-#{name_length}s   \e[1m%s%s\e[0m",
-        base_name,
-        color,
-        text,
-      ),
-    )
   end
 end
 
@@ -92,16 +95,10 @@ task :summary do
     versions[name] = gemspec.version
   end
 
-  name_sets =
-    versions
-    .keys
-    .partition { |name| %w[nanoc nanoc-core nanoc-cli].include?(name) }
-    .map(&:sort)
-
   puts '━━━ VERSIONS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
   puts
   name_length = versions.keys.map(&:size).max
-  name_sets.each_with_index do |names, idx|
+  name_sets(packages).each_with_index do |names, idx|
     puts if idx.positive?
     names.each do |name|
       puts(format("    %#{name_length}s   %s", name, versions[name]))
@@ -111,7 +108,7 @@ task :summary do
 
   puts '━━━ DEPENDENCIES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
   puts
-  name_sets.flatten.each do |name|
+  name_sets(packages).flatten.each do |name|
     puts(format('    %-s %s', name, '╌' * (40 - name.length)))
     dependencies[name].sort_by(&:name).each do |dependency|
       puts(format("      %-#{name_length}s   %s", dependency.name, dependency.requirement))
