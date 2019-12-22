@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 # @api private
-module Nanoc::Checking::Checks
+module Nanoc
+  module Checking
+    module Checks
+    end
+  end
 end
 
 require_relative 'checks/w3c_validator'
