@@ -83,16 +83,6 @@ Style/GlobalVars:
 Style/RegexpLiteral:
   Enabled: false
 
-Style/ClassAndModuleChildren:
-  Include:
-    - 'guard-nanoc/**/*.rb'
-    - 'nanoc-checking/**/*.rb'
-    - 'nanoc-core/**/*.rb'
-    - 'nanoc-deploying/**/*.rb'
-    - 'nanoc-external/**/*.rb'
-    - 'nanoc-live/**/*.rb'
-    - 'nanoc-spec/**/*.rb'
-
 Style/EmptyElse:
   Enabled: false
 
