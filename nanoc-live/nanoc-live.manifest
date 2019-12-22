@@ -2,6 +2,7 @@ NEWS.md
 README.md
 
 lib/nanoc/live.rb
+lib/nanoc/live/command_runners/live.rb
 lib/nanoc/live/commands/live.rb
 lib/nanoc/live/live_recompiler.rb
 lib/nanoc/live/version.rb
