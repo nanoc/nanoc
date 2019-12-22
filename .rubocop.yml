@@ -88,6 +88,7 @@ Style/ClassAndModuleChildren:
     - 'guard-nanoc/**/*.rb'
     - 'nanoc-core/**/*.rb'
     - 'nanoc-deploying/**/*.rb'
+    - 'nanoc-external/**/*.rb'
 
 Style/EmptyElse:
   Enabled: false
