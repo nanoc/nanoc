@@ -45,6 +45,7 @@ RSpec/DescribeClass:
     - 'nanoc/spec/contributors_spec.rb'
     - 'nanoc/spec/nanoc/integration/*_spec.rb'
     - 'nanoc/spec/nanoc/regressions/*_spec.rb'
+    - 'nanoc/spec/regression_filenames_spec.rb'
 
 
 
