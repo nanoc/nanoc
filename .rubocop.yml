@@ -102,6 +102,9 @@ Style/EvalWithLocation:
 Naming/MemoizedInstanceVariableName:
   Enabled: false
 
+Layout/LineLength:
+  Enabled: false
+
 
 
 # ----- DISABLED (security) -----
@@ -139,9 +142,6 @@ Metrics/ClassLength:
   Enabled: false
 
 Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/LineLength:
   Enabled: false
 
 Metrics/MethodLength:
