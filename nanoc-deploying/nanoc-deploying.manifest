@@ -3,6 +3,8 @@ README.md
 
 lib/nanoc-deploying.rb
 lib/nanoc/deploying.rb
+lib/nanoc/deploying/command_runners.rb
+lib/nanoc/deploying/command_runners/deploy.rb
 lib/nanoc/deploying/commands/deploy.rb
 lib/nanoc/deploying/deployer.rb
 lib/nanoc/deploying/deployers.rb

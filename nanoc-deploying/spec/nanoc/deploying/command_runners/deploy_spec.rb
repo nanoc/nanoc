@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Deploying::Commands::Deploy, site: true, stdio: true do
+describe Nanoc::Deploying::CommandRunners::Deploy, site: true, stdio: true do
   before do
     skip_unless_have_command 'rsync'
   end
