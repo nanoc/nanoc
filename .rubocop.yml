@@ -85,6 +85,7 @@ Style/RegexpLiteral:
 
 Style/ClassAndModuleChildren:
   Include:
+    - 'guard-nanoc/**/*.rb'
     - 'nanoc-core/**/*.rb'
 
 Style/EmptyElse:

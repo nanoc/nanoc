@@ -9,7 +9,7 @@ module Guard
   class Nanoc < Plugin
     def self.live_cmd
       @_live_cmd ||= begin
-        path = File.join(File.dirname(__FILE__), '..', 'nanoc', 'orig_cli', 'commands', 'live.rb')
+        path = File.join(File.dirname(__FILE__), 'nanoc', 'live_command.rb')
         Cri::Command.load_file(path, infer_name: true)
       end
     end
