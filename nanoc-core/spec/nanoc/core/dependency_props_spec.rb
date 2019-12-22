@@ -63,43 +63,43 @@ describe Nanoc::Core::DependencyProps do
     subject { props.raw_content? }
 
     context 'nothing active' do
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'raw_content active' do
       let(:props) { described_class.new(raw_content: true) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'raw_content and compiled_content active' do
       let(:props) { described_class.new(raw_content: true, compiled_content: true) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'compiled_content active' do
       let(:props) { described_class.new(compiled_content: true) }
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'all active' do
       let(:props) { described_class.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'raw_content is empty list' do
       let(:props) { described_class.new(raw_content: []) }
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'raw_content is non-empty list' do
       let(:props) { described_class.new(raw_content: ['/asdf.*']) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -107,43 +107,43 @@ describe Nanoc::Core::DependencyProps do
     subject { props.attributes? }
 
     context 'nothing active' do
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'attributes active' do
       let(:props) { described_class.new(attributes: true) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'attributes and compiled_content active' do
       let(:props) { described_class.new(attributes: true, compiled_content: true) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'compiled_content active' do
       let(:props) { described_class.new(compiled_content: true) }
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'all active' do
       let(:props) { described_class.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'attributes is empty list' do
       let(:props) { described_class.new(attributes: []) }
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'attributes is non-empty list' do
       let(:props) { described_class.new(attributes: [:donkey]) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
   end
 

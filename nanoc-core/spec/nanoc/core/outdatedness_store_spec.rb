@@ -15,13 +15,13 @@ describe Nanoc::Core::OutdatednessStore do
     subject { store.include?(rep) }
 
     context 'nothing added' do
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'rep added' do
       before { store.add(rep) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'rep added and removed' do
@@ -30,7 +30,7 @@ describe Nanoc::Core::OutdatednessStore do
         store.remove(rep)
       end
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'rep added, removed, and added again' do
@@ -40,7 +40,7 @@ describe Nanoc::Core::OutdatednessStore do
         store.add(rep)
       end
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -52,13 +52,13 @@ describe Nanoc::Core::OutdatednessStore do
     end
 
     context 'not added' do
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'added' do
       before { store.add(rep) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
   end
 end

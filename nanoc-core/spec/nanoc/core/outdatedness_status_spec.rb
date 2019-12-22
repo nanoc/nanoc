@@ -69,27 +69,27 @@ describe Nanoc::Core::OutdatednessStatus do
     end
 
     context 'no props' do
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'some props' do
       context 'same props' do
         let(:props) { Nanoc::Core::DependencyProps.new(compiled_content: true, path: true) }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
 
       context 'different props' do
         let(:props) { Nanoc::Core::DependencyProps.new(attributes: true) }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
     end
 
     context 'all props' do
       let(:props) { Nanoc::Core::DependencyProps.new(raw_content: true, attributes: true, compiled_content: true, path: true) }
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
   end
 

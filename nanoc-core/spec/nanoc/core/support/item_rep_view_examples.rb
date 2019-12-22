@@ -219,7 +219,7 @@ shared_examples 'an item rep view' do
         expect(dep.props.path?).to eq(false)
       end
 
-      it { is_expected.to be }
+      it { is_expected.not_to be(false) }
     end
 
     context 'snapshot does not exist' do
@@ -240,7 +240,7 @@ shared_examples 'an item rep view' do
         expect(dep.props.path?).to eq(false)
       end
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
   end
 
@@ -301,7 +301,7 @@ shared_examples 'an item rep view' do
         item_rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
       end
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context ':last snapshot is binary' do
@@ -309,7 +309,7 @@ shared_examples 'an item rep view' do
         item_rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: true)]
       end
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
   end
 

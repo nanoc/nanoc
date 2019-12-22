@@ -262,11 +262,11 @@ describe Nanoc::Core::OutdatednessChecker do
           before { distant_item.attributes[:title] = 'omg new title' }
 
           it 'has correct outdatedness of item' do
-            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).not_to be
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).to be(false)
           end
 
           it 'has correct outdatedness of other item' do
-            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be(true)
           end
         end
 
@@ -274,11 +274,11 @@ describe Nanoc::Core::OutdatednessChecker do
           before { distant_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
           it 'has correct outdatedness of item' do
-            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).not_to be
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).to be(false)
           end
 
           it 'has correct outdatedness of other item' do
-            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).not_to be
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be(false)
           end
         end
       end
@@ -293,11 +293,11 @@ describe Nanoc::Core::OutdatednessChecker do
           before { distant_item.attributes[:title] = 'omg new title' }
 
           it 'has correct outdatedness of item' do
-            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).to be
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).to be(true)
           end
 
           it 'has correct outdatedness of other item' do
-            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be(true)
           end
         end
 
@@ -305,11 +305,11 @@ describe Nanoc::Core::OutdatednessChecker do
           before { distant_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
           it 'has correct outdatedness of item' do
-            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).not_to be
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).to be(false)
           end
 
           it 'has correct outdatedness of other item' do
-            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).not_to be
+            expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be(false)
           end
         end
       end
@@ -323,13 +323,13 @@ describe Nanoc::Core::OutdatednessChecker do
       context 'attribute changed' do
         before { other_item.attributes[:title] = 'omg new title' }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'raw content changed' do
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
 
       context 'attribute + raw content changed' do
@@ -337,7 +337,7 @@ describe Nanoc::Core::OutdatednessChecker do
 
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'path changed' do
@@ -348,7 +348,7 @@ describe Nanoc::Core::OutdatednessChecker do
           end
         end
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -360,19 +360,19 @@ describe Nanoc::Core::OutdatednessChecker do
       context 'attribute changed' do
         before { other_item.attributes[:title] = 'omg new title' }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'other attribute changed' do
         before { other_item.attributes[:subtitle] = 'tagline here' }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
 
       context 'raw content changed' do
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
 
       context 'attribute + raw content changed' do
@@ -380,7 +380,7 @@ describe Nanoc::Core::OutdatednessChecker do
 
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'other attribute + raw content changed' do
@@ -388,7 +388,7 @@ describe Nanoc::Core::OutdatednessChecker do
 
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
 
       context 'path changed' do
@@ -399,7 +399,7 @@ describe Nanoc::Core::OutdatednessChecker do
           end
         end
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -409,19 +409,19 @@ describe Nanoc::Core::OutdatednessChecker do
       end
 
       context 'nothing changed' do
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
 
       context 'attribute changed' do
         before { config[:title] = 'omg new title' }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'other attribute changed' do
         before { config[:subtitle] = 'tagline here' }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
     end
 
@@ -431,19 +431,19 @@ describe Nanoc::Core::OutdatednessChecker do
       end
 
       context 'nothing changed' do
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
 
       context 'attribute changed' do
         before { config[:title] = 'omg new title' }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'other attribute changed' do
         before { config[:subtitle] = 'tagline here' }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -455,13 +455,13 @@ describe Nanoc::Core::OutdatednessChecker do
       context 'attribute changed' do
         before { other_item.attributes[:title] = 'omg new title' }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
 
       context 'raw content changed' do
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'attribute + raw content changed' do
@@ -469,7 +469,7 @@ describe Nanoc::Core::OutdatednessChecker do
 
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'path changed' do
@@ -480,7 +480,7 @@ describe Nanoc::Core::OutdatednessChecker do
           end
         end
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -492,13 +492,13 @@ describe Nanoc::Core::OutdatednessChecker do
       context 'attribute changed' do
         before { other_item.attributes[:title] = 'omg new title' }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
 
       context 'raw content changed' do
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'path changed' do
@@ -509,7 +509,7 @@ describe Nanoc::Core::OutdatednessChecker do
           end
         end
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -521,13 +521,13 @@ describe Nanoc::Core::OutdatednessChecker do
       context 'attribute changed' do
         before { other_item.attributes[:title] = 'omg new title' }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'raw content changed' do
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'attribute + raw content changed' do
@@ -535,7 +535,7 @@ describe Nanoc::Core::OutdatednessChecker do
 
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'rules changed' do
@@ -546,7 +546,7 @@ describe Nanoc::Core::OutdatednessChecker do
           end
         end
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -558,13 +558,13 @@ describe Nanoc::Core::OutdatednessChecker do
       context 'attribute changed' do
         before { other_item.attributes[:title] = 'omg new title' }
 
-        it { is_expected.to be }
+        it { is_expected.to be(true) }
       end
 
       context 'raw content changed' do
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -576,13 +576,13 @@ describe Nanoc::Core::OutdatednessChecker do
       context 'attribute changed' do
         before { other_item.attributes[:title] = 'omg new title' }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
 
       context 'raw content changed' do
         before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be(false) }
       end
     end
 
@@ -596,7 +596,7 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'nothing changed' do
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
 
         context 'item added' do
@@ -606,7 +606,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.to be }
+          it { is_expected.to be(true) }
         end
 
         context 'item removed' do
@@ -615,7 +615,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
       end
 
@@ -628,7 +628,7 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'nothing changed' do
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
 
         context 'matching item added' do
@@ -638,7 +638,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.to be }
+          it { is_expected.to be(true) }
         end
 
         context 'non-matching item added' do
@@ -648,7 +648,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
 
         context 'item removed' do
@@ -657,7 +657,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
       end
 
@@ -670,7 +670,7 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'nothing changed' do
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
 
         context 'matching item added' do
@@ -680,7 +680,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.to be }
+          it { is_expected.to be(true) }
         end
 
         context 'non-matching item added' do
@@ -690,7 +690,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
 
         context 'item removed' do
@@ -699,7 +699,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
       end
     end
@@ -714,7 +714,7 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'nothing changed' do
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
 
         context 'layout added' do
@@ -724,7 +724,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.to be }
+          it { is_expected.to be(true) }
         end
 
         context 'layout removed' do
@@ -733,7 +733,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
       end
 
@@ -746,7 +746,7 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'nothing changed' do
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
 
         context 'matching layout added' do
@@ -756,7 +756,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.to be }
+          it { is_expected.to be(true) }
         end
 
         context 'non-matching layout added' do
@@ -766,7 +766,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
 
         context 'layout removed' do
@@ -775,7 +775,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
       end
 
@@ -788,7 +788,7 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'nothing changed' do
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
 
         context 'matching layout added' do
@@ -798,7 +798,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.to be }
+          it { is_expected.to be(true) }
         end
 
         context 'non-matching layout added' do
@@ -808,7 +808,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
 
         context 'layout removed' do
@@ -817,7 +817,7 @@ describe Nanoc::Core::OutdatednessChecker do
             dependency_store.load
           end
 
-          it { is_expected.not_to be }
+          it { is_expected.to be(false) }
         end
       end
     end

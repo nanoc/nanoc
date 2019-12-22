@@ -90,7 +90,7 @@ describe Nanoc::Core::OutdatednessRules do
       context 'no snippets' do
         let(:code_snippets) { [] }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be_nil }
       end
 
       context 'only non-outdated snippets' do
@@ -99,7 +99,7 @@ describe Nanoc::Core::OutdatednessRules do
 
         before { checksum_store.add(code_snippet) }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be_nil }
       end
 
       context 'only outdated snippets' do
@@ -109,7 +109,7 @@ describe Nanoc::Core::OutdatednessRules do
 
         before { checksum_store.add(code_snippet_old) }
 
-        it { is_expected.to be }
+        it { is_expected.not_to be_nil }
       end
     end
 
@@ -119,7 +119,7 @@ describe Nanoc::Core::OutdatednessRules do
       context 'no path' do
         before { item_rep.paths = {} }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be_nil }
       end
 
       context 'path for last snapshot' do
@@ -128,13 +128,13 @@ describe Nanoc::Core::OutdatednessRules do
         before { item_rep.raw_paths = { last: [path] } }
 
         context 'not written' do
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
         end
 
         context 'written' do
           before { File.write(path, 'hello') }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
       end
 
@@ -144,13 +144,13 @@ describe Nanoc::Core::OutdatednessRules do
         before { item_rep.raw_paths = { donkey: [path] } }
 
         context 'not written' do
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
         end
 
         context 'written' do
           before { File.write(path, 'hello') }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
       end
     end
@@ -164,13 +164,13 @@ describe Nanoc::Core::OutdatednessRules do
         before { reps << item_rep }
 
         context 'no checksum available' do
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
         end
 
         context 'checksum available and same' do
           before { checksum_store.add(item) }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
 
         context 'checksum available, but content different' do
@@ -178,7 +178,7 @@ describe Nanoc::Core::OutdatednessRules do
 
           before { checksum_store.add(old_item) }
 
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
         end
 
         context 'checksum available, but attributes different' do
@@ -186,7 +186,7 @@ describe Nanoc::Core::OutdatednessRules do
 
           before { checksum_store.add(old_item) }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
       end
 
@@ -194,13 +194,13 @@ describe Nanoc::Core::OutdatednessRules do
         let(:obj) { item_rep }
 
         context 'no checksum available' do
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
         end
 
         context 'checksum available and same' do
           before { checksum_store.add(item) }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
 
         context 'checksum available, but content different' do
@@ -208,7 +208,7 @@ describe Nanoc::Core::OutdatednessRules do
 
           before { checksum_store.add(old_item) }
 
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
         end
 
         context 'checksum available, but attributes different' do
@@ -216,7 +216,7 @@ describe Nanoc::Core::OutdatednessRules do
 
           before { checksum_store.add(old_item) }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
       end
     end
@@ -230,13 +230,13 @@ describe Nanoc::Core::OutdatednessRules do
         before { reps << item_rep }
 
         context 'no checksum available' do
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
         end
 
         context 'checksum available and same' do
           before { checksum_store.add(item) }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
 
         context 'checksum available, but content different' do
@@ -244,7 +244,7 @@ describe Nanoc::Core::OutdatednessRules do
 
           before { checksum_store.add(old_item) }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
 
         context 'checksum available, but attributes different' do
@@ -252,7 +252,7 @@ describe Nanoc::Core::OutdatednessRules do
 
           before { checksum_store.add(old_item) }
 
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
 
           it 'has the one changed attribute' do
             expect(subject.attributes).to contain_exactly(:greeting)
@@ -308,13 +308,13 @@ describe Nanoc::Core::OutdatednessRules do
         let(:obj) { item_rep }
 
         context 'no checksum available' do
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
         end
 
         context 'checksum available and same' do
           before { checksum_store.add(item) }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
 
         context 'checksum available, but content different' do
@@ -322,7 +322,7 @@ describe Nanoc::Core::OutdatednessRules do
 
           before { checksum_store.add(old_item) }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
 
         context 'checksum available, but attributes different' do
@@ -330,7 +330,7 @@ describe Nanoc::Core::OutdatednessRules do
 
           before { checksum_store.add(old_item) }
 
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
 
           it 'has the one changed attribute' do
             expect(subject.attributes).to contain_exactly(:greeting)
@@ -361,7 +361,7 @@ describe Nanoc::Core::OutdatednessRules do
       context 'memory is the same' do
         let(:new_mem) { old_mem }
 
-        it { is_expected.not_to be }
+        it { is_expected.to be_nil }
       end
 
       context 'memory is different' do
@@ -372,7 +372,7 @@ describe Nanoc::Core::OutdatednessRules do
           end
         end
 
-        it { is_expected.to be }
+        it { is_expected.not_to be_nil }
       end
 
       context 'memory is the same, but refers to a layout' do
@@ -404,7 +404,7 @@ describe Nanoc::Core::OutdatednessRules do
 
           let(:old_layout_mem) { new_layout_mem }
 
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
 
         context 'referenced layout does not exist' do
@@ -428,7 +428,7 @@ describe Nanoc::Core::OutdatednessRules do
 
           # Something changed about the layout; the item-on-layout dependency
           # will ensure this item is marked as outdated.
-          it { is_expected.not_to be }
+          it { is_expected.to be_nil }
         end
 
         context 'filter name is different' do
@@ -444,7 +444,7 @@ describe Nanoc::Core::OutdatednessRules do
             end
           end
 
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
         end
 
         context 'params are different' do
@@ -460,7 +460,7 @@ describe Nanoc::Core::OutdatednessRules do
             end
           end
 
-          it { is_expected.to be }
+          it { is_expected.not_to be_nil }
         end
       end
     end
@@ -610,7 +610,7 @@ describe Nanoc::Core::OutdatednessRules do
           end
         end
 
-        it { is_expected.not_to be }
+        it { is_expected.to be_nil }
       end
 
       context 'known filter, not always outdated' do
@@ -621,7 +621,7 @@ describe Nanoc::Core::OutdatednessRules do
           end
         end
 
-        it { is_expected.not_to be }
+        it { is_expected.to be_nil }
       end
 
       context 'known filter, always outdated' do
@@ -632,7 +632,7 @@ describe Nanoc::Core::OutdatednessRules do
           end
         end
 
-        it { is_expected.to be }
+        it { is_expected.not_to be_nil }
       end
     end
 
@@ -646,7 +646,7 @@ describe Nanoc::Core::OutdatednessRules do
           expect(dependency_store).to receive(:new_items).and_return([])
         end
 
-        it { is_expected.not_to be }
+        it { is_expected.to be_nil }
       end
 
       context 'new item added' do
@@ -654,7 +654,7 @@ describe Nanoc::Core::OutdatednessRules do
           expect(dependency_store).to receive(:new_items).and_return([item])
         end
 
-        it { is_expected.to be }
+        it { is_expected.not_to be_nil }
       end
     end
 
@@ -668,7 +668,7 @@ describe Nanoc::Core::OutdatednessRules do
           expect(dependency_store).to receive(:new_layouts).and_return([])
         end
 
-        it { is_expected.not_to be }
+        it { is_expected.to be_nil }
       end
 
       context 'new layout added' do
@@ -676,7 +676,7 @@ describe Nanoc::Core::OutdatednessRules do
           expect(dependency_store).to receive(:new_layouts).and_return([layout])
         end
 
-        it { is_expected.to be }
+        it { is_expected.not_to be_nil }
       end
     end
   end

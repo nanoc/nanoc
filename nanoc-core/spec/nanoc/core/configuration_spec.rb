@@ -10,13 +10,13 @@ describe Nanoc::Core::Configuration do
     context 'non-existent key' do
       let(:key) { :donkey }
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'existent key' do
       let(:key) { :foo }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
   end
 

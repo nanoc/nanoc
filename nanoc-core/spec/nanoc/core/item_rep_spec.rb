@@ -16,13 +16,13 @@ describe Nanoc::Core::ItemRep do
     context 'snapshot does not exist' do
       let(:snapshot_name) { :giraffe }
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'snapshot exists' do
       let(:snapshot_name) { :donkey }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
   end
 end

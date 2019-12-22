@@ -12,25 +12,25 @@ describe Nanoc::Core::Feature do
     end
 
     context 'not set' do
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'set to list not including feature' do
       before { ENV['NANOC_FEATURES'] = 'foo,bar' }
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
 
     context 'set to all' do
       before { ENV['NANOC_FEATURES'] = 'all' }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'set to list including feature' do
       before { ENV['NANOC_FEATURES'] = 'foo,magic,bar' }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
   end
 
@@ -49,7 +49,7 @@ describe Nanoc::Core::Feature do
     end
 
     context 'not set' do
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
 
       it 'unsets afterwards' do
         expect(described_class.enabled?(feature_name)).not_to be
@@ -59,7 +59,7 @@ describe Nanoc::Core::Feature do
     context 'set to list not including feature' do
       before { ENV['NANOC_FEATURES'] = 'foo,bar' }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
 
       it 'unsets afterwards' do
         expect(described_class.enabled?(feature_name)).not_to be
@@ -69,13 +69,13 @@ describe Nanoc::Core::Feature do
     context 'set to all' do
       before { ENV['NANOC_FEATURES'] = 'all' }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'set to list including feature' do
       before { ENV['NANOC_FEATURES'] = 'foo,magic,bar' }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
   end
 
