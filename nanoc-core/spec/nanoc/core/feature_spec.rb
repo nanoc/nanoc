@@ -52,7 +52,7 @@ describe Nanoc::Core::Feature do
       it { is_expected.to be(true) }
 
       it 'unsets afterwards' do
-        expect(described_class.enabled?(feature_name)).not_to be
+        expect(described_class.enabled?(feature_name)).to be(false)
       end
     end
 
@@ -62,7 +62,7 @@ describe Nanoc::Core::Feature do
       it { is_expected.to be(true) }
 
       it 'unsets afterwards' do
-        expect(described_class.enabled?(feature_name)).not_to be
+        expect(described_class.enabled?(feature_name)).to be(false)
       end
     end
 

@@ -111,10 +111,10 @@ describe Nanoc::Core::DependencyStore do
 
         it 'returns true for all props' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.raw_content?).to be
-          expect(deps[0].props.compiled_content?).to be
-          expect(deps[0].props.path?).to be
-          expect(deps[0].props.attributes?).to be
+          expect(deps[0].props.raw_content?).to be(true)
+          expect(deps[0].props.compiled_content?).to be(true)
+          expect(deps[0].props.path?).to be(true)
+          expect(deps[0].props.attributes?).to be(true)
         end
       end
 
@@ -396,8 +396,8 @@ describe Nanoc::Core::DependencyStore do
         subject
         deps = store.dependencies_causing_outdatedness_of(source_obj)
 
-        expect(deps.first.props.attributes?).not_to be
-        expect(deps.first.props.compiled_content?).to be
+        expect(deps.first.props.attributes?).to be(false)
+        expect(deps.first.props.compiled_content?).to be(true)
       end
 
       it 'ignores all other objects' do
@@ -420,9 +420,9 @@ describe Nanoc::Core::DependencyStore do
         subject
         deps = store.dependencies_causing_outdatedness_of(source_obj)
 
-        expect(deps.first.props.attributes?).to be
-        expect(deps.first.props.attributes).to be
-        expect(deps.first.props.compiled_content?).not_to be
+        expect(deps.first.props.attributes?).to be(true)
+        expect(deps.first.props.attributes).to be(true)
+        expect(deps.first.props.compiled_content?).to be(false)
       end
 
       it 'ignores all other objects' do
@@ -445,9 +445,9 @@ describe Nanoc::Core::DependencyStore do
         subject
         deps = store.dependencies_causing_outdatedness_of(source_obj)
 
-        expect(deps.first.props.attributes?).to be
+        expect(deps.first.props.attributes?).to be(true)
         expect(deps.first.props.attributes).to match_array([:giraffe])
-        expect(deps.first.props.compiled_content?).not_to be
+        expect(deps.first.props.compiled_content?).to be(false)
       end
 
       it 'ignores all other objects' do

@@ -135,7 +135,7 @@ describe Nanoc::Core::BinaryCompiledContentCache do
     end
 
     it 'has content for kept items' do
-      expect(cache[keep_item_rep]).to be
+      expect(cache[keep_item_rep]).not_to be_nil
     end
 
     it 'has no content for removed items' do

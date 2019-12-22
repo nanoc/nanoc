@@ -8,7 +8,7 @@ shared_examples 'a notification center' do
     end
 
     subject.post(:ping_received).sync
-    expect(res).to be
+    expect(res).to be(true)
   end
 
   it 'does not receive notification after unsubscribing' do
@@ -20,7 +20,7 @@ shared_examples 'a notification center' do
     subject.remove :ping_received, :test
 
     subject.post(:ping_received).sync
-    expect(res).not_to be
+    expect(res).to be(false)
   end
 end
 

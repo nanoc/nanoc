@@ -118,7 +118,7 @@ describe Nanoc::Core::CompilationStages::CompileReps do
       end
 
       it 'keeps the item rep out of the outdatedness store' do
-        expect(outdatedness_store.include?(rep)).not_to be
+        expect(outdatedness_store.include?(rep)).to be(false)
         expect { subject }.not_to change { outdatedness_store.include?(rep) }
       end
     end
@@ -162,7 +162,7 @@ describe Nanoc::Core::CompilationStages::CompileReps do
         end
 
         it 'keeps the item rep in the outdatedness store' do
-          expect(outdatedness_store.include?(rep)).to be
+          expect(outdatedness_store.include?(rep)).to be(true)
           expect { subject rescue nil }.not_to change { outdatedness_store.include?(rep) }
         end
       end
