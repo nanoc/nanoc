@@ -90,6 +90,7 @@ Style/ClassAndModuleChildren:
     - 'nanoc-deploying/**/*.rb'
     - 'nanoc-external/**/*.rb'
     - 'nanoc-live/**/*.rb'
+    - 'nanoc-spec/**/*.rb'
 
 Style/EmptyElse:
   Enabled: false
