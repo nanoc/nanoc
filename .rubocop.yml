@@ -85,7 +85,7 @@ Style/RegexpLiteral:
 
 Style/ClassAndModuleChildren:
   Include:
-    - 'nanoc/lib/nanoc/base/**/*.rb'
+    - 'nanoc-core/**/*.rb'
 
 Style/EmptyElse:
   Enabled: false
