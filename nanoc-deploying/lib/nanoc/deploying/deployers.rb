@@ -3,7 +3,11 @@
 require 'tty-command'
 
 # @api private
-module Nanoc::Deploying::Deployers
+module Nanoc
+  module Deploying
+    module Deployers
+    end
+  end
 end
 
 require_relative 'deployers/fog'
