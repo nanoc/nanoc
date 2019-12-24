@@ -59,6 +59,10 @@ module Nanoc::CLI::CompileListeners
       on(:file_pruned) do |path|
         Nanoc::CLI::Logger.instance.file(:high, :delete, path)
       end
+
+      on(:file_listed_for_pruning) do |path|
+        Nanoc::CLI::Logger.instance.file(:high, :delete, '(dry run) ' + path)
+      end
     end
 
     # @see Listener#stop

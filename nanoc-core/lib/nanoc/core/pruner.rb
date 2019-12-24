@@ -111,8 +111,12 @@ module Nanoc
       end
 
       def log_delete_and_run(thing)
-        Nanoc::Core::NotificationCenter.post(:file_pruned, thing)
-        yield unless @dry_run
+        if @dry_run
+          Nanoc::Core::NotificationCenter.post(:file_listed_for_pruning, thing)
+        else
+          Nanoc::Core::NotificationCenter.post(:file_pruned, thing)
+          yield
+        end
       end
     end
   end
