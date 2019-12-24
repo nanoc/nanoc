@@ -22,6 +22,10 @@ module Nanoc::CLI::Commands
       res = Nanoc::Core::Compiler.new_for(@site).run_until_reps_built
       reps = res.fetch(:reps)
 
+      listener_class = Nanoc::CLI::CompileListeners::FileActionPrinter
+      listener = listener_class.new(reps: reps)
+      listener.start_safely
+
       if options.key?(:yes)
         Nanoc::Core::Pruner.new(@site.config, reps, exclude: prune_config_exclude).run
       elsif options.key?(:'dry-run')
@@ -32,6 +36,8 @@ module Nanoc::CLI::Commands
         $stderr.puts 'Please ensure that the output directory does not contain any files (such as images or stylesheets) that are necessary but are not managed by Nanoc. If you want to get a list of all files that would be removed, pass --dry-run.'
         exit 1
       end
+    ensure
+      listener&.stop_safely
     end
 
     protected
