@@ -28,7 +28,7 @@ module Nanoc
       contract String => C::Bool
       def filename_excluded?(filename)
         pathname = Pathname.new(strip_output_dir(filename))
-        @exclude.any? { |e| pathname_components(pathname).include?(e) }
+        @exclude.any? { |e| pathname_components(pathname).include?(e) || Regexp.new(e).match(pathname.to_s) }
       end
 
       contract String => String
