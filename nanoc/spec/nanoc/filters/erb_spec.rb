@@ -134,34 +134,4 @@ describe Nanoc::Filters::ERB do
       end
     end
   end
-
-  context 'safe level' do
-    subject do
-      filter.setup_and_run('<%= eval File.read("moo") %>', params)
-    end
-
-    let(:filter) { described_class.new }
-
-    let(:res) { { success: false } }
-
-    before do
-      File.write('moo', '1+2')
-    end
-
-    context 'safe level unchanged' do
-      let(:params) { {} }
-
-      it 'honors safe level' do
-        expect(subject).to eq('3')
-      end
-    end
-
-    context 'safe level set' do
-      let(:params) { { safe_level: 1 } }
-
-      it 'honors safe level' do
-        expect { subject }.to raise_error(SecurityError)
-      end
-    end
-  end
 end
