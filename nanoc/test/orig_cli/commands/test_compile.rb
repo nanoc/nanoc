@@ -100,6 +100,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
       end
 
       Dir.mkdir('output/excluded_dir')
+      Dir.mkdir('output/excluded_dir_regex')
 
       File.open('nanoc.yaml', 'w') do |io|
         io.write "string_pattern_type: legacy\n"
@@ -119,13 +120,14 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         io.write "string_pattern_type: legacy\n"
         io.write "prune:\n"
         io.write "  auto_prune: true\n"
-        io.write "  exclude: [ 'excluded_dir' ]\n"
+        io.write "  exclude: [ 'excluded_dir', '^/excluded_.*_regex$' ]\n"
       end
 
       assert File.file?('output/stray.html')
       Nanoc::CLI.run %w[compile]
       refute File.file?('output/stray.html')
       assert File.directory?('output/excluded_dir'), 'excluded_dir should still be there'
+      assert File.directory?('output/excluded_dir_regex'), 'excluded_dir_regex should still be there'
     end
   end
 
