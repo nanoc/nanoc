@@ -93,7 +93,7 @@ describe Nanoc::Core::Checksummer do
     context 'non-serializable' do
       let(:obj) { [-> {}] }
 
-      it { is_expected.to match(/\AArray<Proc<#<Proc:0x.*@.*:\d+.*>>,>\z/) }
+      it { is_expected.to match(/\AArray<Proc<#<Proc:0x.*>>,>\z/) }
     end
   end
 
@@ -111,7 +111,7 @@ describe Nanoc::Core::Checksummer do
     context 'non-serializable' do
       let(:obj) { { 'a' => -> {} } }
 
-      it { is_expected.to match(/\AHash<String<a>=Proc<#<Proc:0x.*@.*:\d+.*>>,>\z/) }
+      it { is_expected.to match(/\AHash<String<a>=Proc<#<Proc:0x.*>>,>\z/) }
     end
 
     context 'recursive values' do
@@ -371,6 +371,6 @@ describe Nanoc::Core::Checksummer do
   context 'other non-marshal-able classes' do
     let(:obj) { proc {} }
 
-    it { is_expected.to match(/\AProc<#<Proc:0x.*@.*:[0-9a-fA-F]+.*>>\z/) }
+    it { is_expected.to match(/\AProc<#<Proc:0x.*>>\z/) }
   end
 end
