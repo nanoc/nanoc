@@ -11,9 +11,6 @@ module Nanoc::Filters
     #
     # @param [String] content The content to filter
     #
-    # @option params [Integer] :safe_level (nil) The safe level (`$SAFE`) to
-    #   use while running this filter
-    #
     # @option params [String] :trim_mode (nil) The trim mode to use
     #
     # @return [String] The filtered content
@@ -29,9 +26,8 @@ module Nanoc::Filters
       assigns_binding = context.get_binding(&proc)
 
       # Get result
-      safe_level = params[:safe_level]
       trim_mode = params[:trim_mode]
-      erb = ::ERB.new(content, safe_level, trim_mode)
+      erb = ::ERB.new(content, nil, trim_mode)
       erb.filename = filename
       erb.result(assigns_binding)
     end
