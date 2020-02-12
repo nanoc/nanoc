@@ -371,6 +371,6 @@ describe Nanoc::Core::Checksummer do
   context 'other non-marshal-able classes' do
     let(:obj) { proc {} }
 
-    it { is_expected.to match(/\AProc<#<Proc:0x.*@.*:\d+.*>>\z/) }
+    it { is_expected.to match(/\AProc<#<Proc:0x.*@.*:[0-9a-fA-F]+.*>>\z/) }
   end
 end
