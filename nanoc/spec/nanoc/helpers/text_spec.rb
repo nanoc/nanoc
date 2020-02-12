@@ -2,7 +2,7 @@
 
 describe Nanoc::Helpers::Text, helper: true do
   describe '#excerptize' do
-    subject { helper.excerptize(string, params) }
+    subject { helper.excerptize(string, **params) }
 
     let(:string) { 'Foo bar baz quux meow woof' }
     let(:params) { {} }

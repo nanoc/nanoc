@@ -2,7 +2,7 @@
 
 describe Nanoc::Helpers::Tagging, helper: true do
   describe '#tags_for' do
-    subject { helper.tags_for(item, params) }
+    subject { helper.tags_for(item, **params) }
 
     let(:item) { ctx.items['/me.*'] }
     let(:params) { {} }
