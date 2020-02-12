@@ -32,7 +32,6 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
     begin
       filter.setup_and_run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
     rescue SyntaxError => e
-      assert_match('item /about.md (rep xml):1: syntax error, unexpected tIDENTIFIER', e.to_s)
       assert_match 'syntax error', e.message
       raised = true
     end
