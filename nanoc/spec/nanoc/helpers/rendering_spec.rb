@@ -14,6 +14,11 @@ describe Nanoc::Helpers::Rendering, helper: true do
     before do
       ctx.create_layout(layout_content, {}, layout_identifier)
       ctx.update_action_sequence(layout, action_sequence_for_layout)
+
+      ctx.create_item('some item', {}, '/some.md')
+      ctx.item = ctx.items['/some.md']
+      ctx.create_rep(ctx.item, '/some.html')
+      ctx.item_rep = ctx.item.reps[:default]
     end
 
     context 'legacy identifier' do
@@ -88,6 +93,24 @@ describe Nanoc::Helpers::Rendering, helper: true do
         let(:layout_content) { 'blah <%= @layout._unwrap.class %>' }
 
         it { is_expected.to eql('blah Nanoc::Core::Layout') }
+      end
+
+      context 'printing wrapped item class' do
+        let(:layout_content) { 'item=<%= @item.class %>' }
+
+        it { is_expected.to eql('item=Nanoc::Core::CompilationItemView') }
+      end
+
+      context 'printing wrapped item rep class' do
+        let(:layout_content) { 'item_rep=<%= @item_rep.class %>' }
+
+        it { is_expected.to eql('item_rep=Nanoc::Core::CompilationItemRepView') }
+      end
+
+      context 'printing wrapped rep class' do
+        let(:layout_content) { 'rep=<%= @rep.class %>' }
+
+        it { is_expected.to eql('rep=Nanoc::Core::CompilationItemRepView') }
       end
 
       context 'unknown layout' do
