@@ -8,6 +8,8 @@ if ENV['CI'] == 'true'
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
+ENV['NANOC_DEV_MODE'] = 'true'
+
 require 'fuubar'
 require 'rspec/its'
 require 'timecop'
