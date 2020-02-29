@@ -33,6 +33,7 @@ module Nanoc::Helpers
         content: captured_content,
         item: @item,
         item_rep: @item_rep,
+        rep: @item_rep,
         items: @items,
         layout: layout_view,
         layouts: @layouts,
