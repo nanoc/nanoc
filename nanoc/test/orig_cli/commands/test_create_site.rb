@@ -123,4 +123,28 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
       refute File.file?('output/blah.txt')
     end
   end
+
+  def test_default_site_routes_items_properly
+    Nanoc::CLI.run %w[create_site foo]
+
+    FileUtils.cd('foo') do
+      FileUtils.mkdir_p('content/bar')
+      File.write('content/index.html', 'Index')
+      File.write('content/foo.html', 'Foo')
+      File.write('content/bar/index.html', 'Bar Index')
+      File.write('content/bar/qux.html', 'Bar Qux')
+
+      site = Nanoc::Core::SiteLoader.new.new_from_cwd
+      Nanoc::Core::Compiler.compile(site)
+
+      assert File.file?('output/index.html')
+      assert File.file?('output/foo/index.html')
+      assert File.file?('output/bar/index.html')
+      assert File.file?('output/bar/qux/index.html')
+      assert_match(/Index/, File.read('output/index.html'))
+      assert_match(/Foo/, File.read('output/foo/index.html'))
+      assert_match(/Bar Index/, File.read('output/bar/index.html'))
+      assert_match(/Bar Qux/, File.read('output/bar/qux/index.html'))
+    end
+  end
 end

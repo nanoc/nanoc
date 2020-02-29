@@ -35,14 +35,14 @@ module Nanoc::CLI::Commands
     DEFAULT_RULES = <<~EOS unless defined? DEFAULT_RULES
       #!/usr/bin/env ruby
 
-      compile '/index.html' do
-        layout '/default.*'
-        write '/index.html'
-      end
-
       compile '/**/*.html' do
         layout '/default.*'
-        write item.identifier.without_ext + '/index.html'
+
+        if item.identifier =~ '**/index.*'
+          write item.identifier.to_s
+        else
+          write item.identifier.without_ext + '/index.html'
+        end
       end
 
       # This is an example rule that matches Markdown (.md) files, and filters them
@@ -52,7 +52,12 @@ module Nanoc::CLI::Commands
       #compile '/**/*.md' do
       #  filter :kramdown
       #  layout '/default.*'
-      #  write item.identifier.without_ext + '/index.html'
+      #
+      #  if item.identifier =~ '**/index.*'
+      #    write item.identifier.to_s
+      #  else
+      #    write item.identifier.without_ext + '/index.html'
+      #  end
       #end
 
       compile '/**/*' do
