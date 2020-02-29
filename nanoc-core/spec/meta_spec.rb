@@ -76,7 +76,12 @@ describe 'meta', chdir: false do
 
   it 'doesn’t log anything' do
     # TODO: don’t have any exceptions
-    regular_files = Dir['lib/nanoc/core/**/*.rb'] - ['lib/nanoc/core/data_source.rb']
+    regular_files =
+      Dir['lib/nanoc/core/**/*.rb'] -
+      [
+        'lib/nanoc/core/data_source.rb',
+        'lib/nanoc/core/contracts_support.rb',
+      ]
 
     expect(regular_files).to all(satisfy do |fn|
       content = File.read(fn)

@@ -103,6 +103,8 @@ module Nanoc
           ::Contracts.const_set('Named', EnabledContracts::Named)
           ::Contracts.const_set('IterOf', EnabledContracts::IterOf)
           ::Contracts.const_set('AbsolutePathString', EnabledContracts::AbsolutePathString)
+
+          warn_about_performance
         end
 
         @_contracts_support__should_enable
@@ -125,6 +127,24 @@ module Nanoc
           base.extend(DisabledContracts)
           base.const_set('C', DisabledContracts)
         end
+      end
+
+      def self.warn_about_performance
+        return if ENV.key?('CI')
+        return if ENV.key?('NANOC_DEV_MODE')
+
+        puts '-' * 78
+        puts 'A NOTE ABOUT PERFORMANCE:'
+        puts 'The `contracts` gem is loaded, which enables extra run-time checks, but can drastically reduce Nanoc’s performance. The `contracts` gem is intended for development purposes, and is not recommended for day-to-day Nanoc usage.'
+        puts
+
+        if defined?(Bundler)
+          puts 'To speed up compilation, remove `contracts` from the Gemfile and run `bundle install`.'
+        else
+          puts 'To speed up compilation, either uninstall the `contracts` gem, or use Bundler (https://bundler.io/) with a Gemfile that doesn’t include `contracts`.'
+        end
+
+        puts '-' * 78
       end
     end
   end
