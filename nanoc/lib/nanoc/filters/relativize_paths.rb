@@ -15,7 +15,7 @@ module Nanoc::Filters
         '*/@href',
         '*/@src',
         'object/@data',
-        'param[@name="movie"]/@content',
+        'param[@name="movie"]/@value',
         'form/@action',
         'comment()',
       ].freeze

@@ -384,11 +384,11 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       @item_rep.paths[:last] = ['/woof/meow/']
     end
 
-    raw_content    = %(<object data="/example"><param name="movie" content="/example"></object>)
+    raw_content    = %(<object data="/example"><param name="movie" value="/example"></object>)
     actual_content = filter.setup_and_run(raw_content, type: :html)
 
     assert_match(/<object data="..\/..\/example">/, actual_content)
-    assert_match(/<param (name="movie" )?content="..\/..\/example"/, actual_content)
+    assert_match(/<param (name="movie" )?value="..\/..\/example"/, actual_content)
   end
 
   def test_filter_form
