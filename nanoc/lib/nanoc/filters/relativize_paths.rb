@@ -18,6 +18,7 @@ module Nanoc::Filters
         'param[@name="movie"]/@value',
         'form/@action',
         'comment()',
+        { path: '*/@srcset', type: :srcset },
       ].freeze
 
     GCSE_SEARCH_WORKAROUND = 'nanoc__gcse_search__f7ac3462f628a053f86fe6563c0ec98f1fe45cee'
@@ -207,13 +208,27 @@ module Nanoc::Filters
       case selector_type
       when :basic
         relative_path_to(node.content)
+      when :srcset
+        handle_srcset_node(node)
       else
         raise Nanoc::Core::Errors::InternalInconsistency, "Unsupported selector type #{selector_type.inspect} in #{self.class}"
       end
     end
 
+    def handle_srcset_node(node)
+      parsed = Nanoc::Extra::SrcsetParser.new(node.content).call
+
+      if parsed.is_a?(Array)
+        parsed.map do |pair|
+          [relative_path_to(pair[:url]), pair[:rest]].join('')
+        end.join(',')
+      else
+        relative_path_to(parsed)
+      end
+    end
+
     def path_is_relativizable?(path, params)
-      path.start_with?('/') && !exclude?(path, params)
+      path.match?(/\A\s*\//) && !exclude?(path, params)
     end
   end
 end
