@@ -143,14 +143,7 @@ module Nanoc::Filters
       content = apply_gcse_search_workaround(content)
 
       doc = /<html[\s>]/.match?(content) ? klass.parse(content) : klass.fragment(content)
-      selector = selectors.map { |sel| "descendant-or-self::#{sel}" }.join('|')
-      doc.xpath(selector, namespaces).each do |node|
-        if node.name == 'comment'
-          nokogiri_process_comment(node, doc, selectors, namespaces, klass, type, params)
-        elsif path_is_relativizable?(node.content, params)
-          node.content = relative_path_to(node.content)
-        end
-      end
+      handle_selectors(selectors, doc, namespaces, klass, type, params)
 
       output =
         case type
@@ -169,6 +162,18 @@ module Nanoc::Filters
 
     def revert_gcse_search_workaround(content)
       content.gsub(GCSE_SEARCH_WORKAROUND, 'gcse:search')
+    end
+
+    def handle_selectors(selectors, doc, namespaces, klass, type, params)
+      selector = selectors.map { |sel| "descendant-or-self::#{sel}" }.join('|')
+
+      doc.xpath(selector, namespaces).each do |node|
+        if node.name == 'comment'
+          nokogiri_process_comment(node, doc, selectors, namespaces, klass, type, params)
+        elsif path_is_relativizable?(node.content, params)
+          node.content = relative_path_to(node.content)
+        end
+      end
     end
 
     def nokogiri_process_comment(node, doc, selectors, namespaces, klass, type, params)
