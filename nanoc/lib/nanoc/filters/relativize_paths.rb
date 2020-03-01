@@ -18,6 +18,7 @@ module Nanoc::Filters
         'param[@name="movie"]/@value',
         'form/@action',
         'comment()',
+        { path: '*/@srcset', type: :srcset },
       ].freeze
 
     GCSE_SEARCH_WORKAROUND = 'nanoc__gcse_search__f7ac3462f628a053f86fe6563c0ec98f1fe45cee'
@@ -165,15 +166,30 @@ module Nanoc::Filters
     end
 
     def handle_selectors(selectors, doc, namespaces, klass, type, params)
-      selector = selectors.map { |sel| "descendant-or-self::#{sel}" }.join('|')
+      selectors_by_type(selectors).each do |selector_type, sub_selectors|
+        selector = sub_selectors.map { |sel| "descendant-or-self::#{sel.fetch(:path)}" }.join('|')
 
-      doc.xpath(selector, namespaces).each do |node|
-        if node.name == 'comment'
-          nokogiri_process_comment(node, doc, selectors, namespaces, klass, type, params)
-        elsif path_is_relativizable?(node.content, params)
-          node.content = relative_path_to(node.content)
+        doc.xpath(selector, namespaces).each do |node|
+          if node.name == 'comment'
+            nokogiri_process_comment(node, doc, sub_selectors, namespaces, klass, type, params)
+          elsif path_is_relativizable?(node.content, params)
+            node.content = relativize_node(node, selector_type)
+          end
         end
       end
+    end
+
+    def selectors_by_type(selectors)
+      typed_selectors =
+        selectors.map do |s|
+          if s.respond_to?(:keys)
+            s
+          else
+            { path: s, type: :basic }
+          end
+        end
+
+      typed_selectors.group_by { |s| s.fetch(:type) }
     end
 
     def nokogiri_process_comment(node, doc, selectors, namespaces, klass, type, params)
@@ -188,8 +204,31 @@ module Nanoc::Filters
       node.replace(Nokogiri::XML::Comment.new(doc, content))
     end
 
+    def relativize_node(node, selector_type)
+      case selector_type
+      when :basic
+        relative_path_to(node.content)
+      when :srcset
+        handle_srcset_node(node)
+      else
+        raise Nanoc::Core::Errors::InternalInconsistency, "Unsupported selector type #{selector_type.inspect} in #{self.class}"
+      end
+    end
+
+    def handle_srcset_node(node)
+      parsed = Nanoc::Extra::SrcsetParser.new(node.content).call
+
+      if parsed.is_a?(Array)
+        parsed.map do |pair|
+          [relative_path_to(pair[:url]), pair[:rest]].join('')
+        end.join(',')
+      else
+        relative_path_to(parsed)
+      end
+    end
+
     def path_is_relativizable?(path, params)
-      path.start_with?('/') && !exclude?(path, params)
+      path.match?(/\A\s*\//) && !exclude?(path, params)
     end
   end
 end

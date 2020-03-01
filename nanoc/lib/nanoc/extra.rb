@@ -17,4 +17,5 @@ end
 
 require_relative 'extra/link_collector'
 require_relative 'extra/jruby_nokogiri_warner'
+require_relative 'extra/srcset_parser'
 require_relative 'extra/core_ext'
