@@ -129,10 +129,10 @@ describe Nanoc::Filters::RelativizePaths do
         it { is_expected.to eq('<object data="../foo/bar"></object>') }
       end
 
-      context 'param content' do
-        let(:content) { '<param name="movie" content="/foo/bar.swf">' }
+      context 'param value' do
+        let(:content) { '<param name="movie" value="/foo/bar.swf">' }
 
-        it { is_expected.to eq('<param name="movie" content="../foo/bar.swf">') }
+        it { is_expected.to eq('<param name="movie" value="../foo/bar.swf">') }
       end
     end
 
