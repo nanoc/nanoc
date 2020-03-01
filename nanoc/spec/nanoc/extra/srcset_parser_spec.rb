@@ -34,4 +34,12 @@ describe Nanoc::Extra::SrcsetParser do
       end
     end
   end
+
+  context 'with bad input' do
+    let(:value) { ' http://example.com/a.jpg bad' }
+
+    it 'falls back to input' do
+      expect(parsed).to eq(value)
+    end
+  end
 end

@@ -42,15 +42,12 @@ module Nanoc
           match[:rest] = scan(REGEX_REST)
           scan(/\s*/)
 
-          if try_scan(/,/)
-            matches << match
-            next
-          end
+          matches << match
 
-          if eos?
-            matches << match
-            break
-          end
+          next if try_scan(/,/)
+          break if eos?
+
+          raise(InvalidFormat)
         end
 
         matches
