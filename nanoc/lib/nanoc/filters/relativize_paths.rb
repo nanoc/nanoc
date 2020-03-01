@@ -165,15 +165,30 @@ module Nanoc::Filters
     end
 
     def handle_selectors(selectors, doc, namespaces, klass, type, params)
-      selector = selectors.map { |sel| "descendant-or-self::#{sel}" }.join('|')
+      selectors_by_type(selectors).each do |selector_type, sub_selectors|
+        selector = sub_selectors.map { |sel| "descendant-or-self::#{sel.fetch(:path)}" }.join('|')
 
-      doc.xpath(selector, namespaces).each do |node|
-        if node.name == 'comment'
-          nokogiri_process_comment(node, doc, selectors, namespaces, klass, type, params)
-        elsif path_is_relativizable?(node.content, params)
-          node.content = relative_path_to(node.content)
+        doc.xpath(selector, namespaces).each do |node|
+          if node.name == 'comment'
+            nokogiri_process_comment(node, doc, sub_selectors, namespaces, klass, type, params)
+          elsif path_is_relativizable?(node.content, params)
+            node.content = relativize_node(node, selector_type)
+          end
         end
       end
+    end
+
+    def selectors_by_type(selectors)
+      typed_selectors =
+        selectors.map do |s|
+          if s.respond_to?(:keys)
+            s
+          else
+            { path: s, type: :basic }
+          end
+        end
+
+      typed_selectors.group_by { |s| s.fetch(:type) }
     end
 
     def nokogiri_process_comment(node, doc, selectors, namespaces, klass, type, params)
@@ -186,6 +201,15 @@ module Nanoc::Filters
       end
 
       node.replace(Nokogiri::XML::Comment.new(doc, content))
+    end
+
+    def relativize_node(node, selector_type)
+      case selector_type
+      when :basic
+        relative_path_to(node.content)
+      else
+        raise Nanoc::Core::Errors::InternalInconsistency, "Unsupported selector type #{selector_type.inspect} in #{self.class}"
+      end
     end
 
     def path_is_relativizable?(path, params)
