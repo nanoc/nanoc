@@ -10,7 +10,15 @@ module Nanoc::Filters
 
     DDMemoize.activate(self)
 
-    SELECTORS = ['*/@href', '*/@src', 'object/@data', 'param[@name="movie"]/@content', 'form/@action', 'comment()'].freeze
+    SELECTORS =
+      [
+        '*/@href',
+        '*/@src',
+        'object/@data',
+        'param[@name="movie"]/@content',
+        'form/@action',
+        'comment()',
+      ].freeze
 
     GCSE_SEARCH_WORKAROUND = 'nanoc__gcse_search__f7ac3462f628a053f86fe6563c0ec98f1fe45cee'
 

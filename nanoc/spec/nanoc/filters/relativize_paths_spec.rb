@@ -110,6 +110,30 @@ describe Nanoc::Filters::RelativizePaths do
 
         it { is_expected.to eq('<a href="/foo/bar">Foo</a>') }
       end
+
+      context 'img src' do
+        let(:content) { '<img src="/foo/bar.png">' }
+
+        it { is_expected.to eq('<img src="../foo/bar.png">') }
+      end
+
+      context 'form action' do
+        let(:content) { '<form action="/foo/bar"><button>Submit</button></form>' }
+
+        it { is_expected.to eq('<form action="../foo/bar"><button>Submit</button></form>') }
+      end
+
+      context 'object data' do
+        let(:content) { '<object data="/foo/bar"></object>' }
+
+        it { is_expected.to eq('<object data="../foo/bar"></object>') }
+      end
+
+      context 'param content' do
+        let(:content) { '<param name="movie" content="/foo/bar.swf">' }
+
+        it { is_expected.to eq('<param name="movie" content="../foo/bar.swf">') }
+      end
     end
 
     context 'XHTML' do
