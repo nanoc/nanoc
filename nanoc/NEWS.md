@@ -1,5 +1,21 @@
 # Nanoc news
 
+## 4.11.15 (2020-03-07)
+
+Enhancements:
+
+* Made `prune` print files to delete when using dry run (#1474, #1476)
+* Made Nanoc emit a warning when the `contracts` library is loaded, as it can cause severe slowdowns (#1483, #1489)
+* Made the default Rules handle `index.*` files (#1485, #1490)
+
+Fixes:
+
+* Fixed warnings on Ruby 2.7
+* Made `@rep` (not just `@item_rep`) available in the Rendering helper (#1484, #1488)
+* Made the `:relativize_paths` filter relativize the `value` attribute, not the `content` one, of the `param` HTML element (#1491)
+* Made the `:relativize_paths` filter support relativizing paths in `srcset` attributes (#1475, #1492)
+* Fixed an issue that could cause items to be marked as outdated when they shouldn’t be (#1471, #1493).
+
 ## 4.11.14 (2019-11-10)
 
 Fixes:
