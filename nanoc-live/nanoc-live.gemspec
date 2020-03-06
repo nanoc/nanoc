@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('adsf-live', '~> 1.4')
   s.add_runtime_dependency('listen', '~> 3.0')
-  s.add_runtime_dependency('nanoc-cli', '~> 4.11', '>= 4.11.15')
-  s.add_runtime_dependency('nanoc-core', '~> 4.11', '>= 4.11.15')
+  s.add_runtime_dependency('nanoc-cli', '~> 4.11', '>= 4.11.14')
+  s.add_runtime_dependency('nanoc-core', '~> 4.11', '>= 4.11.14')
 end
