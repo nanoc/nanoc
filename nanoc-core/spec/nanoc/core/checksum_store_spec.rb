@@ -57,6 +57,28 @@ describe Nanoc::Core::ChecksumStore do
     end
   end
 
+  context 'after storing and loading missing data' do
+    let(:code_snippet_a) { Nanoc::Core::CodeSnippet.new('aaa', 'lib/aaa.rb') }
+    let(:code_snippet_b) { Nanoc::Core::CodeSnippet.new('bbb', 'lib/bbb.rb') }
+    let(:code_snippet_c) { Nanoc::Core::CodeSnippet.new('ccc', 'lib/ccc.rb') }
+
+    before do
+      store.add(code_snippet_a)
+      store.add(code_snippet_b)
+      store.add(code_snippet_c)
+      store.store
+
+      # remove B
+      store.objects = [code_snippet_a, code_snippet_c]
+      store.load
+    end
+
+    it 'has checksums for A and C' do
+      expect(store[code_snippet_a]).not_to be_nil
+      expect(store[code_snippet_c]).not_to be_nil
+    end
+  end
+
   context 'setting content on unknown non-document' do
     before { store.add(other_code_snippet) }
 

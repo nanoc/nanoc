@@ -64,7 +64,7 @@ module Nanoc
 
         @checksums = {}
         new_data.each_pair do |key, checksum|
-          if references.include?(key) || references.include?(key.first)
+          if references.include?(key) || (key.respond_to?(:first) && references.include?(key.first))
             @checksums[key] = checksum
           end
         end
