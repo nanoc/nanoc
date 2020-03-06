@@ -36,6 +36,7 @@ end
 
 packages.each do |package|
   namespace(package.tr('-', '_')) do
+    task(:gem) { sub_sh(package, 'bundle exec rake gem') }
     task(:test) { sub_sh(package, 'bundle exec rake test') }
     task(:rubocop) { sub_sh(package, 'bundle exec rake rubocop') }
   end
