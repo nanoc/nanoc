@@ -1,5 +1,11 @@
 # nanoc-external news
 
+## 1.0.4 (2020-03-07)
+
+Fixes:
+
+* Restored compatibility with Nanoc 4.11.14.
+
 ## 1.0.3 (2019-04-28)
 
 Fixes:
