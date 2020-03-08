@@ -10,7 +10,7 @@ EOS
 
 required :H, :handler,       'specify the handler to use (webrick/mongrel/...)'
 required :o, :host,          'specify the host to listen on (default: 0.0.0.0)', default: '127.0.0.1'
-required :p, :port,          'specify the port to listen on (default: 3000)', transform: Nanoc::CLI::Transform::Port, default: 3000
+required :p, :port,          'specify the port to listen on (default: 3000)', transform: ::Nanoc::CLI::Transform::Port, default: 3000
 flag     :L, :'live-reload', 'reload on changes'
 
 module Guard
@@ -33,13 +33,15 @@ module Guard
         end
 
         Thread.new do
+          break if ENV['__NANOC_DEV_LIVE_DISABLE_VIEW']
+
           # Crash the entire process if the viewer dies for some reason (e.g.
           # the port is already bound).
           Thread.current.abort_on_exception = true
-          Nanoc::CLI::Commands::View.new(options, arguments, command).run
+          ::Nanoc::CLI::Commands::View.new(options, arguments, command).run
         end
 
-        Guard.start(no_interactions: true)
+        ::Guard.start(no_interactions: true)
       end
     end
   end
