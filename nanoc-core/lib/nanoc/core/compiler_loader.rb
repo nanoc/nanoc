@@ -32,7 +32,7 @@ module Nanoc
           outdatedness_store: outdatedness_store,
         }
 
-        Nanoc::Core::Compiler.new(site, params)
+        Nanoc::Core::Compiler.new(site, **params)
       end
 
       def compiled_content_cache_class

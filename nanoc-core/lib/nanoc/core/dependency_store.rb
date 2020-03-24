@@ -113,7 +113,7 @@ module Nanoc
         src_ref = obj2ref(src)
         dst_ref = obj2ref(dst)
 
-        existing_props = Nanoc::Core::DependencyProps.new(@graph.props_for(dst_ref, src_ref) || {})
+        existing_props = Nanoc::Core::DependencyProps.new(**(@graph.props_for(dst_ref, src_ref) || {}))
         new_props = Nanoc::Core::DependencyProps.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
         props = existing_props.merge(new_props)
 

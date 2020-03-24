@@ -46,8 +46,8 @@ module Nanoc
         @binary_cache[rep] = content.select { |_key, c| c.binary? }
       end
 
-      def prune(*args)
-        @wrapped_caches.each { |w| w.prune(*args) }
+      def prune(items:)
+        @wrapped_caches.each { |w| w.prune(items: items) }
       end
 
       # True if there is cached compiled content available for this item, and
