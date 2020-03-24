@@ -81,7 +81,7 @@ module Nanoc
 
               # ignore redirects back onto self (misused to set HTTP cookies)
               return nil if href == location
-              
+
               if /^30[18]$/.match?(res.code)
                 return Result.new(href, "link has moved permanently to '#{location}'")
               end
