@@ -243,7 +243,7 @@ describe Nanoc::Core::CompilationItemView do
   end
 
   describe '#compiled_content' do
-    subject { view.compiled_content(params) }
+    subject { view.compiled_content(**params) }
 
     let(:view) { described_class.new(item, view_context) }
 
@@ -322,7 +322,7 @@ describe Nanoc::Core::CompilationItemView do
   end
 
   describe '#path' do
-    subject { view.path(params) }
+    subject { view.path(**params) }
 
     let(:view) { described_class.new(item, view_context) }
 
