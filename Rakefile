@@ -5,7 +5,7 @@ require 'rubocop/rake_task'
 RuboCop::RakeTask.new(:rubocop)
 
 def sub_sh(dir, cmd)
-  Bundler.with_clean_env do
+  Bundler.with_unbundled_env do
     Dir.chdir(dir) do
       puts "======= entering ./#{dir}/"
       puts
