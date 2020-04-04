@@ -50,8 +50,8 @@ module Nanoc
         end
 
         def calc_for_each_attribute_of(obj, digest_class = CompactDigest)
-          obj.attributes.each_with_object({}) do |(key, value), memo|
-            memo[key] = Nanoc::Core::Checksummer.calc(value, digest_class)
+          obj.attributes.transform_values do |value|
+            Nanoc::Core::Checksummer.calc(value, digest_class)
           end
         end
 

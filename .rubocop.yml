@@ -10,11 +10,11 @@ require: rubocop-rspec
 # We use filenames such as “create-site.rb” that translate to method names.
 Naming/FileName:
   Exclude:
-    - 'nanoc/lib/nanoc/orig_cli/commands/*.rb'
-    - 'nanoc-cli/lib/nanoc/cli/commands/*.rb'
-    - 'nanoc-*/lib/nanoc-*.rb'
-    - 'guard-nanoc/lib/guard-nanoc.rb'
-    - '*/*.gemspec'
+    - "nanoc/lib/nanoc/orig_cli/commands/*.rb"
+    - "nanoc-cli/lib/nanoc/cli/commands/*.rb"
+    - "nanoc-*/lib/nanoc-*.rb"
+    - "guard-nanoc/lib/guard-nanoc.rb"
+    - "*/*.gemspec"
 
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma
@@ -31,32 +31,43 @@ Layout/FirstArrayElementIndentation:
 Naming/MethodParameterName:
   AllowedNames:
     - "to" # destination
-    - "e"  # element
+    - "e" # element
     - "id" # identifier
     - "io" # IO instance
-    - "y"  # enumerator yielder
+    - "y" # enumerator yielder
 
 # Some specs deal with things that aren’t classes.
 RSpec/DescribeClass:
   Exclude:
-    - '*/spec/gem_spec.rb'
-    - '*/spec/manifest_spec.rb'
-    - '*/spec/meta_spec.rb'
-    - 'nanoc/spec/contributors_spec.rb'
-    - 'nanoc/spec/nanoc/integration/*_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/*_spec.rb'
-    - 'nanoc/spec/regression_filenames_spec.rb'
-
-
+    - "*/spec/gem_spec.rb"
+    - "*/spec/manifest_spec.rb"
+    - "*/spec/meta_spec.rb"
+    - "nanoc/spec/contributors_spec.rb"
+    - "nanoc/spec/nanoc/integration/*_spec.rb"
+    - "nanoc/spec/nanoc/regressions/*_spec.rb"
+    - "nanoc/spec/regression_filenames_spec.rb"
 
 # ----- CONFIGURED (enabled non-default cops) -----
 
 Layout/ClassStructure:
   Enabled: true
   Include:
-    - 'nanoc-core/**/*.rb'
+    - "nanoc-core/**/*.rb"
 
+Lint/RaiseException:
+  Enabled: true
 
+Lint/StructNewOverride:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
 
 # ----- CONFIGURED (exceptions for tests) -----
 
@@ -64,28 +75,26 @@ Layout/ClassStructure:
 # and generally does not provide useful warnings
 Lint/AmbiguousBlockAssociation:
   Exclude:
-    - '*/spec/**/*.rb'
+    - "*/spec/**/*.rb"
 
 # `rescue nil` is useful in specs where the exception is not important, but
 # the size effects are.
 Style/RescueModifier:
   Exclude:
-    - '*/spec/**/*.rb'
+    - "*/spec/**/*.rb"
 
 # A common pattern in tests is to define anonymous classes in which methods are defined, which trips
 # up Rubocop’s nested method definition cop.
 Lint/NestedMethodDefinition:
   Exclude:
-    - '*/test/**/*.rb'
-    - '*/spec/**/*.rb'
+    - "*/test/**/*.rb"
+    - "*/spec/**/*.rb"
 
 # This is used in tests, to verify the effect of state-changing functions.
 Style/GlobalVars:
   Exclude:
-    - '*/test/**/*.rb'
-    - '*/spec/**/*.rb'
-
-
+    - "*/test/**/*.rb"
+    - "*/spec/**/*.rb"
 
 # ----- TO ENABLE LATER -----
 
@@ -112,8 +121,6 @@ Naming/MemoizedInstanceVariableName:
 Layout/LineLength:
   Enabled: false
 
-
-
 # ----- DISABLED (security) -----
 
 # Nanoc runs offline in a trusted environment, and these security checks are false positives.
@@ -126,11 +133,9 @@ Security/MarshalLoad:
 
 Security/Eval:
   Exclude:
-    - '*/test/**/*.rb'
-    - '*/spec/**/*.rb'
-    - 'nanoc/lib/nanoc/filters/erubi.rb'
-
-
+    - "*/test/**/*.rb"
+    - "*/spec/**/*.rb"
+    - "nanoc/lib/nanoc/filters/erubi.rb"
 
 # ----- DISABLED (metrics) -----
 
@@ -162,8 +167,6 @@ Metrics/ParameterLists:
 
 Metrics/PerceivedComplexity:
   Enabled: false
-
-
 
 # ----- DISABLED (opinionated) -----
 
@@ -213,15 +216,13 @@ Style/StderrPuts:
 Style/FormatStringToken:
   Enabled: false
 
-
-
 # ----- DISABLED (buggy) -----
 
 # This cop attempts to replace Nanoc::VERSION with described_class, which makes
 # the spec fail.
 RSpec/DescribedClass:
   Exclude:
-    - '**/version_spec.rb'
+    - "**/version_spec.rb"
 
 # This turns
 #
@@ -234,4 +235,4 @@ RSpec/DescribedClass:
 # … which does not look right.
 RSpec/PredicateMatcher:
   Exclude:
-    - 'nanoc-core/spec/nanoc/core/item_rep_writer_spec.rb'
+    - "nanoc-core/spec/nanoc/core/item_rep_writer_spec.rb"
