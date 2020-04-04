@@ -9,7 +9,7 @@ require 'codecov'
 SimpleCov.formatter = SimpleCov::Formatter::Codecov
 
 require 'minitest/autorun'
-require 'mocha/setup'
+require 'mocha/minitest'
 require 'vcr'
 
 require 'tmpdir'
