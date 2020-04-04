@@ -32,7 +32,7 @@ module Nanoc
         end
 
         contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
-        def run(_rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
+        def run(_rep, is_outdated:)
           raise NotImplementedError
         end
 

@@ -4,7 +4,7 @@ module Nanoc::Filters::ColorizeSyntax::Colorizers
   class Abstract
     extend DDPlugin::Plugin
 
-    def process(_code, _language, params = {}) # rubocop:disable Lint/UnusedMethodArgument
+    def process(_code, _language, params = {})
       raise NotImplementedError
     end
 
