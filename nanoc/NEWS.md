@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.11.16 (2020-04-26)
+
+Fixes:
+
+- Fixed uninitialized constant/undefined method bug with guard-nanoc (#1494, #1495)
+- Removed remaining more “Using the last argument …” warnings (#1498)
+
+Enhancements:
+
+- Ignore redirects to self (misued for cookies) (#1496) [Daniel Aleksandersen]
+
 ## 4.11.15 (2020-03-07)
 
 Enhancements:
