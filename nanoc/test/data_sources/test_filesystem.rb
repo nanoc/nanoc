@@ -16,6 +16,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Create a fake class
     klass = Class.new do
       attr_reader :stuff
+
       def initialize(*stuff)
         @stuff = stuff
       end
@@ -73,6 +74,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Create a fake class
     klass = Class.new do
       attr_reader :stuff
+
       def initialize(*stuff)
         @stuff = stuff
       end
@@ -304,6 +306,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Create a fake class
     klass = Class.new do
       attr_reader :stuff
+
       def initialize(*stuff)
         @stuff = stuff
       end
@@ -386,6 +389,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Create a fake class
     klass = Class.new do
       attr_reader :stuff
+
       def initialize(*stuff)
         @stuff = stuff
       end

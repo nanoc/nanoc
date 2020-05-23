@@ -21,7 +21,7 @@ module Nanoc
               raise(res)
             when Proc
               fiber.resume(res.call)
-            when DONE # rubocop:disable Lint/EmptyWhen
+            when DONE
               # ignore
             else
               raise Nanoc::Core::Errors::InternalInconsistency.new(
