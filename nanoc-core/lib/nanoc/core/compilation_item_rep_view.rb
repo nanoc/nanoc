@@ -3,6 +3,12 @@
 module Nanoc
   module Core
     class CompilationItemRepView < ::Nanoc::Core::BasicItemRepView
+      # How long to wait before the requested file appears.
+      #
+      # This is a bit of a hack -- ideally, Nanoc would know that the file is
+      # being generated, and wait the appropriate amount of time.
+      FILE_APPEAR_TIMEOUT = 10.0
+
       # @abstract
       def item_view_class
         Nanoc::Core::CompilationItemView
@@ -27,7 +33,7 @@ module Nanoc
         # Wait for file to exist
         if res
           start = Time.now
-          sleep 0.05 until File.file?(res) || Time.now - start > 1.0
+          sleep 0.05 until File.file?(res) || Time.now - start > FILE_APPEAR_TIMEOUT
           raise Nanoc::Core::Errors::InternalInconsistency, "File did not apear in time: #{res}" unless File.file?(res)
         end
 
