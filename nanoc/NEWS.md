@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.17 (2020-06-12)
+
+Fixes:
+
+- Fixed issue which could cause Nanoc to throw a timeout exception (#1503)
+
 ## 4.11.16 (2020-04-26)
 
 Fixes:
