@@ -8,6 +8,8 @@ module Nanoc
       class UTF8 < Abstract
         # @see Nanoc::CLI::StreamCleaners::Abstract#clean
         def clean(str)
+          return unless str.encoding.name == 'UTF-8'
+
           # FIXME: this decomposition is not generally usable
           str
             .unicode_normalize(:nfkd)
