@@ -45,7 +45,7 @@ class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
           </body>
         </html>
       EOS
-      expected_output_regex = %r{^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>}
+      expected_output_regex = %r{^<!DOCTYPE html>\s*<html>\s*<head>\s*<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">\s*<title>Foo</title>\s*</head>\s*<body>\s*<pre title="moo"><code class="language-ruby"># comment</code></pre>\s*</body>\s*</html>}
 
       # Run filter
       actual_output = filter.setup_and_run(input, default_colorizer: :dummy, is_fullpage: true)

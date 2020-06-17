@@ -50,7 +50,7 @@ module ::Nanoc::Extra
     def external_href?(href)
       return false if internal_href?(href)
 
-      href =~ %r{^(\/\/|[a-z\-]+:)}
+      href =~ %r{^(//|[a-z\-]+:)}
     end
 
     def internal_href?(href)

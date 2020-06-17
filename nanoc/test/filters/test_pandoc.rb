@@ -12,7 +12,7 @@ class Nanoc::Filters::PandocTest < Nanoc::TestCase
 
       # Run filter
       result = filter.setup_and_run("# Heading\n")
-      assert_match(%r{<h1 id=\"heading\">Heading</h1>\s*}, result)
+      assert_match(%r{<h1 id="heading">Heading</h1>\s*}, result)
     end
   end
 
@@ -26,7 +26,7 @@ class Nanoc::Filters::PandocTest < Nanoc::TestCase
       # Run filter
       args = { f: :markdown, to: :html }
       result = filter.setup_and_run("# Heading\n", args)
-      assert_match(%r{<h1 id=\"heading\">Heading</h1>\s*}, result)
+      assert_match(%r{<h1 id="heading">Heading</h1>\s*}, result)
     end
   end
 
@@ -41,7 +41,7 @@ class Nanoc::Filters::PandocTest < Nanoc::TestCase
       args = [:s, { f: :markdown, to: :html }, 'wrap=none', :toc]
       result = filter.setup_and_run("# Heading\n", args: args)
       assert_match '<nav id="TOC"', result
-      assert_match(%r{<h1 id=\"heading\">Heading</h1>\s*}, result)
+      assert_match(%r{<h1 id="heading">Heading</h1>\s*}, result)
     end
   end
 end

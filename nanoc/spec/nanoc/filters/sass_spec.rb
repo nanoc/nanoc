@@ -231,12 +231,12 @@ describe Nanoc::Filters::SassCommon do
 
     it 'compacts when using style=compact' do
       expect(sass.setup_and_run(".foo #bar\n  color: #f00", style: 'compact'))
-        .to match(/^\.foo #bar[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
+        .to match(/^\.foo #bar\s*\{\s*color:\s*(red|#f00);?\s*\}/m)
     end
 
     it 'compacts when using style=compressed' do
       expect(sass.setup_and_run(".foo #bar\n  color: #f00", style: 'compressed'))
-        .to match(/^\.foo #bar[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
+        .to match(/^\.foo #bar\s*\{\s*color:\s*(red|#f00);?\s*\}/m)
     end
 
     it 'supports SASS' do
@@ -246,7 +246,7 @@ describe Nanoc::Filters::SassCommon do
       SASS
 
       expect(sass.setup_and_run(content, syntax: :sass))
-        .to match(/^\.foo[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
+        .to match(/^\.foo\s*\{\s*color:\s*(red|#f00);?\s*\}/m)
     end
 
     it 'supports SASS as default syntax' do
@@ -256,12 +256,12 @@ describe Nanoc::Filters::SassCommon do
       SASS
 
       expect(sass.setup_and_run(content))
-        .to match(/^\.foo[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
+        .to match(/^\.foo\s*\{\s*color:\s*(red|#f00);?\s*\}/m)
     end
 
     it 'supports SCSS' do
       expect(sass.setup_and_run('.foo { color: #f00 }', syntax: :scss))
-        .to match(/^\.foo[\s]*\{[\s]*color:\s*(red|#f00);?[\s]*\}/m)
+        .to match(/^\.foo\s*\{\s*color:\s*(red|#f00);?\s*\}/m)
     end
 
     it 'raises proper error on failure' do

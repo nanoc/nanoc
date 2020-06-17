@@ -68,8 +68,8 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       io = capturing_stdio do
         Nanoc::CLI.run %w[prune --dry-run]
       end
-      assert_match %r{^\s+delete\s+\(dry run\) .*\/output2\/index\.html$}, io[:stdout]
-      assert_match %r{^\s+delete\s+\(dry run\) .*\/output2\/foo\.html$}, io[:stdout]
+      assert_match %r{^\s+delete\s+\(dry run\) .*/output2/index\.html$}, io[:stdout]
+      assert_match %r{^\s+delete\s+\(dry run\) .*/output2/foo\.html$}, io[:stdout]
 
       assert File.file?('output2/index.html')
       assert File.file?('output2/foo.html')

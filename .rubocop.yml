@@ -113,6 +113,12 @@ Style/ExponentialNotation:
 Style/SlicingWithRange:
   Enabled: true
 
+Style/RedundantRegexpCharacterClass:
+  Enabled: true
+
+Style/RedundantRegexpEscape:
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
@@ -136,6 +142,9 @@ Naming/MemoizedInstanceVariableName:
   Enabled: false
 
 Layout/LineLength:
+  Enabled: false
+
+Lint/MixedRegexpCaptureTypes:
   Enabled: false
 
 # ----- DISABLED (security) -----
