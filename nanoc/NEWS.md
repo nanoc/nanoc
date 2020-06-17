@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.11.18 (2020-06-17)
+
+Fixes:
+
+- Fixed a `Encoding::CompatibilityError` that would be thrown e.g. when using the `contracts` library (#1502, #1505) [Ethan Crawford]
+- Fixed an issue which could cause Nanoc not to compile all items on Ruby 2.7 (#1501, #1507)
+
 ## 4.11.17 (2020-06-12)
 
 Fixes:
