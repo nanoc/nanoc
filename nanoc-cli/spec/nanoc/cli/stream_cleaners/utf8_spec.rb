@@ -9,7 +9,7 @@ describe Nanoc::CLI::StreamCleaners::UTF8 do
     it 'does not attempt to clean the string' do
       expect(str).not_to receive(:unicode_normalize)
 
-      subject.clean(str)
+      expect(subject.clean(str)).to eq(str)
     end
   end
 
