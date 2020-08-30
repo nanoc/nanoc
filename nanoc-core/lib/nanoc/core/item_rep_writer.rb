@@ -62,11 +62,25 @@ module Nanoc
 
         # Write
         if is_modified
+          # Do a copy-on-write (CoW) filesystem-aware reflink-copying when item_rep is identical
+          # to the source content. Fallback to a hardlink or full copy.
+          written = false
           begin
-            FileUtils.ln(temp_path, raw_path, force: true)
-          rescue Errno::EXDEV, Errno::EACCES
-            FileUtils.cp(temp_path, raw_path)
+            require 'reflink'
+            if !content.filename.nil? && FileUtils.identical?(content.filename, temp_path)
+              Reflink.reflink_always(content.filename, raw_path)
+              written = true
+            end
+          rescue LoadError, Errno::ENOTSUP, Errno::EXDEV
           end
+          unless written
+            begin
+              FileUtils.ln(temp_path, raw_path, force: true)
+            rescue Errno::EXDEV, Errno::EACCES
+              FileUtils.cp(temp_path, raw_path)
+            end
+          end
+
         end
 
         item_rep.modified = is_modified
