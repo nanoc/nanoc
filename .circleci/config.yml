@@ -754,6 +754,7 @@ workflows:
       - setup_cruby24
       - setup_cruby25
       - setup_cruby26
+      - setup_cruby27
 
       # check style
       - check_style_cruby26:
@@ -828,3 +829,26 @@ workflows:
       - test_guard_nanoc_cruby26:
           requires:
             - setup_cruby26
+
+      # test [CRuby 2.7]
+      - test_nanoc_cruby27:
+          requires:
+            - setup_cruby27
+      - test_nanoc_core_cruby27:
+          requires:
+            - setup_cruby27
+      - test_nanoc_deploying_cruby27:
+          requires:
+            - setup_cruby27
+      - test_nanoc_external_cruby27:
+          requires:
+            - setup_cruby27
+      - test_nanoc_live_cruby27:
+          requires:
+            - setup_cruby27
+      - test_nanoc_spec_cruby27:
+          requires:
+            - setup_cruby27
+      - test_guard_nanoc_cruby27:
+          requires:
+            - setup_cruby27
