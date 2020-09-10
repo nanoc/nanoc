@@ -61,11 +61,23 @@ module Nanoc
         end
 
         # Write
+        # Clone or copy the file on a copy-on-write file system (APFS, Btrfs, XFS) if the
+        # resulting and source files are identical.
+        # Otherwise, hardlink the file or do a regular copy if unsupported.
         if is_modified
-          begin
-            FileUtils.ln(temp_path, raw_path, force: true)
-          rescue Errno::EXDEV, Errno::EACCES
-            FileUtils.cp(temp_path, raw_path)
+          written = false
+          if Object.const_defined?('Clonefile')
+            if !content.filename.nil? && FileUtils.identical?(content.filename, temp_path)
+              Clonefile.auto(content.filename, raw_path)
+              written = true
+            end
+          end
+          unless written
+            begin
+              FileUtils.ln(temp_path, raw_path, force: true)
+            rescue Errno::EXDEV, Errno::EACCES
+              FileUtils.cp(temp_path, raw_path)
+            end
           end
         end
 
