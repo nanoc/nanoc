@@ -40,6 +40,20 @@ describe Nanoc::Core::TempFilenameFactory do
       path = subject.create(prefix)
       expect(File.file?(path)).not_to be(true)
     end
+
+    it 'is threadsafe' do
+      pool = Concurrent::FixedThreadPool.new(100)
+
+      # Post
+      10_000.times { pool.post { subject.create(prefix) } }
+
+      # Wait for completion
+      pool.shutdown
+      pool.wait_for_termination
+
+      # Check
+      expect(subject.create(prefix)).to end_with('/10000')
+    end
   end
 
   describe '#cleanup' do

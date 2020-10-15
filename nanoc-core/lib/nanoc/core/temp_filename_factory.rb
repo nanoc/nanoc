@@ -14,6 +14,7 @@ module Nanoc
       def initialize
         @counts = {}
         @root_dir = Dir.mktmpdir('nanoc')
+        @mutex = Mutex.new
       end
 
       # @param [String] prefix A string prefix to include in the temporary
@@ -21,8 +22,11 @@ module Nanoc
       #
       # @return [String] A new unused filename
       def create(prefix)
-        count = @counts.fetch(prefix, 0)
-        @counts[prefix] = count + 1
+        count = nil
+        @mutex.synchronize do
+          count = @counts.fetch(prefix, 0)
+          @counts[prefix] = count + 1
+        end
 
         dirname  = File.join(@root_dir, prefix)
         filename = File.join(@root_dir, prefix, count.to_s)
