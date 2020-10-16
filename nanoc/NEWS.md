@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.19 (2020-10-16)
+
+Fixes:
+
+- Fixed an issue which could cause compiled pages to contain the content of another page (#1501, #1510)
+
 ## 4.11.18 (2020-06-17)
 
 Fixes:
