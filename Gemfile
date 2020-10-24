@@ -44,6 +44,7 @@ group :plugins do
   gem 'asciidoctor'
   gem 'bluecloth', platforms: :ruby
   gem 'builder'
+  gem 'clonefile' unless Gem.win_platform?
   gem 'coderay'
   gem 'coffee-script'
   gem 'duktape', '~> 2.3'

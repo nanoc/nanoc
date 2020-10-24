@@ -78,6 +78,13 @@ module Nanoc
       end
 
       def smart_cp(from, to)
+        # Try clonefile
+        if Object.const_defined?('Clonefile')
+          FileUtils.rm_f(to)
+          res = Clonefile.auto(from, to)
+          return if res
+        end
+
         # Try with hardlink
         begin
           FileUtils.ln(from, to, force: true)
