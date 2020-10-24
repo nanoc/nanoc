@@ -191,6 +191,51 @@ Style/SingleArgumentDig:
 Style/StringConcatenation:
   Enabled: true
 
+Layout/BeginEndAlignment:
+  Enabled: true
+
+Lint/ConstantDefinitionInBlock:
+  Enabled: true
+
+Lint/DuplicateRequire:
+  Enabled: true
+
+Lint/EmptyFile:
+  Enabled: true
+
+Lint/HashCompareByIdentity:
+  Enabled: true
+
+Lint/IdentityComparison:
+  Enabled: true
+
+Lint/RedundantSafeNavigation:
+  Enabled: true
+
+Lint/TrailingCommaInAttributeDeclaration:
+  Enabled: true
+
+Lint/UselessMethodDefinition:
+  Enabled: true
+
+Lint/UselessTimes:
+  Enabled: true
+
+Style/ClassEqualityComparison:
+  Enabled: true
+
+Style/CombinableLoops:
+  Enabled: true
+
+Style/KeywordParametersOrder:
+  Enabled: true
+
+Style/RedundantSelfAssignment:
+  Enabled: true
+
+Style/SoleNestedConditional:
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
