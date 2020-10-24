@@ -18,7 +18,7 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
   end
 
   def add_changes_to_remote
-    system('git', 'init', '--quiet', 'rere_tmp')
+    system('git', 'init', '--quiet', '--initial-branch=master', 'rere_tmp')
     Dir.chdir('rere_tmp') do
       system('git', 'config', 'user.name', 'Zebra Platypus')
       system('git', 'config', 'user.email', 'zebra@platypus.example.com')
@@ -140,7 +140,7 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
 
   shared_examples 'remote configured properly' do
     before do
-      system('git', 'init', '--bare', '--quiet', 'rere')
+      system('git', 'init', '--bare', '--quiet', '--initial-branch=master', 'rere')
     end
 
     context 'default branch' do
@@ -218,7 +218,7 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
     context 'output dir is a Git repo' do
       before do
         Dir.chdir(output_dir) do
-          system('git', 'init', '--quiet')
+          system('git', 'init', '--initial-branch=master', '--quiet')
           system('git', 'config', 'user.name', 'Donkey Giraffe')
           system('git', 'config', 'user.email', 'donkey@giraffe.example.com')
         end
