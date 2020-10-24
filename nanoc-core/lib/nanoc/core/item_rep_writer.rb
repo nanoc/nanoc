@@ -62,11 +62,7 @@ module Nanoc
 
         # Write
         if is_modified
-          begin
-            FileUtils.ln(temp_path, raw_path, force: true)
-          rescue Errno::EXDEV, Errno::EACCES
-            FileUtils.cp(temp_path, raw_path)
-          end
+          smart_cp(temp_path, raw_path)
         end
 
         item_rep.modified = is_modified
@@ -79,6 +75,18 @@ module Nanoc
 
       def temp_filename
         Nanoc::Core::TempFilenameFactory.instance.create(TMP_TEXT_ITEMS_DIR)
+      end
+
+      def smart_cp(from, to)
+        # Try with hardlink
+        begin
+          FileUtils.ln(from, to, force: true)
+          return
+        rescue Errno::EXDEV, Errno::EACCES
+        end
+
+        # Fall back to old-school copy
+        FileUtils.cp(from, to)
       end
     end
   end
