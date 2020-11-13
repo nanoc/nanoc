@@ -20,6 +20,12 @@ require 'tomlrb'
 require 'tty-platform'
 require 'zeitwerk'
 
+# Optional external gems
+begin
+  require 'clonefile'
+rescue LoadError
+end
+
 module Nanoc
   module Core
     # Similar to `nil` except that it can only be compared against using
