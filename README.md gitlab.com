@@ -1,3 +1,5 @@
+
+https://docs.gitlab.com/ee/administration/raketasks/ldap.html#check
 [![Gem version](https://img.shields.io/gem/v/nanoc.svg)](http://rubygems.org/gems/nanoc)
 [![Gem downloads](https://img.shields.io/gem/dt/nanoc.svg)](http://rubygems.org/gems/nanoc)
 [![Build status](https://img.shields.io/circleci/project/github/nanoc/nanoc/master.svg)](https://circleci.com/gh/nanoc/workflows/nanoc)
