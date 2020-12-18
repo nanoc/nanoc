@@ -9,7 +9,6 @@ require 'tmpdir'
 require 'yaml'
 
 # External gems
-require 'clonefile'
 require 'concurrent-ruby'
 require 'json_schema'
 require 'ddmemoize'
@@ -20,6 +19,13 @@ require 'slow_enumerator_tools'
 require 'tomlrb'
 require 'tty-platform'
 require 'zeitwerk'
+
+# External gems (optional)
+begin
+  require 'clonefile'
+rescue LoadError
+  # ignore
+end
 
 module Nanoc
   module Core

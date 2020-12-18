@@ -47,6 +47,7 @@ group :plugins do
   gem 'bluecloth', platforms: :ruby
   gem 'builder'
   gem 'coderay'
+  gem 'clonefile', '~> 0.5.2'
   gem 'coffee-script'
   gem 'duktape', '~> 2.3'
   gem 'erubi'
