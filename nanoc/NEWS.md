@@ -1,5 +1,13 @@
 # Nanoc news
 
+## 4.11.21 (2020-12-18)
+
+Fixes:
+
+- Made clonefile usage optional
+
+You can add `clonefile` to your Gemfile to let Nanoc make use of your filesystem’s copy-on-write functionality (if available), which is not only faster but also more space-efficient. In the previous release, 4.11.20, clonefile was mandatory, even though it won’t properly compile on older operating systems.
+
 ## 4.11.20 (2020-12-18)
 
 Enhancements:
