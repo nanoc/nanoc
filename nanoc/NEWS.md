@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.20 (2020-12-18)
+
+Enhancements:
+
+- Made Nanoc use copy-on-write when available (preferred over hardlinking/copying) (#1509, #1511) [Daniel Aleksandersen]
+
 ## 4.11.19 (2020-10-16)
 
 Fixes:
