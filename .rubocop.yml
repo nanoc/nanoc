@@ -5,7 +5,10 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 2.4
 
-require: rubocop-rspec
+require:
+  - rubocop-minitest
+  - rubocop-rake
+  - rubocop-rspec
 
 # We use filenames such as “create-site.rb” that translate to method names.
 Naming/FileName:
@@ -279,6 +282,45 @@ Style/RedundantArgument: # (new in 1.4)
   Enabled: true
 
 Style/SwapValues: # (new in 1.1)
+  Enabled: true
+
+Minitest/AssertInDelta: # (new in 0.10)
+  Enabled: true
+
+Minitest/AssertionInLifecycleHook: # (new in 0.10)
+  Enabled: true
+
+Minitest/AssertKindOf: # (new in 0.10)
+  Enabled: true
+
+Minitest/AssertOutput: # (new in 0.10)
+  Enabled: true
+
+Minitest/AssertPathExists: # (new in 0.10)
+  Enabled: true
+
+Minitest/AssertSilent: # (new in 0.10)
+  Enabled: true
+
+Minitest/LiteralAsActualArgument: # (new in 0.10)
+  Enabled: true
+
+Minitest/MultipleAssertions: # (new in 0.10)
+  Enabled: true
+
+Minitest/RefuteInDelta: # (new in 0.10)
+  Enabled: true
+
+Minitest/RefuteKindOf: # (new in 0.10)
+  Enabled: true
+
+Minitest/RefutePathExists: # (new in 0.10)
+  Enabled: true
+
+Minitest/TestMethodName: # (new in 0.10)
+  Enabled: true
+
+Minitest/UnspecifiedException: # (new in 0.10)
   Enabled: true
 
 # ----- TO ENABLE LATER -----

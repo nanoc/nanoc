@@ -29,6 +29,8 @@ group :devel do
   gem 'rspec-mocks'
   gem 'rspec_junit_formatter', '~> 0.4.1'
   gem 'rubocop'
+  gem 'rubocop-minitest'
+  gem 'rubocop-rake'
   gem 'rubocop-rspec'
   gem 'timecop'
   gem 'tty-command', '~> 0.8'
