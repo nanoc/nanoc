@@ -124,7 +124,7 @@ describe Nanoc::Live::LiveRecompiler, site: true, stdio: true, fork: true do
 
     sleep 1.0 # HFS+ mtime resolution is 1s
     File.write('lib/lol.rb', 'def greeting; "yo"; end')
-    sleep 0.1 until File.read('output/lol.html') == 'yo'
+    sleep 0.1 until File.file?('output/lol.html') && File.read('output/lol.html') == 'yo'
 
     # Stop
     Process.kill('INT', pid)

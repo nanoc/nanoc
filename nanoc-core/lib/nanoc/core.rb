@@ -9,6 +9,7 @@ require 'tmpdir'
 require 'yaml'
 
 # External gems
+require 'clonefile'
 require 'concurrent-ruby'
 require 'json_schema'
 require 'ddmemoize'

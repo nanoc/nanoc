@@ -65,15 +65,6 @@ describe Nanoc::Core::ItemRepWriter do
         expect(File.read('output/blah.dat')).to eql('binary donkey stuff')
       end
 
-      it 'uses hard links' do
-        subject
-
-        input = File.stat(snapshot_contents[:donkey].filename)
-        output = File.stat('output/blah.dat')
-
-        expect(input.ino).to eq(output.ino)
-      end
-
       context 'output file already exists' do
         let(:old_mtime) { Time.at((Time.now - 600).to_i) }
 
