@@ -16,8 +16,6 @@ no_params
 
 module Nanoc::CLI::Commands
   class View < ::Nanoc::CLI::CommandRunner
-    DEFAULT_HANDLER_NAME = :thin
-
     def run
       load_adsf
 
