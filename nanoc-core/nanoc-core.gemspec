@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.files         = ['NEWS.md', 'README.md'] + Dir['lib/**/*.rb'] + Dir['lib/**/*-schema.json']
   s.require_paths = ['lib']
 
-  s.required_ruby_version = '~> 2.5'
+  s.required_ruby_version = '>= 2.5'
 
   s.add_runtime_dependency('concurrent-ruby', '~> 1.1')
   s.add_runtime_dependency('ddmemoize', '~> 1.0')
