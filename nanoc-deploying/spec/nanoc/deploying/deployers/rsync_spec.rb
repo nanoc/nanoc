@@ -7,7 +7,7 @@ describe Nanoc::Deploying::Deployers::Rsync, stdio: true do
     described_class.new(
       'output',
       config,
-      extra_opts,
+      **extra_opts,
     )
   end
 
