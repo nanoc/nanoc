@@ -96,7 +96,8 @@ module Nanoc
             false
           end
 
-        @_contracts_support__should_enable = contracts_loadable && !ENV.key?('DISABLE_CONTRACTS')
+        # FIXME: Do something better with contracts on Ruby 3.x
+        @_contracts_support__should_enable = contracts_loadable && !RUBY_VERSION.start_with?('3') && !ENV.key?('DISABLE_CONTRACTS')
 
         if @_contracts_support__should_enable
           # FIXME: ugly
