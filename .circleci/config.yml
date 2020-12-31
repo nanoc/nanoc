@@ -1,15 +1,5 @@
 version: 2
 
-defaults_cruby24: &defaults_cruby24
-  working_directory: ~/project
-  docker:
-    - image: circleci/ruby:2.4
-  environment:
-    ENV: "CI"
-    BUNDLE_JOBS: "4"
-    BUNDLE_RETRY: "3"
-    BUNDLE_PATH: vendor/bundle
-
 defaults_cruby25: &defaults_cruby25
   working_directory: ~/project
   docker:
@@ -41,26 +31,6 @@ defaults_cruby27: &defaults_cruby27
     BUNDLE_PATH: vendor/bundle
 
 jobs:
-  setup_cruby24:
-    <<: *defaults_cruby24
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - restore_cache:
-          keys:
-            - nanoc-cruby24-{{ arch }}-{{ checksum "Gemfile" }}
-      - run:
-          name: Install dependencies
-          command: bundle
-      - save_cache:
-          key: nanoc-cruby24-{{ arch }}-{{ checksum "Gemfile" }}
-          paths:
-            - vendor/bundle
-      - persist_to_workspace:
-          root: .
-          paths: vendor/bundle
-
   setup_cruby25:
     <<: *defaults_cruby25
     steps:
@@ -133,159 +103,6 @@ jobs:
       - run:
           name: Check style
           command: bundle exec rake rubocop
-
-  test_nanoc_cruby24:
-    <<: *defaults_cruby24
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install dependencies
-          command: bundle
-          working_directory: ~/project/nanoc
-      - run:
-          name: Test nanoc
-          command: bundle exec rake test
-          working_directory: ~/project/nanoc
-      - store_test_results:
-          path: ~/project/nanoc/test-results
-
-  test_nanoc_core_cruby24:
-    <<: *defaults_cruby24
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install dependencies
-          command: bundle
-          working_directory: ~/project/nanoc-core
-      - run:
-          name: Test nanoc-core
-          command: bundle exec rake test
-          working_directory: ~/project/nanoc-core
-      - store_test_results:
-          path: ~/project/nanoc-core/test-results
-
-  test_nanoc_cli_cruby24:
-    <<: *defaults_cruby24
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install dependencies
-          command: bundle
-          working_directory: ~/project/nanoc-cli
-      - run:
-          name: Test nanoc-cli
-          command: bundle exec rake test
-          working_directory: ~/project/nanoc-cli
-      - store_test_results:
-          path: ~/project/nanoc-cli/test-results
-
-  test_nanoc_checking_cruby24:
-    <<: *defaults_cruby24
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install dependencies
-          command: bundle
-          working_directory: ~/project/nanoc-checking
-      - run:
-          name: Test nanoc-checking
-          command: bundle exec rake test
-          working_directory: ~/project/nanoc-checking
-      - store_test_results:
-          path: ~/project/nanoc-checking/test-results
-
-  test_nanoc_deploying_cruby24:
-    <<: *defaults_cruby24
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install dependencies
-          command: bundle
-          working_directory: ~/project/nanoc-deploying
-      - run:
-          name: Test nanoc-deploying
-          command: bundle exec rake test
-          working_directory: ~/project/nanoc-deploying
-      - store_test_results:
-          path: ~/project/nanoc-deploying/test-results
-
-  test_nanoc_external_cruby24:
-    <<: *defaults_cruby24
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install dependencies
-          command: bundle
-          working_directory: ~/project/nanoc-external
-      - run:
-          name: Test nanoc-external
-          command: bundle exec rake test
-          working_directory: ~/project/nanoc-external
-      - store_test_results:
-          path: ~/project/nanoc-external/test-results
-
-  test_nanoc_live_cruby24:
-    <<: *defaults_cruby24
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install dependencies
-          command: bundle
-          working_directory: ~/project/nanoc-live
-      - run:
-          name: Test nanoc-live
-          command: bundle exec rake test
-          working_directory: ~/project/nanoc-live
-      - store_test_results:
-          path: ~/project/nanoc-live/test-results
-
-  test_nanoc_spec_cruby24:
-    <<: *defaults_cruby24
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install dependencies
-          command: bundle
-          working_directory: ~/project/nanoc-spec
-      - run:
-          name: Test nanoc-spec
-          command: bundle exec rake test
-          working_directory: ~/project/nanoc-spec
-      - store_test_results:
-          path: ~/project/nanoc-spec/test-results
-
-  test_guard_nanoc_cruby24:
-    <<: *defaults_cruby24
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/project
-      - run:
-          name: Install dependencies
-          command: bundle
-          working_directory: ~/project/guard-nanoc
-      - run:
-          name: Test guard-nanoc
-          command: bundle exec rake test
-          working_directory: ~/project/guard-nanoc
-      - store_test_results:
-          path: ~/project/guard-nanoc/test-results
 
   test_nanoc_cruby25:
     <<: *defaults_cruby25
@@ -751,7 +568,6 @@ workflows:
   test:
     jobs:
       # setup
-      - setup_cruby24
       - setup_cruby25
       - setup_cruby26
       - setup_cruby27
@@ -760,29 +576,6 @@ workflows:
       - check_style_cruby26:
           requires:
             - setup_cruby26
-
-      # test [CRuby 2.4]
-      - test_nanoc_cruby24:
-          requires:
-            - setup_cruby24
-      - test_nanoc_core_cruby24:
-          requires:
-            - setup_cruby24
-      - test_nanoc_deploying_cruby24:
-          requires:
-            - setup_cruby24
-      - test_nanoc_external_cruby24:
-          requires:
-            - setup_cruby24
-      - test_nanoc_live_cruby24:
-          requires:
-            - setup_cruby24
-      - test_nanoc_spec_cruby24:
-          requires:
-            - setup_cruby24
-      - test_guard_nanoc_cruby24:
-          requires:
-            - setup_cruby24
 
       # test [CRuby 2.5]
       - test_nanoc_cruby25:
