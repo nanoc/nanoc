@@ -3,7 +3,7 @@ inherit_from: .rubocop_todo.yml
 # ----- CONFIGURED -----
 
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
 
 require:
   - rubocop-minitest
@@ -321,6 +321,15 @@ Minitest/TestMethodName: # (new in 0.10)
   Enabled: true
 
 Minitest/UnspecifiedException: # (new in 0.10)
+  Enabled: true
+
+Layout/SpaceBeforeBrackets: # (new in 1.7)
+  Enabled: true
+
+Lint/AmbiguousAssignment: # (new in 1.7)
+  Enabled: true
+
+Style/HashExcept: # (new in 1.7)
   Enabled: true
 
 # ----- TO ENABLE LATER -----
