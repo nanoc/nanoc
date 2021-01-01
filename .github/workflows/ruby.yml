@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         ruby-version: ["2.5", "2.6", "2.7"]
 
@@ -25,28 +26,28 @@ jobs:
       - run: bundle install --path=vendor/bundle
 
       - name: Test nanoc-core
-        run: bundle exec rake nanoc-core
+        run: bundle exec rake nanoc_core:test
 
       - name: Test nanoc
-        run: bundle exec rake nanoc
+        run: bundle exec rake nanoc:test
 
       - name: Test nanoc-cli
-        run: bundle exec rake nanoc-cli
+        run: bundle exec rake nanoc_cli:test
 
       - name: Test nanoc-checking
-        run: bundle exec rake nanoc-checking
+        run: bundle exec rake nanoc_checking:test
 
       - name: Test nanoc-deploying
-        run: bundle exec rake nanoc-deploying
+        run: bundle exec rake nanoc_deploying:test
 
       - name: Test nanoc-external
-        run: bundle exec rake nanoc-external
+        run: bundle exec rake nanoc_external:test
 
       - name: Test nanoc-live
-        run: bundle exec rake nanoc-live
+        run: bundle exec rake nanoc_live:test
 
       - name: Test nanoc-spec
-        run: bundle exec rake nanoc-spec
+        run: bundle exec rake nanoc_spec:test
 
       - name: Test guard-nanoc
-        run: bundle exec rake guard-nanoc
+        run: bundle exec rake guard_nanoc:test
