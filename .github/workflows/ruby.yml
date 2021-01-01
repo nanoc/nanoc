@@ -1,0 +1,54 @@
+name: Nanoc
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        ruby-version: ["2.5", "2.6", "2.7"]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundler-${{ runner.os }}--ruby-${{ matrix.ruby-version }}
+
+      - run: bundle install
+
+      - name: Test nanoc-core
+        run: bundle exec rake nanoc-core
+
+      - name: Test nanoc
+        run: bundle exec rake nanoc
+
+      - name: Test nanoc-cli
+        run: bundle exec rake nanoc-cli
+
+      - name: Test nanoc-checking
+        run: bundle exec rake nanoc-checking
+
+      - name: Test nanoc-deploying
+        run: bundle exec rake nanoc-deploying
+
+      - name: Test nanoc-external
+        run: bundle exec rake nanoc-external
+
+      - name: Test nanoc-live
+        run: bundle exec rake nanoc-live
+
+      - name: Test nanoc-spec
+        run: bundle exec rake nanoc-spec
+
+      - name: Test guard-nanoc
+        run: bundle exec rake guard-nanoc
