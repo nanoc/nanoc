@@ -32,8 +32,10 @@ jobs:
         timeout-minutes: 3
 
       - name: Test nanoc
-        run: bundle exec rake nanoc:test
+        run: bundle exec rake --verbose --trace nanoc:test
         timeout-minutes: 3
+        env:
+          QUIET: "false"
 
       - name: Test nanoc-cli
         run: bundle exec rake nanoc_cli:test
