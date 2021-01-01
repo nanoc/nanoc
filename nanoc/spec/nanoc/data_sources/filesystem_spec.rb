@@ -265,11 +265,20 @@ describe Nanoc::DataSources::Filesystem, site: true do
       q = SizedQueue.new(1)
       Thread.new { q << enum.take(1).first }
 
-      # FIXME: sleep is ugly
-      sleep 0.3
-      File.write('content/wat.md', 'stuff')
+      # Try until we find a change
+      ok = false
+      20.times do |i|
+        File.write('content/wat.md', "stuff #{i}")
+        begin
+          expect(q.pop(true)).to eq(:unknown)
+          ok = true
+          break
+        rescue ThreadError
+          sleep 0.1
+        end
+      end
+      expect(ok).to be(true)
 
-      expect(q.pop).to eq(:unknown)
       subject.stop
     end
   end
@@ -294,11 +303,20 @@ describe Nanoc::DataSources::Filesystem, site: true do
       q = SizedQueue.new(1)
       Thread.new { q << enum.take(1).first }
 
-      # FIXME: sleep is ugly
-      sleep 0.3
-      File.write('layouts/wat.md', 'stuff')
+      # Try until we find a change
+      ok = false
+      20.times do |i|
+        File.write('layouts/wat.md', "stuff #{i}")
+        begin
+          expect(q.pop(true)).to eq(:unknown)
+          ok = true
+          break
+        rescue ThreadError
+          sleep 0.1
+        end
+      end
+      expect(ok).to be(true)
 
-      expect(q.pop).to eq(:unknown)
       subject.stop
     end
   end
