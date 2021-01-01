@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.11.22 (2021-01-01)
+
+Changes:
+
+- Dropped support for Ruby 2.4 (EOL)
+
+Fixes:
+
+- Added support for Ruby 3.0
+
 ## 4.11.21 (2020-12-18)
 
 Fixes:
