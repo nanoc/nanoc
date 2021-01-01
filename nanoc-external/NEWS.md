@@ -1,5 +1,11 @@
 # nanoc-external news
 
+## 1.0.5 (2021-01-01)
+
+Enhancements:
+
+* Added support for Ruby 3.x
+
 ## 1.0.4 (2020-03-07)
 
 Fixes:
