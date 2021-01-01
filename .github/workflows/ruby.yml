@@ -25,7 +25,7 @@ jobs:
 
       - run: |
           bundle config set --local path 'vendor/bundle'
-          bundle install
+          bundle install --jobs "$(nproc)"
 
       - name: Test nanoc-core
         run: bundle exec rake nanoc_core:test
