@@ -23,7 +23,9 @@ jobs:
           path: vendor/bundle
           key: bundler-b-${{ runner.os }}-${{ matrix.ruby-version }}-${{ hashFiles('Gemfile') }}
 
-      - run: bundle install --path=vendor/bundle
+      - run: |
+          bundle config set --local path 'vendor/bundle'
+          bundle install
 
       - name: Test nanoc-core
         run: bundle exec rake nanoc_core:test
