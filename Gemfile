@@ -38,6 +38,7 @@ group :devel do
   gem 'webmock'
   gem 'yard'
   gem 'yard-contracts'
+  gem 'webrick', '~> 1.7'
 end
 
 group :plugins do

@@ -86,13 +86,13 @@ describe Nanoc::RuleDSL::ActionRecorder do
     end
 
     context 'final argument' do
-      subject { recorder.snapshot(:foo, subject_params) }
+      subject { recorder.snapshot(:foo, **subject_params) }
 
       let(:subject_params) { {} }
 
       context 'routing rule does not exist' do
         context 'no explicit path given' do
-          subject { recorder.snapshot(:foo, subject_params) }
+          subject { recorder.snapshot(:foo, **subject_params) }
 
           it 'records' do
             subject

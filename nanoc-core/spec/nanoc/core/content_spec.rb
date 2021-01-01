@@ -2,7 +2,7 @@
 
 describe Nanoc::Core::Content do
   describe '.create' do
-    subject { described_class.create(arg, params) }
+    subject { described_class.create(arg, **params) }
 
     let(:params) { {} }
 
