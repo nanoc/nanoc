@@ -20,9 +20,9 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: vendor/bundle
-          key: bundler-a-${{ runner.os }}-${{ matrix.ruby-version }}-${{ hashFiles('Gemfile') }}
+          key: bundler-b-${{ runner.os }}-${{ matrix.ruby-version }}-${{ hashFiles('Gemfile') }}
 
-      - run: bundle install
+      - run: bundle install --path=vendor/bundle
 
       - name: Test nanoc-core
         run: bundle exec rake nanoc-core
