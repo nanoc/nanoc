@@ -1,5 +1,11 @@
 # Release notes for nanoc-live
 
+## 1.0.0b7 (2021-01-01)
+
+Enhancements:
+
+- Added support for Ruby 3.x
+
 ## 1.0.0b6 (2020-03-07)
 
 Fixes:

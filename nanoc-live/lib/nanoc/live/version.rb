@@ -2,6 +2,6 @@
 
 module Nanoc
   module Live
-    VERSION = '1.0.0b6'
+    VERSION = '1.0.0b7'
   end
 end
