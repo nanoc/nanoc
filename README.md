@@ -1,7 +1,5 @@
 [![Gem version](https://img.shields.io/gem/v/nanoc.svg)](http://rubygems.org/gems/nanoc)
 [![Gem downloads](https://img.shields.io/gem/dt/nanoc.svg)](http://rubygems.org/gems/nanoc)
-[![Build status](https://img.shields.io/circleci/project/github/nanoc/nanoc/master.svg)](https://circleci.com/gh/nanoc/workflows/nanoc)
-[![Code Climate](https://img.shields.io/codeclimate/maintainability/nanoc/nanoc.svg)](https://codeclimate.com/github/nanoc/nanoc)
 [![Code Coverage](https://img.shields.io/codecov/c/github/nanoc/nanoc.svg)](https://codecov.io/gh/nanoc/nanoc)
 ![Contributors](https://img.shields.io/github/contributors/nanoc/nanoc.svg)
 
