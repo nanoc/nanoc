@@ -34,8 +34,7 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     assert_includes hrefs, 'https://example.com/with-fragment'
     refute_includes hrefs, nil
     assert_includes hrefs, 'mailto:bob@example.com'
-    assert_includes hrefs, 'file:///stuff' if URI('file:///.').to_s == 'file:///.' # Ruby 2.4
-    assert_includes hrefs, 'file:/stuff' unless URI('file:///.').to_s == 'file:///.' # Ruby 2.5+
+    assert_includes hrefs, 'file:///stuff'
     assert_includes hrefs, path_to_file_uri('stuff', Dir.pwd)
   end
 
