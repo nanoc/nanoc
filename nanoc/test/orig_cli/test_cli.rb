@@ -110,20 +110,27 @@ class Nanoc::OrigCLITest < Nanoc::TestCase
       FileUtils.mkdir_p('commands')
       File.open('commands/_test.rb', 'w') { |io| io.write('raise "meh"') }
 
-      # Run command
-      position_before = $stderr.tell
-      Nanoc::CLI::ErrorHandler.disable
-      assert_raises RuntimeError do
-        Nanoc::CLI.run %w[_test]
+      begin
+        # Prep for capture
+        orig_stderr = $stderr
+        new_stderr = StringIO.new
+        $stderr = new_stderr
+
+        # Run command
+        Nanoc::CLI::ErrorHandler.disable
+        assert_raises RuntimeError do
+          Nanoc::CLI.run %w[_test]
+        end
+        Nanoc::CLI::ErrorHandler.enable
+        assert_raises SystemExit do
+          Nanoc::CLI.run %w[_test]
+        end
+      ensure
+        $stderr = orig_stderr
       end
-      Nanoc::CLI::ErrorHandler.enable
-      assert_raises SystemExit do
-        Nanoc::CLI.run %w[_test]
-      end
-      position_after = $stderr.tell
 
       # Check error output
-      stderr_addition = $stderr.string[position_before, position_after]
+      stderr_addition = new_stderr.string
       assert_match(/commands\/_test.rb/, stderr_addition)
     end
   end

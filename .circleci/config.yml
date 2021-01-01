@@ -19,6 +19,7 @@ defaults_cruby26: &defaults_cruby26
     BUNDLE_JOBS: "4"
     BUNDLE_RETRY: "3"
     BUNDLE_PATH: vendor/bundle
+    QUIET: "false"
 
 defaults_cruby27: &defaults_cruby27
   working_directory: ~/project
