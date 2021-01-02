@@ -93,7 +93,7 @@ module Nanoc::DataSources
 
       Nanoc::Core::ChangesStream.new do |cl|
         listener =
-          Listen.to(dir, latency: 0.1, wait_for_delay: 0.0) do |_modifieds, _addeds, _deleteds|
+          Listen.to(dir) do |_modifieds, _addeds, _deleteds|
             cl.unknown
           end
 
