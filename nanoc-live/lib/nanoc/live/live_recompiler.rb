@@ -109,12 +109,7 @@ module Nanoc
 
       def gen_lib_changes
         Nanoc::Core::ChangesStream.new do |cl|
-          opts = {
-            latency: 0.1,
-            wait_for_delay: 0.0,
-          }
-
-          listener = Listen.to('lib', opts) { |*| cl.lib }
+          listener = Listen.to('lib') { |*| cl.lib }
           listener.start
           sleep
         end
@@ -122,13 +117,9 @@ module Nanoc
 
       def gen_config_and_rules_changes
         Nanoc::Core::ChangesStream.new do |cl|
-          opts = {
-            only: /(\/|\A)(nanoc\.yaml|config\.yaml|rules|Rules|rules\.rb|Rules\.rb)\z/,
-            latency: 0.1,
-            wait_for_delay: 0.0,
-          }
+          only = /(\/|\A)(nanoc\.yaml|config\.yaml|rules|Rules|rules\.rb|Rules\.rb)\z/
 
-          listener = Listen.to('.', opts) { |*| cl.unknown }
+          listener = Listen.to('.', only: only) { |*| cl.unknown }
           listener.start
           sleep
         end
