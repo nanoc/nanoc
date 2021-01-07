@@ -97,9 +97,13 @@ module Nanoc::DataSources
             cl.unknown
           end
 
-        listener.start
+        cl.to_stop do
+          raise 'cannot stop listener unless started' unless listener.processing?
 
-        cl.to_stop { listener.stop }
+          listener.stop
+        end
+
+        listener.start
 
         sleep
       end
