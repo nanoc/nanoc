@@ -1,0 +1,38 @@
+.test: &test
+  timeout: 15m
+  cache:
+    untracked: true
+    key: "bundler"
+    paths:
+      - $CI_PROJECT_DIR/vendor/bundle
+  script:
+    - gem install bundler
+    - export BUNDLE_PATH=$CI_PROJECT_DIR/vendor/bundle
+    - bundle install --jobs "$(nproc)"
+    - apt update
+    - apt install -y rsync
+    - bundle exec rake nanoc_core:test
+    - bundle exec rake nanoc:test
+    - bundle exec rake nanoc_cli:test
+    - bundle exec rake nanoc_checking:test
+    - bundle exec rake nanoc_deploying:test
+    - bundle exec rake nanoc_external:test
+    - bundle exec rake nanoc_live:test
+    - bundle exec rake nanoc_spec:test
+    - bundle exec rake guard_nanoc:test
+
+test_ruby25:
+  image: ruby:2.5
+  <<: *test
+
+test_ruby26:
+  image: ruby:2.6
+  <<: *test
+
+test_ruby27:
+  image: ruby:2.7
+  <<: *test
+
+test_ruby30:
+  image: ruby:3.0
+  <<: *test
