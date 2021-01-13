@@ -13,7 +13,6 @@ gemspec path: 'nanoc-spec'
 gemspec path: 'guard-nanoc'
 
 group :devel do
-  gem 'codecov', require: false
   gem 'contracts', '~> 0.16'
   gem 'fuubar'
   gem 'guard-rake'
@@ -32,6 +31,7 @@ group :devel do
   gem 'rubocop-minitest'
   gem 'rubocop-rake'
   gem 'rubocop-rspec'
+  gem 'simplecov', '~> 0.21.2'
   gem 'timecop'
   gem 'tty-command', '~> 0.8'
   gem 'vcr'
