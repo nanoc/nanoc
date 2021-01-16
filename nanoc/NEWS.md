@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.11.23 (2021-01-16)
+
+Fixes:
+
+- Fixed issue which could cause nanoc-live to keep running and use 100% CPU (#1538)
+
 ## 4.11.22 (2021-01-01)
 
 Changes:
