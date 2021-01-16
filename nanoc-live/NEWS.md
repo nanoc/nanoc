@@ -1,5 +1,11 @@
 # Release notes for nanoc-live
 
+## 1.0.0b8 (2021-01-16)
+
+Fixes:
+
+- Fixed issue which could cause nanoc-live to keep running and use 100% CPU (#1538)
+
 ## 1.0.0b7 (2021-01-01)
 
 Enhancements:
