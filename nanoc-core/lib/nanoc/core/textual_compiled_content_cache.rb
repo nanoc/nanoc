@@ -11,7 +11,7 @@ module Nanoc
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
       def initialize(config:)
-        super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'compiled_content'), 2)
+        super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'compiled_content'), 3)
 
         @cache = {}
       end
