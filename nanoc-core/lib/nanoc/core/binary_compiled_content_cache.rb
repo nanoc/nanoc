@@ -62,12 +62,8 @@ module Nanoc
           next if binary_content.filename == filename
 
           # Copy
-          #
-          # NOTE: hardlinking is not an option in this case, because hardlinking
-          # would make it possible for the content to be (inadvertently)
-          # changed outside of Nanoc.
           FileUtils.mkdir_p(File.dirname(filename))
-          FileUtils.cp(binary_content.filename, filename)
+          smart_cp(binary_content.filename, filename)
         end
       end
 
@@ -127,6 +123,26 @@ module Nanoc
           dirname_for_item_rep(rep),
           string_to_path_component(snapshot_name.to_s),
         )
+      end
+
+      # NOTE: Similar to ItemRepWriter#smart_cp (but without hardlinking)
+      def smart_cp(from, to)
+        # NOTE: hardlinking is not an option in this case, because hardlinking
+        # would make it possible for the content to be (inadvertently)
+        # changed outside of Nanoc.
+
+        # Try clonefile
+        if defined?(Clonefile)
+          FileUtils.rm_f(to)
+          begin
+            res = Clonefile.always(from, to)
+            return if res
+          rescue Clonefile::UnsupportedPlatform, Errno::ENOTSUP, Errno::EXDEV, Errno::EINVAL
+          end
+        end
+
+        # Fall back to old-school copy
+        FileUtils.cp(from, to)
       end
     end
   end
