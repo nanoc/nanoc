@@ -153,6 +153,8 @@ describe Nanoc::Core::PostCompileItemRepView do
     context 'binary' do
       let(:snapshot_contents) do
         temp_file = Tempfile.new('binary junk')
+        temp_file.write('binary data here')
+        temp_file.sync
 
         {
           last: Nanoc::Core::TextualContent.new('content-last'),
