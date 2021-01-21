@@ -49,6 +49,11 @@ module Nanoc
         rep_cache = @cache[rep.item.identifier][rep.name]
 
         content.each do |snapshot, binary_content|
+          # Check
+          if Nanoc::Core::ContractsSupport.enabled? && !File.file?(binary_content.filename)
+            raise Nanoc::Core::Errors::InternalInconsistency, "Binary content at #{binary_content.filename.inspect} does not exist, but is expected to."
+          end
+
           filename = build_filename(rep, snapshot)
           rep_cache[snapshot] = filename
 
