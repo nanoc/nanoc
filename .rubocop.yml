@@ -332,6 +332,18 @@ Lint/AmbiguousAssignment: # (new in 1.7)
 Style/HashExcept: # (new in 1.7)
   Enabled: true
 
+Lint/DeprecatedConstants: # (new in 1.8)
+  Enabled: true
+
+Lint/LambdaWithoutLiteralBlock: # (new in 1.8)
+  Enabled: true
+
+Lint/RedundantDirGlobSort: # (new in 1.8)
+  Enabled: true
+
+Style/EndlessMethod: # (new in 1.8)
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
