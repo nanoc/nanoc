@@ -84,7 +84,3 @@ Nanoc::Core::Feature.define('live_cmd', version: '4.11')
 # Tracking issue:
 # https://github.com/nanoc/features/issues/40
 Nanoc::Core::Feature.define('toml', version: '4.11')
-
-# Tracking issue:
-# https://github.com/nanoc/features/issues/20
-Nanoc::Core::Feature.define('binary_compiled_content_cache', version: '4.11')
