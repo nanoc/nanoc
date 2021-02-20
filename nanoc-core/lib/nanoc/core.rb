@@ -79,4 +79,4 @@ require_relative 'core/core_ext/string'
 
 # Tracking issue:
 # https://github.com/nanoc/features/issues/40
-Nanoc::Core::Feature.define('toml', version: '4.11')
+Nanoc::Core::Feature.define('toml', version: '4.12')

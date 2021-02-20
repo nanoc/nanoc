@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.12.0 (2021-02-20)
+
+Features:
+
+- Added `-W`/`--watch` flag to the `compile` command (requires the `nanoc-live` gem)
+
+Enhancements:
+
+- Made the compiler cache binary items
+
 ## 4.11.23 (2021-01-16)
 
 Fixes:
