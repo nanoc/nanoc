@@ -129,7 +129,7 @@ describe Nanoc::Core::BinaryCompiledContentCache do
     before do
       cache[keep_item_rep] = { last: content }
       cache[remove_item_rep] = { last: content }
-      cache[remove_dotted_item_rep] = { '.last'.to_sym => content }
+      cache[remove_dotted_item_rep] = { '.last': content }
 
       cache.prune(items: [keep])
     end

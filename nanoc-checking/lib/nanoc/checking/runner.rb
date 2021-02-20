@@ -70,7 +70,7 @@ module Nanoc
       def run_check_classes(classes)
         issues = run_checks(classes)
         print_issues(issues)
-        issues.empty? ? true : false
+        issues.empty?
       end
 
       def all_check_classes
