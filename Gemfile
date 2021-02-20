@@ -68,7 +68,7 @@ group :plugins do
   gem 'nokogiri', '~> 1.8'
   gem 'nokogumbo', '~> 2.0', platforms: :ruby
   gem 'pandoc-ruby'
-  gem 'pygments.rb', '~> 1.2', platforms: :ruby
+  gem 'pygments.rb', '~> 2.0', platforms: :ruby
   gem 'rack'
   gem 'rainpress'
   gem 'rdiscount', '~> 2.2', platforms: :ruby
