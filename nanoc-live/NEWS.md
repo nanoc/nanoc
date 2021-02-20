@@ -1,5 +1,9 @@
 # Release notes for nanoc-live
 
+## 1.0.0 (2021-02-20)
+
+Idential to 1.0.0b8.
+
 ## 1.0.0b8 (2021-01-16)
 
 Fixes:
