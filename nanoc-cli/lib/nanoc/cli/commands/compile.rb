@@ -8,9 +8,7 @@ EOS
 no_params
 
 flag nil, :diff, 'generate diff'
-if Nanoc::Core::Feature.enabled?(Nanoc::Core::Feature::LIVE_CMD)
-  flag :w, :watch, 'watch for changes and recompile when needed'
-end
+flag :W, :watch, 'watch for changes and recompile when needed'
 
 module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
