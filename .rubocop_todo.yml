@@ -384,7 +384,6 @@ RSpec/ExampleLength:
     - 'nanoc/spec/nanoc/integration/compile_command_spec.rb'
     - 'nanoc/spec/nanoc/integration/outdatedness_integration_spec.rb'
     - 'nanoc/spec/nanoc/integration/partial_recompilation_spec.rb'
-    - 'nanoc/spec/nanoc/integration/toml_config_spec.rb'
     - 'nanoc/spec/nanoc/orig_cli_spec.rb'
     - 'nanoc/spec/nanoc/regressions/gh_1031_spec.rb'
     - 'nanoc/spec/nanoc/regressions/gh_1045_spec.rb'

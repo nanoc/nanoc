@@ -24,7 +24,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('hamster', '~> 3.0')
   s.add_runtime_dependency('json_schema', '~> 0.19')
   s.add_runtime_dependency('slow_enumerator_tools', '~> 1.0')
-  s.add_runtime_dependency('tomlrb', '~> 1.2')
   s.add_runtime_dependency('tty-platform', '~> 0.2')
   s.add_runtime_dependency('zeitwerk', '~> 2.1')
 end

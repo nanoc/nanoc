@@ -16,7 +16,6 @@ require 'ddmetrics'
 require 'ddplugin'
 require 'hamster'
 require 'slow_enumerator_tools'
-require 'tomlrb'
 require 'tty-platform'
 require 'zeitwerk'
 
@@ -76,7 +75,3 @@ loader.eager_load
 require_relative 'core/core_ext/array'
 require_relative 'core/core_ext/hash'
 require_relative 'core/core_ext/string'
-
-# Tracking issue:
-# https://github.com/nanoc/features/issues/40
-Nanoc::Core::Feature.define('toml', version: '4.12')
