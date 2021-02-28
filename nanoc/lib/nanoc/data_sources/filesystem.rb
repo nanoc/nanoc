@@ -187,7 +187,7 @@ module Nanoc::DataSources
 
         content = content_for(proto_doc, content_filename)
         attributes = attributes_for(proto_doc, content_filename, meta_filename)
-        identifier = identifier_for(content_filename, meta_filename, dir_name)
+        identifier = identifier_for(content_filename, meta_filename, File.expand_path(dir_name))
 
         res << klass.new(
           content,
@@ -209,7 +209,10 @@ module Nanoc::DataSources
 
         have_possible_ambiguity = meta_filename && content_filenames.size > 1
         if have_possible_ambiguity && content_filenames.count { |fn| !parser.frontmatter?(fn) } != 1
-          raise Nanoc::DataSources::Filesystem::AmbiguousMetadataAssociationError.new(content_filenames, meta_filename)
+          raise Nanoc::DataSources::Filesystem::AmbiguousMetadataAssociationError.new(
+            content_filenames.map { |fn| compact_path(fn) },
+            compact_path(meta_filename),
+          )
         end
 
         content_filenames.each do |content_filename|
@@ -309,12 +312,12 @@ module Nanoc::DataSources
 
         # Check number of files per type
         unless [0, 1].include?(meta_filenames.size)
-          raise Errors::MultipleMetaFiles.new(meta_filenames, basename)
+          raise Errors::MultipleMetaFiles.new(meta_filenames, compact_path(basename))
         end
 
         unless config[:identifier_type] == 'full'
           unless [0, 1].include?(content_filenames.size)
-            raise Errors::MultipleContentFiles.new(meta_filenames, basename)
+            raise Errors::MultipleContentFiles.new(meta_filenames, compact_path(basename))
           end
         end
 
@@ -331,6 +334,28 @@ module Nanoc::DataSources
     # Returns all files in the given directory and directories below it.
     def all_files_in(dir_name)
       Nanoc::DataSources::Filesystem::Tools.all_files_in(dir_name, config[:extra_files])
+    end
+
+    # If the path is inside the current working directory, returns the relative
+    # path from the current working directory, otherwise returns the path,
+    # unchanged. This is for the purpose of convenience: it avoids printing out
+    # unnecessarily long paths.
+    #
+    # For example:
+    #
+    # If the current working directory is /home/denis, the path
+    # /home/denis/foo/bar becomes foo/bar.
+    #
+    # If the current working directory is /home/denis, the path
+    # /home/someone/foo/bar remains /home/someone/foo/bar.
+    def compact_path(path)
+      cwd = Dir.getwd
+
+      if path.start_with?(cwd)
+        path[(cwd.length + 1)..-1]
+      else
+        path
+      end
     end
 
     # Returns the filename for the given base filename and the extension.

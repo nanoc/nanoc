@@ -47,13 +47,23 @@ describe Nanoc::DataSources::Filesystem, site: true do
           expect(subject.size).to eq(1)
 
           expect(subject[0].content.string).to eq('test 1')
-          expect(subject[0].attributes).to eq(expected_attributes)
           expect(subject[0].identifier).to eq(Nanoc::Core::Identifier.new('/bar/', type: :legacy))
           expect(subject[0].checksum_data).to be_nil
           expect(subject[0].attributes_checksum_data).to be_a(String)
           expect(subject[0].attributes_checksum_data.size).to eq(20)
           expect(subject[0].content_checksum_data).to be_a(String)
           expect(subject[0].content_checksum_data.size).to eq(20)
+        end
+
+        it 'has the right attributes' do
+          expect(subject[0].attributes.keys).to match_array(%i[content_filename extension filename meta_filename mtime num])
+
+          expect(subject[0].attributes[:content_filename]).to end_with('foo/bar.html')
+          expect(subject[0].attributes[:extension]).to eq('html')
+          expect(subject[0].attributes[:filename]).to end_with('foo/bar.html')
+          expect(subject[0].attributes[:meta_filename]).to eq(nil)
+          expect(subject[0].attributes[:mtime]).to eq(now)
+          expect(subject[0].attributes[:num]).to eq(1)
         end
 
         context 'split files' do
@@ -100,11 +110,20 @@ describe Nanoc::DataSources::Filesystem, site: true do
           expect(subject.size).to eq(1)
 
           expect(subject[0].content).to be_a(Nanoc::Core::BinaryContent)
-          expect(subject[0].attributes).to eq(expected_attributes)
           expect(subject[0].identifier).to eq(Nanoc::Core::Identifier.new('/bar/', type: :legacy))
           expect(subject[0].checksum_data).to be_nil
           expect(subject[0].attributes_checksum_data).to be_a(String)
           expect(subject[0].attributes_checksum_data.size).to eq(20)
+        end
+
+        it 'has the right attributes' do
+          expect(subject[0].attributes.keys).to match_array(%i[content_filename extension filename meta_filename mtime])
+
+          expect(subject[0].attributes[:content_filename]).to end_with('foo/bar.dat')
+          expect(subject[0].attributes[:extension]).to eq('dat')
+          expect(subject[0].attributes[:filename]).to end_with('foo/bar.dat')
+          expect(subject[0].attributes[:meta_filename]).to eq(nil)
+          expect(subject[0].attributes[:mtime]).to eq(now)
         end
 
         it 'has no content checksum data' do

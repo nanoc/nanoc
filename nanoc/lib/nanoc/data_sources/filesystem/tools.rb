@@ -95,6 +95,8 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
     #
     # @raise [Nanoc::Core::TrivialError] when pattern can not be handled
     def all_files_and_dirs_in(dir_name, extra_files)
+      dir_name = File.expand_path(dir_name)
+
       base_patterns = ["#{dir_name}/**/*"]
 
       extra_patterns =

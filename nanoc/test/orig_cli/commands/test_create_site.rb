@@ -82,7 +82,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
       exception = assert_raises(Nanoc::DataSources::Filesystem::Errors::InvalidEncoding) do
         Nanoc::Core::SiteLoader.new.new_from_cwd
       end
-      assert_equal 'Could not read content/index.html because the file is not valid UTF-8.', exception.message
+      assert_match(%r{^Could not read .*content/index.html because the file is not valid UTF-8\.}, exception.message)
 
       # Try with encoding = specific
       File.open('nanoc.yaml', 'w') do |io|
