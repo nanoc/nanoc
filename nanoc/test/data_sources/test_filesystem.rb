@@ -41,17 +41,17 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     expected_out = [
       klass.new(
         'test 1',
-        { 'num' => 1, :filename => 'foo/bar.html', :extension => 'html', mtime: File.mtime('foo/bar.html') },
+        { 'num' => 1, :filename => File.expand_path('foo/bar.html'), :extension => 'html', mtime: File.mtime('foo/bar.html') },
         '/bar/',
       ),
       klass.new(
         'test 2',
-        { 'num' => 2, :filename => 'foo/b.c.html', :extension => 'c.html', mtime: File.mtime('foo/b.c.html') },
+        { 'num' => 2, :filename => File.expand_path('foo/b.c.html'), :extension => 'c.html', mtime: File.mtime('foo/b.c.html') },
         '/b/',
       ),
       klass.new(
         'test 3',
-        { 'num' => 3, :filename => 'foo/a/b/c.html', :extension => 'html', mtime: File.mtime('foo/a/b/c.html') },
+        { 'num' => 3, :filename => File.expand_path('foo/a/b/c.html'), :extension => 'html', mtime: File.mtime('foo/a/b/c.html') },
         '/a/b/c/',
       ),
     ]
@@ -336,7 +336,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
         {
           'num' => 1,
           :content_filename => nil,
-          :meta_filename => 'foo/a/b/c.yaml',
+          :meta_filename => File.expand_path('foo/a/b/c.yaml'),
           :extension => nil,
           :file => nil,
           mtime: File.mtime('foo/a/b/c.yaml'),
@@ -347,8 +347,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
         'test 2',
         {
           'num' => 2,
-          :content_filename => 'foo/b.c.html',
-          :meta_filename => 'foo/b.c.yaml',
+          :content_filename => File.expand_path('foo/b.c.html'),
+          :meta_filename => File.expand_path('foo/b.c.yaml'),
           :extension => 'html',
           :file => File.open('foo/b.c.html'),
           mtime: File.mtime('foo/b.c.html') > File.mtime('foo/b.c.yaml') ? File.mtime('foo/b.c.html') : File.mtime('foo/b.c.yaml'),
@@ -358,7 +358,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       klass.new(
         'test 3',
         {
-          content_filename: 'foo/car.html',
+          content_filename: File.expand_path('foo/car.html'),
           meta_filename: nil,
           extension: 'html',
           file: File.open('foo/car.html'),
@@ -419,7 +419,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
         {
           'num' => 1,
           :content_filename => nil,
-          :meta_filename => 'foo/a/b/c.yaml',
+          :meta_filename => File.expand_path('foo/a/b/c.yaml'),
           :extension => nil,
           :file => nil,
           mtime: File.mtime('foo/a/b/c.yaml'),
@@ -430,8 +430,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
         'test 2',
         {
           'num' => 2,
-          :content_filename => 'foo/b.html.erb',
-          :meta_filename => 'foo/b.yaml',
+          :content_filename => File.expand_path('foo/b.html.erb'),
+          :meta_filename => File.expand_path('foo/b.yaml'),
           :extension => 'html.erb',
           :file => File.open('foo/b.html.erb'),
           mtime: File.mtime('foo/b.html.erb') > File.mtime('foo/b.yaml') ? File.mtime('foo/b.html.erb') : File.mtime('foo/b.yaml'),
@@ -441,7 +441,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       klass.new(
         'test 3',
         {
-          content_filename: 'foo/car.html',
+          content_filename: File.expand_path('foo/car.html'),
           meta_filename: nil,
           extension: 'html',
           file: File.open('foo/car.html'),
@@ -547,9 +547,9 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get all files
     output_expected = {
-      './foo' => ['yaml', ['html']],
-      './bar.entry' => [nil, ['html']],
-      './foo/qux' => ['yaml', [nil]],
+      File.expand_path('./foo') => ['yaml', ['html']],
+      File.expand_path('./bar.entry') => [nil, ['html']],
+      File.expand_path('./foo/qux') => ['yaml', [nil]],
     }
     output_actual = data_source.send :all_split_files_in, '.'
 
@@ -574,9 +574,9 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Get all files
     output_expected = {
-      './foo' => ['yaml', ['html']],
-      './bar' => [nil,    ['html.erb']],
-      './foo/qux' => ['yaml', [nil]],
+      File.expand_path('./foo') => ['yaml', ['html']],
+      File.expand_path('./bar') => [nil,    ['html.erb']],
+      File.expand_path('./foo/qux') => ['yaml', [nil]],
     }
     output_actual = data_source.send :all_split_files_in, '.'
 
@@ -596,9 +596,9 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Check
     expected = {
-      './aaa/foo' => [nil, ['html']],
-      './bbb/foo' => [nil, ['html']],
-      './ccc/foo' => [nil, ['html']],
+      File.expand_path('./aaa/foo') => [nil, ['html']],
+      File.expand_path('./bbb/foo') => [nil, ['html']],
+      File.expand_path('./ccc/foo') => [nil, ['html']],
     }
     assert_equal expected, data_source.send(:all_split_files_in, '.')
   end
@@ -616,7 +616,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Check - { './stuff/foo' => ['yaml', ['html', 'md']] }
     res = data_source.send(:all_split_files_in, '.')
-    assert_equal ['./stuff/foo'], res.keys
+    assert_equal 1, res.keys.size
+    assert res.keys[0].end_with?('/stuff/foo')
     assert_equal 2, res.values[0].size
     assert_equal 'yaml', res.values[0][0]
     assert_equal Array, res.values[0][1].class
