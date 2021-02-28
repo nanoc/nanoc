@@ -34,7 +34,7 @@ module Nanoc
         if res
           start = Time.now
           sleep 0.05 until File.file?(res) || Time.now - start > FILE_APPEAR_TIMEOUT
-          raise Nanoc::Core::Errors::InternalInconsistency, "File did not apear in time: #{res}" unless File.file?(res)
+          raise Nanoc::Core::Errors::InternalInconsistency, "File raw_path did not appear in time (#{FILE_APPEAR_TIMEOUT}s): #{res}" unless File.file?(res)
         end
 
         res
