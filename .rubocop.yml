@@ -365,6 +365,12 @@ Style/HashConversion: # (new in 1.10)
 Style/IfWithBooleanLiteralBranches: # (new in 1.9)
   Enabled: true
 
+Style/StringChars: # (new in 1.12)
+  Enabled: true
+
+Minitest/AssertWithExpectedArgument: # (new in 0.11)
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
@@ -486,6 +492,11 @@ Style/StderrPuts:
 # This catches too many false positives. A string that contains a % followed by
 # a letter is not always a format string.
 Style/FormatStringToken:
+  Enabled: false
+
+# Both {} and [] are considered empty, but it’s still important to check whether
+# something is {} rather than [] or vice versa.
+Minitest/AssertEmptyLiteral:
   Enabled: false
 
 # ----- DISABLED (buggy) -----
