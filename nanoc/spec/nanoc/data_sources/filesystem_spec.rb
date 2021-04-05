@@ -12,8 +12,9 @@ describe Nanoc::DataSources::Filesystem, site: true do
   let(:now) { Time.local(2008, 1, 2, 14, 5, 0) }
 
   describe '#load_objects' do
-    subject { data_source.send(:load_objects, 'foo', klass) }
+    subject { data_source.send(:load_objects, dir_with_objects, klass) }
 
+    let(:dir_with_objects) { 'foo' }
     let(:klass) { raise 'override me' }
 
     context 'items' do
@@ -47,23 +48,13 @@ describe Nanoc::DataSources::Filesystem, site: true do
           expect(subject.size).to eq(1)
 
           expect(subject[0].content.string).to eq('test 1')
+          expect(subject[0].attributes).to eq(expected_attributes)
           expect(subject[0].identifier).to eq(Nanoc::Core::Identifier.new('/bar/', type: :legacy))
           expect(subject[0].checksum_data).to be_nil
           expect(subject[0].attributes_checksum_data).to be_a(String)
           expect(subject[0].attributes_checksum_data.size).to eq(20)
           expect(subject[0].content_checksum_data).to be_a(String)
           expect(subject[0].content_checksum_data.size).to eq(20)
-        end
-
-        it 'has the right attributes' do
-          expect(subject[0].attributes.keys).to match_array(%i[content_filename extension filename meta_filename mtime num])
-
-          expect(subject[0].attributes[:content_filename]).to end_with('foo/bar.html')
-          expect(subject[0].attributes[:extension]).to eq('html')
-          expect(subject[0].attributes[:filename]).to end_with('foo/bar.html')
-          expect(subject[0].attributes[:meta_filename]).to eq(nil)
-          expect(subject[0].attributes[:mtime]).to eq(now)
-          expect(subject[0].attributes[:num]).to eq(1)
         end
 
         context 'split files' do
@@ -110,20 +101,11 @@ describe Nanoc::DataSources::Filesystem, site: true do
           expect(subject.size).to eq(1)
 
           expect(subject[0].content).to be_a(Nanoc::Core::BinaryContent)
+          expect(subject[0].attributes).to eq(expected_attributes)
           expect(subject[0].identifier).to eq(Nanoc::Core::Identifier.new('/bar/', type: :legacy))
           expect(subject[0].checksum_data).to be_nil
           expect(subject[0].attributes_checksum_data).to be_a(String)
           expect(subject[0].attributes_checksum_data.size).to eq(20)
-        end
-
-        it 'has the right attributes' do
-          expect(subject[0].attributes.keys).to match_array(%i[content_filename extension filename meta_filename mtime])
-
-          expect(subject[0].attributes[:content_filename]).to end_with('foo/bar.dat')
-          expect(subject[0].attributes[:extension]).to eq('dat')
-          expect(subject[0].attributes[:filename]).to end_with('foo/bar.dat')
-          expect(subject[0].attributes[:meta_filename]).to eq(nil)
-          expect(subject[0].attributes[:mtime]).to eq(now)
         end
 
         it 'has no content checksum data' do
@@ -259,6 +241,28 @@ describe Nanoc::DataSources::Filesystem, site: true do
           expect(subject[0].identifier).to eq(Nanoc::Core::Identifier.new('/a.txt', type: :full))
           expect(subject[0].attributes[:title]).to be_nil
           expect(subject[0].attributes[:author]).to eq('Denis')
+        end
+      end
+
+      context 'content file outside of current working directory' do
+        let(:params) { { identifier_type: 'full' } }
+
+        let(:dir_with_objects) { Dir.mktmpdir }
+
+        before do
+          File.write(File.join(dir_with_objects, 'foo.txt'), "---\ntitle: I am foo\n---\n\nHi!")
+        end
+
+        it 'assigns metadata to the file that doesn’t have any yet' do
+          expect(subject.size).to eq(1)
+
+          items = subject.sort_by { |i| i.identifier.to_s }
+
+          expect(items[0].content).to be_a(Nanoc::Core::TextualContent)
+          expect(items[0].identifier).to eq(Nanoc::Core::Identifier.new('/foo.txt', type: :full))
+          expect(items[0].attributes[:title]).to eq('I am foo')
+          expect(items[0].attributes[:content_filename]).to start_with('../')
+          expect(items[0].attributes[:content_filename]).to end_with('/foo.txt')
         end
       end
     end

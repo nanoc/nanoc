@@ -81,6 +81,15 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
       end.compact.flatten
     end
 
+    # Expands the path (including resolving ~ for home directory) and returns
+    # a relative path to the expanded path.
+    def expand_and_relativize_path(path)
+      from = Pathname.new(Dir.getwd)
+      to = Pathname.new(File.expand_path(path))
+
+      to.relative_path_from(from).to_s
+    end
+
     # Returns all files and directories in the given directory and
     # directories below it.
     #
@@ -95,8 +104,6 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
     #
     # @raise [Nanoc::Core::TrivialError] when pattern can not be handled
     def all_files_and_dirs_in(dir_name, extra_files)
-      dir_name = File.expand_path(dir_name)
-
       base_patterns = ["#{dir_name}/**/*"]
 
       extra_patterns =
