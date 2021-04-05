@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.12.1 (2021-04-05)
+
+Enhancements:
+
+- Made Nanoc expand paths containing `~` (home directory) in the filesystem data source configuration (!4, !5, !6)
+
 ## 4.12.0 (2021-02-20)
 
 Features:
