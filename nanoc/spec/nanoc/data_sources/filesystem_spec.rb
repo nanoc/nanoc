@@ -268,13 +268,23 @@ describe Nanoc::DataSources::Filesystem, site: true do
     end
   end
 
-  describe '#item_changes' do
-    subject { data_source.item_changes }
+  describe '#changes_for_dir' do
+    subject { data_source.changes_for_dir(temp_dir_base_unexpanded) }
+
+    let(:temp_dir_base_unexpanded) { '~/tmp_nanoc_Mj2glnoP' }
+    let(:temp_dir_base_expanded) { File.expand_path(temp_dir_base_unexpanded) }
+    let(:temp_dir) { Dir.mktmpdir(nil, temp_dir_base_expanded) }
 
     before do
       if Nanoc::Core.on_windows?
         skip 'nanoc-live is not currently supported on Windows'
       end
+
+      FileUtils.mkdir_p(temp_dir_base_expanded)
+    end
+
+    after do
+      FileUtils.rm_rf(temp_dir_base_expanded)
     end
 
     it 'returns a stream' do
@@ -282,7 +292,7 @@ describe Nanoc::DataSources::Filesystem, site: true do
     end
 
     it 'contains one element after changing' do
-      FileUtils.mkdir_p('content')
+      FileUtils.mkdir_p(File.join(temp_dir, 'content'))
 
       enum = SlowEnumeratorTools.buffer(subject.to_enum, 1)
       q = SizedQueue.new(1)
@@ -291,45 +301,7 @@ describe Nanoc::DataSources::Filesystem, site: true do
       # Try until we find a change
       ok = false
       20.times do |i|
-        File.write('content/wat.md', "stuff #{i}")
-        begin
-          expect(q.pop(true)).to eq(:unknown)
-          ok = true
-          break
-        rescue ThreadError
-          sleep 0.1
-        end
-      end
-      expect(ok).to be(true)
-
-      subject.stop
-    end
-  end
-
-  describe '#layout_changes' do
-    subject { data_source.layout_changes }
-
-    before do
-      if Nanoc::Core.on_windows?
-        skip 'nanoc-live is not currently supported on Windows'
-      end
-    end
-
-    it 'returns a stream' do
-      expect(subject).to be_a(Nanoc::Core::ChangesStream)
-    end
-
-    it 'contains one element after changing' do
-      FileUtils.mkdir_p('layouts')
-
-      enum = SlowEnumeratorTools.buffer(subject.to_enum, 1)
-      q = SizedQueue.new(1)
-      Thread.new { q << enum.take(1).first }
-
-      # Try until we find a change
-      ok = false
-      20.times do |i|
-        File.write('layouts/wat.md', "stuff #{i}")
+        File.write(File.join(temp_dir, 'content/wat.md'), "stuff #{i}")
         begin
           expect(q.pop(true)).to eq(:unknown)
           ok = true
