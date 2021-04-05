@@ -22,17 +22,17 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
     # 11 expected files (follow symlink 10 times)
     # sort required because 10 comes before 2
     expected_files = [
-      File.expand_path('dir0/foo.md'),
-      File.expand_path('dir0/sub/foo.md'),
-      File.expand_path('dir0/sub/sub/foo.md'),
-      File.expand_path('dir0/sub/sub/sub/foo.md'),
-      File.expand_path('dir0/sub/sub/sub/sub/foo.md'),
-      File.expand_path('dir0/sub/sub/sub/sub/sub/foo.md'),
-      File.expand_path('dir0/sub/sub/sub/sub/sub/sub/foo.md'),
-      File.expand_path('dir0/sub/sub/sub/sub/sub/sub/sub/foo.md'),
-      File.expand_path('dir0/sub/sub/sub/sub/sub/sub/sub/sub/foo.md'),
-      File.expand_path('dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md'),
-      File.expand_path('dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md'),
+      'dir0/foo.md',
+      'dir0/sub/foo.md',
+      'dir0/sub/sub/foo.md',
+      'dir0/sub/sub/sub/foo.md',
+      'dir0/sub/sub/sub/sub/foo.md',
+      'dir0/sub/sub/sub/sub/sub/foo.md',
+      'dir0/sub/sub/sub/sub/sub/sub/foo.md',
+      'dir0/sub/sub/sub/sub/sub/sub/sub/foo.md',
+      'dir0/sub/sub/sub/sub/sub/sub/sub/sub/foo.md',
+      'dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md',
+      'dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md',
     ]
     actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir0', nil).sort
     assert_equal expected_files, actual_files
@@ -62,7 +62,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
 
     File.symlink('../bar', 'foo/barlink')
 
-    expected_files = [File.expand_path('foo/barlink/y.md'), File.expand_path('foo/x.md')]
+    expected_files = ['foo/barlink/y.md', 'foo/x.md']
     actual_files   = Nanoc::DataSources::Filesystem::Tools.all_files_in('foo', nil).sort
     assert_equal expected_files, actual_files
   end
@@ -75,7 +75,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
     File.symlink('../bar', 'dir/bar-link')
 
     # Check
-    expected_files = [File.expand_path('dir/bar-link'), File.expand_path('dir/foo')]
+    expected_files = ['dir/bar-link', 'dir/foo']
     actual_files   = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', nil).sort
     assert_equal expected_files, actual_files
   end
@@ -119,7 +119,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
     File.open('dir/.other', 'w') { |io| io.write('o hai') }
 
     actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', '**/.other').sort
-    assert_equal [File.expand_path('dir/.other')], actual_files
+    assert_equal ['dir/.other'], actual_files
   end
 
   def test_multiple_user_dotfiles_are_valid_items
@@ -129,7 +129,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
     File.open('dir/.DS_Store', 'w') { |io| io.write('o hai') }
 
     actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', ['**/.other', '**/.DS_Store']).sort
-    assert_equal [File.expand_path('dir/.other'), File.expand_path('dir/.DS_Store')].sort, actual_files.sort
+    assert_equal ['dir/.other', 'dir/.DS_Store'].sort, actual_files.sort
   end
 
   def test_unknown_pattern
