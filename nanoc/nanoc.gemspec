@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.executables        = ['nanoc']
   s.require_paths      = ['lib']
 
-  s.required_ruby_version = '>= 2.5'
+  s.required_ruby_version = '>= 2.6'
 
   s.add_runtime_dependency('addressable', '~> 2.5')
   s.add_runtime_dependency('colored', '~> 1.2')

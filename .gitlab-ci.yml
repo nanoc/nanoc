@@ -21,10 +21,6 @@
     - bundle exec rake nanoc_spec:test
     - bundle exec rake guard_nanoc:test
 
-test_ruby25:
-  image: ruby:2.5
-  <<: *test
-
 test_ruby26:
   image: ruby:2.6
   <<: *test
