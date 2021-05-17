@@ -15,6 +15,7 @@ module Nanoc::Filters
         '*/@href',
         '*/@src',
         'object/@data',
+        'video/@poster',
         'param[@name="movie"]/@value',
         'form/@action',
         'comment()',
