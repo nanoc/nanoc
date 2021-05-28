@@ -140,6 +140,12 @@ describe Nanoc::Filters::RelativizePaths do
 
         it { is_expected.to eq('<img srcset="../foo/bar.png 1w 2x,../foo/bloop.png 2w,../foo/asdf.jpg 12w 128x">') }
       end
+
+      context 'video' do
+        let(:content) { '<video poster="/foo.png"><source src="/foo.mp4" type="video/mp4"></video>' }
+
+        it { is_expected.to eq('<video poster="../foo.png"><source src="../foo.mp4" type="video/mp4"></video>') }
+      end
     end
 
     context 'XHTML' do
