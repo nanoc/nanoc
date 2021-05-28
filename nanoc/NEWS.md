@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.12.2 (2021-05-28)
+
+Enhancements:
+
+- Add support for `video/@poster` to relativize_paths (#1544) [Masayuki Higashino]
+
 ## 4.12.1 (2021-04-05)
 
 Enhancements:
