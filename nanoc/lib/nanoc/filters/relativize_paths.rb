@@ -114,7 +114,7 @@ module Nanoc::Filters
         require 'nokogiri'
         ::Nokogiri::HTML
       when :html5
-        require 'nokogumbo'
+        require 'nokogiri'
         ::Nokogiri::HTML5
       when :xml
         require 'nokogiri'

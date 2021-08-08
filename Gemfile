@@ -65,8 +65,7 @@ group :plugins do
   gem 'maruku'
   gem 'mime-types'
   gem 'mustache', '~> 1.0'
-  gem 'nokogiri', '~> 1.8'
-  gem 'nokogumbo', '~> 2.0', platforms: :ruby
+  gem 'nokogiri', '~> 1.12'
   gem 'pandoc-ruby'
   gem 'pygments.rb', '~> 2.0', platforms: :ruby
   gem 'rack'
