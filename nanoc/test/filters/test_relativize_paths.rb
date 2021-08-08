@@ -120,7 +120,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
   end
 
   def test_filter_html5_with_boilerplate
-    skip_unless_have 'nokogumbo'
+    skip_unless_have 'nokogiri'
 
     # Create filter with mock item
     filter = Nanoc::Filters::RelativizePaths.new

@@ -54,7 +54,7 @@ class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
   end
 
   def test_full_page_html5
-    skip_unless_have 'nokogumbo'
+    skip_unless_have 'nokogiri'
 
     # Create filter
     filter = ::Nanoc::Filters::ColorizeSyntax.new

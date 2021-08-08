@@ -191,7 +191,6 @@ module Nanoc::CLI
       'mustache' => 'mustache',
       'nanoc/live' => 'nanoc-live',
       'nokogiri' => 'nokogiri',
-      'nokogumbo' => 'nokogumbo',
       'pandoc-ruby' => 'pandoc-ruby',
       'pry' => 'pry',
       'rack' => 'rack',
