@@ -9,7 +9,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
   end
 
   def test_find
-    refute Nanoc::Filter.named(:redcarpet).nil?
+    refute_nil Nanoc::Filter.named(:redcarpet)
   end
 
   def test_filter

@@ -37,15 +37,22 @@ module Nanoc::CLI::CompileListeners
         duration = @stopwatches[rep].duration
 
         action =
-          if is_created then :create
-          elsif is_modified then :update
-          elsif cached_reps.include?(rep) then :cached
-          else :identical
+          if is_created
+            :create
+          elsif is_modified
+            :update
+          elsif cached_reps.include?(rep)
+            :cached
+          else
+            :identical
           end
         level =
-          if is_created then :high
-          elsif is_modified then :high
-          else :low
+          if is_created
+            :high
+          elsif is_modified
+            :high
+          else
+            :low
           end
 
         # FIXME: do not depend on working directory
