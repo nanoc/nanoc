@@ -56,5 +56,18 @@ describe Nanoc::Core::CodeSnippet do
 
       expect(@foo).to eq('meow')
     end
+
+    describe 'calling twice' do
+      subject do
+        2.times { code_snippet.load }
+      end
+
+      let(:data) { 'def v5yqq2zmfcjr; "ok"; end' }
+
+      it 'does not warn' do
+        expect { subject }.not_to output(/warning: method redefined; discarding old use_helper/).to_stdout
+        expect { subject }.not_to output(/warning: method redefined; discarding old use_helper/).to_stderr
+      end
+    end
   end
 end
