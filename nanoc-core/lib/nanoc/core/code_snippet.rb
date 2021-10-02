@@ -36,7 +36,13 @@ module Nanoc
       # @return [void]
       def load
         # rubocop:disable Security/Eval
-        eval('def self.use_helper(mod); Nanoc::Core::Context.instance_eval { include mod }; end', TOPLEVEL_BINDING)
+        eval(<<~CODE, TOPLEVEL_BINDING)
+          unless respond_to?(:use_helper)
+            def self.use_helper(mod)
+              Nanoc::Core::Context.instance_eval { include mod }
+            end
+          end
+        CODE
         eval(@data, TOPLEVEL_BINDING, @filename)
         # rubocop:enable Security/Eval
         nil
