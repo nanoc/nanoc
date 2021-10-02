@@ -1,0 +1,64 @@
+name: Nanoc
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["2.5", "2.6", "2.7", "3.0"]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+
+      - uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: bundler-b-${{ runner.os }}-${{ matrix.ruby-version }}-${{ hashFiles('Gemfile') }}
+
+      - run: |
+          bundle config set --local path 'vendor/bundle'
+          bundle install --jobs "$(nproc)"
+
+      - name: Test nanoc-core
+        run: bundle exec rake nanoc_core:test
+        timeout-minutes: 3
+
+      - name: Test nanoc
+        run: bundle exec rake nanoc:test
+        timeout-minutes: 3
+
+      - name: Test nanoc-cli
+        run: bundle exec rake nanoc_cli:test
+        timeout-minutes: 3
+
+      - name: Test nanoc-checking
+        run: bundle exec rake nanoc_checking:test
+        timeout-minutes: 3
+
+      - name: Test nanoc-deploying
+        run: bundle exec rake nanoc_deploying:test
+        timeout-minutes: 3
+
+      - name: Test nanoc-external
+        run: bundle exec rake nanoc_external:test
+        timeout-minutes: 3
+
+      - name: Test nanoc-live
+        run: bundle exec rake nanoc_live:test
+        timeout-minutes: 3
+
+      - name: Test nanoc-spec
+        run: bundle exec rake nanoc_spec:test
+        timeout-minutes: 3
+
+      - name: Test guard-nanoc
+        run: bundle exec rake guard_nanoc:test
+        timeout-minutes: 3
