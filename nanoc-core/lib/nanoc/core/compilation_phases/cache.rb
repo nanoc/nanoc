@@ -18,15 +18,20 @@ module Nanoc
         contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
         def run(rep, is_outdated:)
           if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
+            # If cached content can be used for this item rep, do so, and skip
+            # recalculation of the item rep compiled content.
             Nanoc::Core::NotificationCenter.post(:cached_content_used, rep)
-
             @compiled_content_store.set_all(rep, @compiled_content_cache[rep])
           else
+            # Cached content couldn’t be used for this rep. Continue as usual with
+            # recalculation of the item rep compiled content.
             yield
+
+            # Update compiled content cache, now that the item rep is compiled.
+            @compiled_content_cache[rep] = @compiled_content_store.get_all(rep)
           end
 
           rep.compiled = true
-          @compiled_content_cache[rep] = @compiled_content_store.get_all(rep)
         end
 
         contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool] => C::Bool
