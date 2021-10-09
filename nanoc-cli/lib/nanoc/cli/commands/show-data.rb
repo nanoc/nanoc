@@ -99,15 +99,17 @@ module Nanoc::CLI::Commands
               'items'
             when Nanoc::Core::LayoutCollection
               'layouts'
+            when nil
+              '(unknown)'
             else
-              raise Nanoc::Core::Errors::InternalInconsistency, "unexpected pred type #{pred}"
+              raise Nanoc::Core::Errors::InternalInconsistency, "unexpected pred type #{pred.inspect}"
             end
 
           pred_identifier =
             case pred
             when Nanoc::Core::Document
               pred.identifier.to_s
-            when Nanoc::Core::Configuration
+            when Nanoc::Core::Configuration, nil
               nil
             when Nanoc::Core::IdentifiableCollection
               case dep.props.raw_content
@@ -117,13 +119,13 @@ module Nanoc::CLI::Commands
                 "matching any of #{dep.props.raw_content.sort.join(', ')}"
               end
             else
-              raise Nanoc::Core::Errors::InternalInconsistency, "unexpected pred type #{pred}"
+              raise Nanoc::Core::Errors::InternalInconsistency, "unexpected pred type #{pred.inspect}"
             end
 
           if pred
             puts "  [ #{format '%6s', type} ] (#{dep.props}) #{pred_identifier}"
           else
-            puts '  ( removed item )'
+            puts '  ( removed )'
           end
         end
         puts '  (nothing)' if dependencies.empty?
