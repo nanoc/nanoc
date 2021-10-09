@@ -1,5 +1,14 @@
 # Nanoc news
 
+## 4.12.3 (2021-10-09)
+
+Fixes:
+
+- Switched ERB to use keyword arguments (#1547, #1550) [Daniel Aleksandersen]
+- Removed use_helper re-definition warning (#1548, #1553) [Daniel Aleksandersen]
+- Fixed issue which could cause items not to be recalculated when removing items in the preprocess block (#1554, #1555)
+- Dropped Nokogumbo in favor of Nokogiri (#1546, #1549) [Daniel Aleksandersen]
+
 ## 4.12.2 (2021-05-28)
 
 Enhancements:
