@@ -148,6 +148,20 @@ describe Nanoc::Core::DependencyStore do
         end
       end
 
+      context 'dependency on item that will be removed' do
+        before do
+          store.record_dependency(item_a, item_b)
+          store.items = Nanoc::Core::ItemCollection.new(config, [item_a])
+        end
+
+        it 'retains dependency, but from nil' do
+          deps = store.dependencies_causing_outdatedness_of(item_a)
+          expect(deps.size).to be(1)
+          expect(deps[0].from).to eql(nil)
+          expect(deps[0].to).to eql(item_a)
+        end
+      end
+
       context 'one prop' do
         before do
           store.record_dependency(item_a, item_b, compiled_content: true)

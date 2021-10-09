@@ -19,18 +19,23 @@ module Nanoc
       def initialize(items, layouts, config)
         super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'dependencies'), 5)
 
+        @config = config
         @items = items
         @layouts = layouts
 
-        @refs2objs = {}
-        items.each   { |o| add_vertex_for(o) }
-        layouts.each { |o| add_vertex_for(o) }
-        add_vertex_for(config)
-        add_vertex_for(items)
-        add_vertex_for(layouts)
+        rebuild_refs2objs
 
         @new_objects = []
         @graph = Nanoc::Core::DirectedGraph.new([nil] + objs2refs(@items) + objs2refs(@layouts))
+      end
+
+      def rebuild_refs2objs
+        @refs2objs = {}
+        @items.each   { |o| add_vertex_for(o) }
+        @layouts.each { |o| add_vertex_for(o) }
+        add_vertex_for(@config)
+        add_vertex_for(@items)
+        add_vertex_for(@layouts)
       end
 
       contract C_OBJ_SRC => C::ArrayOf[Nanoc::Core::Dependency]
@@ -53,14 +58,12 @@ module Nanoc
 
       def items=(items)
         @items = items
-        items.each { |o| @refs2objs[obj2ref(o)] = o }
-        add_vertex_for(items)
+        rebuild_refs2objs
       end
 
       def layouts=(layouts)
         @layouts = layouts
-        layouts.each { |o| @refs2objs[obj2ref(o)] = o }
-        add_vertex_for(layouts)
+        rebuild_refs2objs
       end
 
       def new_items
