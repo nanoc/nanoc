@@ -157,7 +157,7 @@ describe Nanoc::Core::DependencyStore do
         it 'retains dependency, but from nil' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
           expect(deps.size).to be(1)
-          expect(deps[0].from).to eql(nil)
+          expect(deps[0].from).to be(nil)
           expect(deps[0].to).to eql(item_a)
         end
       end
