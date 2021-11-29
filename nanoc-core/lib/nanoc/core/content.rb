@@ -11,7 +11,7 @@ module Nanoc
       contract C::Maybe[String] => C::Any
       def initialize(filename)
         if filename && Pathname.new(filename).relative?
-          raise ArgumentError, 'Content filename is not absolute'
+          raise ArgumentError, "Content filename #{filename} is not absolute"
         end
 
         @filename = filename
