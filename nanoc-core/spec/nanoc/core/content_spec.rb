@@ -33,12 +33,27 @@ describe Nanoc::Core::Content do
     context 'with binary: false param' do
       context 'with filename param' do
         let(:arg) { 'foo' }
-        let(:params) { { binary: false, filename: '/foo.md' } }
+        let(:params) { { binary: false, filename: filename } }
 
-        it 'returns textual content' do
-          expect(subject).to be_a(Nanoc::Core::TextualContent)
-          expect(subject.string).to eql('foo')
-          expect(subject.filename).to eql('/foo.md')
+        context 'with relative filename param' do
+          let(:filename) { 'foo.md' }
+
+          it 'raises' do
+            expect { subject }.to raise_error(
+              ArgumentError,
+              'Content filename foo.md is not absolute',
+            )
+          end
+        end
+
+        context 'with absolute filename param' do
+          let(:filename) { '/foo.md' }
+
+          it 'returns textual content' do
+            expect(subject).to be_a(Nanoc::Core::TextualContent)
+            expect(subject.string).to eql('foo')
+            expect(subject.filename).to eql('/foo.md')
+          end
         end
       end
 
