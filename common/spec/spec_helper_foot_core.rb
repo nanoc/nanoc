@@ -24,6 +24,8 @@ RSpec.configure do |c|
 
   c.include(Nanoc::Spec::HelperHelper, helper: true)
 
+  c.threadsafe = false
+
   # TODO: Only really relevant when using the filesystem data source
   c.before(:each, site: true) do
     FileUtils.mkdir_p('content')

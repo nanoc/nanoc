@@ -42,17 +42,21 @@ describe Nanoc::Core::TempFilenameFactory do
     end
 
     it 'is threadsafe' do
+      # Create factory
+      # Must happen beforehand, because creation is not threadsafe
+      factory = subject
+
       pool = Concurrent::FixedThreadPool.new(100)
 
       # Post
-      10_000.times { pool.post { subject.create(prefix) } }
+      10_000.times { pool.post { factory.create(prefix) } }
 
       # Wait for completion
       pool.shutdown
       pool.wait_for_termination
 
       # Check
-      expect(subject.create(prefix)).to end_with('/10000')
+      expect(factory.create(prefix)).to end_with('/10000')
     end
   end
 
