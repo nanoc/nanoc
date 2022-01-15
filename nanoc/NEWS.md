@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.12.4 (2022-01-15)
+
+Fixes:
+
+- Fixed “can’t be called from trap context” exception (#1559, #1564)
+
+Enhancements:
+
+- Added `Date` to the list of permitted classes for YAML (#1560) [Damien Mathieu]
+- Made Nanoc log the filename when it is not absolute (#1557) [Johnny Willemsen]
+
 ## 4.12.3 (2021-10-09)
 
 Fixes:
