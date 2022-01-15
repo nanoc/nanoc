@@ -31,6 +31,10 @@ jobs:
           bundle config set --local path 'vendor/bundle'
           bundle install --jobs "$(nproc)"
 
+      - name: Test style
+        if: ${{ matrix.ruby-version == '3.1' }}
+        run: bundle exec rake rubocop
+
       - name: Test nanoc-core
         run: bundle exec rake nanoc_core:test
         timeout-minutes: 3
