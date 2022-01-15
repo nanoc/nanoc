@@ -33,12 +33,8 @@ describe 'Compile command', site: true, stdio: true do
 
   it 'recompiles when changing routes' do
     # Create items
-    File.open('content/a.html', 'w') do |io|
-      io.write('<h1>A</h1>')
-    end
-    File.open('content/b.html', 'w') do |io|
-      io.write('<h1>B</h1>')
-    end
+    File.write('content/a.html', '<h1>A</h1>')
+    File.write('content/b.html', '<h1>B</h1>')
 
     # Create routes
     File.open('Rules', 'w') do |io|

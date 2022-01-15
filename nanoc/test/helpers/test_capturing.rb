@@ -66,28 +66,20 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
   def test_dependencies
     with_site do |_site|
       # Prepare
-      File.open('lib/helpers.rb', 'w') do |io|
-        io.write 'include Nanoc::Helpers::Capturing'
-      end
-      File.open('content/includer.erb', 'w') do |io|
-        io.write '[<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>]'
-      end
+      File.write('lib/helpers.rb', 'include Nanoc::Helpers::Capturing')
+      File.write('content/includer.erb', '[<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>]')
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do ; filter :erb ; end\n"
         io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
       end
 
       # Compile once
-      File.open('content/includee.erb', 'w') do |io|
-        io.write '{<% content_for :blah do %>Old content<% end %>}'
-      end
+      File.write('content/includee.erb', '{<% content_for :blah do %>Old content<% end %>}')
       Nanoc::CLI.run(%w[compile])
       assert_equal '[Old content]', File.read('output/includer/index.html')
 
       # Compile again
-      File.open('content/includee.erb', 'w') do |io|
-        io.write '{<% content_for :blah do %>New content<% end %>}'
-      end
+      File.write('content/includee.erb', '{<% content_for :blah do %>New content<% end %>}')
       Nanoc::CLI.run(%w[compile])
       assert_equal '[New content]', File.read('output/includer/index.html')
     end
@@ -132,12 +124,8 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
         io.write "include Nanoc::Helpers::Capturing\n"
         io.write "include Nanoc::Helpers::Rendering\n"
       end
-      File.open('content/includer.erb', 'w') do |io|
-        io.write '{<%= render \'partial\', :item => nil %>}'
-      end
-      File.open('layouts/partial.erb', 'w') do |io|
-        io.write '[<%= @item.inspect %>-<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>]'
-      end
+      File.write('content/includer.erb', '{<%= render \'partial\', :item => nil %>}')
+      File.write('layouts/partial.erb', '[<%= @item.inspect %>-<%= content_for(@items.find { |i| i.identifier == \'/includee/\' }, :blah) %>]')
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do ; filter :erb ; end\n"
         io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
@@ -145,16 +133,12 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       end
 
       # Compile once
-      File.open('content/includee.erb', 'w') do |io|
-        io.write '{<% content_for :blah do %>Old content<% end %>}'
-      end
+      File.write('content/includee.erb', '{<% content_for :blah do %>Old content<% end %>}')
       Nanoc::CLI.run(%w[compile])
       assert_equal '{[nil-Old content]}', File.read('output/includer/index.html')
 
       # Compile again
-      File.open('content/includee.erb', 'w') do |io|
-        io.write '{<% content_for :blah do %>New content<% end %>}'
-      end
+      File.write('content/includee.erb', '{<% content_for :blah do %>New content<% end %>}')
       Nanoc::CLI.run(%w[compile])
       assert_equal '{[nil-New content]}', File.read('output/includer/index.html')
     end
@@ -162,9 +146,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
   def test_self
     with_site do |_site|
-      File.open('lib/helpers.rb', 'w') do |io|
-        io.write 'include Nanoc::Helpers::Capturing'
-      end
+      File.write('lib/helpers.rb', 'include Nanoc::Helpers::Capturing')
 
       File.open('content/self.erb', 'w') do |io|
         io.write '<% content_for :foo do %>Foo!<% end %>'
@@ -184,29 +166,21 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
   def test_recompile_dependency
     with_site do |_site|
       # Prepare
-      File.open('lib/helpers.rb', 'w') do |io|
-        io.write 'include Nanoc::Helpers::Capturing'
-      end
-      File.open('content/includee.erb', 'w') do |io|
-        io.write '{<% content_for :blah do %>Content<% end %>}'
-      end
+      File.write('lib/helpers.rb', 'include Nanoc::Helpers::Capturing')
+      File.write('content/includee.erb', '{<% content_for :blah do %>Content<% end %>}')
       File.open('Rules', 'w') do |io|
         io.write "compile '*' do ; filter :erb ; end\n"
         io.write "route '*' do ; item.identifier + 'index.html' ; end\n"
       end
 
       # Compile once
-      File.open('content/includer.erb', 'w') do |io|
-        io.write 'Old-<%= content_for(@items["/includee/"], :blah) %>'
-      end
+      File.write('content/includer.erb', 'Old-<%= content_for(@items["/includee/"], :blah) %>')
       Nanoc::CLI.run(%w[compile])
       assert_equal '{}', File.read('output/includee/index.html')
       assert_equal 'Old-Content', File.read('output/includer/index.html')
 
       # Compile again
-      File.open('content/includer.erb', 'w') do |io|
-        io.write 'New-<%= content_for(@items["/includee/"], :blah) %>'
-      end
+      File.write('content/includer.erb', 'New-<%= content_for(@items["/includee/"], :blah) %>')
       Nanoc::CLI.run(%w[compile])
       assert_equal '{}', File.read('output/includee/index.html')
       assert_equal 'New-Content', File.read('output/includer/index.html')

@@ -41,6 +41,7 @@ describe Nanoc::Core::TempFilenameFactory do
       expect(File.file?(path)).not_to be(true)
     end
 
+    # rubocop:disable RSpec/ExampleLength
     it 'is threadsafe' do
       # Create factory
       # Must happen beforehand, because creation is not threadsafe
@@ -58,6 +59,7 @@ describe Nanoc::Core::TempFilenameFactory do
       # Check
       expect(factory.create(prefix)).to end_with('/10000')
     end
+    # rubocop:enable RSpec/ExampleLength
   end
 
   describe '#cleanup' do

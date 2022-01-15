@@ -24,7 +24,7 @@ describe Nanoc::Checking::Checks::HTML do
   it 'handles good HTML' do
     VCR.use_cassette('html_run_ok') do
       FileUtils.mkdir_p('output')
-      File.open('output/blah.html', 'w') { |io| io.write('<h1>Hi!</h1>') }
+      File.write('output/blah.html', '<h1>Hi!</h1>')
 
       check.run
 
@@ -35,7 +35,7 @@ describe Nanoc::Checking::Checks::HTML do
   it 'handles bad HTML' do
     VCR.use_cassette('html_run_error') do
       FileUtils.mkdir_p('output')
-      File.open('output/blah.html', 'w') { |io| io.write('<h1>Hi!</h2>') }
+      File.write('output/blah.html', '<h1>Hi!</h2>')
 
       check.run
 

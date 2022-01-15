@@ -24,8 +24,8 @@ describe Nanoc::Checking::Checks::CSS do
   it 'handles good CSS' do
     VCR.use_cassette('css_run_ok') do
       FileUtils.mkdir_p('output')
-      File.open('output/blah.html', 'w') { |io| io.write('<h1>Hi!</h1>') }
-      File.open('output/style.css', 'w') { |io| io.write('h1 { color: red; }') }
+      File.write('output/blah.html', '<h1>Hi!</h1>')
+      File.write('output/style.css', 'h1 { color: red; }')
 
       check.run
 
@@ -36,8 +36,8 @@ describe Nanoc::Checking::Checks::CSS do
   it 'handles bad CSS' do
     VCR.use_cassette('css_run_error') do
       FileUtils.mkdir_p('output')
-      File.open('output/blah.html', 'w') { |io| io.write('<h1>Hi!</h1>') }
-      File.open('output/style.css', 'w') { |io| io.write('h1 { coxlor: rxed; }') }
+      File.write('output/blah.html', '<h1>Hi!</h1>')
+      File.write('output/style.css', 'h1 { coxlor: rxed; }')
 
       check.run
 
@@ -51,8 +51,8 @@ describe Nanoc::Checking::Checks::CSS do
   it 'handles parse errors' do
     VCR.use_cassette('css_run_parse_error') do
       FileUtils.mkdir_p('output')
-      File.open('output/blah.html', 'w') { |io| io.write('<h1>Hi!</h1>') }
-      File.open('output/style.css', 'w') { |io| io.write('h1 { ; {') }
+      File.write('output/blah.html', '<h1>Hi!</h1>')
+      File.write('output/style.css', 'h1 { ; {')
 
       check.run
 

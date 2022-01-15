@@ -59,7 +59,7 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
 
   def test_compile_with_one_rep
     with_site do |_site|
-      File.open('content/index.html', 'w') { |io| io.write('o hello') }
+      File.write('content/index.html', 'o hello')
 
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Core::Compiler.compile(site)
@@ -72,8 +72,8 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
 
   def test_compile_with_two_independent_reps
     with_site do |_site|
-      File.open('content/foo.html', 'w') { |io| io.write('o hai') }
-      File.open('content/bar.html', 'w') { |io| io.write('o bai') }
+      File.write('content/foo.html', 'o hai')
+      File.write('content/bar.html', 'o bai')
 
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Core::Compiler.compile(site)
@@ -88,12 +88,8 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
 
   def test_compile_with_two_dependent_reps
     with_site(compilation_rule_content: 'filter :erb') do |_site|
-      File.open('content/foo.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>!!!')
-      end
-      File.open('content/bar.html', 'w') do |io|
-        io.write('manatee')
-      end
+      File.write('content/foo.html', '<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>!!!')
+      File.write('content/bar.html', 'manatee')
 
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Core::Compiler.compile(site)
@@ -108,12 +104,8 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
 
   def test_compile_with_two_mutually_dependent_reps
     with_site(compilation_rule_content: 'filter :erb') do |_site|
-      File.open('content/foo.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>')
-      end
-      File.open('content/bar.html', 'w') do |io|
-        io.write('<%= @items.find { |i| i.identifier == "/foo/" }.compiled_content %>')
-      end
+      File.write('content/foo.html', '<%= @items.find { |i| i.identifier == "/bar/" }.compiled_content %>')
+      File.write('content/bar.html', '<%= @items.find { |i| i.identifier == "/foo/" }.compiled_content %>')
 
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
       assert_raises Nanoc::Core::Errors::DependencyCycle do
@@ -152,9 +144,7 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
   def test_include_compiled_content_of_active_item_at_previous_snapshot
     with_site do |_site|
       # Create item
-      File.open('content/index.html', 'w') do |io|
-        io.write('[<%= @item.compiled_content(:snapshot => :aaa) %>]')
-      end
+      File.write('content/index.html', '[<%= @item.compiled_content(:snapshot => :aaa) %>]')
 
       # Create routes
       File.open('Rules', 'w') do |io|
@@ -183,12 +173,8 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
   def test_mutually_include_compiled_content_at_previous_snapshot
     with_site do |_site|
       # Create items
-      File.open('content/a.html', 'w') do |io|
-        io.write('[<%= @items.find { |i| i.identifier == "/z/" }.compiled_content(:snapshot => :guts) %>]')
-      end
-      File.open('content/z.html', 'w') do |io|
-        io.write('stuff')
-      end
+      File.write('content/a.html', '[<%= @items.find { |i| i.identifier == "/z/" }.compiled_content(:snapshot => :guts) %>]')
+      File.write('content/z.html', 'stuff')
 
       # Create routes
       File.open('Rules', 'w') do |io|
@@ -217,9 +203,7 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
   def test_tmp_text_items_are_removed_after_compilation
     with_site do |_site|
       # Create item
-      File.open('content/index.html', 'w') do |io|
-        io.write('stuff')
-      end
+      File.write('content/index.html', 'stuff')
 
       # Compile
       site = Nanoc::Core::SiteLoader.new.new_from_cwd

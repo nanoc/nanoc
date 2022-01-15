@@ -29,7 +29,7 @@ class Nanoc::OrigCLITest < Nanoc::TestCase
     FileUtils.cd('foo') do
       # Create command
       FileUtils.mkdir_p('commands')
-      File.open('commands/_test.rb', 'w') { |io| io.write(COMMAND_CODE) }
+      File.write('commands/_test.rb', COMMAND_CODE)
 
       # Run command
       begin
@@ -49,15 +49,11 @@ class Nanoc::OrigCLITest < Nanoc::TestCase
     FileUtils.cd('foo') do
       # Create command
       FileUtils.mkdir_p('commands')
-      File.open('commands/_test.rb', 'w') do |io|
-        io.write(COMMAND_CODE)
-      end
+      File.write('commands/_test.rb', COMMAND_CODE)
 
       # Create subcommand
       FileUtils.mkdir_p('commands/_test')
-      File.open('commands/_test/_sub.rb', 'w') do |io|
-        io.write(SUBCOMMAND_CODE)
-      end
+      File.write('commands/_test/_sub.rb', SUBCOMMAND_CODE)
 
       # Run command
       begin
@@ -75,19 +71,15 @@ class Nanoc::OrigCLITest < Nanoc::TestCase
   def test_load_custom_commands_non_default_commands_dirs
     Nanoc::CLI.run %w[create_site foo]
     FileUtils.cd('foo') do
-      File.open('nanoc.yaml', 'w') { |io| io.write('commands_dirs: [commands, commands_alt]') }
+      File.write('nanoc.yaml', 'commands_dirs: [commands, commands_alt]')
 
       # Create command
       FileUtils.mkdir_p('commands_alt')
-      File.open('commands_alt/_test.rb', 'w') do |io|
-        io.write(COMMAND_CODE)
-      end
+      File.write('commands_alt/_test.rb', COMMAND_CODE)
 
       # Create subcommand
       FileUtils.mkdir_p('commands_alt/_test')
-      File.open('commands_alt/_test/_sub.rb', 'w') do |io|
-        io.write(SUBCOMMAND_CODE)
-      end
+      File.write('commands_alt/_test/_sub.rb', SUBCOMMAND_CODE)
 
       # Run command
       begin
@@ -108,7 +100,7 @@ class Nanoc::OrigCLITest < Nanoc::TestCase
     FileUtils.cd('foo') do
       # Create command
       FileUtils.mkdir_p('commands')
-      File.open('commands/_test.rb', 'w') { |io| io.write('raise "meh"') }
+      File.write('commands/_test.rb', 'raise "meh"')
 
       begin
         orig_stderr = $stderr

@@ -57,9 +57,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         io.write "  auto_prune: false\n"
       end
 
-      File.open('output/stray.html', 'w') do |io|
-        io.write 'I am a stray file and I am about to be deleted!'
-      end
+      File.write('output/stray.html', 'I am a stray file and I am about to be deleted!')
 
       assert File.file?('output/stray.html')
       Nanoc::CLI.run %w[compile]
@@ -107,9 +105,7 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
         io.write "  auto_prune: false\n"
       end
 
-      File.open('output/stray.html', 'w') do |io|
-        io.write 'I am a stray file and I am about to be deleted!'
-      end
+      File.write('output/stray.html', 'I am a stray file and I am about to be deleted!')
 
       assert File.file?('output/stray.html')
       Nanoc::CLI.run %w[compile]

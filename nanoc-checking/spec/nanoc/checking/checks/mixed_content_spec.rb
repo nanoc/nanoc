@@ -23,9 +23,7 @@ describe ::Nanoc::Checking::Checks::MixedContent do
 
   def create_output_file(name, lines)
     FileUtils.mkdir_p('output')
-    File.open('output/' + name, 'w') do |io|
-      io.write(lines.join('\n'))
-    end
+    File.write('output/' + name, lines.join('\n'))
   end
 
   it 'handles HTTPS URLs' do

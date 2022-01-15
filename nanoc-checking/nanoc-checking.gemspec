@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('nanoc-cli', '~> 4.11', '>= 4.11.15')
   s.add_runtime_dependency('nanoc-core', '~> 4.11', '>= 4.11.15')
+  s.metadata['rubygems_mfa_required'] = 'true'
 end

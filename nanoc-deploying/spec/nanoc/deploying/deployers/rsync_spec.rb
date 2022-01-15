@@ -20,8 +20,8 @@ describe Nanoc::Deploying::Deployers::Rsync, stdio: true do
     # create output
     FileUtils.mkdir_p('output')
     FileUtils.mkdir_p('output/etc')
-    File.open('output/woof', 'w') { |io| io.write 'I am a dog!' }
-    File.open('output/etc/meow', 'w') { |io| io.write 'I am a cat!' }
+    File.write('output/woof', 'I am a dog!')
+    File.write('output/etc/meow', 'I am a cat!')
 
     # create local cloud
     FileUtils.mkdir_p('remote')

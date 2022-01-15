@@ -28,4 +28,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('parallel', '~> 1.12')
   s.add_runtime_dependency('tty-command', '~> 0.8')
   s.add_runtime_dependency('tty-which', '~> 0.4')
+  s.metadata['rubygems_mfa_required'] = 'true'
 end

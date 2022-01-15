@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('diff-lcs', '~> 1.3')
   s.add_runtime_dependency('nanoc-core', "= #{Nanoc::CLI::VERSION}")
   s.add_runtime_dependency('zeitwerk', '~> 2.1')
+  s.metadata['rubygems_mfa_required'] = 'true'
 end

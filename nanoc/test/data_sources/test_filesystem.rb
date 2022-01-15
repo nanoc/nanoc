@@ -29,13 +29,13 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Create sample files
     FileUtils.mkdir_p('foo')
     FileUtils.mkdir_p('foo/a/b')
-    File.open('foo/bar.html',       'w') { |io| io.write("---\nnum: 1\n---\ntest 1") }
-    File.open('foo/b.c.html',       'w') { |io| io.write("---\nnum: 2\n---\ntest 2") }
-    File.open('foo/a/b/c.html',     'w') { |io| io.write("---\nnum: 3\n---\ntest 3") }
-    File.open('foo/ugly.html~',     'w') { |io| io.write("---\nnum: 4\n---\ntest 4") }
-    File.open('foo/ugly.html.orig', 'w') { |io| io.write("---\nnum: 5\n---\ntest 5") }
-    File.open('foo/ugly.html.rej',  'w') { |io| io.write("---\nnum: 6\n---\ntest 6") }
-    File.open('foo/ugly.html.bak',  'w') { |io| io.write("---\nnum: 7\n---\ntest 7") }
+    File.write('foo/bar.html', "---\nnum: 1\n---\ntest 1")
+    File.write('foo/b.c.html', "---\nnum: 2\n---\ntest 2")
+    File.write('foo/a/b/c.html', "---\nnum: 3\n---\ntest 3")
+    File.write('foo/ugly.html~', "---\nnum: 4\n---\ntest 4")
+    File.write('foo/ugly.html.orig', "---\nnum: 5\n---\ntest 5")
+    File.write('foo/ugly.html.rej', "---\nnum: 6\n---\ntest 6")
+    File.write('foo/ugly.html.bak', "---\nnum: 7\n---\ntest 7")
 
     # Get expected and actual output
     expected_out = [
@@ -86,8 +86,8 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Create sample files
     FileUtils.mkdir_p('foo')
-    File.open('foo/bar.html', 'w') { |io| io.write("---\nnum: 1\n---\ntest 1") }
-    File.open('foo/bar.md',   'w') { |io| io.write("---\nnum: 1\n---\ntest 1") }
+    File.write('foo/bar.html', "---\nnum: 1\n---\ntest 1")
+    File.write('foo/bar.md', "---\nnum: 1\n---\ntest 1")
 
     # Check
     actual_out = data_source.send(:load_objects, 'foo', klass)
@@ -100,7 +100,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Create sample files
     FileUtils.mkdir_p('foo')
-    File.open('foo/stuff.dat', 'w') { |io| io.write('random binary data') }
+    File.write('foo/stuff.dat', 'random binary data')
 
     # Load
     items = data_source.send(:load_objects, 'foo', Nanoc::Core::Item)
@@ -133,7 +133,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Create sample files
     FileUtils.mkdir_p('foo')
-    File.open('foo/stuff.dat', 'w') { |io| io.write('random binary data') }
+    File.write('foo/stuff.dat', 'random binary data')
 
     # Load
     assert_raises(Nanoc::DataSources::Filesystem::Errors::BinaryLayout) do
@@ -319,15 +319,15 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Create sample files
     FileUtils.mkdir_p('foo')
     FileUtils.mkdir_p('foo/a/b')
-    File.open('foo/a/b/c.yaml',     'w') { |io| io.write("---\nnum: 1\n") }
-    File.open('foo/b.c.yaml',       'w') { |io| io.write("---\nnum: 2\n") }
-    File.open('foo/b.c.html',       'w') { |io| io.write('test 2')        }
-    File.open('foo/car.html',       'w') { |io| io.write('test 3')        }
-    File.open('foo/ugly.yaml~',     'w') { |io| io.write('blah')          }
-    File.open('foo/ugly.html~',     'w') { |io| io.write('blah')          }
-    File.open('foo/ugly.html.orig', 'w') { |io| io.write('blah')          }
-    File.open('foo/ugly.html.rej',  'w') { |io| io.write('blah')          }
-    File.open('foo/ugly.html.bak',  'w') { |io| io.write('blah')          }
+    File.write('foo/a/b/c.yaml', "---\nnum: 1\n")
+    File.write('foo/b.c.yaml', "---\nnum: 2\n")
+    File.write('foo/b.c.html', 'test 2')
+    File.write('foo/car.html', 'test 3')
+    File.write('foo/ugly.yaml~', 'blah')
+    File.write('foo/ugly.html~', 'blah')
+    File.write('foo/ugly.html.orig', 'blah')
+    File.write('foo/ugly.html.rej', 'blah')
+    File.write('foo/ugly.html.bak', 'blah')
 
     # Get expected output
     expected_out = [
@@ -402,15 +402,15 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Create sample files
     FileUtils.mkdir_p('foo')
     FileUtils.mkdir_p('foo/a/b')
-    File.open('foo/a/b/c.yaml',     'w') { |io| io.write("---\nnum: 1\n") }
-    File.open('foo/b.yaml',         'w') { |io| io.write("---\nnum: 2\n") }
-    File.open('foo/b.html.erb',     'w') { |io| io.write('test 2')        }
-    File.open('foo/car.html',       'w') { |io| io.write('test 3')        }
-    File.open('foo/ugly.yaml~',     'w') { |io| io.write('blah')          }
-    File.open('foo/ugly.html~',     'w') { |io| io.write('blah')          }
-    File.open('foo/ugly.html.orig', 'w') { |io| io.write('blah')          }
-    File.open('foo/ugly.html.rej',  'w') { |io| io.write('blah')          }
-    File.open('foo/ugly.html.bak',  'w') { |io| io.write('blah')          }
+    File.write('foo/a/b/c.yaml', "---\nnum: 1\n")
+    File.write('foo/b.yaml', "---\nnum: 2\n")
+    File.write('foo/b.html.erb', 'test 2')
+    File.write('foo/car.html', 'test 3')
+    File.write('foo/ugly.yaml~', 'blah')
+    File.write('foo/ugly.html~', 'blah')
+    File.write('foo/ugly.html.orig', 'blah')
+    File.write('foo/ugly.html.rej', 'blah')
+    File.write('foo/ugly.html.bak', 'blah')
 
     # Get expected output
     expected_out = [
@@ -537,12 +537,12 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Write sample files
     FileUtils.mkdir_p('foo')
     %w[foo.html foo.yaml bar.entry.html foo/qux.yaml].each do |filename|
-      File.open(filename, 'w') { |io| io.write('test') }
+      File.write(filename, 'test')
     end
 
     # Write stray files
     %w[foo.html~ foo.yaml.orig bar.entry.html.bak].each do |filename|
-      File.open(filename, 'w') { |io| io.write('test') }
+      File.write(filename, 'test')
     end
 
     # Get all files
@@ -564,12 +564,12 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Write sample files
     FileUtils.mkdir_p('foo')
     %w[foo.html foo.yaml bar.html.erb foo/qux.yaml].each do |filename|
-      File.open(filename, 'w') { |io| io.write('test') }
+      File.write(filename, 'test')
     end
 
     # Write stray files
     %w[foo.html~ foo.yaml.orig bar.entry.html.bak].each do |filename|
-      File.open(filename, 'w') { |io| io.write('test') }
+      File.write(filename, 'test')
     end
 
     # Get all files
@@ -591,7 +591,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Write sample files
     %w[aaa/foo.html bbb/foo.html ccc/foo.html].each do |filename|
       FileUtils.mkdir_p(File.dirname(filename))
-      File.open(filename, 'w') { |io| io.write('test') }
+      File.write(filename, 'test')
     end
 
     # Check
@@ -611,7 +611,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Write sample files
     %w[stuff/foo.html stuff/foo.md stuff/foo.yaml].each do |filename|
       FileUtils.mkdir_p(File.dirname(filename))
-      File.open(filename, 'w') { |io| io.write('test') }
+      File.write(filename, 'test')
     end
 
     # Check - { './stuff/foo' => ['yaml', ['html', 'md']] }
@@ -629,7 +629,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Write sample files
     %w[foo.html foo.xhtml foo.txt foo.yaml bar.html qux.yaml].each do |filename|
-      File.open(filename, 'w') { |io| io.write('test') }
+      File.write(filename, 'test')
     end
 
     # Check

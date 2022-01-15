@@ -56,19 +56,17 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   def test_postprocessor_modified_method
     with_site do |_site|
       # Create rules
-      File.open('Rules', 'w') do |io|
-        io.write <<~EOS
-          compile '*' do
-          end
-          route '*' do
-          end
-          postprocess do
-            puts @items.select(&:modified).length
-          end
-        EOS
-      end
+      File.write('Rules', <<~EOS)
+        compile '*' do
+        end
+        route '*' do
+        end
+        postprocess do
+          puts @items.select(&:modified).length
+        end
+      EOS
 
-      File.open('content/index.html', 'w') { |io| io.write('o hello') }
+      File.write('content/index.html', 'o hello')
 
       io = capturing_stdio do
         site = Nanoc::Core::SiteLoader.new.new_from_cwd
@@ -110,20 +108,16 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   def test_passthrough
     with_site do
       # Create rules
-      File.open('Rules', 'w') do |io|
-        io.write <<~EOS
-          passthrough "/robots/"
+      File.write('Rules', <<~EOS)
+        passthrough "/robots/"
 
-          compile '*' do ; end
-          route '*' do ; item.identifier.chop + '-xyz' + item[:extension] ; end
-        EOS
-      end
+        compile '*' do ; end
+        route '*' do ; item.identifier.chop + '-xyz' + item[:extension] ; end
+      EOS
 
       # Create items
       assert Dir['content/*'].empty?
-      File.open('content/robots.txt', 'w') do |io|
-        io.write 'Hello I am robots'
-      end
+      File.write('content/robots.txt', 'Hello I am robots')
 
       # Compile
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
@@ -137,17 +131,13 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   def test_passthrough_no_ext
     with_site do
       # Create rules
-      File.open('Rules', 'w') do |io|
-        io.write <<~EOS
-          passthrough "/foo/"
-        EOS
-      end
+      File.write('Rules', <<~EOS)
+        passthrough "/foo/"
+      EOS
 
       # Create items
       assert Dir['content/*'].empty?
-      File.open('content/foo', 'w') do |io|
-        io.write 'Hello I am foo'
-      end
+      File.write('content/foo', 'Hello I am foo')
 
       # Compile
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
@@ -161,25 +151,21 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   def test_passthrough_priority
     with_site do
       # Create rules
-      File.open('Rules', 'w') do |io|
-        io.write <<~EOS
-          compile '*' do
-            filter :erb
-          end
+      File.write('Rules', <<~EOS)
+        compile '*' do
+          filter :erb
+        end
 
-          route '*' do
-            item.identifier + 'index.html'
-          end
+        route '*' do
+          item.identifier + 'index.html'
+        end
 
-          passthrough "/foo/"
-        EOS
-      end
+        passthrough "/foo/"
+      EOS
 
       # Create items
       assert Dir['content/*'].empty?
-      File.open('content/foo.txt', 'w') do |io|
-        io.write "Hello I am <%= 'foo' %>"
-      end
+      File.write('content/foo.txt', "Hello I am <%= 'foo' %>")
 
       # Compile
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
@@ -208,9 +194,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
       # Create items
       assert Dir['content/*'].empty?
-      File.open('content/robots.txt', 'w') do |io|
-        io.write 'Hello I am robots'
-      end
+      File.write('content/robots.txt', 'Hello I am robots')
 
       # Compile
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
@@ -224,23 +208,17 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   def test_ignore
     with_site do
       # Create rules
-      File.open('Rules', 'w') do |io|
-        io.write <<~EOS
-          ignore '/lame/'
+      File.write('Rules', <<~EOS)
+        ignore '/lame/'
 
-          passthrough '*'
-        EOS
-      end
+        passthrough '*'
+      EOS
 
       # Create items
       assert Dir['content/*'].empty?
-      File.open('content/lame.txt', 'w') do |io|
-        io.write 'Hello I am lame'
-      end
+      File.write('content/lame.txt', 'Hello I am lame')
 
-      File.open('content/notlame.txt', 'w') do |io|
-        io.write 'Hello I am not lame'
-      end
+      File.write('content/notlame.txt', 'Hello I am not lame')
 
       # Compile
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
@@ -254,25 +232,21 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
   def test_ignore_priority
     with_site do
       # Create rules
-      File.open('Rules', 'w') do |io|
-        io.write <<~EOS
-          compile '*' do
-            filter :erb
-          end
+      File.write('Rules', <<~EOS)
+        compile '*' do
+          filter :erb
+        end
 
-          route '*' do
-            item.identifier + 'index.html'
-          end
+        route '*' do
+          item.identifier + 'index.html'
+        end
 
-          ignore "/foo/"
-        EOS
-      end
+        ignore "/foo/"
+      EOS
 
       # Create items
       assert Dir['content/*'].empty?
-      File.open('content/foo.txt', 'w') do |io|
-        io.write "Hello I am <%= 'foo' %>"
-      end
+      File.write('content/foo.txt', "Hello I am <%= 'foo' %>")
 
       # Compile
       site = Nanoc::Core::SiteLoader.new.new_from_cwd

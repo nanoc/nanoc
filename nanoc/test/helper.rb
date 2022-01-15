@@ -88,9 +88,7 @@ module Nanoc::TestHelpers
         FileUtils.mkdir_p('output')
 
         if params[:has_layout]
-          File.open('layouts/default.html', 'w') do |io|
-            io.write('... <%= @yield %> ...')
-          end
+          File.write('layouts/default.html', '... <%= @yield %> ...')
         end
 
         File.open('nanoc.yaml', 'w') do |io|
@@ -101,7 +99,7 @@ module Nanoc::TestHelpers
           io << '    identifier_type: legacy' << "\n" if params.fetch(:legacy, true)
         end
 
-        File.open('Rules', 'w') { |io| io.write(rules_content) }
+        File.write('Rules', rules_content)
       end
     end
 

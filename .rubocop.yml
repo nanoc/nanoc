@@ -430,6 +430,30 @@ RSpec/SubjectDeclaration: # new in 2.5
 RSpec/Rails/AvoidSetupHook: # new in 2.4
   Enabled: false
 
+Gemspec/RequireMFA: # new in 1.23
+  Enabled: true
+
+Lint/UselessRuby2Keywords: # new in 1.23
+  Enabled: true
+
+Naming/BlockForwarding: # new in 1.24
+  Enabled: true
+
+Style/FileRead: # new in 1.24
+  Enabled: true
+
+Style/FileWrite: # new in 1.24
+  Enabled: true
+
+Style/MapToHash: # new in 1.24
+  Enabled: true
+
+Style/OpenStructUse: # new in 1.23
+  Enabled: true
+
+RSpec/FactoryBot/SyntaxMethods: # new in 2.7
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.

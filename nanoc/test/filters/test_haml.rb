@@ -70,9 +70,7 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
 
   def test_filter_with_proper_indentation
     # Create file to include
-    File.open('stuff', 'w') do |io|
-      io.write("<pre>Max Payne\nMona Sax</pre>")
-    end
+    File.write('stuff', "<pre>Max Payne\nMona Sax</pre>")
 
     # Run filter
     filter = ::Nanoc::Filters::Haml.new

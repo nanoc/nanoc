@@ -10,19 +10,19 @@ class Nanoc::Core::SiteTest < Nanoc::TestCase
   end
 
   def test_initialize_with_dir_with_config_yaml
-    File.open('config.yaml', 'w') { |io| io.write('output_dir: public_html') }
+    File.write('config.yaml', 'output_dir: public_html')
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
     assert_equal Dir.getwd + '/public_html', site.config.output_dir
   end
 
   def test_initialize_with_dir_with_nanoc_yaml
-    File.open('nanoc.yaml', 'w') { |io| io.write('output_dir: public_html') }
+    File.write('nanoc.yaml', 'output_dir: public_html')
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
     assert_equal Dir.getwd + '/public_html', site.config.output_dir
   end
 
   def test_initialize_with_incomplete_data_source_config
-    File.open('nanoc.yaml', 'w') { |io| io.write('data_sources: [{ items_root: "/bar/" }]') }
+    File.write('nanoc.yaml', 'data_sources: [{ items_root: "/bar/" }]')
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
     assert_equal('filesystem', site.config[:data_sources][0][:type])
     assert_equal('/bar/', site.config[:data_sources][0][:items_root])
@@ -31,29 +31,23 @@ class Nanoc::Core::SiteTest < Nanoc::TestCase
   end
 
   def test_initialize_with_existing_parent_config_file
-    File.open('nanoc.yaml', 'w') do |io|
-      io.write <<~EOF
-        output_dir: public_html
-        parent_config_file: foo/foo.yaml
-      EOF
-    end
+    File.write('nanoc.yaml', <<~EOF)
+      output_dir: public_html
+      parent_config_file: foo/foo.yaml
+    EOF
     FileUtils.mkdir_p('foo')
     FileUtils.cd('foo') do
-      File.open('foo.yaml', 'w') do |io|
-        io.write <<~EOF
-          parent_config_file: ../bar/bar.yaml
-        EOF
-      end
+      File.write('foo.yaml', <<~EOF)
+        parent_config_file: ../bar/bar.yaml
+      EOF
     end
     FileUtils.mkdir_p('bar')
     FileUtils.cd('bar') do
-      File.open('bar.yaml', 'w') do |io|
-        io.write <<~EOF
-          enable_output_diff: true
-          foo: bar
-          output_dir: output
-        EOF
-      end
+      File.write('bar.yaml', <<~EOF)
+        enable_output_diff: true
+        foo: bar
+        output_dir: output
+      EOF
     end
 
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
@@ -64,11 +58,9 @@ class Nanoc::Core::SiteTest < Nanoc::TestCase
   end
 
   def test_initialize_with_missing_parent_config_file
-    File.open('nanoc.yaml', 'w') do |io|
-      io.write <<~EOF
-        parent_config_file: foo/foo.yaml
-      EOF
-    end
+    File.write('nanoc.yaml', <<~EOF)
+      parent_config_file: foo/foo.yaml
+    EOF
 
     assert_raises(Nanoc::Core::ConfigLoader::NoParentConfigFileFoundError) do
       Nanoc::Core::SiteLoader.new.new_from_cwd
@@ -76,18 +68,14 @@ class Nanoc::Core::SiteTest < Nanoc::TestCase
   end
 
   def test_initialize_with_parent_config_file_cycle
-    File.open('nanoc.yaml', 'w') do |io|
-      io.write <<~EOF
-        parent_config_file: foo/foo.yaml
-      EOF
-    end
+    File.write('nanoc.yaml', <<~EOF)
+      parent_config_file: foo/foo.yaml
+    EOF
     FileUtils.mkdir_p('foo')
     FileUtils.cd('foo') do
-      File.open('foo.yaml', 'w') do |io|
-        io.write <<~EOF
-          parent_config_file: ../nanoc.yaml
-        EOF
-      end
+      File.write('foo.yaml', <<~EOF)
+        parent_config_file: ../nanoc.yaml
+      EOF
     end
 
     assert_raises(Nanoc::Core::ConfigLoader::CyclicalConfigFileError) do
@@ -118,9 +106,9 @@ class Nanoc::Core::SiteTest < Nanoc::TestCase
 
   def test_multiple_items_with_same_identifier
     with_site do
-      File.open('content/sam.html', 'w') { |io| io.write('I am Sam!') }
+      File.write('content/sam.html', 'I am Sam!')
       FileUtils.mkdir_p('content/sam')
-      File.open('content/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
+      File.write('content/sam/index.html', 'I am Sam, too!')
 
       assert_raises(Nanoc::Core::Site::DuplicateIdentifierError) do
         Nanoc::Core::SiteLoader.new.new_from_cwd
@@ -130,9 +118,9 @@ class Nanoc::Core::SiteTest < Nanoc::TestCase
 
   def test_multiple_layouts_with_same_identifier
     with_site do
-      File.open('layouts/sam.html', 'w') { |io| io.write('I am Sam!') }
+      File.write('layouts/sam.html', 'I am Sam!')
       FileUtils.mkdir_p('layouts/sam')
-      File.open('layouts/sam/index.html', 'w') { |io| io.write('I am Sam, too!') }
+      File.write('layouts/sam/index.html', 'I am Sam, too!')
 
       assert_raises(Nanoc::Core::Site::DuplicateIdentifierError) do
         Nanoc::Core::SiteLoader.new.new_from_cwd

@@ -6,15 +6,15 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   def test_run_without_yes
     with_site do |_site|
       # Set output dir
-      File.open('nanoc.yaml', 'w') { |io| io.write "output_dir: output2\nstring_pattern_type: legacy\n" }
+      File.write('nanoc.yaml', "output_dir: output2\nstring_pattern_type: legacy\n")
       FileUtils.mkdir_p('output2')
 
       # Create source files
-      File.open('content/index.html', 'w') { |io| io.write 'stuff' }
+      File.write('content/index.html', 'stuff')
 
       # Create output files
-      File.open('output2/foo.html', 'w')   { |io| io.write 'this is a foo.' }
-      File.open('output2/index.html', 'w') { |io| io.write 'this is a index.' }
+      File.write('output2/foo.html', 'this is a foo.')
+      File.write('output2/index.html', 'this is a index.')
 
       assert_raises SystemExit do
         Nanoc::CLI.run %w[prune]
@@ -39,11 +39,11 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       FileUtils.mkdir_p('output2')
 
       # Create source files
-      File.open('content/index.html', 'w') { |io| io.write 'stuff' }
+      File.write('content/index.html', 'stuff')
 
       # Create output files
-      File.open('output2/foo.html', 'w')   { |io| io.write 'this is a foo.' }
-      File.open('output2/index.html', 'w') { |io| io.write 'this is a index.' }
+      File.write('output2/foo.html', 'this is a foo.')
+      File.write('output2/index.html', 'this is a index.')
 
       Nanoc::CLI.run %w[prune --yes]
 
@@ -55,15 +55,15 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   def test_run_with_dry_run
     with_site do |_site|
       # Set output dir
-      File.open('nanoc.yaml', 'w') { |io| io.write "string_pattern_type: legacy\noutput_dir: output2" }
+      File.write('nanoc.yaml', "string_pattern_type: legacy\noutput_dir: output2")
       FileUtils.mkdir_p('output2')
 
       # Create source files
-      File.open('content/index.html', 'w') { |io| io.write 'stuff' }
+      File.write('content/index.html', 'stuff')
 
       # Create output files
-      File.open('output2/foo.html', 'w')   { |io| io.write 'this is a foo.' }
-      File.open('output2/index.html', 'w') { |io| io.write 'this is a index.' }
+      File.write('output2/foo.html', 'this is a foo.')
+      File.write('output2/index.html', 'this is a index.')
 
       io = capturing_stdio do
         Nanoc::CLI.run %w[prune --dry-run]
@@ -91,16 +91,16 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       FileUtils.mkdir_p('output')
 
       # Create source files
-      File.open('content/index.html', 'w') { |io| io.write 'stuff' }
+      File.write('content/index.html', 'stuff')
 
       # Create output files
       FileUtils.mkdir_p('output/good-dir')
       FileUtils.mkdir_p('output/bad-dir')
-      File.open('output/good-file.html', 'w') { |io| io.write 'stuff' }
-      File.open('output/good-dir/blah', 'w')  { |io| io.write 'stuff' }
-      File.open('output/bad-file.html', 'w')  { |io| io.write 'stuff' }
-      File.open('output/bad-dir/blah', 'w')   { |io| io.write 'stuff' }
-      File.open('output/index.html', 'w')     { |io| io.write 'stuff' }
+      File.write('output/good-file.html', 'stuff')
+      File.write('output/good-dir/blah', 'stuff')
+      File.write('output/bad-file.html', 'stuff')
+      File.write('output/bad-dir/blah', 'stuff')
+      File.write('output/index.html', 'stuff')
 
       Nanoc::CLI.run %w[prune --yes]
 
@@ -130,12 +130,12 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       File.symlink('output-real', 'output')
 
       # Create source files
-      File.open('content/index.html', 'w') { |io| io.write 'stuff' }
+      File.write('content/index.html', 'stuff')
 
       # Create output files
       FileUtils.mkdir_p('output-real/some-dir')
-      File.open('output-real/some-file.html', 'w') { |io| io.write 'stuff' }
-      File.open('output-real/index.html', 'w')     { |io| io.write 'stuff' }
+      File.write('output-real/some-file.html', 'stuff')
+      File.write('output-real/index.html', 'stuff')
 
       Nanoc::CLI.run %w[prune --yes]
 
@@ -148,12 +148,12 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
   def test_run_with_nested_empty_dirs
     with_site do |_site|
       # Set output dir
-      File.open('nanoc.yaml', 'w') { |io| io.write 'output_dir: output' }
+      File.write('nanoc.yaml', 'output_dir: output')
       FileUtils.mkdir_p('output')
 
       # Create output files
       FileUtils.mkdir_p('output/a/b/c')
-      File.open('output/a/b/c/index.html', 'w') { |io| io.write 'stuff' }
+      File.write('output/a/b/c/index.html', 'stuff')
 
       Nanoc::CLI.run %w[prune --yes]
 

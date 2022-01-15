@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
 
   s.files         = Dir['[A-Z]*'] + Dir['lib/**/*'] + ['guard-nanoc.gemspec']
   s.require_paths = ['lib']
+  s.metadata['rubygems_mfa_required'] = 'true'
 end
