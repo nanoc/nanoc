@@ -11,10 +11,10 @@ require 'yaml'
 # External gems
 require 'concurrent-ruby'
 require 'json_schema'
-require 'ddmemoize'
 require 'ddmetrics'
 require 'ddplugin'
 require 'hamster'
+require 'memo_wise'
 require 'slow_enumerator_tools'
 require 'tty-platform'
 require 'zeitwerk'
@@ -50,8 +50,6 @@ module Nanoc
     end
   end
 end
-
-DDMemoize.enable_metrics
 
 inflector_class = Class.new(Zeitwerk::Inflector) do
   def camelize(basename, abspath)

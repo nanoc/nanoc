@@ -18,11 +18,11 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.6'
 
   s.add_runtime_dependency('concurrent-ruby', '~> 1.1')
-  s.add_runtime_dependency('ddmemoize', '~> 1.0')
   s.add_runtime_dependency('ddmetrics', '~> 1.0')
   s.add_runtime_dependency('ddplugin', '~> 1.0')
   s.add_runtime_dependency('hamster', '~> 3.0')
   s.add_runtime_dependency('json_schema', '~> 0.19')
+  s.add_runtime_dependency('memo_wise', '~> 1.5')
   s.add_runtime_dependency('slow_enumerator_tools', '~> 1.0')
   s.add_runtime_dependency('tty-platform', '~> 0.2')
   s.add_runtime_dependency('zeitwerk', '~> 2.1')

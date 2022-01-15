@@ -141,7 +141,6 @@ module Nanoc::CLI::CompileListeners
       print_table_for_summary_duration(:stages, @stages_summary) if Nanoc::CLI.verbosity >= 2
       print_table_for_summary(:outdatedness_rules, @outdatedness_rules_summary) if Nanoc::CLI.verbosity >= 2
       print_table_for_summary_duration(:load_stores, @load_stores_summary) if Nanoc::CLI.verbosity >= 2
-      print_ddmemoize_metrics if Nanoc::CLI.verbosity >= 2
     end
 
     def print_table_for_summary(name, summary)
@@ -156,11 +155,6 @@ module Nanoc::CLI::CompileListeners
 
       puts
       print_table(table_for_summary_durations(name, summary))
-    end
-
-    def print_ddmemoize_metrics
-      puts
-      DDMemoize.print_metrics
     end
 
     def print_table(rows)

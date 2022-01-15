@@ -3,9 +3,9 @@
 module Nanoc
   module Core
     class IdentifiableCollection
-      DDMemoize.activate(self)
+      prepend MemoWise
 
-      include Nanoc::Core::ContractsSupport
+      # include Nanoc::Core::ContractsSupport
       include Enumerable
 
       extend Forwardable
@@ -17,19 +17,19 @@ module Nanoc
         raise 'IdentifiableCollection is abstract and cannot be instantiated'
       end
 
-      contract C::Or[Hash, C::Named['Nanoc::Core::Configuration']], C::IterOf[C::RespondTo[:identifier]], C::Maybe[String] => C::Any
+      # contract C::Or[Hash, C::Named['Nanoc::Core::Configuration']], C::IterOf[C::RespondTo[:identifier]], C::Maybe[String] => C::Any
       def initialize_basic(config, objects = [], name = nil)
         @config = config
         @objects = Hamster::Vector.new(objects)
         @name = name
       end
 
-      contract C::None => String
+      # contract C::None => String
       def inspect
         "<#{self.class}>"
       end
 
-      contract C::None => self
+      # contract C::None => self
       def freeze
         @objects.freeze
         each(&:freeze)
@@ -37,7 +37,7 @@ module Nanoc
         super
       end
 
-      contract C::Any => C::Maybe[C::RespondTo[:identifier]]
+      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
       def [](arg)
         if frozen?
           get_memoized(arg)
@@ -46,7 +46,7 @@ module Nanoc
         end
       end
 
-      contract C::Any => C::IterOf[C::RespondTo[:identifier]]
+      # contract C::Any => C::IterOf[C::RespondTo[:identifier]]
       def find_all(arg)
         if frozen?
           find_all_memoized(arg)
@@ -55,27 +55,27 @@ module Nanoc
         end
       end
 
-      contract C::None => C::ArrayOf[C::RespondTo[:identifier]]
+      # contract C::None => C::ArrayOf[C::RespondTo[:identifier]]
       def to_a
         @objects.to_a
       end
 
-      contract C::None => C::Bool
+      # contract C::None => C::Bool
       def empty?
         @objects.empty?
       end
 
-      contract C::RespondTo[:identifier] => self
+      # contract C::RespondTo[:identifier] => self
       def add(obj)
         self.class.new(@config, @objects.add(obj))
       end
 
-      contract C::Func[C::RespondTo[:identifier] => C::Any] => self
+      # contract C::Func[C::RespondTo[:identifier] => C::Any] => self
       def reject(&block)
         self.class.new(@config, @objects.reject(&block))
       end
 
-      contract C::Any => C::Maybe[C::RespondTo[:identifier]]
+      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
       def object_with_identifier(identifier)
         if frozen?
           @mapping[identifier.to_s]
@@ -86,7 +86,7 @@ module Nanoc
 
       protected
 
-      contract C::Any => C::Maybe[C::RespondTo[:identifier]]
+      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
       def get_unmemoized(arg)
         case arg
         when Nanoc::Core::Identifier
@@ -100,21 +100,23 @@ module Nanoc
         end
       end
 
-      contract C::Any => C::Maybe[C::RespondTo[:identifier]]
-      memoized def get_memoized(arg)
-        get_unmemoized(arg)
+      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
+      def get_memoized(_arg)
+        # TODO: Figure out how to get memo_wise to work with subclasses
+        raise 'implement in subclasses'
       end
 
-      contract C::Any => C::IterOf[C::RespondTo[:identifier]]
+      # contract C::Any => C::IterOf[C::RespondTo[:identifier]]
       def find_all_unmemoized(arg)
         pat = Pattern.from(arg)
         select { |i| pat.match?(i.identifier) }
       end
 
-      contract C::Any => C::IterOf[C::RespondTo[:identifier]]
-      memoized def find_all_memoized(arg)
+      # contract C::Any => C::IterOf[C::RespondTo[:identifier]]
+      def find_all_memoized(arg)
         find_all_unmemoized(arg)
       end
+      memo_wise :find_all_memoized
 
       def object_matching_glob(glob)
         if use_globs?
@@ -130,7 +132,7 @@ module Nanoc
         end
       end
 
-      contract C::None => C::Bool
+      # contract C::None => C::Bool
       def use_globs?
         @config[:string_pattern_type] == 'glob'
       end

@@ -2,8 +2,6 @@
 
 module Nanoc::RuleDSL
   class ActionSequenceCalculator
-    DDMemoize.activate(self)
-
     class UnsupportedObjectTypeException < ::Nanoc::Error
       def initialize(obj)
         super("Do not know how to calculate the action sequence for #{obj.inspect}")

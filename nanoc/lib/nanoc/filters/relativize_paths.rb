@@ -8,7 +8,7 @@ module Nanoc::Filters
     require 'nanoc/helpers/link_to'
     include Nanoc::Helpers::LinkTo
 
-    DDMemoize.activate(self)
+    prepend MemoWise
 
     SELECTORS =
       [
@@ -79,7 +79,7 @@ module Nanoc::Filters
       end
     end
 
-    memoized def excludes(params)
+    def excludes(params)
       raw = [params.fetch(:exclude, [])].flatten
       raw.map do |exclusion|
         case exclusion
@@ -90,6 +90,7 @@ module Nanoc::Filters
         end
       end
     end
+    memo_wise :excludes
 
     def exclude?(path, params)
       # TODO: Use #match? on newer Ruby versions

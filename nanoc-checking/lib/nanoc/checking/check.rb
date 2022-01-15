@@ -13,7 +13,7 @@ module Nanoc
     class Check < Nanoc::Core::Context
       extend DDPlugin::Plugin
 
-      DDMemoize.activate(self)
+      prepend MemoWise
 
       attr_reader :issues
 
@@ -78,13 +78,14 @@ module Nanoc
       end
 
       # @private
-      memoized def excluded_patterns
+      def excluded_patterns
         @config
           .fetch(:checks, {})
           .fetch(:all, {})
           .fetch(:exclude_files, [])
           .map { |pattern| Regexp.new(pattern) }
       end
+      memo_wise :excluded_patterns
 
       # @private
       def output_html_filenames
