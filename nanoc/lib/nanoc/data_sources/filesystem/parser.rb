@@ -61,7 +61,7 @@ class Nanoc::DataSources::Filesystem
     # @return [Hash]
     def parse_metadata(data, filename)
       begin
-        meta = YAML.load(data, permitted_classes: PERMITTED_YAML_CLASSES) || {}
+        meta = YAML.safe_load(data, permitted_classes: PERMITTED_YAML_CLASSES) || {}
       rescue => e
         raise Errors::UnparseableMetadata.new(filename, e)
       end
