@@ -245,6 +245,14 @@ describe Nanoc::DataSources::Filesystem::Parser do
           end
         end
 
+        context 'time attribute' do
+          let(:content) { "---\ncreated_at: 2022-01-01T14:05:00+04:00\n---" }
+
+          it 'has attributes' do
+            expect(subject.attributes).to eq('created_at' => Time.new(2022, 1, 1, 14, 5, 0, '+04:00'))
+          end
+        end
+
         context 'no content' do
           let(:content) { "---\ntitle: Welcome\n---\n" }
 

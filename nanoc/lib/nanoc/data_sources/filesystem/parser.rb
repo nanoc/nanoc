@@ -4,7 +4,7 @@
 class Nanoc::DataSources::Filesystem
   class Parser
     SEPARATOR = /(-{5}|-{3})/.source
-    PERMITTED_YAML_CLASSES = [Symbol, Date].freeze
+    PERMITTED_YAML_CLASSES = [Symbol, Date, Time].freeze
 
     class ParseResult
       attr_reader :content
