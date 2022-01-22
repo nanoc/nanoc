@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.12.5 (2022-01-22)
+
+Fixes:
+
+- Prefer YAML.safe_load over YAML.load (#1566)
+
+Enhancements:
+
+- Added `Time` to the list of permitted classes for YAML (#1565) [Hideaki Nagamine]
+
 ## 4.12.4 (2022-01-15)
 
 Fixes:
