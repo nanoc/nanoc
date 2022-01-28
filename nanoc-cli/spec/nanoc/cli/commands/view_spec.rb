@@ -69,7 +69,7 @@ describe Nanoc::CLI::Commands::View, site: true, stdio: true, fork: true do
     end
 
     it 'does not listen on non-local interfaces' do
-      addresses = Socket.getifaddrs.map(&:addr).select(&:ipv4?).map(&:ip_address)
+      addresses = Socket.getifaddrs.map(&:addr).compact.select(&:ipv4?).map(&:ip_address)
       non_local_addresses = addresses - ['127.0.0.1']
 
       if non_local_addresses.empty?
