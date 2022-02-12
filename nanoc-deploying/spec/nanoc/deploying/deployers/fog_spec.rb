@@ -24,6 +24,8 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
   let(:provider) { 'local' }
 
   before do
+    skip_unless_gem_available('fog/core')
+
     # create output
     FileUtils.mkdir_p('output')
     FileUtils.mkdir_p('output/etc')
@@ -71,7 +73,7 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
       let(:distribution) { Object.new }
 
       it 'does not actually invalidate' do
-        expect(::Fog::CDN).to receive(:new).with(provider: 'local', local_root: 'remote').and_return(cdn)
+        expect(::Fog::CDN).to receive(:new).with({ provider: 'local', local_root: 'remote' }).and_return(cdn)
         expect(cdn).to receive(:get_distribution).with('donkey-cdn').and_return(distribution)
 
         subject
@@ -154,7 +156,7 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
       let(:distribution) { Object.new }
 
       it 'invalidates' do
-        expect(::Fog::CDN).to receive(:new).with(provider: 'local', local_root: 'remote').and_return(cdn)
+        expect(::Fog::CDN).to receive(:new).with({ provider: 'local', local_root: 'remote' }).and_return(cdn)
         expect(cdn).to receive(:get_distribution).with('donkey-cdn').and_return(distribution)
         expect(cdn).to receive(:post_invalidation).with(distribution, contain_exactly('etc/meow', 'woof'))
 
