@@ -45,8 +45,10 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
 
   shared_examples 'branch configured properly' do
     context 'clean working copy' do
-      it 'does not commit or push' do
-        subject
+      it 'does not commit, but still pushes' do
+        expect { subject }
+          .to output(/Deploying via Git to branch “#{branch}” on remote “#{remote}”…/)
+          .to_stdout
       end
     end
 
