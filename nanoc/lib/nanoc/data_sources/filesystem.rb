@@ -48,8 +48,6 @@ module Nanoc::DataSources
   #
   # @api private
   class Filesystem < Nanoc::DataSource
-    PERMITTED_YAML_CLASSES = [Symbol, Date, Time].freeze
-
     class AmbiguousMetadataAssociationError < ::Nanoc::Core::Error
       def initialize(content_filenames, meta_filename)
         super("There are multiple content files (#{content_filenames.sort.join(', ')}) that could match the file containing metadata (#{meta_filename}).")
@@ -152,7 +150,7 @@ module Nanoc::DataSources
       is_binary = content_filename && !@site_config[:text_extensions].include?(File.extname(content_filename)[1..-1])
 
       if is_binary && klass == Nanoc::Core::Item
-        meta = (meta_filename && YAML.load_file(meta_filename, permitted_classes: PERMITTED_YAML_CLASSES)) || {}
+        meta = (meta_filename && YAML.load_file(meta_filename, permitted_classes: Parser::PERMITTED_YAML_CLASSES)) || {}
 
         ProtoDocument.new(is_binary: true, filename: content_filename, attributes: meta)
       elsif is_binary && klass == Nanoc::Core::Layout
