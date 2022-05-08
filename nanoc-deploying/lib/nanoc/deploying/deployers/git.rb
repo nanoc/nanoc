@@ -102,7 +102,7 @@ module Nanoc
         end
 
         def run_cmd(cmd, dry_run: false)
-          TTY::Command.new(printer: :null).run(*cmd, dry_run: dry_run)
+          TTY::Command.new(**tty_command_options).run(*cmd, dry_run: dry_run)
         end
 
         def run_cmd_unless_dry(cmd)
@@ -110,7 +110,15 @@ module Nanoc
         end
 
         def clean_repo?
-          TTY::Command.new(printer: :null).run('git status --porcelain').out.empty?
+          TTY::Command.new(**tty_command_options).run('git status --porcelain').out.empty?
+        end
+
+        def tty_command_options
+          if Nanoc::CLI.verbosity >= 1
+            { uuid: false }
+          else
+            { printer: :null }
+          end
         end
       end
     end
