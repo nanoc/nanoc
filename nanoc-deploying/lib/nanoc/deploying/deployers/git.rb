@@ -78,13 +78,15 @@ module Nanoc
               raise Errors::BranchDoesNotExist.new(branch)
             end
 
-            return if clean_repo?
+            # Commit (if needed)
+            unless clean_repo?
+              msg = "Automated commit at #{Time.now.utc} by Nanoc #{Nanoc::VERSION}"
+              author = 'Nanoc <>'
+              run_cmd_unless_dry(%w[git add -A])
+              run_cmd_unless_dry(%W[git commit -a --author #{author} -m #{msg}])
+            end
 
-            msg = "Automated commit at #{Time.now.utc} by Nanoc #{Nanoc::VERSION}"
-            author = 'Nanoc <>'
-            run_cmd_unless_dry(%w[git add -A])
-            run_cmd_unless_dry(%W[git commit -a --author #{author} -m #{msg}])
-
+            # Push
             if forced
               run_cmd_unless_dry(%W[git push -f #{remote} #{branch}])
             else
