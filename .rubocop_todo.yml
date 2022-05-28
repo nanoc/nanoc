@@ -175,10 +175,11 @@ Naming/VariableNumber:
     - 'nanoc-core/spec/nanoc/core/aggregate_data_source_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/action_sequence_calculator_spec.rb'
 
-# Offense count: 4
+# Offense count: 5
 RSpec/AnyInstance:
   Exclude:
     - 'nanoc-cli/spec/nanoc/cli/commands/shell_spec.rb'
+    - 'nanoc/spec/nanoc/regressions/gh_1572_spec.rb'
 
 # Offense count: 55
 RSpec/Be:

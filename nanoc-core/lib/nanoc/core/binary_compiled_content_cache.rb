@@ -92,6 +92,10 @@ module Nanoc
         end
       end
 
+      def use_clonefile?
+        defined?(Clonefile)
+      end
+
       private
 
       def dirname
@@ -132,7 +136,7 @@ module Nanoc
         # changed outside of Nanoc.
 
         # Try clonefile
-        if defined?(Clonefile)
+        if use_clonefile?
           FileUtils.rm_f(to)
           begin
             res = Clonefile.always(from, to)
@@ -142,6 +146,9 @@ module Nanoc
         end
 
         # Fall back to old-school copy
+        if File.file?(to)
+          FileUtils.rm_f(to)
+        end
         FileUtils.cp(from, to)
       end
     end
