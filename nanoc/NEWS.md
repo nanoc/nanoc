@@ -1,5 +1,14 @@
 # Nanoc news
 
+## 4.12.6 (2022-05-28)
+
+Fixes:
+
+- Fixed a crash in `nanc view` when a TUN device is present (#1567) [Sergio Durigan Junior]
+- Fixed a crash when content/ has non-writable binary files (#1576)
+- Fixed inconsistency in allowed YAML classes in metadata (#1574) [Daniel Aleksandersen]
+- Made the Git deployer perform `git push` even if there is nothing to commit (#1575)
+
 ## 4.12.5 (2022-01-22)
 
 Fixes:
