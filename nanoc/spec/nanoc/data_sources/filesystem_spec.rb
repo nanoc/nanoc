@@ -71,11 +71,11 @@ describe Nanoc::DataSources::Filesystem, site: true do
           end
 
           it 'has a different attributes checksum' do
-            expect(block).to change { data_source.send(:load_objects, 'foo', klass)[0].attributes_checksum_data }
+            expect(&block).to change { data_source.send(:load_objects, 'foo', klass)[0].attributes_checksum_data }
           end
 
           it 'has the same content checksum' do
-            expect(block).not_to change { data_source.send(:load_objects, 'foo', klass)[0].content_checksum_data }
+            expect(&block).not_to change { data_source.send(:load_objects, 'foo', klass)[0].content_checksum_data }
           end
         end
       end
