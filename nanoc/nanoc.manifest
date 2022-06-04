@@ -48,7 +48,7 @@ lib/nanoc/filters/sass/functions.rb
 lib/nanoc/filters/sass/importer.rb
 lib/nanoc/filters/slim.rb
 lib/nanoc/filters/typogruby.rb
-lib/nanoc/filters/uglify_js.rb
+lib/nanoc/filters/terser.rb
 lib/nanoc/filters/xsl.rb
 lib/nanoc/filters/yui_compressor.rb
 lib/nanoc/helpers.rb

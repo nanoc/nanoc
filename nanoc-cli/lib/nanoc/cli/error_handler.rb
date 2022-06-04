@@ -204,7 +204,7 @@ module Nanoc::CLI
       'sass' => 'sass',
       'slim' => 'slim',
       'typogruby' => 'typogruby',
-      'uglifier' => 'uglifier',
+      'terser' => 'terser',
       'w3c_validators' => 'w3c_validators',
       'yuicompressor' => 'yuicompressor',
     }.freeze
