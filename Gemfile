@@ -49,7 +49,6 @@ group :plugins do
   gem 'coderay'
   gem 'clonefile', '~> 0.5.2'
   gem 'coffee-script'
-  gem 'duktape', '~> 2.3'
   gem 'erubi'
   gem 'erubis'
   gem 'execjs', '~> 2.7'
@@ -58,11 +57,11 @@ group :plugins do
   gem 'haml'
   gem 'kramdown'
   gem 'less', '~> 2.6', platforms: :ruby
-  gem 'libv8', platforms: :ruby
   gem 'listen', '~> 3.1'
   gem 'markaby'
   gem 'maruku'
   gem 'mime-types'
+  gem 'mini_racer'
   gem 'mustache', '~> 1.0'
   gem 'nokogiri', '~> 1.12'
   gem 'pandoc-ruby'
@@ -78,7 +77,7 @@ group :plugins do
   gem 'sass'
   gem 'slim', '~> 4.0'
   gem 'typogruby'
-  gem 'uglifier'
+  gem 'terser'
   gem 'w3c_validators'
   gem 'wdm', '>= 0.1.0' if Gem.win_platform?
   gem 'yuicompressor'
