@@ -167,7 +167,7 @@ shared_examples 'a document view' do
     context 'with non-existant key' do
       let(:key) { :weapon }
 
-      it { is_expected.to be(nil) }
+      it { is_expected.to be_nil }
 
       it 'creates a dependency' do
         expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])

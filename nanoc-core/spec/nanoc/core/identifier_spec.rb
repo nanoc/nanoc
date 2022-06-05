@@ -257,7 +257,7 @@ describe Nanoc::Core::Identifier do
       context 'non-matching regex' do
         let(:pat) { %r{\A/qux/monkey} }
 
-        it { is_expected.to be(nil) }
+        it { is_expected.to be_nil }
       end
     end
 
@@ -271,7 +271,7 @@ describe Nanoc::Core::Identifier do
       context 'non-matching string' do
         let(:pat) { '/qux/*' }
 
-        it { is_expected.to be(nil) }
+        it { is_expected.to be_nil }
       end
     end
   end
