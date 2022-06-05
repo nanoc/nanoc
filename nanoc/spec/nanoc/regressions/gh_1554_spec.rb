@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 describe 'GH-1554', site: true, stdio: true do
-  # rubocop:disable RSpec/ExampleLength
   example do
     FileUtils.mkdir_p('content')
     FileUtils.mkdir_p('content/parts')
@@ -36,5 +35,4 @@ describe 'GH-1554', site: true, stdio: true do
     expect(File.file?('output/main.txt')).to be(true)
     expect(File.read('output/main.txt')).to eq('Part A')
   end
-  # rubocop:enable RSpec/ExampleLength
 end

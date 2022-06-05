@@ -102,7 +102,7 @@ describe Nanoc::Core::ConfigLoader do
   describe '.cwd_is_nanoc_site? + .config_filename_for_cwd' do
     context 'no config files' do
       it 'is not considered a Nanoc site dir' do
-        expect(described_class.cwd_is_nanoc_site?).to eq(false)
+        expect(described_class.cwd_is_nanoc_site?).to be(false)
         expect(described_class.config_filename_for_cwd).to be_nil
       end
     end
@@ -113,7 +113,7 @@ describe Nanoc::Core::ConfigLoader do
       end
 
       it 'is considered a Nanoc site dir' do
-        expect(described_class.cwd_is_nanoc_site?).to eq(true)
+        expect(described_class.cwd_is_nanoc_site?).to be(true)
         expect(described_class.config_filename_for_cwd).to eq(File.expand_path('nanoc.yaml'))
       end
     end
@@ -124,7 +124,7 @@ describe Nanoc::Core::ConfigLoader do
       end
 
       it 'is considered a Nanoc site dir' do
-        expect(described_class.cwd_is_nanoc_site?).to eq(true)
+        expect(described_class.cwd_is_nanoc_site?).to be(true)
         expect(described_class.config_filename_for_cwd).to eq(File.expand_path('config.yaml'))
       end
     end
@@ -224,7 +224,7 @@ describe Nanoc::Core::ConfigLoader do
 
           it 'inherits options from grandparent' do
             expect(subject[:day_one]).to eq('lasers')
-            expect(subject[:slugs]).to eq(false)
+            expect(subject[:slugs]).to be(false)
           end
 
           it 'inherits options from parent' do

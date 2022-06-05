@@ -24,7 +24,7 @@ module Nanoc
         end
 
         def hash
-          self.class.hash ^ layout_identifier.hash ^ params.hash
+          [self.class, layout_identifier, params].hash
         end
 
         def ==(other)

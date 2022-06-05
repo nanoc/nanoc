@@ -156,18 +156,18 @@ shared_examples 'a document view' do
         subject
         dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-        expect(dep.props.attributes?).to eq(true)
+        expect(dep.props.attributes?).to be(true)
 
-        expect(dep.props.raw_content?).to eq(false)
-        expect(dep.props.compiled_content?).to eq(false)
-        expect(dep.props.path?).to eq(false)
+        expect(dep.props.raw_content?).to be(false)
+        expect(dep.props.compiled_content?).to be(false)
+        expect(dep.props.path?).to be(false)
       end
     end
 
     context 'with non-existant key' do
       let(:key) { :weapon }
 
-      it { is_expected.to be(nil) }
+      it { is_expected.to be_nil }
 
       it 'creates a dependency' do
         expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([document])
@@ -177,11 +177,11 @@ shared_examples 'a document view' do
         subject
         dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-        expect(dep.props.attributes?).to eq(true)
+        expect(dep.props.attributes?).to be(true)
 
-        expect(dep.props.raw_content?).to eq(false)
-        expect(dep.props.compiled_content?).to eq(false)
-        expect(dep.props.path?).to eq(false)
+        expect(dep.props.raw_content?).to be(false)
+        expect(dep.props.compiled_content?).to be(false)
+        expect(dep.props.path?).to be(false)
       end
     end
   end
@@ -199,11 +199,11 @@ shared_examples 'a document view' do
       subject
       dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-      expect(dep.props.attributes?).to eq(true)
+      expect(dep.props.attributes?).to be(true)
 
-      expect(dep.props.raw_content?).to eq(false)
-      expect(dep.props.compiled_content?).to eq(false)
-      expect(dep.props.path?).to eq(false)
+      expect(dep.props.raw_content?).to be(false)
+      expect(dep.props.compiled_content?).to be(false)
+      expect(dep.props.path?).to be(false)
     end
 
     it 'returns attributes' do
@@ -229,11 +229,11 @@ shared_examples 'a document view' do
         subject
         dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-        expect(dep.props.attributes?).to eq(true)
+        expect(dep.props.attributes?).to be(true)
 
-        expect(dep.props.raw_content?).to eq(false)
-        expect(dep.props.compiled_content?).to eq(false)
-        expect(dep.props.path?).to eq(false)
+        expect(dep.props.raw_content?).to be(false)
+        expect(dep.props.compiled_content?).to be(false)
+        expect(dep.props.path?).to be(false)
       end
     end
 
@@ -253,11 +253,11 @@ shared_examples 'a document view' do
           subject
           dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-          expect(dep.props.attributes?).to eq(true)
+          expect(dep.props.attributes?).to be(true)
 
-          expect(dep.props.raw_content?).to eq(false)
-          expect(dep.props.compiled_content?).to eq(false)
-          expect(dep.props.path?).to eq(false)
+          expect(dep.props.raw_content?).to be(false)
+          expect(dep.props.compiled_content?).to be(false)
+          expect(dep.props.path?).to be(false)
         end
       end
 
@@ -274,11 +274,11 @@ shared_examples 'a document view' do
           subject
           dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-          expect(dep.props.attributes?).to eq(true)
+          expect(dep.props.attributes?).to be(true)
 
-          expect(dep.props.raw_content?).to eq(false)
-          expect(dep.props.compiled_content?).to eq(false)
-          expect(dep.props.path?).to eq(false)
+          expect(dep.props.raw_content?).to be(false)
+          expect(dep.props.compiled_content?).to be(false)
+          expect(dep.props.path?).to be(false)
         end
       end
 
@@ -310,11 +310,11 @@ shared_examples 'a document view' do
         subject
         dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-        expect(dep.props.attributes?).to eq(true)
+        expect(dep.props.attributes?).to be(true)
 
-        expect(dep.props.raw_content?).to eq(false)
-        expect(dep.props.compiled_content?).to eq(false)
-        expect(dep.props.path?).to eq(false)
+        expect(dep.props.raw_content?).to be(false)
+        expect(dep.props.compiled_content?).to be(false)
+        expect(dep.props.path?).to be(false)
       end
     end
 
@@ -331,11 +331,11 @@ shared_examples 'a document view' do
         subject
         dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-        expect(dep.props.attributes?).to eq(true)
+        expect(dep.props.attributes?).to be(true)
 
-        expect(dep.props.raw_content?).to eq(false)
-        expect(dep.props.compiled_content?).to eq(false)
-        expect(dep.props.path?).to eq(false)
+        expect(dep.props.raw_content?).to be(false)
+        expect(dep.props.compiled_content?).to be(false)
+        expect(dep.props.path?).to be(false)
       end
     end
   end
@@ -345,7 +345,7 @@ shared_examples 'a document view' do
 
     let(:document) { double(:document, identifier: '/foo') }
 
-    it { is_expected.to eq described_class.hash ^ '/foo'.hash }
+    it { is_expected.to eq([described_class, '/foo'].hash) }
   end
 
   describe '#raw_content' do
@@ -363,11 +363,11 @@ shared_examples 'a document view' do
       subject
       dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-      expect(dep.props.raw_content?).to eq(true)
+      expect(dep.props.raw_content?).to be(true)
 
-      expect(dep.props.attributes?).to eq(false)
-      expect(dep.props.compiled_content?).to eq(false)
-      expect(dep.props.path?).to eq(false)
+      expect(dep.props.attributes?).to be(false)
+      expect(dep.props.compiled_content?).to be(false)
+      expect(dep.props.path?).to be(false)
     end
   end
 end

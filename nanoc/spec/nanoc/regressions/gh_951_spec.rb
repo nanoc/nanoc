@@ -16,6 +16,6 @@ EOS
   it 'copies foo.md' do
     Nanoc::CLI.run(%w[compile])
 
-    expect(File.file?('output/foo.md')).to eq(true)
+    expect(File.file?('output/foo.md')).to be(true)
   end
 end

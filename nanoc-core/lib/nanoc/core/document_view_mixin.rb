@@ -26,7 +26,7 @@ module Nanoc
 
       # @see Object#hash
       def hash
-        self.class.hash ^ identifier.hash
+        [self.class, identifier].hash
       end
 
       # @return [Nanoc::Core::Identifier]

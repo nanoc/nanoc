@@ -116,7 +116,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       EOS
 
       # Create items
-      assert Dir['content/*'].empty?
+      assert_predicate Dir['content/*'], :empty?
       File.write('content/robots.txt', 'Hello I am robots')
 
       # Compile
@@ -136,7 +136,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       EOS
 
       # Create items
-      assert Dir['content/*'].empty?
+      assert_predicate Dir['content/*'], :empty?
       File.write('content/foo', 'Hello I am foo')
 
       # Compile
@@ -164,7 +164,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       EOS
 
       # Create items
-      assert Dir['content/*'].empty?
+      assert_predicate Dir['content/*'], :empty?
       File.write('content/foo.txt', "Hello I am <%= 'foo' %>")
 
       # Compile
@@ -193,7 +193,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       end
 
       # Create items
-      assert Dir['content/*'].empty?
+      assert_predicate Dir['content/*'], :empty?
       File.write('content/robots.txt', 'Hello I am robots')
 
       # Compile
@@ -215,7 +215,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       EOS
 
       # Create items
-      assert Dir['content/*'].empty?
+      assert_predicate Dir['content/*'], :empty?
       File.write('content/lame.txt', 'Hello I am lame')
 
       File.write('content/notlame.txt', 'Hello I am not lame')
@@ -245,7 +245,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       EOS
 
       # Create items
-      assert Dir['content/*'].empty?
+      assert_predicate Dir['content/*'], :empty?
       File.write('content/foo.txt', "Hello I am <%= 'foo' %>")
 
       # Compile

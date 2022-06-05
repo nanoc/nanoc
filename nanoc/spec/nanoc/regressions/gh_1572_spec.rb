@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 describe 'GH-1572', site: true, stdio: true do
-  # rubocop:disable RSpec/ExampleLength
   example do
     FileUtils.mkdir_p('content')
 
@@ -24,5 +23,4 @@ describe 'GH-1572', site: true, stdio: true do
     expect(File.read('output/repro.jpg')).to eq('<data>')
     expect(File.stat('output/repro.jpg').mode).to eq(0o100400)
   end
-  # rubocop:enable RSpec/ExampleLength
 end

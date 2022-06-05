@@ -26,7 +26,7 @@ module Nanoc
         end
 
         def hash
-          self.class.hash ^ filter_name.hash ^ params.hash
+          [self.class, filter_name, params].hash
         end
 
         def ==(other)

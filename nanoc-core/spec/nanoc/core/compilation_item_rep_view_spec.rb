@@ -89,11 +89,11 @@ describe Nanoc::Core::CompilationItemRepView do
         subject
         dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-        expect(dep.props.compiled_content?).to eq(true)
+        expect(dep.props.compiled_content?).to be(true)
 
-        expect(dep.props.raw_content?).to eq(false)
-        expect(dep.props.attributes?).to eq(false)
-        expect(dep.props.path?).to eq(false)
+        expect(dep.props.raw_content?).to be(false)
+        expect(dep.props.attributes?).to be(false)
+        expect(dep.props.path?).to be(false)
       end
 
       it { is_expected.to be_a(Nanoc::Core::Errors::UnmetDependency) }
@@ -122,11 +122,11 @@ describe Nanoc::Core::CompilationItemRepView do
           subject
           dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-          expect(dep.props.compiled_content?).to eq(true)
+          expect(dep.props.compiled_content?).to be(true)
 
-          expect(dep.props.raw_content?).to eq(false)
-          expect(dep.props.attributes?).to eq(false)
-          expect(dep.props.path?).to eq(false)
+          expect(dep.props.raw_content?).to be(false)
+          expect(dep.props.attributes?).to be(false)
+          expect(dep.props.path?).to be(false)
         end
 
         it { is_expected.to eq(Dir.getwd + '/output/about/index.html') }
@@ -167,11 +167,11 @@ describe Nanoc::Core::CompilationItemRepView do
       subject
       dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
-      expect(dep.props.compiled_content?).to eq(true)
+      expect(dep.props.compiled_content?).to be(true)
 
-      expect(dep.props.raw_content?).to eq(false)
-      expect(dep.props.attributes?).to eq(false)
-      expect(dep.props.path?).to eq(false)
+      expect(dep.props.raw_content?).to be(false)
+      expect(dep.props.attributes?).to be(false)
+      expect(dep.props.path?).to be(false)
     end
 
     it { is_expected.to eq('Hallo') }

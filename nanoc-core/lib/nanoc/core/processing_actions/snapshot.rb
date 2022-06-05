@@ -34,7 +34,7 @@ module Nanoc
         end
 
         def hash
-          self.class.hash ^ snapshot_names.hash ^ paths.hash
+          [self.class, snapshot_names, paths].hash
         end
 
         def ==(other)

@@ -86,7 +86,7 @@ describe Nanoc::Core::ConfigView do
     context 'with non-existing key' do
       let(:key) { :weapon }
 
-      it { is_expected.to be(nil) }
+      it { is_expected.to be_nil }
     end
   end
 

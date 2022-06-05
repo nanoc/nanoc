@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 describe 'meta', chdir: false do
-  # rubocop:disable RSpec/ExampleLength
   it 'has the same license for all projects' do
     Dir.chdir('..') do
       root_license = File.read('LICENSE').sub(/20\d\d/, '20xx')
@@ -13,5 +12,4 @@ describe 'meta', chdir: false do
       end
     end
   end
-  # rubocop:enable RSpec/ExampleLength
 end

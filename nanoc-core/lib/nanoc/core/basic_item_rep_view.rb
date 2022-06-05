@@ -33,7 +33,7 @@ module Nanoc
 
       # @see Object#hash
       def hash
-        self.class.hash ^ item.identifier.hash ^ name.hash
+        [self.class, item.identifier, name].hash
       end
 
       # @return [Symbol]

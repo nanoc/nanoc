@@ -50,10 +50,10 @@ describe Nanoc::Core::DependencyStore do
 
         it 'returns true for all props by default' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.raw_content?).to eq(true)
-          expect(deps[0].props.attributes?).to eq(true)
-          expect(deps[0].props.compiled_content?).to eq(true)
-          expect(deps[0].props.path?).to eq(true)
+          expect(deps[0].props.raw_content?).to be(true)
+          expect(deps[0].props.attributes?).to be(true)
+          expect(deps[0].props.compiled_content?).to be(true)
+          expect(deps[0].props.path?).to be(true)
         end
 
         it 'returns nothing for the others' do
@@ -69,14 +69,14 @@ describe Nanoc::Core::DependencyStore do
 
         it 'returns false for all unspecified props' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.raw_content?).to eq(false)
-          expect(deps[0].props.compiled_content?).to eq(false)
-          expect(deps[0].props.path?).to eq(false)
+          expect(deps[0].props.raw_content?).to be(false)
+          expect(deps[0].props.compiled_content?).to be(false)
+          expect(deps[0].props.path?).to be(false)
         end
 
         it 'returns the specified props' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.attributes?).to eq(true)
+          expect(deps[0].props.attributes?).to be(true)
         end
       end
 
@@ -87,14 +87,14 @@ describe Nanoc::Core::DependencyStore do
 
         it 'returns false for all unspecified props' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.raw_content?).to eq(false)
-          expect(deps[0].props.compiled_content?).to eq(false)
-          expect(deps[0].props.path?).to eq(false)
+          expect(deps[0].props.raw_content?).to be(false)
+          expect(deps[0].props.compiled_content?).to be(false)
+          expect(deps[0].props.path?).to be(false)
         end
 
         it 'returns the specified props' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.attributes?).to eq(true)
+          expect(deps[0].props.attributes?).to be(true)
           expect(deps[0].props.attributes).to contain_exactly(:donkey)
         end
       end
@@ -136,10 +136,10 @@ describe Nanoc::Core::DependencyStore do
 
         it 'returns true for all props by default' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.raw_content?).to eq(true)
-          expect(deps[0].props.attributes?).to eq(true)
-          expect(deps[0].props.compiled_content?).to eq(true)
-          expect(deps[0].props.path?).to eq(true)
+          expect(deps[0].props.raw_content?).to be(true)
+          expect(deps[0].props.attributes?).to be(true)
+          expect(deps[0].props.compiled_content?).to be(true)
+          expect(deps[0].props.path?).to be(true)
         end
 
         it 'returns nothing for the others' do
@@ -157,7 +157,7 @@ describe Nanoc::Core::DependencyStore do
         it 'retains dependency, but from nil' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
           expect(deps.size).to be(1)
-          expect(deps[0].from).to be(nil)
+          expect(deps[0].from).to be_nil
           expect(deps[0].to).to eql(item_a)
         end
       end
@@ -169,14 +169,14 @@ describe Nanoc::Core::DependencyStore do
 
         it 'returns false for all unspecified props' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.raw_content?).to eq(false)
-          expect(deps[0].props.attributes?).to eq(false)
-          expect(deps[0].props.path?).to eq(false)
+          expect(deps[0].props.raw_content?).to be(false)
+          expect(deps[0].props.attributes?).to be(false)
+          expect(deps[0].props.path?).to be(false)
         end
 
         it 'returns the specified props' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.compiled_content?).to eq(true)
+          expect(deps[0].props.compiled_content?).to be(true)
         end
       end
 
@@ -188,14 +188,14 @@ describe Nanoc::Core::DependencyStore do
 
         it 'returns false for all unspecified props' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.raw_content?).to eq(false)
-          expect(deps[0].props.path?).to eq(false)
+          expect(deps[0].props.raw_content?).to be(false)
+          expect(deps[0].props.path?).to be(false)
         end
 
         it 'returns the specified props' do
           deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.attributes?).to eq(true)
-          expect(deps[0].props.compiled_content?).to eq(true)
+          expect(deps[0].props.attributes?).to be(true)
+          expect(deps[0].props.compiled_content?).to be(true)
         end
       end
     end
@@ -246,10 +246,10 @@ describe Nanoc::Core::DependencyStore do
         expect(deps[0].from).to eql(item_b)
         expect(deps[0].to).to eql(item_a)
 
-        expect(deps[0].props.raw_content?).to eq(false)
-        expect(deps[0].props.attributes?).to eq(true)
-        expect(deps[0].props.compiled_content?).to eq(true)
-        expect(deps[0].props.path?).to eq(false)
+        expect(deps[0].props.raw_content?).to be(false)
+        expect(deps[0].props.attributes?).to be(true)
+        expect(deps[0].props.compiled_content?).to be(true)
+        expect(deps[0].props.path?).to be(false)
       end
 
       it 'has the right dependencies for item B' do
@@ -318,11 +318,11 @@ describe Nanoc::Core::DependencyStore do
       expect(deps[0].from).to eql(config)
       expect(deps[0].to).to eql(item_a)
 
-      expect(deps[0].props.raw_content?).to eq(false)
-      expect(deps[0].props.attributes?).to eq(true)
+      expect(deps[0].props.raw_content?).to be(false)
+      expect(deps[0].props.attributes?).to be(true)
       expect(deps[0].props.attributes).to contain_exactly(:donkey)
-      expect(deps[0].props.compiled_content?).to eq(false)
-      expect(deps[0].props.path?).to eq(false)
+      expect(deps[0].props.compiled_content?).to be(false)
+      expect(deps[0].props.path?).to be(false)
     end
 
     it 'has the right dependencies for item B' do
