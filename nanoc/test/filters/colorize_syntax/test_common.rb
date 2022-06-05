@@ -82,7 +82,7 @@ class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
   def test_colorize_syntax_with_missing_executables
     if_have 'nokogiri' do
       begin
-        original_path = ENV['PATH']
+        original_path = ENV.fetch('PATH', nil)
         ENV['PATH'] = './blooblooblah'
 
         # Create filter
