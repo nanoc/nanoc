@@ -143,14 +143,6 @@ Minitest/AssertNil:
     - 'nanoc/test/data_sources/test_filesystem.rb'
     - 'nanoc/test/rule_dsl/test_rules_collection.rb'
 
-# Offense count: 9
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertPredicate:
-  Exclude:
-    - 'nanoc/test/base/test_compiler.rb'
-    - 'nanoc/test/data_sources/test_filesystem.rb'
-    - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
-
 # Offense count: 40
 Minitest/MultipleAssertions:
   Max: 18

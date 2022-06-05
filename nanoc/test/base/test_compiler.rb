@@ -53,7 +53,7 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
     with_site do |site|
       Nanoc::Core::Compiler.compile(site)
 
-      assert Dir['output/*'].empty?
+      assert_predicate Dir['output/*'], :empty?
     end
   end
 
@@ -210,7 +210,7 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
       Nanoc::Core::Compiler.compile(site)
 
       # Check
-      assert Dir['tmp/text_items/*'].empty?
+      assert_predicate Dir['tmp/text_items/*'], :empty?
     end
   end
 end
