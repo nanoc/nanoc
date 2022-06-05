@@ -578,17 +578,6 @@ Rake/Desc:
   Exclude:
     - 'Rakefile'
 
-# Offense count: 7
-Security/CompoundHash:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/basic_item_rep_view.rb'
-    - 'nanoc-core/lib/nanoc/core/document.rb'
-    - 'nanoc-core/lib/nanoc/core/document_view_mixin.rb'
-    - 'nanoc-core/lib/nanoc/core/identifier.rb'
-    - 'nanoc-core/lib/nanoc/core/processing_actions/filter.rb'
-    - 'nanoc-core/lib/nanoc/core/processing_actions/layout.rb'
-    - 'nanoc-core/lib/nanoc/core/processing_actions/snapshot.rb'
-
 # Offense count: 84
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.

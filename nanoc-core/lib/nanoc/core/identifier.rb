@@ -88,7 +88,7 @@ module Nanoc
 
       contract C::None => C::Num
       def hash
-        self.class.hash ^ to_s.hash
+        [self.class, to_s].hash
       end
 
       contract C::Any => C::Maybe[C::Num]

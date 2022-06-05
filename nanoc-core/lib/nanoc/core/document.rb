@@ -107,7 +107,7 @@ module Nanoc
 
       contract C::None => C::Num
       def hash
-        self.class.hash ^ identifier.hash
+        [self.class, identifier].hash
       end
 
       contract C::Any => C::Bool

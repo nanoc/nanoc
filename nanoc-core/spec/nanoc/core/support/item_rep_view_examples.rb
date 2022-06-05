@@ -174,7 +174,7 @@ shared_examples 'an item rep view' do
     let(:item) { Nanoc::Core::Item.new('asdf', {}, '/foo') }
     let(:view) { described_class.new(item_rep, view_context) }
 
-    it { is_expected.to eq described_class.hash ^ Nanoc::Core::Identifier.new('/foo').hash ^ :jacques.hash }
+    it { is_expected.to eq([described_class, Nanoc::Core::Identifier.new('/foo'), :jacques].hash) }
   end
 
   describe '#snapshot?' do

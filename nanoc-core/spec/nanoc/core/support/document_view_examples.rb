@@ -345,7 +345,7 @@ shared_examples 'a document view' do
 
     let(:document) { double(:document, identifier: '/foo') }
 
-    it { is_expected.to eq described_class.hash ^ '/foo'.hash }
+    it { is_expected.to eq([described_class, '/foo'].hash) }
   end
 
   describe '#raw_content' do
