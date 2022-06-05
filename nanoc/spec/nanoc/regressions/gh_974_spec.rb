@@ -14,6 +14,6 @@ describe 'GH-974', site: true, stdio: true do
   it 'writes to path corresponding to identifier' do
     Nanoc::CLI.run(%w[compile])
 
-    expect(File.file?('output/foo.md')).to eq(true)
+    expect(File.file?('output/foo.md')).to be(true)
   end
 end

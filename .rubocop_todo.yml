@@ -192,21 +192,6 @@ RSpec/Be:
     - 'nanoc/spec/nanoc/regressions/gh_828_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rule_spec.rb'
 
-# Offense count: 119
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/BeEq:
-  Exclude:
-    - 'nanoc-core/spec/nanoc/core/compilation_item_rep_view_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_item_view_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/config_loader_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/dependency_store_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/dependency_tracker_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/executor_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/support/document_view_examples.rb'
-    - 'nanoc-core/spec/nanoc/core/support/item_rep_view_examples.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_951_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_974_spec.rb'
-
 # Offense count: 5
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.

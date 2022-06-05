@@ -568,7 +568,7 @@ describe Nanoc::Core::Executor do
         it 'does not write' do
           executor.snapshot(:something)
 
-          expect(File.file?('output/donkey.md')).to eq(false)
+          expect(File.file?('output/donkey.md')).to be(false)
         end
       end
     end
