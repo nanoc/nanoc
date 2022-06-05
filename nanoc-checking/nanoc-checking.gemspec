@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.files         = ['NEWS.md', 'README.md'] + Dir['lib/**/*.rb']
   s.require_paths = ['lib']
 
-  s.required_ruby_version = '>= 2.6'
+  s.required_ruby_version = '>= 2.7'
 
   s.add_runtime_dependency('nanoc-cli', '~> 4.12', '>= 4.12.5')
   s.add_runtime_dependency('nanoc-core', '~> 4.12', '>= 4.12.5')
