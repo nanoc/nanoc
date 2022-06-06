@@ -2,6 +2,22 @@
 
 describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   let(:listener) { described_class.new(reps: reps) }
+  let(:reps) do
+    Nanoc::Core::ItemRepRepo.new.tap do |reps|
+      reps << rep
+    end
+  end
+  let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
+  let(:rep) do
+    Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
+      rep.raw_paths = { default: ['/hi.html'] }
+    end
+  end
+  let(:other_rep) do
+    Nanoc::Core::ItemRep.new(item, :other).tap do |rep|
+      rep.raw_paths = { default: ['/bye.html'] }
+    end
+  end
 
   before { Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0)) }
 
@@ -12,26 +28,6 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   before { listener.start_safely }
 
   after { listener.stop_safely }
-
-  let(:reps) do
-    Nanoc::Core::ItemRepRepo.new.tap do |reps|
-      reps << rep
-    end
-  end
-
-  let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
-
-  let(:rep) do
-    Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
-      rep.raw_paths = { default: ['/hi.html'] }
-    end
-  end
-
-  let(:other_rep) do
-    Nanoc::Core::ItemRep.new(item, :other).tap do |rep|
-      rep.raw_paths = { default: ['/bye.html'] }
-    end
-  end
 
   it 'prints filters table' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))

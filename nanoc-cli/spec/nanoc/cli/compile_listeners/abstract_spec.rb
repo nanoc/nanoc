@@ -60,17 +60,16 @@ describe Nanoc::CLI::CompileListeners::Abstract do
 
     context 'listener that notifies' do
       let!(:notifications) { [] }
+      let(:klass) do
+        Class.new(described_class) do
+          def start; end
+        end
+      end
 
       before do
         Nanoc::Core::NotificationCenter.on(:sah8sem0jaiw1phi4bai) do
           sleep 0.1
           notifications << :notified
-        end
-      end
-
-      let(:klass) do
-        Class.new(described_class) do
-          def start; end
         end
       end
 

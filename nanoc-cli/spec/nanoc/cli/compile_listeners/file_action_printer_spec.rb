@@ -2,26 +2,23 @@
 
 describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
   let(:listener) { described_class.new(reps: reps) }
+  let(:reps) do
+    Nanoc::Core::ItemRepRepo.new.tap do |reps|
+      reps << rep
+    end
+  end
+  let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
+  let(:rep) do
+    Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
+      rep.raw_paths = { default: ['/hi.html'] }
+    end
+  end
 
   before { Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0)) }
 
   after { Timecop.return }
 
   after { listener.stop_safely }
-
-  let(:reps) do
-    Nanoc::Core::ItemRepRepo.new.tap do |reps|
-      reps << rep
-    end
-  end
-
-  let(:item) { Nanoc::Core::Item.new('<%= 1 + 2 %>', {}, '/hi.md') }
-
-  let(:rep) do
-    Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
-      rep.raw_paths = { default: ['/hi.html'] }
-    end
-  end
 
   it 'records from compilation_started to rep_write_ended' do
     listener.start_safely

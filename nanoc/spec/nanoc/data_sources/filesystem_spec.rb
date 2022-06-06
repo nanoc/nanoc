@@ -2,14 +2,13 @@
 
 describe Nanoc::DataSources::Filesystem, site: true do
   let(:data_source) { described_class.new(site.config, nil, nil, params) }
+  let(:now) { Time.local(2008, 1, 2, 14, 5, 0) }
   let(:params) { {} }
   let(:site) { Nanoc::Core::SiteLoader.new.new_from_cwd }
 
   before { Timecop.freeze(now) }
 
   after { Timecop.return }
-
-  let(:now) { Time.local(2008, 1, 2, 14, 5, 0) }
 
   describe '#load_objects' do
     subject { data_source.send(:load_objects, dir_with_objects, klass) }
