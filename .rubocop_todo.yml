@@ -665,13 +665,6 @@ Style/CombinableLoops:
 
 # Offense count: 3
 # This cop supports safe autocorrection (--autocorrect).
-Style/KeywordParametersOrder:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/configuration.rb'
-    - 'nanoc/lib/nanoc/data_sources/filesystem.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
 Style/NegatedIfElseCondition:
   Exclude:
     - 'nanoc-core/lib/nanoc/core/identifier.rb'
