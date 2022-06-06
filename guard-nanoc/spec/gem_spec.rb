@@ -12,7 +12,6 @@ describe 'guard-nanoc.gem', chdir: false, stdio: true do
   end
 
   it 'builds gem' do
-    STDOUT.puts `pwd`
     expect { subject }
       .to change { Dir['*.gem'] }
       .from([])

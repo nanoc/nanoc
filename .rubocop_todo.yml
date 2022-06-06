@@ -663,12 +663,6 @@ Style/CombinableLoops:
   Exclude:
     - 'nanoc-core/lib/nanoc/core/item_rep_router.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/GlobalStdStream:
-  Exclude:
-    - 'guard-nanoc/spec/gem_spec.rb'
-
 # Offense count: 3
 # This cop supports safe autocorrection (--autocorrect).
 Style/KeywordParametersOrder:
