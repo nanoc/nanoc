@@ -725,13 +725,6 @@ Style/SlicingWithRange:
     - 'nanoc/lib/nanoc/data_sources/filesystem/tools.rb'
     - 'nanoc/lib/nanoc/helpers/capturing.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowModifier.
-Style/SoleNestedConditional:
-  Exclude:
-    - 'nanoc/lib/nanoc/data_sources/filesystem.rb'
-
 # Offense count: 137
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: Mode.
