@@ -94,13 +94,6 @@ Lint/MissingSuper:
     - 'nanoc/test/helpers/test_capturing.rb'
     - 'nanoc/test/helpers/test_xml_sitemap.rb'
 
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantCopDisableDirective:
-  Exclude:
-    - 'nanoc-cli/spec/nanoc/cli/cleaning_stream_spec.rb'
-    - 'nanoc-core/lib/nanoc/core/contracts_support.rb'
-
 # Offense count: 3
 # Configuration parameters: AllowedPatterns, IgnoredPatterns.
 # AllowedPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
