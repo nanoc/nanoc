@@ -36,15 +36,24 @@ end
 
 packages.each do |package|
   namespace(package.tr('-', '_')) do
+    desc "Build gem for #{package}"
     task(:gem) { sub_sh(package, 'bundle exec rake gem') }
+
+    desc "Run tests for #{package}"
     task(:test) { sub_sh(package, 'bundle exec rake test') }
+
+    desc "Run style checks for #{package}"
     task(:rubocop) { sub_sh(package, 'bundle exec rake rubocop') }
   end
 end
 
+desc 'Run tests for all packages'
 task test: packages.map { |p| p.tr('-', '_') + ':test' }
+
+desc 'Build gems all packages'
 task gem: packages.map { |p| p.tr('-', '_') + ':gem' }
 
+desc 'Print overview of which packages need a release'
 task :needs_release do
   tags = `git tags`.lines.map(&:chomp).map { |t| t.match?(/\A\d/) ? 'nanoc-v' + t : t }
   tags_by_base_name = tags.group_by { |t| t[/\A.*(?=-v\d)/] }.select { |(base_name, _tags)| base_name }
@@ -82,6 +91,7 @@ task :needs_release do
   end
 end
 
+desc 'Print overview of all packages and their versions'
 task :summary do
   versions = {}
   dependencies = {}
