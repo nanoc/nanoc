@@ -46,16 +46,16 @@ module Nanoc
       end
 
       # contract C::Func[Nanoc::Core::ProcessingAction => C::Any] => self
-      def each
-        @actions.each { |a| yield(a) }
+      def each(&block)
+        @actions.each(&block)
         self
       end
 
       # contract C::Func[Nanoc::Core::ProcessingAction => C::Any] => self
-      def map
+      def map(&block)
         self.class.new(
           @item_rep,
-          actions: @actions.map { |a| yield(a) },
+          actions: @actions.map(&block),
         )
       end
     end

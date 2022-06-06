@@ -136,8 +136,8 @@ module Nanoc
       end
 
       contract C::Func[C::Any, C::Any => C::Any] => self
-      def each
-        @wrapped.each { |k, v| yield(k, v) }
+      def each(&block)
+        @wrapped.each(&block)
         self
       end
 

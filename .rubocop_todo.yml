@@ -663,17 +663,6 @@ Style/CombinableLoops:
   Exclude:
     - 'nanoc-core/lib/nanoc/core/item_rep_router.rb'
 
-# Offense count: 9
-# This cop supports safe autocorrection (--autocorrect).
-Style/ExplicitBlockArgument:
-  Exclude:
-    - 'nanoc-cli/lib/nanoc/cli/error_handler.rb'
-    - 'nanoc-core/lib/nanoc/core/action_sequence.rb'
-    - 'nanoc-core/lib/nanoc/core/changes_stream.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_phases/resume.rb'
-    - 'nanoc-core/lib/nanoc/core/configuration.rb'
-    - 'nanoc-live/lib/nanoc/live/live_recompiler.rb'
-
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
 Style/GlobalStdStream:

@@ -8,11 +8,11 @@ module Nanoc::CLI
     # Enables error handling in the given block.
     #
     # @return [void]
-    def self.handle_while(exit_on_error: true)
+    def self.handle_while(exit_on_error: true, &block)
       if @disabled
         yield
       else
-        new.handle_while(exit_on_error: exit_on_error) { yield }
+        new.handle_while(exit_on_error: exit_on_error, &block)
       end
     end
 
