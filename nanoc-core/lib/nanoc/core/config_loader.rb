@@ -54,7 +54,7 @@ module Nanoc
       end
 
       def load_file(filename)
-        YAML.load_file(filename)
+        YAML.safe_load_file(filename)
       end
 
       # @api private
