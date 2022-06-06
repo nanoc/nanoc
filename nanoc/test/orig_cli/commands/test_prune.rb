@@ -48,7 +48,7 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       Nanoc::CLI.run %w[prune --yes]
 
       assert File.file?('output2/index.html')
-      assert !File.file?('output2/foo.html')
+      refute File.file?('output2/foo.html')
     end
   end
 
@@ -107,8 +107,8 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       assert File.file?('output/index.html')
       assert File.file?('output/good-dir/blah')
       assert File.file?('output/good-file.html')
-      assert !File.file?('output/bad-dir/blah')
-      assert !File.file?('output/bad-file.html')
+      refute File.file?('output/bad-dir/blah')
+      refute File.file?('output/bad-file.html')
     end
   end
 
@@ -140,8 +140,8 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
       Nanoc::CLI.run %w[prune --yes]
 
       assert File.file?('output-real/index.html')
-      assert !File.directory?('output-real/some-dir')
-      assert !File.file?('output-real/some-file.html')
+      refute File.directory?('output-real/some-dir')
+      refute File.file?('output-real/some-file.html')
     end
   end
 
@@ -157,10 +157,10 @@ class Nanoc::CLI::Commands::PruneTest < Nanoc::TestCase
 
       Nanoc::CLI.run %w[prune --yes]
 
-      assert !File.file?('output/a/b/c/index.html')
-      assert !File.directory?('output/a/b/c')
-      assert !File.directory?('output/a/b')
-      assert !File.directory?('output/a')
+      refute File.file?('output/a/b/c/index.html')
+      refute File.directory?('output/a/b/c')
+      refute File.directory?('output/a/b')
+      refute File.directory?('output/a')
     end
   end
 end

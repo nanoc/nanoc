@@ -81,31 +81,27 @@ class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
 
   def test_colorize_syntax_with_missing_executables
     if_have 'nokogiri' do
-      begin
-        original_path = ENV.fetch('PATH', nil)
-        ENV['PATH'] = './blooblooblah'
+      original_path = ENV.fetch('PATH', nil)
+      ENV['PATH'] = './blooblooblah'
 
-        # Create filter
-        filter = ::Nanoc::Filters::ColorizeSyntax.new
+      # Create filter
+      filter = ::Nanoc::Filters::ColorizeSyntax.new
 
-        # Get input and expected output
+      # Get input and expected output
+      input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
+
+      # Run filter
+      %i[albino pygmentize simon_highlight].each do |colorizer|
         input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
-
-        # Run filter
-        %i[albino pygmentize simon_highlight].each do |colorizer|
-          begin
-            input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
-            filter.setup_and_run(
-              input,
-              colorizers: { ruby: colorizer },
-            )
-            flunk 'expected colorizer to raise if no executable is available'
-          rescue
-          end
-        end
-      ensure
-        ENV['PATH'] = original_path
+        filter.setup_and_run(
+          input,
+          colorizers: { ruby: colorizer },
+        )
+        flunk 'expected colorizer to raise if no executable is available'
+      rescue
       end
+    ensure
+      ENV['PATH'] = original_path
     end
   end
 end

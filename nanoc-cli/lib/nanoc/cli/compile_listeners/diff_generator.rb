@@ -28,17 +28,15 @@ module Nanoc::CLI::CompileListeners
         prev_hunk = hunk = nil
         file_length_difference = 0
         diffs.each do |piece|
-          begin
-            hunk = Diff::LCS::Hunk.new(lines_a, lines_b, piece, 3, file_length_difference)
-            file_length_difference = hunk.file_length_difference
+          hunk = Diff::LCS::Hunk.new(lines_a, lines_b, piece, 3, file_length_difference)
+          file_length_difference = hunk.file_length_difference
 
-            next unless prev_hunk
-            next if hunk.merge(prev_hunk)
+          next unless prev_hunk
+          next if hunk.merge(prev_hunk)
 
-            output << prev_hunk.diff(:unified) << "\n"
-          ensure
-            prev_hunk = hunk
-          end
+          output << prev_hunk.diff(:unified) << "\n"
+        ensure
+          prev_hunk = hunk
         end
         last = prev_hunk.diff(:unified)
         output << last << "\n"

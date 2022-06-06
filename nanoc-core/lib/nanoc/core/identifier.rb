@@ -149,10 +149,10 @@ module Nanoc
 
         extname = File.extname(@string)
 
-        if !extname.empty?
-          @string[0..-extname.size - 1]
-        else
+        if extname.empty?
           @string
+        else
+          @string[0..-extname.size - 1]
         end
       end
 
@@ -171,10 +171,10 @@ module Nanoc
       # The identifier, as string, with all extensions removed
       def without_exts
         extname = exts.join('.')
-        if !extname.empty?
-          @string[0..-extname.size - 2]
-        else
+        if extname.empty?
           @string
+        else
+          @string[0..-extname.size - 2]
         end
       end
 

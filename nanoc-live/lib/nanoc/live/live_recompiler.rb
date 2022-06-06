@@ -60,10 +60,10 @@ module Nanoc
         exit 0
       end
 
-      def run_parent
+      def run_parent(&block)
         # create initial child
         pipe_read, pipe_write = IO.pipe
-        fork { run_child(pipe_write, pipe_read) { |s| yield(s) } }
+        fork { run_child(pipe_write, pipe_read, &block) }
         pipe_read.close
 
         changes = gen_lib_changes
@@ -76,7 +76,7 @@ module Nanoc
 
           # create new child
           pipe_read, pipe_write = IO.pipe
-          fork { run_child(pipe_write, pipe_read) { |s| yield(s) } }
+          fork { run_child(pipe_write, pipe_read, &block) }
           pipe_read.close
         end
       rescue Interrupt

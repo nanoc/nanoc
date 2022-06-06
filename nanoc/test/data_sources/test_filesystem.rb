@@ -483,7 +483,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal '/foo.bar',     data_source.send(:filename_for, '/foo', 'bar')
     assert_equal '/foo.bar.baz', data_source.send(:filename_for, '/foo', 'bar.baz')
     assert_equal '/foo',         data_source.send(:filename_for, '/foo', '')
-    assert_equal nil,            data_source.send(:filename_for, '/foo', nil)
+    assert_nil data_source.send(:filename_for, '/foo', nil)
   end
 
   def test_compile_iso_8859_1_site

@@ -116,7 +116,7 @@ module Nanoc::DataSources
       attr_reader :is_binary
       alias binary? is_binary
 
-      def initialize(is_binary:, content: nil, filename: nil, attributes:, content_checksum_data: nil, attributes_checksum_data: nil)
+      def initialize(is_binary:, attributes:, content: nil, filename: nil, content_checksum_data: nil, attributes_checksum_data: nil)
         if content.nil? && filename.nil?
           raise ArgumentError, '#initialize needs at least content or filename'
         end
@@ -318,10 +318,8 @@ module Nanoc::DataSources
           raise Errors::MultipleMetaFiles.new(meta_filenames, basename)
         end
 
-        unless config[:identifier_type] == 'full'
-          unless [0, 1].include?(content_filenames.size)
-            raise Errors::MultipleContentFiles.new(meta_filenames, basename)
-          end
+        if (config[:identifier_type] != 'full') && ![0, 1].include?(content_filenames.size)
+          raise Errors::MultipleContentFiles.new(meta_filenames, basename)
         end
 
         all[basename] = []

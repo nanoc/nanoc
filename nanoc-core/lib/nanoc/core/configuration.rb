@@ -45,7 +45,7 @@ module Nanoc
       NANOC_ENV_DEFAULT = 'default'
 
       contract C::KeywordArgs[hash: C::Optional[Hash], env_name: C::Maybe[String], dir: C::AbsolutePathString] => C::Any
-      def initialize(hash: {}, dir:, env_name: nil)
+      def initialize(dir:, hash: {}, env_name: nil)
         @env_name = env_name
         @wrapped = hash.__nanoc_symbolize_keys_recursively
         @dir = dir
@@ -136,8 +136,8 @@ module Nanoc
       end
 
       contract C::Func[C::Any, C::Any => C::Any] => self
-      def each
-        @wrapped.each { |k, v| yield(k, v) }
+      def each(&block)
+        @wrapped.each(&block)
         self
       end
 

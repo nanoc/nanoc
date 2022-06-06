@@ -9,7 +9,7 @@ describe Nanoc::CLI::CleaningStream do
         @called_methods = []
       end
 
-      def method_missing(symbol, *_args) # rubocop:disable Style/MethodMissingSuper
+      def method_missing(symbol, *_args)
         @called_methods << symbol
       end
 

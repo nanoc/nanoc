@@ -35,9 +35,9 @@ group :devel do
   gem 'tty-command', '~> 0.8'
   gem 'vcr'
   gem 'webmock'
+  gem 'webrick', '~> 1.7'
   gem 'yard'
   gem 'yard-contracts'
-  gem 'webrick', '~> 1.7'
 end
 
 group :plugins do
@@ -46,8 +46,8 @@ group :plugins do
   gem 'asciidoctor'
   gem 'bluecloth', platforms: :ruby
   gem 'builder'
-  gem 'coderay'
   gem 'clonefile', '~> 0.5.2'
+  gem 'coderay'
   gem 'coffee-script'
   gem 'erubi'
   gem 'erubis'
@@ -76,8 +76,8 @@ group :plugins do
   gem 'rubypants'
   gem 'sass'
   gem 'slim', '~> 4.0'
-  gem 'typogruby'
   gem 'terser'
+  gem 'typogruby'
   gem 'w3c_validators'
   gem 'wdm', '>= 0.1.0' if Gem.win_platform?
   gem 'yuicompressor'

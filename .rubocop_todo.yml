@@ -6,14 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: TreatCommentsAsGroupSeparators, ConsiderPunctuation, Include.
-# Include: **/*.gemfile, **/Gemfile, **/gems.rb
-Bundler/OrderedGems:
-  Exclude:
-    - 'Gemfile'
-
 # Offense count: 1
 # Configuration parameters: Include.
 # Include: **/*.gemspec
@@ -102,13 +94,6 @@ Lint/MissingSuper:
     - 'nanoc/test/helpers/test_capturing.rb'
     - 'nanoc/test/helpers/test_xml_sitemap.rb'
 
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantCopDisableDirective:
-  Exclude:
-    - 'nanoc-cli/spec/nanoc/cli/cleaning_stream_spec.rb'
-    - 'nanoc-core/lib/nanoc/core/contracts_support.rb'
-
 # Offense count: 3
 # Configuration parameters: AllowedPatterns, IgnoredPatterns.
 # AllowedPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
@@ -117,41 +102,9 @@ Lint/UnreachableLoop:
     - 'nanoc-core/lib/nanoc/core/item_rep_selector.rb'
     - 'nanoc-core/spec/nanoc/core/item_rep_selector_spec.rb'
 
-# Offense count: 8
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertEmpty:
-  Exclude:
-    - 'nanoc/test/base/test_compiler.rb'
-    - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
-
-# Offense count: 8
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertEqual:
-  Exclude:
-    - 'nanoc/test/base/test_compiler.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertIncludes:
-  Exclude:
-    - 'nanoc/test/filters/test_relativize_paths.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertNil:
-  Exclude:
-    - 'nanoc/test/data_sources/test_filesystem.rb'
-    - 'nanoc/test/rule_dsl/test_rules_collection.rb'
-
 # Offense count: 40
 Minitest/MultipleAssertions:
   Max: 18
-
-# Offense count: 9
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/RefuteFalse:
-  Exclude:
-    - 'nanoc/test/orig_cli/commands/test_prune.rb'
 
 # Offense count: 1
 Minitest/SkipEnsure:
@@ -503,15 +456,6 @@ RSpec/RepeatedExampleGroupDescription:
     - 'nanoc-core/spec/nanoc/core/identifiable_collection_spec.rb'
     - 'nanoc-core/spec/nanoc/core/support/item_rep_view_examples.rb'
 
-# Offense count: 9
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/ScatteredLet:
-  Exclude:
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/abstract_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/file_action_printer_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/timing_recorder_spec.rb'
-    - 'nanoc/spec/nanoc/data_sources/filesystem_spec.rb'
-
 # Offense count: 61
 RSpec/ScatteredSetup:
   Exclude:
@@ -571,43 +515,6 @@ RSpec/VerifiedDoubles:
     - 'nanoc-deploying/spec/nanoc/deploying/deployers/fog_spec.rb'
     - 'nanoc/spec/nanoc/orig_cli/commands/show_rules_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
-
-# Offense count: 7
-# This cop supports safe autocorrection (--autocorrect).
-Rake/Desc:
-  Exclude:
-    - 'Rakefile'
-
-# Offense count: 84
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: separated, grouped
-Style/AccessorGrouping:
-  Exclude:
-    - 'nanoc-checking/lib/nanoc/checking/checks/external_links.rb'
-    - 'nanoc-checking/lib/nanoc/checking/issue.rb'
-    - 'nanoc-cli/lib/nanoc/cli/compile_listeners/timing_recorder.rb'
-    - 'nanoc-core/lib/nanoc/core/action_sequence.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_context.rb'
-    - 'nanoc-core/lib/nanoc/core/dependency.rb'
-    - 'nanoc-core/lib/nanoc/core/dependency_props.rb'
-    - 'nanoc-core/lib/nanoc/core/dependency_store.rb'
-    - 'nanoc-core/lib/nanoc/core/in_memory_data_source.rb'
-    - 'nanoc-core/lib/nanoc/core/item_rep.rb'
-    - 'nanoc-core/lib/nanoc/core/outdatedness_checker.rb'
-    - 'nanoc-core/lib/nanoc/core/outdatedness_status.rb'
-    - 'nanoc-core/lib/nanoc/core/processing_actions/filter.rb'
-    - 'nanoc-core/lib/nanoc/core/processing_actions/layout.rb'
-    - 'nanoc-core/lib/nanoc/core/processing_actions/snapshot.rb'
-    - 'nanoc-core/lib/nanoc/core/site.rb'
-    - 'nanoc-core/lib/nanoc/core/snapshot_def.rb'
-    - 'nanoc-core/lib/nanoc/core/view_context_for_compilation.rb'
-    - 'nanoc-core/lib/nanoc/core/view_context_for_pre_compilation.rb'
-    - 'nanoc-core/lib/nanoc/core/view_context_for_shell.rb'
-    - 'nanoc/lib/nanoc/data_sources/filesystem.rb'
-    - 'nanoc/lib/nanoc/data_sources/filesystem/parser.rb'
-    - 'nanoc/lib/nanoc/helpers/blogging.rb'
-    - 'nanoc/lib/nanoc/rule_dsl/rule.rb'
 
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -751,49 +658,10 @@ Style/ClassAndModuleChildren:
     - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
     - 'nanoc/test/rule_dsl/test_rules_collection.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: IgnoredMethods.
-# IgnoredMethods: ==, equal?, eql?
-Style/ClassEqualityComparison:
-  Exclude:
-    - 'nanoc-cli/lib/nanoc/cli/cleaning_stream.rb'
-
 # Offense count: 2
 Style/CombinableLoops:
   Exclude:
     - 'nanoc-core/lib/nanoc/core/item_rep_router.rb'
-
-# Offense count: 9
-# This cop supports safe autocorrection (--autocorrect).
-Style/ExplicitBlockArgument:
-  Exclude:
-    - 'nanoc-cli/lib/nanoc/cli/error_handler.rb'
-    - 'nanoc-core/lib/nanoc/core/action_sequence.rb'
-    - 'nanoc-core/lib/nanoc/core/changes_stream.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_phases/resume.rb'
-    - 'nanoc-core/lib/nanoc/core/configuration.rb'
-    - 'nanoc-live/lib/nanoc/live/live_recompiler.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/GlobalStdStream:
-  Exclude:
-    - 'guard-nanoc/spec/gem_spec.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Style/KeywordParametersOrder:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/configuration.rb'
-    - 'nanoc/lib/nanoc/data_sources/filesystem.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Style/NegatedIfElseCondition:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/identifier.rb'
-    - 'nanoc-core/lib/nanoc/core/outdatedness_checker.rb'
 
 # Offense count: 7
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -807,24 +675,6 @@ Style/RedundantArgument:
     - 'nanoc/spec/contributors_spec.rb'
     - 'nanoc/spec/nanoc/core/checksummer_spec.rb'
     - 'nanoc/spec/nanoc/helpers/capturing_spec.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantAssignment:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/compilation_stages/compile_reps.rb'
-
-# Offense count: 21
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantBegin:
-  Exclude:
-    - 'common/spec/spec_helper_foot.rb'
-    - 'common/spec/spec_helper_foot_core.rb'
-    - 'nanoc-cli/lib/nanoc/cli/compile_listeners/diff_generator.rb'
-    - 'nanoc-cli/spec/nanoc/cli/error_handler_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_phases/resume_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/item_rep_selector_spec.rb'
-    - 'nanoc/test/filters/colorize_syntax/test_common.rb'
 
 # Offense count: 3
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -874,13 +724,6 @@ Style/SlicingWithRange:
     - 'nanoc/lib/nanoc/data_sources/filesystem.rb'
     - 'nanoc/lib/nanoc/data_sources/filesystem/tools.rb'
     - 'nanoc/lib/nanoc/helpers/capturing.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowModifier.
-Style/SoleNestedConditional:
-  Exclude:
-    - 'nanoc/lib/nanoc/data_sources/filesystem.rb'
 
 # Offense count: 137
 # This cop supports unsafe autocorrection (--autocorrect-all).

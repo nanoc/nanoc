@@ -33,7 +33,7 @@ module Nanoc
       #
       # @return [void]
       def remove_stream_cleaner(klass)
-        @stream_cleaners.delete_if { |c| c.class == klass }
+        @stream_cleaners.delete_if { |c| c.instance_of?(klass) }
       end
 
       # @group IO proxy methods

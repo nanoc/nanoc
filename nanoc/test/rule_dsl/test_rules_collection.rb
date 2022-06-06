@@ -58,7 +58,7 @@ class Nanoc::RuleDSL::RulesCollectionTest < Nanoc::TestCase
     layout.expect(:identifier, '/bar/')
 
     # Check
-    assert_equal(nil, rules_collection.filter_for_layout(layout))
+    assert_nil(rules_collection.filter_for_layout(layout))
   end
 
   def test_filter_for_layout_with_many_layouts

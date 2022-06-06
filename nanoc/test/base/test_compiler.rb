@@ -64,9 +64,9 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Core::Compiler.compile(site)
 
-      assert Dir['output/*'].size == 1
+      assert_equal(1, Dir['output/*'].size)
       assert File.file?('output/index.html')
-      assert File.read('output/index.html') == 'o hello'
+      assert_equal('o hello', File.read('output/index.html'))
     end
   end
 
@@ -78,11 +78,11 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Core::Compiler.compile(site)
 
-      assert Dir['output/*'].size == 2
+      assert_equal(2, Dir['output/*'].size)
       assert File.file?('output/foo/index.html')
       assert File.file?('output/bar/index.html')
-      assert File.read('output/foo/index.html') == 'o hai'
-      assert File.read('output/bar/index.html') == 'o bai'
+      assert_equal('o hai', File.read('output/foo/index.html'))
+      assert_equal('o bai', File.read('output/bar/index.html'))
     end
   end
 
@@ -94,11 +94,11 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Core::Compiler.compile(site)
 
-      assert Dir['output/*'].size == 2
+      assert_equal(2, Dir['output/*'].size)
       assert File.file?('output/foo/index.html')
       assert File.file?('output/bar/index.html')
-      assert File.read('output/foo/index.html') == 'manatee!!!'
-      assert File.read('output/bar/index.html') == 'manatee'
+      assert_equal('manatee!!!', File.read('output/foo/index.html'))
+      assert_equal('manatee', File.read('output/bar/index.html'))
     end
   end
 
