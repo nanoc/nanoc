@@ -663,13 +663,6 @@ Style/CombinableLoops:
   Exclude:
     - 'nanoc-core/lib/nanoc/core/item_rep_router.rb'
 
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Style/NegatedIfElseCondition:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/identifier.rb'
-    - 'nanoc-core/lib/nanoc/core/outdatedness_checker.rb'
-
 # Offense count: 7
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: Methods.

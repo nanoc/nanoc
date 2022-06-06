@@ -80,15 +80,15 @@ module Nanoc
         # contract C::ArrayOf[Class], C_OBJ_MAYBE_REP, Nanoc::Core::OutdatednessStatus => C::Maybe[Nanoc::Core::OutdatednessStatus]
         def apply_rules(rules, obj, status = Nanoc::Core::OutdatednessStatus.new)
           rules.inject(status) do |acc, rule|
-            if !acc.useful_to_apply?(rule)
-              acc
-            else
+            if acc.useful_to_apply?(rule)
               reason = rule.instance.call(obj, @outdatedness_checker)
               if reason
                 acc.update(reason)
               else
                 acc
               end
+            else
+              acc
             end
           end
         end
