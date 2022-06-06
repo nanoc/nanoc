@@ -104,13 +104,6 @@ Lint/UnreachableLoop:
 
 # Offense count: 8
 # This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertEmpty:
-  Exclude:
-    - 'nanoc/test/base/test_compiler.rb'
-    - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
-
-# Offense count: 8
-# This cop supports safe autocorrection (--autocorrect).
 Minitest/AssertEqual:
   Exclude:
     - 'nanoc/test/base/test_compiler.rb'
