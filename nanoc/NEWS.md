@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.12.7 (2022-06-06)
+
+Fixes:
+
+- Dropped support for incompatible Psych versions (#1577, #1583)
+
+Enhancements:
+
+- Replaced UglifyJS (unmaintained) with Terser (#1578, #1579)
+- Dropped support for Ruby 2.6 (EOL) (#1580)
+
 ## 4.12.6 (2022-05-28)
 
 Fixes:
