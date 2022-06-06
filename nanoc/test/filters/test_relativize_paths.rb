@@ -825,7 +825,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
       # Test
       actual_content = filter.setup_and_run(raw_content.freeze, type: :html)
-      assert actual_content.include? %(<script src="../../js/lib/html5shiv.js">)
+      assert_includes actual_content, %(<script src="../../js/lib/html5shiv.js">)
     end
   end
 
