@@ -84,11 +84,9 @@ module Nanoc
             outdatedness_store: @outdatedness_store,
           )
 
-          notify_phrase = Nanoc::Core::CompilationPhases::Notify.new(
+          Nanoc::Core::CompilationPhases::Notify.new(
             wrapped: mark_done_phase,
           )
-
-          notify_phrase
         end
       end
     end

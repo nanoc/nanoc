@@ -696,12 +696,6 @@ Style/RedundantArgument:
     - 'nanoc/spec/nanoc/core/checksummer_spec.rb'
     - 'nanoc/spec/nanoc/helpers/capturing_spec.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantAssignment:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/compilation_stages/compile_reps.rb'
-
 # Offense count: 3
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: SafeForConstants.
