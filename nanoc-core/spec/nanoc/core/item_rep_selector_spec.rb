@@ -75,11 +75,9 @@ describe Nanoc::Core::ItemRepSelector do
     context 'wrapped error' do
       subject do
         selector.each do |rep|
-          begin
-            raise 'heh'
-          rescue => e
-            raise Nanoc::Core::Errors::CompilationError.new(e, rep)
-          end
+          raise 'heh'
+        rescue => e
+          raise Nanoc::Core::Errors::CompilationError.new(e, rep)
         end
       end
 

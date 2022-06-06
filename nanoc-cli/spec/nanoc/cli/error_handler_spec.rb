@@ -8,11 +8,9 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
 
     context 'LoadError of known gem' do
       let(:error) do
-        begin
-          raise LoadError, 'cannot load such file -- nokogiri'
-        rescue LoadError => e
-          return e
-        end
+        raise LoadError, 'cannot load such file -- nokogiri'
+      rescue LoadError => e
+        return e
       end
 
       it { is_expected.to be(true) }
@@ -20,11 +18,9 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
 
     context 'LoadError of unknown gem' do
       let(:error) do
-        begin
-          raise LoadError, 'cannot load such file -- whatever'
-        rescue LoadError => e
-          return e
-        end
+        raise LoadError, 'cannot load such file -- whatever'
+      rescue LoadError => e
+        return e
       end
 
       it { is_expected.to be(false) }
@@ -32,11 +28,9 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
 
     context 'random error' do
       let(:error) do
-        begin
-          raise 'stuff'
-        rescue => e
-          return e
-        end
+        raise 'stuff'
+      rescue => e
+        return e
       end
 
       it { is_expected.to be(false) }
@@ -44,11 +38,9 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
 
     context 'Errno::EADDRINUSE' do
       let(:error) do
-        begin
-          raise Errno::EADDRINUSE
-        rescue => e
-          return e
-        end
+        raise Errno::EADDRINUSE
+      rescue => e
+        return e
       end
 
       it { is_expected.to be(true) }
@@ -56,11 +48,9 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
 
     context 'TrivialError' do
       let(:error) do
-        begin
-          raise Nanoc::Core::TrivialError, 'oh just a tiny thing'
-        rescue => e
-          return e
-        end
+        raise Nanoc::Core::TrivialError, 'oh just a tiny thing'
+      rescue => e
+        return e
       end
 
       it { is_expected.to be(true) }
@@ -71,11 +61,9 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
     subject { error_handler.handle_error(error, exit_on_error: exit_on_error) }
 
     let(:error) do
-      begin
-        raise 'Bewm'
-      rescue => e
-        return e
-      end
+      raise 'Bewm'
+    rescue => e
+      return e
     end
 
     let(:exit_on_error) { false }
@@ -101,11 +89,9 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
     describe 'printing behavior' do
       context 'trivial error with no resolution' do
         let(:error) do
-          begin
-            raise Nanoc::Core::TrivialError, 'asdf'
-          rescue => e
-            return e
-          end
+          raise Nanoc::Core::TrivialError, 'asdf'
+        rescue => e
+          return e
         end
 
         it 'prints summary' do
@@ -115,11 +101,9 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
 
       context 'LoadError' do
         let(:error) do
-          begin
-            raise LoadError, 'cannot load such file -- nokogiri'
-          rescue LoadError => e
-            return e
-          end
+          raise LoadError, 'cannot load such file -- nokogiri'
+        rescue LoadError => e
+          return e
         end
 
         it 'prints summary' do
@@ -144,11 +128,9 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
     subject { error_handler.send(:write_error_message, $stdout, error, verbose: true) }
 
     let(:error) do
-      begin
-        Nanoc::Core::Configuration.new(dir: '/oink', hash: { enable_output_diff: 'yeah' })
-      rescue => e
-        return e
-      end
+      Nanoc::Core::Configuration.new(dir: '/oink', hash: { enable_output_diff: 'yeah' })
+    rescue => e
+      return e
     end
 
     example do

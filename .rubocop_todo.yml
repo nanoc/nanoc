@@ -702,18 +702,6 @@ Style/RedundantAssignment:
   Exclude:
     - 'nanoc-core/lib/nanoc/core/compilation_stages/compile_reps.rb'
 
-# Offense count: 21
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantBegin:
-  Exclude:
-    - 'common/spec/spec_helper_foot.rb'
-    - 'common/spec/spec_helper_foot_core.rb'
-    - 'nanoc-cli/lib/nanoc/cli/compile_listeners/diff_generator.rb'
-    - 'nanoc-cli/spec/nanoc/cli/error_handler_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_phases/resume_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/item_rep_selector_spec.rb'
-    - 'nanoc/test/filters/colorize_syntax/test_common.rb'
-
 # Offense count: 3
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: SafeForConstants.

@@ -59,16 +59,14 @@ describe Nanoc::Core::CompilationPhases::Resume do
       end
 
       it 'posts correct notifications' do
-        begin
-          msgs = []
-          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+        msgs = []
+        Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
 
-          subject rescue nil
-          Nanoc::Core::NotificationCenter.sync
-          expect(msgs).to eq([:compilation_suspended])
-        ensure
-          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
-        end
+        subject rescue nil
+        Nanoc::Core::NotificationCenter.sync
+        expect(msgs).to eq([:compilation_suspended])
+      ensure
+        Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
       end
 
       context 'wrapped in Notify' do
@@ -77,20 +75,18 @@ describe Nanoc::Core::CompilationPhases::Resume do
         end
 
         it 'posts correct notifications' do
-          begin
-            msgs = []
-            Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
-            Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-            Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
+          msgs = []
+          Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
+          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+          Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
 
-            subject rescue nil
-            Nanoc::Core::NotificationCenter.sync
-            expect(msgs).to eq(%i[compilation_started compilation_suspended])
-          ensure
-            Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
-          end
+          subject rescue nil
+          Nanoc::Core::NotificationCenter.sync
+          expect(msgs).to eq(%i[compilation_started compilation_suspended])
+        ensure
+          Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
+          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
+          Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
         end
       end
     end
@@ -110,16 +106,14 @@ describe Nanoc::Core::CompilationPhases::Resume do
       end
 
       it 'posts correct notifications' do
-        begin
-          msgs = []
-          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+        msgs = []
+        Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
 
-          subject rescue nil
-          Nanoc::Core::NotificationCenter.sync
-          expect(msgs).to eq(%i[compilation_suspended compilation_suspended])
-        ensure
-          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
-        end
+        subject rescue nil
+        Nanoc::Core::NotificationCenter.sync
+        expect(msgs).to eq(%i[compilation_suspended compilation_suspended])
+      ensure
+        Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
       end
 
       context 'wrapped in Notify' do
@@ -128,20 +122,18 @@ describe Nanoc::Core::CompilationPhases::Resume do
         end
 
         it 'posts correct notifications' do
-          begin
-            msgs = []
-            Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
-            Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-            Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
+          msgs = []
+          Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
+          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+          Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
 
-            subject rescue nil
-            Nanoc::Core::NotificationCenter.sync
-            expect(msgs).to eq(%i[compilation_started compilation_suspended compilation_started compilation_suspended])
-          ensure
-            Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
-          end
+          subject rescue nil
+          Nanoc::Core::NotificationCenter.sync
+          expect(msgs).to eq(%i[compilation_started compilation_suspended compilation_started compilation_suspended])
+        ensure
+          Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
+          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
+          Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
         end
       end
     end
@@ -162,16 +154,14 @@ describe Nanoc::Core::CompilationPhases::Resume do
       end
 
       it 'posts correct notifications' do
-        begin
-          msgs = []
-          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+        msgs = []
+        Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
 
-          subject
-          Nanoc::Core::NotificationCenter.sync
-          expect(msgs).to eq(%i[compilation_suspended compilation_suspended])
-        ensure
-          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
-        end
+        subject
+        Nanoc::Core::NotificationCenter.sync
+        expect(msgs).to eq(%i[compilation_suspended compilation_suspended])
+      ensure
+        Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
       end
 
       context 'wrapped in Notify' do
@@ -180,20 +170,18 @@ describe Nanoc::Core::CompilationPhases::Resume do
         end
 
         it 'posts correct notifications' do
-          begin
-            msgs = []
-            Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
-            Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
-            Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
+          msgs = []
+          Nanoc::Core::NotificationCenter.on(:compilation_started, self) { msgs << :compilation_started }
+          Nanoc::Core::NotificationCenter.on(:compilation_suspended, self) { msgs << :compilation_suspended }
+          Nanoc::Core::NotificationCenter.on(:compilation_ended, self) { msgs << :compilation_ended }
 
-            subject
-            Nanoc::Core::NotificationCenter.sync
-            expect(msgs).to eq(%i[compilation_started compilation_suspended compilation_started compilation_suspended compilation_started compilation_ended])
-          ensure
-            Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
-            Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
-          end
+          subject
+          Nanoc::Core::NotificationCenter.sync
+          expect(msgs).to eq(%i[compilation_started compilation_suspended compilation_started compilation_suspended compilation_started compilation_ended])
+        ensure
+          Nanoc::Core::NotificationCenter.remove(:compilation_ended, self)
+          Nanoc::Core::NotificationCenter.remove(:compilation_suspended, self)
+          Nanoc::Core::NotificationCenter.remove(:compilation_started, self)
         end
       end
     end

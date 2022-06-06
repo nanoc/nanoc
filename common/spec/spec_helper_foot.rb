@@ -22,11 +22,9 @@ RSpec::Matchers.define :raise_wrapped_error do |expected|
   include RSpec::Matchers::Composable
 
   match do |actual|
-    begin
-      actual.call
-    rescue Nanoc::Core::Errors::CompilationError => e
-      values_match?(expected, e.unwrap)
-    end
+    actual.call
+  rescue Nanoc::Core::Errors::CompilationError => e
+    values_match?(expected, e.unwrap)
   end
 
   description do
