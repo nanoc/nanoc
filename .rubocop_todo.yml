@@ -516,37 +516,6 @@ RSpec/VerifiedDoubles:
     - 'nanoc/spec/nanoc/orig_cli/commands/show_rules_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
 
-# Offense count: 84
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: separated, grouped
-Style/AccessorGrouping:
-  Exclude:
-    - 'nanoc-checking/lib/nanoc/checking/checks/external_links.rb'
-    - 'nanoc-checking/lib/nanoc/checking/issue.rb'
-    - 'nanoc-cli/lib/nanoc/cli/compile_listeners/timing_recorder.rb'
-    - 'nanoc-core/lib/nanoc/core/action_sequence.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_context.rb'
-    - 'nanoc-core/lib/nanoc/core/dependency.rb'
-    - 'nanoc-core/lib/nanoc/core/dependency_props.rb'
-    - 'nanoc-core/lib/nanoc/core/dependency_store.rb'
-    - 'nanoc-core/lib/nanoc/core/in_memory_data_source.rb'
-    - 'nanoc-core/lib/nanoc/core/item_rep.rb'
-    - 'nanoc-core/lib/nanoc/core/outdatedness_checker.rb'
-    - 'nanoc-core/lib/nanoc/core/outdatedness_status.rb'
-    - 'nanoc-core/lib/nanoc/core/processing_actions/filter.rb'
-    - 'nanoc-core/lib/nanoc/core/processing_actions/layout.rb'
-    - 'nanoc-core/lib/nanoc/core/processing_actions/snapshot.rb'
-    - 'nanoc-core/lib/nanoc/core/site.rb'
-    - 'nanoc-core/lib/nanoc/core/snapshot_def.rb'
-    - 'nanoc-core/lib/nanoc/core/view_context_for_compilation.rb'
-    - 'nanoc-core/lib/nanoc/core/view_context_for_pre_compilation.rb'
-    - 'nanoc-core/lib/nanoc/core/view_context_for_shell.rb'
-    - 'nanoc/lib/nanoc/data_sources/filesystem.rb'
-    - 'nanoc/lib/nanoc/data_sources/filesystem/parser.rb'
-    - 'nanoc/lib/nanoc/helpers/blogging.rb'
-    - 'nanoc/lib/nanoc/rule_dsl/rule.rb'
-
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/CaseLikeIf:

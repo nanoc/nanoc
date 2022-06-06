@@ -63,6 +63,10 @@ Lint/RaiseException:
 Lint/StructNewOverride:
   Enabled: true
 
+Style/AccessorGrouping:
+  Enabled: true
+  EnforcedStyle: separated
+
 Style/HashEachMethods:
   Enabled: true
 
@@ -150,9 +154,6 @@ Lint/TopLevelReturnWithArgument:
   Enabled: true
 
 Lint/UnreachableLoop:
-  Enabled: true
-
-Style/AccessorGrouping:
   Enabled: true
 
 Style/ArrayCoercion:
