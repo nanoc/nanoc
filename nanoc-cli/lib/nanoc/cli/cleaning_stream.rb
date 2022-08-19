@@ -139,11 +139,11 @@ module Nanoc
       end
 
       # @see ARGF.set_encoding
-      # rubocop:disable Naming/AccessorMethodName
+      # rubocop:disable Naming/AccessorMethodName, Lint/RedundantCopDisableDirective
       def set_encoding(*args)
         @stream.set_encoding(*args)
       end
-      # rubocop:enable Naming/AccessorMethodName
+      # rubocop:enable Naming/AccessorMethodName, Lint/RedundantCopDisableDirective
 
       protected
 
