@@ -26,7 +26,7 @@ group :devel do
   gem 'rspec'
   gem 'rspec-its', '~> 1.2'
   gem 'rspec-mocks'
-  gem 'rubocop'
+  gem 'rubocop', '< 1.31'
   gem 'rubocop-minitest'
   gem 'rubocop-rake'
   gem 'rubocop-rspec'
