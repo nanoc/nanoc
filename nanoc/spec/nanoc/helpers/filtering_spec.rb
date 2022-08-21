@@ -58,10 +58,12 @@ describe Nanoc::Helpers::Filtering, helper: true do
       subject { ::Haml::Engine.new(content).render(helper.get_binding) }
 
       let(:content) do
-        "%p Foo.\n" \
-        "- filter(:erb) do\n" \
-        "  <%= 'abc' + 'xyz' %>\n" \
-        "%p Bar.\n"
+        <<~CONTENT
+          %p Foo.
+          - filter(:erb) do
+            <%= 'abc' + 'xyz' %>
+          %p Bar.
+        CONTENT
       end
 
       before do
