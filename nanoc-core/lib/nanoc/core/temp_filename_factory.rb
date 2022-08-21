@@ -42,9 +42,8 @@ module Nanoc
       # @return [void]
       def cleanup(prefix)
         path = File.join(@root_dir, prefix)
-        if File.exist?(path)
-          FileUtils.rm_rf(path)
-        end
+
+        FileUtils.rm_rf(path)
 
         @counts.delete(prefix)
 
