@@ -21,7 +21,7 @@ module Nanoc
             filenames = hrefs_with_filenames[res.href]
             filenames.each do |filename|
               add_issue(
-                "broken reference to #{res.href}: #{res.explanation}",
+                "broken reference to <#{res.href}>: #{res.explanation}",
                 subject: filename,
               )
             end

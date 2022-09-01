@@ -116,7 +116,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
       check.run
       expect(check.issues.size).to eq(1)
       expect(check.issues.first.description)
-        .to eq('broken reference to http://example.com/x: redirection without a target location')
+        .to eq('broken reference to <http://example.com/x>: redirection without a target location')
     end
   end
 
@@ -137,7 +137,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
       check.run
       expect(check.issues.size).to eq(1)
       expect(check.issues.first.description)
-        .to eq('broken reference to mailto:lol: invalid URI')
+        .to eq('broken reference to <mailto:lol>: invalid URI')
     end
   end
 
@@ -166,7 +166,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
 
       expect(check.issues.size).to eq(1)
       expect(check.issues.first.description)
-        .to match(%r{broken reference to http://localhost:1234/ink_luded: Failed to open TCP connection})
+        .to match(%r{broken reference to <http://localhost:1234/ink_luded>: Failed to open TCP connection})
     end
   end
 
@@ -200,7 +200,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
 
       expect(check.issues.size).to eq(1)
       expect(check.issues.first.description)
-        .to match(%r{broken reference to http://example.com/ink_luded: 404})
+        .to match(%r{broken reference to <http://example.com/ink_luded>: 404})
     end
   end
 end
