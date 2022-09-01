@@ -25,7 +25,7 @@ module Nanoc
               next if valid?(href, filename)
 
               add_issue(
-                "broken reference to #{href}",
+                "broken reference to <#{href}>",
                 subject: filename,
               )
             end
