@@ -29,6 +29,7 @@ module Nanoc::Helpers
           .gsub('<', '&lt;')
           .gsub('>', '&gt;')
           .gsub('"', '&quot;')
+          .gsub("'", '&#39;')
       else
         raise 'The #html_escape or #h function needs either a ' \
           'string or a block to HTML-escape, but neither a string nor a block was given'
