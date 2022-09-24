@@ -10,7 +10,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
 
   def test_all_files_in_follows_symlinks_to_dirs
     # Write sample files
-    (0..15).each do |i|
+    16.times do |i|
       FileUtils.mkdir_p("dir#{i}")
       File.write("dir#{i}/foo.md", 'o hai')
     end
@@ -40,7 +40,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
 
   def test_all_files_in_follows_symlinks_to_dirs_too_many
     # Write sample files
-    (0..15).each do |i|
+    16.times do |i|
       FileUtils.mkdir_p("dir#{i}")
       File.write("dir#{i}/foo.md", 'o hai')
     end
