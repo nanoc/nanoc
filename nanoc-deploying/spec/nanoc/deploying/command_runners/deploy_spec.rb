@@ -38,11 +38,13 @@ describe Nanoc::Deploying::CommandRunners::Deploy, site: true, stdio: true do
         before do
           File.write(
             'Checks',
-            "check :donkey do\n" \
-            "  add_issue('things are broken', subject: 'success.txt')\n" \
-            "end\n" \
-            "\n" \
-            "deploy_check :donkey\n",
+            <<~CHECKS,
+              check :donkey do
+                add_issue('things are broken', subject: 'success.txt')
+              end
+
+              deploy_check :donkey
+            CHECKS
           )
         end
 
@@ -183,11 +185,13 @@ describe Nanoc::Deploying::CommandRunners::Deploy, site: true, stdio: true do
           before do
             File.write(
               'Rules',
-              "preprocess do\n" \
-              "  @config[:deploy] = {\n" \
-              "    default: { dst: 'remote' },\n" \
-              "  }\n" \
-              "end\n\n" + File.read('Rules'),
+              <<~RULES + File.read('Rules'),
+                preprocess do
+                  @config[:deploy] = {
+                    default: { dst: 'remote' },
+                  }
+                end
+              RULES
             )
           end
 

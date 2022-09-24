@@ -503,6 +503,36 @@ RSpec/ChangeByZero: # new in 2.11.0
 RSpec/VerifiedDoubleReference: # new in 2.10.0
   Enabled: true
 
+Layout/LineContinuationLeadingSpace: # new in 1.31
+  Enabled: true
+
+Layout/LineContinuationSpacing: # new in 1.31
+  Enabled: true
+
+Lint/ConstantOverwrittenInRescue: # new in 1.31
+  Enabled: true
+
+Lint/NonAtomicFileOperation: # new in 1.31
+  Enabled: true
+
+Lint/RequireRangeParentheses: # new in 1.32
+  Enabled: true
+
+Style/EmptyHeredoc: # new in 1.32
+  Enabled: true
+
+Style/MagicCommentFormat: # new in 1.35
+  Enabled: true
+
+Minitest/AssertRaisesCompoundBody: # new in 0.21
+  Enabled: true
+
+RSpec/Capybara/SpecificMatcher: # new in 2.12
+  Enabled: true
+
+RSpec/Rails/HaveHttpStatus: # new in 2.12
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
