@@ -4,10 +4,28 @@ describe Nanoc::Helpers::HTMLEscape, helper: true do
   describe '#html_escape' do
     subject { helper.html_escape(string) }
 
-    context 'given strings to escape' do
-      let(:string) { '< > & "' }
+    context 'when given angular brackets' do
+      let(:string) { '<br/>' }
 
-      it { is_expected.to eql('&lt; &gt; &amp; &quot;') }
+      it { is_expected.to eql('&lt;br/&gt;') }
+    end
+
+    context 'when given ampersand' do
+      let(:string) { 'red & blue' }
+
+      it { is_expected.to eql('red &amp; blue') }
+    end
+
+    context 'when given double quotes' do
+      let(:string) { 'projection="isometric"' }
+
+      it { is_expected.to eql('projection=&quot;isometric&quot;') }
+    end
+
+    context 'when given single quotes' do
+      let(:string) { "projection='perspective'" }
+
+      it { is_expected.to eql('projection=&#39;perspective&#39;') }
     end
 
     context 'given a block' do
