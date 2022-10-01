@@ -25,6 +25,8 @@ module Nanoc::CLI::CompileListeners
 
     # @see Listener#start
     def start
+      Nanoc::Core::Instrumentor.enable
+
       on(:stage_ran) do |duration, klass|
         @stages_summary.observe(duration, name: klass.to_s.sub(/.*::/, ''))
       end
@@ -65,6 +67,8 @@ module Nanoc::CLI::CompileListeners
 
     # @see Listener#stop
     def stop
+      Nanoc::Core::Instrumentor.disable
+
       print_profiling_feedback
     end
 
