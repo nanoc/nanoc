@@ -35,6 +35,7 @@ Naming/MethodParameterName:
   AllowedNames:
     - "to" # destination
     - "e" # element
+    - "fn" # filename
     - "id" # identifier
     - "io" # IO instance
     - "y" # enumerator yielder
