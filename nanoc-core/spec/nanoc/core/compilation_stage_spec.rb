@@ -9,6 +9,10 @@ describe Nanoc::Core::CompilationStage do
 
   after { Timecop.return }
 
+  around do |ex|
+    Nanoc::Core::Instrumentor.enable { ex.run }
+  end
+
   describe '#call' do
     subject { stage.call }
 
