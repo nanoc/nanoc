@@ -123,7 +123,7 @@ describe Nanoc::Core::OutdatednessRules do
       end
 
       context 'path for last snapshot' do
-        let(:path) { Dir.getwd + '/foo.txt' }
+        let(:path) { Dir.getwd + '/output/foo.txt' }
 
         before { item_rep.raw_paths = { last: [path] } }
 
@@ -132,14 +132,39 @@ describe Nanoc::Core::OutdatednessRules do
         end
 
         context 'written' do
-          before { File.write(path, 'hello') }
+          before do
+            FileUtils.mkdir_p(File.dirname(path))
+            File.write(path, 'hello')
+          end
 
           it { is_expected.to be_nil }
         end
       end
 
       context 'path for other snapshot' do
-        let(:path) { Dir.getwd + '/foo.txt' }
+        let(:path) { Dir.getwd + '/output/foo.txt' }
+
+        before { item_rep.raw_paths = { donkey: [path] } }
+
+        context 'not written' do
+          it { is_expected.not_to be_nil }
+        end
+
+        context 'written' do
+          before do
+            FileUtils.mkdir_p(File.dirname(path))
+            File.write(path, 'hello')
+          end
+
+          it { is_expected.to be_nil }
+        end
+      end
+
+      context 'path inside output dir not inside current directory' do
+        let(:path) { output_dir + '/foo.txt' }
+
+        let(:config) { super().merge(output_dir: output_dir) }
+        let(:output_dir) { Dir.mktmpdir('nanoc-outdatendess-rules-spec') }
 
         before { item_rep.raw_paths = { donkey: [path] } }
 
