@@ -81,7 +81,7 @@ module Nanoc
         return unless File.file?(filename)
 
         begin
-          pstore.transaction do
+          pstore.transaction(true) do
             return if pstore[:version] != version
 
             self.data = pstore[:data]
