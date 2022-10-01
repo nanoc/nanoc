@@ -241,7 +241,7 @@ describe Nanoc::DataSources::Filesystem::Parser do
           let(:content) { "---\ncreated_at: 2022-01-01\n---" }
 
           it 'has attributes' do
-            if Psych::VERSION <= '4.0.5' && Timecop::VERSION <= '0.9.5'
+            if Psych::VERSION <= '4.0.6' && Timecop::VERSION <= '0.9.5'
               skip <<~MESSAGE.lines.map(&:chomp).join(' ')
                 Psych 4.0.5 introduces an incompatibility with Timecop 0.9.5,
                 which causes dates not to be parsed correctly (see
