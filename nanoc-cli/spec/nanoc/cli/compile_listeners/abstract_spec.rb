@@ -10,7 +10,7 @@ describe Nanoc::CLI::CompileListeners::Abstract do
       expect { subject.start }.to raise_error(NotImplementedError)
     end
 
-    it 'stops silently' do
+    it 'stops silently' do # rubocop:disable RSpec/NoExpectationExample
       subject.stop
     end
   end

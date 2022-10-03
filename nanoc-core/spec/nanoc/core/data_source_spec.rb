@@ -5,11 +5,11 @@ describe Nanoc::Core::DataSource, stdio: true do
     described_class.new({}, nil, nil, {})
   end
 
-  it 'has an empty #up implementation' do
+  it 'has an empty #up implementation' do # rubocop:disable RSpec/NoExpectationExample
     data_source.up
   end
 
-  it 'has an empty #down implementation' do
+  it 'has an empty #down implementation' do # rubocop:disable RSpec/NoExpectationExample
     data_source.down
   end
 

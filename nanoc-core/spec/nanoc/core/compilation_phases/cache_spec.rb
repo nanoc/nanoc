@@ -61,7 +61,7 @@ describe Nanoc::Core::CompilationPhases::Cache do
           .to(true)
       end
 
-      it 'sends no other notifications' do
+      it 'sends no other notifications' do # rubocop:disable RSpec/NoExpectationExample
         subject
       end
 

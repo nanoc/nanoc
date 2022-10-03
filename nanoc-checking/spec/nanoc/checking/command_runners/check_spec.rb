@@ -10,7 +10,7 @@ describe Nanoc::Checking::CommandRunners::Check, site: true, stdio: true do
       subject { Nanoc::CLI.run(['check']) }
 
       context 'no issues for any checks' do
-        it 'succeeds' do
+        it 'succeeds' do # rubocop:disable RSpec/NoExpectationExample
           subject
         end
       end
@@ -33,7 +33,7 @@ describe Nanoc::Checking::CommandRunners::Check, site: true, stdio: true do
           File.write('Checks', '')
         end
 
-        it 'succeeds' do
+        it 'succeeds' do # rubocop:disable RSpec/NoExpectationExample
           subject
         end
       end

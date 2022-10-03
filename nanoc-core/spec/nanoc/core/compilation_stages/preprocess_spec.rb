@@ -56,7 +56,7 @@ describe Nanoc::Core::CompilationStages::Preprocess do
           .to(true)
       end
 
-      it 'freezes the site' do
+      it 'freezes the site' do # rubocop:disable RSpec/NoExpectationExample
         subject
       end
     end

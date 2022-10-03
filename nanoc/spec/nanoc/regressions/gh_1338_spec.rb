@@ -19,7 +19,7 @@ describe 'GH-1338', site: true, stdio: true do
     File.write('content/foo.txt', 'stuff')
   end
 
-  example do
+  example do # rubocop:disable RSpec/NoExpectationExample
     Nanoc::CLI.run([])
   end
 end

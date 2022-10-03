@@ -10,7 +10,7 @@ describe 'GH-833', site: true, stdio: true do
 EOS
   end
 
-  it 'runs show-data without crashing' do
+  it 'runs show-data without crashing' do # rubocop:disable RSpec/NoExpectationExample
     Nanoc::CLI.run(['show-data'])
   end
 end

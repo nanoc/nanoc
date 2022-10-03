@@ -11,7 +11,7 @@ describe 'GH-841', site: true, stdio: true do
 EOS
   end
 
-  it 'preprocesses before running the check' do
+  it 'preprocesses before running the check' do # rubocop:disable RSpec/NoExpectationExample
     Nanoc::CLI.run(%w[check stale])
   end
 end

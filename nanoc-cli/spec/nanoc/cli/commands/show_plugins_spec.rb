@@ -2,7 +2,7 @@
 
 describe Nanoc::CLI::Commands::ShowPlugins, site: true, stdio: true do
   describe '#run' do
-    it 'can be invoked' do
+    it 'can be invoked' do # rubocop:disable RSpec/NoExpectationExample
       Nanoc::CLI.run(['show-plugins'])
     end
 

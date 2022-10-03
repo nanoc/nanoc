@@ -16,7 +16,7 @@ describe 'GH-1185', site: true, stdio: true do
     EOS
   end
 
-  it 'does not crash' do
+  it 'does not crash' do # rubocop:disable RSpec/NoExpectationExample
     Nanoc::CLI.run(%w[compile])
   end
 end

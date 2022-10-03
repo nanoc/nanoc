@@ -76,7 +76,7 @@ describe Nanoc::Core::CompilationPhases::Abstract do
     context 'without wrapped' do
       let(:wrapped) { nil }
 
-      it 'does not start wrapped' do
+      it 'does not start wrapped' do # rubocop:disable RSpec/NoExpectationExample
         subject
       end
     end
@@ -97,7 +97,7 @@ describe Nanoc::Core::CompilationPhases::Abstract do
     context 'without wrapped' do
       let(:wrapped) { nil }
 
-      it 'does not stop wrapped' do
+      it 'does not stop wrapped' do # rubocop:disable RSpec/NoExpectationExample
         subject
       end
     end

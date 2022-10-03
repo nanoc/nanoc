@@ -15,7 +15,7 @@ describe 'GH-1130', site: true, stdio: true do
     EOS
   end
 
-  it 'does not raise fiber error' do
+  it 'does not raise fiber error' do # rubocop:disable RSpec/NoExpectationExample
     Nanoc::CLI.run(%w[check wat])
   end
 end

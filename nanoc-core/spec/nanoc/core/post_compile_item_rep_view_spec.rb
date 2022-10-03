@@ -93,7 +93,7 @@ describe Nanoc::Core::PostCompileItemRepView do
     context 'no args' do
       subject { view.raw_path }
 
-      it 'does not raise' do
+      it 'does not raise' do # rubocop:disable RSpec/NoExpectationExample
         subject
       end
 
@@ -121,7 +121,7 @@ describe Nanoc::Core::PostCompileItemRepView do
     context 'snapshot arg' do
       subject { view.raw_path(snapshot: :special) }
 
-      it 'does not raise' do
+      it 'does not raise' do # rubocop:disable RSpec/NoExpectationExample
         subject
       end
 

@@ -50,7 +50,7 @@ describe Nanoc::CLI::CleaningStream do
     expect(s.called_methods).to eq([:tty?])
   end
 
-  it 'works with Logger' do
+  it 'works with Logger' do # rubocop:disable RSpec/NoExpectationExample
     require 'logger'
     stream = StringIO.new
     cleaning_stream = described_class.new(stream)
@@ -59,7 +59,7 @@ describe Nanoc::CLI::CleaningStream do
     logger.warn('Something could start going wrong!')
   end
 
-  it 'handles broken pipes' do
+  it 'handles broken pipes' do # rubocop:disable RSpec/NoExpectationExample
     stream = StringIO.new
     def stream.write(_str)
       raise Errno::EPIPE.new

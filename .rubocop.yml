@@ -534,6 +534,18 @@ RSpec/Capybara/SpecificMatcher: # new in 2.12
 RSpec/Rails/HaveHttpStatus: # new in 2.12
   Enabled: true
 
+Minitest/AssertRaisesWithRegexpArgument: # new in 0.22
+  Enabled: true
+
+RSpec/ClassCheck: # new in 2.13
+  Enabled: true
+
+RSpec/NoExpectationExample: # new in 2.13
+  Enabled: true
+
+RSpec/Capybara/SpecificFinders: # new in 2.13
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.

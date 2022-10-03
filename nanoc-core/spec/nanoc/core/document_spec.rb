@@ -211,7 +211,7 @@ shared_examples 'a document' do
 
     let(:document) { described_class.new('kontent', { at: 'ribut' }, '/donkey.md') }
 
-    it 'does not mutate the original' do
+    it 'does not mutate the original' do # rubocop:disable RSpec/NoExpectationExample
       document.freeze
       subject
     end

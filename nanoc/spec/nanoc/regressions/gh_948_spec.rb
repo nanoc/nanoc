@@ -12,7 +12,7 @@ describe 'GH-948', site: true, stdio: true do
     FileUtils.rm_rf('output')
   end
 
-  it 'does not crash when output dir is not present' do
+  it 'does not crash when output dir is not present' do # rubocop:disable RSpec/NoExpectationExample
     Nanoc::CLI.run(%w[compile])
   end
 end

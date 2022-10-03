@@ -18,7 +18,7 @@ describe 'GH-1342', site: true, stdio: true do
     EOS
   end
 
-  example do
+  example do # rubocop:disable RSpec/NoExpectationExample
     Nanoc::CLI.run([])
     Nanoc::CLI.run([])
   end
