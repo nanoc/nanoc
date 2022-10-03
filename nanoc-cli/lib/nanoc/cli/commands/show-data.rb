@@ -105,31 +105,60 @@ module Nanoc::CLI::Commands
               raise Nanoc::Core::Errors::InternalInconsistency, "unexpected pred type #{pred.inspect}"
             end
 
-          pred_identifier =
+          details =
             case pred
             when Nanoc::Core::Document
-              pred.identifier.to_s
+              [pred.identifier.to_s]
             when Nanoc::Core::Configuration, nil
-              nil
+              []
             when Nanoc::Core::IdentifiableCollection
-              case dep.props.raw_content
-              when true
-                'matching any'
-              else
-                "matching any of #{dep.props.raw_content.sort.join(', ')}"
-              end
+              describe_identifiable_collection_dependency(dep)
             else
               raise Nanoc::Core::Errors::InternalInconsistency, "unexpected pred type #{pred.inspect}"
             end
 
           if pred
-            puts "  [ #{format '%7s', type} ] (#{dep.props}) #{pred_identifier}"
+            puts "  [ #{format '%7s', type} ] (#{dep.props})"
+            details.each do |d|
+              puts "    • #{d}"
+            end
           else
             puts '  ( removed )'
           end
         end
         puts '  (nothing)' if dependencies.empty?
       end
+    end
+
+    def describe_identifiable_collection_dependency(dep)
+      outcome = []
+
+      case dep.props.raw_content
+      when true
+        outcome << 'matching any identifier'
+      when Set
+        dep.props.raw_content.sort.each do |x|
+          outcome << "matching identifier #{x}"
+        end
+      end
+
+      if dep.props.attributes
+        case dep.props.attributes
+        when true
+          outcome << 'matching any attribute'
+        when Set
+          dep.props.attributes.each do |elem|
+            outcome << "matching attribute #{elem.inspect}"
+          end
+        else
+          raise(
+            Nanoc::Core::Errors::InternalInconsistency,
+            "unexpected prop attribute #{dep.props.attributes.inspect}",
+          )
+        end
+      end
+
+      outcome
     end
 
     def print_item_rep_paths(items, reps)
