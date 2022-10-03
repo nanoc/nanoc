@@ -12,13 +12,15 @@ module Nanoc
       # TODO: Split raw_content for documents and collections
       C_RAW_CONTENT =
         C::Or[
-          C::IterOf[C::Or[String, Regexp]],
+          C::SetOf[C::Or[String, Regexp]],
+          C::ArrayOf[C::Or[String, Regexp]],
           C::Bool
         ]
 
       C_ATTR =
         C::Or[
-          C::IterOf[Symbol],
+          C::SetOf[Symbol],
+          C::ArrayOf[Symbol],
           C::Bool
         ]
 
@@ -39,7 +41,7 @@ module Nanoc
           case attributes
           when Set
             attributes
-          when Enumerable
+          when Array
             Set.new(attributes)
           else
             attributes
@@ -49,7 +51,7 @@ module Nanoc
           case raw_content
           when Set
             raw_content
-          when Enumerable
+          when Array
             Set.new(raw_content)
           else
             raw_content
@@ -81,7 +83,7 @@ module Nanoc
       contract C::None => C::Bool
       def raw_content?
         case @raw_content
-        when Enumerable
+        when Set
           @raw_content.any?
         else
           @raw_content
@@ -91,7 +93,7 @@ module Nanoc
       contract C::None => C::Bool
       def attributes?
         case @attributes
-        when Enumerable
+        when Set
           @attributes.any?
         else
           @attributes
