@@ -123,7 +123,7 @@ module Nanoc::CLI::Commands
             end
 
           if pred
-            puts "  [ #{format '%6s', type} ] (#{dep.props}) #{pred_identifier}"
+            puts "  [ #{format '%7s', type} ] (#{dep.props}) #{pred_identifier}"
           else
             puts '  ( removed )'
           end

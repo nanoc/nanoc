@@ -65,7 +65,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[ config \] \(racp\) $}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[  config \] \(racp\) $}m).to_stdout
       end
 
       it 'outputs no dependencies for /other.dat' do
@@ -83,7 +83,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   item \] \(racp\) /about.md$}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[    item \] \(racp\) /about.md$}m).to_stdout
       end
 
       it 'outputs no dependencies for /other.dat' do
@@ -97,7 +97,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   item \] \(r___\) /about.md$}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[    item \] \(r___\) /about.md$}m).to_stdout
       end
     end
 
@@ -107,7 +107,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   item \] \(_a__\) /about.md$}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[    item \] \(_a__\) /about.md$}m).to_stdout
       end
     end
 
@@ -117,7 +117,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[ config \] \(_a__\) $}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[  config \] \(_a__\) $}m).to_stdout
       end
     end
 
@@ -127,7 +127,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   item \] \(__c_\) /about.md$}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[    item \] \(__c_\) /about.md$}m).to_stdout
       end
     end
 
@@ -137,7 +137,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   item \] \(___p\) /about.md$}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[    item \] \(___p\) /about.md$}m).to_stdout
       end
     end
 
@@ -147,7 +147,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   item \] \(ra__\) /about.md$}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[    item \] \(ra__\) /about.md$}m).to_stdout
       end
     end
 
@@ -157,7 +157,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[  items \] \(r___\) matching any$}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   items \] \(r___\) matching any$}m).to_stdout
       end
     end
 
@@ -167,7 +167,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[  items \] \(r___\) matching any of /about\.\*$}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   items \] \(r___\) matching any of /about\.\*$}m).to_stdout
       end
     end
 
@@ -178,7 +178,28 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
 
       it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[  items \] \(r___\) matching any of /about\.\*, /giraffe\.\*$}m).to_stdout
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[   items \] \(r___\) matching any of /about\.\*, /giraffe\.\*$}m).to_stdout
+      end
+    end
+
+    context 'dependency onto one specific layout' do
+      before do
+        dependency_store.record_dependency(item_dog, layouts, raw_content: ['/about.*'])
+      end
+
+      it 'outputs dependencies for /dog.md' do
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[ layouts \] \(r___\) matching any of /about\.\*$}m).to_stdout
+      end
+    end
+
+    context 'dependency onto multiple specific layouts' do
+      before do
+        dependency_store.record_dependency(item_dog, layouts, raw_content: ['/about.*'])
+        dependency_store.record_dependency(item_dog, layouts, raw_content: ['/giraffe.*'])
+      end
+
+      it 'outputs dependencies for /dog.md' do
+        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[ layouts \] \(r___\) matching any of /about\.\*, /giraffe\.\*$}m).to_stdout
       end
     end
   end
