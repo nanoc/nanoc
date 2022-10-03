@@ -10,9 +10,27 @@ module Nanoc
       attr_reader :raw_content
 
       # TODO: Split raw_content for documents and collections
-      C_RAW_CONTENT = C::Or[C::ArrayOf[C::Or[String, Regexp]], C::Bool]
-      C_ATTRS = C::Or[C::ArrayOf[Symbol], C::Bool]
-      contract C::KeywordArgs[raw_content: C::Optional[C_RAW_CONTENT], attributes: C::Optional[C_ATTRS], compiled_content: C::Optional[C::Bool], path: C::Optional[C::Bool]] => C::Any
+      C_RAW_CONTENT =
+        C::Or[
+          C::IterOf[C::Or[String, Regexp]],
+          C::Bool
+        ]
+
+      C_ATTR =
+        C::Or[
+          C::IterOf[Symbol],
+          C::Bool
+        ]
+
+      C_ARGS =
+        C::KeywordArgs[
+          raw_content: C::Optional[C_RAW_CONTENT],
+          attributes: C::Optional[C_ATTR],
+          compiled_content: C::Optional[C::Bool],
+          path: C::Optional[C::Bool]
+        ]
+
+      contract C_ARGS => C::Any
       def initialize(raw_content: false, attributes: false, compiled_content: false, path: false)
         @compiled_content = compiled_content
         @path = path

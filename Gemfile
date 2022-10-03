@@ -13,7 +13,7 @@ gemspec path: 'nanoc-spec'
 gemspec path: 'guard-nanoc'
 
 group :devel do
-  gem 'contracts', '~> 0.16'
+  gem 'contracts', '~> 0.17'
   gem 'fuubar'
   gem 'guard-rake'
   gem 'json', '~> 2.1'

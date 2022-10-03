@@ -16,13 +16,13 @@ module Nanoc
 
       C_RAW_CONTENT =
         C::Or[
-          C::ArrayOf[C::Or[String, Regexp]],
+          C::IterOf[C::Or[String, Regexp]],
           C::Bool
         ]
 
       C_ATTR =
         C::Or[
-          C::ArrayOf[Symbol],
+          C::IterOf[Symbol],
           C::Bool
         ]
 
