@@ -116,11 +116,11 @@ module Nanoc
         src_ref = obj2ref(src)
         dst_ref = obj2ref(dst)
 
-        existing_props = Nanoc::Core::DependencyProps.new(**(@graph.props_for(dst_ref, src_ref) || {}))
+        existing_props = @graph.props_for(dst_ref, src_ref)
         new_props = Nanoc::Core::DependencyProps.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
-        props = existing_props.merge(new_props)
+        props = existing_props ? existing_props.merge(new_props) : new_props
 
-        @graph.add_edge(dst_ref, src_ref, props: props.to_h)
+        @graph.add_edge(dst_ref, src_ref, props: props)
       end
 
       def add_vertex_for(obj)
@@ -162,11 +162,12 @@ module Nanoc
         refs.map { |r| ref2obj(r) }
       end
 
+      # TODO: Return not a Hash, but a DependencyProps instead
       def props_for(from, to)
-        props = @graph.props_for(obj2ref(from), obj2ref(to)) || {}
+        props = @graph.props_for(obj2ref(from), obj2ref(to))
 
-        if props.values.any? { |v| v }
-          props
+        if props&.active&.any?
+          props.to_h
         else
           { raw_content: true, attributes: true, compiled_content: true, path: true }
         end
@@ -174,7 +175,7 @@ module Nanoc
 
       def data
         {
-          edges: @graph.edges,
+          edges: @graph.edges.map { |arr| [arr[0], arr[1], arr[2].to_h] },
           vertices: @graph.vertices,
         }
       end
@@ -193,8 +194,11 @@ module Nanoc
         # Load edges
         new_data[:edges].each do |edge|
           from_index, to_index, props = *edge
-          from = from_index && previous_refs[from_index]
-          to   = to_index && previous_refs[to_index]
+
+          from  = from_index && previous_refs[from_index]
+          to    = to_index && previous_refs[to_index]
+          props = Nanoc::Core::DependencyProps.new(**props)
+
           @graph.add_edge(from, to, props: props)
         end
 
