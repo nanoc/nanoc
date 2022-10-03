@@ -19,8 +19,18 @@ module Nanoc
 
       C_ATTR =
         C::Or[
-          C::SetOf[Symbol],
-          C::ArrayOf[Symbol],
+          C::SetOf[
+            C::Or[
+              Symbol,          # any value
+              [Symbol, C::Any] # pair (specific value)
+            ],
+          ],
+          C::ArrayOf[
+            C::Or[
+              Symbol,          # any value
+              [Symbol, C::Any] # pair (specific value)
+            ],
+          ],
           C::Bool
         ]
 
@@ -66,6 +76,23 @@ module Nanoc
           s << (attributes? ? 'a' : '_')
           s << (compiled_content? ? 'c' : '_')
           s << (path? ? 'p' : '_')
+
+          if @raw_content.is_a?(Set)
+            @raw_content.each do |elem|
+              s << '; raw_content('
+              s << elem.inspect
+              s << ')'
+            end
+          end
+
+          if @attributes.is_a?(Set)
+            @attributes.each do |elem|
+              s << '; attr('
+              s << elem.inspect
+              s << ')'
+            end
+          end
+
           s << ')'
         end
       end
@@ -153,6 +180,15 @@ module Nanoc
           pr << :attributes if attributes?
           pr << :compiled_content if compiled_content?
           pr << :path if path?
+        end
+      end
+
+      def attribute_keys
+        case @attributes
+        when Enumerable
+          @attributes.map { |a| a.is_a?(Array) ? a.first : a }
+        else
+          []
         end
       end
 

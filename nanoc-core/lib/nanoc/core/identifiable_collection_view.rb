@@ -69,6 +69,34 @@ module Nanoc
         @objects.find_all(arg).map { |i| view_class.new(i, @context) }
       end
 
+      # Finds all objects that have the given attribute key/value pair.
+      #
+      # @example
+      #
+      #     @items.where(kind: 'article')
+      #     @items.where(kind: 'article', year: 2020)
+      #
+      # @return [Enumerable]
+      def where(**hash)
+        unless Nanoc::Core::Feature.enabled?(Nanoc::Core::Feature::WHERE)
+          raise(
+            Nanoc::Core::TrivialError,
+            '#where is experimental, and not yet available unless the corresponding feature flag is turned on. Set the `NANOC_FEATURES` environment variable to `where` to enable its usage. (Alternatively, set the environment variable to `all` to turn on all feature flags.)',
+          )
+        end
+
+        @context.dependency_tracker.bounce(_unwrap, attributes: hash)
+
+        # IDEA: Nanoc could remember (from the previous compilation) how many
+        # times #where is called with a given attribute key, and memoize the
+        # key-to-identifiers list.
+        found_objects = @objects.select do |i|
+          hash.all? { |k, v| i.attributes[k] == v }
+        end
+
+        found_objects.map { |i| view_class.new(i, @context) }
+      end
+
       # @overload [](string)
       #
       #   Finds the object whose identifier matches the given string.
