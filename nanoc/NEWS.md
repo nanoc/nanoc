@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.12.8 (2022-10-03)
+
+Fixes:
+
+- Fixed incorrect documentation regarding the IP addresses that the `live` and `view` commands listen on (#1584, #1585)
+
+Enhancements:
+
+- Wrapped URLs printed to stdout in angular brackets (like `<http://…>`) so terminals can detect them properly (#1589) [Daniel Aleksandersen]
+- Made various performance improvements (#1596, #1597, #1598)
+
 ## 4.12.7 (2022-06-06)
 
 Fixes:
