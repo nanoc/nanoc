@@ -18,6 +18,10 @@ module Nanoc
         # @param [String] message The descriptive message for this outdatedness
         #   reason
         def initialize(message, props = Nanoc::Core::DependencyProps.new)
+          # TODO: Replace `DependencyProps` with its own `OutdatednessProps`
+          # type. For `OutdatednessProps`, the only values are true/false;
+          # giving a collection for `raw_content` makes no sense (anymore).
+
           @message = message
           @props = props
         end
@@ -42,29 +46,15 @@ module Nanoc
         Nanoc::Core::DependencyProps.new(compiled_content: true, path: true),
       )
 
+      DocumentAdded = Generic.new(
+        'The item or layout is newly added to the site.',
+        Nanoc::Core::DependencyProps.new, # NOTE: empty props, because they’re not relevant
+      )
+
       ContentModified = Generic.new(
         'The content of this item has been modified since the last time the site was compiled.',
         Nanoc::Core::DependencyProps.new(raw_content: true, compiled_content: true),
       )
-
-      class DocumentCollectionExtended < Generic
-        attr_reader :objects
-
-        def initialize(objects)
-          super(
-            'New items/layouts have been added to the site.',
-            Nanoc::Core::DependencyProps.new(raw_content: true),
-          )
-
-          @objects = objects
-        end
-      end
-
-      class ItemCollectionExtended < DocumentCollectionExtended
-      end
-
-      class LayoutCollectionExtended < DocumentCollectionExtended
-      end
 
       class AttributesModified < Generic
         attr_reader :attributes
