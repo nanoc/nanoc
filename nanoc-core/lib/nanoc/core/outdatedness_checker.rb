@@ -187,37 +187,7 @@ module Nanoc
           true
         when Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection
           all_objects = dependency.from
-          matching_objects =
-            case dependency.props.raw_content
-            when true
-              # If the `raw_content` dependency prop is `true`, then this is a
-              # dependency on all *objects* (items or layouts).
-              all_objects
-            when Enumerable
-              # If the `raw_content` dependency prop is a collection, then this
-              # is a dependency on specific objects, given by the patterns.
-              patterns = dependency.props.raw_content.map { |r| Nanoc::Core::Pattern.from(r) }
-              patterns.flat_map { |pat| all_objects.select { |obj| pat.match?(obj.identifier) } }
-            else
-              raise(
-                Nanoc::Core::Errors::InternalInconsistency,
-                "Unexpected type of raw_content: #{dependency.props.raw_content.inspect}",
-              )
-            end
-
-          # For all objects matching the `raw_content` dependency prop:
-          # If the object is outdated because it is newly added,
-          # then this dependency causes outdatedness.
-          #
-          # Note that these objects might be modified but *not* newly added,
-          # in which case this dependency will *not* cause outdatedness.
-          # However, when the object is used later (e.g. attributes are
-          # accessed), then another dependency will exist that will cause
-          # outdatedness.
-          matching_objects.any? do |obj|
-            status = basic.outdatedness_status_for(obj)
-            status.reasons.any? { |r| Nanoc::Core::OutdatednessReasons::DocumentAdded == r }
-          end
+          raw_content_prop_causes_outdatedness?(all_objects, dependency.props.raw_content)
         else
           status = basic.outdatedness_status_for(dependency.from)
 
@@ -231,6 +201,40 @@ module Nanoc
       def attributes_unaffected?(status, dependency)
         reason = status.reasons.find { |r| r.is_a?(Nanoc::Core::OutdatednessReasons::AttributesModified) }
         reason && dependency.props.attributes.is_a?(Enumerable) && (dependency.props.attributes & reason.attributes).empty?
+      end
+
+      def raw_content_prop_causes_outdatedness?(objects, raw_content_prop)
+        matching_objects =
+          case raw_content_prop
+          when true
+            # If the `raw_content` dependency prop is `true`, then this is a
+            # dependency on all *objects* (items or layouts).
+            objects
+          when Enumerable
+            # If the `raw_content` dependency prop is a collection, then this
+            # is a dependency on specific objects, given by the patterns.
+            patterns = raw_content_prop.map { |r| Nanoc::Core::Pattern.from(r) }
+            patterns.flat_map { |pat| objects.select { |obj| pat.match?(obj.identifier) } }
+          else
+            raise(
+              Nanoc::Core::Errors::InternalInconsistency,
+              "Unexpected type of raw_content: #{raw_content_prop.inspect}",
+            )
+          end
+
+        # For all objects matching the `raw_content` dependency prop:
+        # If the object is outdated because it is newly added,
+        # then this dependency causes outdatedness.
+        #
+        # Note that these objects might be modified but *not* newly added,
+        # in which case this dependency will *not* cause outdatedness.
+        # However, when the object is used later (e.g. attributes are
+        # accessed), then another dependency will exist that will cause
+        # outdatedness.
+        matching_objects.any? do |obj|
+          status = basic.outdatedness_status_for(obj)
+          status.reasons.any? { |r| Nanoc::Core::OutdatednessReasons::DocumentAdded == r }
+        end
       end
     end
   end
