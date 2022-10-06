@@ -25,6 +25,7 @@ module Nanoc
         Maybe       = Ignorer.instance
         None        = Ignorer.instance
         ArrayOf     = Ignorer.instance
+        SetOf       = Ignorer.instance
         Or          = Ignorer.instance
         Func        = Ignorer.instance
         RespondTo   = Ignorer.instance
