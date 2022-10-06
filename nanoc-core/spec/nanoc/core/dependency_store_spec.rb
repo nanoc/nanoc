@@ -261,6 +261,14 @@ describe Nanoc::Core::DependencyStore do
         deps = reloaded_store.dependencies_causing_outdatedness_of(item_c)
         expect(deps).to be_empty
       end
+
+      it 'has no new items' do
+        expect(reloaded_store.new_items).to be_empty
+      end
+
+      it 'has no new layouts' do
+        expect(reloaded_store.new_layouts).to be_empty
+      end
     end
 
     context 'one new item' do
@@ -275,6 +283,14 @@ describe Nanoc::Core::DependencyStore do
         expect(reloaded_store.objects_causing_outdatedness_of(item_b)).not_to include(item_d)
         expect(reloaded_store.objects_causing_outdatedness_of(item_c)).not_to include(item_d)
         expect(reloaded_store.objects_causing_outdatedness_of(item_d)).not_to include(item_d)
+      end
+
+      it 'has one new item' do
+        expect(reloaded_store.new_items).to match_array([item_d])
+      end
+
+      it 'has no new layouts' do
+        expect(reloaded_store.new_layouts).to be_empty
       end
     end
 

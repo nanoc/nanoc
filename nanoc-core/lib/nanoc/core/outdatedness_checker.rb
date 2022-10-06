@@ -13,6 +13,7 @@ module Nanoc
 
         RULES_FOR_ITEM_REP =
           [
+            Rules::ItemAdded,
             Rules::RulesModified,
             Rules::ContentModified,
             Rules::AttributesModified,
@@ -23,6 +24,7 @@ module Nanoc
 
         RULES_FOR_LAYOUT =
           [
+            Rules::LayoutAdded,
             Rules::RulesModified,
             Rules::ContentModified,
             Rules::AttributesModified,
@@ -32,16 +34,6 @@ module Nanoc
         RULES_FOR_CONFIG =
           [
             Rules::AttributesModified,
-          ].freeze
-
-        RULES_FOR_ITEM_COLLECTION =
-          [
-            Rules::ItemCollectionExtended,
-          ].freeze
-
-        RULES_FOR_LAYOUT_COLLECTION =
-          [
-            Rules::LayoutCollectionExtended,
           ].freeze
 
         C_OBJ_MAYBE_REP = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep, Nanoc::Core::Configuration, Nanoc::Core::Layout, Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection]
@@ -67,10 +59,10 @@ module Nanoc
               apply_rules(RULES_FOR_LAYOUT, obj)
             when Nanoc::Core::Configuration
               apply_rules(RULES_FOR_CONFIG, obj)
-            when Nanoc::Core::ItemCollection
-              apply_rules(RULES_FOR_ITEM_COLLECTION, obj)
-            when Nanoc::Core::LayoutCollection
-              apply_rules(RULES_FOR_LAYOUT_COLLECTION, obj)
+            when Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection
+              # Collections are never outdated. Objects inside them might be,
+              # however.
+              apply_rules([], obj)
             else
               raise Nanoc::Core::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
             end
@@ -190,32 +182,55 @@ module Nanoc
 
       contract Nanoc::Core::Dependency => C::Bool
       def dependency_causes_outdatedness?(dependency)
-        return true if dependency.from.nil?
+        case dependency.from
+        when nil
+          true
+        when Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection
+          all_objects = dependency.from
+          matching_objects =
+            case dependency.props.raw_content
+            when true
+              # If the `raw_content` dependency prop is `true`, then this is a
+              # dependency on all *objects* (items or layouts).
+              all_objects
+            when Enumerable
+              # If the `raw_content` dependency prop is a collection, then this
+              # is a dependency on specific objects, given by the patterns.
+              patterns = dependency.props.raw_content.map { |r| Nanoc::Core::Pattern.from(r) }
+              patterns.flat_map { |pat| all_objects.select { |obj| pat.match?(obj.identifier) } }
+            else
+              raise(
+                Nanoc::Core::Errors::InternalInconsistency,
+                "Unexpected type of raw_content: #{dependency.props.raw_content.inspect}",
+              )
+            end
 
-        status = basic.outdatedness_status_for(dependency.from)
+          # For all objects matching the `raw_content` dependency prop:
+          # If the object is outdated because it is newly added,
+          # then this dependency causes outdatedness.
+          #
+          # Note that these objects might be modified but *not* newly added,
+          # in which case this dependency will *not* cause outdatedness.
+          # However, when the object is used later (e.g. attributes are
+          # accessed), then another dependency will exist that will cause
+          # outdatedness.
+          matching_objects.any? do |obj|
+            status = basic.outdatedness_status_for(obj)
+            status.reasons.any? { |r| Nanoc::Core::OutdatednessReasons::DocumentAdded == r }
+          end
+        else
+          status = basic.outdatedness_status_for(dependency.from)
 
-        active = status.props.active & dependency.props.active
-        active.delete(:attributes) if attributes_unaffected?(status, dependency)
-        active.delete(:raw_content) if raw_content_unaffected?(status, dependency)
+          active = status.props.active & dependency.props.active
+          active.delete(:attributes) if attributes_unaffected?(status, dependency)
 
-        active.any?
+          active.any?
+        end
       end
 
       def attributes_unaffected?(status, dependency)
         reason = status.reasons.find { |r| r.is_a?(Nanoc::Core::OutdatednessReasons::AttributesModified) }
         reason && dependency.props.attributes.is_a?(Enumerable) && (dependency.props.attributes & reason.attributes).empty?
-      end
-
-      def raw_content_unaffected?(status, dependency)
-        reason = status.reasons.find { |r| r.is_a?(Nanoc::Core::OutdatednessReasons::DocumentCollectionExtended) }
-        if reason.nil?
-          false
-        elsif !dependency.props.raw_content.is_a?(Enumerable)
-          false
-        else
-          patterns = dependency.props.raw_content.map { |r| Nanoc::Core::Pattern.from(r) }
-          patterns.none? { |pat| reason.objects.any? { |obj| pat.match?(obj.identifier) } }
-        end
       end
     end
   end

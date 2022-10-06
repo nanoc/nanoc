@@ -36,8 +36,8 @@ describe 'meta', chdir: false do
       outdatedness_rules/attributes_modified
       outdatedness_rules/code_snippets_modified
       outdatedness_rules/content_modified
-      outdatedness_rules/item_collection_extended
-      outdatedness_rules/layout_collection_extended
+      outdatedness_rules/item_added
+      outdatedness_rules/layout_added
       outdatedness_rules/not_written
       outdatedness_rules/rules_modified
       outdatedness_rules/uses_always_outdated_filter

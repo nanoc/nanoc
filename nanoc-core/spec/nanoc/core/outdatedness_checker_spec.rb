@@ -140,56 +140,6 @@ describe Nanoc::Core::OutdatednessChecker do
     context 'with layout' do
       # …
     end
-
-    context 'with item collection' do
-      let(:obj) { items }
-
-      context 'no new items' do
-        it { is_expected.to be_nil }
-      end
-
-      context 'new items' do
-        before do
-          dependency_store.store
-
-          new_item = Nanoc::Core::Item.new('stuff', {}, '/newblahz.md')
-          dependency_store.items = Nanoc::Core::ItemCollection.new(config, [item, new_item])
-
-          dependency_store.load
-        end
-
-        it { is_expected.to be_a(Nanoc::Core::OutdatednessReasons::ItemCollectionExtended) }
-
-        it 'includes proper raw_content props' do
-          expect(subject.objects.map(&:identifier).map(&:to_s)).to eq(['/newblahz.md'])
-        end
-      end
-    end
-
-    context 'with layout collection' do
-      let(:obj) { layouts }
-
-      context 'no new layouts' do
-        it { is_expected.to be_nil }
-      end
-
-      context 'new layouts' do
-        before do
-          dependency_store.store
-
-          new_layout = Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md')
-          dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
-
-          dependency_store.load
-        end
-
-        it { is_expected.to be_a(Nanoc::Core::OutdatednessReasons::LayoutCollectionExtended) }
-
-        it 'includes proper raw_content props' do
-          expect(subject.objects.map(&:identifier).map(&:to_s)).to eq(['/newblahz.md'])
-        end
-      end
-    end
   end
 
   describe '#outdated_due_to_dependencies?' do
@@ -600,8 +550,16 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'item added' do
+          let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/newblahz.md') }
+          let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
+
+          let(:action_sequences) do
+            super().merge({ new_item_rep => old_action_sequence_for_item_rep })
+          end
+
           before do
-            new_item = Nanoc::Core::Item.new('stuff', {}, '/newblahz.md')
+            reps << new_item_rep
+
             dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
             dependency_store.load
           end
@@ -632,8 +590,16 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'matching item added' do
+          let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/newblahz.md') }
+          let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
+
+          let(:action_sequences) do
+            super().merge({ new_item_rep => old_action_sequence_for_item_rep })
+          end
+
           before do
-            new_item = Nanoc::Core::Item.new('stuff', {}, '/newblahz.md')
+            reps << new_item_rep
+
             dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
             dependency_store.load
           end
@@ -674,8 +640,16 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'matching item added' do
+          let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/newblahz.md') }
+          let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
+
+          let(:action_sequences) do
+            super().merge({ new_item_rep => old_action_sequence_for_item_rep })
+          end
+
           before do
-            new_item = Nanoc::Core::Item.new('stuff', {}, '/newblahz.md')
+            reps << new_item_rep
+
             dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
             dependency_store.load
           end
@@ -718,8 +692,17 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'layout added' do
+          let(:new_layout) { Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md') }
+
+          let(:action_sequences) do
+            seq = Nanoc::Core::ActionSequenceBuilder.build(new_layout) do |b|
+              b.add_filter(:erb, {})
+            end
+
+            super().merge({ new_layout => seq })
+          end
+
           before do
-            new_layout = Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md')
             dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
             dependency_store.load
           end
@@ -750,8 +733,17 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'matching layout added' do
+          let(:new_layout) { Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md') }
+
+          let(:action_sequences) do
+            seq = Nanoc::Core::ActionSequenceBuilder.build(new_layout) do |b|
+              b.add_filter(:erb, {})
+            end
+
+            super().merge({ new_layout => seq })
+          end
+
           before do
-            new_layout = Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md')
             dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
             dependency_store.load
           end
@@ -760,8 +752,17 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'non-matching layout added' do
+          let(:new_layout) { Nanoc::Core::Layout.new('stuff', {}, '/nublahz.md') }
+
+          let(:action_sequences) do
+            seq = Nanoc::Core::ActionSequenceBuilder.build(new_layout) do |b|
+              b.add_filter(:erb, {})
+            end
+
+            super().merge({ new_layout => seq })
+          end
+
           before do
-            new_layout = Nanoc::Core::Layout.new('stuff', {}, '/nublahz.md')
             dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
             dependency_store.load
           end
@@ -792,8 +793,17 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'matching layout added' do
+          let(:new_layout) { Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md') }
+
+          let(:action_sequences) do
+            seq = Nanoc::Core::ActionSequenceBuilder.build(new_layout) do |b|
+              b.add_filter(:erb, {})
+            end
+
+            super().merge({ new_layout => seq })
+          end
+
           before do
-            new_layout = Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md')
             dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
             dependency_store.load
           end
@@ -802,8 +812,17 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'non-matching layout added' do
+          let(:new_layout) { Nanoc::Core::Layout.new('stuff', {}, '/nublahz.md') }
+
+          let(:action_sequences) do
+            seq = Nanoc::Core::ActionSequenceBuilder.build(new_layout) do |b|
+              b.add_filter(:erb, {})
+            end
+
+            super().merge({ new_layout => seq })
+          end
+
           before do
-            new_layout = Nanoc::Core::Layout.new('stuff', {}, '/nublahz.md')
             dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, layouts.to_a + [new_layout])
             dependency_store.load
           end

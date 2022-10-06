@@ -661,47 +661,75 @@ describe Nanoc::Core::OutdatednessRules do
       end
     end
 
-    describe 'ItemCollectionExtended' do
-      let(:rule_class) { Nanoc::Core::OutdatednessRules::ItemCollectionExtended }
+    describe 'ItemAdded' do
+      let(:rule_class) { Nanoc::Core::OutdatednessRules::ItemAdded }
 
-      let(:obj) { items }
-
-      context 'no new item added' do
-        before do
-          expect(dependency_store).to receive(:new_items).and_return([])
-        end
-
-        it { is_expected.to be_nil }
+      let(:items_before) do
+        Nanoc::Core::ItemCollection.new(config, [old_item])
       end
 
-      context 'new item added' do
-        before do
-          expect(dependency_store).to receive(:new_items).and_return([item])
-        end
+      let(:items_after) do
+        Nanoc::Core::ItemCollection.new(config, [old_item, new_item])
+      end
 
-        it { is_expected.not_to be_nil }
+      let(:old_item) { Nanoc::Core::Item.new('stuff', {}, '/old.md') }
+      let(:new_item) { Nanoc::Core::Item.new('new', {}, '/new.md') }
+
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(items_before, layouts, config).store
+        Nanoc::Core::DependencyStore.new(items_after, layouts, config).tap(&:load)
+      end
+
+      context 'when used on old item' do
+        let(:obj) { Nanoc::Core::ItemRep.new(old_item, :default) }
+
+        example do
+          expect(subject).to be_nil
+        end
+      end
+
+      context 'when used on new item' do
+        let(:obj) { Nanoc::Core::ItemRep.new(new_item, :default) }
+
+        example do
+          expect(subject).to eq(Nanoc::Core::OutdatednessReasons::DocumentAdded)
+        end
       end
     end
 
-    describe 'LayoutCollectionExtended' do
-      let(:rule_class) { Nanoc::Core::OutdatednessRules::LayoutCollectionExtended }
+    describe 'LayoutAdded' do
+      let(:rule_class) { Nanoc::Core::OutdatednessRules::LayoutAdded }
 
-      let(:obj) { layouts }
-
-      context 'no new layout added' do
-        before do
-          expect(dependency_store).to receive(:new_layouts).and_return([])
-        end
-
-        it { is_expected.to be_nil }
+      let(:layouts_before) do
+        Nanoc::Core::LayoutCollection.new(config, [old_layout])
       end
 
-      context 'new layout added' do
-        before do
-          expect(dependency_store).to receive(:new_layouts).and_return([layout])
-        end
+      let(:layouts_after) do
+        Nanoc::Core::LayoutCollection.new(config, [old_layout, new_layout])
+      end
 
-        it { is_expected.not_to be_nil }
+      let(:old_layout) { Nanoc::Core::Layout.new('stuff', {}, '/old.md') }
+      let(:new_layout) { Nanoc::Core::Layout.new('new', {}, '/new.md') }
+
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(items, layouts_before, config).store
+        Nanoc::Core::DependencyStore.new(items, layouts_after, config).tap(&:load)
+      end
+
+      context 'when used on old layout' do
+        let(:obj) { old_layout }
+
+        example do
+          expect(subject).to be_nil
+        end
+      end
+
+      context 'when used on new layout' do
+        let(:obj) { new_layout }
+
+        example do
+          expect(subject).to eq(Nanoc::Core::OutdatednessReasons::DocumentAdded)
+        end
       end
     end
   end
