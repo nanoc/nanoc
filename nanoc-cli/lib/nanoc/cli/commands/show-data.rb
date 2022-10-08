@@ -151,7 +151,17 @@ module Nanoc::CLI::Commands
           outcome << 'matching any attribute'
         when Set
           dep.props.attributes.each do |elem|
-            outcome << "matching attribute #{elem.inspect}"
+            case elem
+            when Symbol
+              outcome << "matching attribute #{elem.inspect} (any value)"
+            when Array
+              outcome << "matching attribute pair #{elem[0].inspect} => #{elem[1].inspect}"
+            else
+              raise(
+                Nanoc::Core::Errors::InternalInconsistency,
+                "unexpected prop attribute element #{elem.inspect}",
+              )
+            end
           end
         else
           raise(

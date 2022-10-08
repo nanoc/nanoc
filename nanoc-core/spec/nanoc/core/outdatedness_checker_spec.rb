@@ -675,6 +675,56 @@ describe Nanoc::Core::OutdatednessChecker do
 
           it { is_expected.to be(false) }
         end
+
+        context 'dependency on specific new items (attribute)' do
+          before do
+            dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
+            dependency_tracker.enter(item)
+            dependency_tracker.bounce(items, attributes: { kind: 'note' })
+            dependency_store.store
+          end
+
+          context 'nothing changed' do
+            it { is_expected.to be(false) }
+          end
+
+          context 'matching item added' do
+            let(:new_item) { Nanoc::Core::Item.new('stuff', { kind: 'note' }, '/new-note.md') }
+            let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
+
+            let(:action_sequences) do
+              super().merge({ new_item_rep => old_action_sequence_for_item_rep })
+            end
+
+            before do
+              reps << new_item_rep
+
+              dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
+              dependency_store.load
+            end
+
+            it { is_expected.to be(true) }
+          end
+
+          context 'non-matching item added' do
+            before do
+              new_item = Nanoc::Core::Item.new('stuff', { kind: 'article' }, '/new-article.md')
+              dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
+              dependency_store.load
+            end
+
+            it { is_expected.to be(false) }
+          end
+
+          context 'item removed' do
+            before do
+              dependency_store.items = Nanoc::Core::ItemCollection.new(config, [])
+              dependency_store.load
+            end
+
+            it { is_expected.to be(false) }
+          end
+        end
       end
     end
 

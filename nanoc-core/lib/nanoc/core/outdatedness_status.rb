@@ -22,6 +22,10 @@ module Nanoc
           props: @props.merge(reason.props),
         )
       end
+
+      def inspect
+        "<#{self.class} reasons=#{@reasons.inspect} props=#{@props.inspect}>"
+      end
     end
   end
 end

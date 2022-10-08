@@ -15,6 +15,7 @@ module Nanoc
       C_ATTR =
         C::Or[
           C::ArrayOf[Symbol],
+          C::HashOf[Symbol => C::Any],
           C::Bool
         ]
 
@@ -139,6 +140,11 @@ module Nanoc
 
         src_ref = obj2ref(src)
         dst_ref = obj2ref(dst)
+
+        # Convert attributes into key-value pairs, if necessary
+        if attributes.is_a?(Hash)
+          attributes = attributes.to_a
+        end
 
         existing_props = @graph.props_for(dst_ref, src_ref)
         new_props = Nanoc::Core::DependencyProps.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)

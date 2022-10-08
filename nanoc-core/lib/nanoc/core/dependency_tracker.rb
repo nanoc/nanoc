@@ -23,6 +23,7 @@ module Nanoc
       C_ATTR =
         C::Or[
           C::ArrayOf[Symbol],
+          C::HashOf[Symbol => C::Any],
           C::Bool
         ]
 

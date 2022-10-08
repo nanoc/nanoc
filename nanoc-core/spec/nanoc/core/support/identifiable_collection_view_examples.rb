@@ -328,4 +328,72 @@ shared_examples 'an identifiable collection view' do
       end
     end
   end
+
+  describe '#where' do
+    around do |ex|
+      Nanoc::Core::Feature.enable('where') { ex.run }
+    end
+
+    let(:wrapped) do
+      collection_class.new(
+        config,
+        [
+          double(
+            :identifiable,
+            identifier: Nanoc::Core::Identifier.new('/bare.md'),
+            attributes: {},
+          ),
+          double(
+            :identifiable,
+            identifier: Nanoc::Core::Identifier.new('/note.md'),
+            attributes: { kind: 'note' },
+          ),
+          double(
+            :identifiable,
+            identifier: Nanoc::Core::Identifier.new('/note-2020.md'),
+            attributes: { kind: 'note', year: 2020 },
+          ),
+          double(
+            :identifiable,
+            identifier: Nanoc::Core::Identifier.new('/note-2021.md'),
+            attributes: { kind: 'note', year: 2021 },
+          ),
+        ],
+      )
+    end
+
+    context 'with one attribute' do
+      subject { view.where(kind: 'note') }
+
+      it 'creates dependency' do
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, attributes: { kind: 'note' })
+        subject
+      end
+
+      it 'contains views' do
+        expect(subject.size).to be(3)
+        note = subject.find { |iv| iv.identifier == '/note.md' }
+        note2020 = subject.find { |iv| iv.identifier == '/note-2020.md' }
+        note2021 = subject.find { |iv| iv.identifier == '/note-2021.md' }
+        expect(note.class).to equal(view_class)
+        expect(note2020.class).to equal(view_class)
+        expect(note2021.class).to equal(view_class)
+      end
+    end
+
+    context 'with two attributes' do
+      subject { view.where(kind: 'note', year: 2020) }
+
+      it 'creates dependency' do
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, attributes: { kind: 'note', year: 2020 })
+        subject
+      end
+
+      it 'contains views' do
+        expect(subject.size).to be(1)
+        note2020 = subject.find { |iv| iv.identifier == '/note-2020.md' }
+        expect(note2020.class).to equal(view_class)
+      end
+    end
+  end
 end
