@@ -25,6 +25,7 @@ packages = %w[
   nanoc-external
   nanoc-live
   nanoc-spec
+  nanoc-tilt
   guard-nanoc
 ]
 

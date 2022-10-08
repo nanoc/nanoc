@@ -66,6 +66,10 @@ jobs:
         run: bundle exec rake nanoc_live:test
         timeout-minutes: 3
 
+      - name: Test nanoc-tilt
+        run: bundle exec rake nanoc_tilt:test
+        timeout-minutes: 3
+
       - name: Test nanoc-spec
         run: bundle exec rake nanoc_spec:test
         timeout-minutes: 3

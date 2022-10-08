@@ -1,0 +1,7 @@
+NEWS.md
+README.md
+
+lib/nanoc-tilt.rb
+lib/nanoc/tilt.rb
+lib/nanoc/tilt/filter.rb
+lib/nanoc/tilt/version.rb
