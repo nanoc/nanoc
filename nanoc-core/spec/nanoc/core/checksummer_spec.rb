@@ -97,6 +97,30 @@ describe Nanoc::Core::Checksummer do
     end
   end
 
+  context 'Set' do
+    let(:obj) { Set.new(%w[hello goodbye]) }
+
+    it { is_expected.to eql('Set<String<goodbye>,String<hello>,>') }
+
+    context 'different order' do
+      let(:obj) { Set.new(%w[goodbye hello]) }
+
+      it { is_expected.to eql('Set<String<goodbye>,String<hello>,>') }
+    end
+
+    context 'recursive' do
+      let(:obj) { Set.new.tap { |set| set << Set.new.add('hello').add(set) } }
+
+      it { is_expected.to eql('Set<Set<String<hello>,Set<recur>,>,>') }
+    end
+
+    context 'non-serializable' do
+      let(:obj) { Set.new.add(-> {}) }
+
+      it { is_expected.to match(/\ASet<Proc<#<Proc:0x.*>>,>\z/) }
+    end
+  end
+
   context 'Hash' do
     let(:obj) { { 'a' => 'foo', 'b' => 'bar' } }
 
