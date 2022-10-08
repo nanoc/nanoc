@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.12.9 (2022-10-08)
+
+Fixes:
+
+- Fixed compatibility with Haml 6.0 (#1595, #1593)
+
 ## 4.12.8 (2022-10-03)
 
 Fixes:
