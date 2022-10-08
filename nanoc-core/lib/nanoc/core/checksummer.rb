@@ -81,7 +81,8 @@ module Nanoc
           # NOTE: Other behaviors are registered elsewhere
           # (search for `define_behavior`).
 
-          define_behavior(Array, ArrayUpdateBehavior)
+          define_behavior(Array, CollectionUpdateBehavior)
+          define_behavior(Set, SetUpdateBehavior)
           define_behavior(FalseClass, NoUpdateBehavior)
           define_behavior(Hash, HashUpdateBehavior)
           define_behavior(NilClass, NoUpdateBehavior)
@@ -96,7 +97,7 @@ module Nanoc
           define_behavior(Nanoc::Core::Configuration, HashUpdateBehavior)
           define_behavior(Nanoc::Core::Context, ContextUpdateBehavior)
           define_behavior(Nanoc::Core::CodeSnippet, DataUpdateBehavior)
-          define_behavior(Nanoc::Core::IdentifiableCollection, ArrayUpdateBehavior)
+          define_behavior(Nanoc::Core::IdentifiableCollection, CollectionUpdateBehavior)
           define_behavior(Nanoc::Core::Identifier, ToSUpdateBehavior)
           define_behavior(Nanoc::Core::Item, DocumentUpdateBehavior)
           define_behavior(Nanoc::Core::ItemRep, ItemRepUpdateBehavior)
@@ -194,12 +195,19 @@ module Nanoc
         end
       end
 
-      class ArrayUpdateBehavior < UpdateBehavior
+      class CollectionUpdateBehavior < UpdateBehavior
         def self.update(obj, digest)
           obj.each do |el|
             yield(el)
             digest.update(',')
           end
+        end
+      end
+
+      class SetUpdateBehavior < CollectionUpdateBehavior
+        def self.update(obj, digest)
+          # Similar to CollectionUpdateBehavior, but sorted for consistency.
+          super(obj.sort { |a, b| (a <=> b) || 0 }, digest)
         end
       end
 
