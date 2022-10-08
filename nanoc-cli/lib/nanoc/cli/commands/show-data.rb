@@ -118,10 +118,13 @@ module Nanoc::CLI::Commands
             end
 
           if pred
-            puts "  [ #{format '%7s', type} ] (#{dep.props})"
-            details.each do |d|
-              puts "    • #{d}"
+            print "  [ #{format '%7s', type} ] (#{dep.props})"
+
+            if details.any?
+              print ' '
             end
+
+            puts details.join("\n                     ")
           else
             puts '  ( removed )'
           end
