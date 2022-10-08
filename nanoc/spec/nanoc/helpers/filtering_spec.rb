@@ -53,24 +53,5 @@ describe Nanoc::Helpers::Filtering, helper: true do
 
       it { is_expected.to eql('AbaahB') }
     end
-
-    context 'with Haml' do
-      subject { ::Haml::Engine.new(content).render(helper.get_binding) }
-
-      let(:content) do
-        <<~CONTENT
-          %p Foo.
-          - filter(:erb) do
-            <%= 'abc' + 'xyz' %>
-          %p Bar.
-        CONTENT
-      end
-
-      before do
-        require 'haml'
-      end
-
-      it { is_expected.to match(%r{^<p>Foo.</p>\s*abcxyz\s*<p>Bar.</p>$}) }
-    end
   end
 end

@@ -43,7 +43,7 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
       filter.setup_and_run('%p= this isn\'t really ruby so it\'ll break, muahaha')
     rescue SyntaxError, Haml::SyntaxError => e
       e.message =~ /(.+?):\d+: /
-      assert_match '?', Regexp.last_match[1]
+      assert_equal '(__TEMPLATE__)', Regexp.last_match[1]
       raised = true
     end
     assert raised
@@ -75,6 +75,6 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
     # Run filter
     filter = ::Nanoc::Filters::Haml.new
     result = filter.setup_and_run("%body\n  ~ File.read('stuff')")
-    assert_match(/Max Payne&#x000A;Mona Sax/, result)
+    assert_match(/Max Payne\nMona Sax/, result)
   end
 end

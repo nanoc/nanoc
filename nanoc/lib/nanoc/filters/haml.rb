@@ -22,7 +22,20 @@ module Nanoc::Filters
 
       # Get result
       proc = assigns[:content] ? -> { assigns[:content] } : nil
-      ::Haml::Engine.new(content, options).render(context, assigns, &proc)
+
+      # Render
+      haml_major_version = ::Haml::VERSION[0]
+      case haml_major_version
+      when '5'
+        ::Haml::Engine.new(content, options).render(context, assigns, &proc)
+      when '6'
+        template = Tilt::HamlTemplate.new(options) { content }
+        template.render(context, assigns, &proc)
+      else
+        raise Nanoc::Core::TrivialError.new(
+          "Cannot run Haml filter: unsupported Haml major version: #{haml_major_version}",
+        )
+      end
     end
   end
 end
