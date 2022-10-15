@@ -55,42 +55,6 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
       end
     end
 
-    context 'dependency (without props) from config to dog' do
-      before do
-        dependency_store.record_dependency(item_dog, config)
-      end
-
-      it 'outputs no dependencies for /about.md' do
-        expect { subject }.to output(%r{^item /about.md depends on:\n  \(nothing\)$}m).to_stdout
-      end
-
-      it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[  config \] \(racp\)$}m).to_stdout
-      end
-
-      it 'outputs no dependencies for /other.dat' do
-        expect { subject }.to output(%r{^item /other.dat depends on:\n  \(nothing\)$}m).to_stdout
-      end
-    end
-
-    context 'dependency (without props) from about to dog' do
-      before do
-        dependency_store.record_dependency(item_dog, item_about)
-      end
-
-      it 'outputs no dependencies for /about.md' do
-        expect { subject }.to output(%r{^item /about.md depends on:\n  \(nothing\)$}m).to_stdout
-      end
-
-      it 'outputs dependencies for /dog.md' do
-        expect { subject }.to output(%r{^item /dog.md depends on:\n  \[    item \] \(racp\) /about.md$}m).to_stdout
-      end
-
-      it 'outputs no dependencies for /other.dat' do
-        expect { subject }.to output(%r{^item /other.dat depends on:\n  \(nothing\)$}m).to_stdout
-      end
-    end
-
     context 'dependency (with raw_content prop) from about to dog' do
       before do
         dependency_store.record_dependency(item_dog, item_about, raw_content: true)

@@ -26,13 +26,7 @@ module Nanoc
       #
       # @see Hash#[]=
       def []=(key, value)
-        disallowed_value_classes = Set.new([
-          Nanoc::Core::Item,
-          Nanoc::Core::Layout,
-          Nanoc::Core::CompilationItemView,
-          Nanoc::Core::LayoutView,
-        ])
-        if disallowed_value_classes.include?(value.class)
+        if disallowed_value_class?(value.class)
           raise DisallowedAttributeValueError.new(value)
         end
 
@@ -54,6 +48,21 @@ module Nanoc
       def update_attributes(hash)
         hash.each { |k, v| _unwrap.set_attribute(k, v) }
         self
+      end
+
+      private
+
+      def disallowed_value_class?(klass)
+        # NOTE: We’re explicitly disabling Style/MultipleComparison, because
+        # the suggested alternative (Array#include?) carries a measurable
+        # performance penatly.
+        #
+        # rubocop:disable Style/MultipleComparison
+        klass == Nanoc::Core::Item ||
+          klass == Nanoc::Core::Layout ||
+          klass == Nanoc::Core::CompilationItemView ||
+          klass == Nanoc::Core::LayoutView
+        # rubocop:enable Style/MultipleComparison
       end
     end
   end

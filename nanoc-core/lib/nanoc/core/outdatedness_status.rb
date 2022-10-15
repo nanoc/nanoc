@@ -13,7 +13,12 @@ module Nanoc
       end
 
       def useful_to_apply?(rule)
-        (rule.affected_props - @props.active).any?
+        return true if rule.affects_raw_content? && !@props.raw_content?
+        return true if rule.affects_attributes? && !@props.attributes?
+        return true if rule.affects_compiled_content? && !@props.compiled_content?
+        return true if rule.affects_path? && !@props.path?
+
+        false
       end
 
       def update(reason)

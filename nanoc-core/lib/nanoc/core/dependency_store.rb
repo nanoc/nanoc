@@ -71,12 +71,7 @@ module Nanoc
           Nanoc::Core::Dependency.new(
             other_object,
             object,
-            Nanoc::Core::DependencyProps.new(
-              raw_content: props.fetch(:raw_content, false),
-              attributes: props.fetch(:attributes, false),
-              compiled_content: props.fetch(:compiled_content, false),
-              path: props.fetch(:path, false),
-            ),
+            props,
           )
         end
       end
@@ -192,15 +187,22 @@ module Nanoc
         refs.map { |r| ref2obj(r) }
       end
 
-      # TODO: Return not a Hash, but a DependencyProps instead
       def props_for(from, to)
         props = @graph.props_for(obj2ref(from), obj2ref(to))
+        return props if props
 
-        if props&.any_active?
-          props.to_h
-        else
-          { raw_content: true, attributes: true, compiled_content: true, path: true }
-        end
+        # This is for backwards compatibility, in case there are no dependency
+        # props available yet. Pretend everything is set to `true`; it’ll be
+        # recompiled and correct props will be available in the next run.
+        #
+        # NOTE: This isn’t covered by tests, yet. (Not trivial to test because
+        # it’s not a condition that can arise in the current Nanoc version.)
+        Nanoc::Core::DependencyProps.new(
+          raw_content: true,
+          attributes: true,
+          compiled_content: true,
+          path: true,
+        )
       end
 
       def data
