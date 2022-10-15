@@ -196,7 +196,7 @@ module Nanoc
           active = status.props.active & dependency.props.active
           active.delete(:attributes) if attributes_unaffected?(status, dependency)
 
-          active.any?
+          !active.empty?
         end
       end
 

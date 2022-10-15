@@ -111,7 +111,7 @@ module Nanoc
       def raw_content?
         case @raw_content
         when Set
-          @raw_content.any?
+          !@raw_content.empty?
         else
           @raw_content
         end
@@ -121,7 +121,7 @@ module Nanoc
       def attributes?
         case @attributes
         when Set
-          @attributes.any?
+          !@attributes.empty?
         else
           @attributes
         end
