@@ -274,14 +274,14 @@ module Nanoc
             old_value = old_object_checksums[key]
             new_value = new_object_checksums[key]
 
-            # If either the old or new vale match the value in the dependency,
-            # then a potential change is relevant to us, and can cause
-            # outdatedness.
-            is_match = [old_value, new_value].include?(dep_value)
+            # If the old and new checksums are identical, then the attribute is
+            # unchanged and can’t cause outdatedness.
+            next false unless old_value != new_value
 
-            is_changed = old_value != new_value
-
-            is_match && is_changed
+            # We already know that the old value and new value are different.
+            # This attribute will cause outdatedness if either of those
+            # checksums is identical to the one in the prop.
+            old_value == dep_value || new_value == dep_value
           end
         end
       end
