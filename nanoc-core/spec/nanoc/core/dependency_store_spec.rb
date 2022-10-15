@@ -48,14 +48,6 @@ describe Nanoc::Core::DependencyStore do
           expect(deps[0].to).to eql(item_a)
         end
 
-        it 'returns true for all props by default' do
-          deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.raw_content?).to be(true)
-          expect(deps[0].props.attributes?).to be(true)
-          expect(deps[0].props.compiled_content?).to be(true)
-          expect(deps[0].props.path?).to be(true)
-        end
-
         it 'returns nothing for the others' do
           expect(store.dependencies_causing_outdatedness_of(item_b)).to be_empty
           expect(store.dependencies_causing_outdatedness_of(item_c)).to be_empty
@@ -108,14 +100,6 @@ describe Nanoc::Core::DependencyStore do
           deps = store.dependencies_causing_outdatedness_of(item_a)
           expect(deps.size).to be(1)
         end
-
-        it 'returns true for all props' do
-          deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.raw_content?).to be(true)
-          expect(deps[0].props.compiled_content?).to be(true)
-          expect(deps[0].props.path?).to be(true)
-          expect(deps[0].props.attributes?).to be(true)
-        end
       end
 
       context 'no props' do
@@ -132,14 +116,6 @@ describe Nanoc::Core::DependencyStore do
           deps = store.dependencies_causing_outdatedness_of(item_a)
           expect(deps[0].from).to eql(item_b)
           expect(deps[0].to).to eql(item_a)
-        end
-
-        it 'returns true for all props by default' do
-          deps = store.dependencies_causing_outdatedness_of(item_a)
-          expect(deps[0].props.raw_content?).to be(true)
-          expect(deps[0].props.attributes?).to be(true)
-          expect(deps[0].props.compiled_content?).to be(true)
-          expect(deps[0].props.path?).to be(true)
         end
 
         it 'returns nothing for the others' do

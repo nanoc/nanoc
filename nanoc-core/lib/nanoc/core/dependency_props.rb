@@ -173,10 +173,6 @@ module Nanoc
         end
       end
 
-      def any_active?
-        compiled_content? || path? || raw_content? || attributes?
-      end
-
       contract C::None => Set
       def active
         Set.new.tap do |pr|
