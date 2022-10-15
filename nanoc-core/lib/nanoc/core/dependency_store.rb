@@ -196,7 +196,7 @@ module Nanoc
       def props_for(from, to)
         props = @graph.props_for(obj2ref(from), obj2ref(to))
 
-        if props&.active&.any?
+        if props&.any_active?
           props.to_h
         else
           { raw_content: true, attributes: true, compiled_content: true, path: true }
