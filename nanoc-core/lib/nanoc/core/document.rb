@@ -50,8 +50,9 @@ module Nanoc
         @content_checksum_data = content_checksum_data
         @attributes_checksum_data = attributes_checksum_data
 
-        # Precalculate hash for performance
+        # Precalculate for performance
         @hash = [self.class, identifier].hash
+        reference
       end
 
       # @return [Hash]

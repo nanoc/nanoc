@@ -4,7 +4,7 @@ module Nanoc
   module Core
     class Item < ::Nanoc::Core::Document
       def reference
-        "item:#{identifier}"
+        @_reference ||= "item:#{identifier}"
       end
     end
   end
