@@ -49,6 +49,9 @@ module Nanoc
         @checksum_data = checksum_data
         @content_checksum_data = content_checksum_data
         @attributes_checksum_data = attributes_checksum_data
+
+        # Precalculate hash for performance
+        @hash = [self.class, identifier].hash
       end
 
       # @return [Hash]
@@ -107,7 +110,7 @@ module Nanoc
 
       contract C::None => C::Num
       def hash
-        [self.class, identifier].hash
+        @hash
       end
 
       contract C::Any => C::Bool
