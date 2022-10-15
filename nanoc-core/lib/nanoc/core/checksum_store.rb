@@ -21,6 +21,8 @@ module Nanoc
         @objects = objects
 
         @checksums = {}
+
+        invalidate_memoization
       end
 
       contract c_obj => C::Maybe[String]
@@ -50,7 +52,7 @@ module Nanoc
 
       contract c_obj => C::Maybe[C::HashOf[Symbol, String]]
       def attributes_checksum_for(obj)
-        @checksums[[obj.reference, :each_attribute]]
+        @_attribute_checksums[obj] ||= @checksums[[obj.reference, :each_attribute]]
       end
 
       protected
@@ -60,6 +62,8 @@ module Nanoc
       end
 
       def data=(new_data)
+        invalidate_memoization
+
         references = Set.new(@objects.map(&:reference))
 
         @checksums = {}
@@ -68,6 +72,12 @@ module Nanoc
             @checksums[key] = checksum
           end
         end
+      end
+
+      private
+
+      def invalidate_memoization
+        @_attribute_checksums = {}
       end
     end
   end
