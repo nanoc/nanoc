@@ -23,11 +23,39 @@ module Nanoc
       end
 
       def self.affects_props(*names)
-        @affected_props = Set.new(names)
+        @affects_raw_content = false
+        @affects_attributes = false
+        @affects_compiled_content = false
+        @affects_path = false
+
+        names.each do |name|
+          case name
+          when :raw_content
+            @affects_raw_content = true
+          when :attributes
+            @affects_attributes = true
+          when :compiled_content
+            @affects_compiled_content = true
+          when :path
+            @affects_path = true
+          end
+        end
       end
 
-      def self.affected_props
-        @affected_props
+      def self.affects_raw_content?
+        @affects_raw_content
+      end
+
+      def self.affects_attributes?
+        @affects_attributes
+      end
+
+      def self.affects_compiled_content?
+        @affects_compiled_content
+      end
+
+      def self.affects_path?
+        @affects_path
       end
     end
   end
