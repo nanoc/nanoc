@@ -9,6 +9,8 @@ module Nanoc
 
       def initialize(checksums)
         @checksums = checksums
+
+        @_attribute_checksums = {}
       end
 
       contract c_obj => C::Maybe[String]
@@ -23,7 +25,7 @@ module Nanoc
 
       contract c_obj => C::Maybe[C::HashOf[Symbol, String]]
       def attributes_checksum_for(obj)
-        @checksums[[obj.reference, :each_attribute]]
+        @_attribute_checksums[obj] ||= @checksums[[obj.reference, :each_attribute]]
       end
 
       def to_h

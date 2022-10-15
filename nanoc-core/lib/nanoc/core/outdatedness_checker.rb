@@ -269,10 +269,6 @@ module Nanoc
 
           new_object_checksums = checksums.attributes_checksum_for(object)
 
-          # Ignore any attribute not mentioned in the dependency
-          old_object_checksums = old_object_checksums.select { |k, _v| dep_checksums.key?(k) }
-          new_object_checksums = new_object_checksums.select { |k, _v| dep_checksums.key?(k) }
-
           dep_checksums.any? do |key, dep_value|
             # Get old and new checksum for this particular attribute
             old_value = old_object_checksums[key]
