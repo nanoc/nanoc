@@ -1,22 +1,15 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::BasicOutdatednessChecker do
-  let(:outdatedness_checker) do
-    Nanoc::Core::OutdatednessChecker.new(
+  let(:basic_outdatedness_checker) do
+    described_class.new(
+      reps: reps,
       site: site,
       checksum_store: checksum_store,
       checksums: checksums,
       dependency_store: dependency_store,
       action_sequence_store: action_sequence_store,
       action_sequences: action_sequences,
-      reps: reps,
-    )
-  end
-
-  let(:basic_outdatedness_checker) do
-    described_class.new(
-      outdatedness_checker: outdatedness_checker,
-      site: site,
     )
   end
 
@@ -95,7 +88,7 @@ describe Nanoc::Core::BasicOutdatednessChecker do
   end
 
   describe 'basic outdatedness reasons' do
-    subject { outdatedness_checker.send(:basic).outdatedness_status_for(obj).reasons.first }
+    subject { basic_outdatedness_checker.outdatedness_status_for(obj).reasons.first }
 
     let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config: config, objects: items.to_a + layouts.to_a) }
 

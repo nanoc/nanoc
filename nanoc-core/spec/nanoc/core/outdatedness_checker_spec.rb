@@ -87,61 +87,6 @@ describe Nanoc::Core::OutdatednessChecker do
     action_sequence_store[item_rep] = old_action_sequence_for_item_rep.serialize
   end
 
-  describe 'basic outdatedness reasons' do
-    subject { outdatedness_checker.send(:basic).outdatedness_status_for(obj).reasons.first }
-
-    let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config: config, objects: items.to_a + layouts.to_a) }
-
-    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
-
-    before do
-      checksum_store.add(item)
-
-      allow(site).to receive(:code_snippets).and_return([])
-      allow(site).to receive(:config).and_return(config)
-    end
-
-    context 'with item' do
-      let(:obj) { item }
-
-      context 'action sequence differs' do
-        let(:new_action_sequence_for_item_rep) do
-          Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
-            b.add_filter(:super_erb, {})
-          end
-        end
-
-        it 'is outdated due to rule differences' do
-          expect(subject).to eql(Nanoc::Core::OutdatednessReasons::RulesModified)
-        end
-      end
-
-      # …
-    end
-
-    context 'with item rep' do
-      let(:obj) { item_rep }
-
-      context 'action sequence differs' do
-        let(:new_action_sequence_for_item_rep) do
-          Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
-            b.add_filter(:super_erb, {})
-          end
-        end
-
-        it 'is outdated due to rule differences' do
-          expect(subject).to eql(Nanoc::Core::OutdatednessReasons::RulesModified)
-        end
-      end
-
-      # …
-    end
-
-    context 'with layout' do
-      # …
-    end
-  end
-
   describe '#outdated_due_to_dependencies?' do
     subject { outdatedness_checker.send(:outdated_due_to_dependencies?, item) }
 
