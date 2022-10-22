@@ -82,6 +82,7 @@ module Nanoc
 
       contract C_OBJ_MAYBE_REP => C::Maybe[Nanoc::Core::OutdatednessStatus]
       def outdatedness_status_for(obj)
+        # TODO: remove memoization (no longer needed)
         @_outdatedness_status_for[obj] ||=
           case obj
           when Nanoc::Core::ItemRep

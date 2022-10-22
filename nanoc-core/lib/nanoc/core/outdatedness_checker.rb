@@ -42,9 +42,20 @@ module Nanoc
         @objects_outdated_due_to_dependencies = {}
       end
 
+      def basic_outdatedness_statuses
+        @_basic_outdatedness_statuses ||= {}.tap do |tmp|
+          collections = [[@site.config], @site.layouts, @site.items, @reps]
+          collections.each do |collection|
+            collection.each do |obj|
+              tmp[obj] = basic.outdatedness_status_for(obj)
+            end
+          end
+        end
+      end
+
       contract C_OBJ => C::IterOf[Reasons::Generic]
       def outdatedness_reasons_for(obj)
-        basic_reasons = basic.outdatedness_status_for(obj).reasons
+        basic_reasons = basic_outdatedness_statuses.fetch(obj).reasons
         if basic_reasons.any?
           basic_reasons
         elsif outdated_due_to_dependencies?(obj)
@@ -112,7 +123,7 @@ module Nanoc
           raw_content_prop_causes_outdatedness?(all_objects, dependency.props.raw_content) ||
             attributes_prop_causes_outdatedness?(all_objects, dependency.props.attributes)
         else
-          status = basic.outdatedness_status_for(dependency.from)
+          status = basic_outdatedness_statuses.fetch(dependency.from)
 
           active = status.props.active & dependency.props.active
           active.delete(:attributes) if attributes_unaffected?(status, dependency)
@@ -157,7 +168,7 @@ module Nanoc
         # accessed), then another dependency will exist that will cause
         # outdatedness.
         matching_objects.any? do |obj|
-          status = basic.outdatedness_status_for(obj)
+          status = basic_outdatedness_statuses.fetch(obj)
           status.reasons.any? { |r| Nanoc::Core::OutdatednessReasons::DocumentAdded == r }
         end
       end
