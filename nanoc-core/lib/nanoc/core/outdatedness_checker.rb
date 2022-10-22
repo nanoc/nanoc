@@ -42,17 +42,6 @@ module Nanoc
         @objects_outdated_due_to_dependencies = {}
       end
 
-      def basic_outdatedness_statuses
-        @_basic_outdatedness_statuses ||= {}.tap do |tmp|
-          collections = [[@site.config], @site.layouts, @site.items, @reps]
-          collections.each do |collection|
-            collection.each do |obj|
-              tmp[obj] = basic.outdatedness_status_for(obj)
-            end
-          end
-        end
-      end
-
       contract C_OBJ => C::IterOf[Reasons::Generic]
       def outdatedness_reasons_for(obj)
         basic_reasons = basic_outdatedness_statuses.fetch(obj).reasons
@@ -66,6 +55,17 @@ module Nanoc
       end
 
       private
+
+      def basic_outdatedness_statuses
+        @_basic_outdatedness_statuses ||= {}.tap do |tmp|
+          collections = [[@site.config], @site.layouts, @site.items, @reps]
+          collections.each do |collection|
+            collection.each do |obj|
+              tmp[obj] = basic.outdatedness_status_for(obj)
+            end
+          end
+        end
+      end
 
       contract C::None => BasicOutdatednessChecker
       def basic
