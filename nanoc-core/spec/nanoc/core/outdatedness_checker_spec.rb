@@ -14,30 +14,12 @@ describe Nanoc::Core::OutdatednessChecker do
   end
 
   let(:checksums) do
-    checksums = {}
-
-    [items_after, layouts_after].each do |documents|
-      documents.each do |document|
-        checksums[[document.reference, :content]] =
-          Nanoc::Core::Checksummer.calc_for_content_of(document)
-        checksums[[document.reference, :each_attribute]] =
-          Nanoc::Core::Checksummer.calc_for_each_attribute_of(document)
-      end
-    end
-
-    [items_after, layouts_after, code_snippets].each do |objs|
-      objs.each do |obj|
-        checksums[obj.reference] =
-          Nanoc::Core::Checksummer.calc(obj)
-      end
-    end
-
-    checksums[config.reference] =
-      Nanoc::Core::Checksummer.calc(config)
-    checksums[[config.reference, :each_attribute]] =
-      Nanoc::Core::Checksummer.calc_for_each_attribute_of(config)
-
-    Nanoc::Core::ChecksumCollection.new(checksums)
+    Nanoc::Core::CompilationStages::CalculateChecksums.new(
+      items: items_after,
+      layouts: layouts_after,
+      code_snippets: code_snippets,
+      config: config,
+    ).run
   end
 
   let(:dependency_store) do
