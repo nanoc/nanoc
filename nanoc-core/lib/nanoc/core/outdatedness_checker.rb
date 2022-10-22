@@ -131,11 +131,22 @@ module Nanoc
 
       contract C_OBJ => C::IterOf[Reasons::Generic]
       def outdatedness_reasons_for(obj)
+        basic_reasons = basic_outdatedness_reasons_for(obj)
+        if basic_reasons.any?
+          basic_reasons
+        elsif outdated_due_to_dependencies?(obj)
+          [Reasons::DependenciesOutdated]
+        else
+          []
+        end
+      end
+
+      contract C_OBJ => C::IterOf[Reasons::Generic]
+      def basic_outdatedness_reasons_for(obj)
+        # reasons = @basic_outdatedness_reasons.fetch(obj)
         reasons = basic.outdatedness_status_for(obj).reasons
         if reasons.any?
           reasons
-        elsif outdated_due_to_dependencies?(obj)
-          [Reasons::DependenciesOutdated]
         else
           []
         end
