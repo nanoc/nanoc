@@ -15,14 +15,13 @@ module Nanoc
         end
       end
 
-      def self.build(rep)
-        builder = new(rep)
+      def self.build
+        builder = new
         yield(builder)
         builder.action_sequence
       end
 
-      def initialize(item_rep)
-        @item_rep = item_rep
+      def initialize
         @actions = []
       end
 
@@ -38,9 +37,8 @@ module Nanoc
         self
       end
 
-      contract Symbol, C::Maybe[String] => self
-      def add_snapshot(snapshot_name, path)
-        will_add_snapshot(snapshot_name)
+      def add_snapshot(snapshot_name, path, rep)
+        will_add_snapshot(snapshot_name, rep)
         @actions << Nanoc::Core::ProcessingActions::Snapshot.new([snapshot_name], path ? [path] : [])
         self
       end
@@ -52,10 +50,10 @@ module Nanoc
 
       private
 
-      def will_add_snapshot(name)
+      def will_add_snapshot(name, rep)
         @_snapshot_names ||= Set.new
         if @_snapshot_names.include?(name)
-          raise CannotCreateMultipleSnapshotsWithSameNameError.new(@item_rep, name)
+          raise CannotCreateMultipleSnapshotsWithSameNameError.new(rep, name)
         else
           @_snapshot_names << name
         end

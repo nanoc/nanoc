@@ -35,7 +35,7 @@ describe Nanoc::Core::ItemRepBuilder do
 
     it 'has no snapshot defs by default' do
       action_sequence =
-        Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
+        Nanoc::Core::ActionSequenceBuilder.build do |b|
         end
 
       snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
@@ -47,8 +47,8 @@ describe Nanoc::Core::ItemRepBuilder do
 
       it 'generates initial textual snapshot def' do
         action_sequence =
-          Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
-            b.add_snapshot(:giraffe, nil)
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
+            b.add_snapshot(:giraffe, nil, rep)
           end
 
         snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
@@ -59,10 +59,10 @@ describe Nanoc::Core::ItemRepBuilder do
 
       it 'generated follow-up textual snapshot def if previous filter is textual' do
         action_sequence =
-          Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
-            b.add_snapshot(:giraffe, nil)
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
+            b.add_snapshot(:giraffe, nil, rep)
             b.add_filter(:RuleMemSpec_filter_t2t, arguments: 'irrelevant')
-            b.add_snapshot(:zebra, nil)
+            b.add_snapshot(:zebra, nil, rep)
           end
 
         snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
@@ -75,10 +75,10 @@ describe Nanoc::Core::ItemRepBuilder do
 
       it 'generated follow-up binary snapshot def if previous filter is text-to-bianry' do
         action_sequence =
-          Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
-            b.add_snapshot(:giraffe, nil)
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
+            b.add_snapshot(:giraffe, nil, rep)
             b.add_filter(:RuleMemSpec_filter_t2b, arguments: 'irrelevant')
-            b.add_snapshot(:zebra, nil)
+            b.add_snapshot(:zebra, nil, rep)
           end
 
         snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
@@ -95,8 +95,8 @@ describe Nanoc::Core::ItemRepBuilder do
 
       it 'generates initial binary snapshot def' do
         action_sequence =
-          Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
-            b.add_snapshot(:giraffe, nil)
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
+            b.add_snapshot(:giraffe, nil, rep)
           end
 
         snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
@@ -107,10 +107,10 @@ describe Nanoc::Core::ItemRepBuilder do
 
       it 'generated follow-up binary snapshot def if previous filter is binary' do
         action_sequence =
-          Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
-            b.add_snapshot(:giraffe, nil)
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
+            b.add_snapshot(:giraffe, nil, rep)
             b.add_filter(:RuleMemSpec_filter_b2b, arguments: 'irrelevant')
-            b.add_snapshot(:zebra, nil)
+            b.add_snapshot(:zebra, nil, rep)
           end
 
         snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
@@ -123,10 +123,10 @@ describe Nanoc::Core::ItemRepBuilder do
 
       it 'generated follow-up textual snapshot def if previous filter is binary-to-text' do
         action_sequence =
-          Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
-            b.add_snapshot(:giraffe, nil)
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
+            b.add_snapshot(:giraffe, nil, rep)
             b.add_filter(:RuleMemSpec_filter_b2t, arguments: 'irrelevant')
-            b.add_snapshot(:zebra, nil)
+            b.add_snapshot(:zebra, nil, rep)
           end
 
         snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)

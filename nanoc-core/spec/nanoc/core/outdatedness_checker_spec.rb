@@ -65,7 +65,7 @@ describe Nanoc::Core::OutdatednessChecker do
   end
 
   let(:old_action_sequence_for_item_rep) do
-    Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
+    Nanoc::Core::ActionSequenceBuilder.build do |b|
       b.add_filter(:erb, {})
     end
   end
@@ -104,7 +104,7 @@ describe Nanoc::Core::OutdatednessChecker do
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
     let(:old_action_sequence_for_other_item_rep) do
-      Nanoc::Core::ActionSequenceBuilder.build(other_item_rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build do |b|
         b.add_filter(:erb, {})
       end
     end
@@ -257,9 +257,9 @@ describe Nanoc::Core::OutdatednessChecker do
 
         context 'path changed' do
           let(:new_action_sequence_for_other_item_rep) do
-            Nanoc::Core::ActionSequenceBuilder.build(other_item_rep) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
-              b.add_snapshot(:donkey, '/giraffe.txt')
+              b.add_snapshot(:donkey, '/giraffe.txt', other_item_rep)
             end
           end
 
@@ -308,9 +308,9 @@ describe Nanoc::Core::OutdatednessChecker do
 
         context 'path changed' do
           let(:new_action_sequence_for_other_item_rep) do
-            Nanoc::Core::ActionSequenceBuilder.build(other_item_rep) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
-              b.add_snapshot(:donkey, '/giraffe.txt')
+              b.add_snapshot(:donkey, '/giraffe.txt', other_item_rep)
             end
           end
 
@@ -389,9 +389,9 @@ describe Nanoc::Core::OutdatednessChecker do
 
         context 'path changed' do
           let(:new_action_sequence_for_other_item_rep) do
-            Nanoc::Core::ActionSequenceBuilder.build(other_item_rep) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
-              b.add_snapshot(:donkey, '/giraffe.txt')
+              b.add_snapshot(:donkey, '/giraffe.txt', other_item_rep)
             end
           end
 
@@ -418,9 +418,9 @@ describe Nanoc::Core::OutdatednessChecker do
 
         context 'path changed' do
           let(:new_action_sequence_for_other_item_rep) do
-            Nanoc::Core::ActionSequenceBuilder.build(other_item_rep) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
-              b.add_snapshot(:donkey, '/giraffe.txt')
+              b.add_snapshot(:donkey, '/giraffe.txt', other_item_rep)
             end
           end
 
@@ -455,7 +455,7 @@ describe Nanoc::Core::OutdatednessChecker do
 
         context 'rules changed' do
           let(:new_action_sequence_for_other_item_rep) do
-            Nanoc::Core::ActionSequenceBuilder.build(other_item_rep) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
               b.add_filter(:donkey, {})
             end
@@ -769,7 +769,7 @@ describe Nanoc::Core::OutdatednessChecker do
           end
 
           let(:action_sequences) do
-            seq = Nanoc::Core::ActionSequenceBuilder.build(new_layout) do |b|
+            seq = Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
             end
 
@@ -816,7 +816,7 @@ describe Nanoc::Core::OutdatednessChecker do
           end
 
           let(:action_sequences) do
-            seq = Nanoc::Core::ActionSequenceBuilder.build(new_layout) do |b|
+            seq = Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
             end
 
@@ -839,7 +839,7 @@ describe Nanoc::Core::OutdatednessChecker do
           end
 
           let(:action_sequences) do
-            seq = Nanoc::Core::ActionSequenceBuilder.build(new_layout) do |b|
+            seq = Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
             end
 
@@ -886,7 +886,7 @@ describe Nanoc::Core::OutdatednessChecker do
           end
 
           let(:action_sequences) do
-            seq = Nanoc::Core::ActionSequenceBuilder.build(new_layout) do |b|
+            seq = Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
             end
 
@@ -909,7 +909,7 @@ describe Nanoc::Core::OutdatednessChecker do
           end
 
           let(:action_sequences) do
-            seq = Nanoc::Core::ActionSequenceBuilder.build(new_layout) do |b|
+            seq = Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
             end
 

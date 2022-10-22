@@ -374,7 +374,7 @@ describe Nanoc::Core::Executor do
     subject { executor.layout('/default.*') }
 
     let(:action_sequence) do
-      Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build do |b|
         b.add_filter(:simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei, {})
       end
     end

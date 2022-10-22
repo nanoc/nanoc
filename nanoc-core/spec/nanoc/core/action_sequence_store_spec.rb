@@ -12,8 +12,7 @@ describe Nanoc::Core::ActionSequenceStore do
     let(:unknown_obj) { Nanoc::Core::Item.new('fdsa', {}, '/fdsa.md') }
 
     let(:some_action_sequence) do
-      rep = Nanoc::Core::ItemRep.new(known_obj, :default)
-      Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build do |b|
         b.add_filter(:foo, {})
       end
     end
@@ -45,8 +44,7 @@ describe Nanoc::Core::ActionSequenceStore do
     let(:unknown_obj) { Nanoc::Core::Item.new('fdsa', {}, '/fdsa.md') }
 
     let(:some_action_sequence) do
-      rep = Nanoc::Core::ItemRep.new(known_obj, :default)
-      Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
+      Nanoc::Core::ActionSequenceBuilder.build do |b|
         b.add_filter(:foo, {})
       end
     end

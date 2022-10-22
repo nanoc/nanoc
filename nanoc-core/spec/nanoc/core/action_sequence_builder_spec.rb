@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::ActionSequenceBuilder do
-  let(:builder) { described_class.new(item_rep) }
+  let(:builder) { described_class.new }
 
   let(:item_rep) { Nanoc::Core::ItemRep.new(item, :default) }
   let(:item) { Nanoc::Core::Item.new('some content', {}, '/foo.md') }
@@ -30,7 +30,7 @@ describe Nanoc::Core::ActionSequenceBuilder do
 
   describe '#add_snapshot' do
     context 'add one snapshot' do
-      subject { builder.add_snapshot(:last, '/foo.html') }
+      subject { builder.add_snapshot(:last, '/foo.html', item_rep) }
 
       it 'adds an action' do
         expect { subject }
@@ -42,8 +42,8 @@ describe Nanoc::Core::ActionSequenceBuilder do
 
     context 'add two snapshots with same name' do
       subject do
-        builder.add_snapshot(:last, '/foo.html')
-        builder.add_snapshot(:last, '/foo.htm')
+        builder.add_snapshot(:last, '/foo.html', item_rep)
+        builder.add_snapshot(:last, '/foo.htm', item_rep)
       end
 
       it 'raises' do

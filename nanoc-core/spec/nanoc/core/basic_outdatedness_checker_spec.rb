@@ -64,7 +64,7 @@ describe Nanoc::Core::BasicOutdatednessChecker do
   end
 
   let(:old_action_sequence_for_item_rep) do
-    Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
+    Nanoc::Core::ActionSequenceBuilder.build do |b|
       b.add_filter(:erb, {})
     end
   end
@@ -106,7 +106,7 @@ describe Nanoc::Core::BasicOutdatednessChecker do
 
       context 'action sequence differs' do
         let(:new_action_sequence_for_item_rep) do
-          Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
             b.add_filter(:super_erb, {})
           end
         end
@@ -124,7 +124,7 @@ describe Nanoc::Core::BasicOutdatednessChecker do
 
       context 'action sequence differs' do
         let(:new_action_sequence_for_item_rep) do
-          Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
             b.add_filter(:super_erb, {})
           end
         end

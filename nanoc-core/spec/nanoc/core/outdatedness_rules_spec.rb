@@ -372,7 +372,7 @@ describe Nanoc::Core::OutdatednessRules do
       let(:rule_class) { Nanoc::Core::OutdatednessRules::RulesModified }
 
       let(:old_mem) do
-        Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
+        Nanoc::Core::ActionSequenceBuilder.build do |b|
           b.add_filter(:erb, {})
         end
       end
@@ -391,7 +391,7 @@ describe Nanoc::Core::OutdatednessRules do
 
       context 'memory is different' do
         let(:new_mem) do
-          Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
             b.add_filter(:erb, {})
             b.add_filter(:donkey, {})
           end
@@ -402,7 +402,7 @@ describe Nanoc::Core::OutdatednessRules do
 
       context 'memory is the same, but refers to a layout' do
         let(:old_mem) do
-          Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
             b.add_layout('/page.*', {})
           end
         end
@@ -422,7 +422,7 @@ describe Nanoc::Core::OutdatednessRules do
 
         context 'everything is the same' do
           let(:new_layout_mem) do
-            Nanoc::Core::ActionSequenceBuilder.build(layout) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
             end
           end
@@ -434,19 +434,19 @@ describe Nanoc::Core::OutdatednessRules do
 
         context 'referenced layout does not exist' do
           let(:new_layout_mem) do
-            Nanoc::Core::ActionSequenceBuilder.build(layout) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
             end
           end
 
           let(:old_layout_mem) do
-            Nanoc::Core::ActionSequenceBuilder.build(layout) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:haml, {})
             end
           end
 
           let(:old_mem) do
-            Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_layout('/moo.*', {})
             end
           end
@@ -458,13 +458,13 @@ describe Nanoc::Core::OutdatednessRules do
 
         context 'filter name is different' do
           let(:new_layout_mem) do
-            Nanoc::Core::ActionSequenceBuilder.build(layout) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
             end
           end
 
           let(:old_layout_mem) do
-            Nanoc::Core::ActionSequenceBuilder.build(layout) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:haml, {})
             end
           end
@@ -474,13 +474,13 @@ describe Nanoc::Core::OutdatednessRules do
 
         context 'params are different' do
           let(:new_layout_mem) do
-            Nanoc::Core::ActionSequenceBuilder.build(layout) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, {})
             end
           end
 
           let(:old_layout_mem) do
-            Nanoc::Core::ActionSequenceBuilder.build(layout) do |b|
+            Nanoc::Core::ActionSequenceBuilder.build do |b|
               b.add_filter(:erb, foo: 123)
             end
           end
@@ -629,8 +629,8 @@ describe Nanoc::Core::OutdatednessRules do
 
       context 'unknown filter' do
         let(:mem) do
-          Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
-            b.add_snapshot(:donkey, '/foo.md')
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
+            b.add_snapshot(:donkey, '/foo.md', item_rep)
             b.add_filter(:asdf, {})
           end
         end
@@ -640,8 +640,8 @@ describe Nanoc::Core::OutdatednessRules do
 
       context 'known filter, not always outdated' do
         let(:mem) do
-          Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
-            b.add_snapshot(:donkey, '/foo.md')
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
+            b.add_snapshot(:donkey, '/foo.md', item_rep)
             b.add_filter(:erb, {})
           end
         end
@@ -651,8 +651,8 @@ describe Nanoc::Core::OutdatednessRules do
 
       context 'known filter, always outdated' do
         let(:mem) do
-          Nanoc::Core::ActionSequenceBuilder.build(item_rep) do |b|
-            b.add_snapshot(:donkey, '/foo.md')
+          Nanoc::Core::ActionSequenceBuilder.build do |b|
+            b.add_snapshot(:donkey, '/foo.md', item_rep)
             b.add_filter(:always_outdated_voibwz9nhgf6gbpkdznrxcwkqgzlwnif, {})
           end
         end

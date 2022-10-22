@@ -6,8 +6,10 @@ module Nanoc
       include Nanoc::Core::ContractsSupport
 
       contract Nanoc::Core::ItemRep => C::Any
-      def initialize(rep)
-        @action_sequence_builder = Nanoc::Core::ActionSequenceBuilder.new(rep)
+      def initialize(item_rep)
+        @item_rep = item_rep
+
+        @action_sequence_builder = Nanoc::Core::ActionSequenceBuilder.new
 
         @any_layouts = false
         @last_snapshot = false
@@ -30,7 +32,7 @@ module Nanoc
 
         unless any_layouts?
           @pre_snapshot = true
-          @action_sequence_builder.add_snapshot(:pre, nil)
+          @action_sequence_builder.add_snapshot(:pre, nil, @item_rep)
         end
 
         @action_sequence_builder.add_layout(layout_identifier, extra_filter_args)
@@ -51,7 +53,7 @@ module Nanoc
             path.to_s
           end
 
-        @action_sequence_builder.add_snapshot(snapshot_name, path)
+        @action_sequence_builder.add_snapshot(snapshot_name, path, @item_rep)
         case snapshot_name
         when :last
           @last_snapshot = true
