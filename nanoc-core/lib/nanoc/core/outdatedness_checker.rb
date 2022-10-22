@@ -42,11 +42,6 @@ module Nanoc
         @objects_outdated_due_to_dependencies = {}
       end
 
-      contract C_OBJ => C::Bool
-      def outdated?(obj)
-        outdatedness_reasons_for(obj).any?
-      end
-
       contract C_OBJ => C::IterOf[Reasons::Generic]
       def outdatedness_reasons_for(obj)
         basic_reasons = basic_outdatedness_reasons_for(obj)
