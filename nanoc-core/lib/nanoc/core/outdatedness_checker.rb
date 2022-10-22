@@ -42,10 +42,6 @@ module Nanoc
         @objects_outdated_due_to_dependencies = {}
       end
 
-      def action_sequence_for(rep)
-        @action_sequences.fetch(rep)
-      end
-
       contract C_OBJ => C::Bool
       def outdated?(obj)
         outdatedness_reasons_for(obj).any?
