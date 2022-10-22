@@ -48,7 +48,7 @@ module Nanoc
       # @see IO#<<
       def <<(str)
         _nanoc_swallow_broken_pipe_errors_while do
-          @stream.<<(_nanoc_clean(str))
+          @stream << (_nanoc_clean(str))
         end
       end
 

@@ -546,6 +546,15 @@ RSpec/NoExpectationExample: # new in 2.13
 RSpec/Capybara/SpecificFinders: # new in 2.13
   Enabled: true
 
+Lint/DuplicateMagicComment: # new in 1.37
+  Enabled: true
+
+Style/OperatorMethodCall: # new in 1.37
+  Enabled: true
+
+Style/RedundantStringEscape: # new in 1.37
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.

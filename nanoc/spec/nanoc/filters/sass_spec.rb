@@ -51,7 +51,7 @@ describe Nanoc::Filters::SassCommon do
 
     let(:content_blue) do
       Nanoc::Core::TextualContent.new(
-        "\.blue\n  color: blue",
+        ".blue\n  color: blue",
         filename: File.expand_path('content/style/colors/blue.sass'),
       )
     end

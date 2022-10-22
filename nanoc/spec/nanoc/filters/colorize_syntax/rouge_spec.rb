@@ -22,8 +22,8 @@ describe Nanoc::Filters::ColorizeSyntax, filter: true do
   let(:output) do
     <<~EOS
       before
-      <pre><code class=\"language-ruby#{wrap ? " #{css_class}" : ''}\">  <span class=\"k\">def</span> <span class=\"nf\">foo</span>
-        <span class=\"k\">end</span></code></pre>
+      <pre><code class="language-ruby#{wrap ? " #{css_class}" : ''}">  <span class="k">def</span> <span class="nf">foo</span>
+        <span class="k">end</span></code></pre>
       after
     EOS
   end
