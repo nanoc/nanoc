@@ -63,7 +63,7 @@ describe(Nanoc::Core::ItemRepRouter) do
           Nanoc::Core::ProcessingActions::Snapshot.new([], []),
         ]
 
-      Nanoc::Core::ActionSequence.new(nil, actions: actions)
+      Nanoc::Core::ActionSequence.new(actions: actions)
     end
 
     let(:action_sequence_for_default) do
@@ -73,7 +73,7 @@ describe(Nanoc::Core::ItemRepRouter) do
           Nanoc::Core::ProcessingActions::Snapshot.new([:last], ['/foo/index.html']),
         ]
 
-      Nanoc::Core::ActionSequence.new(nil, actions: actions)
+      Nanoc::Core::ActionSequence.new(actions: actions)
     end
 
     let(:action_sequence_for_csv) do
@@ -83,7 +83,7 @@ describe(Nanoc::Core::ItemRepRouter) do
           Nanoc::Core::ProcessingActions::Snapshot.new([:last], ['/foo.csv']),
         ]
 
-      Nanoc::Core::ActionSequence.new(nil, actions: actions)
+      Nanoc::Core::ActionSequence.new(actions: actions)
     end
 
     example do

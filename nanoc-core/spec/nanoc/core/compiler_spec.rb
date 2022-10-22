@@ -75,7 +75,7 @@ describe Nanoc::Core::Compiler do
         Nanoc::Core::ProcessingActions::Snapshot.new([:last], []),
       ]
 
-    Nanoc::Core::ActionSequence.new(nil, actions: actions)
+    Nanoc::Core::ActionSequence.new(actions: actions)
   end
 
   let(:action_sequences) do

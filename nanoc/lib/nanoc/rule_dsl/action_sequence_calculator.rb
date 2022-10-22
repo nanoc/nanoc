@@ -98,7 +98,7 @@ module Nanoc::RuleDSL
           actions << action
         end
       end
-      Nanoc::Core::ActionSequence.new(seq.item_rep, actions: actions)
+      Nanoc::Core::ActionSequence.new(actions: actions)
     end
 
     def copy_paths_from_routing_rules(seq, snapshots_for_which_to_skip_routing_rule, rep:)

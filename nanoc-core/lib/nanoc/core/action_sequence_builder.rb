@@ -47,7 +47,7 @@ module Nanoc
 
       contract C::None => Nanoc::Core::ActionSequence
       def action_sequence
-        Nanoc::Core::ActionSequence.new(@item_rep, actions: @actions)
+        Nanoc::Core::ActionSequence.new(actions: @actions)
       end
 
       private

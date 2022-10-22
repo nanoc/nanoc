@@ -7,11 +7,9 @@ module Nanoc
       include Enumerable
       prepend MemoWise
 
-      attr_reader :item_rep
       attr_reader :actions
 
-      def initialize(item_rep, actions: [])
-        @item_rep = item_rep
+      def initialize(actions: [])
         @actions = actions
       end
 
@@ -54,7 +52,6 @@ module Nanoc
       # contract C::Func[Nanoc::Core::ProcessingAction => C::Any] => self
       def map(&block)
         self.class.new(
-          @item_rep,
           actions: @actions.map(&block),
         )
       end

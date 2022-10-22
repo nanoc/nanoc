@@ -25,15 +25,15 @@ module Nanoc
         action_sequences = Nanoc::Core::ItemRepRouter.new(@reps, @action_provider, @site).run
 
         @reps.each do |rep|
-          rep.snapshot_defs = self.class.snapshot_defs_for(action_sequences[rep])
+          rep.snapshot_defs = self.class.snapshot_defs_for(action_sequences[rep], rep)
         end
 
         action_sequences
       end
 
-      contract Nanoc::Core::ActionSequence => C::ArrayOf[Nanoc::Core::SnapshotDef]
-      def self.snapshot_defs_for(action_sequence)
-        is_binary = action_sequence.item_rep.item.content.binary?
+      contract Nanoc::Core::ActionSequence, Nanoc::Core::ItemRep => C::ArrayOf[Nanoc::Core::SnapshotDef]
+      def self.snapshot_defs_for(action_sequence, rep)
+        is_binary = rep.item.content.binary?
         snapshot_defs = []
 
         action_sequence.each do |action|

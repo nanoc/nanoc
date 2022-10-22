@@ -485,7 +485,7 @@ describe Nanoc::Core::Executor do
 
     context 'no filter specified' do
       let(:action_sequence) do
-        Nanoc::Core::ActionSequence.new(rep)
+        Nanoc::Core::ActionSequence.new
       end
 
       it 'raises' do

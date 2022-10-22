@@ -8,7 +8,7 @@ describe Nanoc::Core::ActionSequence do
 
   describe '#initialize' do
     context 'with actions' do
-      subject { described_class.new(rep, actions: actions) }
+      subject { described_class.new(actions: actions) }
 
       let(:actions) do
         [
@@ -16,14 +16,12 @@ describe Nanoc::Core::ActionSequence do
         ]
       end
 
-      its(:item_rep) { is_expected.to be(rep) }
       its(:actions) { is_expected.to be(actions) }
     end
 
     context 'without actions' do
-      subject { described_class.new(rep) }
+      subject { described_class.new }
 
-      its(:item_rep) { is_expected.to be(rep) }
       its(:actions) { is_expected.to be_empty }
     end
   end

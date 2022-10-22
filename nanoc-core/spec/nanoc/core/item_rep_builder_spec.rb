@@ -38,7 +38,7 @@ describe Nanoc::Core::ItemRepBuilder do
         Nanoc::Core::ActionSequenceBuilder.build(rep) do |b|
         end
 
-      snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence)
+      snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
       expect(snapshot_defs).to be_empty
     end
 
@@ -51,7 +51,7 @@ describe Nanoc::Core::ItemRepBuilder do
             b.add_snapshot(:giraffe, nil)
           end
 
-        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence)
+        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
         expect(snapshot_defs.size).to eq(1)
         expect(snapshot_defs[0].name).to eq(:giraffe)
         expect(snapshot_defs[0]).not_to be_binary
@@ -65,7 +65,7 @@ describe Nanoc::Core::ItemRepBuilder do
             b.add_snapshot(:zebra, nil)
           end
 
-        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence)
+        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
         expect(snapshot_defs.size).to eq(2)
         expect(snapshot_defs[0].name).to eq(:giraffe)
         expect(snapshot_defs[0]).not_to be_binary
@@ -81,7 +81,7 @@ describe Nanoc::Core::ItemRepBuilder do
             b.add_snapshot(:zebra, nil)
           end
 
-        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence)
+        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
         expect(snapshot_defs.size).to eq(2)
         expect(snapshot_defs[0].name).to eq(:giraffe)
         expect(snapshot_defs[0]).not_to be_binary
@@ -99,7 +99,7 @@ describe Nanoc::Core::ItemRepBuilder do
             b.add_snapshot(:giraffe, nil)
           end
 
-        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence)
+        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
         expect(snapshot_defs.size).to eq(1)
         expect(snapshot_defs[0].name).to eq(:giraffe)
         expect(snapshot_defs[0]).to be_binary
@@ -113,7 +113,7 @@ describe Nanoc::Core::ItemRepBuilder do
             b.add_snapshot(:zebra, nil)
           end
 
-        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence)
+        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
         expect(snapshot_defs.size).to eq(2)
         expect(snapshot_defs[0].name).to eq(:giraffe)
         expect(snapshot_defs[0]).to be_binary
@@ -129,7 +129,7 @@ describe Nanoc::Core::ItemRepBuilder do
             b.add_snapshot(:zebra, nil)
           end
 
-        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence)
+        snapshot_defs = described_class.send(:snapshot_defs_for, action_sequence, rep)
         expect(snapshot_defs.size).to eq(2)
         expect(snapshot_defs[0].name).to eq(:giraffe)
         expect(snapshot_defs[0]).to be_binary

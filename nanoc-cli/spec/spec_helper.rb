@@ -53,7 +53,6 @@ Class.new(Nanoc::Core::ActionProvider) do
 
   def action_sequence_for(rep)
     Nanoc::Core::ActionSequence.new(
-      rep,
       actions: [
         Nanoc::Core::ProcessingActions::Snapshot.new([:last], [rep.item.identifier.to_s]),
       ],
