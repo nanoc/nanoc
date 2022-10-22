@@ -197,23 +197,30 @@ module Nanoc
         objects.any? do |object|
           # Find old and new attribute checksums for the object
           old_object_checksums = checksum_store.attributes_checksum_for(object)
-          next false unless old_object_checksums
-
           new_object_checksums = checksums.attributes_checksum_for(object)
 
           dep_checksums.any? do |key, dep_value|
-            # Get old and new checksum for this particular attribute
-            old_value = old_object_checksums[key]
-            new_value = new_object_checksums[key]
+            if old_object_checksums
+              # Get old and new checksum for this particular attribute
+              old_value = old_object_checksums[key]
+              new_value = new_object_checksums[key]
 
-            # If the old and new checksums are identical, then the attribute is
-            # unchanged and can’t cause outdatedness.
-            next false unless old_value != new_value
+              # If the old and new checksums are identical, then the attribute
+              # is unchanged and can’t cause outdatedness.
+              next false unless old_value != new_value
 
-            # We already know that the old value and new value are different.
-            # This attribute will cause outdatedness if either of those
-            # checksums is identical to the one in the prop.
-            old_value == dep_value || new_value == dep_value
+              # We already know that the old value and new value are different.
+              # This attribute will cause outdatedness if either of those
+              # checksums is identical to the one in the prop.
+              old_value == dep_value || new_value == dep_value
+            else
+              # We don’t have the previous checksums, which means this item is
+              # newly added. In this case, we can compare the value in the
+              # dependency with the new checksum.
+
+              new_value = new_object_checksums[key]
+              new_value == dep_value
+            end
           end
         end
       end

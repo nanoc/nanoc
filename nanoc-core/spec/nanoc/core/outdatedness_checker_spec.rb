@@ -1,922 +1,1477 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 describe Nanoc::Core::OutdatednessChecker do
+  Class.new(Nanoc::Core::Filter) do
+    identifier :always_outdated_3zh5qfqlqysghkd5ipek8glxzrljrylr
+    always_outdated
+
+    def run(content, _params)
+      content.upcase
+    end
+  end
+
+  let(:site) do
+    Nanoc::Core::Site.new(
+      config: config_after,
+      code_snippets: code_snippets_after,
+      data_source: Nanoc::Core::InMemoryDataSource.new(items_after_coll, layouts_after_coll),
+    )
+  end
+
+  let(:config_before) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+  let(:config_after) { config_before }
+
+  let(:code_snippet_a_before) { Nanoc::Core::CodeSnippet.new('aaa', 'lib/a.rb') }
+  let(:code_snippet_b_before) { Nanoc::Core::CodeSnippet.new('bbb', 'lib/b.rb') }
+
+  let(:code_snippet_a_after) { code_snippet_a_before }
+  let(:code_snippet_b_after) { code_snippet_b_before }
+
+  let(:code_snippets_before) { [code_snippet_a_before, code_snippet_b_before] }
+  let(:code_snippets_after)  { [code_snippet_a_after, code_snippet_b_after] }
+
+  let(:item_home_before)          { Nanoc::Core::Item.new('Home', {}, '/home.md') }
+  let(:item_home_rep_before)      { Nanoc::Core::ItemRep.new(item_home_before, :default) }
+  let(:item_articles_before)      { Nanoc::Core::Item.new('Articles', {}, '/articles.html.erb') }
+  let(:item_articles_rep_before)  { Nanoc::Core::ItemRep.new(item_articles_before, :default) }
+  let(:item_article_a_before)     { Nanoc::Core::Item.new('Article A', {}, '/articles/2019-a.md') }
+  let(:item_article_a_rep_before) { Nanoc::Core::ItemRep.new(item_article_a_before, :default) }
+  let(:item_article_b_before)     { Nanoc::Core::Item.new('Article B', {}, '/articles/2022-b.md') }
+  let(:item_article_b_rep_before) { Nanoc::Core::ItemRep.new(item_article_b_before, :default) }
+  let(:item_article_c_before)     { Nanoc::Core::Item.new('Article C', {}, '/articles/2022-c.md') }
+  let(:item_article_c_rep_before) { Nanoc::Core::ItemRep.new(item_article_c_before, :default) }
+
+  let(:item_home_after)          { item_home_before }
+  let(:item_home_rep_after)      { item_home_rep_before }
+  let(:item_articles_after)      { item_articles_before }
+  let(:item_articles_rep_after)  { item_articles_rep_before }
+  let(:item_article_a_after)     { item_article_a_before }
+  let(:item_article_a_rep_after) { item_article_a_rep_before }
+  let(:item_article_b_after)     { item_article_b_before }
+  let(:item_article_b_rep_after) { item_article_b_rep_before }
+  let(:item_article_c_after)     { item_article_c_before }
+  let(:item_article_c_rep_after) { item_article_c_rep_before }
+
+  let(:items_before_array) { [item_home_before, item_articles_before, item_article_a_before, item_article_b_before, item_article_c_before] }
+  let(:items_after_array)  { [item_home_after, item_articles_after, item_article_a_after, item_article_b_after, item_article_c_after] }
+  let(:items_before_coll)  { Nanoc::Core::ItemCollection.new(config_before, items_before_array) }
+  let(:items_after_coll)   { Nanoc::Core::ItemCollection.new(config_after, items_after_array) }
+
+  let(:reps) do
+    Nanoc::Core::ItemRepRepo.new.tap do |rr|
+      rr << item_home_rep_after
+      rr << item_articles_rep_after
+      rr << item_article_a_rep_after
+      rr << item_article_b_rep_after
+      rr << item_article_c_rep_after
+    end
+  end
+
+  let(:layout_default_before)       { Nanoc::Core::Layout.new('Default', { kind: 'default' }, '/default.html.erb') }
+  let(:layout_articles_before)      { Nanoc::Core::Layout.new('Articles', { kind: 'article' }, '/articles.html.erb') }
+
+  let(:layout_default_after)       { layout_default_before }
+  let(:layout_articles_after)      { layout_articles_before }
+
+  let(:layouts_before_array) { [layout_default_before, layout_articles_before] }
+  let(:layouts_after_array)  { [layout_default_after, layout_articles_after] }
+  let(:layouts_before_coll)  { Nanoc::Core::LayoutCollection.new(config_before, layouts_before_array) }
+  let(:layouts_after_coll)   { Nanoc::Core::LayoutCollection.new(config_after, layouts_after_array) }
+
   let(:outdatedness_checker) do
     described_class.new(
       site: site,
       checksum_store: checksum_store,
-      checksums: checksums,
+      checksums: checksums_after,
       dependency_store: dependency_store,
       action_sequence_store: action_sequence_store,
-      action_sequences: action_sequences,
+      action_sequences: action_sequences_after,
       reps: reps,
     )
   end
 
-  let(:checksums) do
+  let(:checksum_store) do
+    Nanoc::Core::ChecksumStore.new(
+      config: config_before,
+      objects: items_before_array + layouts_before_array,
+    ).tap do |store|
+      store.checksums = checksums_before.to_h
+    end
+  end
+
+  let(:checksums_before) do
     Nanoc::Core::CompilationStages::CalculateChecksums.new(
-      items: items_after,
-      layouts: layouts_after,
-      code_snippets: code_snippets,
-      config: config,
+      items: items_before_coll,
+      layouts: layouts_before_coll,
+      code_snippets: code_snippets_before,
+      config: config_before,
+    ).run
+  end
+
+  let(:checksums_after) do
+    Nanoc::Core::CompilationStages::CalculateChecksums.new(
+      items: items_after_coll,
+      layouts: layouts_after_coll,
+      code_snippets: code_snippets_after,
+      config: config_after,
     ).run
   end
 
   let(:dependency_store) do
-    Nanoc::Core::DependencyStore.new(items_before, layouts_before, config)
-  end
-
-  let(:items_after) { items_before }
-  let(:layouts_after) { layouts_before }
-
-  let(:items_before) { Nanoc::Core::ItemCollection.new(config, [item]) }
-  let(:layouts_before) { Nanoc::Core::LayoutCollection.new(config) }
-
-  let(:code_snippets) { [] }
-
-  let(:site) do
-    Nanoc::Core::Site.new(
-      config: config,
-      code_snippets: code_snippets,
-      data_source: Nanoc::Core::InMemoryDataSource.new(items_after, layouts_after),
+    # NOTE: No dependencies to start with, but those will be filled in on an
+    # ad-hoc basis.
+    Nanoc::Core::DependencyStore.new(
+      items_before_coll,
+      layouts_before_coll,
+      config_before,
     )
   end
 
   let(:action_sequence_store) do
-    Nanoc::Core::ActionSequenceStore.new(config: config)
+    Nanoc::Core::ActionSequenceStore.new(config: config_before).tap do |store|
+      action_sequences_before.each_pair do |obj, action_sequence|
+        store[obj] = action_sequence.serialize
+      end
+    end
   end
 
-  let(:old_action_sequence_for_item_rep) do
+  let(:action_sequences_before) do
+    {
+      item_home_rep_before => some_action_sequence_for_item_rep,
+      item_articles_rep_before => some_action_sequence_for_item_rep,
+      item_article_a_rep_before => some_action_sequence_for_item_rep,
+      item_article_b_rep_before => some_action_sequence_for_item_rep,
+      item_article_c_rep_before => some_action_sequence_for_item_rep,
+
+      layout_default_before => some_action_sequence_for_layout,
+      layout_articles_before => some_action_sequence_for_layout,
+    }
+  end
+
+  let(:action_sequences_after) { action_sequences_before }
+
+  let(:some_action_sequence_for_item_rep) do
     Nanoc::Core::ActionSequenceBuilder.build do |b|
       b.add_filter(:erb, {})
     end
   end
 
-  let(:new_action_sequence_for_item_rep) { old_action_sequence_for_item_rep }
-
-  let(:action_sequences) do
-    { item_rep => new_action_sequence_for_item_rep }
+  let(:some_action_sequence_for_layout) do
+    Nanoc::Core::ActionSequenceBuilder.build do |b|
+      b.add_filter(:erb, {})
+    end
   end
 
-  let(:reps) do
-    Nanoc::Core::ItemRepRepo.new
+  let(:different_action_sequence_for_item_rep) do
+    Nanoc::Core::ActionSequenceBuilder.build do |b|
+      b.add_filter(:xyzzy, {})
+    end
   end
 
-  let(:item_rep) { Nanoc::Core::ItemRep.new(item, :default) }
-  let(:item) { Nanoc::Core::Item.new('stuff', {}, '/foo.md') }
-
-  before do
-    reps << item_rep
-    action_sequence_store[item_rep] = old_action_sequence_for_item_rep.serialize
+  let(:different_action_sequence_for_layout) do
+    Nanoc::Core::ActionSequenceBuilder.build do |b|
+      b.add_filter(:xyzzy, {})
+    end
   end
 
-  describe '#outdated_due_to_dependencies?' do
-    subject { outdatedness_checker.send(:outdated_due_to_dependencies?, item) }
+  let(:always_outdated_action_sequence_for_item_rep) do
+    Nanoc::Core::ActionSequenceBuilder.build do |b|
+      b.add_filter(:always_outdated_3zh5qfqlqysghkd5ipek8glxzrljrylr, {})
+    end
+  end
 
-    let(:checksum_store) do
-      Nanoc::Core::ChecksumStore.new(
-        config: config,
-        objects: items_before.to_a + layouts_before.to_a,
+  let(:always_outdated_action_sequence_for_layout) do
+    Nanoc::Core::ActionSequenceBuilder.build do |b|
+      b.add_filter(:always_outdated_3zh5qfqlqysghkd5ipek8glxzrljrylr, {})
+    end
+  end
+
+  context 'when nothing has changed' do
+    it 'marks all items as NOT outdated' do
+      expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+    end
+  end
+
+  context 'when home item has changed content' do
+    let(:item_home_after)          { Nanoc::Core::Item.new('Home UPDATED', {}, '/home.md') }
+    let(:item_home_rep_after)      { Nanoc::Core::ItemRep.new(item_home_after, :default) }
+
+    it 'marks home item as outdated' do
+      expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to match_array([
+        Nanoc::Core::OutdatednessReasons::ContentModified,
+      ])
+    end
+
+    it 'marks other items as NOT outdated' do
+      expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+    end
+  end
+
+  context 'when article item has changed raw content' do
+    let(:item_article_a_after)     { Nanoc::Core::Item.new('Article A UPDATED', {}, '/articles/2019-a.md') }
+    let(:item_article_a_rep_after) { Nanoc::Core::ItemRep.new(item_article_a_after, :default) }
+
+    context 'when articles item depends on raw content of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, raw_content: true)
+          store.record_dependency(item_articles_before, item_article_b_before, raw_content: true)
+          store.record_dependency(item_articles_before, item_article_c_before, raw_content: true)
+        end
+      end
+
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::ContentModified,
+        ])
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item depends on attributes of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, attributes: true)
+          store.record_dependency(item_articles_before, item_article_b_before, attributes: true)
+          store.record_dependency(item_articles_before, item_article_c_before, attributes: true)
+        end
+      end
+
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::ContentModified,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item depends on compiled content of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, compiled_content: true)
+          store.record_dependency(item_articles_before, item_article_b_before, compiled_content: true)
+          store.record_dependency(item_articles_before, item_article_c_before, compiled_content: true)
+        end
+      end
+
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::ContentModified,
+        ])
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item depends on path of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, path: true)
+          store.record_dependency(item_articles_before, item_article_b_before, path: true)
+          store.record_dependency(item_articles_before, item_article_c_before, path: true)
+        end
+      end
+
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::ContentModified,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+  end
+
+  context 'when article item has changed attributes' do
+    let(:item_article_a_after)     { Nanoc::Core::Item.new('Article A', { title: 'UPDATED title' }, '/articles/2019-a.md') }
+    let(:item_article_a_rep_after) { Nanoc::Core::ItemRep.new(item_article_a_after, :default) }
+
+    context 'when articles item depends on raw content of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, raw_content: true)
+          store.record_dependency(item_articles_before, item_article_b_before, raw_content: true)
+          store.record_dependency(item_articles_before, item_article_c_before, raw_content: true)
+        end
+      end
+
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::AttributesModified,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a generic attributes dependency on articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, attributes: true)
+          store.record_dependency(item_articles_before, item_article_b_before, attributes: true)
+          store.record_dependency(item_articles_before, item_article_c_before, attributes: true)
+        end
+      end
+
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::AttributesModified,
+        ])
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attributes dependency on articles, and is triggered' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, attributes: [:title])
+          store.record_dependency(item_articles_before, item_article_b_before, attributes: [:title])
+          store.record_dependency(item_articles_before, item_article_c_before, attributes: [:title])
+        end
+      end
+
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::AttributesModified,
+        ])
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attributes dependency on articles, but is not triggered' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, attributes: [:updated_on])
+          store.record_dependency(item_articles_before, item_article_b_before, attributes: [:updated_on])
+          store.record_dependency(item_articles_before, item_article_c_before, attributes: [:updated_on])
+        end
+      end
+
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::AttributesModified,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item depends on compiled content of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, compiled_content: true)
+          store.record_dependency(item_articles_before, item_article_b_before, compiled_content: true)
+          store.record_dependency(item_articles_before, item_article_c_before, compiled_content: true)
+        end
+      end
+
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::AttributesModified,
+        ])
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item depends on path of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, path: true)
+          store.record_dependency(item_articles_before, item_article_b_before, path: true)
+          store.record_dependency(item_articles_before, item_article_c_before, path: true)
+        end
+      end
+
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::AttributesModified,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+  end
+
+  context 'when layout has changed raw content' do
+    let(:layout_default_after) { Nanoc::Core::Layout.new('Default UPDATED', { kind: 'default' }, '/default.html.erb') }
+
+    context 'when articles item depends on raw content of layout' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, layout_default_after, raw_content: true)
+        end
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a generic attributes dependency on layout' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, layout_default_after, attributes: true)
+        end
+      end
+
+      it 'marks all items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attributes dependency on layout, and is triggered' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, layout_default_after, attributes: [:title])
+        end
+      end
+
+      it 'marks all items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attributes dependency on articles, but is not triggered' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, layout_default_after, attributes: [:author])
+        end
+      end
+
+      it 'marks all items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when home item has a transitive dependency via articles item on layout' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_home_before, item_articles_before, compiled_content: true)
+          store.record_dependency(item_articles_before, layout_default_after, raw_content: true)
+        end
+      end
+
+      it 'marks home item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+  end
+
+  context 'when layout has changed attributes' do
+    let(:layout_default_after) { Nanoc::Core::Layout.new('Default', { title: 'Title UPDATED' }, '/default.html.erb') }
+
+    context 'when articles item depends on raw content of layout' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, layout_default_after, raw_content: true)
+        end
+      end
+
+      it 'marks all items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a generic attributes dependency on layout' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, layout_default_after, attributes: true)
+        end
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attributes dependency on layout, and is triggered' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, layout_default_after, attributes: [:title])
+        end
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attributes dependency on articles, but is not triggered' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, layout_default_after, attributes: [:author])
+        end
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+  end
+
+  context 'when article item has changed rules' do
+    let(:item_article_a_after)     { Nanoc::Core::Item.new('Article A', {}, '/articles/2019-a.md') }
+    let(:item_article_a_rep_after) { Nanoc::Core::ItemRep.new(item_article_a_after, :default) }
+
+    let(:action_sequences_after) do
+      action_sequences_before.merge(
+        {
+          item_article_a_rep_before => different_action_sequence_for_item_rep,
+        },
       )
     end
 
-    let(:other_item) { Nanoc::Core::Item.new('other stuff', {}, '/other.md') }
-    let(:other_item_rep) { Nanoc::Core::ItemRep.new(other_item, :default) }
+    context 'when articles item depends on raw content of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, raw_content: true)
+          store.record_dependency(item_articles_before, item_article_b_before, raw_content: true)
+          store.record_dependency(item_articles_before, item_article_c_before, raw_content: true)
+        end
+      end
 
-    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::RulesModified,
+        ])
+      end
 
-    let(:old_action_sequence_for_other_item_rep) do
-      Nanoc::Core::ActionSequenceBuilder.build do |b|
-        b.add_filter(:erb, {})
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
       end
     end
 
-    let(:new_action_sequence_for_other_item_rep) { old_action_sequence_for_other_item_rep }
-
-    let(:action_sequences) do
-      {
-        item_rep => new_action_sequence_for_item_rep,
-      }
-    end
-
-    before do
-      checksum_store.add(item)
-      checksum_store.add(config)
-
-      allow(site).to receive(:code_snippets).and_return([])
-      allow(site).to receive(:config).and_return(config)
-    end
-
-    context 'two items' do
-      before do
-        reps << other_item_rep
-
-        action_sequence_store[other_item_rep] = old_action_sequence_for_other_item_rep.serialize
-
-        checksum_store.add(other_item)
-      end
-
-      let(:items_before) do
-        Nanoc::Core::ItemCollection.new(config, [item, other_item])
-      end
-
-      let(:action_sequences) do
-        {
-          item_rep => new_action_sequence_for_item_rep,
-          other_item_rep => new_action_sequence_for_other_item_rep,
-        }
-      end
-
-      context 'transitive dependency' do
-        let(:distant_item) { Nanoc::Core::Item.new('distant stuff', {}, '/distant.md') }
-        let(:distant_item_rep) { Nanoc::Core::ItemRep.new(distant_item, :default) }
-
-        let(:items_before) do
-          Nanoc::Core::ItemCollection.new(config, [item, other_item, distant_item])
-        end
-
-        let(:action_sequences) do
-          {
-            item_rep => new_action_sequence_for_item_rep,
-            other_item_rep => new_action_sequence_for_other_item_rep,
-            distant_item_rep => new_action_sequence_for_other_item_rep,
-          }
-        end
-
-        before do
-          reps << distant_item_rep
-          checksum_store.add(distant_item)
-          action_sequence_store[distant_item_rep] = old_action_sequence_for_other_item_rep.serialize
-        end
-
-        context 'on attribute + attribute' do
-          before do
-            dependency_store.record_dependency(item, other_item, attributes: true)
-            dependency_store.record_dependency(other_item, distant_item, attributes: true)
-          end
-
-          context 'distant attribute changed' do
-            before { distant_item.attributes[:title] = 'omg new title' }
-
-            it 'has correct outdatedness of item' do
-              expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).to be(false)
-            end
-
-            it 'has correct outdatedness of other item' do
-              expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be(true)
-            end
-          end
-
-          context 'distant raw content changed' do
-            before { distant_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-            it 'has correct outdatedness of item' do
-              expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).to be(false)
-            end
-
-            it 'has correct outdatedness of other item' do
-              expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be(false)
-            end
-          end
-        end
-
-        context 'on compiled content + attribute' do
-          before do
-            dependency_store.record_dependency(item, other_item, compiled_content: true)
-            dependency_store.record_dependency(other_item, distant_item, attributes: true)
-          end
-
-          context 'distant attribute changed' do
-            before { distant_item.attributes[:title] = 'omg new title' }
-
-            it 'has correct outdatedness of item' do
-              expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).to be(true)
-            end
-
-            it 'has correct outdatedness of other item' do
-              expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be(true)
-            end
-          end
-
-          context 'distant raw content changed' do
-            before { distant_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-            it 'has correct outdatedness of item' do
-              expect(outdatedness_checker.send(:outdated_due_to_dependencies?, item)).to be(false)
-            end
-
-            it 'has correct outdatedness of other item' do
-              expect(outdatedness_checker.send(:outdated_due_to_dependencies?, other_item)).to be(false)
-            end
-          end
+    context 'when articles item depends on attributes of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, attributes: true)
+          store.record_dependency(item_articles_before, item_article_b_before, attributes: true)
+          store.record_dependency(item_articles_before, item_article_c_before, attributes: true)
         end
       end
 
-      context 'only generic attribute dependency' do
-        before do
-          dependency_store.record_dependency(item, other_item, attributes: true)
-        end
-
-        context 'attribute changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'raw content changed' do
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'attribute + raw content changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'path changed' do
-          let(:new_action_sequence_for_other_item_rep) do
-            Nanoc::Core::ActionSequenceBuilder.build do |b|
-              b.add_filter(:erb, {})
-              b.add_snapshot(:donkey, '/giraffe.txt', other_item_rep)
-            end
-          end
-
-          it { is_expected.to be(false) }
-        end
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::RulesModified,
+        ])
       end
 
-      context 'only specific attribute dependency' do
-        before do
-          dependency_store.record_dependency(item, other_item, attributes: [:title])
-        end
-
-        context 'attribute changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'other attribute changed' do
-          before { other_item.attributes[:subtitle] = 'tagline here' }
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'raw content changed' do
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'attribute + raw content changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'other attribute + raw content changed' do
-          before { other_item.attributes[:subtitle] = 'tagline here' }
-
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'path changed' do
-          let(:new_action_sequence_for_other_item_rep) do
-            Nanoc::Core::ActionSequenceBuilder.build do |b|
-              b.add_filter(:erb, {})
-              b.add_snapshot(:donkey, '/giraffe.txt', other_item_rep)
-            end
-          end
-
-          it { is_expected.to be(false) }
-        end
-      end
-
-      context 'generic dependency on config' do
-        before do
-          dependency_store.record_dependency(item, config, attributes: true)
-        end
-
-        context 'nothing changed' do
-          it { is_expected.to be(false) }
-        end
-
-        context 'attribute changed' do
-          before { config[:title] = 'omg new title' }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'other attribute changed' do
-          before { config[:subtitle] = 'tagline here' }
-
-          it { is_expected.to be(true) }
-        end
-      end
-
-      context 'specific dependency on config' do
-        before do
-          dependency_store.record_dependency(item, config, attributes: [:title])
-        end
-
-        context 'nothing changed' do
-          it { is_expected.to be(false) }
-        end
-
-        context 'attribute changed' do
-          before { config[:title] = 'omg new title' }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'other attribute changed' do
-          before { config[:subtitle] = 'tagline here' }
-
-          it { is_expected.to be(false) }
-        end
-      end
-
-      context 'only raw content dependency' do
-        before do
-          dependency_store.record_dependency(item, other_item, raw_content: true)
-        end
-
-        context 'attribute changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'raw content changed' do
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'attribute + raw content changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'path changed' do
-          let(:new_action_sequence_for_other_item_rep) do
-            Nanoc::Core::ActionSequenceBuilder.build do |b|
-              b.add_filter(:erb, {})
-              b.add_snapshot(:donkey, '/giraffe.txt', other_item_rep)
-            end
-          end
-
-          it { is_expected.to be(false) }
-        end
-      end
-
-      context 'only path dependency' do
-        before do
-          dependency_store.record_dependency(item, other_item, raw_content: true)
-        end
-
-        context 'attribute changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'raw content changed' do
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'path changed' do
-          let(:new_action_sequence_for_other_item_rep) do
-            Nanoc::Core::ActionSequenceBuilder.build do |b|
-              b.add_filter(:erb, {})
-              b.add_snapshot(:donkey, '/giraffe.txt', other_item_rep)
-            end
-          end
-
-          it { is_expected.to be(false) }
-        end
-      end
-
-      context 'attribute + raw content dependency' do
-        before do
-          dependency_store.record_dependency(item, other_item, attributes: true, raw_content: true)
-        end
-
-        context 'attribute changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'raw content changed' do
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'attribute + raw content changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'rules changed' do
-          let(:new_action_sequence_for_other_item_rep) do
-            Nanoc::Core::ActionSequenceBuilder.build do |b|
-              b.add_filter(:erb, {})
-              b.add_filter(:donkey, {})
-            end
-          end
-
-          it { is_expected.to be(false) }
-        end
-      end
-
-      context 'attribute + other dependency' do
-        before do
-          dependency_store.record_dependency(item, other_item, attributes: true, path: true)
-        end
-
-        context 'attribute changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'raw content changed' do
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(false) }
-        end
-      end
-
-      context 'other dependency' do
-        before do
-          dependency_store.record_dependency(item, other_item, path: true)
-        end
-
-        context 'attribute changed' do
-          before { other_item.attributes[:title] = 'omg new title' }
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'raw content changed' do
-          before { other_item.content = Nanoc::Core::TextualContent.new('omg new content') }
-
-          it { is_expected.to be(false) }
-        end
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
       end
     end
 
-    context 'only item collection dependency' do
-      context 'dependency on any new item' do
-        before do
-          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
-          dependency_tracker.enter(item)
-          dependency_tracker.bounce(items_after, raw_content: true)
-          dependency_store.store
-        end
-
-        context 'nothing changed' do
-          it { is_expected.to be(false) }
-        end
-
-        context 'item added' do
-          let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/newblahz.md') }
-          let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
-
-          let(:items_after) do
-            Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
-          end
-
-          let(:action_sequences) do
-            super().merge({ new_item_rep => old_action_sequence_for_item_rep })
-          end
-
-          before do
-            reps << new_item_rep
-
-            dependency_store.items = items_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'item removed' do
-          let(:items_after) { Nanoc::Core::ItemCollection.new(config, []) }
-
-          before do
-            dependency_store.items = items_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(false) }
+    context 'when articles item depends on compiled content of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, compiled_content: true)
+          store.record_dependency(item_articles_before, item_article_b_before, compiled_content: true)
+          store.record_dependency(item_articles_before, item_article_c_before, compiled_content: true)
         end
       end
 
-      context 'dependency on specific new items (string)' do
-        before do
-          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
-          dependency_tracker.enter(item)
-          dependency_tracker.bounce(items_after, raw_content: ['/new*'])
-          dependency_store.store
-        end
-
-        context 'nothing changed' do
-          it { is_expected.to be(false) }
-        end
-
-        context 'matching item added' do
-          let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/newblahz.md') }
-          let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
-
-          let(:items_after) do
-            Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
-          end
-
-          let(:action_sequences) do
-            super().merge({ new_item_rep => old_action_sequence_for_item_rep })
-          end
-
-          before do
-            reps << new_item_rep
-
-            dependency_store.items = items_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'non-matching item added' do
-          let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/nublahz.md') }
-          let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
-
-          let(:items_after) do
-            Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
-          end
-
-          before do
-            reps << new_item_rep
-
-            dependency_store.items = items_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'item removed' do
-          let(:items_after) { Nanoc::Core::ItemCollection.new(config, []) }
-
-          before do
-            dependency_store.items = items_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(false) }
-        end
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::RulesModified,
+        ])
       end
 
-      context 'dependency on specific new items (regex)' do
-        before do
-          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
-          dependency_tracker.enter(item)
-          dependency_tracker.bounce(items_after, raw_content: [%r{^/new.*}])
-          dependency_store.store
-        end
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
 
-        context 'nothing changed' do
-          it { is_expected.to be(false) }
-        end
-
-        context 'matching item added' do
-          let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/newblahz.md') }
-          let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
-
-          let(:items_after) do
-            Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
-          end
-
-          let(:action_sequences) do
-            super().merge({ new_item_rep => old_action_sequence_for_item_rep })
-          end
-
-          before do
-            reps << new_item_rep
-
-            dependency_store.items = items_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'non-matching item added' do
-          let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/nublahz.md') }
-          let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
-
-          let(:items_after) do
-            Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
-          end
-
-          let(:action_sequences) do
-            super().merge({ new_item_rep => old_action_sequence_for_item_rep })
-          end
-
-          before do
-            dependency_store.items = items_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'item removed' do
-          let(:items_after) { Nanoc::Core::ItemCollection.new(config, []) }
-
-          before do
-            dependency_store.items = items_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'dependency on specific new items (attribute)' do
-          before do
-            dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
-            dependency_tracker.enter(item)
-            dependency_tracker.bounce(items_after, attributes: { kind: 'note' })
-            dependency_store.store
-          end
-
-          context 'nothing changed' do
-            it { is_expected.to be(false) }
-          end
-
-          context 'matching item added' do
-            let(:new_item) { Nanoc::Core::Item.new('stuff', { kind: 'note' }, '/new-note.md') }
-            let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
-
-            let(:items_after) do
-              Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
-            end
-
-            let(:action_sequences) do
-              super().merge({ new_item_rep => old_action_sequence_for_item_rep })
-            end
-
-            before do
-              reps << new_item_rep
-
-              dependency_store.items = items_after
-              dependency_store.load
-            end
-
-            it { is_expected.to be(true) }
-          end
-
-          context 'non-matching item added' do
-            let(:new_item) { Nanoc::Core::Item.new('stuff', { kind: 'article' }, '/nu-article.md') }
-            let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
-
-            let(:items_after) do
-              Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
-            end
-
-            let(:action_sequences) do
-              super().merge({ new_item_rep => old_action_sequence_for_item_rep })
-            end
-
-            before do
-              reps << new_item_rep
-
-              dependency_store.items = items_after
-              dependency_store.load
-            end
-
-            it { is_expected.to be(false) }
-          end
-
-          context 'item removed' do
-            let(:items_after) { Nanoc::Core::ItemCollection.new(config, []) }
-
-            before do
-              dependency_store.items = items_after
-              dependency_store.load
-            end
-
-            it { is_expected.to be(false) }
-          end
-        end
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
       end
     end
 
-    context 'only layout collection dependency' do
-      context 'dependency on any new layout' do
-        before do
-          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
-          dependency_tracker.enter(item)
-          dependency_tracker.bounce(layouts_after, raw_content: true)
-          dependency_store.store
-        end
-
-        context 'nothing changed' do
-          it { is_expected.to be(false) }
-        end
-
-        context 'layout added' do
-          let(:new_layout) { Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md') }
-
-          let(:layouts_after) do
-            Nanoc::Core::LayoutCollection.new(config, layouts_before.to_a + [new_layout])
-          end
-
-          let(:action_sequences) do
-            seq = Nanoc::Core::ActionSequenceBuilder.build do |b|
-              b.add_filter(:erb, {})
-            end
-
-            super().merge({ new_layout => seq })
-          end
-
-          before do
-            dependency_store.layouts = layouts_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'layout removed' do
-          let(:layouts_after) { Nanoc::Core::LayoutCollection.new(config, []) }
-
-          before do
-            dependency_store.layouts = layouts_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(false) }
+    context 'when articles item depends on path of articles' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, item_article_a_before, path: true)
+          store.record_dependency(item_articles_before, item_article_b_before, path: true)
+          store.record_dependency(item_articles_before, item_article_c_before, path: true)
         end
       end
 
-      context 'dependency on specific new layouts (string)' do
-        before do
-          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
-          dependency_tracker.enter(item)
-          dependency_tracker.bounce(layouts_after, raw_content: ['/new*'])
-          dependency_store.store
-        end
-
-        context 'nothing changed' do
-          it { is_expected.to be(false) }
-        end
-
-        context 'matching layout added' do
-          let(:new_layout) { Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md') }
-
-          let(:layouts_after) do
-            Nanoc::Core::LayoutCollection.new(config, layouts_before.to_a + [new_layout])
-          end
-
-          let(:action_sequences) do
-            seq = Nanoc::Core::ActionSequenceBuilder.build do |b|
-              b.add_filter(:erb, {})
-            end
-
-            super().merge({ new_layout => seq })
-          end
-
-          before do
-            dependency_store.layouts = layouts_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'non-matching layout added' do
-          let(:new_layout) { Nanoc::Core::Layout.new('stuff', {}, '/nublahz.md') }
-
-          let(:layouts_after) do
-            Nanoc::Core::LayoutCollection.new(config, layouts_before.to_a + [new_layout])
-          end
-
-          let(:action_sequences) do
-            seq = Nanoc::Core::ActionSequenceBuilder.build do |b|
-              b.add_filter(:erb, {})
-            end
-
-            super().merge({ new_layout => seq })
-          end
-
-          before do
-            dependency_store.layouts = layouts_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'layout removed' do
-          let(:layouts_after) { Nanoc::Core::LayoutCollection.new(config, []) }
-
-          before do
-            dependency_store.layouts = layouts_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(false) }
-        end
+      it 'marks article item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::RulesModified,
+        ])
       end
 
-      context 'dependency on specific new layouts (regex)' do
-        before do
-          dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
-          dependency_tracker.enter(item)
-          dependency_tracker.bounce(layouts_after, raw_content: [%r{^/new.*}])
-          dependency_store.store
-        end
+      it 'marks articles item as outdated' do
+        # FIXME: This is not optimal. The path has not changed, and so the
+        # articles item should not be considered as outdated. This is because
+        # the `RulesModified` outdatedness reason has the property `path: true`.
 
-        context 'nothing changed' do
-          it { is_expected.to be(false) }
-        end
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
 
-        context 'matching layout added' do
-          let(:new_layout) { Nanoc::Core::Layout.new('stuff', {}, '/newblahz.md') }
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
 
-          let(:layouts_after) do
-            Nanoc::Core::LayoutCollection.new(config, layouts_before.to_a + [new_layout])
-          end
-
-          let(:action_sequences) do
-            seq = Nanoc::Core::ActionSequenceBuilder.build do |b|
-              b.add_filter(:erb, {})
-            end
-
-            super().merge({ new_layout => seq })
-          end
-
-          before do
-            dependency_store.layouts = layouts_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(true) }
-        end
-
-        context 'non-matching layout added' do
-          let(:new_layout) { Nanoc::Core::Layout.new('stuff', {}, '/nublahz.md') }
-
-          let(:layouts_after) do
-            Nanoc::Core::LayoutCollection.new(config, layouts_before.to_a + [new_layout])
-          end
-
-          let(:action_sequences) do
-            seq = Nanoc::Core::ActionSequenceBuilder.build do |b|
-              b.add_filter(:erb, {})
-            end
-
-            super().merge({ new_layout => seq })
-          end
-
-          before do
-            dependency_store.layouts = layouts_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(false) }
-        end
-
-        context 'layout removed' do
-          let(:layouts_after) { Nanoc::Core::LayoutCollection.new(config, []) }
-
-          before do
-            dependency_store.layouts = layouts_after
-            dependency_store.load
-          end
-
-          it { is_expected.to be(false) }
-        end
+        # FIXME: This is not optimal. Also see related test case above.
+        # expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
       end
     end
   end
+
+  context 'when code snippets are changed' do
+    let(:code_snippet_b_after) { Nanoc::Core::CodeSnippet.new('bbb UPDATED', 'lib/b.rb') }
+
+    it 'marks all items as outdated' do
+      expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to match_array([
+        Nanoc::Core::OutdatednessReasons::CodeSnippetsModified,
+      ])
+      expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+        Nanoc::Core::OutdatednessReasons::CodeSnippetsModified,
+      ])
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+        Nanoc::Core::OutdatednessReasons::CodeSnippetsModified,
+      ])
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to match_array([
+        Nanoc::Core::OutdatednessReasons::CodeSnippetsModified,
+      ])
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to match_array([
+        Nanoc::Core::OutdatednessReasons::CodeSnippetsModified,
+      ])
+    end
+  end
+
+  context 'when using an always-outdated filter' do
+    # NOTE: This modifies both before AND after action sequences.
+    let(:action_sequences_before) do
+      super().merge(
+        {
+          item_article_a_rep_before => always_outdated_action_sequence_for_item_rep,
+        },
+      )
+    end
+
+    it 'marks article item as outdated' do
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+        Nanoc::Core::OutdatednessReasons::UsesAlwaysOutdatedFilter,
+      ])
+    end
+
+    it 'marks other items as NOT outdated' do
+      expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+    end
+  end
+
+  context 'when path is present but not written' do
+    before do
+      item_article_a_rep_after.raw_paths = {
+        last: ["#{site.config.output_dir}/articles.html"],
+      }
+    end
+
+    it 'marks article item as outdated' do
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to match_array([
+        Nanoc::Core::OutdatednessReasons::NotWritten,
+      ])
+    end
+
+    it 'marks other items as NOT outdated' do
+      expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+      expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+    end
+  end
+
+  context 'when config has changed' do
+    let(:config_after) { Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: { name: 'Name UPDATED' }).with_defaults }
+
+    context 'when there are no dependencies on the config' do
+      it 'marks all items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a generic attribute dependency on config' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, config_before, attributes: true)
+        end
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attribute dependency on config, and is triggered' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, config_before, attributes: [:name])
+        end
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attribute dependency on config, but is not triggered' do
+      let(:dependency_store) do
+        Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        ).tap do |store|
+          store.record_dependency(item_articles_before, config_before, attributes: [:author])
+        end
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+  end
+
+  context 'when an item is added to the site' do
+    let(:item_article_d_after)     { Nanoc::Core::Item.new('Article D', { kind: 'article' }, '/articles/2022-d.md') }
+    let(:item_article_d_rep_after) { Nanoc::Core::ItemRep.new(item_article_d_after, :default) }
+
+    let(:items_after_array) { super() + [item_article_d_after] }
+
+    let(:reps) do
+      super().tap do |rr|
+        rr << item_article_d_rep_after
+      end
+    end
+
+    let(:action_sequences_after) do
+      super().merge(
+        {
+          item_article_d_rep_after => some_action_sequence_for_item_rep,
+        },
+      )
+    end
+
+    context 'when there are no dependencies on the new item' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks all items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+
+      it 'marks new item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).not_to be_empty
+
+        # FIXME: It should be DocumentAdded (though it’s not a big issue)
+        # expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).to match_array([
+        #   Nanoc::Core::OutdatednessReasons::DocumentAdded,
+        # ])
+      end
+    end
+
+    # NOTE: Generic attribute dependency on item collection is not an option,
+    # and not needed. IdentifiableCollectionView generates dependencies with
+    # specific attributes only.
+
+    context 'when articles item has a specific attribute dependency on all items, and attribute matches' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.record_dependency(item_articles_before, items_before_coll, attributes: { kind: 'article' })
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks new item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).not_to be_empty
+
+        # FIXME: It should be DocumentAdded:
+        # expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).to match_array([
+        #   Nanoc::Core::OutdatednessReasons::DocumentAdded,
+        # ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attribute dependency on all items, and attribute does not match' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.record_dependency(item_articles_before, items_before_coll, attributes: { kind: 'non-article' })
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks new item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).not_to be_empty
+
+        # FIXME: It should be DocumentAdded:
+        # expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).to match_array([
+        #   Nanoc::Core::OutdatednessReasons::DocumentAdded,
+        # ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a generic raw content dependency on all items' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.record_dependency(item_articles_before, items_before_coll, raw_content: true)
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks new item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).not_to be_empty
+
+        # FIXME: It should be DocumentAdded:
+        # expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).to match_array([
+        #   Nanoc::Core::OutdatednessReasons::DocumentAdded,
+        # ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific raw content dependency (string pattern) on all items' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.record_dependency(item_articles_before, items_before_coll, raw_content: ['/articles/*.md'])
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks new item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).not_to be_empty
+
+        # FIXME: It should be DocumentAdded:
+        # expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).to match_array([
+        #   Nanoc::Core::OutdatednessReasons::DocumentAdded,
+        # ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific raw content dependency (regex pattern) on all items' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.record_dependency(item_articles_before, items_before_coll, raw_content: [%r{^/articles/.*}])
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks new item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).not_to be_empty
+
+        # FIXME: It should be DocumentAdded:
+        # expect(outdatedness_checker.outdatedness_reasons_for(item_article_d_after)).to match_array([
+        #   Nanoc::Core::OutdatednessReasons::DocumentAdded,
+        # ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+  end
+
+  context 'when a layout is added to the site' do
+    let(:layout_new_after) { Nanoc::Core::Layout.new('Layout', { kind: 'article' }, '/articles/2022-d.md') }
+
+    let(:layouts_after_array) { super() + [layout_new_after] }
+
+    let(:action_sequences_after) do
+      super().merge(
+        {
+          layout_new_after => some_action_sequence_for_layout,
+        },
+      )
+    end
+
+    context 'when there are no dependencies on the new item' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks all items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attribute dependency on all layouts, and attribute matches' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.record_dependency(item_articles_before, layouts_before_coll, attributes: { kind: 'article' })
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific attribute dependency on all layouts, but attribute does not match' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.record_dependency(item_articles_before, layouts_before_coll, attributes: { kind: 'note' })
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks all items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a generic raw content dependency on all layouts' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.record_dependency(item_articles_before, layouts_before_coll, raw_content: true)
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific raw content dependency (string pattern) on all layouts' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.record_dependency(item_articles_before, layouts_before_coll, raw_content: ['/articles/*.md'])
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+
+    context 'when articles item has a specific raw content dependency (regex pattern) on all layouts' do
+      before do
+        # Store old dependency store
+        old_dependency_store = Nanoc::Core::DependencyStore.new(
+          items_before_coll,
+          layouts_before_coll,
+          config_before,
+        )
+        old_dependency_store.record_dependency(item_articles_before, layouts_before_coll, raw_content: [%r{^/articles/.*}])
+        old_dependency_store.store
+
+        # Reload
+        dependency_store.items = items_after_coll
+        dependency_store.layouts = layouts_after_coll
+        dependency_store.load
+      end
+
+      it 'marks articles item as outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_articles_after)).to match_array([
+          Nanoc::Core::OutdatednessReasons::DependenciesOutdated,
+        ])
+      end
+
+      it 'marks other items as NOT outdated' do
+        expect(outdatedness_checker.outdatedness_reasons_for(item_home_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_a_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_b_after)).to be_empty
+        expect(outdatedness_checker.outdatedness_reasons_for(item_article_c_after)).to be_empty
+      end
+    end
+  end
+
+  # NOTE: When an item or layout is removed from the site, the dependency on the
+  # item/layout collection will not trigger outdatedness. If any specific item
+  # in the collection is used, then that will create individual dependencies.
+  #
+  # Open questions:
+  # - What if you do only do `@items.find_all('/articles/*').size`?
 end
+
+# rubocop:enable RSpec/MultipleMemoizedHelpers
