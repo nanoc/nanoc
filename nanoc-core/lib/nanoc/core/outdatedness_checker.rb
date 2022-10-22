@@ -6,92 +6,6 @@ module Nanoc
     #
     # @api private
     class OutdatednessChecker
-      class Basic
-        include Nanoc::Core::ContractsSupport
-
-        Rules = Nanoc::Core::OutdatednessRules
-
-        RULES_FOR_ITEM_REP =
-          [
-            Rules::ItemAdded,
-            Rules::RulesModified,
-            Rules::ContentModified,
-            Rules::AttributesModified,
-            Rules::NotWritten,
-            Rules::CodeSnippetsModified,
-            Rules::UsesAlwaysOutdatedFilter,
-          ].freeze
-
-        RULES_FOR_LAYOUT =
-          [
-            Rules::LayoutAdded,
-            Rules::RulesModified,
-            Rules::ContentModified,
-            Rules::AttributesModified,
-            Rules::UsesAlwaysOutdatedFilter,
-          ].freeze
-
-        RULES_FOR_CONFIG =
-          [
-            Rules::AttributesModified,
-          ].freeze
-
-        C_OBJ_MAYBE_REP = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep, Nanoc::Core::Configuration, Nanoc::Core::Layout, Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection]
-
-        contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Core::ItemRepRepo] => C::Any
-        def initialize(outdatedness_checker:, reps:)
-          @outdatedness_checker = outdatedness_checker
-          @reps = reps
-
-          # Memoize
-          @_outdatedness_status_for = {}
-        end
-
-        contract C_OBJ_MAYBE_REP => C::Maybe[Nanoc::Core::OutdatednessStatus]
-        def outdatedness_status_for(obj)
-          @_outdatedness_status_for[obj] ||=
-            case obj
-            when Nanoc::Core::ItemRep
-              apply_rules(RULES_FOR_ITEM_REP, obj)
-            when Nanoc::Core::Item
-              apply_rules_multi(RULES_FOR_ITEM_REP, @reps[obj])
-            when Nanoc::Core::Layout
-              apply_rules(RULES_FOR_LAYOUT, obj)
-            when Nanoc::Core::Configuration
-              apply_rules(RULES_FOR_CONFIG, obj)
-            when Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection
-              # Collections are never outdated. Objects inside them might be,
-              # however.
-              apply_rules([], obj)
-            else
-              raise Nanoc::Core::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
-            end
-        end
-
-        private
-
-        contract C::ArrayOf[Class], C_OBJ_MAYBE_REP, Nanoc::Core::OutdatednessStatus => C::Maybe[Nanoc::Core::OutdatednessStatus]
-        def apply_rules(rules, obj, status = Nanoc::Core::OutdatednessStatus.new)
-          rules.inject(status) do |acc, rule|
-            if acc.useful_to_apply?(rule)
-              reason = rule.instance.call(obj, @outdatedness_checker)
-              if reason
-                acc.update(reason)
-              else
-                acc
-              end
-            else
-              acc
-            end
-          end
-        end
-
-        contract C::ArrayOf[Class], C::ArrayOf[C_OBJ_MAYBE_REP] => C::Maybe[Nanoc::Core::OutdatednessStatus]
-        def apply_rules_multi(rules, objs)
-          objs.inject(Nanoc::Core::OutdatednessStatus.new) { |acc, elem| apply_rules(rules, elem, acc) }
-        end
-      end
-
       include Nanoc::Core::ContractsSupport
 
       attr_reader :checksum_store
@@ -143,7 +57,6 @@ module Nanoc
 
       contract C_OBJ => C::IterOf[Reasons::Generic]
       def basic_outdatedness_reasons_for(obj)
-        # reasons = @basic_outdatedness_reasons.fetch(obj)
         reasons = basic.outdatedness_status_for(obj).reasons
         if reasons.any?
           reasons
@@ -154,9 +67,9 @@ module Nanoc
 
       private
 
-      contract C::None => Basic
+      contract C::None => BasicOutdatednessChecker
       def basic
-        @_basic ||= Basic.new(outdatedness_checker: self, reps: @reps)
+        @_basic ||= BasicOutdatednessChecker.new(outdatedness_checker: self, reps: @reps)
       end
 
       contract C_OBJ, Hamster::Set => C::Bool
