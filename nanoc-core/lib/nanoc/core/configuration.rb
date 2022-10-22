@@ -176,6 +176,21 @@ module Nanoc
         "<#{self.class}>"
       end
 
+      contract C::None => C::Num
+      def hash
+        [@dir, @env_name].hash
+      end
+
+      contract C::Any => C::Bool
+      def ==(other)
+        eql?(other)
+      end
+
+      contract C::Any => C::Bool
+      def eql?(other)
+        other.is_a?(self.class) && @dir == other.dir && @env_name == other.env_name
+      end
+
       private
 
       def make_absolute(path)
