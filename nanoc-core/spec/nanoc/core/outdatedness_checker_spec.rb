@@ -103,8 +103,6 @@ describe Nanoc::Core::OutdatednessChecker do
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
-    let(:items) { Nanoc::Core::ItemCollection.new(config, [item, other_item]) }
-
     let(:old_action_sequence_for_other_item_rep) do
       Nanoc::Core::ActionSequenceBuilder.build(other_item_rep) do |b|
         b.add_filter(:erb, {})
@@ -509,7 +507,7 @@ describe Nanoc::Core::OutdatednessChecker do
         before do
           dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
           dependency_tracker.enter(item)
-          dependency_tracker.bounce(items, raw_content: true)
+          dependency_tracker.bounce(items_after, raw_content: true)
           dependency_store.store
         end
 
@@ -521,6 +519,10 @@ describe Nanoc::Core::OutdatednessChecker do
           let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/newblahz.md') }
           let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
 
+          let(:items_after) do
+            Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
+          end
+
           let(:action_sequences) do
             super().merge({ new_item_rep => old_action_sequence_for_item_rep })
           end
@@ -528,7 +530,7 @@ describe Nanoc::Core::OutdatednessChecker do
           before do
             reps << new_item_rep
 
-            dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.items = items_after
             dependency_store.load
           end
 
@@ -536,8 +538,10 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'item removed' do
+          let(:items_after) { Nanoc::Core::ItemCollection.new(config, []) }
+
           before do
-            dependency_store.items = Nanoc::Core::ItemCollection.new(config, [])
+            dependency_store.items = items_after
             dependency_store.load
           end
 
@@ -549,7 +553,7 @@ describe Nanoc::Core::OutdatednessChecker do
         before do
           dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
           dependency_tracker.enter(item)
-          dependency_tracker.bounce(items, raw_content: ['/new*'])
+          dependency_tracker.bounce(items_after, raw_content: ['/new*'])
           dependency_store.store
         end
 
@@ -561,6 +565,10 @@ describe Nanoc::Core::OutdatednessChecker do
           let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/newblahz.md') }
           let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
 
+          let(:items_after) do
+            Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
+          end
+
           let(:action_sequences) do
             super().merge({ new_item_rep => old_action_sequence_for_item_rep })
           end
@@ -568,7 +576,7 @@ describe Nanoc::Core::OutdatednessChecker do
           before do
             reps << new_item_rep
 
-            dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.items = items_after
             dependency_store.load
           end
 
@@ -576,9 +584,17 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'non-matching item added' do
+          let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/nublahz.md') }
+          let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
+
+          let(:items_after) do
+            Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
+          end
+
           before do
-            new_item = Nanoc::Core::Item.new('stuff', {}, '/nublahz.md')
-            dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
+            reps << new_item_rep
+
+            dependency_store.items = items_after
             dependency_store.load
           end
 
@@ -586,8 +602,10 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'item removed' do
+          let(:items_after) { Nanoc::Core::ItemCollection.new(config, []) }
+
           before do
-            dependency_store.items = Nanoc::Core::ItemCollection.new(config, [])
+            dependency_store.items = items_after
             dependency_store.load
           end
 
@@ -599,7 +617,7 @@ describe Nanoc::Core::OutdatednessChecker do
         before do
           dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
           dependency_tracker.enter(item)
-          dependency_tracker.bounce(items, raw_content: [%r{^/new.*}])
+          dependency_tracker.bounce(items_after, raw_content: [%r{^/new.*}])
           dependency_store.store
         end
 
@@ -611,6 +629,10 @@ describe Nanoc::Core::OutdatednessChecker do
           let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/newblahz.md') }
           let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
 
+          let(:items_after) do
+            Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
+          end
+
           let(:action_sequences) do
             super().merge({ new_item_rep => old_action_sequence_for_item_rep })
           end
@@ -618,7 +640,7 @@ describe Nanoc::Core::OutdatednessChecker do
           before do
             reps << new_item_rep
 
-            dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.items = items_after
             dependency_store.load
           end
 
@@ -626,9 +648,19 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'non-matching item added' do
+          let(:new_item) { Nanoc::Core::Item.new('stuff', {}, '/nublahz.md') }
+          let(:new_item_rep) { Nanoc::Core::ItemRep.new(new_item, :default) }
+
+          let(:items_after) do
+            Nanoc::Core::ItemCollection.new(config, items_before.to_a + [new_item])
+          end
+
+          let(:action_sequences) do
+            super().merge({ new_item_rep => old_action_sequence_for_item_rep })
+          end
+
           before do
-            new_item = Nanoc::Core::Item.new('stuff', {}, '/nublahz.md')
-            dependency_store.items = Nanoc::Core::ItemCollection.new(config, items.to_a + [new_item])
+            dependency_store.items = items_after
             dependency_store.load
           end
 
@@ -636,8 +668,10 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'item removed' do
+          let(:items_after) { Nanoc::Core::ItemCollection.new(config, []) }
+
           before do
-            dependency_store.items = Nanoc::Core::ItemCollection.new(config, [])
+            dependency_store.items = items_after
             dependency_store.load
           end
 
@@ -648,7 +682,7 @@ describe Nanoc::Core::OutdatednessChecker do
           before do
             dependency_tracker = Nanoc::Core::DependencyTracker.new(dependency_store)
             dependency_tracker.enter(item)
-            dependency_tracker.bounce(items, attributes: { kind: 'note' })
+            dependency_tracker.bounce(items_after, attributes: { kind: 'note' })
             dependency_store.store
           end
 
@@ -701,8 +735,10 @@ describe Nanoc::Core::OutdatednessChecker do
           end
 
           context 'item removed' do
+            let(:items_after) { Nanoc::Core::ItemCollection.new(config, []) }
+
             before do
-              dependency_store.items = Nanoc::Core::ItemCollection.new(config, [])
+              dependency_store.items = items_after
               dependency_store.load
             end
 
@@ -749,8 +785,10 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'layout removed' do
+          let(:layouts_after) { Nanoc::Core::LayoutCollection.new(config, []) }
+
           before do
-            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, [])
+            dependency_store.layouts = layouts_after
             dependency_store.load
           end
 
@@ -817,8 +855,10 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'layout removed' do
+          let(:layouts_after) { Nanoc::Core::LayoutCollection.new(config, []) }
+
           before do
-            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, [])
+            dependency_store.layouts = layouts_after
             dependency_store.load
           end
 
@@ -885,8 +925,10 @@ describe Nanoc::Core::OutdatednessChecker do
         end
 
         context 'layout removed' do
+          let(:layouts_after) { Nanoc::Core::LayoutCollection.new(config, []) }
+
           before do
-            dependency_store.layouts = Nanoc::Core::LayoutCollection.new(config, [])
+            dependency_store.layouts = layouts_after
             dependency_store.load
           end
 
