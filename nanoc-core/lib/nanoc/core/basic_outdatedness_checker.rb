@@ -5,6 +5,13 @@ module Nanoc
     class BasicOutdatednessChecker
       include Nanoc::Core::ContractsSupport
 
+      attr_reader :site
+      attr_reader :checksum_store
+      attr_reader :checksums
+      attr_reader :dependency_store
+      attr_reader :action_sequence_store
+      attr_reader :action_sequences
+
       Rules = Nanoc::Core::OutdatednessRules
 
       RULES_FOR_ITEM_REP =
@@ -32,12 +39,42 @@ module Nanoc
           Rules::AttributesModified,
         ].freeze
 
-      C_OBJ_MAYBE_REP = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep, Nanoc::Core::Configuration, Nanoc::Core::Layout, Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection]
+      C_OBJ = C::Or[
+        Nanoc::Core::Item,
+        Nanoc::Core::ItemRep,
+        Nanoc::Core::Configuration,
+        Nanoc::Core::Layout,
+        Nanoc::Core::ItemCollection,
+      ]
 
-      contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Core::ItemRepRepo] => C::Any
-      def initialize(outdatedness_checker:, reps:)
-        @outdatedness_checker = outdatedness_checker
+      C_OBJ_MAYBE_REP = C::Or[
+        Nanoc::Core::Item,
+        Nanoc::Core::ItemRep,
+        Nanoc::Core::Configuration,
+        Nanoc::Core::Layout,
+        Nanoc::Core::ItemCollection,
+        Nanoc::Core::LayoutCollection,
+      ]
+
+      C_ACTION_SEQUENCES = C::HashOf[C_OBJ => Nanoc::Core::ActionSequence]
+
+      contract C::KeywordArgs[
+        site: Nanoc::Core::Site,
+        checksum_store: Nanoc::Core::ChecksumStore,
+        checksums: Nanoc::Core::ChecksumCollection,
+        dependency_store: Nanoc::Core::DependencyStore,
+        action_sequence_store: Nanoc::Core::ActionSequenceStore,
+        action_sequences: C_ACTION_SEQUENCES,
+        reps: Nanoc::Core::ItemRepRepo,
+      ] => C::Any
+      def initialize(site:, checksum_store:, checksums:, dependency_store:, action_sequence_store:, action_sequences:, reps:)
         @reps = reps
+        @site = site
+        @checksum_store = checksum_store
+        @checksums = checksums
+        @dependency_store = dependency_store
+        @action_sequence_store = action_sequence_store
+        @action_sequences = action_sequences
 
         # Memoize
         @_outdatedness_status_for = {}
@@ -64,13 +101,17 @@ module Nanoc
           end
       end
 
+      def action_sequence_for(rep)
+        @action_sequences.fetch(rep)
+      end
+
       private
 
       contract C::ArrayOf[Class], C_OBJ_MAYBE_REP, Nanoc::Core::OutdatednessStatus => C::Maybe[Nanoc::Core::OutdatednessStatus]
       def apply_rules(rules, obj, status = Nanoc::Core::OutdatednessStatus.new)
         rules.inject(status) do |acc, rule|
           if acc.useful_to_apply?(rule)
-            reason = rule.instance.call(obj, @outdatedness_checker)
+            reason = rule.instance.call(obj, self)
             if reason
               acc.update(reason)
             else
@@ -84,7 +125,9 @@ module Nanoc
 
       contract C::ArrayOf[Class], C::ArrayOf[C_OBJ_MAYBE_REP] => C::Maybe[Nanoc::Core::OutdatednessStatus]
       def apply_rules_multi(rules, objs)
-        objs.inject(Nanoc::Core::OutdatednessStatus.new) { |acc, elem| apply_rules(rules, elem, acc) }
+        objs.inject(Nanoc::Core::OutdatednessStatus.new) do |acc, elem|
+          apply_rules(rules, elem, acc)
+        end
       end
     end
   end

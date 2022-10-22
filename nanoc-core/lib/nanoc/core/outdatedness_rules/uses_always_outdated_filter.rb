@@ -6,8 +6,8 @@ module Nanoc
       class UsesAlwaysOutdatedFilter < Nanoc::Core::OutdatednessRule
         affects_props :raw_content, :attributes, :path
 
-        def apply(obj, outdatedness_checker)
-          seq = outdatedness_checker.action_sequence_for(obj)
+        def apply(obj, basic_outdatedness_checker)
+          seq = basic_outdatedness_checker.action_sequence_for(obj)
           if any_always_outdated?(seq)
             Nanoc::Core::OutdatednessReasons::UsesAlwaysOutdatedFilter
           end

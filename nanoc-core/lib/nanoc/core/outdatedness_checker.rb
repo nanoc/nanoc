@@ -21,7 +21,15 @@ module Nanoc
       C_ITEM_OR_REP = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep]
       C_ACTION_SEQUENCES = C::HashOf[C_OBJ => Nanoc::Core::ActionSequence]
 
-      contract C::KeywordArgs[site: Nanoc::Core::Site, checksum_store: Nanoc::Core::ChecksumStore, checksums: Nanoc::Core::ChecksumCollection, dependency_store: Nanoc::Core::DependencyStore, action_sequence_store: Nanoc::Core::ActionSequenceStore, action_sequences: C_ACTION_SEQUENCES, reps: Nanoc::Core::ItemRepRepo] => C::Any
+      contract C::KeywordArgs[
+        site: Nanoc::Core::Site,
+        checksum_store: Nanoc::Core::ChecksumStore,
+        checksums: Nanoc::Core::ChecksumCollection,
+        dependency_store: Nanoc::Core::DependencyStore,
+        action_sequence_store: Nanoc::Core::ActionSequenceStore,
+        action_sequences: C_ACTION_SEQUENCES,
+        reps: Nanoc::Core::ItemRepRepo
+      ] => C::Any
       def initialize(site:, checksum_store:, checksums:, dependency_store:, action_sequence_store:, action_sequences:, reps:)
         @site = site
         @checksum_store = checksum_store
@@ -69,7 +77,15 @@ module Nanoc
 
       contract C::None => BasicOutdatednessChecker
       def basic
-        @_basic ||= BasicOutdatednessChecker.new(outdatedness_checker: self, reps: @reps)
+        @_basic ||= BasicOutdatednessChecker.new(
+          site: @site,
+          checksum_store: @checksum_store,
+          checksums: @checksums,
+          dependency_store: @dependency_store,
+          action_sequence_store: @action_sequence_store,
+          action_sequences: @action_sequences,
+          reps: @reps,
+        )
       end
 
       contract C_OBJ, Hamster::Set => C::Bool
