@@ -11,6 +11,7 @@ lib/nanoc/core/action_sequence_store.rb
 lib/nanoc/core/action_sequence.rb
 lib/nanoc/core/aggregate_data_source.rb
 lib/nanoc/core/assertions.rb
+lib/nanoc/core/basic_outdatedness_checker.rb
 lib/nanoc/core/basic_item_rep_collection_view.rb
 lib/nanoc/core/basic_item_rep_view.rb
 lib/nanoc/core/basic_item_view.rb

@@ -41,7 +41,12 @@ module Nanoc
         end
 
         def outdated?(rep)
-          @outdatedness_store.include?(rep) || @outdatedness_checker.outdated?(rep)
+          if @outdatedness_store.include?(rep)
+            # We determined previously that this rep is outdated.
+            true
+          else
+            !@outdatedness_checker.outdatedness_reasons_for(rep).empty?
+          end
         end
       end
     end

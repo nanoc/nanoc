@@ -11,12 +11,12 @@ describe Nanoc::Core::OutdatednessRules do
   end
 
   describe '#apply' do
-    subject { rule_class.instance.apply(obj, outdatedness_checker) }
+    subject { rule_class.instance.apply(obj, basic_outdatedness_checker) }
 
     let(:obj) { item_rep }
 
-    let(:outdatedness_checker) do
-      Nanoc::Core::OutdatednessChecker.new(
+    let(:basic_outdatedness_checker) do
+      Nanoc::Core::BasicOutdatednessChecker.new(
         site: site,
         checksum_store: checksum_store,
         checksums: checksums,
@@ -495,7 +495,7 @@ describe Nanoc::Core::OutdatednessRules do
         [
           Nanoc::Core::OutdatednessRules::ContentModified,
           Nanoc::Core::OutdatednessRules::AttributesModified,
-        ].map { |c| !!c.instance.apply(new_obj, outdatedness_checker) } # rubocop:disable Style/DoubleNegation
+        ].map { |c| !!c.instance.apply(new_obj, basic_outdatedness_checker) } # rubocop:disable Style/DoubleNegation
       end
 
       let(:stored_obj) { raise 'override me' }

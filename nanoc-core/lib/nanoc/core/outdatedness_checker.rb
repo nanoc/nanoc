@@ -6,92 +6,6 @@ module Nanoc
     #
     # @api private
     class OutdatednessChecker
-      class Basic
-        include Nanoc::Core::ContractsSupport
-
-        Rules = Nanoc::Core::OutdatednessRules
-
-        RULES_FOR_ITEM_REP =
-          [
-            Rules::ItemAdded,
-            Rules::RulesModified,
-            Rules::ContentModified,
-            Rules::AttributesModified,
-            Rules::NotWritten,
-            Rules::CodeSnippetsModified,
-            Rules::UsesAlwaysOutdatedFilter,
-          ].freeze
-
-        RULES_FOR_LAYOUT =
-          [
-            Rules::LayoutAdded,
-            Rules::RulesModified,
-            Rules::ContentModified,
-            Rules::AttributesModified,
-            Rules::UsesAlwaysOutdatedFilter,
-          ].freeze
-
-        RULES_FOR_CONFIG =
-          [
-            Rules::AttributesModified,
-          ].freeze
-
-        C_OBJ_MAYBE_REP = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep, Nanoc::Core::Configuration, Nanoc::Core::Layout, Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection]
-
-        contract C::KeywordArgs[outdatedness_checker: OutdatednessChecker, reps: Nanoc::Core::ItemRepRepo] => C::Any
-        def initialize(outdatedness_checker:, reps:)
-          @outdatedness_checker = outdatedness_checker
-          @reps = reps
-
-          # Memoize
-          @_outdatedness_status_for = {}
-        end
-
-        contract C_OBJ_MAYBE_REP => C::Maybe[Nanoc::Core::OutdatednessStatus]
-        def outdatedness_status_for(obj)
-          @_outdatedness_status_for[obj] ||=
-            case obj
-            when Nanoc::Core::ItemRep
-              apply_rules(RULES_FOR_ITEM_REP, obj)
-            when Nanoc::Core::Item
-              apply_rules_multi(RULES_FOR_ITEM_REP, @reps[obj])
-            when Nanoc::Core::Layout
-              apply_rules(RULES_FOR_LAYOUT, obj)
-            when Nanoc::Core::Configuration
-              apply_rules(RULES_FOR_CONFIG, obj)
-            when Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection
-              # Collections are never outdated. Objects inside them might be,
-              # however.
-              apply_rules([], obj)
-            else
-              raise Nanoc::Core::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
-            end
-        end
-
-        private
-
-        contract C::ArrayOf[Class], C_OBJ_MAYBE_REP, Nanoc::Core::OutdatednessStatus => C::Maybe[Nanoc::Core::OutdatednessStatus]
-        def apply_rules(rules, obj, status = Nanoc::Core::OutdatednessStatus.new)
-          rules.inject(status) do |acc, rule|
-            if acc.useful_to_apply?(rule)
-              reason = rule.instance.call(obj, @outdatedness_checker)
-              if reason
-                acc.update(reason)
-              else
-                acc
-              end
-            else
-              acc
-            end
-          end
-        end
-
-        contract C::ArrayOf[Class], C::ArrayOf[C_OBJ_MAYBE_REP] => C::Maybe[Nanoc::Core::OutdatednessStatus]
-        def apply_rules_multi(rules, objs)
-          objs.inject(Nanoc::Core::OutdatednessStatus.new) { |acc, elem| apply_rules(rules, elem, acc) }
-        end
-      end
-
       include Nanoc::Core::ContractsSupport
 
       attr_reader :checksum_store
@@ -107,7 +21,15 @@ module Nanoc
       C_ITEM_OR_REP = C::Or[Nanoc::Core::Item, Nanoc::Core::ItemRep]
       C_ACTION_SEQUENCES = C::HashOf[C_OBJ => Nanoc::Core::ActionSequence]
 
-      contract C::KeywordArgs[site: Nanoc::Core::Site, checksum_store: Nanoc::Core::ChecksumStore, checksums: Nanoc::Core::ChecksumCollection, dependency_store: Nanoc::Core::DependencyStore, action_sequence_store: Nanoc::Core::ActionSequenceStore, action_sequences: C_ACTION_SEQUENCES, reps: Nanoc::Core::ItemRepRepo] => C::Any
+      contract C::KeywordArgs[
+        site: Nanoc::Core::Site,
+        checksum_store: Nanoc::Core::ChecksumStore,
+        checksums: Nanoc::Core::ChecksumCollection,
+        dependency_store: Nanoc::Core::DependencyStore,
+        action_sequence_store: Nanoc::Core::ActionSequenceStore,
+        action_sequences: C_ACTION_SEQUENCES,
+        reps: Nanoc::Core::ItemRepRepo
+      ] => C::Any
       def initialize(site:, checksum_store:, checksums:, dependency_store:, action_sequence_store:, action_sequences:, reps:)
         @site = site
         @checksum_store = checksum_store
@@ -120,20 +42,11 @@ module Nanoc
         @objects_outdated_due_to_dependencies = {}
       end
 
-      def action_sequence_for(rep)
-        @action_sequences.fetch(rep)
-      end
-
-      contract C_OBJ => C::Bool
-      def outdated?(obj)
-        outdatedness_reasons_for(obj).any?
-      end
-
       contract C_OBJ => C::IterOf[Reasons::Generic]
       def outdatedness_reasons_for(obj)
-        reasons = basic.outdatedness_status_for(obj).reasons
-        if reasons.any?
-          reasons
+        basic_reasons = basic_outdatedness_statuses.fetch(obj).reasons
+        if basic_reasons.any?
+          basic_reasons
         elsif outdated_due_to_dependencies?(obj)
           [Reasons::DependenciesOutdated]
         else
@@ -143,9 +56,28 @@ module Nanoc
 
       private
 
-      contract C::None => Basic
+      def basic_outdatedness_statuses
+        @_basic_outdatedness_statuses ||= {}.tap do |tmp|
+          collections = [[@site.config], @site.layouts, @site.items, @reps]
+          collections.each do |collection|
+            collection.each do |obj|
+              tmp[obj] = basic.outdatedness_status_for(obj)
+            end
+          end
+        end
+      end
+
+      contract C::None => BasicOutdatednessChecker
       def basic
-        @_basic ||= Basic.new(outdatedness_checker: self, reps: @reps)
+        @_basic ||= BasicOutdatednessChecker.new(
+          site: @site,
+          checksum_store: @checksum_store,
+          checksums: @checksums,
+          dependency_store: @dependency_store,
+          action_sequence_store: @action_sequence_store,
+          action_sequences: @action_sequences,
+          reps: @reps,
+        )
       end
 
       contract C_OBJ, Hamster::Set => C::Bool
@@ -191,7 +123,7 @@ module Nanoc
           raw_content_prop_causes_outdatedness?(all_objects, dependency.props.raw_content) ||
             attributes_prop_causes_outdatedness?(all_objects, dependency.props.attributes)
         else
-          status = basic.outdatedness_status_for(dependency.from)
+          status = basic_outdatedness_statuses.fetch(dependency.from)
 
           active = status.props.active & dependency.props.active
           active.delete(:attributes) if attributes_unaffected?(status, dependency)
@@ -236,7 +168,7 @@ module Nanoc
         # accessed), then another dependency will exist that will cause
         # outdatedness.
         matching_objects.any? do |obj|
-          status = basic.outdatedness_status_for(obj)
+          status = basic_outdatedness_statuses.fetch(obj)
           status.reasons.any? { |r| Nanoc::Core::OutdatednessReasons::DocumentAdded == r }
         end
       end
