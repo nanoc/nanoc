@@ -42,6 +42,9 @@ module Nanoc
         # Reset flags
         @compiled = false
         @modified = false
+
+        # Precalculate for performance
+        @hash = [self.class, item, name].hash
       end
 
       contract C::HashOf[Symbol => C::IterOf[C::AbsolutePathString]] => C::HashOf[Symbol => C::IterOf[C::AbsolutePathString]]
@@ -73,6 +76,21 @@ module Nanoc
       # filename if the filename is an index filename.
       def path(snapshot: :last)
         @paths.fetch(snapshot, []).first
+      end
+
+      contract C::None => C::Num
+      def hash
+        @hash
+      end
+
+      contract C::Any => C::Bool
+      def ==(other)
+        eql?(other)
+      end
+
+      contract C::Any => C::Bool
+      def eql?(other)
+        other.is_a?(self.class) && item == other.item && name == other.name
       end
 
       # Returns an object that can be used for uniquely identifying objects.

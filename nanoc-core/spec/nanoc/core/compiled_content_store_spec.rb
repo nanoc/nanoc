@@ -65,7 +65,7 @@ describe Nanoc::Core::CompiledContentStore do
   describe '#set_all' do
     subject { repo.set_all(rep, contents_by_snapshot) }
 
-    let(:other_item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
+    let(:other_item) { Nanoc::Core::Item.new('contentz', {}, '/foo2.md') }
     let(:other_rep) { Nanoc::Core::ItemRep.new(other_item, :foo) }
 
     let(:item) { Nanoc::Core::Item.new('contentz', {}, '/foo.md') }
