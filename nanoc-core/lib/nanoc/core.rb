@@ -33,6 +33,14 @@ module Nanoc
     # thus cannot be used to mean the presence of nothing.
     UNDEFINED = Object.new
 
+    def UNDEFINED.inspect
+      '<UNDEFINED>'
+    end
+
+    def UNDEFINED.to_s
+      inspect
+    end
+
     # @return [String] A string containing information about this Nanoc version
     #   and its environment (Ruby engine and version, Rubygems version if any).
     #
