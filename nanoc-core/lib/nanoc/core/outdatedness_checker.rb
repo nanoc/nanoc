@@ -150,7 +150,7 @@ module Nanoc
             # If the `raw_content` dependency prop is a collection, then this
             # is a dependency on specific objects, given by the patterns.
             patterns = raw_content_prop.map { |r| Nanoc::Core::Pattern.from(r) }
-            patterns.flat_map { |pat| objects.select { |obj| pat.match?(obj.identifier) } }
+            patterns.flat_map { |pat| objects.find_all(pat) }
           else
             raise(
               Nanoc::Core::Errors::InternalInconsistency,
