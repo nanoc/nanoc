@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrigCLI::Commands::ShowRules, stdio: true, site: true do
+describe Nanoc::OrigCLI::Commands::ShowRules, site: true, stdio: true do
   describe '#run' do
     subject { runner.run }
 

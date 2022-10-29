@@ -555,6 +555,21 @@ Style/OperatorMethodCall: # new in 1.37
 Style/RedundantStringEscape: # new in 1.37
   Enabled: true
 
+RSpec/SortMetadata: # new in 2.14
+  Enabled: true
+
+RSpec/Capybara/NegationMatcher: # new in 2.14
+  Enabled: true
+
+RSpec/Capybara/SpecificActions: # new in 2.14
+  Enabled: true
+
+RSpec/FactoryBot/ConsistentParenthesesStyle: # new in 2.14
+  Enabled: true
+
+RSpec/Rails/InferredSpecType: # new in 2.14
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.

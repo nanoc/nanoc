@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Live::CommandRunners::Live, site: true, stdio: true, fork: true do
+describe Nanoc::Live::CommandRunners::Live, fork: true, site: true, stdio: true do
   def run_cmd
     pipe_stdout_read, pipe_stdout_write = IO.pipe
     pid = fork do
