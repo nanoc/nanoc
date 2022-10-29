@@ -10,6 +10,7 @@ gemspec path: 'nanoc-deploying'
 gemspec path: 'nanoc-external'
 gemspec path: 'nanoc-live'
 gemspec path: 'nanoc-spec'
+gemspec path: 'nanoc-tilt'
 gemspec path: 'guard-nanoc'
 
 group :devel do

@@ -30,6 +30,7 @@ version_constant =
     'nanoc-external' => 'Nanoc::External::VERSION',
     'nanoc-live' => 'Nanoc::Live::VERSION',
     'nanoc-spec' => 'Nanoc::Spec::VERSION',
+    'nanoc-tilt' => 'Nanoc::Tilt::VERSION',
     'guard-nanoc' => 'Guard::GUARD_NANOC_VERSION',
   }.fetch(gem_name) do
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
@@ -46,6 +47,7 @@ gem_dir =
     'nanoc-external' => 'nanoc-external',
     'nanoc-live' => 'nanoc-live',
     'nanoc-spec' => 'nanoc-spec',
+    'nanoc-tilt' => 'nanoc-tilt',
     'guard-nanoc' => 'guard-nanoc',
   }.fetch(gem_name) do
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
@@ -62,6 +64,7 @@ gem_path =
     'nanoc-external' => 'nanoc/external',
     'nanoc-live' => 'nanoc/live',
     'nanoc-spec' => 'nanoc/spec',
+    'nanoc-tilt' => 'nanoc/tilt',
     'guard-nanoc' => 'guard/nanoc',
   }.fetch(gem_name) do
     $stderr.puts "Error: Unknown gem name: #{gem_name}"
