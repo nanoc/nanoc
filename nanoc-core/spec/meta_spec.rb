@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 describe 'meta', chdir: false do
+  # rubocop:disable RSpec/ExampleLength
   it 'is covered by specs' do
     regular_files = Dir['lib/nanoc/core/**/*.rb']
     regular_file_base_names = regular_files.map { |fn| fn.gsub(/^lib\/nanoc\/core\/|\.rb$/, '') }
@@ -62,6 +63,7 @@ describe 'meta', chdir: false do
     ignored_spec_file_base_names = %w[
       errors/dependency_cycle
       outdatedness_rules
+      item_rep_selector/item_rep_priority_queue
     ]
 
     effective_regular_file_base_names =
@@ -88,4 +90,5 @@ describe 'meta', chdir: false do
       !content.match?(/\b(puts|warn)\b/) && !content.match?(/\$std(err|out)/)
     end)
   end
+  # rubocop:enable RSpec/ExampleLength
 end

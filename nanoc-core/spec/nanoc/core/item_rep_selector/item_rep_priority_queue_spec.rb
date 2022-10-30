@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Core::ItemRepSelector::MicroGraph do
+describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
   subject(:micro_graph) { described_class.new(reps) }
 
   let(:items) do
@@ -50,9 +50,6 @@ describe Nanoc::Core::ItemRepSelector::MicroGraph do
       expect(micro_graph.next).to eq(reps[2])
       micro_graph.mark_ok
 
-      expect(micro_graph.next).to eq(reps[0])
-      micro_graph.mark_ok
-
       expect(micro_graph.next).to eq(reps[1])
       micro_graph.mark_ok
 
@@ -60,6 +57,9 @@ describe Nanoc::Core::ItemRepSelector::MicroGraph do
       micro_graph.mark_ok
 
       expect(micro_graph.next).to eq(reps[4])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[0])
       micro_graph.mark_ok
     end
   end
@@ -75,16 +75,16 @@ describe Nanoc::Core::ItemRepSelector::MicroGraph do
       expect(micro_graph.next).to eq(reps[4])
       micro_graph.mark_ok
 
-      expect(micro_graph.next).to eq(reps[2])
-      micro_graph.mark_ok
-
-      expect(micro_graph.next).to eq(reps[0])
-      micro_graph.mark_ok
-
       expect(micro_graph.next).to eq(reps[1])
       micro_graph.mark_ok
 
       expect(micro_graph.next).to eq(reps[3])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[2])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[0])
       micro_graph.mark_ok
     end
   end
