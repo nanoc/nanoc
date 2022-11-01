@@ -188,7 +188,7 @@ describe Nanoc::Core::ItemRepSelector do
 
       example do
         expect(successfully_yielded).to eq %i[b c d e a]
-        expect(tentatively_yielded).to eq %i[a b a c a d a e a]
+        expect(tentatively_yielded).to eq %i[a b c d e a]
       end
     end
 
@@ -217,8 +217,8 @@ describe Nanoc::Core::ItemRepSelector do
       end
 
       it 'picks prioritised roots' do
-        expect(successfully_yielded).to eq %i[d a e b c]
-        expect(tentatively_yielded).to eq %i[a d a b e b c]
+        expect(successfully_yielded).to eq %i[d e c b a]
+        expect(tentatively_yielded).to eq %i[a d b e c b a]
       end
     end
   end
