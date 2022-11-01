@@ -27,6 +27,7 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     # Test
     hrefs_with_filenames = collector.filenames_per_href
     hrefs = hrefs_with_filenames.keys
+
     assert_includes hrefs, 'http://example.com/'
     assert_includes hrefs, 'https://example.com/'
     assert_includes hrefs, path_to_file_uri('stuff/', Dir.pwd)
@@ -59,6 +60,7 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     # Test
     hrefs_with_filenames = collector.filenames_per_href
     hrefs = hrefs_with_filenames.keys
+
     assert_includes hrefs, 'http://example.com/'
     assert_includes hrefs, 'https://example.com/'
     refute_includes hrefs, path_to_file_uri('/', Dir.pwd)
@@ -87,6 +89,7 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     # Test
     hrefs_with_filenames = collector.filenames_per_href
     hrefs = hrefs_with_filenames.keys
+
     refute_includes hrefs, 'http://example.com/'
     refute_includes hrefs, 'https://example.com/'
     refute_includes hrefs, 'https://nanoc.ws'
@@ -109,6 +112,7 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     # Test
     hrefs_with_filenames = collector.filenames_per_href
     hrefs = hrefs_with_filenames.keys
+
     assert_includes hrefs, path_to_file_uri('image.jpeg', Dir.pwd)
     assert_includes hrefs, path_to_file_uri('image-large.jpeg', Dir.pwd)
     assert_includes hrefs, path_to_file_uri('image-medium.jpeg', Dir.pwd)
@@ -137,6 +141,7 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
     # Test
     hrefs_with_filenames = collector.filenames_per_href
     hrefs = hrefs_with_filenames.keys
+
     assert_includes hrefs, 'urn:uuid:6650eb58-86e6-416c-906a-35336e5ac8b2'
     assert_includes hrefs, 'ms-settings:windows-update'
     assert_includes hrefs, 'https://tracking.nanoc.ws/ping'
@@ -155,12 +160,14 @@ class Nanoc::Extra::LinkCollectorTest < Nanoc::TestCase
       Nanoc::Extra::LinkCollector.new(['a.html'], :internal)
 
     hrefs = external_collector.filenames_per_href.keys
+
     assert_includes hrefs, '//example.com/broken'
     refute_includes hrefs, 'http://example.com/broken'
     refute_includes hrefs, 'file:///example.com/broken'
     refute_includes hrefs, 'file://example.com/broken'
 
     hrefs = internal_collector.filenames_per_href.keys
+
     refute_includes hrefs, '//example.com/broken'
     refute_includes hrefs, 'http://example.com/broken'
     refute_includes hrefs, 'file:///example.com/broken'

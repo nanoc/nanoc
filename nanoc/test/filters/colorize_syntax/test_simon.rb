@@ -18,6 +18,7 @@ class Nanoc::Filters::ColorizeSyntax::SimonTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input, default_colorizer: :simon_highlight)
+
       assert_equal(expected_output, actual_output)
     end
   end

@@ -137,6 +137,7 @@ class Nanoc::Core::CompilerTest < Nanoc::TestCase
       error = assert_raises(Nanoc::Error) do
         Nanoc::Core::Compiler.compile(site)
       end
+
       assert_match(/^The path returned for the.*does not start with a slash. Please ensure that all routing rules return a path that starts with a slash./, error.message)
     end
   end

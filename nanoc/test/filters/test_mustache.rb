@@ -16,6 +16,7 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run('The protagonist of {{title}} is {{protagonist}}.')
+
     assert_equal('The protagonist of Max Payne is Max Payne.', result)
   end
 
@@ -34,6 +35,7 @@ class Nanoc::Filters::MustacheTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run('Max says: {{yield}}.')
+
     assert_equal('Max says: No Payne No Gayne.', result)
   end
 end

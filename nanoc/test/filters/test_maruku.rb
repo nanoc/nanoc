@@ -9,6 +9,7 @@ class Nanoc::Filters::MarukuTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run('This is _so_ *cool*!')
+
     assert_equal('<p>This is <em>so</em> <em>cool</em>!</p>', result.strip)
   end
 end

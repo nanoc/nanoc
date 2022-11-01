@@ -162,10 +162,12 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 
       # Run the filter and validate the results
       result = filter.setup_and_run(layout.raw_content)
+
       assert_match SAMPLE_XML_OUT, result
 
       # Verify dependencies
       dep = @dependency_store.dependencies_causing_outdatedness_of(@base_item)[0]
+
       refute_nil dep
     end
   end
@@ -188,10 +190,12 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 
       # Run the filter and validate the results
       result = filter.setup_and_run(layout.raw_content, foo: 'bar')
+
       assert_match SAMPLE_XML_OUT_WITH_PARAMS, result
 
       # Verify dependencies
       dep = @dependency_store.dependencies_causing_outdatedness_of(@base_item)[0]
+
       refute_nil dep
     end
   end
@@ -214,10 +218,12 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 
       # Run the filter and validate the results
       result = filter.setup_and_run(layout.raw_content)
+
       assert_match SAMPLE_XML_OUT_WITH_OMIT_XML_DECL, result
 
       # Verify dependencies
       dep = @dependency_store.dependencies_causing_outdatedness_of(@base_item)[0]
+
       refute_nil dep
     end
   end

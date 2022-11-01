@@ -9,6 +9,7 @@ class Nanoc::Filters::RainpressTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run('body { color: black; }')
+
     assert_equal('body{color:#000}', result)
   end
 
@@ -18,6 +19,7 @@ class Nanoc::Filters::RainpressTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run('body { color: #aabbcc; }', colors: false)
+
     assert_equal('body{color:#aabbcc}', result)
   end
 end

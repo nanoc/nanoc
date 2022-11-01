@@ -222,6 +222,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
+
     assert_equal(
       'Cannot build Atom feed: no articles',
       error.message,
@@ -246,6 +247,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
+
     assert_equal(
       'Cannot build Atom feed: site configuration has no base_url',
       error.message,
@@ -270,6 +272,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
+
     assert_equal(
       'Cannot build Atom feed: no title in params, item or site config',
       error.message,
@@ -294,6 +297,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
+
     assert_equal(
       'Cannot build Atom feed: no author_name in params, item or site config',
       error.message,
@@ -352,6 +356,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
+
     assert_equal(
       'Cannot build Atom feed: no author_uri in params, item or site config',
       error.message,
@@ -378,6 +383,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     error = assert_raises(Nanoc::Core::TrivialError) do
       atom_feed
     end
+
     assert_equal(
       'Cannot build Atom feed: one or more articles lack created_at',
       error.message,
@@ -479,6 +485,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Check
     result = atom_feed limit: 1, articles: @items
+
     assert_match(
       Regexp.new('Article 0', Regexp::MULTILINE),
       result,
@@ -511,6 +518,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Check
     result = atom_feed
+
     assert_match(
       Regexp.new('Article 1.*Article 0', Regexp::MULTILINE),
       result,
@@ -539,6 +547,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Check
     result = atom_feed(preserve_order: true)
+
     assert_match(
       Regexp.new('Article 1.*Article 0', Regexp::MULTILINE),
       result,
@@ -562,6 +571,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Check
     result = atom_feed content_proc: ->(_a) { 'foobar!' }
+
     assert_match 'foobar!</content>', result
   end
 
@@ -582,6 +592,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Check
     result = atom_feed excerpt_proc: ->(_a) { 'foobar!' }
+
     assert_match 'foobar!</summary>', result
   end
 
@@ -602,6 +613,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Check
     result = atom_feed title_proc: ->(_a) { 'foobar!' }
+
     assert_match 'foobar!</title>', result
   end
 
@@ -622,6 +634,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Check
     result = atom_feed icon: 'http://example.com/icon.png'
+
     assert_match '<icon>http://example.com/icon.png</icon>', result
   end
 
@@ -642,6 +655,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Check
     result = atom_feed logo: 'http://example.com/logo.png'
+
     assert_match '<logo>http://example.com/logo.png</logo>', result
   end
 
@@ -662,6 +676,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     # Check
     result = atom_feed
+
     assert_match 'xml:base="http://example.com/"', result
   end
 
@@ -709,6 +724,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(atom_feed)
       id_elements = doc.xpath('/atom:feed/atom:id', atom: 'http://www.w3.org/2005/Atom')
+
       assert_equal 1, id_elements.size
       assert_equal 'http://example.com/', id_elements[0].inner_text
     end
@@ -736,6 +752,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(atom_feed(id: 'tag:foo,bar'))
       id_elements = doc.xpath('/atom:feed/atom:id', atom: 'http://www.w3.org/2005/Atom')
+
       assert_equal 1, id_elements.size
       assert_equal 'tag:foo,bar', id_elements[0].inner_text
     end
@@ -763,6 +780,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(atom_feed)
       elements = doc.xpath('/atom:feed/atom:link[@rel=\'alternate\']', atom: 'http://www.w3.org/2005/Atom')
+
       assert_equal 1, elements.size
       assert_equal 'http://example.com/', elements[0].attribute('href').inner_text
       assert_equal 'text/html', elements[0].attribute('type').inner_text
@@ -791,6 +809,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(atom_feed)
       elements = doc.xpath('/atom:feed/atom:link[@rel=\'self\']', atom: 'http://www.w3.org/2005/Atom')
+
       assert_equal 1, elements.size
       assert_equal 'http://example.com/journal/feed/', elements[0].attribute('href').inner_text
       assert_equal 'application/atom+xml', elements[0].attribute('type').inner_text
@@ -819,6 +838,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(atom_feed(alt_link: '/blog/'))
       elements = doc.xpath('/atom:feed/atom:link[@rel=\'alternate\']', atom: 'http://www.w3.org/2005/Atom')
+
       assert_equal 1, elements.size
       assert_equal '/blog/', elements[0].attribute('href').inner_text
     end
@@ -848,6 +868,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(atom_feed)
       elements = doc.xpath('/atom:feed/atom:entry/atom:link[@rel=\'alternate\']', atom: 'http://www.w3.org/2005/Atom')
+
       assert_equal 1, elements.size
       assert_equal 'http://example.com/some-article/', elements[0].attribute('href').inner_text
       assert_equal 'text/html', elements[0].attribute('type').inner_text

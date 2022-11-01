@@ -131,6 +131,7 @@ class Nanoc::OrigCLITest < Nanoc::TestCase
       $after_setup_success = true
     end
     Nanoc::CLI.setup
+
     assert $after_setup_success
   end
 end

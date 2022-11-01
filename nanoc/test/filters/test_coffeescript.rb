@@ -10,6 +10,7 @@ class Nanoc::Filters::CoffeeScriptTest < Nanoc::TestCase
 
       # Run filter (no assigns)
       result = filter.setup_and_run('alert 42')
+
       assert_equal('(function() { alert(42); }).call(this); ', result.gsub(/\s+/, ' '))
     end
   end

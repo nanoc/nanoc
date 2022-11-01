@@ -76,11 +76,13 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       # Compile once
       File.write('content/includee.erb', '{<% content_for :blah do %>Old content<% end %>}')
       Nanoc::CLI.run(%w[compile])
+
       assert_equal '[Old content]', File.read('output/includer/index.html')
 
       # Compile again
       File.write('content/includee.erb', '{<% content_for :blah do %>New content<% end %>}')
       Nanoc::CLI.run(%w[compile])
+
       assert_equal '[New content]', File.read('output/includer/index.html')
     end
   end
@@ -114,6 +116,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
 
     expected = %w[head before basic after foot]
     actual   = result.scan(/[a-z]+/)
+
     assert_equal expected, actual
   end
 
@@ -135,11 +138,13 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       # Compile once
       File.write('content/includee.erb', '{<% content_for :blah do %>Old content<% end %>}')
       Nanoc::CLI.run(%w[compile])
+
       assert_equal '{[nil-Old content]}', File.read('output/includer/index.html')
 
       # Compile again
       File.write('content/includee.erb', '{<% content_for :blah do %>New content<% end %>}')
       Nanoc::CLI.run(%w[compile])
+
       assert_equal '{[nil-New content]}', File.read('output/includer/index.html')
     end
   end
@@ -159,6 +164,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       end
 
       Nanoc::CLI.run(%w[compile])
+
       assert_equal 'Foo!', File.read('output/self/index.html')
     end
   end
@@ -176,12 +182,14 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       # Compile once
       File.write('content/includer.erb', 'Old-<%= content_for(@items["/includee/"], :blah) %>')
       Nanoc::CLI.run(%w[compile])
+
       assert_equal '{}', File.read('output/includee/index.html')
       assert_equal 'Old-Content', File.read('output/includer/index.html')
 
       # Compile again
       File.write('content/includer.erb', 'New-<%= content_for(@items["/includee/"], :blah) %>')
       Nanoc::CLI.run(%w[compile])
+
       assert_equal '{}', File.read('output/includee/index.html')
       assert_equal 'New-Content', File.read('output/includer/index.html')
     end

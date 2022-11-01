@@ -29,10 +29,13 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
 
       # Run filter
       result = filter.setup_and_run('{{protagonist}} says: {{yield}}.')
+
       assert_equal('Max Payne says: No Payne No Gayne.', result)
       result = filter.setup_and_run('We can’t stop {{item.location}}! This is the {{layout.name}} layout!')
+
       assert_equal('We can’t stop here! This is the Max Payne layout!', result)
       result = filter.setup_and_run('It’s raining {{config.animals}} here!')
+
       assert_equal('It’s raining cats and dogs here!', result)
     end
   end
@@ -55,6 +58,7 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
 
       # Run filter
       result = filter.setup_and_run('{{protagonist}} says: {{yield}}.')
+
       assert_equal('Max Payne says: No Payne No Gayne.', result)
     end
   end

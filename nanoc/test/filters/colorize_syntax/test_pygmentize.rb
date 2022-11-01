@@ -16,6 +16,7 @@ class Nanoc::Filters::ColorizeSyntax::PygmentizeTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input, colorizers: { ruby: :pygmentize })
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -33,6 +34,7 @@ class Nanoc::Filters::ColorizeSyntax::PygmentizeTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input, default_colorizer: :pygmentize)
+
       assert_equal(expected_output, actual_output)
     end
   end

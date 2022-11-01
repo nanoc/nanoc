@@ -26,6 +26,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -52,6 +53,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -78,6 +80,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -115,6 +118,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_match(expected0, actual_content)
     assert_match(expected1, actual_content)
   end
@@ -155,6 +159,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html5)
+
     assert_match(expected0, actual_content)
     assert_match(expected1, actual_content)
   end
@@ -182,6 +187,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -208,6 +214,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -234,6 +241,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -260,6 +268,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -286,6 +295,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -312,6 +322,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -338,6 +349,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -364,6 +376,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -414,6 +427,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -450,6 +464,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :css)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -476,6 +491,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :css)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -502,6 +518,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :css)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -528,6 +545,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :css)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -557,6 +575,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :css)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -583,6 +602,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :css)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -761,6 +781,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
       # Test
       actual_content = filter.setup_and_run(raw_content.freeze, type: :xhtml)
+
       assert_match(expected_content, actual_content)
     end
   end
@@ -825,6 +846,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
       # Test
       actual_content = filter.setup_and_run(raw_content.freeze, type: :html)
+
       assert_includes actual_content, %(<script src="../../js/lib/html5shiv.js">)
     end
   end
@@ -852,6 +874,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
     # Test
     actual_content = filter.setup_and_run(raw_content, type: :html)
+
     assert_equal(expected_content, actual_content)
   end
 
@@ -881,6 +904,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       # Test
       nokogiri_save_options = Nokogiri::XML::Node::SaveOptions::DEFAULT_HTML & ~Nokogiri::XML::Node::SaveOptions::FORMAT
       actual_content = filter.setup_and_run(raw_content.freeze, type: :html, nokogiri_save_options: nokogiri_save_options)
+
       assert_equal(actual_content, raw_content)
     end
   end

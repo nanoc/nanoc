@@ -570,6 +570,9 @@ RSpec/FactoryBot/ConsistentParenthesesStyle: # new in 2.14
 RSpec/Rails/InferredSpecType: # new in 2.14
   Enabled: true
 
+Minitest/EmptyLineBeforeAssertionMethods: # new in 0.23
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.

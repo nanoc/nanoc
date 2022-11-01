@@ -17,6 +17,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input)
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -33,6 +34,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input)
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -50,6 +52,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input)
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -67,6 +70,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input)
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -82,6 +86,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input)
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -109,6 +114,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input, syntax: :xml)
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -124,6 +130,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input, syntax: :xhtml)
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -153,6 +160,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input).sub(/\s*\Z/m, '')
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -181,6 +189,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input).sub(/\s*\Z/m, '')
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -196,6 +205,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input, outside_pre: false)
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -211,6 +221,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input, outside_pre: true)
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -241,6 +252,7 @@ class Nanoc::Filters::ColorizeSyntax::CoderayTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input).sub(/\s*\Z/m, '')
+
       assert_equal(expected_output, actual_output)
     end
   end

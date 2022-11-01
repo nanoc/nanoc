@@ -100,8 +100,10 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(res)
       urlsets = doc.css('> urlset')
+
       assert_equal 1, urlsets.size
       urls = urlsets.css('> url')
+
       assert_equal 4, urls.size
       assert_equal 'http://example.com/item-one/a/',   urls[0].css('> loc').inner_text
       assert_equal 'http://example.com/item-one/b/',   urls[1].css('> loc').inner_text
@@ -147,8 +149,10 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(res)
       urlsets = doc.css('> urlset')
+
       assert_equal 1, urlsets.size
       urls = urlsets.css('> url')
+
       assert_equal 2, urls.size
       assert_equal 'http://example.com/item-one/a/',   urls[0].css('> loc').inner_text
       assert_equal 'http://example.com/item-one/b/',   urls[1].css('> loc').inner_text
@@ -182,8 +186,10 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(res)
       urlsets = doc.css('> urlset')
+
       assert_equal 1, urlsets.size
       urls = urlsets.css('> url')
+
       assert_equal 1, urls.size
       assert_equal 'http://example.com/item-one/a/',   urls[0].css('> loc').inner_text
       assert_equal '',                                 urls[0].css('> changefreq').inner_text
@@ -223,8 +229,10 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(res)
       urlsets = doc.css('> urlset')
+
       assert_equal 1, urlsets.size
       urls = urlsets.css('> url')
+
       assert_equal 6, urls.size
       assert_equal 'http://example.com/george/alice/',  urls[0].css('> loc').inner_text
       assert_equal 'http://example.com/george/zoey/',   urls[1].css('> loc').inner_text
@@ -255,8 +263,10 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       # Check
       doc = Nokogiri::XML(res)
       urlsets = doc.css('> urlset')
+
       assert_equal 1, urlsets.size
       urls = urlsets.css('> url')
+
       assert_equal 1, urls.size
       assert_equal 'http://example.com/cool%20projects/%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0', urls[0].css('> loc').inner_text
     end

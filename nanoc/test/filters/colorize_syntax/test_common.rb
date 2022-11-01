@@ -14,6 +14,7 @@ class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input, default_colorizer: :dummy)
+
       assert_equal(expected_output, actual_output)
     end
   end
@@ -49,6 +50,7 @@ class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
 
       # Run filter
       actual_output = filter.setup_and_run(input, default_colorizer: :dummy, is_fullpage: true)
+
       assert_match expected_output_regex, actual_output
     end
   end
@@ -76,6 +78,7 @@ class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
 
     # Run filter
     actual_output = filter.setup_and_run(input, syntax: :html5, default_colorizer: :dummy, is_fullpage: true)
+
     assert_match expected_output_regex, actual_output
   end
 
@@ -97,6 +100,7 @@ class Nanoc::Filters::ColorizeSyntax::CommonTest < Nanoc::TestCase
           input,
           colorizers: { ruby: colorizer },
         )
+
         flunk 'expected colorizer to raise if no executable is available'
       rescue
       end

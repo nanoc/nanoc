@@ -18,6 +18,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run('> Quote')
+
     assert_match(/<blockquote>\s*<p>Quote<\/p>\s*<\/blockquote>/, result)
   end
 
@@ -29,6 +30,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
     input           = 'this is ~~good~~ bad'
     output_expected = /this is <del>good<\/del> bad/
     output_actual   = filter.setup_and_run(input, options: { strikethrough: true })
+
     assert_match(output_expected, output_actual)
   end
 
@@ -40,6 +42,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
     input           = "![Alt](/path/to/img 'Title')"
     output_expected = %r{<img src="/path/to/img" alt="Alt" title="Title">}
     output_actual   = filter.setup_and_run(input)
+
     assert_match(output_expected, output_actual)
   end
 
@@ -51,6 +54,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
     input           = "![Alt](/path/to/img 'Title')"
     output_expected = %r{<img src="/path/to/img" alt="Alt" title="Title"/>}
     output_actual   = filter.setup_and_run(input, renderer_options: { xhtml: true })
+
     assert_match(output_expected, output_actual)
   end
 
@@ -64,6 +68,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
 
     # Test
     output_expected = %r{<ul>\n<li>\n<a href="#heading-1">Heading 1</a>\n<ul>\n<li>\n<a href="#heading-2">Heading 2</a>\n</li>\n</ul>\n</li>\n</ul>}
+
     assert_match(output_expected, output_actual)
   end
 

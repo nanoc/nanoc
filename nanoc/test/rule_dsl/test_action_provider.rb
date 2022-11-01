@@ -47,6 +47,7 @@ class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
 
       # Apply preprocess blocks
       action_provider.preprocess(site)
+
       assert site.items['/index.*'].attributes[:preprocessed]
     end
   end

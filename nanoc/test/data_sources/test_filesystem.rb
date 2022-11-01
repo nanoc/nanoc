@@ -91,6 +91,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Check
     actual_out = data_source.send(:load_objects, 'foo', klass)
+
     assert_equal 2, actual_out.size
   end
 
@@ -156,6 +157,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:identifier_for_filename, input)
+
       assert_equal(
         expected_output, actual_output,
         "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
@@ -178,6 +180,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:identifier_for_filename, input)
+
       assert_equal(
         expected_output, actual_output,
         "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
@@ -200,6 +203,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:identifier_for_filename, input)
+
       assert_equal(
         expected_output, actual_output,
         "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
@@ -272,6 +276,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = new_data_source(allow_periods_in_identifiers: true)
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:identifier_for_filename, input)
+
       assert_equal(
         expected_output, actual_output,
         "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
@@ -292,6 +297,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = new_data_source
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:identifier_for_filename, input)
+
       assert_equal(
         expected_output, actual_output,
         "identifier_for_filename(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
@@ -473,6 +479,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     File.write('foo/donkey.yaml', "---\nalt: Donkey\n")
 
     objects = data_source.send(:load_objects, 'foo', Nanoc::Core::Item)
+
     assert_equal 1, objects.size
     assert_equal '/donkey.jpeg', objects.first.identifier.to_s
   end
@@ -526,6 +533,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Parse
     items = data_source.items
+
     assert_equal 1, items.size
     assert_equal Encoding.find('UTF-8'), items[0].content.string.encoding
   end
@@ -600,6 +608,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       './bbb/foo' => [nil, ['html']],
       './ccc/foo' => [nil, ['html']],
     }
+
     assert_equal expected, data_source.send(:all_split_files_in, '.')
   end
 
@@ -616,6 +625,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
 
     # Check - { './stuff/foo' => ['yaml', ['html', 'md']] }
     res = data_source.send(:all_split_files_in, '.')
+
     assert_equal ['./stuff/foo'], res.keys
     assert_equal 2, res.values[0].size
     assert_equal 'yaml', res.values[0][0]
@@ -657,6 +667,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:basename_of, input)
+
       assert_equal(
         expected_output, actual_output,
         "basename_of(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
@@ -687,6 +698,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:basename_of, input)
+
       assert_equal(
         expected_output, actual_output,
         "basename_of(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
@@ -717,6 +729,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:basename_of, input)
+
       assert_equal(
         expected_output, actual_output,
         "basename_of(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
@@ -747,6 +760,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:ext_of, input)
+
       assert_equal(
         expected_output, actual_output,
         "basename_of(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"
@@ -777,6 +791,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     # Check
     expected.each_pair do |input, expected_output|
       actual_output = data_source.send(:ext_of, input)
+
       assert_equal(
         expected_output, actual_output,
         "basename_of(#{input.inspect}) should equal #{expected_output.inspect}, not #{actual_output.inspect}"

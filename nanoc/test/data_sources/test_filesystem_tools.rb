@@ -35,6 +35,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
       'dir0/sub/sub/sub/sub/sub/sub/sub/sub/sub/sub/foo.md',
     ]
     actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir0', nil).sort
+
     assert_equal expected_files, actual_files
   end
 
@@ -64,6 +65,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
 
     expected_files = ['foo/barlink/y.md', 'foo/x.md']
     actual_files   = Nanoc::DataSources::Filesystem::Tools.all_files_in('foo', nil).sort
+
     assert_equal expected_files, actual_files
   end
 
@@ -77,6 +79,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
     # Check
     expected_files = ['dir/bar-link', 'dir/foo']
     actual_files   = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', nil).sort
+
     assert_equal expected_files, actual_files
   end
 
@@ -88,6 +91,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
 
     expected = File.expand_path('foo')
     actual   = Nanoc::DataSources::Filesystem::Tools.resolve_symlink('qux')
+
     assert_equal expected, actual
   end
 
@@ -110,6 +114,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
     File.write('dir/.htaccess', 'o hai')
 
     actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', nil).sort
+
     assert_equal [], actual_files
   end
 
@@ -119,6 +124,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
     File.write('dir/.other', 'o hai')
 
     actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', '**/.other').sort
+
     assert_equal ['dir/.other'], actual_files
   end
 
@@ -129,6 +135,7 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
     File.write('dir/.DS_Store', 'o hai')
 
     actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', ['**/.other', '**/.DS_Store']).sort
+
     assert_equal ['dir/.other', 'dir/.DS_Store'].sort, actual_files.sort
   end
 

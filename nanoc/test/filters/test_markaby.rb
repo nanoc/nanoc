@@ -11,6 +11,7 @@ class Nanoc::Filters::MarkabyTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run("html do\nend")
+
     assert_equal('<html></html>', result)
   end
 end

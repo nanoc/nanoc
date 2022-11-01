@@ -9,6 +9,7 @@ class Nanoc::Filters::ErubisTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run('<%= "I was hiding in #{@location}." %>') # rubocop:disable Lint/InterpolationCheck
+
     assert_equal('I was hiding in a cheap motel.', result)
   end
 
@@ -18,6 +19,7 @@ class Nanoc::Filters::ErubisTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run('<%= "I was hiding in #{location}." %>') # rubocop:disable Lint/InterpolationCheck
+
     assert_equal('I was hiding in a cheap motel.', result)
   end
 
@@ -31,9 +33,11 @@ class Nanoc::Filters::ErubisTest < Nanoc::TestCase
       filter.setup_and_run('<%= this isn\'t really ruby so it\'ll break, muahaha %>')
     rescue SyntaxError => e
       e.message =~ /(.+?):\d+: /
+
       assert_match '?', Regexp.last_match[1]
       raised = true
     end
+
     assert raised
   end
 
@@ -43,6 +47,7 @@ class Nanoc::Filters::ErubisTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run('<%= "I was hiding in #{yield}." %>') # rubocop:disable Lint/InterpolationCheck
+
     assert_equal('I was hiding in a cheap motel.', result)
   end
 
@@ -59,6 +64,7 @@ class Nanoc::Filters::ErubisTest < Nanoc::TestCase
   def test_filter_with_erbout
     filter = ::Nanoc::Filters::Erubis.new
     result = filter.setup_and_run('stuff<% _erbout << _erbout %>')
+
     assert_equal 'stuffstuff', result
   end
 end

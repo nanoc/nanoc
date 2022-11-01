@@ -9,14 +9,17 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
 
     # Run filter (no assigns)
     result = filter.setup_and_run('html')
+
     assert_match(/<html>.*<\/html>/, result)
 
     # Run filter (assigns without @)
     result = filter.setup_and_run('p = rabbit')
+
     assert_equal('<p>The rabbit is on the branch.</p>', result)
 
     # Run filter (assigns with @)
     result = filter.setup_and_run('p = @rabbit')
+
     assert_equal('<p>The rabbit is on the branch.</p>', result)
   end
 
@@ -24,6 +27,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
     filter = ::Nanoc::Filters::Slim.new(content: 'The rabbit is on the branch.')
 
     result = filter.setup_and_run('p = yield')
+
     assert_equal('<p>The rabbit is on the branch.</p>', result)
   end
 
@@ -80,6 +84,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
     filter = ::Nanoc::Filters::Slim.new(assigns)
 
     error = assert_raises(NameError) { filter.setup_and_run('deliberate=failure') }
+
     assert_match(%r{^layout /layout.slim}, error.backtrace[1])
   end
 end

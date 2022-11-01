@@ -12,18 +12,21 @@ class Nanoc::Core::SiteTest < Nanoc::TestCase
   def test_initialize_with_dir_with_config_yaml
     File.write('config.yaml', 'output_dir: public_html')
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
+
     assert_equal Dir.getwd + '/public_html', site.config.output_dir
   end
 
   def test_initialize_with_dir_with_nanoc_yaml
     File.write('nanoc.yaml', 'output_dir: public_html')
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
+
     assert_equal Dir.getwd + '/public_html', site.config.output_dir
   end
 
   def test_initialize_with_incomplete_data_source_config
     File.write('nanoc.yaml', 'data_sources: [{ items_root: "/bar/" }]')
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
+
     assert_equal('filesystem', site.config[:data_sources][0][:type])
     assert_equal('/bar/', site.config[:data_sources][0][:items_root])
     assert_equal('/',     site.config[:data_sources][0][:layouts_root])
@@ -51,6 +54,7 @@ class Nanoc::Core::SiteTest < Nanoc::TestCase
     end
 
     site = Nanoc::Core::SiteLoader.new.new_from_cwd
+
     assert_nil site.config[:parent_config_file]
     assert site.config[:enable_output_diff]
     assert_equal 'bar', site.config[:foo]

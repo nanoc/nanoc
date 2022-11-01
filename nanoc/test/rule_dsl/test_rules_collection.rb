@@ -86,6 +86,7 @@ class Nanoc::RuleDSL::RulesCollectionTest < Nanoc::TestCase
     # Check
     expectations.each_pair do |num, char|
       filter_and_args = rules_collection.filter_for_layout(layouts[num])
+
       refute_nil(filter_and_args)
       assert_equal(char, filter_and_args[1][:char])
     end

@@ -9,6 +9,7 @@ class Nanoc::Filters::RubyPantsTest < Nanoc::TestCase
 
     # Run filter
     result = filter.setup_and_run('Wait---what?')
+
     assert_equal('Wait&#8212;what?', result)
   end
 end
