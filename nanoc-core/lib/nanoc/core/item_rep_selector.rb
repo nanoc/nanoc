@@ -12,24 +12,13 @@ module Nanoc
       # elements.
       class ItemRepIgnorableIterator
         def initialize(array)
-          @array = array
-          @index = 0
-        end
-
-        def next
-          elem = @array[@index]
-          @index += 1
-          elem
+          @array = array.dup
         end
 
         def next_ignoring(ignored)
-          loop do
-            elem = self.next
-
-            unless ignored.include?(elem)
-              return elem
-            end
-          end
+          elem = @array.shift
+          elem = @array.shift while ignored.include?(elem)
+          elem
         end
       end
 
