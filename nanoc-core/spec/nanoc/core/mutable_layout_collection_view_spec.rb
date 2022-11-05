@@ -31,14 +31,14 @@ describe Nanoc::Core::MutableLayoutCollectionView do
       view.create('new content', { title: 'New Page' }, '/new')
 
       expect(view._unwrap.size).to eq(2)
-      expect(view._unwrap['/new'].content.string).to eq('new content')
+      expect(view._unwrap.object_with_identifier('/new').content.string).to eq('new content')
     end
 
     it 'does not update wrapped' do
       view.create('new content', { title: 'New Page' }, '/new')
 
       expect(wrapped.size).to eq(1)
-      expect(wrapped['/new']).to be_nil
+      expect(wrapped.object_with_identifier('/new')).to be_nil
     end
 
     it 'returns self' do

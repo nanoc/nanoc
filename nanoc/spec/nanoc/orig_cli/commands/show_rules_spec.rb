@@ -37,11 +37,11 @@ describe Nanoc::OrigCLI::Commands::ShowRules, site: true, stdio: true do
 
     let(:reps) do
       Nanoc::Core::ItemRepRepo.new.tap do |reps|
-        reps << Nanoc::Core::ItemRep.new(items['/about.md'], :default)
-        reps << Nanoc::Core::ItemRep.new(items['/about.md'], :text)
-        reps << Nanoc::Core::ItemRep.new(items['/dog.md'], :default)
-        reps << Nanoc::Core::ItemRep.new(items['/dog.md'], :text)
-        reps << Nanoc::Core::ItemRep.new(items['/other.dat'], :default)
+        reps << Nanoc::Core::ItemRep.new(items.object_with_identifier('/about.md'), :default)
+        reps << Nanoc::Core::ItemRep.new(items.object_with_identifier('/about.md'), :text)
+        reps << Nanoc::Core::ItemRep.new(items.object_with_identifier('/dog.md'), :default)
+        reps << Nanoc::Core::ItemRep.new(items.object_with_identifier('/dog.md'), :text)
+        reps << Nanoc::Core::ItemRep.new(items.object_with_identifier('/other.dat'), :default)
       end
     end
 

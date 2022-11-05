@@ -90,10 +90,11 @@ module Nanoc
 
       def find_layout(arg)
         req_id = arg.__nanoc_cleaned_identifier
-        layout = layouts[req_id]
+        layout = layouts.object_with_identifier(req_id)
         return layout if layout
 
         if use_globs?
+          # TODO: use object_matching_glob instead
           pat = Nanoc::Core::Pattern.from(arg)
           layout = layouts.find { |l| pat.match?(l.identifier) }
           return layout if layout

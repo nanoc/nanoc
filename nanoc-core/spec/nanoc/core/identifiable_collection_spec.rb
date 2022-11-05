@@ -19,62 +19,6 @@ describe Nanoc::Core::IdentifiableCollection do
       it { is_expected.to eq("<#{described_class}>") }
     end
 
-    describe '#[]' do
-      let(:objects) do
-        [
-          Nanoc::Core::Item.new('asdf', {}, Nanoc::Core::Identifier.new('/one')),
-          Nanoc::Core::Item.new('asdf', {}, Nanoc::Core::Identifier.new('/two')),
-        ]
-      end
-
-      context 'string pattern style is glob' do
-        let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
-
-        it 'handles glob' do
-          expect(identifiable_collection['/on*']).to equal(objects[0])
-          expect(identifiable_collection['/*wo']).to equal(objects[1])
-        end
-      end
-
-      context 'string pattern style is glob' do
-        let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
-
-        it 'does not handle glob' do
-          expect(identifiable_collection['/on*']).to be_nil
-          expect(identifiable_collection['/*wo']).to be_nil
-        end
-      end
-
-      it 'handles identifier' do
-        expect(identifiable_collection['/one']).to equal(objects[0])
-        expect(identifiable_collection['/two']).to equal(objects[1])
-      end
-
-      it 'handles malformed identifier' do
-        expect(identifiable_collection['one/']).to be_nil
-        expect(identifiable_collection['/one/']).to be_nil
-        expect(identifiable_collection['one']).to be_nil
-        expect(identifiable_collection['//one']).to be_nil
-        expect(identifiable_collection['/one//']).to be_nil
-      end
-
-      it 'handles regex' do
-        expect(identifiable_collection[/one/]).to equal(objects[0])
-        expect(identifiable_collection[/on/]).to equal(objects[0])
-        expect(identifiable_collection[/\/o/]).to equal(objects[0])
-        expect(identifiable_collection[/e$/]).to equal(objects[0])
-      end
-
-      context 'frozen' do
-        before { identifiable_collection.freeze }
-
-        example do
-          expect(identifiable_collection['/one']).to equal(objects[0])
-          expect(identifiable_collection['/fifty']).to be_nil
-        end
-      end
-    end
-
     describe '#find_all' do
       subject { identifiable_collection.find_all(arg) }
 
@@ -177,14 +121,14 @@ describe Nanoc::Core::IdentifiableCollection do
 
       it 'makes /foo nil' do
         expect { subject }
-          .to change { identifiable_collection['/foo'] }
+          .to change { identifiable_collection.object_with_identifier('/foo') }
           .from(objects[0])
           .to(nil)
       end
 
       it 'makes /bar non-nil' do
         expect { subject }
-          .to change { identifiable_collection['/bar'] }
+          .to change { identifiable_collection.object_with_identifier('/bar') }
           .from(nil)
           .to(objects[0])
       end

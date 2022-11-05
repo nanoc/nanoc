@@ -37,17 +37,6 @@ module Nanoc
         super
       end
 
-      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
-      def [](arg)
-        # TODO: remove
-
-        if frozen?
-          get_memoized(arg)
-        else
-          get_unmemoized(arg)
-        end
-      end
-
       # contract C::Any => C::IterOf[C::RespondTo[:identifier]]
       def find_all(arg)
         if frozen?
