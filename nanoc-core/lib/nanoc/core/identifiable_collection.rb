@@ -68,9 +68,9 @@ module Nanoc
 
       def object_with_identifier(identifier)
         if frozen?
-          object_with_identifier_memoized(identifier)
+          @mapping[identifier.to_s]
         else
-          object_with_identifier_unmemoized(identifier)
+          find { |i| i.identifier == identifier }
         end
       end
 
@@ -83,19 +83,6 @@ module Nanoc
       end
 
       protected
-
-      def object_with_identifier_memoized(identifier)
-        object_with_identifier_unmemoized(identifier)
-      end
-      memo_wise :object_with_identifier_memoized
-
-      def object_with_identifier_unmemoized(identifier)
-        if frozen?
-          @mapping[identifier.to_s]
-        else
-          find { |i| i.identifier == identifier }
-        end
-      end
 
       def object_matching_glob_memoized(glob)
         object_matching_glob_unmemoized(glob)
