@@ -34,7 +34,7 @@ module Nanoc
         parent_identifier = '/' + _unwrap.identifier.components[0..-2].join('/') + '/'
         parent_identifier = '/' if parent_identifier == '//'
 
-        parent = @context.items[parent_identifier]
+        parent = @context.items.object_with_identifier(parent_identifier)
 
         parent && self.class.new(parent, @context)
       end

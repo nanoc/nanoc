@@ -39,16 +39,22 @@ describe Nanoc::Core::SiteLoader do
 
       it 'has an item' do
         expect(subject.items.size).to eq(1)
-        expect(subject.items['/about.md'].content).to be_a(Nanoc::Core::TextualContent)
-        expect(subject.items['/about.md'].content.string).to eq('I am Denis!')
-        expect(subject.items['/about.md'].identifier.to_s).to eq('/about.md')
+        expect(subject.items.object_with_identifier('/about.md').content)
+          .to be_a(Nanoc::Core::TextualContent)
+        expect(subject.items.object_with_identifier('/about.md').content.string)
+          .to eq('I am Denis!')
+        expect(subject.items.object_with_identifier('/about.md').identifier.to_s)
+          .to eq('/about.md')
       end
 
       it 'has a layout' do
         expect(subject.layouts.size).to eq(1)
-        expect(subject.layouts['/page.erb'].content).to be_a(Nanoc::Core::TextualContent)
-        expect(subject.layouts['/page.erb'].content.string).to eq('<html><%= yield %></html>')
-        expect(subject.layouts['/page.erb'].identifier.to_s).to eq('/page.erb')
+        expect(subject.layouts.object_with_identifier('/page.erb').content)
+          .to be_a(Nanoc::Core::TextualContent)
+        expect(subject.layouts.object_with_identifier('/page.erb').content.string)
+          .to eq('<html><%= yield %></html>')
+        expect(subject.layouts.object_with_identifier('/page.erb').identifier.to_s)
+          .to eq('/page.erb')
       end
 
       context 'some items, layouts, and code snippets' do
@@ -149,10 +155,14 @@ describe Nanoc::Core::SiteLoader do
 
       it 'loads code snippets before items/layouts' do
         expect(subject.items.size).to eq(1)
-        expect(subject.items['/generated.txt'].content).to be_a(Nanoc::Core::TextualContent)
-        expect(subject.items['/generated.txt'].content.string).to eq('Generated content!')
-        expect(subject.items['/generated.txt'].attributes).to eq(generated: true)
-        expect(subject.items['/generated.txt'].identifier.to_s).to eq('/generated.txt')
+        expect(subject.items.object_with_identifier('/generated.txt').content)
+          .to be_a(Nanoc::Core::TextualContent)
+        expect(subject.items.object_with_identifier('/generated.txt').content.string)
+          .to eq('Generated content!')
+        expect(subject.items.object_with_identifier('/generated.txt').attributes)
+          .to eq(generated: true)
+        expect(subject.items.object_with_identifier('/generated.txt').identifier.to_s)
+          .to eq('/generated.txt')
       end
     end
   end

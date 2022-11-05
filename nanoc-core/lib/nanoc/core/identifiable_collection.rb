@@ -37,15 +37,6 @@ module Nanoc
         super
       end
 
-      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
-      def [](arg)
-        if frozen?
-          get_memoized(arg)
-        else
-          get_unmemoized(arg)
-        end
-      end
-
       # contract C::Any => C::IterOf[C::RespondTo[:identifier]]
       def find_all(arg)
         if frozen?
@@ -75,7 +66,6 @@ module Nanoc
         self.class.new(@config, @objects.reject(&block))
       end
 
-      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
       def object_with_identifier(identifier)
         if frozen?
           @mapping[identifier.to_s]
@@ -84,26 +74,26 @@ module Nanoc
         end
       end
 
-      protected
-
-      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
-      def get_unmemoized(arg)
-        case arg
-        when Nanoc::Core::Identifier
-          object_with_identifier(arg)
-        when String
-          object_with_identifier(arg) || object_matching_glob(arg)
-        when Regexp
-          find { |i| i.identifier.to_s =~ arg }
+      def object_matching_glob(glob)
+        if frozen?
+          object_matching_glob_memoized(glob)
         else
-          raise ArgumentError, "don’t know how to fetch objects by #{arg.inspect}"
+          object_matching_glob_unmemoized(glob)
         end
       end
 
-      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
-      def get_memoized(_arg)
-        # TODO: Figure out how to get memo_wise to work with subclasses
-        raise 'implement in subclasses'
+      protected
+
+      def object_matching_glob_memoized(glob)
+        object_matching_glob_unmemoized(glob)
+      end
+      memo_wise :object_matching_glob_memoized
+
+      def object_matching_glob_unmemoized(glob)
+        if use_globs?
+          pat = Pattern.from(glob)
+          find { |i| pat.match?(i.identifier) }
+        end
       end
 
       # contract C::Any => C::IterOf[C::RespondTo[:identifier]]
@@ -117,13 +107,6 @@ module Nanoc
         find_all_unmemoized(arg)
       end
       memo_wise :find_all_memoized
-
-      def object_matching_glob(glob)
-        if use_globs?
-          pat = Pattern.from(glob)
-          find { |i| pat.match?(i.identifier) }
-        end
-      end
 
       def build_mapping
         @mapping = {}

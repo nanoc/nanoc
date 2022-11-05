@@ -34,9 +34,11 @@ module Nanoc
           actions = basic_outdatedness_checker.action_sequence_store[obj]
           layout_actions = actions.select { |a| a.first == :layout }
 
+          layouts = basic_outdatedness_checker.site.layouts
+
           layout_actions.map do |layout_action|
             layout_pattern = layout_action[1]
-            basic_outdatedness_checker.site.layouts[layout_pattern]
+            layouts.object_with_identifier(layout_pattern) || layouts.object_matching_glob(layout_pattern)
           end.compact
         end
       end

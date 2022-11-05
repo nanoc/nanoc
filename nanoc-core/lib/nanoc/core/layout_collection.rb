@@ -9,12 +9,6 @@ module Nanoc
         initialize_basic(config, objects, 'layouts')
       end
 
-      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
-      def get_memoized(arg)
-        get_unmemoized(arg)
-      end
-      memo_wise :get_memoized
-
       def reference
         'layouts'
       end

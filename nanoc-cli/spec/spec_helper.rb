@@ -38,7 +38,7 @@ Class.new(Nanoc::Core::ActionProvider) do
   end
 
   def preprocess(site)
-    item = site.items['/hello.*']
+    item = site.items.object_matching_glob('/hello.*')
 
     if item
       item.content = Nanoc::Core::TextualContent.new('Better hello!')

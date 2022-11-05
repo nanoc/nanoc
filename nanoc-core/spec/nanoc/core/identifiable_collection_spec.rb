@@ -19,59 +19,115 @@ describe Nanoc::Core::IdentifiableCollection do
       it { is_expected.to eq("<#{described_class}>") }
     end
 
-    describe '#[]' do
+    describe '#object_with_identifier' do
+      subject(:object_with_identifier) { identifiable_collection.object_with_identifier(arg) }
+
       let(:objects) do
         [
-          Nanoc::Core::Item.new('asdf', {}, Nanoc::Core::Identifier.new('/one')),
-          Nanoc::Core::Item.new('asdf', {}, Nanoc::Core::Identifier.new('/two')),
+          Nanoc::Core::Item.new('Foo', {}, '/foo.md'),
+          Nanoc::Core::Item.new('Bar', {}, '/bar.md'),
+          Nanoc::Core::Item.new('Quz', {}, '/qux.md'),
         ]
       end
 
-      context 'string pattern style is glob' do
-        let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+      shared_examples 'object_with_identifier' do
+        context 'when given an identifier' do
+          context 'when object does not exist' do
+            let(:arg) { Nanoc::Core::Identifier.new('/nope.md') }
 
-        it 'handles glob' do
-          expect(identifiable_collection['/on*']).to equal(objects[0])
-          expect(identifiable_collection['/*wo']).to equal(objects[1])
+            it 'returns nil' do
+              expect(object_with_identifier).to be_nil
+            end
+          end
+
+          context 'when object exist' do
+            let(:arg) { Nanoc::Core::Identifier.new('/foo.md') }
+
+            it 'returns object' do
+              expect(object_with_identifier).to eq(objects[0])
+            end
+          end
+        end
+
+        context 'when given a string' do
+          context 'when object does not exist' do
+            let(:arg) { '/nope.md' }
+
+            it 'returns nil' do
+              expect(object_with_identifier).to be_nil
+            end
+          end
+
+          context 'when object exist' do
+            let(:arg) { '/foo.md' }
+
+            it 'returns object' do
+              expect(object_with_identifier).to eq(objects[0])
+            end
+          end
         end
       end
 
-      context 'string pattern style is glob' do
-        let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
-
-        it 'does not handle glob' do
-          expect(identifiable_collection['/on*']).to be_nil
-          expect(identifiable_collection['/*wo']).to be_nil
-        end
-      end
-
-      it 'handles identifier' do
-        expect(identifiable_collection['/one']).to equal(objects[0])
-        expect(identifiable_collection['/two']).to equal(objects[1])
-      end
-
-      it 'handles malformed identifier' do
-        expect(identifiable_collection['one/']).to be_nil
-        expect(identifiable_collection['/one/']).to be_nil
-        expect(identifiable_collection['one']).to be_nil
-        expect(identifiable_collection['//one']).to be_nil
-        expect(identifiable_collection['/one//']).to be_nil
-      end
-
-      it 'handles regex' do
-        expect(identifiable_collection[/one/]).to equal(objects[0])
-        expect(identifiable_collection[/on/]).to equal(objects[0])
-        expect(identifiable_collection[/\/o/]).to equal(objects[0])
-        expect(identifiable_collection[/e$/]).to equal(objects[0])
-      end
-
-      context 'frozen' do
+      context 'when frozen' do
         before { identifiable_collection.freeze }
 
-        example do
-          expect(identifiable_collection['/one']).to equal(objects[0])
-          expect(identifiable_collection['/fifty']).to be_nil
+        include_examples 'object_with_identifier'
+      end
+
+      context 'when not frozen' do
+        include_examples 'object_with_identifier'
+      end
+    end
+
+    describe '#object_matching_glob' do
+      subject(:object_matching_glob) { identifiable_collection.object_matching_glob(arg) }
+
+      let(:objects) do
+        [
+          Nanoc::Core::Item.new('Foo', {}, '/foo.md'),
+          Nanoc::Core::Item.new('Bar', {}, '/bar.md'),
+          Nanoc::Core::Item.new('Quz', {}, '/qux.md'),
+        ]
+      end
+
+      shared_examples 'object_matching_glob' do
+        context 'when object does not exist' do
+          let(:arg) { '/nope.*' }
+
+          it 'returns nil' do
+            expect(object_matching_glob).to be_nil
+          end
         end
+
+        context 'when object exist' do
+          let(:arg) { '/foo.*' }
+
+          context 'when globs are enabled' do
+            let(:config) { super().merge(string_pattern_type: 'glob') }
+
+            it 'returns object' do
+              expect(object_matching_glob).to eq(objects[0])
+            end
+          end
+
+          context 'when globs are disabled' do
+            let(:config) { super().merge(string_pattern_type: 'legacy') }
+
+            it 'returns nil' do
+              expect(object_matching_glob).to be_nil
+            end
+          end
+        end
+      end
+
+      context 'when frozen' do
+        before { identifiable_collection.freeze }
+
+        include_examples 'object_matching_glob'
+      end
+
+      context 'when not frozen' do
+        include_examples 'object_matching_glob'
       end
     end
 
@@ -177,14 +233,14 @@ describe Nanoc::Core::IdentifiableCollection do
 
       it 'makes /foo nil' do
         expect { subject }
-          .to change { identifiable_collection['/foo'] }
+          .to change { identifiable_collection.object_with_identifier('/foo') }
           .from(objects[0])
           .to(nil)
       end
 
       it 'makes /bar non-nil' do
         expect { subject }
-          .to change { identifiable_collection['/bar'] }
+          .to change { identifiable_collection.object_with_identifier('/bar') }
           .from(nil)
           .to(objects[0])
       end

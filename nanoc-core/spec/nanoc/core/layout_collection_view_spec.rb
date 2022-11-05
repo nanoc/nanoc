@@ -6,7 +6,9 @@ describe Nanoc::Core::LayoutCollectionView do
   let(:view_class) { Nanoc::Core::LayoutView }
   let(:collection_class) { Nanoc::Core::LayoutCollection }
 
-  it_behaves_like 'an identifiable collection view'
+  it_behaves_like 'an identifiable collection view' do
+    let(:element_class) { Nanoc::Core::Layout }
+  end
 
   describe '#inspect' do
     subject { view.inspect }
