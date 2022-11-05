@@ -39,6 +39,8 @@ module Nanoc
 
       # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
       def [](arg)
+        # TODO: remove
+
         if frozen?
           get_memoized(arg)
         else
@@ -75,8 +77,30 @@ module Nanoc
         self.class.new(@config, @objects.reject(&block))
       end
 
-      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
       def object_with_identifier(identifier)
+        if frozen?
+          object_with_identifier_memoized(identifier)
+        else
+          object_with_identifier_unmemoized(identifier)
+        end
+      end
+
+      def object_matching_glob(glob)
+        if frozen?
+          object_matching_glob_memoized(glob)
+        else
+          object_matching_glob_unmemoized(glob)
+        end
+      end
+
+      protected
+
+      def object_with_identifier_memoized(identifier)
+        object_with_identifier_unmemoized(identifier)
+      end
+      memo_wise :object_with_identifier_memoized
+
+      def object_with_identifier_unmemoized(identifier)
         if frozen?
           @mapping[identifier.to_s]
         else
@@ -84,26 +108,16 @@ module Nanoc
         end
       end
 
-      protected
-
-      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
-      def get_unmemoized(arg)
-        case arg
-        when Nanoc::Core::Identifier
-          object_with_identifier(arg)
-        when String
-          object_with_identifier(arg) || object_matching_glob(arg)
-        when Regexp
-          find { |i| i.identifier.to_s =~ arg }
-        else
-          raise ArgumentError, "don’t know how to fetch objects by #{arg.inspect}"
-        end
+      def object_matching_glob_memoized(glob)
+        object_matching_glob_unmemoized(glob)
       end
+      memo_wise :object_matching_glob_memoized
 
-      # contract C::Any => C::Maybe[C::RespondTo[:identifier]]
-      def get_memoized(_arg)
-        # TODO: Figure out how to get memo_wise to work with subclasses
-        raise 'implement in subclasses'
+      def object_matching_glob_unmemoized(glob)
+        if use_globs?
+          pat = Pattern.from(glob)
+          find { |i| pat.match?(i.identifier) }
+        end
       end
 
       # contract C::Any => C::IterOf[C::RespondTo[:identifier]]
@@ -117,13 +131,6 @@ module Nanoc
         find_all_unmemoized(arg)
       end
       memo_wise :find_all_memoized
-
-      def object_matching_glob(glob)
-        if use_globs?
-          pat = Pattern.from(glob)
-          find { |i| pat.match?(i.identifier) }
-        end
-      end
 
       def build_mapping
         @mapping = {}

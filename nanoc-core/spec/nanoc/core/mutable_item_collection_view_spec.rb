@@ -10,7 +10,9 @@ describe Nanoc::Core::MutableItemCollectionView do
     { string_pattern_type: 'glob' }
   end
 
-  it_behaves_like 'an identifiable collection view'
+  it_behaves_like 'an identifiable collection view' do
+    let(:element_class) { Nanoc::Core::Item }
+  end
   it_behaves_like 'a mutable identifiable collection view'
 
   describe '#create' do

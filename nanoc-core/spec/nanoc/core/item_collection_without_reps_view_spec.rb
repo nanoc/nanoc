@@ -6,7 +6,9 @@ describe Nanoc::Core::ItemCollectionWithoutRepsView do
   let(:view_class) { Nanoc::Core::BasicItemView }
   let(:collection_class) { Nanoc::Core::ItemCollection }
 
-  it_behaves_like 'an identifiable collection view'
+  it_behaves_like 'an identifiable collection view' do
+    let(:element_class) { Nanoc::Core::Item }
+  end
 
   describe '#inspect' do
     subject { view.inspect }

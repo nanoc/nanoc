@@ -156,11 +156,11 @@ shared_examples 'an identifiable collection view' do
     subject { view[arg] }
 
     let(:page_object) do
-      double(:identifiable, identifier: Nanoc::Core::Identifier.new('/page.erb'))
+      element_class.new('content', {}, Nanoc::Core::Identifier.new('/page.erb'))
     end
 
     let(:home_object) do
-      double(:identifiable, identifier: Nanoc::Core::Identifier.new('/home.erb'))
+      element_class.new('content', {}, Nanoc::Core::Identifier.new('/home.erb'))
     end
 
     let(:wrapped) do
@@ -184,11 +184,11 @@ shared_examples 'an identifiable collection view' do
       end
     end
 
-    context 'string' do
+    context 'string, with exact match' do
       let(:arg) { '/home.erb' }
 
-      it 'creates dependency' do
-        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/home.erb'])
+      it 'does not create dependency' do
+        expect(dependency_tracker).not_to receive(:bounce)
         subject
       end
 
@@ -205,8 +205,8 @@ shared_examples 'an identifiable collection view' do
     context 'identifier' do
       let(:arg) { Nanoc::Core::Identifier.new('/home.erb') }
 
-      it 'creates dependency' do
-        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: ['/home.erb'])
+      it 'does not create dependency' do
+        expect(dependency_tracker).not_to receive(:bounce)
         subject
       end
 

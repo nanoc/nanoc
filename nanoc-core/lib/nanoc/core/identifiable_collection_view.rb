@@ -120,19 +120,63 @@ module Nanoc
       #
       #   @return [#identifier] if an object was found
       def [](arg)
-        prop_attribute =
-          case arg
-          when String, Nanoc::Core::Identifier
-            [arg.to_s]
-          when Regexp
-            [arg]
-          else
-            true
-          end
+        # The argument to #[] fall in two categories: exact matches, and
+        # patterns. An example of an exact match is '/about.md', while an
+        # example of a pattern is '/about.*'.
+        #
+        # If a Nanoc::Core::Identifier is given, we know it will need to be an
+        # exact match. If a String is given, it could be either. If a Regexp is
+        # given, we know it’s a pattern match.
+        #
+        # If we have a pattern match, create a dependency on the item
+        # collection, with a `raw_content` property that contains the pattern.
+        # If we have an exact match, do nothing -- there is no reason to create
+        # a dependency on the item itself, because accessing that item
+        # (attributes, compiled content, …) will create the dependency later.
 
-        @context.dependency_tracker.bounce(_unwrap, raw_content: prop_attribute)
-        res = @objects[arg]
-        res && view_class.new(res, @context)
+        object_from_exact_match = nil
+        object_from_pattern_match = nil
+
+        case arg
+        when Nanoc::Core::Identifier
+          # Can only be an exact match
+          object_from_exact_match = @objects.object_with_identifier(arg)
+        when String
+          # Can be an exact match, or a pattern match
+          tmp = @objects.object_with_identifier(arg)
+          if tmp
+            object_from_exact_match = tmp
+          else
+            object_from_pattern_match = @objects.object_matching_glob(arg)
+          end
+        when Regexp
+          # Can only be a pattern match
+          object_from_pattern_match = @objects.find { |i| i.identifier.to_s =~ arg }
+        else
+          raise ArgumentError, "Unexpected argument #{arg.class} to []: Can only pass strings, identfiers, and regular expressions"
+        end
+
+        unless object_from_exact_match
+          # We got this object from a pattern match. Create a dependency with
+          # this pattern, because if the objects matching this pattern change,
+          # then the result of #[] will change too.
+          #
+          # NOTE: object_from_exact_match can also be nil, but in that case
+          # we still need to create a dependency.
+
+          prop_attribute =
+            case arg
+            when Identifier
+              [arg.to_s]
+            when String, Regexp
+              [arg]
+            end
+
+          @context.dependency_tracker.bounce(_unwrap, raw_content: prop_attribute)
+        end
+
+        object = object_from_exact_match || object_from_pattern_match
+        object && view_class.new(object, @context)
       end
     end
   end
