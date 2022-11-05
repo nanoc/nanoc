@@ -19,6 +19,118 @@ describe Nanoc::Core::IdentifiableCollection do
       it { is_expected.to eq("<#{described_class}>") }
     end
 
+    describe '#object_with_identifier' do
+      subject(:object_with_identifier) { identifiable_collection.object_with_identifier(arg) }
+
+      let(:objects) do
+        [
+          Nanoc::Core::Item.new('Foo', {}, '/foo.md'),
+          Nanoc::Core::Item.new('Bar', {}, '/bar.md'),
+          Nanoc::Core::Item.new('Quz', {}, '/qux.md'),
+        ]
+      end
+
+      shared_examples 'object_with_identifier' do
+        context 'when given an identifier' do
+          context 'when object does not exist' do
+            let(:arg) { Nanoc::Core::Identifier.new('/nope.md') }
+
+            it 'returns nil' do
+              expect(object_with_identifier).to be_nil
+            end
+          end
+
+          context 'when object exist' do
+            let(:arg) { Nanoc::Core::Identifier.new('/foo.md') }
+
+            it 'returns object' do
+              expect(object_with_identifier).to eq(objects[0])
+            end
+          end
+        end
+
+        context 'when given a string' do
+          context 'when object does not exist' do
+            let(:arg) { '/nope.md' }
+
+            it 'returns nil' do
+              expect(object_with_identifier).to be_nil
+            end
+          end
+
+          context 'when object exist' do
+            let(:arg) { '/foo.md' }
+
+            it 'returns object' do
+              expect(object_with_identifier).to eq(objects[0])
+            end
+          end
+        end
+      end
+
+      context 'when frozen' do
+        before { identifiable_collection.freeze }
+
+        include_examples 'object_with_identifier'
+      end
+
+      context 'when not frozen' do
+        include_examples 'object_with_identifier'
+      end
+    end
+
+    describe '#object_matching_glob' do
+      subject(:object_matching_glob) { identifiable_collection.object_matching_glob(arg) }
+
+      let(:objects) do
+        [
+          Nanoc::Core::Item.new('Foo', {}, '/foo.md'),
+          Nanoc::Core::Item.new('Bar', {}, '/bar.md'),
+          Nanoc::Core::Item.new('Quz', {}, '/qux.md'),
+        ]
+      end
+
+      shared_examples 'object_matching_glob' do
+        context 'when object does not exist' do
+          let(:arg) { '/nope.*' }
+
+          it 'returns nil' do
+            expect(object_matching_glob).to be_nil
+          end
+        end
+
+        context 'when object exist' do
+          let(:arg) { '/foo.*' }
+
+          context 'when globs are enabled' do
+            let(:config) { super().merge(string_pattern_type: 'glob') }
+
+            it 'returns object' do
+              expect(object_matching_glob).to eq(objects[0])
+            end
+          end
+
+          context 'when globs are disabled' do
+            let(:config) { super().merge(string_pattern_type: 'legacy') }
+
+            it 'returns nil' do
+              expect(object_matching_glob).to be_nil
+            end
+          end
+        end
+      end
+
+      context 'when frozen' do
+        before { identifiable_collection.freeze }
+
+        include_examples 'object_matching_glob'
+      end
+
+      context 'when not frozen' do
+        include_examples 'object_matching_glob'
+      end
+    end
+
     describe '#find_all' do
       subject { identifiable_collection.find_all(arg) }
 
