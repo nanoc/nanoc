@@ -16,18 +16,11 @@ module Nanoc
 
         contract C::None => C::Any
         def run
-          load_store(@checksum_store)
-          load_store(@compiled_content_cache)
-          load_store(@dependency_store)
-          load_store(@action_sequence_store)
-          load_store(@outdatedness_store)
-        end
-
-        contract Nanoc::Core::Store => C::Any
-        def load_store(store)
-          Nanoc::Core::Instrumentor.call(:store_loaded, store.class) do
-            store.load
-          end
+          @checksum_store.load
+          @compiled_content_cache.load
+          @dependency_store.load
+          @action_sequence_store.load
+          @outdatedness_store.load
         end
       end
     end

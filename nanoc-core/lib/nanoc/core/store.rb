@@ -78,6 +78,12 @@ module Nanoc
       #
       # @return [void]
       def load
+        Nanoc::Core::Instrumentor.call(:store_loaded, self.class) do
+          load_uninstrumented
+        end
+      end
+
+      def load_uninstrumented
         return unless File.file?(filename)
 
         begin
@@ -88,7 +94,7 @@ module Nanoc
           end
         rescue
           FileUtils.rm_f(filename)
-          load
+          load_uninstrumented
         end
       end
 
