@@ -83,29 +83,6 @@ module Nanoc
         end
       end
 
-      def load_uninstrumented
-        # If there is no database, no point in loading anything
-        return unless File.file?(version_filename)
-
-        begin
-          # Check if store version is the expected version. If it is not, don’t
-          # load.
-          read_version = read_obj_from_file(version_filename)
-          return if read_version != version
-
-          # Load data
-          self.data = read_obj_from_file(data_filename)
-        rescue
-          # An error occurred! Remove the database and try again
-          FileUtils.rm_f(version_filename)
-          FileUtils.rm_f(data_filename)
-
-          # Try again
-          # TODO: Probably better not to try this indefinitely.
-          load_uninstrumented
-        end
-      end
-
       # Stores the data contained in memory to the filesystem. This method will
       #   use the {#data} method to fetch the data that should be written.
       #
@@ -118,6 +95,19 @@ module Nanoc
         end
       end
 
+      private
+
+      def load_uninstrumented
+        unsafe_load_uninstrumented
+      rescue
+        # An error occurred! Remove the database and try again
+        FileUtils.rm_f(version_filename)
+        FileUtils.rm_f(data_filename)
+
+        # Try again
+        unsafe_load_uninstrumented
+      end
+
       def store_uninstrumented
         FileUtils.mkdir_p(File.dirname(filename))
 
@@ -128,7 +118,19 @@ module Nanoc
         FileUtils.rm_f(filename)
       end
 
-      private
+      # Unsafe, because it can throw exceptions.
+      def unsafe_load_uninstrumented
+        # If there is no database, no point in loading anything
+        return unless File.file?(version_filename)
+
+        # Check if store version is the expected version. If it is not, don’t
+        # load.
+        read_version = read_obj_from_file(version_filename)
+        return if read_version != version
+
+        # Load data
+        self.data = read_obj_from_file(data_filename)
+      end
 
       def write_obj_to_file(fn, obj)
         File.binwrite(fn, Marshal.dump(obj))
