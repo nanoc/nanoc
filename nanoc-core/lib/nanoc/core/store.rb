@@ -78,6 +78,12 @@ module Nanoc
       #
       # @return [void]
       def load
+        Nanoc::Core::Instrumentor.call(:store_loaded, self.class) do
+          load_uninstrumented
+        end
+      end
+
+      def load_uninstrumented
         return unless File.file?(filename)
 
         begin
@@ -88,7 +94,7 @@ module Nanoc
           end
         rescue
           FileUtils.rm_f(filename)
-          load
+          load_uninstrumented
         end
       end
 
@@ -97,6 +103,14 @@ module Nanoc
       #
       # @return [void]
       def store
+        # NOTE: Yes, the “store stored” name is a little silly. Maybe stores
+        # need to be renamed to databases or so.
+        Nanoc::Core::Instrumentor.call(:store_stored, self.class) do
+          store_uninstrumented
+        end
+      end
+
+      def store_uninstrumented
         FileUtils.mkdir_p(File.dirname(filename))
 
         pstore.transaction do
