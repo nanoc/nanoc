@@ -84,26 +84,14 @@ module Nanoc
       end
 
       def load_uninstrumented
-        # If there is no database, no point in loading anything
-        return unless File.file?(version_filename)
+        unsafe_load_uninstrumented
+      rescue
+        # An error occurred! Remove the database and try again
+        FileUtils.rm_f(version_filename)
+        FileUtils.rm_f(data_filename)
 
-        begin
-          # Check if store version is the expected version. If it is not, don’t
-          # load.
-          read_version = read_obj_from_file(version_filename)
-          return if read_version != version
-
-          # Load data
-          self.data = read_obj_from_file(data_filename)
-        rescue
-          # An error occurred! Remove the database and try again
-          FileUtils.rm_f(version_filename)
-          FileUtils.rm_f(data_filename)
-
-          # Try again
-          # TODO: Probably better not to try this indefinitely.
-          load_uninstrumented
-        end
+        # Try again
+        unsafe_load_uninstrumented
       end
 
       # Stores the data contained in memory to the filesystem. This method will
@@ -129,6 +117,20 @@ module Nanoc
       end
 
       private
+
+      # Unsafe, because it can throw exceptions.
+      def unsafe_load_uninstrumented
+        # If there is no database, no point in loading anything
+        return unless File.file?(version_filename)
+
+        # Check if store version is the expected version. If it is not, don’t
+        # load.
+        read_version = read_obj_from_file(version_filename)
+        return if read_version != version
+
+        # Load data
+        self.data = read_obj_from_file(data_filename)
+      end
 
       def write_obj_to_file(fn, obj)
         File.binwrite(fn, Marshal.dump(obj))
