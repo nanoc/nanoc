@@ -83,17 +83,6 @@ module Nanoc
         end
       end
 
-      def load_uninstrumented
-        unsafe_load_uninstrumented
-      rescue
-        # An error occurred! Remove the database and try again
-        FileUtils.rm_f(version_filename)
-        FileUtils.rm_f(data_filename)
-
-        # Try again
-        unsafe_load_uninstrumented
-      end
-
       # Stores the data contained in memory to the filesystem. This method will
       #   use the {#data} method to fetch the data that should be written.
       #
@@ -106,6 +95,19 @@ module Nanoc
         end
       end
 
+      private
+
+      def load_uninstrumented
+        unsafe_load_uninstrumented
+      rescue
+        # An error occurred! Remove the database and try again
+        FileUtils.rm_f(version_filename)
+        FileUtils.rm_f(data_filename)
+
+        # Try again
+        unsafe_load_uninstrumented
+      end
+
       def store_uninstrumented
         FileUtils.mkdir_p(File.dirname(filename))
 
@@ -115,8 +117,6 @@ module Nanoc
         # Remove old file (back from the PStore days), if there are any.
         FileUtils.rm_f(filename)
       end
-
-      private
 
       # Unsafe, because it can throw exceptions.
       def unsafe_load_uninstrumented
