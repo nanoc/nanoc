@@ -21,6 +21,7 @@ module Nanoc::CLI::CompileListeners
       @outdatedness_rules_summary = DDMetrics::Summary.new
       @filters_summary = DDMetrics::Summary.new
       @load_stores_summary = DDMetrics::Summary.new
+      @store_stores_summary = DDMetrics::Summary.new
     end
 
     # @see Listener#start
@@ -52,6 +53,10 @@ module Nanoc::CLI::CompileListeners
 
       on(:store_loaded) do |duration, klass|
         @load_stores_summary.observe(duration, name: klass.to_s)
+      end
+
+      on(:store_stored) do |duration, klass|
+        @store_stores_summary.observe(duration, name: klass.to_s)
       end
 
       on(:compilation_suspended) do |rep, _target_rep, _snapshot_name|
@@ -145,6 +150,7 @@ module Nanoc::CLI::CompileListeners
       print_table_for_summary_duration(:stages, @stages_summary) if Nanoc::CLI.verbosity >= 2
       print_table_for_summary(:outdatedness_rules, @outdatedness_rules_summary) if Nanoc::CLI.verbosity >= 2
       print_table_for_summary_duration(:load_stores, @load_stores_summary) if Nanoc::CLI.verbosity >= 2
+      print_table_for_summary_duration(:store_stores, @store_stores_summary) if Nanoc::CLI.verbosity >= 2
     end
 
     def print_table_for_summary(name, summary)
