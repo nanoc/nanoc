@@ -89,7 +89,7 @@ describe Nanoc::Core::Store do
   end
 
   it 'deletes and reloads on error' do
-    store = test_store_klass.new('test.db', 1)
+    store = test_store_klass.new('test', 1)
 
     # Create
     store.load
@@ -97,15 +97,15 @@ describe Nanoc::Core::Store do
     store.store
 
     # Test stored values
-    store = test_store_klass.new('test.db', 1)
+    store = test_store_klass.new('test', 1)
     store.load
     expect(store.data).to eq(fun: 'sure')
 
     # Mess up
-    File.write('test.db', 'Damn {}#}%@}$^)@&$&*^#@ broken stores!!!')
+    File.write('test.data.db', 'Damn {}#}%@}$^)@&$&*^#@ broken stores!!!')
 
     # Reload
-    store = test_store_klass.new('test.db', 1)
+    store = test_store_klass.new('test', 1)
     store.load
     expect(store.data).to be_nil
   end

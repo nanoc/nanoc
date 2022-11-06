@@ -84,16 +84,24 @@ module Nanoc
       end
 
       def load_uninstrumented
-        return unless File.file?(filename)
+        # If there is no database, no point in loading anything
+        return unless File.file?(version_filename)
 
         begin
-          pstore.transaction(true) do
-            return if pstore[:version] != version
+          # Check if store version is the expected version. If it is not, don’t
+          # load.
+          read_version = read_obj_from_file(version_filename)
+          return if read_version != version
 
-            self.data = pstore[:data]
-          end
+          # Load data
+          self.data = read_obj_from_file(data_filename)
         rescue
-          FileUtils.rm_f(filename)
+          # An error occurred! Remove the database and try again
+          FileUtils.rm_f(version_filename)
+          FileUtils.rm_f(data_filename)
+
+          # Try again
+          # TODO: Probably better not to try this indefinitely.
           load_uninstrumented
         end
       end
@@ -113,16 +121,29 @@ module Nanoc
       def store_uninstrumented
         FileUtils.mkdir_p(File.dirname(filename))
 
-        pstore.transaction do
-          pstore[:data]    = data
-          pstore[:version] = version
-        end
+        write_obj_to_file(version_filename, version)
+        write_obj_to_file(data_filename, data)
+
+        # Remove old file (back from the PStore days), if there are any.
+        FileUtils.rm_f(filename)
       end
 
       private
 
-      def pstore
-        @pstore ||= PStore.new(filename)
+      def write_obj_to_file(fn, obj)
+        File.binwrite(fn, Marshal.dump(obj))
+      end
+
+      def read_obj_from_file(fn)
+        Marshal.load(File.binread(fn))
+      end
+
+      def version_filename
+        "#{filename}.version.db"
+      end
+
+      def data_filename
+        "#{filename}.data.db"
       end
     end
   end
