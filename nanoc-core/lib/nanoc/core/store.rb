@@ -90,11 +90,11 @@ module Nanoc
         begin
           # Check if store version is the expected version. If it is not, don’t
           # load.
-          read_version = Marshal.load(File.binread(version_filename))
+          read_version = read_obj_from_file(version_filename)
           return if read_version != version
 
           # Load data
-          self.data = Marshal.load(File.binread(data_filename))
+          self.data = read_obj_from_file(data_filename)
         rescue
           # An error occurred! Remove the database and try again
           FileUtils.rm_f(version_filename)
@@ -121,14 +121,22 @@ module Nanoc
       def store_uninstrumented
         FileUtils.mkdir_p(File.dirname(filename))
 
-        File.binwrite(version_filename, Marshal.dump(version))
-        File.binwrite(data_filename, Marshal.dump(data))
+        write_obj_to_file(version_filename, version)
+        write_obj_to_file(data_filename, data)
 
         # Remove old file (back from the PStore days), if there are any.
         FileUtils.rm_f(filename)
       end
 
       private
+
+      def write_obj_to_file(fn, obj)
+        File.binwrite(fn, Marshal.dump(obj))
+      end
+
+      def read_obj_from_file(fn)
+        Marshal.load(File.binread(fn))
+      end
 
       def version_filename
         "#{filename}.version.db"
