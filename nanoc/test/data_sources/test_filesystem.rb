@@ -228,6 +228,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = new_data_source(allow_periods_in_identifiers: true)
     expectations.each_pair do |meta_filename, expected_identifier|
       content_filename = meta_filename.sub(/yaml$/, 'html')
+
       [meta_filename, content_filename].each do |filename|
         assert_equal(
           expected_identifier,
@@ -254,6 +255,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     data_source = new_data_source
     expectations.each_pair do |meta_filename, expected_identifier|
       content_filename = meta_filename.sub(/yaml$/, 'html')
+
       [meta_filename, content_filename].each do |filename|
         assert_equal(
           expected_identifier,
