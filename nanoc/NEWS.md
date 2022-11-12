@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.12.11 (2022-11-12)
+
+Enhancements:
+
+- Further improved compilation speed, especially for partial recomilation (#1609, #1612, #1613, #1615)
+
 ## 4.12.10 (2022-10-18)
 
 Enhancements:
