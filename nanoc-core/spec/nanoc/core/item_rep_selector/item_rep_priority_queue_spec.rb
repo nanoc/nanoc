@@ -130,4 +130,114 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
         .to raise_error(Nanoc::Core::Errors::DependencyCycle)
     end
   end
+
+  context 'when there are two regular dependencies' do
+    it 'schedules the dependency next up' do
+      expect(micro_graph.next).to eq(reps[0])
+      micro_graph.mark_failed(reps[2])
+
+      expect(micro_graph.next).to eq(reps[2])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[1])
+      micro_graph.mark_failed(reps[4])
+
+      expect(micro_graph.next).to eq(reps[4])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[3])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[1])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[0])
+      micro_graph.mark_ok
+    end
+  end
+
+  context 'when there is one regular dependency and one cyclical dependency' do
+    it 'schedules the dependency next up' do
+      expect(micro_graph.next).to eq(reps[0])
+      micro_graph.mark_failed(reps[2])
+
+      expect(micro_graph.next).to eq(reps[2])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[1])
+      micro_graph.mark_failed(reps[4])
+
+      expect(micro_graph.next).to eq(reps[4])
+      expect { micro_graph.mark_failed(reps[1]) }
+        .to raise_error(Nanoc::Core::Errors::DependencyCycle)
+    end
+  end
+
+  context 'when there is a transitive dependency' do
+    it 'schedules the dependency next up' do
+      expect(micro_graph.next).to eq(reps[0])
+      micro_graph.mark_failed(reps[1])
+
+      expect(micro_graph.next).to eq(reps[1])
+      micro_graph.mark_failed(reps[2])
+
+      expect(micro_graph.next).to eq(reps[2])
+      micro_graph.mark_failed(reps[3])
+
+      expect(micro_graph.next).to eq(reps[3])
+      micro_graph.mark_failed(reps[4])
+
+      expect(micro_graph.next).to eq(reps[4])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[3])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[2])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[1])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[0])
+      micro_graph.mark_ok
+    end
+  end
+
+  context 'when there is an item with dependencies on many other items that also have dependences' do
+    # 0 -> 2
+    # 2 -> 4
+    # 4 OK
+    # 1 -> 2
+    # 2 -> 3
+    # 3 OK
+    it 'schedules the dependency next up' do
+      expect(micro_graph.next).to eq(reps[0])
+      micro_graph.mark_failed(reps[2])
+
+      expect(micro_graph.next).to eq(reps[2])
+      micro_graph.mark_failed(reps[4])
+
+      expect(micro_graph.next).to eq(reps[4])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[1])
+      micro_graph.mark_failed(reps[2])
+
+      expect(micro_graph.next).to eq(reps[2])
+      micro_graph.mark_failed(reps[3])
+
+      expect(micro_graph.next).to eq(reps[3])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[1])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[2])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[0])
+      micro_graph.mark_ok
+    end
+  end
 end
