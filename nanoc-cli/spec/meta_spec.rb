@@ -21,8 +21,7 @@ describe 'meta', chdir: false do
       transform
     ]
 
-    ignored_spec_file_base_names = %w[
-    ]
+    ignored_spec_file_base_names = %w[]
 
     effective_regular_file_base_names =
       regular_file_base_names - ignored_regular_file_base_names
