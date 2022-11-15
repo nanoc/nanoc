@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.12.12 (2022-11-15)
+
+Fixes:
+
+- Fixed a bug that could incorrectly raise compilation dependency cycle errors (#1620)
+
 ## 4.12.11 (2022-11-12)
 
 Enhancements:
