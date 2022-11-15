@@ -31,35 +31,31 @@ module Nanoc
           @prio_b = ItemRepIgnorableIterator.new(reps)
           @prio_c = []
 
-          # Stack of things that depend on each other. This is used for
-          # detecting and reporting circular dependencies.
-          @stack = []
-
           # List of reps that we’ve already seen. Reps from `reps` will end up
           # in here. Reps can end up in here even *before* they come from
           # `reps`, when they are part of a dependency.
           @seen = Set.new
+
+          # Record (hard) dependencies. Used for detecting cycles.
+          @dependencies = Hash.new { |hash, key| hash[key] = Set.new }
         end
 
         def next
           # Read prio A
           @this = @prio_a.pop
           if @this
-            @stack.push(@this)
             return @this
           end
 
           # Read prio B
           @this = @prio_b.next_ignoring(@seen)
           if @this
-            @stack.push(@this)
             return @this
           end
 
           # Read prio C
           @this = @prio_c.pop
           if @this
-            @stack.push(@this)
             return @this
           end
 
@@ -67,20 +63,18 @@ module Nanoc
         end
 
         def mark_ok
-          @stack.pop
+          # Nothing to do
         end
 
         def mark_failed(dep)
-          if @stack.include?(dep)
-            raise Nanoc::Core::Errors::DependencyCycle.new(@stack + [dep])
-          end
+          record_dependency(dep)
 
           # `@this` depends on `dep`, so `dep` has to be compiled first. Thus,
           # move `@this` into priority C, and `dep` into priority A.
 
           # Put `@this` (item rep that needs `dep` to be compiled first) into
           # priority C (lowest prio).
-          @prio_c.push(@this)
+          @prio_c.push(@this) unless @prio_c.include?(@this)
 
           # Put `dep` (item rep that needs to be compiled first, before
           # `@this`) into priority A (highest prio).
@@ -90,6 +84,27 @@ module Nanoc
           # come from @prio_b at some point in the future, so we’ll have to skip
           # it then.
           @seen << dep
+        end
+
+        private
+
+        def record_dependency(dep)
+          @dependencies[@this] << dep
+
+          find_cycle(@this, [@this])
+        end
+
+        def find_cycle(dep, path)
+          @dependencies[dep].each do |dep1|
+            # Check whether this dependency path ends in `@this` again. If it
+            # does, we have a cycle (because we started from `@this`).
+            if dep1 == @this
+              raise Nanoc::Core::Errors::DependencyCycle.new(path)
+            end
+
+            # Continue checking, starting from `dep1` this time.
+            find_cycle(dep1, [*path, dep1])
+          end
         end
       end
 

@@ -1,16 +1,14 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::Errors::DependencyCycle do
-  subject(:error) { described_class.new(stack) }
+  subject(:error) { described_class.new(cycle) }
 
-  let(:stack) do
+  let(:cycle) do
     [
-      rep_a,
       rep_b,
       rep_c,
       rep_d,
       rep_e,
-      rep_b,
     ]
   end
 

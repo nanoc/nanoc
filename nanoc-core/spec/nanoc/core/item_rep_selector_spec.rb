@@ -142,9 +142,9 @@ describe Nanoc::Core::ItemRepSelector do
         expect { subject }.to raise_error(Nanoc::Core::Errors::DependencyCycle, <<~EOS)
           The site cannot be compiled because there is a dependency cycle:
 
-              (1) item /foo.md, rep :a, uses compiled content of
-              (2) item /foo.md, rep :b, uses compiled content of
-              (3) item /foo.md, rep :c, uses compiled content of (1)
+              (1) item /foo.md, rep :c, uses compiled content of
+              (2) item /foo.md, rep :a, uses compiled content of
+              (3) item /foo.md, rep :b, uses compiled content of (1)
         EOS
       end
     end

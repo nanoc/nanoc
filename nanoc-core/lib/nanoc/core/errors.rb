@@ -72,10 +72,7 @@ module Nanoc
       # Error that is raised during site compilation when an item (directly or
       # indirectly) includes its own item content, leading to endless recursion.
       class DependencyCycle < ::Nanoc::Core::Error
-        def initialize(stack)
-          start_idx = stack.index(stack.last)
-          cycle = stack[start_idx..-2]
-
+        def initialize(cycle)
           msg_bits = []
           msg_bits << 'The site cannot be compiled because there is a dependency cycle:'
           msg_bits << ''
