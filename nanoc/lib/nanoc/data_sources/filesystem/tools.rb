@@ -111,9 +111,9 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
         when nil
           []
         when String
-          ["#{dir_name}/#{extra_files}"]
+          ["#{dir_name}/#{extra_files.dup.delete_prefix('/')}"]
         when Array
-          extra_files.map { |extra_file| "#{dir_name}/#{extra_file}" }
+          extra_files.map { |extra_file| "#{dir_name}/#{extra_file.dup.delete_prefix('/')}" }
         else
           raise(
             Nanoc::Core::TrivialError,
