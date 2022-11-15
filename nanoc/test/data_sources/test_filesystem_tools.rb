@@ -139,6 +139,28 @@ class Nanoc::DataSources::FilesystemToolsTest < Nanoc::TestCase
     assert_equal ['dir/.other', 'dir/.DS_Store'].sort, actual_files.sort
   end
 
+  def test_extra_files_string_with_leading_slash
+    # Write sample files
+    FileUtils.mkdir_p('dir')
+    File.write('dir/.other', 'o hai')
+    File.write('dir/.DS_Store', 'o hai')
+
+    actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', '/**/.DS_Store').sort
+
+    assert_equal ['dir/.DS_Store'].sort, actual_files.sort
+  end
+
+  def test_extra_files_array_with_leading_slash
+    # Write sample files
+    FileUtils.mkdir_p('dir')
+    File.write('dir/.other', 'o hai')
+    File.write('dir/.DS_Store', 'o hai')
+
+    actual_files = Nanoc::DataSources::Filesystem::Tools.all_files_in('dir', ['/**/.DS_Store']).sort
+
+    assert_equal ['dir/.DS_Store'].sort, actual_files.sort
+  end
+
   def test_unknown_pattern
     # Write sample files
     FileUtils.mkdir_p('dir')
