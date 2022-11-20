@@ -21,7 +21,10 @@ end
 RSpec.configure do |c|
   c.include(Nanoc::Spec::Helper)
 
+  # TODO: Now that HelperHelper is used for filters too, maybe it is worth
+  # renaming it to DataHelper or so.
   c.include(Nanoc::Spec::HelperHelper, helper: true)
+  c.include(Nanoc::Spec::HelperHelper, filter: true)
 
   c.threadsafe = false
 
