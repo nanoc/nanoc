@@ -54,6 +54,10 @@ jobs:
         run: bundle exec rake nanoc_checking:test
         timeout-minutes: 3
 
+      - name: Test nanoc-dart-sass
+        run: bundle exec rake nanoc_dart_sass:test
+        timeout-minutes: 3
+
       - name: Test nanoc-deploying
         run: bundle exec rake nanoc_deploying:test
         timeout-minutes: 3

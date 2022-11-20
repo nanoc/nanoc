@@ -16,6 +16,7 @@ Naming/FileName:
     - "nanoc/lib/nanoc/orig_cli/commands/*.rb"
     - "nanoc-cli/lib/nanoc/cli/commands/*.rb"
     - "nanoc-*/lib/nanoc-*.rb"
+    - "nanoc-dart-sass/lib/nanoc/dart-sass.rb"
     - "guard-nanoc/lib/guard-nanoc.rb"
     - "*/*.gemspec"
 

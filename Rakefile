@@ -21,6 +21,7 @@ packages = %w[
   nanoc-core
   nanoc-cli
   nanoc-checking
+  nanoc-dart-sass
   nanoc-deploying
   nanoc-external
   nanoc-live
