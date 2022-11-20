@@ -94,9 +94,11 @@ module Nanoc::DataSources
       require 'listen'
 
       Nanoc::Core::ChangesStream.new do |cl|
-        if dir
+        full_dir = dir ? File.expand_path(dir) : nil
+
+        if full_dir && File.directory?(full_dir)
           listener =
-            Listen.to(File.expand_path(dir)) do |_modifieds, _addeds, _deleteds|
+            Listen.to(full_dir) do |_modifieds, _addeds, _deleteds|
               cl.unknown
             end
 

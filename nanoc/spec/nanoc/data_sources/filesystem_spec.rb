@@ -278,40 +278,71 @@ describe Nanoc::DataSources::Filesystem, site: true do
       if Nanoc::Core.on_windows?
         skip 'nanoc-live is not currently supported on Windows'
       end
-
-      FileUtils.mkdir_p(temp_dir_base_expanded)
     end
 
-    after do
-      FileUtils.rm_rf(temp_dir_base_expanded)
-    end
-
-    it 'returns a stream' do
-      expect(subject).to be_a(Nanoc::Core::ChangesStream)
-    end
-
-    it 'contains one element after changing' do
-      FileUtils.mkdir_p(File.join(temp_dir, 'content'))
-
-      enum = SlowEnumeratorTools.buffer(subject.to_enum, 1)
-      q = SizedQueue.new(1)
-      Thread.new { q << enum.take(1).first }
-
-      # Try until we find a change
-      ok = false
-      20.times do |i|
-        File.write(File.join(temp_dir, 'content/wat.md'), "stuff #{i}")
-        begin
-          expect(q.pop(true)).to eq(:unknown)
-          ok = true
-          break
-        rescue ThreadError
-          sleep 0.1
-        end
+    context 'when directory exists' do
+      before do
+        FileUtils.mkdir_p(temp_dir_base_expanded)
       end
-      expect(ok).to be(true)
 
-      subject.stop
+      after do
+        FileUtils.rm_rf(temp_dir_base_expanded)
+      end
+
+      it 'returns a stream' do
+        expect(subject).to be_a(Nanoc::Core::ChangesStream)
+      end
+
+      it 'contains one element after changing' do
+        FileUtils.mkdir_p(File.join(temp_dir, 'content'))
+
+        enum = SlowEnumeratorTools.buffer(subject.to_enum, 1)
+        q = SizedQueue.new(1)
+        Thread.new { q << enum.take(1).first }
+
+        # Try until we find a change
+        ok = false
+        20.times do |i|
+          File.write(File.join(temp_dir, 'content/wat.md'), "stuff #{i}")
+          begin
+            expect(q.pop(true)).to eq(:unknown)
+            ok = true
+            break
+          rescue ThreadError
+            sleep 0.1
+          end
+        end
+        expect(ok).to be(true)
+
+        subject.stop
+      end
+    end
+
+    context 'when directory does not exist' do
+      it 'returns a stream' do
+        expect(subject).to be_a(Nanoc::Core::ChangesStream)
+      end
+
+      it 'does not raise' do
+        subject
+
+        t = Thread.new do
+          Thread.current.abort_on_exception = true
+          Thread.current.report_on_exception = false
+
+          begin
+            Timeout.timeout(0.1) { subject.to_enum.take(1).first }
+            Thread.current[:outcome] = :not_timed_out
+          rescue Timeout::Error
+            Thread.current[:outcome] = :timed_out
+          end
+        end
+
+        t.join
+        expect(t[:outcome]).to eq(:timed_out)
+
+        subject.stop
+      end
     end
   end
 end
