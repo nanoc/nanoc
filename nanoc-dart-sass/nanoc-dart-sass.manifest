@@ -1,0 +1,8 @@
+NEWS.md
+README.md
+
+lib/nanoc-dart-sass.rb
+lib/nanoc/dart-sass.rb
+lib/nanoc/dart_sass.rb
+lib/nanoc/dart_sass/filter.rb
+lib/nanoc/dart_sass/version.rb
