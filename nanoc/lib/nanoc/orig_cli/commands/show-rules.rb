@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-usage 'show-rules [thing]'
+usage 'show-rules'
 aliases :explain
 summary 'describe the rules for each item'
 description "
