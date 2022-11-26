@@ -28,7 +28,7 @@ module Nanoc
 
         result = Sass.compile_string(
           content,
-          importer: make_dart_sass_importer(@items),
+          importer: NanocImporter.new(@items),
           **params,
           syntax: syntax,
         )
@@ -38,23 +38,25 @@ module Nanoc
         raise e
       end
 
-      private
+      class NanocImporter
+        def initialize(items)
+          @items = items
+        end
 
-      def make_dart_sass_importer(items)
-        {
-          canonicalize: lambda do |param, **|
-            "nanoc:#{items[param.sub(/\Ananoc:/, '')].identifier}"
-          end,
-          load: lambda { |url|
-            param = url.sub(/\Ananoc:/, '')
-            item = items[param]
-            return {
-              contents: item.raw_content,
-              syntax: item.identifier.ext,
-            }
-          },
-        }
+        def canonicalize(url, **)
+          "nanoc:#{@items[url.sub(/\Ananoc:/, '')].identifier}"
+        end
+
+        def load(url)
+          item = @items[url.sub(/\Ananoc:/, '')]
+          {
+            contents: item.raw_content,
+            syntax: item.identifier.ext,
+          }
+        end
       end
+
+      private_constant :NanocImporter
     end
   end
 end
