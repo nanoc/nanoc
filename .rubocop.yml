@@ -577,6 +577,9 @@ Minitest/EmptyLineBeforeAssertionMethods: # new in 0.23
 Style/RedundantEach: # new in 1.38
   Enabled: true
 
+Minitest/SkipWithoutReason: # new in 0.24
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
