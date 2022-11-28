@@ -14,17 +14,7 @@ module Nanoc
       def run(content, params = {})
         # Read syntax
         syntax = params[:syntax]
-        syntax ||=
-          case item.identifier.ext
-          when 'sass'
-            :indented
-          when 'scss'
-            :scss
-          when 'css'
-            :css
-          else
-            nil
-          end
+        syntax ||= Util.syntax_from_ext(item.identifier.ext)
 
         result = Sass.compile_string(
           content,
@@ -51,12 +41,31 @@ module Nanoc
           item = @items[url.sub(/\Ananoc:/, '')]
           {
             contents: item.raw_content,
-            syntax: item.identifier.ext,
+            syntax: Util.syntax_from_ext(item.identifier.ext),
           }
         end
       end
 
       private_constant :NanocImporter
+
+      module Util
+        module_funciton
+
+        def syntax_from_ext(ext)
+          case ext
+          when 'sass'
+            :indented
+          when 'scss'
+            :scss
+          when 'css'
+            :css
+          else
+            nil
+          end
+        end
+      end
+
+      private_constant :Util
     end
   end
 end
