@@ -49,7 +49,7 @@ module Nanoc
       private_constant :NanocImporter
 
       module Util
-        module_funciton
+        module_function
 
         def syntax_from_ext(ext)
           case ext
