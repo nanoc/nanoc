@@ -13,7 +13,7 @@ module Nanoc
       class ItemRepPriorityQueue
         def initialize(reps)
           # Prio A: most important; prio C: least important.
-          @prio_a = []
+          @prio_a = nil
           @prio_b = reps.dup
           @prio_c = []
 
@@ -32,8 +32,9 @@ module Nanoc
 
         def next
           # Read prio A
-          @this = @prio_a.pop
+          @this = @prio_a
           if @this
+            @prio_a = nil
             return @this
           end
 
@@ -70,7 +71,7 @@ module Nanoc
 
           # Put `dep` (item rep that needs to be compiled first, before
           # `@this`) into priority A (highest prio).
-          @prio_a.push(dep)
+          @prio_a = dep
 
           # Remember that we’ve prioritised `dep`. This particular element will
           # come from @prio_b at some point in the future, so we’ll have to skip
