@@ -8,27 +8,13 @@ module Nanoc
         @reps = reps
       end
 
-      # An iterator (FIFO) over an array, with ability to ignore certain
-      # elements.
-      class ItemRepIgnorableIterator
-        def initialize(array)
-          @array = array.dup
-        end
-
-        def next_ignoring(ignored)
-          elem = @array.shift
-          elem = @array.shift while ignored.include?(elem)
-          elem
-        end
-      end
-
       # A priority queue that tracks dependencies and can detect circular
       # dependencies.
       class ItemRepPriorityQueue
         def initialize(reps)
           # Prio A: most important; prio C: least important.
-          @prio_a = []
-          @prio_b = ItemRepIgnorableIterator.new(reps)
+          @prio_a = nil
+          @prio_b = reps.dup
           @prio_c = []
 
           # List of reps that we’ve already seen. Reps from `reps` will end up
@@ -46,13 +32,15 @@ module Nanoc
 
         def next
           # Read prio A
-          @this = @prio_a.pop
+          @this = @prio_a
           if @this
+            @prio_a = nil
             return @this
           end
 
           # Read prio B
-          @this = @prio_b.next_ignoring(@seen)
+          @this = @prio_b.shift
+          @this = @prio_b.shift while @seen.include?(@this)
           if @this
             return @this
           end
@@ -83,7 +71,7 @@ module Nanoc
 
           # Put `dep` (item rep that needs to be compiled first, before
           # `@this`) into priority A (highest prio).
-          @prio_a.push(dep)
+          @prio_a = dep
 
           # Remember that we’ve prioritised `dep`. This particular element will
           # come from @prio_b at some point in the future, so we’ll have to skip
