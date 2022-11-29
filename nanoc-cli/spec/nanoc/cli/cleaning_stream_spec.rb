@@ -20,7 +20,7 @@ describe Nanoc::CLI::CleaningStream do
   end
 
   it 'forwards methods' do
-    methods = %i[write << flush tell print puts string reopen exist? exists? close]
+    methods = %i[write << flush tell print puts string reopen exist? exists? close closed?]
 
     s = stream_class.new
     cs = described_class.new(s)
@@ -36,6 +36,7 @@ describe Nanoc::CLI::CleaningStream do
     cs.exist?
     cs.exists?
     cs.close
+    cs.closed?
 
     expect(s.called_methods).to eq(methods)
   end

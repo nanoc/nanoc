@@ -103,6 +103,11 @@ module Nanoc
         @stream.close
       end
 
+      # @see IO#closed?
+      def closed?
+        @stream.closed?
+      end
+
       # @see File#exist?
       def exist?
         @stream.exist?
