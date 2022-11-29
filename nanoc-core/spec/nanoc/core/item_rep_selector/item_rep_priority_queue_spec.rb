@@ -39,6 +39,8 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
 
       expect(micro_graph.next).to eq(reps[4])
       micro_graph.mark_ok
+
+      expect(micro_graph.next).to be_nil
     end
   end
 
@@ -61,6 +63,8 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
 
       expect(micro_graph.next).to eq(reps[0])
       micro_graph.mark_ok
+
+      expect(micro_graph.next).to be_nil
     end
   end
 
@@ -86,6 +90,8 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
 
       expect(micro_graph.next).to eq(reps[0])
       micro_graph.mark_ok
+
+      expect(micro_graph.next).to be_nil
     end
   end
 
@@ -153,6 +159,8 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
 
       expect(micro_graph.next).to eq(reps[0])
       micro_graph.mark_ok
+
+      expect(micro_graph.next).to be_nil
     end
   end
 
@@ -201,6 +209,8 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
 
       expect(micro_graph.next).to eq(reps[0])
       micro_graph.mark_ok
+
+      expect(micro_graph.next).to be_nil
     end
   end
 
@@ -238,6 +248,8 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
 
       expect(micro_graph.next).to eq(reps[0])
       micro_graph.mark_ok
+
+      expect(micro_graph.next).to be_nil
     end
   end
 
