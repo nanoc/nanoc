@@ -240,4 +240,35 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
       micro_graph.mark_ok
     end
   end
+
+  context 'when there is an item with dependencies on an item that was delayed due to another dependency' do
+    # 0 -> 3
+    # 3 OK
+    # 1 -> 0
+    # 0 OK
+    it 'schedules the dependency next up' do
+      expect(micro_graph.next).to eq(reps[0])
+      micro_graph.mark_failed(reps[3])
+
+      expect(micro_graph.next).to eq(reps[3])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[1])
+      micro_graph.mark_failed(reps[0])
+
+      expect(micro_graph.next).to eq(reps[0])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[2])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[4])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to eq(reps[1])
+      micro_graph.mark_ok
+
+      expect(micro_graph.next).to be_nil
+    end
+  end
 end
