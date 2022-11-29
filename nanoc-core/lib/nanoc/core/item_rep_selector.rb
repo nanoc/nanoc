@@ -36,6 +36,10 @@ module Nanoc
           # `reps`, when they are part of a dependency.
           @seen = Set.new
 
+          # List of reps that have already been completed (yielded followed by
+          # `#mark_ok`).
+          @completed = Set.new
+
           # Record (hard) dependencies. Used for detecting cycles.
           @dependencies = Hash.new { |hash, key| hash[key] = Set.new }
         end
@@ -55,6 +59,7 @@ module Nanoc
 
           # Read prio C
           @this = @prio_c.pop
+          @this = @prio_c.pop while @completed.include?(@this)
           if @this
             return @this
           end
@@ -63,7 +68,7 @@ module Nanoc
         end
 
         def mark_ok
-          # Nothing to do
+          @completed << @this
         end
 
         def mark_failed(dep)
