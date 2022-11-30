@@ -1,5 +1,14 @@
 # Nanoc news
 
+## 4.12.13 (2022-11-30)
+
+Fixes:
+
+- Prevented an issue where items could have two leading slashes in their identifier when using the `filesystem` data source’s `extra_files` option (#1622)
+- Fixed an issue which would make `nanoc compile --watch` or `nanoc live` crash if the layouts directory does not exist (#1625, #1626)
+- Fixed the usage of the `show-rules` command (it takes no arguments) (#1628)
+- Fixed an issue which could make Nanoc crash with `Stopwatch::AlreadyRunningError` (#1631, #1633)
+
 ## 4.12.12 (2022-11-15)
 
 Fixes:
