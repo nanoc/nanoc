@@ -2,6 +2,6 @@
 
 module Nanoc
   module CLI
-    VERSION = '4.12.12'
+    VERSION = '4.12.13'
   end
 end
