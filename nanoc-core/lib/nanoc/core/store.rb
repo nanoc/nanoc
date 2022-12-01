@@ -128,8 +128,28 @@ module Nanoc
         self.data = read_obj_from_file(data_filename)
       end
 
-      def write_obj_to_file(fn, obj)
-        File.binwrite(fn, Marshal.dump(obj))
+      def write_obj_to_file(filename, obj)
+        chunk_size = 104_857_600 # 100 MiB
+
+        data = Marshal.dump(obj)
+
+        # Read the marshalled data in chunks, because File.binwrite can’t
+        # necessarily deal with writing that much data all at once.
+        #
+        # See https://github.com/nanoc/nanoc/issues/1635.
+        reader = StringIO.new(data)
+        File.open(filename, 'wb:ASCII-8BIT') do |writer|
+          # Create a string to read into, to reduce the amount of allocation.
+          #
+          # Note that String.new takes a `capacity` kwarg, but this isn’t used
+          # here as the performance impact seemed to be negligible or even
+          # slightly negative.
+          chunk = +''
+
+          while reader.read(chunk_size, chunk) # rubocop:disable Style/WhileUntilModifier
+            writer.write(chunk)
+          end
+        end
       end
 
       def read_obj_from_file(fn)
