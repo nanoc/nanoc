@@ -130,15 +130,7 @@ module Nanoc
 
       def write_obj_to_file(filename, obj)
         data = Marshal.dump(obj)
-
-        # Write the marshalled data as a stream, because File.binwrite can’t
-        # necessarily deal with writing that much data all at once.
-        #
-        # See https://github.com/nanoc/nanoc/issues/1635.
-        reader = StringIO.new(data)
-        File.open(filename, 'wb:ASCII-8BIT') do |writer|
-          IO.copy_stream(reader, writer)
-        end
+        write_data_to_file(filename, data)
       end
 
       def read_obj_from_file(fn)
@@ -151,6 +143,28 @@ module Nanoc
 
       def data_filename
         "#{filename}.data.db"
+      end
+
+      def write_data_to_file(filename, data)
+        basename = File.basename(filename)
+        dirname = File.dirname(filename)
+
+        # Write to a temporary file first, and then (atomically) move it into
+        # place.
+        Tempfile.open(".#{basename}", dirname) do |temp_file|
+          temp_file.binmode
+
+          # Write the data as a stream, because File.binwrite can’t
+          # necessarily deal with writing that much data all at once.
+          #
+          # See https://github.com/nanoc/nanoc/issues/1635.
+          reader = StringIO.new(data)
+          IO.copy_stream(reader, temp_file)
+          temp_file.close
+
+          # Rename (atomic)
+          File.rename(temp_file.path, filename)
+        end
       end
     end
   end
