@@ -1,5 +1,15 @@
 # Nanoc news
 
+## 4.12.14 (2022-12-03)
+
+Fixes:
+
+- Fixed an issue which would cause `Invalid argument @ io_write` on larger sites (#1636)
+
+Enhancements:
+
+- Made Nanoc store temporary data (in `tmp/nanoc/`) in compressed form (#1637)
+
 ## 4.12.13 (2022-11-30)
 
 Fixes:
