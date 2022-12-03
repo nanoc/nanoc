@@ -2,6 +2,6 @@
 
 module Nanoc
   module Core
-    VERSION = '4.12.13'
+    VERSION = '4.12.14'
   end
 end
