@@ -7,6 +7,7 @@ require 'pstore'
 require 'singleton'
 require 'tmpdir'
 require 'yaml'
+require 'zlib'
 
 # External gems
 require 'concurrent-ruby'

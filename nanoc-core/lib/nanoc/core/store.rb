@@ -130,11 +130,14 @@ module Nanoc
 
       def write_obj_to_file(filename, obj)
         data = Marshal.dump(obj)
-        write_data_to_file(filename, data)
+        compressed_data = Zlib::Deflate.deflate(data, Zlib::BEST_SPEED)
+        write_data_to_file(filename, compressed_data)
       end
 
       def read_obj_from_file(fn)
-        Marshal.load(File.binread(fn))
+        compressed_data = File.binread(fn)
+        data = Zlib::Inflate.inflate(compressed_data)
+        Marshal.load(data)
       end
 
       def version_filename
