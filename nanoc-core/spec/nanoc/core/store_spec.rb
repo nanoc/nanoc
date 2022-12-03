@@ -109,4 +109,25 @@ describe Nanoc::Core::Store do
     store.load
     expect(store.data).to be_nil
   end
+
+  it 'can write humongous amounts of data' do
+    # Skip running on GitHub actions etc because this thing just uses far too many resources
+    skip if ENV['CI']
+
+    store = test_store_klass.new('test', 1)
+
+    # Create huge string
+    array = []
+    100.times do |i|
+      raw = 'x' * 1_000_037
+      raw << i.to_s
+      io = StringIO.new
+      100.times { io << raw }
+      array << io.string
+    end
+
+    # Write
+    store.data = { data: array }
+    expect { store.store }.not_to raise_exception
+  end
 end
