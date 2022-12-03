@@ -16,7 +16,7 @@ module Nanoc
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration, objects: C::IterOf[c_obj]] => C::Any
       def initialize(config:, objects:)
-        super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'checksums'), 2)
+        super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'checksums'), 3)
 
         @objects = objects
 
