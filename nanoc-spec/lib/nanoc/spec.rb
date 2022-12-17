@@ -115,11 +115,11 @@ module Nanoc
       end
 
       def item=(item)
-        @item = item ? item._unwrap : nil
+        @item = item&._unwrap
       end
 
       def item_rep=(item_rep)
-        @item_rep = item_rep ? item_rep._unwrap : nil
+        @item_rep = item_rep&._unwrap
       end
 
       # @return [Nanoc::Core::MutableConfigView]

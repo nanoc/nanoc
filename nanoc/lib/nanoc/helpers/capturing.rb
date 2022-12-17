@@ -75,7 +75,7 @@ module Nanoc::Helpers
 
         compiled_content_store = @config._context.compiled_content_store
         content = compiled_content_store.get(rep, "__capture_#{@name}".to_sym)
-        content ? content.string : nil
+        content&.string
       end
     end
 
