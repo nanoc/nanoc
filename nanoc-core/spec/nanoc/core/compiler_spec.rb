@@ -5,7 +5,7 @@ describe Nanoc::Core::Compiler do
     identifier :simple_erb_ob3rqra0yc
 
     def run(content, _params = {})
-      context = ::Nanoc::Core::Context.new(assigns)
+      context = Nanoc::Core::Context.new(assigns)
       ERB.new(content).result(context.get_binding)
     end
   end

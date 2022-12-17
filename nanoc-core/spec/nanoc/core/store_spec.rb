@@ -112,7 +112,7 @@ describe Nanoc::Core::Store do
 
   it 'can write humongous amounts of data' do
     # Skip running on GitHub actions etc because this thing just uses far too many resources
-    skip if ENV['CI']
+    skip 'GitHub Actions does not give us enough resources to run this' if ENV['CI']
 
     store = test_store_klass.new('test', 1)
 

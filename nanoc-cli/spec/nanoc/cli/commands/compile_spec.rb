@@ -16,7 +16,7 @@ describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
     let(:code_snippets) { [] }
 
     it 'starts and stops listeners as needed' do
-      test_listener_class = Class.new(::Nanoc::CLI::CompileListeners::Abstract) do
+      test_listener_class = Class.new(Nanoc::CLI::CompileListeners::Abstract) do
         def start
           @started = true
         end

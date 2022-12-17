@@ -7,7 +7,7 @@ describe Nanoc::DartSass::Filter, helper: true do
     ctx.create_rep(ctx.items['/foo.scss'], '/assets/foo.css')
     ctx.item = ctx.items['/foo.scss']
 
-    filter = ::Nanoc::DartSass::Filter.new(ctx.assigns)
+    filter = described_class.new(ctx.assigns)
 
     res = filter.run(<<~SCSS)
       $primary-color: #333;
@@ -26,7 +26,7 @@ describe Nanoc::DartSass::Filter, helper: true do
     ctx.create_rep(ctx.items['/foo.css'], '/assets/foo.css')
     ctx.item = ctx.items['/foo.css']
 
-    filter = ::Nanoc::DartSass::Filter.new(ctx.assigns)
+    filter = described_class.new(ctx.assigns)
 
     res = filter.run(<<~SCSS, syntax: 'scss')
       $primary-color: #333;
@@ -45,7 +45,7 @@ describe Nanoc::DartSass::Filter, helper: true do
     ctx.create_rep(ctx.items['/foo.sass'], '/assets/foo.css')
     ctx.item = ctx.items['/foo.sass']
 
-    filter = ::Nanoc::DartSass::Filter.new(ctx.assigns)
+    filter = described_class.new(ctx.assigns)
 
     res = filter.run(<<~SASS)
       $primary-color: #333
@@ -80,14 +80,14 @@ describe Nanoc::DartSass::Filter, helper: true do
     end
 
     it 'supports reading from dependencies' do
-      filter = ::Nanoc::DartSass::Filter.new(ctx.assigns)
+      filter = described_class.new(ctx.assigns)
 
       res = filter.run(content)
       expect(res.strip).to match(/color: #900/m)
     end
 
     it 'creates Nanoc dependencies' do
-      filter = ::Nanoc::DartSass::Filter.new(ctx.assigns)
+      filter = described_class.new(ctx.assigns)
 
       expect { filter.run(content) }
         .to create_dependency_from(ctx.items['/foo.scss'])

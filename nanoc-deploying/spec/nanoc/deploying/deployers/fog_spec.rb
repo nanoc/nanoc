@@ -73,7 +73,7 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
       let(:distribution) { Object.new }
 
       it 'does not actually invalidate' do
-        expect(::Fog::CDN).to receive(:new).with({ provider: 'local', local_root: 'remote' }).and_return(cdn)
+        expect(Fog::CDN).to receive(:new).with({ provider: 'local', local_root: 'remote' }).and_return(cdn)
         expect(cdn).to receive(:get_distribution).with('donkey-cdn').and_return(distribution)
 
         subject
@@ -156,7 +156,7 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
       let(:distribution) { Object.new }
 
       it 'invalidates' do
-        expect(::Fog::CDN).to receive(:new).with({ provider: 'local', local_root: 'remote' }).and_return(cdn)
+        expect(Fog::CDN).to receive(:new).with({ provider: 'local', local_root: 'remote' }).and_return(cdn)
         expect(cdn).to receive(:get_distribution).with('donkey-cdn').and_return(distribution)
         expect(cdn).to receive(:post_invalidation).with(distribution, contain_exactly('etc/meow', 'woof'))
 
@@ -166,7 +166,7 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
 
     context 'remote list consists of truncated sets' do
       before do
-        expect(::Fog::Storage).to receive(:new).and_return(fog_storage)
+        expect(Fog::Storage).to receive(:new).and_return(fog_storage)
         expect(fog_storage).to receive(:directories).and_return(directories)
         expect(directories).to receive(:get).and_return(directory)
         allow(directory).to receive(:files).and_return(files)

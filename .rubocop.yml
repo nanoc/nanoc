@@ -580,6 +580,21 @@ Style/RedundantEach: # new in 1.38
 Minitest/SkipWithoutReason: # new in 0.24
   Enabled: true
 
+Style/ArrayIntersect: # new in 1.40
+  Enabled: true
+
+Style/RedundantConstantBase: # new in 1.40
+  Enabled: true
+
+RSpec/DuplicatedMetadata: # new in 2.16
+  Enabled: true
+
+RSpec/PendingWithoutReason: # new in 2.16
+  Enabled: true
+
+RSpec/FactoryBot/FactoryNameStyle: # new in 2.16
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.

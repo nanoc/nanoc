@@ -4,7 +4,7 @@ RSpec.describe Guard::Nanoc do
   around do |example|
     Dir.mktmpdir('nanoc-test') do |dir|
       __nanoc_core_chdir(dir) do
-        ::Nanoc::CLI.run(%w[create-site foo])
+        Nanoc::CLI.run(%w[create-site foo])
         __nanoc_core_chdir('foo') do
           example.run
         end
@@ -58,7 +58,7 @@ RSpec.describe Guard::Nanoc do
 
   describe 'command' do
     it 'has an option set that is a superset of the view command’s options' do
-      view_cmd = ::Nanoc::CLI.root_command.command_named('view')
+      view_cmd = Nanoc::CLI.root_command.command_named('view')
       live_cmd = described_class.live_cmd
 
       expect(live_cmd.option_definitions).not_to eq(view_cmd.option_definitions)

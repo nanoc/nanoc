@@ -83,7 +83,7 @@ describe Nanoc::CLI::CommandRunner, stdio: true do
 
     context 'no config file in ancestral paths' do
       it 'raises' do
-        expect { subject }.to raise_error(::Nanoc::Core::TrivialError, 'The current working directory, nor any of its parents, seems to be a Nanoc site.')
+        expect { subject }.to raise_error(Nanoc::Core::TrivialError, 'The current working directory, nor any of its parents, seems to be a Nanoc site.')
       end
     end
   end

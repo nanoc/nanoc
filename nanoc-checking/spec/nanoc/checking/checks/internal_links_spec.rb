@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe ::Nanoc::Checking::Checks::InternalLinks do
+describe Nanoc::Checking::Checks::InternalLinks do
   let(:check) { described_class.create(site) }
 
   let(:site) do

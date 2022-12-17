@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe ::Nanoc::Checking::Checks::ExternalLinks do
+describe Nanoc::Checking::Checks::ExternalLinks do
   let(:check) do
-    Nanoc::Checking::Checks::ExternalLinks.create(site).tap do |c|
+    described_class.create(site).tap do |c|
       def c.request_url_once(_url)
         Net::HTTPResponse.new('1.1', '200', 'okay')
       end
@@ -33,7 +33,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
     end
 
     let(:check) do
-      Nanoc::Checking::Checks::ExternalLinks.create(site).tap do |c|
+      described_class.create(site).tap do |c|
         def c.request_url_once(_url)
           Net::HTTPResponse.new('1.1', '200', 'okay')
         end
@@ -52,7 +52,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
     end
 
     let(:check) do
-      Nanoc::Checking::Checks::ExternalLinks.create(site).tap do |c|
+      described_class.create(site).tap do |c|
         def c.request_url_once(_url)
           Net::HTTPResponse.new('1.1', '404', 'okay')
         end
@@ -72,7 +72,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
     end
 
     let(:check) do
-      Nanoc::Checking::Checks::ExternalLinks.create(site).tap do |c|
+      described_class.create(site).tap do |c|
         # rubocop:disable RSpec/InstanceVariable
         def c.request_url_once(_url)
           @enum ||= Enumerator.new do |y|
@@ -100,7 +100,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
     end
 
     let(:check) do
-      Nanoc::Checking::Checks::ExternalLinks.create(site).tap do |c|
+      described_class.create(site).tap do |c|
         # rubocop:disable RSpec/InstanceVariable
         def c.request_url_once(_url)
           @enum ||= Enumerator.new do |y|
@@ -126,7 +126,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
     end
 
     let(:check) do
-      Nanoc::Checking::Checks::ExternalLinks.create(site)
+      described_class.create(site)
     end
 
     before do
@@ -149,7 +149,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
     end
 
     let(:check) do
-      Nanoc::Checking::Checks::ExternalLinks.create(site)
+      described_class.create(site)
     end
 
     before do
@@ -178,7 +178,7 @@ describe ::Nanoc::Checking::Checks::ExternalLinks do
     end
 
     let(:check) do
-      Nanoc::Checking::Checks::ExternalLinks.create(site)
+      described_class.create(site)
     end
 
     before do

@@ -5,7 +5,7 @@ describe Nanoc::Core::Executor do
     identifier :simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei
 
     def run(content, _params = {})
-      context = ::Nanoc::Core::Context.new(assigns)
+      context = Nanoc::Core::Context.new(assigns)
       ERB.new(content).result(context.get_binding)
     end
   end
@@ -127,7 +127,7 @@ describe Nanoc::Core::Executor do
 
         File.write(content.filename, 'Foo Data')
 
-        filter_class = Class.new(::Nanoc::Core::Filter) do
+        filter_class = Class.new(Nanoc::Core::Filter) do
           type :binary
 
           def run(filename, _params = {})
@@ -182,7 +182,7 @@ describe Nanoc::Core::Executor do
 
         File.write(content.filename, 'Foo Data')
 
-        filter_class = Class.new(::Nanoc::Core::Filter) do
+        filter_class = Class.new(Nanoc::Core::Filter) do
           type binary: :text
 
           def run(filename, _params = {})
@@ -227,7 +227,7 @@ describe Nanoc::Core::Executor do
         expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :whatever)
 
-        filter_class = Class.new(::Nanoc::Core::Filter) do
+        filter_class = Class.new(Nanoc::Core::Filter) do
           type text: :binary
 
           def run(content, _params = {})
@@ -272,7 +272,7 @@ describe Nanoc::Core::Executor do
 
     context 'non-binary rep, binary-to-something filter' do
       before do
-        filter_class = Class.new(::Nanoc::Core::Filter) do
+        filter_class = Class.new(Nanoc::Core::Filter) do
           type :binary
 
           def run(_content, _params = {}); end
@@ -313,7 +313,7 @@ describe Nanoc::Core::Executor do
 
         File.write(content.filename, 'Foo Data')
 
-        filter_class = Class.new(::Nanoc::Core::Filter) do
+        filter_class = Class.new(Nanoc::Core::Filter) do
           identifier :executor_spec_Toing1Oowoa3aewoop0k
           type :binary
 
@@ -341,7 +341,7 @@ describe Nanoc::Core::Executor do
       end
 
       let(:filter_that_modifies_content) do
-        Class.new(::Nanoc::Core::Filter) do
+        Class.new(Nanoc::Core::Filter) do
           def run(content, _params = {})
             content.gsub!('foo', 'moo')
             content
@@ -350,7 +350,7 @@ describe Nanoc::Core::Executor do
       end
 
       let(:filter_that_modifies_params) do
-        Class.new(::Nanoc::Core::Filter) do
+        Class.new(Nanoc::Core::Filter) do
           def run(_content, params = {})
             params[:foo] = 'bar'
             'asdf'
@@ -505,7 +505,7 @@ describe Nanoc::Core::Executor do
     end
 
     it 'receives frozen filter args' do
-      filter_class = Class.new(::Nanoc::Core::Filter) do
+      filter_class = Class.new(Nanoc::Core::Filter) do
         def run(_content, params = {})
           params[:foo] = 'bar'
           'asdf'

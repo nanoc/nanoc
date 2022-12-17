@@ -5,7 +5,7 @@ require 'rouge'
 describe Nanoc::Filters::ColorizeSyntax, filter: true do
   subject { filter.setup_and_run(input, default_colorizer: :rouge, rouge: params) }
 
-  let(:filter) { ::Nanoc::Filters::ColorizeSyntax.new }
+  let(:filter) { described_class.new }
   let(:params) { {} }
   let(:wrap) { false }
   let(:css_class) { 'highlight' }

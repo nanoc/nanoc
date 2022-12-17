@@ -2,7 +2,7 @@
 
 describe Nanoc::External::Filter do
   example do
-    filter = ::Nanoc::External::Filter.new({})
+    filter = described_class.new({})
 
     src = <<-SHAKESPEARE
     Shall I compare thee to a Summer's day?

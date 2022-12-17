@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe ::Nanoc::Checking::Checks::Stale do
+describe Nanoc::Checking::Checks::Stale do
   let(:check) { described_class.create(site) }
 
   let(:site) do

@@ -152,7 +152,7 @@ describe Nanoc::Core::Checksummer do
   end
 
   context 'Pathname' do
-    let(:obj) { ::Pathname.new(filename) }
+    let(:obj) { Pathname.new(filename) }
 
     let(:filename) { '/tmp/whatever' }
     let(:mtime) { 200 }

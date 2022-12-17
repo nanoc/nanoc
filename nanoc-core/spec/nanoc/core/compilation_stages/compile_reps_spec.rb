@@ -5,7 +5,7 @@ describe Nanoc::Core::CompilationStages::CompileReps do
     identifier :simple_erb_vcn3np2ayqmv6ayqp8su2crbusonmgwh
 
     def run(content, _params = {})
-      context = ::Nanoc::Core::Context.new(assigns)
+      context = Nanoc::Core::Context.new(assigns)
       ERB.new(content).result(context.get_binding)
     end
   end

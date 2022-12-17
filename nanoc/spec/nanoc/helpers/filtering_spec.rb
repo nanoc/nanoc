@@ -2,7 +2,7 @@
 
 describe Nanoc::Helpers::Filtering, helper: true do
   describe '#filter' do
-    subject { ::ERB.new(content).result(helper.get_binding) }
+    subject { ERB.new(content).result(helper.get_binding) }
 
     before do
       ctx.create_item('some content', { title: 'Hello!' }, '/about.md')

@@ -81,6 +81,6 @@ module Guard
   end
 end
 
-::Nanoc::CLI.after_setup do
-  ::Nanoc::CLI.add_command(Guard::Nanoc.live_cmd)
+Nanoc::CLI.after_setup do
+  Nanoc::CLI.add_command(Guard::Nanoc.live_cmd)
 end

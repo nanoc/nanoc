@@ -237,7 +237,7 @@ class Nanoc::TestCase < Minitest::Test
 end
 
 # Unexpected system exit is unexpected
-::Minitest::Test::PASSTHROUGH_EXCEPTIONS.delete(SystemExit)
+Minitest::Test::PASSTHROUGH_EXCEPTIONS.delete(SystemExit)
 
 # A more precise inspect method for Time improves assert failure messages.
 #
