@@ -35,6 +35,7 @@ lib/nanoc/filters/less.rb
 lib/nanoc/filters/markaby.rb
 lib/nanoc/filters/maruku.rb
 lib/nanoc/filters/mustache.rb
+lib/nanoc/filters/orgmode.rb
 lib/nanoc/filters/pandoc.rb
 lib/nanoc/filters/rainpress.rb
 lib/nanoc/filters/rdiscount.rb

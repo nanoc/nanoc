@@ -66,6 +66,7 @@ group :plugins do
   gem 'mini_racer'
   gem 'mustache', '~> 1.0'
   gem 'nokogiri', '~> 1.12'
+  gem 'org-ruby'
   gem 'pandoc-ruby'
   gem 'pygments.rb', '~> 2.0', platforms: :ruby
   gem 'rack'
