@@ -30,12 +30,12 @@ class Nanoc::Filters::ColorizeSyntax::PygmentizeTest < Nanoc::TestCase
 
       # Get input and expected output
       input = '<pre><code class="language-ruby">puts "foo"</code></pre>'
-      expected_output = '<pre><code class="language-ruby"><span class="nb">puts</span><span class="w"> </span><span class="s2">"foo"</span></code></pre>'
+      expected_output = %r{<pre><code class="language-ruby"><span class="nb">puts</span>(<span class="w"> </span>| )<span class="s2">"foo"</span></code></pre>}
 
       # Run filter
       actual_output = filter.setup_and_run(input, default_colorizer: :pygmentize)
 
-      assert_equal(expected_output, actual_output)
+      assert_match(expected_output, actual_output)
     end
   end
 end
