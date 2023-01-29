@@ -71,7 +71,8 @@ module Nanoc
               next
             end
 
-            if /^3..$/.match?(res.code)
+            case res.code
+            when /^3..$/
               if i == 4
                 return Result.new(href, 'too many redirects')
               end
@@ -87,7 +88,7 @@ module Nanoc
               end
 
               url = URI.parse(location)
-            elsif res.code == '200'
+            when '200'
               return nil
             else
               return Result.new(href, res.code)
