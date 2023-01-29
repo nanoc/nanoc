@@ -284,15 +284,11 @@ module Nanoc::DataSources
     def mtime_of(content_filename, meta_filename)
       meta_mtime = meta_filename ? File.stat(meta_filename).mtime : nil
       content_mtime = content_filename ? File.stat(content_filename).mtime : nil
-      if meta_mtime && content_mtime
-        meta_mtime > content_mtime ? meta_mtime : content_mtime
-      elsif meta_mtime
-        meta_mtime
-      elsif content_mtime
-        content_mtime
-      else
-        raise 'meta_mtime and content_mtime are both nil'
-      end
+
+      mtime = [meta_mtime, content_mtime].compact.max
+      raise 'meta_mtime and content_mtime are both nil' unless mtime
+
+      mtime
     end
 
     # e.g.
