@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
 describe Nanoc::Core::OutdatednessChecker do
   Class.new(Nanoc::Core::Filter) do
     identifier :always_outdated_3zh5qfqlqysghkd5ipek8glxzrljrylr
@@ -1473,5 +1472,3 @@ describe Nanoc::Core::OutdatednessChecker do
   # Open questions:
   # - What if you do only do `@items.find_all('/articles/*').size`?
 end
-
-# rubocop:enable RSpec/MultipleMemoizedHelpers
