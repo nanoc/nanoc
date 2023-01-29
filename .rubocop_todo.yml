@@ -13,19 +13,6 @@ Gemspec/RequiredRubyVersion:
   Exclude:
     - 'guard-nanoc/guard-nanoc.gemspec'
 
-# Offense count: 6
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Categories, ExpectedOrder.
-# ExpectedOrder: module_inclusion, constants, public_class_methods, initializer, public_methods, protected_methods, private_methods
-Layout/ClassStructure:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/compiler.rb'
-    - 'nanoc-core/lib/nanoc/core/content.rb'
-    - 'nanoc-core/lib/nanoc/core/item_rep_builder.rb'
-    - 'nanoc-core/lib/nanoc/core/outdatedness_rule.rb'
-    - 'nanoc-core/lib/nanoc/core/site_loader.rb'
-    - 'nanoc-core/lib/nanoc/core/store.rb'
-
 # Offense count: 1
 Lint/BinaryOperatorWithIdenticalOperands:
   Exclude:
@@ -534,12 +521,6 @@ RSpec/VerifiedDoubles:
     - 'nanoc/spec/nanoc/orig_cli/commands/show_rules_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/CaseLikeIf:
-  Exclude:
-    - 'nanoc-checking/lib/nanoc/checking/checks/external_links.rb'
-
 # Offense count: 130
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.
@@ -730,12 +711,6 @@ Style/RedundantInitialize:
     - 'nanoc/test/helpers/test_blogging.rb'
     - 'nanoc/test/helpers/test_capturing.rb'
     - 'nanoc/test/helpers/test_xml_sitemap.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantRegexpEscape:
-  Exclude:
-    - 'nanoc/lib/nanoc/extra/link_collector.rb'
 
 # Offense count: 12
 # This cop supports unsafe autocorrection (--autocorrect-all).

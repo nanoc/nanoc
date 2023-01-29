@@ -13,6 +13,22 @@ module Nanoc
     class Store
       include Nanoc::Core::ContractsSupport
 
+      # Logic for building tmp path from active environment and store name
+      # @api private
+      contract C::KeywordArgs[config: Nanoc::Core::Configuration, store_name: String] => C::AbsolutePathString
+      def self.tmp_path_for(store_name:, config:)
+        File.absolute_path(
+          File.join(tmp_path_prefix(config.output_dir), store_name),
+          config.dir,
+        )
+      end
+
+      contract String => String
+      def self.tmp_path_prefix(output_dir)
+        dir = Digest::SHA1.hexdigest(output_dir)[0..12]
+        File.join('tmp', 'nanoc', dir)
+      end
+
       # @return [String] The name of the file where data will be loaded from and
       #   stored to.
       attr_reader :filename
@@ -33,22 +49,6 @@ module Nanoc
       def initialize(filename, version)
         @filename = filename
         @version  = version
-      end
-
-      # Logic for building tmp path from active environment and store name
-      # @api private
-      contract C::KeywordArgs[config: Nanoc::Core::Configuration, store_name: String] => C::AbsolutePathString
-      def self.tmp_path_for(store_name:, config:)
-        File.absolute_path(
-          File.join(tmp_path_prefix(config.output_dir), store_name),
-          config.dir,
-        )
-      end
-
-      contract String => String
-      def self.tmp_path_prefix(output_dir)
-        dir = Digest::SHA1.hexdigest(output_dir)[0..12]
-        File.join('tmp', 'nanoc', dir)
       end
 
       # @group Loading and storing data

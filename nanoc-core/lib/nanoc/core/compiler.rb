@@ -5,6 +5,16 @@ module Nanoc
     class Compiler
       include Nanoc::Core::ContractsSupport
 
+      contract Nanoc::Core::Site => C::Any
+      def self.compile(site)
+        new_for(site).run_until_end
+      end
+
+      contract Nanoc::Core::Site => Nanoc::Core::Compiler
+      def self.new_for(site)
+        Nanoc::Core::CompilerLoader.new.load(site)
+      end
+
       def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, outdatedness_store:)
         @site = site
 
@@ -19,16 +29,6 @@ module Nanoc
         @outdatedness_store     = outdatedness_store
 
         @compiled_content_store = Nanoc::Core::CompiledContentStore.new
-      end
-
-      contract Nanoc::Core::Site => C::Any
-      def self.compile(site)
-        new_for(site).run_until_end
-      end
-
-      contract Nanoc::Core::Site => Nanoc::Core::Compiler
-      def self.new_for(site)
-        Nanoc::Core::CompilerLoader.new.load(site)
       end
 
       def run_until_preprocessed

@@ -7,19 +7,16 @@ module Nanoc
       include Nanoc::Core::ContractsSupport
       include Singleton
 
-      def call(obj, outdatedness_checker)
-        Nanoc::Core::Instrumentor.call(:outdatedness_rule_ran, self.class) do
-          apply(obj, outdatedness_checker)
-        end
+      def self.affects_path?
+        @affects_path
       end
 
-      def apply(_obj, _outdatedness_checker)
-        raise NotImplementedError.new('Nanoc::Core::OutdatednessRule subclasses must implement #apply')
+      def self.affects_attributes?
+        @affects_attributes
       end
 
-      contract C::None => String
-      def inspect
-        "#{self.class.name}(#{reason})"
+      def self.affects_compiled_content?
+        @affects_compiled_content
       end
 
       def self.affects_props(*names)
@@ -46,16 +43,19 @@ module Nanoc
         @affects_raw_content
       end
 
-      def self.affects_attributes?
-        @affects_attributes
+      def call(obj, outdatedness_checker)
+        Nanoc::Core::Instrumentor.call(:outdatedness_rule_ran, self.class) do
+          apply(obj, outdatedness_checker)
+        end
       end
 
-      def self.affects_compiled_content?
-        @affects_compiled_content
+      def apply(_obj, _outdatedness_checker)
+        raise NotImplementedError.new('Nanoc::Core::OutdatednessRule subclasses must implement #apply')
       end
 
-      def self.affects_path?
-        @affects_path
+      contract C::None => String
+      def inspect
+        "#{self.class.name}(#{reason})"
       end
     end
   end

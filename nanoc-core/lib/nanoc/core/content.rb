@@ -5,6 +5,19 @@ module Nanoc
     class Content
       include Nanoc::Core::ContractsSupport
 
+      contract C::Or[self, String, Proc], C::KeywordArgs[binary: C::Optional[C::Bool], filename: C::Optional[C::Maybe[String]]] => self
+      def self.create(content, binary: false, filename: nil)
+        if content.nil?
+          raise ArgumentError, 'Cannot create nil content'
+        elsif content.is_a?(Nanoc::Core::Content)
+          content
+        elsif binary
+          Nanoc::Core::BinaryContent.new(content)
+        else
+          Nanoc::Core::TextualContent.new(content, filename: filename)
+        end
+      end
+
       contract C::None => C::Maybe[String]
       attr_reader :filename
 
@@ -22,19 +35,6 @@ module Nanoc
         super
         @filename.freeze
         self
-      end
-
-      contract C::Or[self, String, Proc], C::KeywordArgs[binary: C::Optional[C::Bool], filename: C::Optional[C::Maybe[String]]] => self
-      def self.create(content, binary: false, filename: nil)
-        if content.nil?
-          raise ArgumentError, 'Cannot create nil content'
-        elsif content.is_a?(Nanoc::Core::Content)
-          content
-        elsif binary
-          Nanoc::Core::BinaryContent.new(content)
-        else
-          Nanoc::Core::TextualContent.new(content, filename: filename)
-        end
       end
 
       contract C::None => C::Bool

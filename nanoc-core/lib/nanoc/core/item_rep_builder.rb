@@ -6,6 +6,25 @@ module Nanoc
     class ItemRepBuilder
       include Nanoc::Core::ContractsSupport
 
+      contract Nanoc::Core::ActionSequence, Nanoc::Core::ItemRep => C::ArrayOf[Nanoc::Core::SnapshotDef]
+      def self.snapshot_defs_for(action_sequence, rep)
+        is_binary = rep.item.content.binary?
+        snapshot_defs = []
+
+        action_sequence.each do |action|
+          case action
+          when Nanoc::Core::ProcessingActions::Snapshot
+            action.snapshot_names.each do |snapshot_name|
+              snapshot_defs << Nanoc::Core::SnapshotDef.new(snapshot_name, binary: is_binary)
+            end
+          when Nanoc::Core::ProcessingActions::Filter
+            is_binary = Nanoc::Core::Filter.named!(action.filter_name).to_binary?
+          end
+        end
+
+        snapshot_defs
+      end
+
       attr_reader :reps
 
       contract Nanoc::Core::Site, Nanoc::Core::ActionProvider, Nanoc::Core::ItemRepRepo => C::Any
@@ -29,25 +48,6 @@ module Nanoc
         end
 
         action_sequences
-      end
-
-      contract Nanoc::Core::ActionSequence, Nanoc::Core::ItemRep => C::ArrayOf[Nanoc::Core::SnapshotDef]
-      def self.snapshot_defs_for(action_sequence, rep)
-        is_binary = rep.item.content.binary?
-        snapshot_defs = []
-
-        action_sequence.each do |action|
-          case action
-          when Nanoc::Core::ProcessingActions::Snapshot
-            action.snapshot_names.each do |snapshot_name|
-              snapshot_defs << Nanoc::Core::SnapshotDef.new(snapshot_name, binary: is_binary)
-            end
-          when Nanoc::Core::ProcessingActions::Filter
-            is_binary = Nanoc::Core::Filter.named!(action.filter_name).to_binary?
-          end
-        end
-
-        snapshot_defs
       end
     end
   end
