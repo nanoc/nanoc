@@ -67,7 +67,7 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
               fn
             else
               all_files_in(absolute_target, extra_files, recursion_limit - 1).map do |sfn|
-                fn + sfn[absolute_target.size..-1]
+                fn + sfn[absolute_target.size..]
               end
             end
           end

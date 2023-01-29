@@ -89,7 +89,7 @@ module Nanoc
           # FIXME: do not depend on current working directory
           origin = File.absolute_path(origin)
 
-          relative_origin = origin[@config.output_dir.size..-1]
+          relative_origin = origin[@config.output_dir.size..]
           excludes = config.fetch(:exclude_origins, [])
           excludes.any? { |pattern| Regexp.new(pattern).match(relative_origin) }
         end

@@ -703,18 +703,6 @@ Style/RedundantInitialize:
     - 'nanoc/test/helpers/test_capturing.rb'
     - 'nanoc/test/helpers/test_xml_sitemap.rb'
 
-# Offense count: 12
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/SlicingWithRange:
-  Exclude:
-    - 'nanoc-checking/lib/nanoc/checking/checks/internal_links.rb'
-    - 'nanoc-core/lib/nanoc/core/identifier.rb'
-    - 'nanoc-core/lib/nanoc/core/processing_action.rb'
-    - 'nanoc-core/lib/nanoc/core/pruner.rb'
-    - 'nanoc/lib/nanoc/data_sources/filesystem.rb'
-    - 'nanoc/lib/nanoc/data_sources/filesystem/tools.rb'
-    - 'nanoc/lib/nanoc/helpers/capturing.rb'
-
 # Offense count: 138
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: Mode.

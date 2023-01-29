@@ -34,7 +34,7 @@ module Nanoc
       contract String => String
       def strip_output_dir(filename)
         if filename.start_with?(@config.output_dir)
-          filename[@config.output_dir.size..-1]
+          filename[@config.output_dir.size..]
         else
           filename
         end

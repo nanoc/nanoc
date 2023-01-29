@@ -151,7 +151,7 @@ module Nanoc::DataSources
     end
 
     def read_proto_document(content_filename, meta_filename, klass)
-      is_binary = content_filename && !@site_config[:text_extensions].include?(File.extname(content_filename)[1..-1])
+      is_binary = content_filename && !@site_config[:text_extensions].include?(File.extname(content_filename)[1..])
 
       if is_binary && klass == Nanoc::Core::Item
         meta = (meta_filename && YAML.safe_load_file(meta_filename, permitted_classes: PERMITTED_YAML_CLASSES)) || {}
@@ -252,7 +252,7 @@ module Nanoc::DataSources
         filename: content_filename,
         content_filename: content_filename,
         meta_filename: meta_filename,
-        extension: content_filename ? ext_of(content_filename)[1..-1] : nil,
+        extension: content_filename ? ext_of(content_filename)[1..] : nil,
         mtime: mtime_of(content_filename, meta_filename),
       }
     end
@@ -263,9 +263,9 @@ module Nanoc::DataSources
 
     def identifier_for(content_filename, meta_filename, dir_name)
       if content_filename
-        identifier_for_filename(content_filename[dir_name.length..-1])
+        identifier_for_filename(content_filename[dir_name.length..])
       elsif meta_filename
-        identifier_for_filename(meta_filename[dir_name.length..-1])
+        identifier_for_filename(meta_filename[dir_name.length..])
       else
         raise 'meta_filename and content_filename are both nil'
       end
@@ -326,7 +326,7 @@ module Nanoc::DataSources
         all[basename][0] =
           meta_filenames[0] ? 'yaml' : nil
         all[basename][1] =
-          content_filenames.any? ? content_filenames.map { |fn| ext_of(fn)[1..-1] || '' } : [nil]
+          content_filenames.any? ? content_filenames.map { |fn| ext_of(fn)[1..] || '' } : [nil]
       end
 
       all

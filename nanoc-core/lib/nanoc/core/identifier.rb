@@ -164,7 +164,7 @@ module Nanoc
         end
 
         s = File.extname(@string)
-        s && s[1..-1]
+        s && s[1..]
       end
 
       contract C::None => String
@@ -195,7 +195,7 @@ module Nanoc
         if res.empty?
           []
         else
-          res[1..-1]
+          res[1..]
         end
       end
 

@@ -15,7 +15,7 @@ module Nanoc
         format(
           '<%s %s>',
           self.class.to_s,
-          serialize[1..-1].map(&:inspect).join(', '),
+          serialize[1..].map(&:inspect).join(', '),
         )
       end
     end

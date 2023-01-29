@@ -155,7 +155,7 @@ module Nanoc::Helpers
       yield
 
       # Get new piece of erbout
-      erbout_addition = erbout[erbout_length..-1]
+      erbout_addition = erbout[erbout_length..]
 
       # Remove addition
       erbout[erbout_length..-1] = +''
