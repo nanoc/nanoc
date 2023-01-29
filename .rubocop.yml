@@ -529,9 +529,6 @@ Style/MagicCommentFormat: # new in 1.35
 Minitest/AssertRaisesCompoundBody: # new in 0.21
   Enabled: true
 
-RSpec/Capybara/SpecificMatcher: # new in 2.12
-  Enabled: true
-
 RSpec/Rails/HaveHttpStatus: # new in 2.12
   Enabled: true
 
@@ -544,9 +541,6 @@ RSpec/ClassCheck: # new in 2.13
 RSpec/NoExpectationExample: # new in 2.13
   Enabled: true
 
-RSpec/Capybara/SpecificFinders: # new in 2.13
-  Enabled: true
-
 Lint/DuplicateMagicComment: # new in 1.37
   Enabled: true
 
@@ -557,12 +551,6 @@ Style/RedundantStringEscape: # new in 1.37
   Enabled: true
 
 RSpec/SortMetadata: # new in 2.14
-  Enabled: true
-
-RSpec/Capybara/NegationMatcher: # new in 2.14
-  Enabled: true
-
-RSpec/Capybara/SpecificActions: # new in 2.14
   Enabled: true
 
 RSpec/FactoryBot/ConsistentParenthesesStyle: # new in 2.14
@@ -593,6 +581,57 @@ RSpec/PendingWithoutReason: # new in 2.16
   Enabled: true
 
 RSpec/FactoryBot/FactoryNameStyle: # new in 2.16
+  Enabled: true
+
+Gemspec/DevelopmentDependencies: # new in 1.44
+  Enabled: true
+
+Lint/UselessRescue: # new in 1.43
+  Enabled: true
+
+Style/ComparableClamp: # new in 1.44
+  Enabled: true
+
+Style/ConcatArrayLiterals: # new in 1.41
+  Enabled: true
+
+Style/MapToSet: # new in 1.42
+  Enabled: true
+
+Style/MinMaxComparison: # new in 1.42
+  Enabled: true
+
+Style/RedundantDoubleSplatHashBraces: # new in 1.41
+  Enabled: true
+
+Minitest/AssertSame: # new in 0.26
+  Enabled: true
+
+Minitest/RefuteSame: # new in 0.26
+  Enabled: true
+
+Minitest/TestFileName: # new in 0.26
+  Enabled: true
+
+Minitest/UselessAssertion: # new in 0.26
+  Enabled: true
+
+Capybara/NegationMatcher: # new in 2.14
+  Enabled: true
+
+Capybara/SpecificActions: # new in 2.14
+  Enabled: true
+
+Capybara/SpecificFinders: # new in 2.13
+  Enabled: true
+
+Capybara/SpecificMatcher: # new in 2.12
+  Enabled: true
+
+Capybara/MatchStyle: # new in <<next>>
+  Enabled: true
+
+RSpec/Rails/MinitestAssertions: # new in 2.17
   Enabled: true
 
 # ----- TO ENABLE LATER -----
