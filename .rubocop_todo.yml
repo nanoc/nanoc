@@ -675,15 +675,6 @@ Style/RedundantArgument:
     - 'nanoc/spec/nanoc/core/checksummer_spec.rb'
     - 'nanoc/spec/nanoc/helpers/capturing_spec.rb'
 
-# Offense count: 3
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: SafeForConstants.
-Style/RedundantFetchBlock:
-  Exclude:
-    - 'nanoc-core/spec/nanoc/core/config_view_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/configuration_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/support/document_view_examples.rb'
-
 # Offense count: 22
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowComments.

@@ -129,7 +129,7 @@ describe Nanoc::Core::Configuration do
     end
 
     context 'key does not exist, and called with block' do
-      subject { config.fetch(:bar) { 2000 } }
+      subject { config.fetch(:bar) { 2000 } } # rubocop:disable Style/RedundantFetchBlock
 
       it { is_expected.to eq(2000) }
     end

@@ -113,7 +113,7 @@ describe Nanoc::Core::ConfigView do
       end
 
       context 'with block' do
-        subject { view.fetch(key) { 'nothing sorry' } }
+        subject { view.fetch(key) { 'nothing sorry' } } # rubocop:disable Style/RedundantFetchBlock
 
         it { is_expected.to eql('nothing sorry') }
       end

@@ -262,7 +262,7 @@ shared_examples 'a document view' do
       end
 
       context 'with block' do
-        subject { view.fetch(key) { 'nothing sorry' } }
+        subject { view.fetch(key) { 'nothing sorry' } } # rubocop:disable Style/RedundantFetchBlock
 
         it { is_expected.to eql('nothing sorry') }
 
