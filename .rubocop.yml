@@ -634,6 +634,9 @@ Capybara/MatchStyle: # new in <<next>>
 RSpec/Rails/MinitestAssertions: # new in 2.17
   Enabled: true
 
+Minitest/NonPublicTestMethod: # new in 0.27
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
