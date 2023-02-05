@@ -6,6 +6,13 @@ module Nanoc
       def reference
         @_reference ||= "item:#{identifier}"
       end
+
+      def identifier=(new_identifier)
+        super(new_identifier)
+
+        # Invalidate memoization cache
+        @_reference = nil
+      end
     end
   end
 end
