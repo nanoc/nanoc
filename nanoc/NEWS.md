@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.12.15 (2023-02-06)
+
+Fixes:
+
+- Fixed an issue which made items always be considered outdated in sites with data sources with a custom `items_root` defined (#1640, #1644)
+
 ## 4.12.14 (2022-12-03)
 
 Fixes:
