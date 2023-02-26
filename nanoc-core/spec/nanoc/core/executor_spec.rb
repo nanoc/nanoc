@@ -274,7 +274,7 @@ describe Nanoc::Core::Executor do
 
         context 'to text' do
           subject { executor.filter(:foo).string }
-          let(:to) { :text }
+
           before do
             Class.new(Nanoc::Core::Filter) do
               identifier :foo
