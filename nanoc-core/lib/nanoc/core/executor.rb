@@ -107,7 +107,9 @@ module Nanoc
         klass = Nanoc::Core::Filter.named!(filter_name)
 
         last = @compilation_context.compiled_content_store.get_current(@rep)
-        if klass.from_binary? && !last.binary?
+        if klass.from_binary_or_text?
+          # do nothing
+        elsif klass.from_binary? && !last.binary?
           raise Nanoc::Core::Errors::CannotUseBinaryFilter.new(@rep, klass)
         elsif !klass.from_binary? && last.binary?
           raise Nanoc::Core::Errors::CannotUseTextualFilter.new(@rep, klass)

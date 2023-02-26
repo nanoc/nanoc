@@ -263,6 +263,89 @@ describe Nanoc::Core::Executor do
       end
     end
 
+    context 'from binary or text' do
+      let(:item) { Nanoc::Core::Item.new(content, {}, content.filename) }
+      let(:rep) { Nanoc::Core::ItemRep.new(item, :rep_name) }
+      let(:textual_content) { Nanoc::Core::TextualContent.new('text', filename: '/index.md') }
+      let(:binary_content) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.dat')) }
+
+      context 'from text' do
+        let(:content) { textual_content }
+
+        context 'to text' do
+          subject { executor.filter(:foo).string }
+          let(:to) { :text }
+          before do
+            Class.new(Nanoc::Core::Filter) do
+              identifier :foo
+              type %i[binary text] => :text
+              def run(content, _params = {})
+                content.sub('text', 'OK')
+              end
+            end
+            compiled_content_store.set_current(rep, content)
+          end
+
+          it { is_expected.to eq('OK') }
+        end
+
+        context 'to binary' do
+          subject { File.binread executor.filter(:foo).filename }
+
+          before do
+            Class.new(Nanoc::Core::Filter) do
+              identifier :foo
+              type %i[binary text] => :binary
+              def run(content, _params = {})
+                File.binwrite(output_filename, content.sub('text', 'OK'))
+              end
+            end
+            compiled_content_store.set_current(rep, content)
+          end
+
+          it { is_expected.to eq('OK') }
+        end
+      end
+
+      context 'from binary' do
+        let(:content) { binary_content }
+
+        context 'to text' do
+          subject { File.basename(executor.filter(:foo).string) }
+
+          before do
+            Class.new(Nanoc::Core::Filter) do
+              identifier :foo
+              type %i[binary text] => :text
+              def run(file, _params = {})
+                file
+              end
+            end
+            compiled_content_store.set_current(rep, content)
+          end
+
+          it { is_expected.to eq('foo.dat') }
+        end
+
+        context 'to binary' do
+          subject { File.binread(executor.filter(:foo).filename) }
+
+          before do
+            Class.new(Nanoc::Core::Filter) do
+              identifier :foo
+              type %i[binary text] => :binary
+              def run(_file, _params = {})
+                File.binwrite(output_filename, 'OK')
+              end
+            end
+            compiled_content_store.set_current(rep, content)
+          end
+
+          it { is_expected.to eq('OK') }
+        end
+      end
+    end
+
     context 'non-existant filter' do
       it 'raises' do
         expect { executor.filter(:ajlsdfjklaskldfj) }

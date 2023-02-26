@@ -89,6 +89,12 @@ module Nanoc
         #
         #     type :text => :binary
         #
+        # @example Specifying from text-or-binary to text filter
+        #     type [:binary, :text] => :text
+        #
+        # @example Specifying from text-or-binary to binary filter
+        #     type [:binary, :text] => :binary
+        #
         # @param [Symbol, Hash] arg The new type of this filter
         #
         # @return [void]
@@ -100,6 +106,16 @@ module Nanoc
             @from = arg
             @to = arg
           end
+        end
+
+        # @return [Boolean] True if this filter can be applied to either binary
+        # or text representations, false otherwise
+        #
+        # @api private
+        def from_binary_or_text?
+          return false unless @from.is_a?(Array)
+
+          @from.sort == %i[binary text]
         end
 
         # @return [Boolean] True if this filter can be applied to binary item
