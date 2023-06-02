@@ -683,14 +683,6 @@ Style/ClassAndModuleChildren:
     - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
     - 'nanoc/test/rule_dsl/test_rules_collection.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowedMethods, AllowedPatterns.
-# AllowedMethods: ==, equal?, eql?
-Style/ClassEqualityComparison:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/checksummer.rb'
-
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/CombinableLoops:
