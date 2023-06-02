@@ -113,12 +113,6 @@ Lint/MissingSuper:
     - 'nanoc/test/helpers/test_capturing.rb'
     - 'nanoc/test/helpers/test_xml_sitemap.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantStringCoercion:
-  Exclude:
-    - 'nanoc-cli/lib/nanoc/cli/compile_listeners/timing_recorder.rb'
-
 # Offense count: 2
 # Configuration parameters: AllowedPatterns.
 # AllowedPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
