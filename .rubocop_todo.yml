@@ -120,13 +120,6 @@ Lint/UnreachableLoop:
   Exclude:
     - 'nanoc-core/spec/nanoc/core/item_rep_selector_spec.rb'
 
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertInstanceOf:
-  Exclude:
-    - 'nanoc/test/base/test_site.rb'
-    - 'nanoc/test/data_sources/test_filesystem.rb'
-
 # Offense count: 5
 # This cop supports safe autocorrection (--autocorrect).
 Minitest/AssertMatch:

@@ -110,7 +110,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal 1, items.size
     assert_predicate items[0].content, :binary?
     assert_equal "#{Dir.getwd}/foo/stuff.dat", items[0].content.filename
-    assert_equal Nanoc::Core::BinaryContent, items[0].content.class
+    assert_instance_of Nanoc::Core::BinaryContent, items[0].content
   end
 
   def test_load_layouts_with_nil_dir_name
@@ -631,7 +631,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     assert_equal ['./stuff/foo'], res.keys
     assert_equal 2, res.values[0].size
     assert_equal 'yaml', res.values[0][0]
-    assert_equal Array, res.values[0][1].class
+    assert_instance_of Array, res.values[0][1]
     assert_equal %w[html md], res.values[0][1].sort
   end
 
