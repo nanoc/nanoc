@@ -117,9 +117,7 @@ describe Nanoc::Core::SiteLoader do
             staging:
               animal: giraffe
         EOS
-      end
 
-      before do
         expect(ENV).to receive(:fetch).with('NANOC_ENV', 'default').and_return('staging')
       end
 

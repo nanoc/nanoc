@@ -53,13 +53,10 @@ describe Nanoc::Helpers::LinkTo, helper: true do
     context 'with item' do
       before do
         ctx.create_item('content', {}, '/target')
+        ctx.create_rep(target, '/target.html')
       end
 
       let(:target) { ctx.items['/target'] }
-
-      before do
-        ctx.create_rep(target, '/target.html')
-      end
 
       it { is_expected.to eql('<a href="/target.html">Text</a>') }
     end

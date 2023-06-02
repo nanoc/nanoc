@@ -276,11 +276,15 @@ module Nanoc
 
       class RescueUpdateBehavior < UpdateBehavior
         def self.update(obj, digest)
+          # rubocop:disable Style/ClassEqualityComparison
+          # This Rubocop rule is disabled because the class
+          # itself might not be loaded (yet).
           if obj.class.to_s == 'Sass::Importers::Filesystem'
             digest.update('root=')
             digest.update(obj.root)
             return
           end
+          # rubocop:enable Style/ClassEqualityComparison
 
           data =
             begin

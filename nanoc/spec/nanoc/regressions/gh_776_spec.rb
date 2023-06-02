@@ -4,22 +4,20 @@ describe 'GH-776', site: true do
   before do
     File.write('content/donkey.md', 'Donkey!')
 
-    File.write('Rules', <<EOS)
-  compile '/donkey.*' do
-    filter :erb
-    snapshot :secret, path: '/donkey-secret.html'
-    write '/donkey.html'
-  end
+    File.write('Rules', <<~EOS)
+      compile '/donkey.*' do
+        filter :erb
+        snapshot :secret, path: '/donkey-secret.html'
+        write '/donkey.html'
+      end
 
-  layout '/foo.*', :erb
-EOS
+      layout '/foo.*', :erb
+    EOS
+
+    Nanoc::Core::Compiler.compile(site)
   end
 
   let(:site) { Nanoc::Core::SiteLoader.new.new_from_cwd }
-
-  before do
-    Nanoc::Core::Compiler.compile(site)
-  end
 
   context 'without pruning' do
     it 'writes two files' do

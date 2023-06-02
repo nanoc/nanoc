@@ -11,9 +11,7 @@ describe 'GH-1248', site: true, stdio: true do
 
       passthrough '/**/*'
     EOS
-  end
 
-  before do
     Nanoc::CLI.run(%w[compile])
   end
 

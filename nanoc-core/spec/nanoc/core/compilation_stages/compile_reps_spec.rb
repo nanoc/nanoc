@@ -124,9 +124,9 @@ describe Nanoc::Core::CompilationStages::CompileReps do
     end
 
     context 'rep in outdatedness store' do
-      before { outdatedness_store.add(rep) }
-
       before do
+        outdatedness_store.add(rep)
+
         # Needed for consistency
         compiled_content_cache[other_rep] = { last: Nanoc::Core::TextualContent.new('asdf') }
       end

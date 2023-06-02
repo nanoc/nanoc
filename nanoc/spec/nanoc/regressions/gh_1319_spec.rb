@@ -10,9 +10,7 @@ describe 'GH-1319', site: true, stdio: true do
         write ext: 'html'
       end
     EOS
-  end
 
-  before do
     Nanoc::CLI.run(%w[compile])
   end
 

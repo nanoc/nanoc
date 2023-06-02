@@ -9,9 +9,7 @@ describe 'GH-1313', site: true, stdio: true do
         exclude:
           - bin
     CONFIG
-  end
 
-  before do
     FileUtils.mkdir_p('build/bin/web/bin')
     File.write('build/bin/web/bin/should-be-pruned', 'asdf')
   end

@@ -19,15 +19,16 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
     end
   end
 
-  before { Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0)) }
+  before do
+    Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0))
+    Nanoc::CLI.verbosity = 2
+    listener.start_safely
+  end
 
-  after { Timecop.return }
-
-  before { Nanoc::CLI.verbosity = 2 }
-
-  before { listener.start_safely }
-
-  after { listener.stop_safely }
+  after do
+    Timecop.return
+    listener.stop_safely
+  end
 
   it 'prints filters table' do
     Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))

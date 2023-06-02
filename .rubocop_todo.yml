@@ -7,13 +7,6 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 1
-# Configuration parameters: Severity, Include.
-# Include: **/*.gemspec
-Gemspec/RequiredRubyVersion:
-  Exclude:
-    - 'guard-nanoc/guard-nanoc.gemspec'
-
-# Offense count: 1
 Lint/BinaryOperatorWithIdenticalOperands:
   Exclude:
     - 'nanoc-core/spec/nanoc/core/checksummer_spec.rb'
@@ -120,12 +113,6 @@ Lint/MissingSuper:
     - 'nanoc/test/helpers/test_capturing.rb'
     - 'nanoc/test/helpers/test_xml_sitemap.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantStringCoercion:
-  Exclude:
-    - 'nanoc-cli/lib/nanoc/cli/compile_listeners/timing_recorder.rb'
-
 # Offense count: 2
 # Configuration parameters: AllowedPatterns.
 # AllowedPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)
@@ -133,28 +120,9 @@ Lint/UnreachableLoop:
   Exclude:
     - 'nanoc-core/spec/nanoc/core/item_rep_selector_spec.rb'
 
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertInstanceOf:
-  Exclude:
-    - 'nanoc/test/base/test_site.rb'
-    - 'nanoc/test/data_sources/test_filesystem.rb'
-
-# Offense count: 5
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertMatch:
-  Exclude:
-    - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
-
 # Offense count: 40
 Minitest/MultipleAssertions:
   Max: 18
-
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/RefuteMatch:
-  Exclude:
-    - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
 
 # Offense count: 1
 # Configuration parameters: Severity.
@@ -508,30 +476,6 @@ RSpec/RepeatedExampleGroupDescription:
     - 'nanoc-core/spec/nanoc/core/identifiable_collection_spec.rb'
     - 'nanoc-core/spec/nanoc/core/support/item_rep_view_examples.rb'
 
-# Offense count: 51
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/ScatteredSetup:
-  Exclude:
-    - 'nanoc-checking/spec/nanoc/checking/checks/external_links_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/file_action_printer_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/timing_recorder_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_stages/compile_reps_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/config_loader_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/pruner_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/site_loader_spec.rb'
-    - 'nanoc/spec/nanoc/filters/less_spec.rb'
-    - 'nanoc/spec/nanoc/helpers/link_to_spec.rb'
-    - 'nanoc/spec/nanoc/integration/outdatedness_integration_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1102_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1216_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1248_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1313_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1319_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1328_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_776_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_924_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_970b_spec.rb'
-
 # Offense count: 28
 RSpec/StubbedMock:
   Exclude:
@@ -703,14 +647,6 @@ Style/ClassAndModuleChildren:
     - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
     - 'nanoc/test/rule_dsl/test_rules_collection.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowedMethods, AllowedPatterns.
-# AllowedMethods: ==, equal?, eql?
-Style/ClassEqualityComparison:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/checksummer.rb'
-
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/CombinableLoops:
@@ -820,11 +756,3 @@ Style/StringConcatenation:
     - 'nanoc/test/orig_cli/commands/test_create_site.rb'
     - 'nanoc/test/rule_dsl/test_action_provider.rb'
     - 'scripts/release'
-
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: forbid_for_all_comparison_operators, forbid_for_equality_operators_only, require_for_all_comparison_operators, require_for_equality_operators_only
-Style/YodaCondition:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/outdatedness_checker.rb'

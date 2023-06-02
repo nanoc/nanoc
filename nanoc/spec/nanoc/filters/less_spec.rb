@@ -6,9 +6,6 @@ describe Nanoc::Filters::Less, site: true, stdio: true do
 
   before do
     skip_unless_gem_available('less')
-  end
-
-  before do
     File.open('Rules', 'w') do |io|
       io.write "compile '/**/*.less' do\n"
       io.write "  filter :less\n"

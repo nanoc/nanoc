@@ -168,7 +168,7 @@ module Nanoc::CLI::CompileListeners
     end
 
     def print_table(rows)
-      puts DDMetrics::Table.new(rows).to_s
+      puts DDMetrics::Table.new(rows)
     end
   end
 end
