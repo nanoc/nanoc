@@ -168,7 +168,7 @@ module Nanoc
         # outdatedness.
         matching_objects.any? do |obj|
           status = basic_outdatedness_statuses.fetch(obj)
-          status.reasons.any? { |r| Nanoc::Core::OutdatednessReasons::DocumentAdded == r }
+          status.reasons.any? { |r| r == Nanoc::Core::OutdatednessReasons::DocumentAdded }
         end
       end
 
