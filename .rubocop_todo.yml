@@ -120,21 +120,9 @@ Lint/UnreachableLoop:
   Exclude:
     - 'nanoc-core/spec/nanoc/core/item_rep_selector_spec.rb'
 
-# Offense count: 5
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/AssertMatch:
-  Exclude:
-    - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
-
 # Offense count: 40
 Minitest/MultipleAssertions:
   Max: 18
-
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/RefuteMatch:
-  Exclude:
-    - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
 
 # Offense count: 1
 # Configuration parameters: Severity.

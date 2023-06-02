@@ -277,9 +277,13 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
     pattern = compiler_dsl.create_pattern('/foo/*')
 
+    # rubocop:disable Minitest/AssertMatch
+    # rubocop:disable Minitest/RefuteMatch
     assert pattern.match?('/foo/aaaa')
     refute pattern.match?('/foo/aaaa/')
     refute pattern.match?('/foo/a/a/a/a')
+    # rubocop:enable Minitest/RefuteMatch
+    # rubocop:enable Minitest/AssertMatch Minitest/RefuteMatch
   end
 
   def test_create_pattern_with_regex
@@ -287,7 +291,9 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
     pattern = compiler_dsl.create_pattern(%r{\A/foo/a*/})
 
+    # rubocop:disable Minitest/AssertMatch
     assert pattern.match?('/foo/aaaa/')
+    # rubocop:enable Minitest/AssertMatch
   end
 
   def test_create_pattern_with_string_with_unknown_string_pattern_type
@@ -389,8 +395,13 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
     assert_equal(expected.source,    actual.source)
     assert_equal(expected.casefold?, actual.casefold?)
     assert_equal(expected.options,   actual.options)
+
+    # rubocop:disable Minitest/AssertMatch
+    # rubocop:disable Minitest/RefuteMatch
     assert('/foo/bar/' =~ actual)
     refute('/foo/' =~ actual)
+    # rubocop:enable Minitest/RefuteMatch
+    # rubocop:enable Minitest/AssertMatch
   end
 
   def test_identifier_to_regex_with_full_identifier
@@ -402,9 +413,13 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
     assert_equal(expected.to_s, actual.to_s)
 
+    # rubocop:disable Minitest/AssertMatch
+    # rubocop:disable Minitest/RefuteMatch
     assert('/favicon.ico' =~ actual)
     assert('/favicon.ico/' =~ actual)
     refute('/faviconxico' =~ actual)
+    # rubocop:enable Minitest/RefuteMatch
+    # rubocop:enable Minitest/AssertMatch
   end
 
   def test_dsl_has_no_access_to_compiler
