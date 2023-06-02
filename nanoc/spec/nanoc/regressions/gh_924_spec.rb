@@ -55,9 +55,7 @@ describe 'GH-924', site: true, stdio: true do
 
       layout '/**/*.xsl', :xsl
     EOS
-  end
 
-  before do
     Nanoc::CLI.run(%w[compile])
   end
 

@@ -401,9 +401,6 @@ describe Nanoc::Core::Pruner, stdio: true do
       before do
         FileUtils.mv('output', 'output-real')
         File.symlink('output-real', 'output')
-      end
-
-      before do
         if Nanoc::Core.on_windows?
           skip 'Symlinks to output dirs are currently not supported on Windows.'
         end

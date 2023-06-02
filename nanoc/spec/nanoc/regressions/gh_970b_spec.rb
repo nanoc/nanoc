@@ -15,9 +15,9 @@ describe 'GH-970 (show-data)', site: true, stdio: true do
         write '/bar.html'
       end
     EOS
-  end
 
-  before { Nanoc::CLI.run(%w[compile]) }
+    Nanoc::CLI.run(%w[compile])
+  end
 
   it 'shows default rep outdatedness' do
     expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(

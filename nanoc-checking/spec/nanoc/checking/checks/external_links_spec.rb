@@ -123,14 +123,11 @@ describe Nanoc::Checking::Checks::ExternalLinks do
   context 'invalid URL component' do
     before do
       skip 'Known failure on Windows' if Nanoc::Core.on_windows?
+      File.write('output/hi.html', '<a href="mailto:lol">stuff</a>')
     end
 
     let(:check) do
       described_class.create(site)
-    end
-
-    before do
-      File.write('output/hi.html', '<a href="mailto:lol">stuff</a>')
     end
 
     it 'has issues' do

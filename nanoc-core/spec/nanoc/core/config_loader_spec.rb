@@ -71,9 +71,6 @@ describe Nanoc::Core::ConfigLoader do
 
       before do
         File.write('nanoc.yaml', YAML.dump(config))
-      end
-
-      before do
         expect(ENV).to receive(:fetch).with('NANOC_ENV', 'default').and_return(active_env_name)
       end
 

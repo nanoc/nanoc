@@ -21,9 +21,7 @@ describe 'GH-1328', site: true, stdio: true do
         write ext: 'xhtml'
       end
     EOS
-  end
 
-  before do
     Nanoc::CLI.run([])
   end
 

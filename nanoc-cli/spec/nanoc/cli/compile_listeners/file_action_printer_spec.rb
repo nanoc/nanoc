@@ -16,9 +16,10 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
 
   before { Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0)) }
 
-  after { Timecop.return }
-
-  after { listener.stop_safely }
+  after do
+    Timecop.return
+    listener.stop_safely
+  end
 
   it 'records from compilation_started to rep_write_ended' do
     listener.start_safely
@@ -72,9 +73,10 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
   end
 
   context 'log level = high' do
-    before { listener.start_safely }
-
-    before { Nanoc::CLI::Logger.instance.level = :high }
+    before do
+      listener.start_safely
+      Nanoc::CLI::Logger.instance.level = :high
+    end
 
     it 'does not print skipped (uncompiled) reps' do
       expect { listener.stop_safely }
@@ -100,9 +102,10 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
   end
 
   context 'log level = low' do
-    before { listener.start_safely }
-
-    before { Nanoc::CLI::Logger.instance.level = :low }
+    before do
+      listener.start_safely
+      Nanoc::CLI::Logger.instance.level = :low
+    end
 
     it 'prints skipped (uncompiled) reps' do
       expect { listener.stop_safely }

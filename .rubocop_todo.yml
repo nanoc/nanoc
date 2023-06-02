@@ -488,30 +488,6 @@ RSpec/RepeatedExampleGroupDescription:
     - 'nanoc-core/spec/nanoc/core/identifiable_collection_spec.rb'
     - 'nanoc-core/spec/nanoc/core/support/item_rep_view_examples.rb'
 
-# Offense count: 51
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/ScatteredSetup:
-  Exclude:
-    - 'nanoc-checking/spec/nanoc/checking/checks/external_links_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/file_action_printer_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/timing_recorder_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_stages/compile_reps_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/config_loader_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/pruner_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/site_loader_spec.rb'
-    - 'nanoc/spec/nanoc/filters/less_spec.rb'
-    - 'nanoc/spec/nanoc/helpers/link_to_spec.rb'
-    - 'nanoc/spec/nanoc/integration/outdatedness_integration_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1102_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1216_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1248_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1313_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1319_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1328_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_776_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_924_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_970b_spec.rb'
-
 # Offense count: 28
 RSpec/StubbedMock:
   Exclude:
