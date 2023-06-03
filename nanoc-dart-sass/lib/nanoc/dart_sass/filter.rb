@@ -18,7 +18,7 @@ module Nanoc
 
         result = Sass.compile_string(
           content,
-          importer: NanocImporter.new(@items),
+          importer: NanocImporter.new(@items, item),
           **params,
           syntax: syntax,
         )
@@ -29,24 +29,57 @@ module Nanoc
       end
 
       class NanocImporter
-        def initialize(items)
+        def initialize(items, source_item)
           @items = items
+          @source_item = source_item
         end
 
         def canonicalize(url, **)
-          "nanoc:#{@items[url.sub(/\Ananoc:/, '')].identifier}"
+          # Construct proper URL with `nanoc:` prefix if needed
+          if url.start_with?('nanoc:')
+            url
+          else
+            "nanoc:#{url}"
+          end
         end
 
         def load(url)
-          item = @items[url.sub(/\Ananoc:/, '')]
+          item = find_item_for_url(url)
+
           {
             contents: item.raw_content,
             syntax: Util.syntax_from_ext(item.identifier.ext),
           }
         end
-      end
 
-      private_constant :NanocImporter
+        private
+
+        def find_item_for_url(url)
+          pat = url.sub(/\Ananoc:/, '')
+
+          # If URL has no extension, add `.*` at the end
+          if pat.match?(%r{(/|^)[^.]+$})
+            pat += '.*'
+          end
+
+          # Convert to absolute pattern
+          pat =
+            if pat.start_with?('/')
+              pat
+            else
+              dirname = File.dirname(@source_item.identifier.to_s)
+              File.expand_path(pat, dirname)
+            end
+
+          item = @items[pat]
+
+          unless item
+            raise "Could not find an item matching pattern `#{pat}`"
+          end
+
+          item
+        end
+      end
 
       module Util
         module_function
