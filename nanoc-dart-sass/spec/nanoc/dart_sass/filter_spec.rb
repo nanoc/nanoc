@@ -57,7 +57,7 @@ describe Nanoc::DartSass::Filter, helper: true do
     expect(res.strip).to match(/color: #333/m)
   end
 
-  context 'when one item depends on another' do
+  context 'when one item depends on another with absolute path' do
     before do
       # Create item
       ctx.create_item('stuff', {}, '/foo.scss')
@@ -92,6 +92,59 @@ describe Nanoc::DartSass::Filter, helper: true do
       expect { filter.run(content) }
         .to create_dependency_from(ctx.items['/foo.scss'])
         .onto([instance_of(Nanoc::Core::ItemCollection), ctx.items['/defs.scss']])
+    end
+  end
+
+  context 'when one item depends on another with relative path' do
+    before do
+      # Create item
+      ctx.create_item('stuff', {}, '/assets/style/foo.scss')
+      ctx.create_rep(ctx.items['/assets/style/foo.scss'], '/assets/foo.css')
+      ctx.item = ctx.items['/assets/style/foo.scss']
+
+      # Create other items
+      ctx.create_item('$fg-color: #900;', {}, '/assets/style/defs1.scss')
+      ctx.create_rep(ctx.items['/assets/style/defs1.scss'], '/assets/defs1.css')
+      ctx.create_item('$bg-color: #dff;', {}, '/assets/style/defs2.scss')
+      ctx.create_rep(ctx.items['/assets/style/defs2.scss'], '/assets/defs2.css')
+      ctx.create_item('$hl: #f00;', {}, '/assets/style/defs3.scss')
+      ctx.create_rep(ctx.items['/assets/style/defs3.scss'], '/assets/defs3.css')
+    end
+
+    let(:content) do
+      <<~SCSS
+        @import './defs1.*';
+        @import 'defs2.*';
+        @import 'defs3';
+
+        body {
+          color: $fg-color;
+          background: $bg-color;
+        }
+      SCSS
+    end
+
+    it 'supports reading from dependencies' do
+      filter = described_class.new(ctx.assigns)
+
+      res = filter.run(content)
+      expect(res.strip).to match(/color: #900/m)
+      expect(res.strip).to match(/background: #dff/m)
+    end
+
+    it 'creates Nanoc dependencies' do
+      filter = described_class.new(ctx.assigns)
+
+      expect { filter.run(content) }
+        .to create_dependency_from(ctx.items['/assets/style/foo.scss'])
+        .onto(
+          [
+            instance_of(Nanoc::Core::ItemCollection),
+            ctx.items['/assets/style/defs1.scss'],
+            ctx.items['/assets/style/defs2.scss'],
+            ctx.items['/assets/style/defs3.scss'],
+          ],
+        )
     end
   end
 end
