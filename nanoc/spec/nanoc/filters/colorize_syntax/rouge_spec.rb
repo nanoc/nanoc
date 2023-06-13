@@ -86,8 +86,8 @@ describe Nanoc::Filters::ColorizeSyntax, filter: true do
           let(:output) do
             <<~EOS
               before
-              <pre><code class="language-ruby">  <span style="color: #000000;font-weight: bold">def</span> <span style="color: #990000;font-weight: bold">foo</span>
-                <span style="color: #000000;font-weight: bold">end</span></code></pre>
+              <pre><code class="language-ruby">  <span style="color: #cf222e">def</span> <span style="color: #8250df">foo</span>
+                <span style="color: #cf222e">end</span></code></pre>
               after
             EOS
           end
