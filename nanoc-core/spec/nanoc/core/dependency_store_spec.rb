@@ -262,7 +262,7 @@ describe Nanoc::Core::DependencyStore do
       end
 
       it 'has one new item' do
-        expect(reloaded_store.new_items).to match_array([item_d])
+        expect(reloaded_store.new_items).to contain_exactly(item_d)
       end
 
       it 'has no new layouts' do
@@ -452,7 +452,7 @@ describe Nanoc::Core::DependencyStore do
         deps = store.dependencies_causing_outdatedness_of(source_obj)
 
         expect(deps.first.props.attributes?).to be(true)
-        expect(deps.first.props.attributes).to match_array([:giraffe])
+        expect(deps.first.props.attributes).to contain_exactly(:giraffe)
         expect(deps.first.props.compiled_content?).to be(false)
       end
 
@@ -509,7 +509,7 @@ describe Nanoc::Core::DependencyStore do
     it 'removes dependencies from item_b' do
       expect { subject }
         .to change { store.objects_causing_outdatedness_of(item_b) }
-        .from(match_array([item_a, item_c]))
+        .from(contain_exactly(item_a, item_c))
         .to(be_empty)
     end
 

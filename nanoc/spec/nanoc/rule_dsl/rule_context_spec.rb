@@ -115,7 +115,7 @@ shared_examples 'a rule context' do
     end
 
     it 'contains all items' do
-      expect(subject._unwrap).to match_array([item, parent, child])
+      expect(subject._unwrap).to contain_exactly(item, parent, child)
     end
 
     it 'provides no rep access' do

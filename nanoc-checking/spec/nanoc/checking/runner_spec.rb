@@ -96,7 +96,7 @@ describe Nanoc::Checking::Runner, site: true do
           File.write('nanoc.yaml', "checking:\n  enabled_checks:\n    - elinks")
         end
 
-        it { is_expected.to match_array([:elinks]) }
+        it { is_expected.to contain_exactly(:elinks) }
       end
     end
 
@@ -114,7 +114,7 @@ describe Nanoc::Checking::Runner, site: true do
           File.write('nanoc.yaml', "checking:\n  enabled_checks:\n    - elinks")
         end
 
-        it { is_expected.to match_array([:elinks]) }
+        it { is_expected.to contain_exactly(:elinks) }
       end
     end
 
@@ -124,7 +124,7 @@ describe Nanoc::Checking::Runner, site: true do
       end
 
       context 'no deploy checks defined in config' do
-        it { is_expected.to match_array([:ilinks]) }
+        it { is_expected.to contain_exactly(:ilinks) }
       end
 
       context 'deploy checks defined in config' do

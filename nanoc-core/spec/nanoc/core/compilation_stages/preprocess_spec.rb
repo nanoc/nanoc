@@ -109,7 +109,7 @@ describe Nanoc::Core::CompilationStages::Preprocess do
         expect { subject }
           .to change { checksum_store.objects.to_a }
           .from([])
-          .to(match_array([new_item, new_layout, config]))
+          .to(contain_exactly(new_item, new_layout, config))
       end
     end
   end

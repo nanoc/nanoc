@@ -257,7 +257,7 @@ describe Nanoc::Core::IdentifiableCollection do
       it 'loops' do
         res = []
         identifiable_collection.each { |i| res << i.identifier.to_s }
-        expect(res).to match_array(['/foo', '/bar'])
+        expect(res).to contain_exactly('/foo', '/bar')
       end
     end
 
@@ -271,7 +271,7 @@ describe Nanoc::Core::IdentifiableCollection do
 
       it 'loops' do
         res = identifiable_collection.map { |i| i.identifier.to_s }
-        expect(res).to match_array(['/foo', '/bar'])
+        expect(res).to contain_exactly('/foo', '/bar')
       end
     end
   end

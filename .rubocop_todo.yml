@@ -343,19 +343,6 @@ RSpec/InstanceVariable:
     - 'nanoc-core/spec/nanoc/core/filter_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rule_spec.rb'
 
-# Offense count: 60
-# This cop supports safe autocorrection (--autocorrect).
-RSpec/MatchArray:
-  Exclude:
-    - 'nanoc-checking/spec/nanoc/checking/runner_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_stages/preprocess_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/dependency_store_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/directed_graph_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/identifiable_collection_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/outdatedness_checker_spec.rb'
-    - 'nanoc/spec/nanoc/helpers/blogging_spec.rb'
-    - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
-
 # Offense count: 140
 # Configuration parameters: .
 # SupportedStyles: have_received, receive

@@ -29,7 +29,7 @@ describe Nanoc::Core::DirectedGraph do
         graph.add_edge('1', '3')
       end
 
-      it { is_expected.to match_array([[0, 1, nil], [0, 2, nil]]) }
+      it { is_expected.to contain_exactly([0, 1, nil], [0, 2, nil]) }
     end
 
     context 'graph with edges from new vertices' do
@@ -38,7 +38,7 @@ describe Nanoc::Core::DirectedGraph do
         graph.add_edge('1', '3')
       end
 
-      it { is_expected.to match_array([[0, 1, nil], [0, 2, nil]]) }
+      it { is_expected.to contain_exactly([0, 1, nil], [0, 2, nil]) }
     end
 
     context 'graph with edge props' do
@@ -47,7 +47,7 @@ describe Nanoc::Core::DirectedGraph do
         graph.add_edge('1', '3', props: { name: 'Cooper' })
       end
 
-      it { is_expected.to match_array([[0, 1, { name: 'Mr. C' }], [0, 2, { name: 'Cooper' }]]) }
+      it { is_expected.to contain_exactly([0, 1, { name: 'Mr. C' }], [0, 2, { name: 'Cooper' }]) }
     end
   end
 
@@ -125,7 +125,7 @@ describe Nanoc::Core::DirectedGraph do
     context 'one edge to' do
       before { graph.add_edge('1', '2') }
 
-      it { is_expected.to match_array(['1']) }
+      it { is_expected.to contain_exactly('1') }
       it { is_expected.to be_a(Set) }
     end
 
@@ -172,7 +172,7 @@ describe Nanoc::Core::DirectedGraph do
       end
 
       context 'no indirect predecessors' do
-        it { is_expected.to match_array(['1']) }
+        it { is_expected.to contain_exactly('1') }
       end
 
       context 'indirect predecessors' do

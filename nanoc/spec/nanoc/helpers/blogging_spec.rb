@@ -16,7 +16,7 @@ describe Nanoc::Helpers::Blogging, helper: true do
     end
 
     it 'returns the two articles' do
-      expect(subject.map(&:identifier)).to match_array(['/1', '/2'])
+      expect(subject.map(&:identifier)).to contain_exactly('/1', '/2')
     end
   end
 
