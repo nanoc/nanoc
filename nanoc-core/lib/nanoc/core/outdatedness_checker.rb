@@ -80,8 +80,8 @@ module Nanoc
         )
       end
 
-      contract C_OBJ, Hamster::Set => C::Bool
-      def outdated_due_to_dependencies?(obj, processed = Hamster::Set.new)
+      contract C_OBJ, Immutable::Set => C::Bool
+      def outdated_due_to_dependencies?(obj, processed = Immutable::Set.new)
         # Convert from rep to item if necessary
         obj = obj.item if obj.is_a?(Nanoc::Core::ItemRep)
 
