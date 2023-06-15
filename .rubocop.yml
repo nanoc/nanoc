@@ -637,6 +637,75 @@ RSpec/Rails/MinitestAssertions: # new in 2.17
 Minitest/NonPublicTestMethod: # new in 0.27
   Enabled: true
 
+Lint/DuplicateMatchPattern: # new in 1.50
+  Enabled: true
+
+Metrics/CollectionLiteralLength: # new in 1.47
+  Enabled: true
+
+Style/DataInheritance: # new in 1.49
+  Enabled: true
+
+Style/DirEmpty: # new in 1.48
+  Enabled: true
+
+Style/ExactRegexpMatch: # new in 1.51
+  Enabled: true
+
+Style/FileEmpty: # new in 1.48
+  Enabled: true
+
+Style/RedundantArrayConstructor: # new in 1.52
+  Enabled: true
+
+Style/RedundantFilterChain: # new in 1.52
+  Enabled: true
+
+Style/RedundantHeredocDelimiterQuotes: # new in 1.45
+  Enabled: true
+
+Style/RedundantLineContinuation: # new in 1.49
+  Enabled: true
+
+Style/RedundantRegexpConstructor: # new in 1.52
+  Enabled: true
+
+Minitest/LifecycleHooksOrder: # new in 0.28
+  Enabled: true
+
+Minitest/ReturnInTestMethod: # new in 0.31
+  Enabled: true
+
+FactoryBot/AssociationStyle: # new in 2.23
+  Enabled: true
+
+FactoryBot/FactoryAssociationWithStrategy: # new in 2.23
+  Enabled: true
+
+FactoryBot/RedundantFactoryOption: # new in 2.23
+  Enabled: true
+
+RSpec/BeEmpty: # new in 2.20
+  Enabled: true
+
+RSpec/ContainExactly: # new in 2.19
+  Enabled: true
+
+RSpec/IndexedLet: # new in 2.20
+  Enabled: true
+
+RSpec/MatchArray: # new in 2.19
+  Enabled: true
+
+RSpec/RedundantAround: # new in 2.19
+  Enabled: true
+
+RSpec/SkipBlockInsideExample: # new in 2.19
+  Enabled: true
+
+RSpec/Rails/TravelAround: # new in 2.19
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
