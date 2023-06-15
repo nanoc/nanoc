@@ -72,7 +72,7 @@ group :plugins do
   gem 'rainpress'
   gem 'redcarpet', '~> 3.4', platforms: :ruby
   gem 'RedCloth', platforms: :ruby
-  gem 'rouge', '~> 3.1'
+  gem 'rouge', '~> 4.1'
   gem 'ruby-handlebars'
   gem 'rubypants'
   gem 'sass'
