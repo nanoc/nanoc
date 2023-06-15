@@ -61,7 +61,7 @@ module Nanoc
 
         private
 
-        def update(obj, digest, visited = Hamster::Set.new)
+        def update(obj, digest, visited = Immutable::Set.new)
           digest.update(obj.class.to_s)
 
           if visited.include?(obj)

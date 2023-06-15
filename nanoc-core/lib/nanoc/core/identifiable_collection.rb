@@ -20,7 +20,7 @@ module Nanoc
       # contract C::Or[Hash, C::Named['Nanoc::Core::Configuration']], C::IterOf[C::RespondTo[:identifier]], C::Maybe[String] => C::Any
       def initialize_basic(config, objects = [], name = nil)
         @config = config
-        @objects = Hamster::Vector.new(objects)
+        @objects = Immutable::Vector.new(objects)
         @name = name
       end
 

@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('concurrent-ruby', '~> 1.1')
   s.add_runtime_dependency('ddmetrics', '~> 1.0')
   s.add_runtime_dependency('ddplugin', '~> 1.0')
-  s.add_runtime_dependency('hamster', '~> 3.0')
+  s.add_runtime_dependency('immutable-ruby', '~> 0.1')
   s.add_runtime_dependency('json_schema', '~> 0.19')
   s.add_runtime_dependency('memo_wise', '~> 1.5')
   s.add_runtime_dependency('psych', '~> 4.0')
