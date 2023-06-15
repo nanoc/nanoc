@@ -451,7 +451,7 @@ Style/MapToHash: # new in 1.24
 Style/OpenStructUse: # new in 1.23
   Enabled: true
 
-RSpec/FactoryBot/SyntaxMethods: # new in 2.7
+FactoryBot/SyntaxMethods: # new in 2.7
   Enabled: true
 
 Gemspec/DeprecatedAttributeAssignment: # new in 1.30
@@ -553,7 +553,7 @@ Style/RedundantStringEscape: # new in 1.37
 RSpec/SortMetadata: # new in 2.14
   Enabled: true
 
-RSpec/FactoryBot/ConsistentParenthesesStyle: # new in 2.14
+FactoryBot/ConsistentParenthesesStyle: # new in 2.14
   Enabled: true
 
 RSpec/Rails/InferredSpecType: # new in 2.14
@@ -580,7 +580,7 @@ RSpec/DuplicatedMetadata: # new in 2.16
 RSpec/PendingWithoutReason: # new in 2.16
   Enabled: true
 
-RSpec/FactoryBot/FactoryNameStyle: # new in 2.16
+FactoryBot/FactoryNameStyle: # new in 2.16
   Enabled: true
 
 Gemspec/DevelopmentDependencies: # new in 1.44
