@@ -1,5 +1,9 @@
 # nanoc-dart-sass news
 
+## 1.0.1 (2023-06-15)
+
+- Added support for importing relative paths (#1646, #1653)
+
 ## 1.0.0 (2022-12-17)
 
 Initial release.
