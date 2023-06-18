@@ -23,9 +23,6 @@ module Nanoc
           syntax: syntax,
         )
         result.css
-      rescue StandardError => e # rubocop:disable Lint/UselessRescue
-        # TODO: use full_message for syntax errors
-        raise e
       end
 
       class NanocImporter

@@ -118,6 +118,34 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
         end
       end
 
+      context 'when error implements #full_message', stdio: true do
+        let(:klass) do
+          Class.new(StandardError) do
+            def self.to_s
+              'SubclassOfStandardError'
+            end
+
+            def full_message
+              "okay so what I mean is that #{message}"
+            end
+          end
+        end
+
+        let(:error) do
+          raise klass.new('it is broken')
+        rescue => e
+          return e
+        end
+
+        it 'prints error message followed by error detail' do
+          subject
+
+          expect($stderr.string).to match(
+            %r{SubclassOfStandardError: it is broken.*okay so what I mean is that it is broken}m,
+          )
+        end
+      end
+
       context 'non-trivial error' do
         # …
       end
