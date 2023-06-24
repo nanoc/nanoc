@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.12.16 (2023-06-24)
+
+Fixes:
+
+- Made error handler print full error message if available (#1657)
+
 ## 4.12.15 (2023-02-06)
 
 Fixes:
