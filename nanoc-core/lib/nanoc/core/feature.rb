@@ -84,7 +84,7 @@ module Nanoc
       def self.all_outdated
         repo.keys.reject do |name|
           version = repo[name]
-          Nanoc::VERSION.start_with?(version)
+          Nanoc::Core::VERSION.start_with?(version)
         end
       end
     end
