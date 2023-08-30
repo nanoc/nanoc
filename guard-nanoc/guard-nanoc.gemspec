@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './lib/guard/nanoc/version'
+require_relative 'lib/guard/nanoc/version'
 
 Gem::Specification.new do |s|
   s.name          = 'guard-nanoc'

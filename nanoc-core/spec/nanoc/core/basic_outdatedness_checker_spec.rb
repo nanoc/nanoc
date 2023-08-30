@@ -97,8 +97,7 @@ describe Nanoc::Core::BasicOutdatednessChecker do
     before do
       checksum_store.add(item)
 
-      allow(site).to receive(:code_snippets).and_return([])
-      allow(site).to receive(:config).and_return(config)
+      allow(site).to receive_messages(code_snippets: [], config: config)
     end
 
     context 'with item' do

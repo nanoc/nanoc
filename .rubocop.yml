@@ -706,6 +706,30 @@ RSpec/SkipBlockInsideExample: # new in 2.19
 RSpec/Rails/TravelAround: # new in 2.19
   Enabled: true
 
+Lint/MixedCaseRange: # new in 1.53
+  Enabled: true
+
+Lint/RedundantRegexpQuantifiers: # new in 1.53
+  Enabled: true
+
+Style/RedundantCurrentDirectoryInPath: # new in 1.53
+  Enabled: true
+
+Style/RedundantRegexpArgument: # new in 1.53
+  Enabled: true
+
+Style/ReturnNilInPredicateMethodDefinition: # new in 1.53
+  Enabled: true
+
+Style/YAMLFileRead: # new in 1.53
+  Enabled: true
+
+RSpec/ReceiveMessages: # new in 2.23
+  Enabled: true
+
+RSpec/Rails/NegationBeValid: # new in 2.23
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.

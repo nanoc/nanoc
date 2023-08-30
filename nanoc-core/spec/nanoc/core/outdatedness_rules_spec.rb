@@ -80,8 +80,7 @@ describe Nanoc::Core::OutdatednessRules do
     let(:layouts) { Nanoc::Core::LayoutCollection.new(config, [layout]) }
 
     before do
-      allow(site).to receive(:code_snippets).and_return(code_snippets)
-      allow(site).to receive(:config).and_return(config)
+      allow(site).to receive_messages(code_snippets: code_snippets, config: config)
     end
 
     describe 'CodeSnippetsModified' do
