@@ -30,7 +30,7 @@ class Nanoc::RuleDSL::RulesCollectionTest < Nanoc::TestCase
     rules_collection.layout_filter_mapping[Nanoc::Core::Pattern.from(/.*/)] = [:erb, { foo: 'bar' }]
 
     # Mock layout
-    layout = MiniTest::Mock.new
+    layout = Minitest::Mock.new
     layout.expect(:identifier, '/some_layout/')
 
     # Check
@@ -42,7 +42,7 @@ class Nanoc::RuleDSL::RulesCollectionTest < Nanoc::TestCase
     rules_collection.layout_filter_mapping[Nanoc::Core::Pattern.from(/.*/)] = [:some_unknown_filter, { foo: 'bar' }]
 
     # Mock layout
-    layout = MiniTest::Mock.new
+    layout = Minitest::Mock.new
     layout.expect(:identifier, '/some_layout/')
 
     # Check
@@ -54,7 +54,7 @@ class Nanoc::RuleDSL::RulesCollectionTest < Nanoc::TestCase
     rules_collection.layout_filter_mapping[Nanoc::Core::Pattern.from(%r{^/foo/$})] = [:erb, { foo: 'bar' }]
 
     # Mock layout
-    layout = MiniTest::Mock.new
+    layout = Minitest::Mock.new
     layout.expect(:identifier, '/bar/')
 
     # Check
