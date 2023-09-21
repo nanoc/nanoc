@@ -31,7 +31,7 @@ module Nanoc
           @source_item = source_item
         end
 
-        def canonicalize(url, **)
+        def canonicalize(url, *, **)
           # Construct proper URL with `nanoc:` prefix if needed
           if url.start_with?('nanoc:')
             url
