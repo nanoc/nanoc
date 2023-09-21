@@ -317,7 +317,7 @@ RSpec/ExpectOutput:
 # Offense count: 7
 # Configuration parameters: Include, CustomTransform, IgnoreMethods, SpecSuffixOnly.
 # Include: **/*_spec*rb*, **/spec/**/*
-RSpec/FilePath:
+RSpec/SpecFilePathFormat:
   Exclude:
     - 'guard-nanoc/spec/lib/guard/nanoc/live_command_spec.rb'
     - 'nanoc-external/spec/filter_spec.rb'
