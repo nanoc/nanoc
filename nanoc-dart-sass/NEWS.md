@@ -1,6 +1,6 @@
 # nanoc-dart-sass news
 
-## 1.0.2 (2023-09-39)
+## 1.0.2 (2023-09-30)
 
 - Fix dart-sass compatibility (#1664)
 
