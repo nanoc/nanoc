@@ -1,5 +1,12 @@
 # Nanoc news
 
+## 4.12.17 (2023-09-30)
+
+Fixes:
+
+- Fix dart-sass compatibility (#1664)
+- Remove accidental dependency from `nanoc-core` onto `nanoc`
+
 ## 4.12.16 (2023-06-24)
 
 Fixes:
