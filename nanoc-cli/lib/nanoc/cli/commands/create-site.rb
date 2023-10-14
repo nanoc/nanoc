@@ -54,7 +54,7 @@ module Nanoc::CLI::Commands
       #  layout '/default.*'
       #
       #  if item.identifier =~ '**/index.*'
-      #    write item.identifier.to_s
+      #    write item.identifier.without_ext + '.html'
       #  else
       #    write item.identifier.without_ext + '/index.html'
       #  end
