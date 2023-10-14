@@ -18,6 +18,14 @@ module Nanoc::CLI::Commands
       end
     end
 
+    DEFAULT_GEMFILE = <<~EOS unless defined? DEFAULT_GEMFILE
+      # frozen_string_literal: true
+
+      source 'https://rubygems.org'
+
+      gem 'nanoc', '~> #{Nanoc::VERSION.split('.').take(2).join('.')}'
+    EOS
+
     DEFAULT_CONFIG = <<~EOS unless defined? DEFAULT_CONFIG
       # A list of file extensions that Nanoc will consider to be textual rather than
       # binary. If an item with an extension not in this list is found,  the file
@@ -240,6 +248,7 @@ module Nanoc::CLI::Commands
         FileUtils.mkdir_p('lib')
         FileUtils.mkdir_p('output')
 
+        write('Gemfile', DEFAULT_GEMFILE)
         write('nanoc.yaml', DEFAULT_CONFIG)
         write('Rules', DEFAULT_RULES)
         write('content/index.html', DEFAULT_ITEM)
