@@ -148,4 +148,13 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
       assert_match(/Bar Qux/, File.read('output/bar/qux/index.html'))
     end
   end
+
+  def test_create_site_gemfile
+    Nanoc::CLI.run %w[create_site foo]
+
+    FileUtils.cd('foo') do
+      assert File.file?('Gemfile')
+      assert_match(/^gem 'nanoc', '~> 4.12'$/, File.read('Gemfile'))
+    end
+  end
 end
