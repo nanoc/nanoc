@@ -131,7 +131,7 @@ module Nanoc::CLI
     #
     # @return [void]
     def write_verbose_error(error, stream)
-      stream.puts "Crashlog created at #{Time.now}"
+      stream.puts "Crash log created at #{Time.now}"
 
       write_error_message(stream, error, verbose: true)
       write_error_detail(stream, error)
