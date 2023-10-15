@@ -38,7 +38,7 @@ module Nanoc::CLI
       %w[INT TERM].each do |signal|
         Signal.trap(signal) do
           puts
-          exit!(0)
+          exit(0)
         end
       end
 
@@ -55,10 +55,21 @@ module Nanoc::CLI
 
       # Run
       yield
-    rescue Interrupt
-      exit(1)
-    rescue StandardError, ScriptError => e
-      handle_error(e, exit_on_error: exit_on_error)
+    rescue Exception => e # rubocop:disable Lint/RescueException
+      # The exception could be wrapped in a
+      # Nanoc::Core::Errors::CompilationError, so find the
+      # underlying exception and handle that one instead.
+      e = unwrap_error(e)
+
+      case e
+      when Interrupt
+        puts
+        exit(1)
+      when StandardError, ScriptError
+        handle_error(e, exit_on_error: exit_on_error)
+      else
+        raise e
+      end
     end
 
     def handle_error(error, exit_on_error:)

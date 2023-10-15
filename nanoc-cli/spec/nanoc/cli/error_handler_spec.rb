@@ -178,4 +178,14 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
       expect(missing).to be_empty
     end
   end
+
+  describe '#handle_while' do
+    it 'makes #exit bubble up a SystemExit' do
+      expect do
+        error_handler.handle_while(exit_on_error: false) do
+          exit(0)
+        end
+      end.to raise_error(SystemExit)
+    end
+  end
 end
