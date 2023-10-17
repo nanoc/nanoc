@@ -60,9 +60,7 @@ module Nanoc::CLI::Commands
       #  end
       #end
 
-      compile '/**/*' do
-        write item.identifier.to_s
-      end
+      passthrough '/**/*'
 
       layout '/**/*', :erb
     EOS
