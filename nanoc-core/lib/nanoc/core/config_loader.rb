@@ -56,7 +56,7 @@ module Nanoc
       end
 
       def load_file(filename)
-        YAML.safe_load_file(filename, permitted_classes: PERMITTED_YAML_CLASSES)
+        YAML.safe_load_file(filename, permitted_classes: PERMITTED_YAML_CLASSES, aliases: true)
       end
 
       # @api private
