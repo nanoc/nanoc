@@ -154,7 +154,7 @@ module Nanoc::DataSources
       is_binary = content_filename && !@site_config[:text_extensions].include?(File.extname(content_filename)[1..])
 
       if is_binary && klass == Nanoc::Core::Item
-        meta = (meta_filename && YAML.safe_load_file(meta_filename, permitted_classes: PERMITTED_YAML_CLASSES)) || {}
+        meta = (meta_filename && YAML.safe_load_file(meta_filename, permitted_classes: PERMITTED_YAML_CLASSES, aliases: true)) || {}
 
         ProtoDocument.new(is_binary: true, filename: content_filename, attributes: meta)
       elsif is_binary && klass == Nanoc::Core::Layout
