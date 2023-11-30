@@ -76,7 +76,7 @@ group :plugins do
   gem 'ruby-handlebars'
   gem 'rubypants'
   gem 'sass'
-  gem 'slim', '~> 4.0'
+  gem 'slim', '~> 5.0'
   gem 'terser'
   gem 'typogruby'
   gem 'w3c_validators'
