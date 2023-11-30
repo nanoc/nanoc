@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('immutable-ruby', '~> 0.1')
   s.add_runtime_dependency('json_schema', '~> 0.19')
   s.add_runtime_dependency('memo_wise', '~> 1.5')
-  s.add_runtime_dependency('psych', '~> 4.0')
+  s.add_runtime_dependency('psych', '>= 4.0', '< 6.0')
   s.add_runtime_dependency('slow_enumerator_tools', '~> 1.0')
   s.add_runtime_dependency('tty-platform', '~> 0.2')
   s.add_runtime_dependency('zeitwerk', '~> 2.1')
