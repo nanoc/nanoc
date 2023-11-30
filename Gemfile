@@ -32,7 +32,7 @@ group :devel do
   gem 'rubocop-minitest'
   gem 'rubocop-rake'
   gem 'rubocop-rspec'
-  gem 'simplecov', '~> 0.21.2'
+  gem 'simplecov', '~> 0.22.0'
   gem 'timecop'
   gem 'tty-command', '~> 0.8'
   gem 'vcr'
