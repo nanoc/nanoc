@@ -19,25 +19,32 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
     end
   end
 
+  let(:original_timestamp) { Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond) }
+
+  def mock_time(seconds)
+    allow(Process)
+      .to receive(:clock_gettime)
+      .with(Process::CLOCK_MONOTONIC, :nanosecond)
+      .and_return(original_timestamp + seconds * 1_000_000_000)
+  end
+
   before do
-    Timecop.freeze(Time.local(2008, 1, 2, 14, 5, 0))
     Nanoc::CLI.verbosity = 2
     listener.start_safely
   end
 
   after do
-    Timecop.return
     listener.stop_safely
   end
 
   it 'prints filters table' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    mock_time(0)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    mock_time(1)
     Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 14, 1))
+    mock_time(100)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 14, 3))
+    mock_time(102)
     Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
 
     expect { listener.stop_safely }
@@ -45,9 +52,9 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records single from filtering_started to filtering_ended' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    mock_time(0)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    mock_time(1)
     Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
 
     expect(listener.filters_summary.get(name: 'erb').min).to eq(1.00)
@@ -58,13 +65,13 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records multiple from filtering_started to filtering_ended' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    mock_time(0)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    mock_time(1)
     Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 14, 1))
+    mock_time(100)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 14, 3))
+    mock_time(102)
     Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
 
     expect(listener.filters_summary.get(name: 'erb').min).to eq(1.00)
@@ -75,13 +82,13 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records filters in nested filtering_started/filtering_ended' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    mock_time(0)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :outer).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    mock_time(1)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :inner).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
+    mock_time(3)
     Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :inner).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
+    mock_time(6)
     Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :outer).sync
 
     expect(listener.filters_summary.get(name: 'inner').min).to eq(2.00)
@@ -98,16 +105,16 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'pauses outer stopwatch when suspended' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    mock_time(0)
     Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :outer).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    mock_time(1)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :inner).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
+    mock_time(3)
     Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, :__anything__).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 6))
+    mock_time(6)
     Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 10))
+    mock_time(10)
     Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :inner).sync
     Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :outer).sync
 
@@ -120,13 +127,13 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records single from filtering_started over compilation_{suspended,started} to filtering_ended' do
     Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    mock_time(0)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    mock_time(1)
     Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, :__anything__).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 3))
+    mock_time(3)
     Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 7))
+    mock_time(7)
     Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
 
     expect(listener.filters_summary.get(name: 'erb').min).to eq(5.00)
@@ -137,9 +144,9 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records single phase start+stop' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    mock_time(0)
     Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    mock_time(1)
     Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(1.00)
@@ -150,13 +157,13 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records multiple phase start+stop' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    mock_time(0)
     Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    mock_time(1)
     Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 0))
+    mock_time(100)
     Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 2))
+    mock_time(102)
     Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(1.00)
@@ -167,13 +174,13 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records single phase start+yield+resume+stop' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    mock_time(0)
     Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    mock_time(1)
     Nanoc::Core::NotificationCenter.post(:phase_yielded, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 0))
+    mock_time(100)
     Nanoc::Core::NotificationCenter.post(:phase_resumed, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 2))
+    mock_time(102)
     Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(3.00)
@@ -184,15 +191,15 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records single phase start+yield+abort+start+stop' do
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 0))
+    mock_time(0)
     Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 10, 5, 1))
+    mock_time(1)
     Nanoc::Core::NotificationCenter.post(:phase_yielded, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 11, 6, 0))
+    mock_time(100)
     Nanoc::Core::NotificationCenter.post(:phase_aborted, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 12, 7, 2))
+    mock_time(200)
     Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
-    Timecop.freeze(Time.local(2008, 9, 1, 12, 7, 5))
+    mock_time(203)
     Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(1.00)
