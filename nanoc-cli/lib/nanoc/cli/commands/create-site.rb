@@ -23,7 +23,7 @@ module Nanoc::CLI::Commands
 
       source 'https://rubygems.org'
 
-      gem 'nanoc', '~> #{Nanoc::VERSION.split('.').take(2).join('.')}'
+      gem 'nanoc', '~> #{Nanoc::CLI::VERSION.split('.').take(2).join('.')}'
     EOS
 
     DEFAULT_CONFIG = <<~EOS unless defined? DEFAULT_CONFIG
