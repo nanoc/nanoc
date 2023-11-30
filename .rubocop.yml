@@ -371,65 +371,6 @@ Style/StringChars: # (new in 1.12)
 Minitest/AssertWithExpectedArgument: # (new in 0.11)
   Enabled: true
 
-# ----- DISABLED (new cops not enabled by default; to enable later) -----
-
-Layout/LineEndStringConcatenationIndentation: # new in 1.18
-  Enabled: false
-
-Lint/AmbiguousOperatorPrecedence: # new in 1.21
-  Enabled: false
-
-Lint/AmbiguousRange: # new in 1.19
-  Enabled: false
-
-Lint/EmptyInPattern: # new in 1.16
-  Enabled: false
-
-Lint/IncompatibleIoSelectWithFiberScheduler: # new in 1.21
-  Enabled: false
-
-Lint/RequireRelativeSelfPath: # new in 1.22
-  Enabled: false
-
-Security/IoMethods: # new in 1.22
-  Enabled: false
-
-Style/InPatternThen: # new in 1.16
-  Enabled: false
-
-Style/MultilineInPatternThen: # new in 1.16
-  Enabled: false
-
-Style/NumberedParameters: # new in 1.22
-  Enabled: false
-
-Style/NumberedParametersLimit: # new in 1.22
-  Enabled: false
-
-Style/QuotedSymbols: # new in 1.16
-  Enabled: false
-
-Style/RedundantSelfAssignmentBranch: # new in 1.19
-  Enabled: false
-
-Style/SelectByRegexp: # new in 1.22
-  Enabled: false
-
-Minitest/UnreachableAssertion: # new in 0.14
-  Enabled: false
-
-RSpec/ExcessiveDocstringSpacing: # new in 2.5
-  Enabled: false
-
-RSpec/IdenticalEqualityAssertion: # new in 2.4
-  Enabled: false
-
-RSpec/SubjectDeclaration: # new in 2.5
-  Enabled: false
-
-RSpec/Rails/AvoidSetupHook: # new in 2.4
-  Enabled: false
-
 Gemspec/RequireMFA: # new in 1.23
   Enabled: true
 
@@ -729,6 +670,65 @@ RSpec/ReceiveMessages: # new in 2.23
 
 RSpec/Rails/NegationBeValid: # new in 2.23
   Enabled: true
+
+# ----- DISABLED (new cops not enabled by default; to enable later) -----
+
+Layout/LineEndStringConcatenationIndentation: # new in 1.18
+  Enabled: false
+
+Lint/AmbiguousOperatorPrecedence: # new in 1.21
+  Enabled: false
+
+Lint/AmbiguousRange: # new in 1.19
+  Enabled: false
+
+Lint/EmptyInPattern: # new in 1.16
+  Enabled: false
+
+Lint/IncompatibleIoSelectWithFiberScheduler: # new in 1.21
+  Enabled: false
+
+Lint/RequireRelativeSelfPath: # new in 1.22
+  Enabled: false
+
+Security/IoMethods: # new in 1.22
+  Enabled: false
+
+Style/InPatternThen: # new in 1.16
+  Enabled: false
+
+Style/MultilineInPatternThen: # new in 1.16
+  Enabled: false
+
+Style/NumberedParameters: # new in 1.22
+  Enabled: false
+
+Style/NumberedParametersLimit: # new in 1.22
+  Enabled: false
+
+Style/QuotedSymbols: # new in 1.16
+  Enabled: false
+
+Style/RedundantSelfAssignmentBranch: # new in 1.19
+  Enabled: false
+
+Style/SelectByRegexp: # new in 1.22
+  Enabled: false
+
+Minitest/UnreachableAssertion: # new in 0.14
+  Enabled: false
+
+RSpec/ExcessiveDocstringSpacing: # new in 2.5
+  Enabled: false
+
+RSpec/IdenticalEqualityAssertion: # new in 2.4
+  Enabled: false
+
+RSpec/SubjectDeclaration: # new in 2.5
+  Enabled: false
+
+RSpec/Rails/AvoidSetupHook: # new in 2.4
+  Enabled: false
 
 # ----- TO ENABLE LATER -----
 
