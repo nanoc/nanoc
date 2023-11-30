@@ -21,6 +21,16 @@ describe Nanoc::Core::CompilationStage do
     end
 
     context 'actual implementation' do
+      before do
+        a = Process.clock_gettime(Process::CLOCK_MONOTONIC, :nanosecond)
+
+        # Go to a few seconds in the future
+        allow(Process)
+          .to receive(:clock_gettime)
+          .with(Process::CLOCK_MONOTONIC, :nanosecond)
+          .and_return(a, a + 13_570_000_000)
+      end
+
       let(:klass) do
         Class.new(described_class) do
           def self.to_s
@@ -28,7 +38,6 @@ describe Nanoc::Core::CompilationStage do
           end
 
           def run
-            Timecop.freeze(Time.now + 13.57)
             :i_like_donkeys
           end
         end
@@ -71,9 +80,9 @@ describe Nanoc::Core::CompilationStage do
           end
         end
 
-        it 'does not send timing notification' do
+        it 'sends timing notification' do
           expect { subject rescue nil }
-            .not_to send_notification(:stage_ran, 13.57, klass)
+            .to send_notification(:stage_ran, 13.57, klass)
         end
 
         it 'sends stage_started' do
