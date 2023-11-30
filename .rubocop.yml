@@ -671,6 +671,30 @@ RSpec/ReceiveMessages: # new in 2.23
 RSpec/Rails/NegationBeValid: # new in 2.23
   Enabled: true
 
+Style/SingleLineDoEndBlock: # new in 1.57
+  Enabled: true
+
+Capybara/ClickLinkOrButtonStyle: # new in 2.19
+  Enabled: true
+
+Capybara/RSpec/HaveSelector: # new in 2.19
+  Enabled: true
+
+Capybara/RSpec/PredicateMatcher: # new in 2.19
+  Enabled: true
+
+FactoryBot/IdSequence: # new in <<next>>
+  Enabled: true
+
+RSpec/EmptyMetadata: # new in 2.24
+  Enabled: true
+
+RSpec/Eq: # new in 2.24
+  Enabled: true
+
+RSpec/SpecFilePathSuffix: # new in 2.24
+  Enabled: true
+
 # ----- DISABLED (new cops not enabled by default; to enable later) -----
 
 Layout/LineEndStringConcatenationIndentation: # new in 1.18
@@ -730,7 +754,19 @@ RSpec/SubjectDeclaration: # new in 2.5
 RSpec/Rails/AvoidSetupHook: # new in 2.4
   Enabled: false
 
-# ----- TO ENABLE LATER -----
+RSpec/MetadataStyle: # new in 2.24
+  Enabled: false
+
+Minitest/AssertOperator: # new in 0.32
+  Enabled: false
+
+RSpec/SpecFilePathFormat: # new in 2.24
+  Enabled: false
+
+Minitest/RefuteOperator: # new in 0.32
+  Enabled: false
+
+# ----- TO ENABLE LATER -----ref
 
 # Valid cops, but fixing the offenses they report is non-trivial.
 
