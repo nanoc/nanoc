@@ -24,6 +24,6 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.metadata = {
     'rubygems_mfa_required' => 'true',
-    'source_code_uri' => "https://github.com/nanoc/nanoc/tree/#{s.name}-v#{s.version}/#{s.name}"
+    'source_code_uri' => "https://github.com/nanoc/nanoc/tree/#{s.name}-v#{s.version}/#{s.name}",
   }
 end

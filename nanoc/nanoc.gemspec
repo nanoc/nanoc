@@ -30,6 +30,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('tty-which', '~> 0.4')
   s.metadata = {
     'rubygems_mfa_required' => 'true',
-    'source_code_uri' => "https://github.com/nanoc/nanoc/tree/#{s.name}-v#{s.version}/#{s.name}"
+    'source_code_uri' => "https://github.com/nanoc/nanoc/tree/#{s.name}-v#{s.version}/#{s.name}",
   }
 end
