@@ -4,7 +4,6 @@
 class Nanoc::DataSources::Filesystem
   class Parser
     SEPARATOR = /(-{5}|-{3})/.source
-    PERMITTED_YAML_CLASSES = Nanoc::Core::ConfigLoader::PERMITTED_YAML_CLASSES
 
     class ParseResult
       attr_reader :content
@@ -61,7 +60,7 @@ class Nanoc::DataSources::Filesystem
     # @return [Hash]
     def parse_metadata(data, filename)
       begin
-        meta = YAML.safe_load(data, permitted_classes: PERMITTED_YAML_CLASSES) || {}
+        meta = Nanoc::Core::YamlLoader.load(data) || {}
       rescue => e
         raise Errors::UnparseableMetadata.new(filename, e)
       end

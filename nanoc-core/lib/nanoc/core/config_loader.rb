@@ -4,8 +4,6 @@ module Nanoc
   module Core
     # @api private
     class ConfigLoader
-      PERMITTED_YAML_CLASSES = [Symbol, Date, Time].freeze
-
       class NoConfigFileFoundError < ::Nanoc::Core::Error
         def initialize
           super('No configuration file found')
@@ -56,7 +54,7 @@ module Nanoc
       end
 
       def load_file(filename)
-        YAML.safe_load_file(filename, permitted_classes: PERMITTED_YAML_CLASSES)
+        YamlLoader.load_file(filename)
       end
 
       # @api private

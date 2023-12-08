@@ -140,3 +140,4 @@ lib/nanoc/core/view_context_for_compilation.rb
 lib/nanoc/core/view_context_for_pre_compilation.rb
 lib/nanoc/core/view_context_for_shell.rb
 lib/nanoc/core/view.rb
+lib/nanoc/core/yaml_loader.rb
