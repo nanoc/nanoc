@@ -22,7 +22,7 @@ module Nanoc::Helpers
         # Get existing contents and prep for store
         compiled_content_store = @item._context.compiled_content_store
         rep = @item.reps[:default]._unwrap
-        capture_name = "__capture_#{@name}".to_sym
+        capture_name = :"__capture_#{@name}"
         old_content_string =
           case existing_behavior
           when :overwrite
@@ -74,7 +74,7 @@ module Nanoc::Helpers
         end
 
         compiled_content_store = @config._context.compiled_content_store
-        content = compiled_content_store.get(rep, "__capture_#{@name}".to_sym)
+        content = compiled_content_store.get(rep, :"__capture_#{@name}")
         content&.string
       end
     end

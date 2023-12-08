@@ -69,7 +69,7 @@ module Nanoc::RuleDSL
     # @return [void]
     def write(arg)
       @_write_snapshot_counter ||= 0
-      snapshot_name = "_#{@_write_snapshot_counter}".to_sym
+      snapshot_name = :"_#{@_write_snapshot_counter}"
       @_write_snapshot_counter += 1
 
       case arg
