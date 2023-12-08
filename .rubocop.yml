@@ -695,6 +695,12 @@ RSpec/Eq: # new in 2.24
 RSpec/SpecFilePathSuffix: # new in 2.24
   Enabled: true
 
+Lint/LiteralAssignmentInCondition: # new in 1.58
+  Enabled: true
+
+Style/SuperWithArgsParentheses: # new in 1.58
+  Enabled: true
+
 # ----- DISABLED (new cops not enabled by default; to enable later) -----
 
 Layout/LineEndStringConcatenationIndentation: # new in 1.18
