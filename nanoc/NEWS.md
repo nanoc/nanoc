@@ -1,5 +1,19 @@
 # Nanoc news
 
+## 4.12.19 (2023-12-08)
+
+Fixes:
+
+- Restored support for YAML aliases (#1677) [zor-el]
+- Fixed inadvertent reference to `Nanoc::` namespace from within `nanoc-cli` gem (#1673)
+
+Enhancements:
+
+- Made the default Rules file use `#passthrough` (#1668) [Hendrik Jäger]
+- Added support for slim 5.x (#1675)
+- Added support for psych 5.x (#1674)
+- Added `source_code_uri` metadata to gemspecs (#1669) [Junichi Sato]
+
 ## 4.12.18 (2023-10-15)
 
 Fixes:
