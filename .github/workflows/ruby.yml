@@ -24,6 +24,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
           bundler-cache: true
 
       - name: Test style
