@@ -24,15 +24,8 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-
-      - uses: actions/cache@v3
-        with:
-          path: vendor/bundle
-          key: bundler-b-${{ runner.os }}-${{ matrix.ruby-version }}-${{ hashFiles('Gemfile') }}
-
-      - run: |
-          bundle config set --local path 'vendor/bundle'
-          bundle install --jobs "$(nproc)"
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
 
       - name: Test style
         if: ${{ matrix.ruby-version == '3.1' }}
