@@ -11,7 +11,6 @@ module Nanoc
 end
 
 # Load general requirements
-require 'base64'
 require 'cgi'
 require 'digest'
 require 'English'

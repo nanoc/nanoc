@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # Ruby stdlib
+require 'base64'
 require 'fiber'
 require 'find'
 require 'pstore'
