@@ -772,6 +772,18 @@ RSpec/SpecFilePathFormat: # new in 2.24
 Minitest/RefuteOperator: # new in 0.32
   Enabled: false
 
+Lint/ItWithoutArgumentsInBlock: # new in 1.59
+  Enabled: true
+
+Minitest/NonExecutableTestMethod: # new in 0.34
+  Enabled: true
+
+Minitest/RedundantMessageArgument: # new in 0.34
+  Enabled: true
+
+Capybara/RedundantWithinFind: # new in 2.20
+  Enabled: true
+
 # ----- TO ENABLE LATER -----ref
 
 # Valid cops, but fixing the offenses they report is non-trivial.
