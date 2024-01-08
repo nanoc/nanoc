@@ -17,6 +17,7 @@ lib/nanoc/checking/command_runners/check.rb
 lib/nanoc/checking/commands/check.rb
 lib/nanoc/checking/dsl.rb
 lib/nanoc/checking/issue.rb
+lib/nanoc/checking/link_collector.rb
 lib/nanoc/checking/loader.rb
 lib/nanoc/checking/runner.rb
 lib/nanoc/checking/version.rb

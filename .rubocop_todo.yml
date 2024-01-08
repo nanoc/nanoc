@@ -553,7 +553,6 @@ Style/ClassAndModuleChildren:
     - 'nanoc/lib/nanoc/extra.rb'
     - 'nanoc/lib/nanoc/extra/core_ext/time.rb'
     - 'nanoc/lib/nanoc/extra/jruby_nokogiri_warner.rb'
-    - 'nanoc/lib/nanoc/extra/link_collector.rb'
     - 'nanoc/lib/nanoc/filters.rb'
     - 'nanoc/lib/nanoc/filters/asciidoc.rb'
     - 'nanoc/lib/nanoc/filters/asciidoctor.rb'

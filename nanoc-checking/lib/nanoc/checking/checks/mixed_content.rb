@@ -14,7 +14,7 @@ module Nanoc
 
         def run
           filenames = output_html_filenames
-          resource_uris_with_filenames = ::Nanoc::Extra::LinkCollector.new(filenames).filenames_per_resource_uri
+          resource_uris_with_filenames = ::Nanoc::Checking::LinkCollector.new(filenames).filenames_per_resource_uri
 
           resource_uris_with_filenames.each_pair do |uri, fns|
             next unless guaranteed_insecure?(uri)
