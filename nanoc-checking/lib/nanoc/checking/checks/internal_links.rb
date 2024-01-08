@@ -18,7 +18,7 @@ module Nanoc
         def run
           # TODO: de-duplicate this (duplicated in external links check)
           filenames = output_html_filenames
-          uris = ::Nanoc::Extra::LinkCollector.new(filenames, :internal).filenames_per_href
+          uris = ::Nanoc::Checking::LinkCollector.new(filenames, :internal).filenames_per_href
 
           uris.each_pair do |href, fns|
             fns.each do |filename|
