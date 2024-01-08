@@ -45,7 +45,7 @@ describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
       Nanoc::CLI.run(['console'])
     end
 
-    it 'will preprocess if requested' do
+    it 'preprocesses if requested' do
       expect_any_instance_of(Nanoc::Core::Context).to receive(:pry) do |ctx|
         expect(ctx.items.size).to eq(1)
         expect(ctx.items.to_a[0]._unwrap.content.string).to eq('Better hello!')
