@@ -64,8 +64,11 @@ describe Nanoc::Core::CodeSnippet do
 
       let(:data) { 'def v5yqq2zmfcjr; "ok"; end' }
 
-      it 'does not warn' do
+      it 'does not write warnings to stdout' do
         expect { subject }.not_to output(/warning: method redefined; discarding old use_helper/).to_stdout
+      end
+
+      it 'does not write warnings to stderr' do
         expect { subject }.not_to output(/warning: method redefined; discarding old use_helper/).to_stderr
       end
     end

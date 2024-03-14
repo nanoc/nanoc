@@ -793,7 +793,16 @@ RSpec/RedundantPredicateMatcher: # new in 2.26
 RSpec/RemoveConst: # new in 2.26
   Enabled: true
 
-# ----- TO ENABLE LATER -----ref
+Minitest/Focus: # new in 0.35
+  Enabled: true
+
+RSpec/IsExpectedSpecify: # new in 2.27
+  Enabled: true
+
+RSpec/RepeatedSubjectCall: # new in 2.27
+  Enabled: true
+
+# ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
 
