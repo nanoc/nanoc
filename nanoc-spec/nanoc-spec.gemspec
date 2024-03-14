@@ -5,7 +5,7 @@ require_relative 'lib/nanoc/spec/version'
 Gem::Specification.new do |s|
   s.name        = 'nanoc-spec'
   s.version     = Nanoc::Spec::VERSION
-  s.homepage    = 'https://nanoc.ws/'
+  s.homepage    = 'https://nanoc.app/'
   s.summary     = 'Testing functionality for Nanoc'
   s.description = 'Provides Nanoc::Spec, containing functionality for writing tests for Nanoc'
   s.author      = 'Denis Defreyne'

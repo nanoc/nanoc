@@ -1,6 +1,6 @@
 # nanoc-spec
 
-This provides `Nanoc::Spec`, which contains a bunch of functionality that facilitates writing tests for [Nanoc](https://nanoc.ws).
+This provides `Nanoc::Spec`, which contains a bunch of functionality that facilitates writing tests for [Nanoc](https://nanoc.app).
 
 ## Installation
 

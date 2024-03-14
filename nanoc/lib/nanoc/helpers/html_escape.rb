@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see https://nanoc.ws/doc/reference/helpers/#filtering
+  # @see https://nanoc.app/doc/reference/helpers/#filtering
   module HTMLEscape
     require 'nanoc/helpers/capturing'
     include Nanoc::Helpers::Capturing

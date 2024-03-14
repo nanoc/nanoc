@@ -28,14 +28,14 @@ describe Nanoc::Checking::Checks::MixedContent do
 
   it 'handles HTTPS URLs' do
     create_output_file('foo.html', [
-      '<img src="https://nanoc.ws/logo.png" />',
-      '<img src="HTTPS://nanoc.ws/logo.png" />',
-      '<link href="https://nanoc.ws/style.css" />',
-      '<script src="https://nanoc.ws/app.js"></script>',
-      '<form action="https://nanoc.ws/process.cgi"></form>',
-      '<iframe src="https://nanoc.ws/preview.html"></iframe>',
-      '<audio src="https://nanoc.ws/theme-song.flac"></audio>',
-      '<video src="https://nanoc.ws/screen-cast.mkv"></video>',
+      '<img src="https://nanoc.app/logo.png" />',
+      '<img src="https://nanoc.app/logo.png" />',
+      '<link href="https://nanoc.app/style.css" />',
+      '<script src="https://nanoc.app/app.js"></script>',
+      '<form action="https://nanoc.app/process.cgi"></form>',
+      '<iframe src="https://nanoc.app/preview.html"></iframe>',
+      '<audio src="https://nanoc.app/theme-song.flac"></audio>',
+      '<video src="https://nanoc.app/screen-cast.mkv"></video>',
     ])
 
     check.run

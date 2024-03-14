@@ -1341,11 +1341,11 @@ Enhancements:
 
 - Added several convenience methods to view classes (#570, #572)
 
-See the [nanoc 4 upgrade guide](https://nanoc.ws/doc/nanoc-4-upgrade-guide/) for details.
+See the [nanoc 4 upgrade guide](https://nanoc.app/doc/nanoc-4-upgrade-guide/) for details.
 
 ## 4.0.0a1 (2015-05-09)
 
-This is a major upgrade. For details on upgrading, see the [nanoc 4 upgrade guide](https://nanoc.ws/doc/nanoc-4-upgrade-guide/).
+This is a major upgrade. For details on upgrading, see the [nanoc 4 upgrade guide](https://nanoc.app/doc/nanoc-4-upgrade-guide/).
 
 This release provides no new features, but streamlines the API and functionality, in order to easen future development, both for features and for optimisations.
 
@@ -2058,7 +2058,7 @@ Removed:
 ## 2.1 (2008-08-17)
 
 This is only a short summary of all changes in 2.1. For details, see the
-[nanoc web site](https://nanoc.ws/). Especially the blog and the
+[nanoc web site](https://nanoc.app/). Especially the blog and the
 updated manual will be useful.
 
 New:

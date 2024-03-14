@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see https://nanoc.ws/doc/reference/helpers/#text
+  # @see https://nanoc.app/doc/reference/helpers/#text
   module Text
     # @param [String] string
     # @param [Number] length

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see https://nanoc.ws/doc/reference/helpers/#childparent
+  # @see https://nanoc.app/doc/reference/helpers/#childparent
   module ChildParent
     def parent_of(item)
       if item.identifier.legacy?

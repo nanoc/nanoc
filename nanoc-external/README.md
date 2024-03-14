@@ -1,6 +1,6 @@
 # nanoc-external
 
-This provides a filter that allows [Nanoc](https://nanoc.ws) to process content by executing an external program.
+This provides a filter that allows [Nanoc](https://nanoc.app) to process content by executing an external program.
 
 ## Installation
 

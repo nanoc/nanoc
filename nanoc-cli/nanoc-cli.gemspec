@@ -5,7 +5,7 @@ require_relative 'lib/nanoc/cli/version'
 Gem::Specification.new do |s|
   s.name        = 'nanoc-cli'
   s.version     = Nanoc::CLI::VERSION
-  s.homepage    = 'https://nanoc.ws/'
+  s.homepage    = 'https://nanoc.app/'
   s.summary     = 'CLI for Nanoc'
   s.description = 'Provides the CLI for Nanoc'
   s.author      = 'Denis Defreyne'

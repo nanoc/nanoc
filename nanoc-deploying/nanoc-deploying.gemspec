@@ -5,7 +5,7 @@ require_relative 'lib/nanoc/deploying/version'
 Gem::Specification.new do |s|
   s.name        = 'nanoc-deploying'
   s.version     = Nanoc::Deploying::VERSION
-  s.homepage    = 'https://nanoc.ws/'
+  s.homepage    = 'https://nanoc.app/'
   s.summary     = 'Deploying support for Nanoc'
   s.description = 'Provides deploying functionality for Nanoc'
   s.author      = 'Denis Defreyne'

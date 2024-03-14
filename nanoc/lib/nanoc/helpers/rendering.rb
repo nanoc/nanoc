@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see https://nanoc.ws/doc/reference/helpers/#rendering
+  # @see https://nanoc.app/doc/reference/helpers/#rendering
   module Rendering
     include Nanoc::Helpers::Capturing
 

@@ -5,7 +5,7 @@ require_relative 'lib/nanoc/dart_sass/version'
 Gem::Specification.new do |s|
   s.name        = 'nanoc-dart-sass'
   s.version     = Nanoc::DartSass::VERSION
-  s.homepage    = 'https://nanoc.ws/'
+  s.homepage    = 'https://nanoc.app/'
   s.summary     = 'Dart Sass filter for Nanoc'
   s.description = 'Provides a :dart_sass filter for Nanoc'
   s.author      = 'Denis Defreyne'

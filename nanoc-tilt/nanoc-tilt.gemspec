@@ -5,7 +5,7 @@ require_relative 'lib/nanoc/tilt/version'
 Gem::Specification.new do |s|
   s.name        = 'nanoc-tilt'
   s.version     = Nanoc::Tilt::VERSION
-  s.homepage    = 'https://nanoc.ws/'
+  s.homepage    = 'https://nanoc.app/'
   s.summary     = 'Tilt filter for Nanoc'
   s.description = 'Provides a :tilt filter for Nanoc'
   s.author      = 'Denis Defreyne'

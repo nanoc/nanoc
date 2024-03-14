@@ -82,7 +82,7 @@ module Nanoc
         end
         File.open(file_b, 'w') do |io|
           io << %(<a href="mailto:bob@example.com">B 1</a>)
-          io << %(<a href="https://nanoc.ws">B 2</a>)
+          io << %(<a href="https://nanoc.app">B 2</a>)
         end
 
         # Create validator
@@ -94,7 +94,7 @@ module Nanoc
 
         refute_includes hrefs, 'http://example.com/'
         refute_includes hrefs, 'https://example.com/'
-        refute_includes hrefs, 'https://nanoc.ws'
+        refute_includes hrefs, 'https://nanoc.app'
         refute_includes hrefs, 'mailto:bob@example.com'
       end
 
@@ -134,8 +134,8 @@ module Nanoc
         File.open(file_a, 'w') do |io|
           io << %(<blockquote cite="urn:uuid:6650eb58-86e6-416c-906a-35336e5ac8b2">A 1</blockquote>)
           io << %(<a href="ms-settings:windows-update" ping="https://tracking.nanoc.ws/ping">A 2</a>)
-          io << %(<div about="https://nanoc.ws/#static-generator">A 3</div>)
-          io << %(<base href="https://nanoc.ws/all-your-base-are-belong-to-us" />)
+          io << %(<div about="https://nanoc.app/#static-generator">A 3</div>)
+          io << %(<base href="https://nanoc.app/all-your-base-are-belong-to-us" />)
         end
 
         collector = Nanoc::Checking::LinkCollector.new([file_a], :external)
@@ -147,9 +147,9 @@ module Nanoc
         assert_includes hrefs, 'urn:uuid:6650eb58-86e6-416c-906a-35336e5ac8b2'
         assert_includes hrefs, 'ms-settings:windows-update'
         assert_includes hrefs, 'https://tracking.nanoc.ws/ping'
-        refute_includes hrefs, 'https://nanoc.ws/#static-generator'
-        assert_includes hrefs, 'https://nanoc.ws/'
-        assert_includes hrefs, 'https://nanoc.ws/all-your-base-are-belong-to-us'
+        refute_includes hrefs, 'https://nanoc.app/#static-generator'
+        assert_includes hrefs, 'https://nanoc.app/'
+        assert_includes hrefs, 'https://nanoc.app/all-your-base-are-belong-to-us'
       end
 
       def test_protocol_relative_urls

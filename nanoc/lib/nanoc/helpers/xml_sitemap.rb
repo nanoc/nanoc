@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see https://nanoc.ws/doc/reference/helpers/#xmlsitemap
+  # @see https://nanoc.app/doc/reference/helpers/#xmlsitemap
   module XMLSitemap
     # @option params [Array] :items
     # @option params [Proc] :rep_select

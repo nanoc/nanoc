@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see https://nanoc.ws/doc/reference/helpers/#linkto
+  # @see https://nanoc.app/doc/reference/helpers/#linkto
   module LinkTo
     require 'nanoc/helpers/html_escape'
     include Nanoc::Helpers::HTMLEscape
