@@ -1,5 +1,13 @@
 # Nanoc news
 
+## 4.12.20 (2024-03-15)
+
+Enhancements:
+
+- Add base64 as a gem dependency (#1681)
+- Specify pry as one of nanoc-cli's runtime dependencies (#1679) [Junichi Sato]
+- Add `org` extension (for Org Mode) to list of text file extensions (#1688) [Antar]
+
 ## 4.12.19 (2023-12-08)
 
 Fixes:
