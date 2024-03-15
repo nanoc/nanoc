@@ -1,0 +1,8 @@
+NEWS.md
+README.md
+
+lib/nanoc-org-mode.rb
+lib/nanoc/org-mode.rb
+lib/nanoc/org_mode.rb
+lib/nanoc/org_mode/filter.rb
+lib/nanoc/org_mode/version.rb
