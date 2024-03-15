@@ -59,6 +59,10 @@ jobs:
         run: bundle exec rake nanoc_external:test
         timeout-minutes: 3
 
+      - name: Test nanoc-org-mode
+        run: bundle exec rake nanoc_org_mode:test
+        timeout-minutes: 3
+
       - name: Test nanoc-live
         run: bundle exec rake nanoc_live:test
         timeout-minutes: 3
