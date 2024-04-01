@@ -71,7 +71,12 @@ module Nanoc
           item = @items[pat]
 
           unless item
-            raise "Could not find an item matching pattern `#{pat}`"
+            # Handle partials in a somewhat hacky way
+            pat_ = File.expand_path( "_"+File.basename(pat), File.dirname(pat) )
+            item = @items[pat_]
+            unless item
+              raise "Could not find an item matching pattern `#{pat}`"
+            end
           end
 
           item
