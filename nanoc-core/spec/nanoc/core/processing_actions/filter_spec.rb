@@ -6,7 +6,7 @@ describe Nanoc::Core::ProcessingActions::Filter do
   describe '#serialize' do
     subject { action.serialize }
 
-    it { is_expected.to eql([:filter, :foo, 'sJYzLjHGo1e4ytuDfnOLkqrt9QE=']) }
+    it { is_expected.to eql([:filter, :foo, 'v+eiDx9FKFH7+UBdX93/FK7/pRM=']) }
   end
 
   describe '#to_s' do
@@ -18,7 +18,7 @@ describe Nanoc::Core::ProcessingActions::Filter do
   describe '#inspect' do
     subject { action.inspect }
 
-    it { is_expected.to eql('<Nanoc::Core::ProcessingActions::Filter :foo, "sJYzLjHGo1e4ytuDfnOLkqrt9QE=">') }
+    it { is_expected.to eql('<Nanoc::Core::ProcessingActions::Filter :foo, "v+eiDx9FKFH7+UBdX93/FK7/pRM=">') }
   end
 
   describe '#== and #eql?' do

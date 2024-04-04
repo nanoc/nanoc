@@ -147,9 +147,9 @@ describe Nanoc::Core::ActionSequence do
     example do
       expect(subject).to eql(
         [
-          [:filter, :erb, 'PeWUm2PtXYtqeHJdTqnY7kkwAow='],
+          [:filter, :erb, 'B1gmzMdP+iEDgTz7SylLoB6yLNw='],
           [:snapshot, [:bar], true, ['/foo.md']],
-          [:layout, '/default.erb', '97LAe1pYTLKczxBsu+x4MmvqdkU='],
+          [:layout, '/default.erb', 'QQW0vu/3fP4Ihc5xhQKuPer3xUc='],
         ],
       )
     end
