@@ -81,6 +81,11 @@ module Nanoc
         end
       end
 
+      # @see IO#printf
+      def printf(*args)
+        @stream.printf(*args)
+      end
+
       # @see IO#puts
       def puts(*str)
         _nanoc_swallow_broken_pipe_errors_while do

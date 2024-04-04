@@ -20,7 +20,7 @@ describe Nanoc::CLI::CleaningStream do
   end
 
   it 'forwards methods' do
-    methods = %i[write << flush tell print puts string reopen exist? exists? close closed?]
+    methods = %i[write << flush tell print printf puts string reopen exist? exists? close closed?]
 
     s = stream_class.new
     cs = described_class.new(s)
@@ -30,6 +30,7 @@ describe Nanoc::CLI::CleaningStream do
     cs.flush
     cs.tell
     cs.print('cc')
+    cs.printf('cc')
     cs.puts('dd')
     cs.string
     cs.reopen('/dev/null', 'r')
