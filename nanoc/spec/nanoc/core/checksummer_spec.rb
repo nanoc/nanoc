@@ -12,7 +12,7 @@ describe Nanoc::Core::Checksummer do
 
     let(:data) { 'STUFF!' }
 
-    it { is_expected.to eql('Nanoc::RuleDSL::RulesCollection<String<STUFF!>>') }
+    it { is_expected.to eql('Nanoc::RuleDSL::RulesCollection#0<String#1<STUFF!>>') }
   end
 
   context 'Nanoc::RuleDSL::CompilationRuleContext' do
@@ -37,24 +37,24 @@ describe Nanoc::Core::Checksummer do
     let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
     let(:view_context) { Nanoc::Core::ViewContextForPreCompilation.new(items: items) }
 
-    let(:expected_item_checksum) { 'Nanoc::Core::Item<content=Nanoc::Core::TextualContent<String<stuff>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</stuff.md>>>' }
-    let(:expected_item_rep_checksum) { 'Nanoc::Core::ItemRep<item=' + expected_item_checksum + ',name=Symbol<pdf>>' }
-    let(:expected_layout_checksum) { 'Nanoc::Core::Layout<content=Nanoc::Core::TextualContent<String<asdf>>,attributes=Hash<>,identifier=Nanoc::Core::Identifier<String</foo.md>>>' }
-    let(:expected_config_checksum) { 'Nanoc::Core::Configuration<Symbol<foo>=String<bar>,>' }
+    let(:expected_item_checksum) { 'Nanoc::Core::Item#2<content=Nanoc::Core::TextualContent#3<String#4<stuff>>,attributes=Hash#5<>,identifier=Nanoc::Core::Identifier#6<String#7</stuff.md>>>' }
+    let(:expected_item_rep_checksum) { 'Nanoc::Core::ItemRep#9<item=@2,name=Symbol#10<pdf>>' }
+    let(:expected_layout_checksum) { 'Nanoc::Core::Layout#15<content=Nanoc::Core::TextualContent#16<String#17<asdf>>,attributes=@5,identifier=Nanoc::Core::Identifier#18<String#19</foo.md>>>' }
+    let(:expected_config_checksum) { 'Nanoc::Core::Configuration#21<Symbol#22<foo>=String#23<bar>,>' }
 
     let(:expected_checksum) do
       [
-        'Nanoc::RuleDSL::CompilationRuleContext<',
+        'Nanoc::RuleDSL::CompilationRuleContext#0<',
         'item=',
-        'Nanoc::Core::BasicItemView<' + expected_item_checksum + '>',
+        'Nanoc::Core::BasicItemView#1<' + expected_item_checksum + '>',
         ',rep=',
-        'Nanoc::Core::BasicItemRepView<' + expected_item_rep_checksum + '>',
+        'Nanoc::Core::BasicItemRepView#8<' + expected_item_rep_checksum + '>',
         ',items=',
-        'Nanoc::Core::ItemCollectionWithoutRepsView<Nanoc::Core::ItemCollection<' + expected_item_checksum + ',>>',
+        'Nanoc::Core::ItemCollectionWithoutRepsView#11<Nanoc::Core::ItemCollection#12<@2,>>',
         ',layouts=',
-        'Nanoc::Core::LayoutCollectionView<Nanoc::Core::LayoutCollection<' + expected_layout_checksum + ',>>',
+        'Nanoc::Core::LayoutCollectionView#13<Nanoc::Core::LayoutCollection#14<' + expected_layout_checksum + ',>>',
         ',config=',
-        'Nanoc::Core::ConfigView<' + expected_config_checksum + '>',
+        'Nanoc::Core::ConfigView#20<' + expected_config_checksum + '>',
         '>',
       ].join('')
     end
@@ -67,6 +67,6 @@ describe Nanoc::Core::Checksummer do
 
     before { require 'sass' }
 
-    it { is_expected.to match(%r{\ASass::Importers::Filesystem<root=(C:)?/foo>\z}) }
+    it { is_expected.to match(%r{\ASass::Importers::Filesystem#0<root=(C:)?/foo>\z}) }
   end
 end
