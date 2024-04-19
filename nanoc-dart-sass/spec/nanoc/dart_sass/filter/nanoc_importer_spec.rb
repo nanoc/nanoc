@@ -184,6 +184,24 @@ describe Nanoc::DartSass::Filter::NanocImporter do
       end
     end
 
-    # TODO: test ambiguous import
+    context 'with ambiguous import' do
+      let(:color_scss_item) { Nanoc::Core::Item.new('foundation/index content here', {}, '/assets/style/color.scss') }
+      let(:color_sass_item) { Nanoc::Core::Item.new('foundation/index content here', {}, '/assets/style/color.sass') }
+      let(:source_item) { screen_item }
+
+      let(:items_array) do
+        [
+          screen_item,
+          color_scss_item,
+          color_sass_item,
+        ]
+      end
+
+      let(:url) { 'color.*' }
+
+      it 'raises' do
+        expect { load_call }.to raise_error('It is not clear which item to import. Multiple items match `/assets/style/color.*`: /assets/style/color.sass, /assets/style/color.scss')
+      end
+    end
   end
 end

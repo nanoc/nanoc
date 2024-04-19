@@ -68,16 +68,16 @@ module Nanoc
           items = []
 
           # Try as a regular path
-          items << try_pat(pat, is_extension_given)
+          items.concat(try_pat(pat, is_extension_given))
 
           # Try as a partial
           partial_pat = File.join(File.dirname(pat), "_#{File.basename(pat)}")
-          items << try_pat(partial_pat, is_extension_given)
+          items.concat(try_pat(partial_pat, is_extension_given))
 
           # Try as index
           unless is_extension_given
-            items << @items[File.join(pat, '/index.*')]
-            items << @items[File.join(pat, '/_index.*')]
+            items.concat(@items.find_all(File.join(pat, '/index.*')))
+            items.concat(@items.find_all(File.join(pat, '/_index.*')))
           end
 
           items = items.compact
@@ -87,15 +87,15 @@ module Nanoc
           when 1
             items.first
           else
-            raise "It is not clear which item to import. Multiple items match `#{pat}`: #{items.map { _1.identifier.to_s }.join(', ')}"
+            raise "It is not clear which item to import. Multiple items match `#{pat}`: #{items.map { _1.identifier.to_s }.sort.join(', ')}"
           end
         end
 
         def try_pat(pat, is_extension_given)
           if is_extension_given
-            @items[pat]
+            @items.find_all(pat)
           else
-            @items["#{pat}.*"]
+            @items.find_all("#{pat}.*")
           end
         end
       end
