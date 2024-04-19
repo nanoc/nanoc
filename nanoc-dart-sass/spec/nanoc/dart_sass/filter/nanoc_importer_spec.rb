@@ -54,14 +54,14 @@ describe Nanoc::DartSass::Filter::NanocImporter do
 
   let(:screen_item) { Nanoc::Core::Item.new('screen content here', {}, '/assets/style/screen.scss') }
   let(:colors_item) { Nanoc::Core::Item.new('colors content here', {}, '/assets/style/colors.scss') }
-  let(:fonts_item) { Nanoc::Core::Item.new('fonts content here', {}, '/assets/fonts.scss') }
+  let(:partial_item) { Nanoc::Core::Item.new('partial content here', {}, '/assets/style/_partial.scss') }
   let(:source_item) { screen_item }
 
   let(:items_array) do
     [
       screen_item,
       colors_item,
-      fonts_item,
+      partial_item,
     ]
   end
 
@@ -119,5 +119,20 @@ describe Nanoc::DartSass::Filter::NanocImporter do
 
       it { is_expected.to eq({ contents: 'colors content here', syntax: :scss }) }
     end
+
+    context 'when importing partial with relative path without dot with extension' do
+      let(:url) { 'partial.scss' }
+
+      it { is_expected.to eq({ contents: 'partial content here', syntax: :scss }) }
+    end
+
+    context 'when importing partial with relative path without dot without extension' do
+      let(:url) { 'partial' }
+
+      it { is_expected.to eq({ contents: 'partial content here', syntax: :scss }) }
+    end
+
+    # TODO: test ambiguous import
+    # TODO: test index (directory import)
   end
 end

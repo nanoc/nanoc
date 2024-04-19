@@ -68,13 +68,24 @@ module Nanoc
               File.expand_path(pat, dirname)
             end
 
-          item = @items[pat]
+          items = []
 
-          unless item
+          # Try as a regular path
+          items << @items[pat]
+
+          # Try as a partial
+          partial_pat = File.join(File.dirname(pat), "_#{File.basename(pat)}")
+          items << @items[partial_pat]
+
+          items = items.compact
+          case items.size
+          when 0
             raise "Could not find an item matching pattern `#{pat}`"
+          when 1
+            items.first
+          else
+            raise "It is not clear which item to import. Multiple items match `#{pat}`: #{items.map { _1.identifier.to_s }.join(', ')}"
           end
-
-          item
         end
       end
 
