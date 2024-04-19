@@ -15,7 +15,6 @@ lib/nanoc/data_sources/filesystem/parser.rb
 lib/nanoc/extra.rb
 lib/nanoc/extra/core_ext.rb
 lib/nanoc/extra/core_ext/time.rb
-lib/nanoc/extra/jruby_nokogiri_warner.rb
 lib/nanoc/extra/srcset_parser.rb
 lib/nanoc/filters.rb
 lib/nanoc/filters/asciidoc.rb

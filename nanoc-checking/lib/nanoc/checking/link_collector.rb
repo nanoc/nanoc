@@ -23,8 +23,6 @@ module ::Nanoc
       GLOBAL_ATTRS = %i[about resource].freeze
 
       def initialize(filenames, mode = nil)
-        Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
-
         @filenames = filenames
         @filter =
           case mode
