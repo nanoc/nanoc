@@ -65,6 +65,24 @@ module Nanoc
               File.expand_path(pat, dirname)
             end
 
+          items = collect_items(pat, is_extension_given)
+
+          # Get the single matching item, or error if there isn’t exactly one
+          items = items.compact
+          case items.size
+          when 0
+            raise "Could not find an item matching pattern `#{pat}`"
+          when 1
+            items.first
+          else
+            raise "It is not clear which item to import. Multiple items match `#{pat}`: #{items.map { _1.identifier.to_s }.sort.join(', ')}"
+          end
+        end
+
+        # Given a pattern, return a collection of items that match this pattern.
+        # This goes beyond what Nanoc patterns typically support by e.g.
+        # supporting partials and index imports.
+        def collect_items(pat, is_extension_given)
           items = []
 
           # Try as a regular path
@@ -80,15 +98,7 @@ module Nanoc
             items.concat(@items.find_all(File.join(pat, '/_index.*')))
           end
 
-          items = items.compact
-          case items.size
-          when 0
-            raise "Could not find an item matching pattern `#{pat}`"
-          when 1
-            items.first
-          else
-            raise "It is not clear which item to import. Multiple items match `#{pat}`: #{items.map { _1.identifier.to_s }.sort.join(', ')}"
-          end
+          items
         end
 
         def try_pat(pat, is_extension_given)
