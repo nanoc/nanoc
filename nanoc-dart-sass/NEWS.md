@@ -1,5 +1,11 @@
 # nanoc-dart-sass news
 
+## 1.0.3 (2024-04-19)
+
+Enhancements:
+
+- Added support for importing partials and directories (#1690, #1699)
+
 ## 1.0.2 (2023-09-30)
 
 - Fix dart-sass compatibility (#1664)
