@@ -54,10 +54,7 @@ module Nanoc
         def find_item_for_url(url)
           pat = url.sub(/\Ananoc:/, '')
 
-          # If URL has no extension, add `.*` at the end
-          if pat.match?(%r{(/|^)[^.]+$})
-            pat += '.*'
-          end
+          is_extension_given = !pat.match?(%r{(/|^)[^.]+$})
 
           # Convert to absolute pattern
           pat =
@@ -71,11 +68,17 @@ module Nanoc
           items = []
 
           # Try as a regular path
-          items << @items[pat]
+          items << try_pat(pat, is_extension_given)
 
           # Try as a partial
           partial_pat = File.join(File.dirname(pat), "_#{File.basename(pat)}")
-          items << @items[partial_pat]
+          items << try_pat(partial_pat, is_extension_given)
+
+          # Try as index
+          unless is_extension_given
+            items << @items[File.join(pat, '/index.*')]
+            items << @items[File.join(pat, '/_index.*')]
+          end
 
           items = items.compact
           case items.size
@@ -85,6 +88,14 @@ module Nanoc
             items.first
           else
             raise "It is not clear which item to import. Multiple items match `#{pat}`: #{items.map { _1.identifier.to_s }.join(', ')}"
+          end
+        end
+
+        def try_pat(pat, is_extension_given)
+          if is_extension_given
+            @items[pat]
+          else
+            @items["#{pat}.*"]
           end
         end
       end

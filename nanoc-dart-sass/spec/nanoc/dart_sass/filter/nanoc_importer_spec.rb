@@ -82,7 +82,7 @@ describe Nanoc::DartSass::Filter::NanocImporter do
   end
 
   describe '#load' do
-    subject { importer.load(url) }
+    subject(:load_call) { importer.load(url) }
 
     context 'when importing absolute path with extension' do
       let(:url) { '/assets/style/colors.scss' }
@@ -132,7 +132,58 @@ describe Nanoc::DartSass::Filter::NanocImporter do
       it { is_expected.to eq({ contents: 'partial content here', syntax: :scss }) }
     end
 
+    context 'with index (not a partial)' do
+      let(:foundation_item) { Nanoc::Core::Item.new('foundation/index content here', {}, '/assets/style/foundation/index.scss') }
+      let(:source_item) { screen_item }
+
+      let(:items_array) do
+        [
+          screen_item,
+          foundation_item,
+        ]
+      end
+
+      context 'when importing index with relative path without dot without extension' do
+        let(:url) { 'foundation' }
+
+        it { is_expected.to eq({ contents: 'foundation/index content here', syntax: :scss }) }
+      end
+
+      context 'when importing index with relative path with dot with extension' do
+        let(:url) { 'foundation.*' }
+
+        it 'raises' do
+          expect { load_call }.to raise_error('Could not find an item matching pattern `/assets/style/foundation.*`')
+        end
+      end
+    end
+
+    context 'with index (partial)' do
+      let(:foundation_item) { Nanoc::Core::Item.new('foundation/index content here', {}, '/assets/style/foundation/_index.scss') }
+      let(:source_item) { screen_item }
+
+      let(:items_array) do
+        [
+          screen_item,
+          foundation_item,
+        ]
+      end
+
+      context 'when importing index with relative path without dot without extension' do
+        let(:url) { 'foundation' }
+
+        it { is_expected.to eq({ contents: 'foundation/index content here', syntax: :scss }) }
+      end
+
+      context 'when importing index with relative path with dot with extension' do
+        let(:url) { 'foundation.*' }
+
+        it 'raises' do
+          expect { load_call }.to raise_error('Could not find an item matching pattern `/assets/style/foundation.*`')
+        end
+      end
+    end
+
     # TODO: test ambiguous import
-    # TODO: test index (directory import)
   end
 end
