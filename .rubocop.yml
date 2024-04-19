@@ -471,9 +471,6 @@ Style/MagicCommentFormat: # new in 1.35
 Minitest/AssertRaisesCompoundBody: # new in 0.21
   Enabled: true
 
-RSpec/Rails/HaveHttpStatus: # new in 2.12
-  Enabled: true
-
 Minitest/AssertRaisesWithRegexpArgument: # new in 0.22
   Enabled: true
 
@@ -496,9 +493,6 @@ RSpec/SortMetadata: # new in 2.14
   Enabled: true
 
 FactoryBot/ConsistentParenthesesStyle: # new in 2.14
-  Enabled: true
-
-RSpec/Rails/InferredSpecType: # new in 2.14
   Enabled: true
 
 Minitest/EmptyLineBeforeAssertionMethods: # new in 0.23
@@ -573,9 +567,6 @@ Capybara/SpecificMatcher: # new in 2.12
 Capybara/MatchStyle: # new in <<next>>
   Enabled: true
 
-RSpec/Rails/MinitestAssertions: # new in 2.17
-  Enabled: true
-
 Minitest/NonPublicTestMethod: # new in 0.27
   Enabled: true
 
@@ -645,9 +636,6 @@ RSpec/RedundantAround: # new in 2.19
 RSpec/SkipBlockInsideExample: # new in 2.19
   Enabled: true
 
-RSpec/Rails/TravelAround: # new in 2.19
-  Enabled: true
-
 Lint/MixedCaseRange: # new in 1.53
   Enabled: true
 
@@ -667,9 +655,6 @@ Style/YAMLFileRead: # new in 1.53
   Enabled: true
 
 RSpec/ReceiveMessages: # new in 2.23
-  Enabled: true
-
-RSpec/Rails/NegationBeValid: # new in 2.23
   Enabled: true
 
 Style/SingleLineDoEndBlock: # new in 1.57
@@ -756,9 +741,6 @@ RSpec/IdenticalEqualityAssertion: # new in 2.4
   Enabled: false
 
 RSpec/SubjectDeclaration: # new in 2.5
-  Enabled: false
-
-RSpec/Rails/AvoidSetupHook: # new in 2.4
   Enabled: false
 
 RSpec/MetadataStyle: # new in 2.24
@@ -951,3 +933,9 @@ RSpec/DescribedClass:
 RSpec/PredicateMatcher:
   Exclude:
     - "nanoc-core/spec/nanoc/core/item_rep_writer_spec.rb"
+
+# ----- DISABLED (not useful) -----
+
+# This is not a Ruby on Rails projec.t
+RSpecRails:
+  Enabled: false
