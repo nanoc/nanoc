@@ -43,6 +43,13 @@ module Nanoc
         end
 
         def validate(href)
+          # Skip javascript: URLs
+          #
+          # This needs to be handled explicitly, because URI.parse does not
+          # like `javascript:` URLs -- presumably because those are not
+          # technically valid URLs.
+          return nil if href.start_with?('javascript:')
+
           # Parse
           url = nil
           begin

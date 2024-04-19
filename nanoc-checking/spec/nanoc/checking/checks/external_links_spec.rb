@@ -138,6 +138,21 @@ describe Nanoc::Checking::Checks::ExternalLinks do
     end
   end
 
+  context 'javascript URL' do
+    before do
+      File.write('output/hi.html', %[<a href="javascript:window.scrollTo({top:0,behavior: 'smooth'})">scroll to top</a>])
+    end
+
+    let(:check) do
+      described_class.create(site)
+    end
+
+    it 'has no issues' do
+      check.run
+      expect(check.issues.size).to eq(0)
+    end
+  end
+
   context 'with some patterns excluded' do
     let(:config) do
       super().merge(
