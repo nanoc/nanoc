@@ -111,8 +111,7 @@ describe Nanoc::Core::ActionSequence do
     end
 
     example do
-      actions = []
-      action_sequence.each { |a| actions << a }
+      actions = action_sequence.map { _1 }
       expect(actions.size).to eq(3)
     end
   end

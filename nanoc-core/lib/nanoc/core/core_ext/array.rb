@@ -10,19 +10,23 @@ module Nanoc
         #
         # @return [Array] The converted array
         def __nanoc_symbolize_keys_recursively
-          array = []
-          each do |element|
-            array << (element.respond_to?(:__nanoc_symbolize_keys_recursively) ? element.__nanoc_symbolize_keys_recursively : element)
+          map do |element|
+            if element.respond_to?(:__nanoc_symbolize_keys_recursively)
+              element.__nanoc_symbolize_keys_recursively
+            else
+              element
+            end
           end
-          array
         end
 
         def __nanoc_stringify_keys_recursively
-          array = []
-          each do |element|
-            array << (element.respond_to?(:__nanoc_stringify_keys_recursively) ? element.__nanoc_stringify_keys_recursively : element)
+          map do |element|
+            if element.respond_to?(:__nanoc_stringify_keys_recursively)
+              element.__nanoc_stringify_keys_recursively
+            else
+              element
+            end
           end
-          array
         end
 
         # Freezes the contents of the array, as well as all array elements. The

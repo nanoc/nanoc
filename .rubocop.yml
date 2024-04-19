@@ -785,6 +785,15 @@ RSpec/IsExpectedSpecify: # new in 2.27
 RSpec/RepeatedSubjectCall: # new in 2.27
   Enabled: true
 
+Style/MapIntoArray: # new in 1.63
+  Enabled: true
+
+RSpec/EmptyOutput: # new in 2.29
+  Enabled: true
+
+RSpec/UndescriptiveLiteralsDescription: # new in 2.29
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
