@@ -45,13 +45,6 @@ module Nanoc
           digest.to_s
         end
 
-        # TODO: remove (older, slower implementation)
-        def calc_v1(obj, digest_class = CompactDigest)
-          digest = digest_class.new
-          update_v1(obj, digest)
-          digest.to_s
-        end
-
         def calc_for_content_of(obj)
           obj.content_checksum_data || obj.checksum_data || Nanoc::Core::Checksummer.calc(obj.content)
         end
@@ -81,19 +74,6 @@ module Nanoc
             digest.update(obj.class.to_s)
             digest.update("##{num}<")
             behavior_for(obj).update(obj, digest) { |o| update(o, digest, visited) }
-            digest.update('>')
-          end
-        end
-
-        # TODO: remove (older, slower implementation)
-        def update_v1(obj, digest, visited = Immutable::Set.new)
-          digest.update(obj.class.to_s)
-
-          if visited.include?(obj)
-            digest.update('<recur>')
-          else
-            digest.update('<')
-            behavior_for(obj).update(obj, digest) { |o| update_v1(o, digest, visited.add(obj)) }
             digest.update('>')
           end
         end
