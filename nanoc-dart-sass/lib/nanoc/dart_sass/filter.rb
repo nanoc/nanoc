@@ -54,10 +54,7 @@ module Nanoc
         def find_item_for_url(url)
           pat = url.sub(/\Ananoc:/, '')
 
-          # If URL has no extension, add `.*` at the end
-          if pat.match?(%r{(/|^)[^.]+$})
-            pat += '.*'
-          end
+          is_extension_given = !pat.match?(%r{(/|^)[^.]+$})
 
           # Convert to absolute pattern
           pat =
@@ -68,13 +65,48 @@ module Nanoc
               File.expand_path(pat, dirname)
             end
 
-          item = @items[pat]
+          items = collect_items(pat, is_extension_given)
 
-          unless item
+          # Get the single matching item, or error if there isn’t exactly one
+          items = items.compact
+          case items.size
+          when 0
             raise "Could not find an item matching pattern `#{pat}`"
+          when 1
+            items.first
+          else
+            raise "It is not clear which item to import. Multiple items match `#{pat}`: #{items.map { _1.identifier.to_s }.sort.join(', ')}"
+          end
+        end
+
+        # Given a pattern, return a collection of items that match this pattern.
+        # This goes beyond what Nanoc patterns typically support by e.g.
+        # supporting partials and index imports.
+        def collect_items(pat, is_extension_given)
+          items = []
+
+          # Try as a regular path
+          items.concat(try_pat(pat, is_extension_given))
+
+          # Try as a partial
+          partial_pat = File.join(File.dirname(pat), "_#{File.basename(pat)}")
+          items.concat(try_pat(partial_pat, is_extension_given))
+
+          # Try as index
+          unless is_extension_given
+            items.concat(@items.find_all(File.join(pat, '/index.*')))
+            items.concat(@items.find_all(File.join(pat, '/_index.*')))
           end
 
-          item
+          items
+        end
+
+        def try_pat(pat, is_extension_given)
+          if is_extension_given
+            @items.find_all(pat)
+          else
+            @items.find_all("#{pat}.*")
+          end
         end
       end
 

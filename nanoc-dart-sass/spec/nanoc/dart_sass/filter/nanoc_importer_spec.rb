@@ -54,14 +54,14 @@ describe Nanoc::DartSass::Filter::NanocImporter do
 
   let(:screen_item) { Nanoc::Core::Item.new('screen content here', {}, '/assets/style/screen.scss') }
   let(:colors_item) { Nanoc::Core::Item.new('colors content here', {}, '/assets/style/colors.scss') }
-  let(:fonts_item) { Nanoc::Core::Item.new('fonts content here', {}, '/assets/fonts.scss') }
+  let(:partial_item) { Nanoc::Core::Item.new('partial content here', {}, '/assets/style/_partial.scss') }
   let(:source_item) { screen_item }
 
   let(:items_array) do
     [
       screen_item,
       colors_item,
-      fonts_item,
+      partial_item,
     ]
   end
 
@@ -82,7 +82,7 @@ describe Nanoc::DartSass::Filter::NanocImporter do
   end
 
   describe '#load' do
-    subject { importer.load(url) }
+    subject(:load_call) { importer.load(url) }
 
     context 'when importing absolute path with extension' do
       let(:url) { '/assets/style/colors.scss' }
@@ -118,6 +118,90 @@ describe Nanoc::DartSass::Filter::NanocImporter do
       let(:url) { 'colors' }
 
       it { is_expected.to eq({ contents: 'colors content here', syntax: :scss }) }
+    end
+
+    context 'when importing partial with relative path without dot with extension' do
+      let(:url) { 'partial.scss' }
+
+      it { is_expected.to eq({ contents: 'partial content here', syntax: :scss }) }
+    end
+
+    context 'when importing partial with relative path without dot without extension' do
+      let(:url) { 'partial' }
+
+      it { is_expected.to eq({ contents: 'partial content here', syntax: :scss }) }
+    end
+
+    context 'with index (not a partial)' do
+      let(:foundation_item) { Nanoc::Core::Item.new('foundation/index content here', {}, '/assets/style/foundation/index.scss') }
+      let(:source_item) { screen_item }
+
+      let(:items_array) do
+        [
+          screen_item,
+          foundation_item,
+        ]
+      end
+
+      context 'when importing index with relative path without dot without extension' do
+        let(:url) { 'foundation' }
+
+        it { is_expected.to eq({ contents: 'foundation/index content here', syntax: :scss }) }
+      end
+
+      context 'when importing index with relative path with dot with extension' do
+        let(:url) { 'foundation.*' }
+
+        it 'raises' do
+          expect { load_call }.to raise_error('Could not find an item matching pattern `/assets/style/foundation.*`')
+        end
+      end
+    end
+
+    context 'with index (partial)' do
+      let(:foundation_item) { Nanoc::Core::Item.new('foundation/index content here', {}, '/assets/style/foundation/_index.scss') }
+      let(:source_item) { screen_item }
+
+      let(:items_array) do
+        [
+          screen_item,
+          foundation_item,
+        ]
+      end
+
+      context 'when importing index with relative path without dot without extension' do
+        let(:url) { 'foundation' }
+
+        it { is_expected.to eq({ contents: 'foundation/index content here', syntax: :scss }) }
+      end
+
+      context 'when importing index with relative path with dot with extension' do
+        let(:url) { 'foundation.*' }
+
+        it 'raises' do
+          expect { load_call }.to raise_error('Could not find an item matching pattern `/assets/style/foundation.*`')
+        end
+      end
+    end
+
+    context 'with ambiguous import' do
+      let(:color_scss_item) { Nanoc::Core::Item.new('foundation/index content here', {}, '/assets/style/color.scss') }
+      let(:color_sass_item) { Nanoc::Core::Item.new('foundation/index content here', {}, '/assets/style/color.sass') }
+      let(:source_item) { screen_item }
+
+      let(:items_array) do
+        [
+          screen_item,
+          color_scss_item,
+          color_sass_item,
+        ]
+      end
+
+      let(:url) { 'color.*' }
+
+      it 'raises' do
+        expect { load_call }.to raise_error('It is not clear which item to import. Multiple items match `/assets/style/color.*`: /assets/style/color.sass, /assets/style/color.scss')
+      end
     end
   end
 end
