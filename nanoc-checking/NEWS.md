@@ -1,5 +1,11 @@
 # nanoc-checking news
 
+## 1.0.4 (2024-04-19)
+
+Enhancements:
+
+- Added support for `javascript:` pseudo-URLs (#1698)
+
 ## 1.0.3 (2024-03-15)
 
 Fixes:
