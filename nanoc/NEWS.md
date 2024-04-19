@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.12.21 (???)
+
+Enhancements:
+
+- Sped up checksummer and made it more reliable/correct (#1693)
+
 ## 4.12.20 (2024-03-15)
 
 Enhancements:
