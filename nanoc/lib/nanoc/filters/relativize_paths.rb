@@ -45,8 +45,6 @@ module Nanoc::Filters
     #
     # @return [String] The filtered content
     def run(content, params = {})
-      Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
-
       # Set assigns so helper function can be used
       @item_rep = assigns[:item_rep] if @item_rep.nil?
 

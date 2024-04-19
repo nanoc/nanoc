@@ -12,8 +12,6 @@ module Nanoc::Filters
     ExtractedLanguage = Struct.new(:language, :from_class)
 
     def run(content, params = {})
-      Nanoc::Extra::JRubyNokogiriWarner.check_and_warn
-
       @colorizers = colorizers_from_params(params)
 
       syntax = params.fetch(:syntax, :html)

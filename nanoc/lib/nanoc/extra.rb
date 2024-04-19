@@ -15,6 +15,5 @@ module Nanoc::Extra
   Pruner = Nanoc::Core::Pruner
 end
 
-require_relative 'extra/jruby_nokogiri_warner'
 require_relative 'extra/srcset_parser'
 require_relative 'extra/core_ext'
