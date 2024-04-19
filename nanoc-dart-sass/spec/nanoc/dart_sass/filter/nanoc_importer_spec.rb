@@ -84,7 +84,7 @@ describe Nanoc::DartSass::Filter::NanocImporter do
   describe '#load' do
     subject { importer.load(url) }
 
-    context 'when importing absolute, full path' do
+    context 'when importing absolute path with extension' do
       let(:url) { '/assets/style/colors.scss' }
 
       it { is_expected.to eq({ contents: 'colors content here', syntax: :scss }) }
@@ -102,7 +102,7 @@ describe Nanoc::DartSass::Filter::NanocImporter do
       it { is_expected.to eq({ contents: 'colors content here', syntax: :scss }) }
     end
 
-    context 'when importing absolute path with dot without extension' do
+    context 'when importing relative path with dot without extension' do
       let(:url) { './colors' }
 
       it { is_expected.to eq({ contents: 'colors content here', syntax: :scss }) }
@@ -114,7 +114,7 @@ describe Nanoc::DartSass::Filter::NanocImporter do
       it { is_expected.to eq({ contents: 'colors content here', syntax: :scss }) }
     end
 
-    context 'when importing absolute path without dot without extension' do
+    context 'when importing relative path without dot without extension' do
       let(:url) { 'colors' }
 
       it { is_expected.to eq({ contents: 'colors content here', syntax: :scss }) }
