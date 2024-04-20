@@ -83,7 +83,8 @@ module ::Nanoc
 
       def uris_in_file(filename, tag_names)
         uris = Set.new
-        base_uri = URI("file://#{filename}")
+        # FIXME: escape is hacky
+        base_uri = URI("file://#{filename.gsub(' ', '%20')}")
         doc = Nokogiri::HTML(::File.read(filename))
         doc.traverse do |tag|
           next unless tag_names.nil? || tag_names.include?(tag.name)
