@@ -16,6 +16,13 @@ describe Nanoc::Checking::Checks::InternalLinks do
   let(:items)         { Nanoc::Core::ItemCollection.new(config, []) }
   let(:layouts)       { Nanoc::Core::LayoutCollection.new(config, []) }
 
+  around do |ex|
+    FileUtils.mkdir('site with spaces')
+    Dir.chdir('site with spaces') do
+      ex.run
+    end
+  end
+
   before do
     FileUtils.mkdir_p('output')
     File.write('Rules', 'passthrough "/**/*"')
