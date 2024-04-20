@@ -7,13 +7,14 @@ module Nanoc
     class LinkCollectorTest < Nanoc::TestCase
       def test_all
         # Create dummy data
-        FileUtils.mkdir_p('testdir')
+        FileUtils.mkdir_p('test dir')
         file_a = File.join(Dir.pwd, 'file-a.html')
-        file_b = File.join(Dir.pwd, 'testdir', 'file-b.html')
+        file_b = File.join(Dir.pwd, 'test dir', 'file-b.html')
         File.open(file_a, 'w') do |io|
           io << %(<a href="http://example.com/">A 1</a>)
           io << %(<a href="https://example.com/">A 2</a>)
-          io << %(<a href="stuff/"A 3></a>)
+          io << %(<a href="stuff/">A 3</a>)
+          io << %(<a href="stuff with spaces/">A 3b</a>)
           io << %(<a name="href-less-anchor">A 4</a>)
           io << %(<a href="https://example.com/with-fragment#moo">A 5</a>)
         end
@@ -33,6 +34,7 @@ module Nanoc
         assert_includes hrefs, 'http://example.com/'
         assert_includes hrefs, 'https://example.com/'
         assert_includes hrefs, path_to_file_uri('stuff/', Dir.pwd)
+        assert_includes hrefs, path_to_file_uri('stuff with spaces/', Dir.pwd)
         refute_includes hrefs, 'https://example.com/with-fragment#moo'
         assert_includes hrefs, 'https://example.com/with-fragment'
         refute_includes hrefs, nil
