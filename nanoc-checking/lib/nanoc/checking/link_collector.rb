@@ -116,7 +116,8 @@ module ::Nanoc
             uri
           else
             begin
-              URI.join(base_uri, uri).to_s
+              # FIXME: escape is hacky
+              URI.join(base_uri, uri.gsub(' ', '%20')).to_s
             rescue
               uri
             end

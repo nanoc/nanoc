@@ -225,10 +225,13 @@ module Nanoc::TestHelpers
     File.absolute_path(__dir__ + '/..')
   end
 
+  # FIXME: deduplicate
   def path_to_file_uri(path, dir)
     output_dir = dir.is_a?(String) ? dir : dir.config.output_dir
     output_dir += '/' unless output_dir.end_with?('/')
-    URI.join("file://#{output_dir}", path).to_s
+
+    uri = Addressable::URI.convert_path(output_dir) + Addressable::URI.convert_path(path)
+    uri.to_s
   end
 end
 

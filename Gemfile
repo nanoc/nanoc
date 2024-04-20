@@ -16,7 +16,9 @@ gemspec path: 'nanoc-tilt'
 gemspec path: 'guard-nanoc'
 
 group :devel do
+  gem 'addressable', '~> 2.8'
   gem 'contracts', '~> 0.16'
+  gem 'debug', '~> 1.9'
   gem 'fuubar'
   gem 'guard-rake'
   gem 'json', '~> 2.1'
