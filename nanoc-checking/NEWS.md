@@ -1,5 +1,11 @@
 # nanoc-checking news
 
+## 1.0.5 (2024-04-21)
+
+Fixes:
+
+- Fixed support for paths with spaces in internal_links check (#1702)
+
 ## 1.0.4 (2024-04-19)
 
 Enhancements:
