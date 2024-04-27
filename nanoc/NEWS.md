@@ -1,10 +1,15 @@
 # Nanoc news
 
-## 4.12.21 (???)
+## 4.12.21 (2024-04-27)
+
+Fixes:
+
+- Fixed a rare “private method printf” error (#1694)
 
 Enhancements:
 
-- Sped up checksummer and made it more reliable/correct (#1693)
+- Sped up checksummer and made it more reliable and correct (#1693)
+- Removed Nokogiri warning message on JRuby (#1700)
 
 ## 4.12.20 (2024-03-15)
 
