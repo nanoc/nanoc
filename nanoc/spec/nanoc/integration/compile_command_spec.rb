@@ -47,8 +47,7 @@ describe 'Compile command', site: true, stdio: true do
     end
 
     # Compile
-    site = Nanoc::Core::SiteLoader.new.new_from_cwd
-    Nanoc::Core::Compiler.compile(site)
+    Nanoc::CLI.run(%w[compile])
 
     # Check
     expect(File.read('output/index.html')).to eq('<h1>A</h1>')
@@ -64,10 +63,29 @@ describe 'Compile command', site: true, stdio: true do
     end
 
     # Compile
-    site = Nanoc::Core::SiteLoader.new.new_from_cwd
-    Nanoc::Core::Compiler.compile(site)
+    Nanoc::CLI.run(%w[compile])
 
     # Check
     expect(File.read('output/index.html')).to eq('<h1>B</h1>')
+  end
+
+  it 'recompiles only items under focus' do
+    # Create items
+    File.write('content/a.html', '<h1>A</h1>')
+    File.write('content/b.html', '<h1>B</h1>')
+
+    # Create routes
+    File.write('Rules', <<~RULES)
+      compile '/**/*' do
+        write ext: '.html'
+      end
+    RULES
+
+    # Compile
+    Nanoc::CLI.run(%w[compile --focus /a.*])
+
+    # Check
+    expect(File.read('output/a.html')).to eq('<h1>A</h1>')
+    expect(File.file?('output/b.html')).to be(false)
   end
 end

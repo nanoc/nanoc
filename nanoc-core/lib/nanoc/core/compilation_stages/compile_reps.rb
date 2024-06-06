@@ -7,17 +7,32 @@ module Nanoc
         include Nanoc::Core::ContractsSupport
         include Nanoc::Core::Assertions::Mixin
 
-        def initialize(reps:, outdatedness_store:, dependency_store:, action_sequences:, compilation_context:, compiled_content_cache:)
+        def initialize(reps:, outdatedness_store:, dependency_store:, action_sequences:, compilation_context:, compiled_content_cache:, focus:)
           @reps = reps
           @outdatedness_store = outdatedness_store
           @dependency_store = dependency_store
           @action_sequences = action_sequences
           @compilation_context = compilation_context
           @compiled_content_cache = compiled_content_cache
+          @focus = focus
         end
 
         def run
           outdated_reps = @reps.select { |r| @outdatedness_store.include?(r) }
+
+          # If a focus is specified, only compile reps that match this focus.
+          # (If no focus is specified, `@focus` will be `nil`, not an empty array.)
+          if @focus
+            focus_patterns = @focus.map { |f| Nanoc::Core::Pattern.from(f) }
+
+            # Find reps for which at least one focus pattern matches.
+            outdated_reps = outdated_reps.select do |irep|
+              focus_patterns.any? do |focus_pattern|
+                focus_pattern.match?(irep.item.identifier)
+              end
+            end
+          end
+
           selector = Nanoc::Core::ItemRepSelector.new(outdated_reps)
           run_phase_stack do |phase_stack|
             selector.each do |rep|
@@ -27,10 +42,12 @@ module Nanoc
             end
           end
 
-          assert Nanoc::Core::Assertions::AllItemRepsHaveCompiledContent.new(
-            compiled_content_cache: @compiled_content_cache,
-            item_reps: @reps,
-          )
+          unless @focus
+            assert Nanoc::Core::Assertions::AllItemRepsHaveCompiledContent.new(
+              compiled_content_cache: @compiled_content_cache,
+              item_reps: @reps,
+            )
+          end
         ensure
           @outdatedness_store.store
           @compiled_content_cache.prune(items: @reps.map(&:item).uniq)

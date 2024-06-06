@@ -106,6 +106,10 @@ Style/GlobalVars:
     - "*/test/**/*.rb"
     - "*/spec/**/*.rb"
 
+# This interferes with variables named `focus`.
+RSpec/Focus:
+  Enabled: false
+
 # ----- ENABLED (new cops not enabled by default) -----
 
 Layout/EmptyLinesAroundAttributeAccessor:

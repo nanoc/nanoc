@@ -29,7 +29,7 @@ module Nanoc
             Nanoc::CLI::Commands::View.new(view_options, [], self).run
           end
 
-          Nanoc::Live::LiveRecompiler.new(command_runner: self).run
+          Nanoc::Live::LiveRecompiler.new(command_runner: self, focus: options[:focus]).run
         end
       end
     end

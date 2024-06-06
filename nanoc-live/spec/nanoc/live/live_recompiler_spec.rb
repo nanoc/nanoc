@@ -5,10 +5,13 @@ describe Nanoc::Live::LiveRecompiler, fork: true, site: true, stdio: true do
     Nanoc::CLI::ErrorHandler.enable
   end
 
+  # TODO: vary
+  let(:focus) { nil }
+
   it 'detects content changes' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
-    live_recompiler = described_class.new(command_runner:)
+    live_recompiler = described_class.new(command_runner:, focus:)
 
     pid = fork do
       trap(:INT) { exit(0) }
@@ -34,7 +37,7 @@ describe Nanoc::Live::LiveRecompiler, fork: true, site: true, stdio: true do
   it 'detects rules changes' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
-    live_recompiler = described_class.new(command_runner:)
+    live_recompiler = described_class.new(command_runner:, focus:)
 
     pid = fork do
       trap(:INT) { exit(0) }
@@ -65,7 +68,7 @@ describe Nanoc::Live::LiveRecompiler, fork: true, site: true, stdio: true do
   it 'detects lib changes' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
-    live_recompiler = described_class.new(command_runner:)
+    live_recompiler = described_class.new(command_runner:, focus:)
 
     File.write('nanoc.yaml', 'site_name: Oldz')
     File.write('content/lol.html', '<%= @config[:site_name] %>')
@@ -99,7 +102,7 @@ describe Nanoc::Live::LiveRecompiler, fork: true, site: true, stdio: true do
   it 'detects lib changes' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
-    live_recompiler = described_class.new(command_runner:)
+    live_recompiler = described_class.new(command_runner:, focus:)
 
     FileUtils.mkdir_p('lib')
     File.write('lib/lol.rb', 'def greeting; "hi"; end')
@@ -145,7 +148,7 @@ describe Nanoc::Live::LiveRecompiler, fork: true, site: true, stdio: true do
 
       command = nil
       command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
-      live_recompiler = described_class.new(command_runner:)
+      live_recompiler = described_class.new(command_runner:, focus:)
 
       live_recompiler.run
     end

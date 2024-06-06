@@ -18,8 +18,11 @@ describe Nanoc::Core::CompilationStages::CompileReps do
       action_sequences:,
       compilation_context:,
       compiled_content_cache:,
+      focus:,
     )
   end
+
+  let(:focus) { nil }
 
   let(:compilation_context) do
     Nanoc::Core::CompilationContext.new(
@@ -131,14 +134,59 @@ describe Nanoc::Core::CompilationStages::CompileReps do
         compiled_content_cache[other_rep] = { last: Nanoc::Core::TextualContent.new('asdf') }
       end
 
-      it 'compiles individual reps' do
-        expect { subject }.to change { compiled_content_store.get(rep, :last) }
-          .from(nil)
-          .to(some_textual_content('3'))
+      context 'when focus is not specified' do
+        let(:focus) { nil }
+
+        it 'compiles individual reps' do
+          expect { subject }.to change { compiled_content_store.get(rep, :last) }
+            .from(nil)
+            .to(some_textual_content('3'))
+        end
+
+        it 'removes the item rep from the outdatedness store' do
+          expect { subject }.to change { outdatedness_store.include?(rep) }.from(true).to(false)
+        end
       end
 
-      it 'removes the item rep from the outdatedness store' do
-        expect { subject }.to change { outdatedness_store.include?(rep) }.from(true).to(false)
+      context 'when in focus with one entry' do
+        let(:focus) { ['/hi.*'] }
+
+        it 'compiles individual reps' do
+          expect { subject }.to change { compiled_content_store.get(rep, :last) }
+            .from(nil)
+            .to(some_textual_content('3'))
+        end
+
+        it 'removes the item rep from the outdatedness store' do
+          expect { subject }.to change { outdatedness_store.include?(rep) }.from(true).to(false)
+        end
+      end
+
+      context 'when in focus with multiple entries' do
+        let(:focus) { ['/hi.*', '/unrelated.*'] }
+
+        it 'compiles individual reps' do
+          expect { subject }.to change { compiled_content_store.get(rep, :last) }
+            .from(nil)
+            .to(some_textual_content('3'))
+        end
+
+        it 'removes the item rep from the outdatedness store' do
+          expect { subject }.to change { outdatedness_store.include?(rep) }.from(true).to(false)
+        end
+      end
+
+      context 'when not in focus' do
+        let(:focus) { ['/other.*'] }
+
+        it 'does not compile individual reps' do
+          expect { subject }.not_to change { compiled_content_store.get(rep, :last) }
+            .from(nil)
+        end
+
+        it 'does not remove the item rep from the outdatedness store' do
+          expect { subject }.not_to change { outdatedness_store.include?(rep) }.from(true)
+        end
       end
 
       context 'exception' do
