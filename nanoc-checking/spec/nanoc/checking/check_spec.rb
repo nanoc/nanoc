@@ -14,7 +14,7 @@ describe Nanoc::Checking::Check do
 
   let(:site) do
     Nanoc::Core::Site.new(
-      config: config,
+      config:,
       code_snippets: [],
       data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
     )
@@ -25,21 +25,21 @@ describe Nanoc::Checking::Check do
 
   let(:view_context) do
     Nanoc::Core::ViewContextForCompilation.new(
-      reps: reps,
-      items: items,
-      dependency_tracker: dependency_tracker,
-      compilation_context: compilation_context,
-      compiled_content_store: compiled_content_store,
+      reps:,
+      items:,
+      dependency_tracker:,
+      compilation_context:,
+      compiled_content_store:,
     )
   end
 
   let(:compilation_context) do
     Nanoc::Core::CompilationContext.new(
-      action_provider: action_provider,
-      reps: reps,
-      site: site,
-      compiled_content_cache: compiled_content_cache,
-      compiled_content_store: compiled_content_store,
+      action_provider:,
+      reps:,
+      site:,
+      compiled_content_cache:,
+      compiled_content_store:,
     )
   end
 
@@ -53,7 +53,7 @@ describe Nanoc::Checking::Check do
     end.new
   end
 
-  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config: config) }
+  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
 
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
@@ -120,7 +120,7 @@ describe Nanoc::Checking::Check do
 
     let(:check) do
       described_class.new(
-        output_filenames: output_filenames,
+        output_filenames:,
         config: Nanoc::Core::ConfigView.new(config, view_context),
       )
     end
@@ -165,7 +165,7 @@ describe Nanoc::Checking::Check do
 
     let(:check) do
       described_class.new(
-        output_filenames: output_filenames,
+        output_filenames:,
         config: Nanoc::Core::ConfigView.new(config, view_context),
       )
     end

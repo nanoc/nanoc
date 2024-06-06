@@ -25,7 +25,7 @@ module Nanoc
               x           #     and a U+0078 LATIN SMALL LETTER X character.
             )
           )*
-        /x.freeze
+        /x
 
       def initialize(value)
         @value = value

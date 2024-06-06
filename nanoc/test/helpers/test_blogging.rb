@@ -39,7 +39,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     site =
       Nanoc::Core::Site.new(
-        config: config,
+        config:,
         code_snippets: [],
         data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
       )
@@ -47,7 +47,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     dep_store = Nanoc::Core::DependencyStore.new(items, layouts, config)
     dependency_tracker = Nanoc::Core::DependencyTracker.new(dep_store)
 
-    compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config: config)
+    compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config:)
     compiled_content_store = Nanoc::Core::CompiledContentStore.new
 
     action_provider =
@@ -61,18 +61,18 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
 
     compilation_context =
       Nanoc::Core::CompilationContext.new(
-        action_provider: action_provider,
-        reps: reps,
-        site: site,
-        compiled_content_cache: compiled_content_cache,
-        compiled_content_store: compiled_content_store,
+        action_provider:,
+        reps:,
+        site:,
+        compiled_content_cache:,
+        compiled_content_store:,
       )
 
     @view_context = Nanoc::Core::ViewContextForCompilation.new(
-      reps: reps,
-      items: items,
-      dependency_tracker: dependency_tracker,
-      compilation_context: compilation_context,
+      reps:,
+      items:,
+      dependency_tracker:,
+      compilation_context:,
       compiled_content_store: Nanoc::Core::CompiledContentStore.new,
     )
   end

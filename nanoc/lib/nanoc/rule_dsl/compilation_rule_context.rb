@@ -13,7 +13,7 @@ module Nanoc::RuleDSL
     def initialize(rep:, site:, recorder:, view_context:)
       @_recorder = recorder
 
-      super(rep: rep, site: site, view_context: view_context)
+      super(rep:, site:, view_context:)
     end
 
     # Filters the current representation (calls {Nanoc::Core::ItemRep#filter} with
@@ -56,7 +56,7 @@ module Nanoc::RuleDSL
     #
     # @return [void]
     def snapshot(snapshot_name, path: Nanoc::Core::UNDEFINED)
-      @_recorder.snapshot(snapshot_name, path: path)
+      @_recorder.snapshot(snapshot_name, path:)
     end
 
     # Creates a snapshot named :last the current compiled item content, with
@@ -79,7 +79,7 @@ module Nanoc::RuleDSL
         if arg.key?(:ext)
           ext = arg[:ext].sub(/\A\./, '')
           path = @item.identifier.without_exts + '.' + ext
-          snapshot(snapshot_name, path: path)
+          snapshot(snapshot_name, path:)
         else
           raise ArgumentError, 'Cannot call #write this way (need path or :ext)'
         end

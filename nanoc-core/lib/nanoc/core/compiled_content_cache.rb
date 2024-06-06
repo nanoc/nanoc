@@ -11,8 +11,8 @@ module Nanoc
 
       contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
       def initialize(config:)
-        @textual_cache = Nanoc::Core::TextualCompiledContentCache.new(config: config)
-        @binary_cache = Nanoc::Core::BinaryCompiledContentCache.new(config: config)
+        @textual_cache = Nanoc::Core::TextualCompiledContentCache.new(config:)
+        @binary_cache = Nanoc::Core::BinaryCompiledContentCache.new(config:)
 
         @wrapped_caches = [@textual_cache, @binary_cache]
       end
@@ -47,7 +47,7 @@ module Nanoc
       end
 
       def prune(items:)
-        @wrapped_caches.each { |w| w.prune(items: items) }
+        @wrapped_caches.each { |w| w.prune(items:) }
       end
 
       # True if there is cached compiled content available for this item, and

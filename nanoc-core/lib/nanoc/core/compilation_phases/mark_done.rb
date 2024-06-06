@@ -7,7 +7,7 @@ module Nanoc
         include Nanoc::Core::ContractsSupport
 
         def initialize(wrapped:, outdatedness_store:)
-          super(wrapped: wrapped)
+          super(wrapped:)
 
           @outdatedness_store = outdatedness_store
         end

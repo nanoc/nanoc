@@ -903,7 +903,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
       # Test
       nokogiri_save_options = Nokogiri::XML::Node::SaveOptions::DEFAULT_HTML & ~Nokogiri::XML::Node::SaveOptions::FORMAT
-      actual_content = filter.setup_and_run(raw_content.freeze, type: :html, nokogiri_save_options: nokogiri_save_options)
+      actual_content = filter.setup_and_run(raw_content.freeze, type: :html, nokogiri_save_options:)
 
       assert_equal(actual_content, raw_content)
     end

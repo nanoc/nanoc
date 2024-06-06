@@ -6,21 +6,21 @@ shared_examples 'an identifiable collection view' do
 
   let(:view_context) do
     Nanoc::Core::ViewContextForCompilation.new(
-      reps: reps,
+      reps:,
       items: Nanoc::Core::ItemCollection.new(config),
-      dependency_tracker: dependency_tracker,
-      compilation_context: compilation_context,
-      compiled_content_store: compiled_content_store,
+      dependency_tracker:,
+      compilation_context:,
+      compiled_content_store:,
     )
   end
 
   let(:compilation_context) do
     Nanoc::Core::CompilationContext.new(
-      action_provider: action_provider,
-      reps: reps,
-      site: site,
-      compiled_content_cache: compiled_content_cache,
-      compiled_content_store: compiled_content_store,
+      action_provider:,
+      reps:,
+      site:,
+      compiled_content_cache:,
+      compiled_content_store:,
     )
   end
 
@@ -36,7 +36,7 @@ shared_examples 'an identifiable collection view' do
 
   let(:site) do
     Nanoc::Core::Site.new(
-      config: config,
+      config:,
       code_snippets: [],
       data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
     )
@@ -50,7 +50,7 @@ shared_examples 'an identifiable collection view' do
   end
 
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
-  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config: config) }
+  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
 
   let(:reps) { Nanoc::Core::ItemRepRepo.new }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }

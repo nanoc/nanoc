@@ -44,15 +44,15 @@ module Nanoc
       end
 
       # contract C::Func[Nanoc::Core::ProcessingAction => C::Any] => self
-      def each(&block)
-        @actions.each(&block)
+      def each(&)
+        @actions.each(&)
         self
       end
 
       # contract C::Func[Nanoc::Core::ProcessingAction => C::Any] => self
-      def map(&block)
+      def map(&)
         self.class.new(
-          actions: @actions.map(&block),
+          actions: @actions.map(&),
         )
       end
     end

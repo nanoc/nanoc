@@ -13,21 +13,21 @@ describe Nanoc::Core::Compiler do
   let(:compiler) do
     described_class.new(
       site,
-      compiled_content_cache: compiled_content_cache,
-      checksum_store: checksum_store,
-      action_sequence_store: action_sequence_store,
-      action_provider: action_provider,
-      dependency_store: dependency_store,
-      outdatedness_store: outdatedness_store,
+      compiled_content_cache:,
+      checksum_store:,
+      action_sequence_store:,
+      action_provider:,
+      dependency_store:,
+      outdatedness_store:,
     )
   end
 
-  let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config: config, objects: items) }
-  let(:action_sequence_store) { Nanoc::Core::ActionSequenceStore.new(config: config) }
+  let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config:, objects: items) }
+  let(:action_sequence_store) { Nanoc::Core::ActionSequenceStore.new(config:) }
 
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
 
-  let(:outdatedness_store) { Nanoc::Core::OutdatednessStore.new(config: config) }
+  let(:outdatedness_store) { Nanoc::Core::OutdatednessStore.new(config:) }
 
   let(:action_provider) do
     Class.new(Nanoc::Core::ActionProvider) do
@@ -40,7 +40,7 @@ describe Nanoc::Core::Compiler do
   end
 
   let(:compiled_content_cache) do
-    Nanoc::Core::CompiledContentCache.new(config: config)
+    Nanoc::Core::CompiledContentCache.new(config:)
   end
 
   let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
@@ -51,8 +51,8 @@ describe Nanoc::Core::Compiler do
 
   let(:site) do
     Nanoc::Core::Site.new(
-      config: config,
-      code_snippets: code_snippets,
+      config:,
+      code_snippets:,
       data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
     )
   end
@@ -75,7 +75,7 @@ describe Nanoc::Core::Compiler do
         Nanoc::Core::ProcessingActions::Snapshot.new([:last], []),
       ]
 
-    Nanoc::Core::ActionSequence.new(actions: actions)
+    Nanoc::Core::ActionSequence.new(actions:)
   end
 
   let(:action_sequences) do
@@ -87,7 +87,7 @@ describe Nanoc::Core::Compiler do
   end
 
   describe '#compile_rep' do
-    subject { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: is_outdated) }
+    subject { stage.send(:compile_rep, rep, phase_stack:, is_outdated:) }
 
     let(:stage) { compiler.send(:compile_reps_stage, action_sequences, reps) }
 
@@ -108,7 +108,7 @@ describe Nanoc::Core::Compiler do
     it 'generates expected output' do
       reps = Nanoc::Core::ItemRepRepo.new
       expect { subject }
-        .to change { compiler.compilation_context(reps: reps).compiled_content_store.get_current(rep) }
+        .to change { compiler.compilation_context(reps:).compiled_content_store.get_current(rep) }
         .from(nil)
         .to(some_textual_content('3'))
     end
@@ -127,14 +127,14 @@ describe Nanoc::Core::Compiler do
 
       it 'generates expected output' do
         reps = Nanoc::Core::ItemRepRepo.new
-        expect(compiler.compilation_context(reps: reps).compiled_content_store.get_current(rep)).to be_nil
+        expect(compiler.compilation_context(reps:).compiled_content_store.get_current(rep)).to be_nil
 
-        expect { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true) }
+        expect { stage.send(:compile_rep, rep, phase_stack:, is_outdated: true) }
           .to raise_error(Nanoc::Core::Errors::UnmetDependency)
-        stage.send(:compile_rep, other_rep, phase_stack: phase_stack, is_outdated: true)
-        stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true)
+        stage.send(:compile_rep, other_rep, phase_stack:, is_outdated: true)
+        stage.send(:compile_rep, rep, phase_stack:, is_outdated: true)
 
-        expect(compiler.compilation_context(reps: reps).compiled_content_store.get_current(rep).string).to eql('other=other content')
+        expect(compiler.compilation_context(reps:).compiled_content_store.get_current(rep).string).to eql('other=other content')
       end
 
       it 'generates notifications in the proper order' do
@@ -155,10 +155,10 @@ describe Nanoc::Core::Compiler do
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :simple_erb_ob3rqra0yc).ordered
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
 
-        expect { stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true) }
+        expect { stage.send(:compile_rep, rep, phase_stack:, is_outdated: true) }
           .to raise_error(Nanoc::Core::Errors::UnmetDependency)
-        stage.send(:compile_rep, other_rep, phase_stack: phase_stack, is_outdated: true)
-        stage.send(:compile_rep, rep, phase_stack: phase_stack, is_outdated: true)
+        stage.send(:compile_rep, other_rep, phase_stack:, is_outdated: true)
+        stage.send(:compile_rep, rep, phase_stack:, is_outdated: true)
       end
     end
   end

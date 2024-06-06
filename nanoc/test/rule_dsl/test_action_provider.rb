@@ -8,7 +8,7 @@ class Nanoc::RuleDSL::ActionProviderTest < Nanoc::TestCase
 
     action_sequence_calculator =
       Nanoc::RuleDSL::ActionSequenceCalculator.new(
-        rules_collection: rules_collection, site: site,
+        rules_collection:, site:,
       )
 
     action_provider = Nanoc::RuleDSL::ActionProvider.new(

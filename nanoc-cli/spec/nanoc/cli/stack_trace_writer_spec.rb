@@ -8,7 +8,7 @@ describe Nanoc::CLI::StackTraceWriter do
   let(:io) { StringIO.new }
 
   describe '#write' do
-    subject { writer.write(exception, verbose: verbose) }
+    subject { writer.write(exception, verbose:) }
 
     let(:exception) do
       backtrace_generator = lambda do |af|

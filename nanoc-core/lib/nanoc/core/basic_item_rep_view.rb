@@ -57,7 +57,7 @@ module Nanoc
       # @return [String] The item rep’s path.
       def path(snapshot: :last)
         @context.dependency_tracker.bounce(_unwrap.item, path: true)
-        @item_rep.path(snapshot: snapshot)
+        @item_rep.path(snapshot:)
       end
 
       # Returns the item that this item rep belongs to.

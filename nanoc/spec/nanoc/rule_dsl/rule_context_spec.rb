@@ -9,9 +9,9 @@ shared_examples 'a rule context' do
 
   let(:site) do
     Nanoc::Core::Site.new(
-      config: config,
+      config:,
       code_snippets: [],
-      data_source: data_source,
+      data_source:,
     )
   end
 
@@ -24,7 +24,7 @@ shared_examples 'a rule context' do
   let(:compilation_context) { double(:compilation_context) }
 
   let(:view_context) do
-    Nanoc::Core::ViewContextForPreCompilation.new(items: items)
+    Nanoc::Core::ViewContextForPreCompilation.new(items:)
   end
 
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker::Null.new }
@@ -141,7 +141,7 @@ end
 
 describe(Nanoc::RuleDSL::RoutingRuleContext) do
   subject(:rule_context) do
-    described_class.new(rep: rep, site: site, view_context: view_context)
+    described_class.new(rep:, site:, view_context:)
   end
 
   let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
@@ -152,14 +152,14 @@ describe(Nanoc::RuleDSL::RoutingRuleContext) do
 
   let(:site) do
     Nanoc::Core::Site.new(
-      config: config,
+      config:,
       code_snippets: [],
-      data_source: data_source,
+      data_source:,
     )
   end
 
   let(:view_context) do
-    Nanoc::Core::ViewContextForPreCompilation.new(items: items)
+    Nanoc::Core::ViewContextForPreCompilation.new(items:)
   end
 
   it_behaves_like 'a rule context'
@@ -167,7 +167,7 @@ end
 
 describe(Nanoc::RuleDSL::CompilationRuleContext) do
   subject(:rule_context) do
-    described_class.new(rep: rep, site: site, recorder: recorder, view_context: view_context)
+    described_class.new(rep:, site:, recorder:, view_context:)
   end
 
   let(:item_identifier) { Nanoc::Core::Identifier.new('/foo.md') }
@@ -179,9 +179,9 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
 
   let(:site) do
     Nanoc::Core::Site.new(
-      config: config,
+      config:,
       code_snippets: [],
-      data_source: data_source,
+      data_source:,
     )
   end
 
@@ -192,7 +192,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
   let(:view_context) do
-    Nanoc::Core::ViewContextForPreCompilation.new(items: items)
+    Nanoc::Core::ViewContextForPreCompilation.new(items:)
   end
 
   let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
@@ -224,7 +224,7 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
   end
 
   describe '#snapshot' do
-    subject { rule_context.snapshot(snapshot_name, path: path) }
+    subject { rule_context.snapshot(snapshot_name, path:) }
 
     let(:snapshot_name) { :for_snippet }
     let(:path) { '/foo.html' }

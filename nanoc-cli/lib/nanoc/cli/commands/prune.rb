@@ -23,7 +23,7 @@ module Nanoc::CLI::Commands
       reps = res.fetch(:reps)
 
       listener_class = Nanoc::CLI::CompileListeners::FileActionPrinter
-      listener = listener_class.new(reps: reps)
+      listener = listener_class.new(reps:)
       listener.start_safely
 
       if options.key?(:yes)

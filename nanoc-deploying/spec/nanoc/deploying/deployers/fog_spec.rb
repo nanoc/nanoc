@@ -16,7 +16,7 @@ describe Nanoc::Deploying::Deployers::Fog, stdio: true do
   let(:config) do
     {
       bucket: 'bucky',
-      provider: provider,
+      provider:,
       local_root: 'remote',
     }
   end

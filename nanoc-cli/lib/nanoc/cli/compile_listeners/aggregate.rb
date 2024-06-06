@@ -36,7 +36,7 @@ module Nanoc::CLI::CompileListeners
       @listeners =
         @listener_classes
         .select { |klass| klass.enable_for?(@command_runner, @site) }
-        .map    { |klass| klass.new(reps: reps) }
+        .map    { |klass| klass.new(reps:) }
 
       @listeners.each(&:start_safely)
     end

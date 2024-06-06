@@ -58,7 +58,7 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
   end
 
   describe '#handle_error' do
-    subject { error_handler.handle_error(error, exit_on_error: exit_on_error) }
+    subject { error_handler.handle_error(error, exit_on_error:) }
 
     let(:error) do
       raise 'Bewm'

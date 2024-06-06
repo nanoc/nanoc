@@ -16,7 +16,7 @@ module Nanoc
       #
       # @return [String] The content of the given rep at the given snapshot.
       def compiled_content(rep: :default, snapshot: nil)
-        reps.fetch(rep).compiled_content(snapshot: snapshot)
+        reps.fetch(rep).compiled_content(snapshot:)
       end
 
       # Returns the item path, as used when being linked to. It starts
@@ -33,7 +33,7 @@ module Nanoc
       #
       # @return [String] The item’s path.
       def path(rep: :default, snapshot: :last)
-        reps.fetch(rep).path(snapshot: snapshot)
+        reps.fetch(rep).path(snapshot:)
       end
 
       # Returns the representations of this item.

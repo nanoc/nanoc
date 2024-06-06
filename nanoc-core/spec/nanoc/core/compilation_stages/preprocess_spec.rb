@@ -3,10 +3,10 @@
 describe Nanoc::Core::CompilationStages::Preprocess do
   let(:stage) do
     described_class.new(
-      action_provider: action_provider,
-      site: site,
-      dependency_store: dependency_store,
-      checksum_store: checksum_store,
+      action_provider:,
+      site:,
+      dependency_store:,
+      checksum_store:,
     )
   end
 
@@ -22,9 +22,9 @@ describe Nanoc::Core::CompilationStages::Preprocess do
 
   let(:site) do
     Nanoc::Core::Site.new(
-      config: config,
+      config:,
       code_snippets: [],
-      data_source: data_source,
+      data_source:,
     )
   end
 
@@ -38,7 +38,7 @@ describe Nanoc::Core::CompilationStages::Preprocess do
   end
 
   let(:checksum_store) do
-    Nanoc::Core::ChecksumStore.new(config: config, objects: items.to_a + layouts.to_a)
+    Nanoc::Core::ChecksumStore.new(config:, objects: items.to_a + layouts.to_a)
   end
 
   describe '#run' do

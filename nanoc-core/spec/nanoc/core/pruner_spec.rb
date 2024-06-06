@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::Pruner, stdio: true do
-  subject(:pruner) { described_class.new(config, reps, dry_run: dry_run, exclude: exclude) }
+  subject(:pruner) { described_class.new(config, reps, dry_run:, exclude:) }
 
   let(:config) { Nanoc::Core::Configuration.new(hash: {}, dir: Dir.getwd).with_defaults }
   let(:dry_run) { false }

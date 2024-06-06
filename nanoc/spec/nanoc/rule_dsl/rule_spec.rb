@@ -58,10 +58,10 @@ shared_examples 'Rule#apply_to' do
   let(:item) { Nanoc::Core::Item.new('', {}, '/foo.md') }
   let(:rep) { Nanoc::Core::ItemRep.new(item, :amazings) }
 
-  let(:site) { Nanoc::Core::Site.new(config: config, data_source: data_source, code_snippets: []) }
+  let(:site) { Nanoc::Core::Site.new(config:, data_source:, code_snippets: []) }
   let(:data_source) { Nanoc::Core::InMemoryDataSource.new(items, layouts) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd) }
-  let(:view_context) { Nanoc::Core::ViewContextForPreCompilation.new(items: items) }
+  let(:view_context) { Nanoc::Core::ViewContextForPreCompilation.new(items:) }
   let(:items) { Nanoc::Core::ItemCollection.new(config, []) }
   let(:layouts) { Nanoc::Core::LayoutCollection.new(config, []) }
 
@@ -125,7 +125,7 @@ describe Nanoc::RuleDSL::RoutingRule do
   end
 
   describe '#apply_to' do
-    subject { rule.apply_to(rep, site: site, view_context: view_context) }
+    subject { rule.apply_to(rep, site:, view_context:) }
 
     it_behaves_like 'Rule#apply_to'
   end
@@ -142,7 +142,7 @@ describe Nanoc::RuleDSL::CompilationRule do
   it_behaves_like 'a generic rule'
 
   describe '#apply_to' do
-    subject { rule.apply_to(rep, site: site, recorder: recorder, view_context: view_context) }
+    subject { rule.apply_to(rep, site:, recorder:, view_context:) }
 
     let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
     let(:rep) { nil }

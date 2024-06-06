@@ -20,7 +20,7 @@ module Nanoc::RuleDSL
     ] => C::Any
     def apply_to(rep, site:, view_context:)
       context = Nanoc::RuleDSL::RoutingRuleContext.new(
-        rep: rep, site: site, view_context: view_context,
+        rep:, site:, view_context:,
       )
 
       context.instance_exec(matches(rep.item.identifier), &@block)

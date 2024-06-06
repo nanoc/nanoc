@@ -3,13 +3,13 @@
 describe Nanoc::Core::BasicOutdatednessChecker do
   let(:basic_outdatedness_checker) do
     described_class.new(
-      reps: reps,
-      site: site,
-      checksum_store: checksum_store,
-      checksums: checksums,
-      dependency_store: dependency_store,
-      action_sequence_store: action_sequence_store,
-      action_sequences: action_sequences,
+      reps:,
+      site:,
+      checksum_store:,
+      checksums:,
+      dependency_store:,
+      action_sequence_store:,
+      action_sequences:,
     )
   end
 
@@ -53,14 +53,14 @@ describe Nanoc::Core::BasicOutdatednessChecker do
 
   let(:site) do
     Nanoc::Core::Site.new(
-      config: config,
-      code_snippets: code_snippets,
+      config:,
+      code_snippets:,
       data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
     )
   end
 
   let(:action_sequence_store) do
-    Nanoc::Core::ActionSequenceStore.new(config: config)
+    Nanoc::Core::ActionSequenceStore.new(config:)
   end
 
   let(:old_action_sequence_for_item_rep) do
@@ -90,14 +90,14 @@ describe Nanoc::Core::BasicOutdatednessChecker do
   describe 'basic outdatedness reasons' do
     subject { basic_outdatedness_checker.outdatedness_status_for(obj).reasons.first }
 
-    let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config: config, objects: items.to_a + layouts.to_a) }
+    let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config:, objects: items.to_a + layouts.to_a) }
 
     let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
     before do
       checksum_store.add(item)
 
-      allow(site).to receive_messages(code_snippets: [], config: config)
+      allow(site).to receive_messages(code_snippets: [], config:)
     end
 
     context 'with item' do

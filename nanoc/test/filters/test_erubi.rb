@@ -27,7 +27,7 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
     # Create filter
     item = Nanoc::Core::Item.new('asdf', {}, '/about.md')
     item_rep = Nanoc::Core::ItemRep.new(item, :xml)
-    filter = ::Nanoc::Filters::Erubi.new(item: item, item_rep: item_rep)
+    filter = ::Nanoc::Filters::Erubi.new(item:, item_rep:)
 
     # Run filter
     raised = false
@@ -45,7 +45,7 @@ class Nanoc::Filters::ErubiTest < Nanoc::TestCase
     # Create filter
     item = Nanoc::Core::Item.new('asdf', {}, '/about.md')
     item_rep = Nanoc::Core::ItemRep.new(item, :xml)
-    filter = ::Nanoc::Filters::Erubi.new(item: item, item_rep: item_rep)
+    filter = ::Nanoc::Filters::Erubi.new(item:, item_rep:)
 
     # Run filter
     raised = false

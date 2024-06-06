@@ -12,7 +12,7 @@ module Nanoc::RuleDSL
 
       action_sequence_calculator =
         Nanoc::RuleDSL::ActionSequenceCalculator.new(
-          rules_collection: rules_collection, site: site,
+          rules_collection:, site:,
         )
 
       action_provider = new(rules_collection, action_sequence_calculator)
@@ -61,10 +61,10 @@ module Nanoc::RuleDSL
 
       view_context =
         Nanoc::Core::ViewContextForCompilation.new(
-          reps: reps,
+          reps:,
           items: site.items,
-          dependency_tracker: dependency_tracker,
-          compilation_context: compiler.compilation_context(reps: reps),
+          dependency_tracker:,
+          compilation_context: compiler.compilation_context(reps:),
           compiled_content_store: Nanoc::Core::CompiledContentStore.new,
         )
       ctx = new_postprocessor_context(site, view_context)

@@ -11,7 +11,7 @@ module Nanoc
 
         contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
         def run(rep, is_outdated:, &block)
-          fiber = fiber_for(rep, is_outdated: is_outdated, &block)
+          fiber = fiber_for(rep, is_outdated:, &block)
           while fiber.alive?
             res = fiber.resume
 

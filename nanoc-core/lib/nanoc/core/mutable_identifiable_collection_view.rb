@@ -10,7 +10,7 @@ module Nanoc
       # @yieldreturn [Boolean]
       #
       # @return [self]
-      def delete_if(&_block)
+      def delete_if(&)
         @objects = @objects.reject { |o| yield(view_class.new(o, @context)) }
         self
       end

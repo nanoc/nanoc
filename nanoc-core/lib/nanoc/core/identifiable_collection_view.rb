@@ -49,10 +49,10 @@ module Nanoc
       # @param [String, Regex] arg
       #
       # @return [Enumerable]
-      def find_all(arg = NOTHING, &block)
+      def find_all(arg = NOTHING, &)
         if NOTHING.equal?(arg)
           @context.dependency_tracker.bounce(_unwrap, raw_content: true)
-          return @objects.map { |i| view_class.new(i, @context) }.select(&block)
+          return @objects.map { |i| view_class.new(i, @context) }.select(&)
         end
 
         prop_attribute =

@@ -25,7 +25,7 @@ module Nanoc
       #
       # @return [self]
       def create(content, attributes, identifier, binary: false, filename: nil)
-        content = Nanoc::Core::Content.create(content, binary: binary, filename: filename)
+        content = Nanoc::Core::Content.create(content, binary:, filename:)
         @objects = @objects.add(Nanoc::Core::Item.new(content, attributes, identifier))
         self
       end

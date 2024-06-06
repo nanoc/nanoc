@@ -39,7 +39,7 @@ module Nanoc::CLI::Commands
       listener = Nanoc::CLI::CompileListeners::Aggregate.new(
         command_runner: self,
         site: @site,
-        compiler: compiler,
+        compiler:,
       )
       listener.run_while do
         compiler.run_until_end

@@ -3,7 +3,7 @@
 describe Nanoc::Core::CompilationPhases::Resume do
   subject(:phase) do
     described_class.new(
-      wrapped: wrapped,
+      wrapped:,
     )
   end
 

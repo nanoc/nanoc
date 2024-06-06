@@ -195,8 +195,8 @@ module Nanoc
       contract C::None => Hash
       def to_h
         {
-          raw_content: raw_content,
-          attributes: attributes,
+          raw_content:,
+          attributes:,
           compiled_content: compiled_content?,
           path: path?,
         }

@@ -80,13 +80,13 @@ describe Nanoc::Core::OutdatednessChecker do
 
   let(:outdatedness_checker) do
     described_class.new(
-      site: site,
-      checksum_store: checksum_store,
+      site:,
+      checksum_store:,
       checksums: checksums_after,
-      dependency_store: dependency_store,
-      action_sequence_store: action_sequence_store,
+      dependency_store:,
+      action_sequence_store:,
       action_sequences: action_sequences_after,
-      reps: reps,
+      reps:,
     )
   end
 

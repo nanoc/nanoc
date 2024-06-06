@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::CLI::CompileListeners::DebugPrinter, stdio: true do
-  let(:listener) { described_class.new(reps: reps) }
+  let(:listener) { described_class.new(reps:) }
 
   let(:reps) do
     Nanoc::Core::ItemRepRepo.new

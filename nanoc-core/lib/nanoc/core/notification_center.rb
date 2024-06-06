@@ -53,7 +53,7 @@ module Nanoc
       end
 
       def on(name, id = nil, &block)
-        @notifications[name] << { id: id, block: block }
+        @notifications[name] << { id:, block: }
       end
 
       def remove(name, id)
@@ -75,8 +75,8 @@ module Nanoc
           @_instance ||= new.tap(&:start)
         end
 
-        def on(name, id = nil, &block)
-          instance.on(name, id, &block)
+        def on(name, id = nil, &)
+          instance.on(name, id, &)
         end
 
         def post(name, *args)

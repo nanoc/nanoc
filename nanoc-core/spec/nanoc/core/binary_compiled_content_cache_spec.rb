@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::BinaryCompiledContentCache do
-  let(:cache) { described_class.new(config: config) }
+  let(:cache) { described_class.new(config:) }
 
   let(:items) { [item] }
 
@@ -76,7 +76,7 @@ describe Nanoc::Core::BinaryCompiledContentCache do
   end
 
   describe '#prune' do
-    subject { cache.prune(items: items) }
+    subject { cache.prune(items:) }
 
     before do
       cache[item_rep] = { last: content }

@@ -49,10 +49,10 @@ module Nanoc
           @dependency_store.record_dependency(
             @stack.last,
             obj,
-            raw_content: raw_content,
-            attributes: attributes,
-            compiled_content: compiled_content,
-            path: path,
+            raw_content:,
+            attributes:,
+            compiled_content:,
+            path:,
           )
         end
 
@@ -66,7 +66,7 @@ module Nanoc
 
       contract C_OBJ, C_ARGS => C::Any
       def bounce(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
-        enter(obj, raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
+        enter(obj, raw_content:, attributes:, compiled_content:, path:)
         exit
       end
 

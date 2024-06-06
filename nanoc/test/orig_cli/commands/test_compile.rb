@@ -178,15 +178,15 @@ class Nanoc::CLI::Commands::CompileTest < Nanoc::TestCase
     rescue SystemExit
     end
 
-    listener = Nanoc::CLI::CompileListeners::FileActionPrinter.new(reps: reps)
+    listener = Nanoc::CLI::CompileListeners::FileActionPrinter.new(reps:)
 
     def listener.log(level, action, path, duration)
       @events ||= []
       @events << {
-        level: level,
-        action: action,
-        path: path,
-        duration: duration,
+        level:,
+        action:,
+        path:,
+        duration:,
       }
     end
 

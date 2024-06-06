@@ -17,13 +17,13 @@ describe Nanoc::Core::OutdatednessRules do
 
     let(:basic_outdatedness_checker) do
       Nanoc::Core::BasicOutdatednessChecker.new(
-        site: site,
-        checksum_store: checksum_store,
-        checksums: checksums,
-        dependency_store: dependency_store,
-        action_sequence_store: action_sequence_store,
-        action_sequences: action_sequences,
-        reps: reps,
+        site:,
+        checksum_store:,
+        checksums:,
+        dependency_store:,
+        action_sequence_store:,
+        action_sequences:,
+        reps:,
       )
     end
 
@@ -37,8 +37,8 @@ describe Nanoc::Core::OutdatednessRules do
 
     let(:site) do
       Nanoc::Core::Site.new(
-        config: config,
-        code_snippets: code_snippets,
+        config:,
+        code_snippets:,
         data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
       )
     end
@@ -46,8 +46,8 @@ describe Nanoc::Core::OutdatednessRules do
     let(:action_sequences) { {} }
     let(:reps) { Nanoc::Core::ItemRepRepo.new }
     let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
-    let(:action_sequence_store) { Nanoc::Core::ActionSequenceStore.new(config: config) }
-    let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config: config, objects: objects) }
+    let(:action_sequence_store) { Nanoc::Core::ActionSequenceStore.new(config:) }
+    let(:checksum_store) { Nanoc::Core::ChecksumStore.new(config:, objects:) }
 
     let(:checksums) do
       checksums = {}
@@ -80,7 +80,7 @@ describe Nanoc::Core::OutdatednessRules do
     let(:layouts) { Nanoc::Core::LayoutCollection.new(config, [layout]) }
 
     before do
-      allow(site).to receive_messages(code_snippets: code_snippets, config: config)
+      allow(site).to receive_messages(code_snippets:, config:)
     end
 
     describe 'CodeSnippetsModified' do
@@ -162,7 +162,7 @@ describe Nanoc::Core::OutdatednessRules do
       context 'path inside output dir not inside current directory' do
         let(:path) { output_dir + '/foo.txt' }
 
-        let(:config) { super().merge(output_dir: output_dir) }
+        let(:config) { super().merge(output_dir:) }
         let(:output_dir) { Dir.mktmpdir('nanoc-outdatendess-rules-spec') }
 
         before { item_rep.raw_paths = { donkey: [path] } }

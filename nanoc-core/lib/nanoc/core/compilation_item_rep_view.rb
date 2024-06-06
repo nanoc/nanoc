@@ -24,7 +24,7 @@ module Nanoc
       def raw_path(snapshot: :last)
         @context.dependency_tracker.bounce(_unwrap.item, compiled_content: true)
 
-        res = @item_rep.raw_path(snapshot: snapshot)
+        res = @item_rep.raw_path(snapshot:)
 
         unless @item_rep.compiled?
           Fiber.yield(Nanoc::Core::Errors::UnmetDependency.new(@item_rep, snapshot))
@@ -50,7 +50,7 @@ module Nanoc
       # @return [String] The content at the given snapshot.
       def compiled_content(snapshot: nil)
         @context.dependency_tracker.bounce(_unwrap.item, compiled_content: true)
-        @context.compiled_content_store.compiled_content(rep: _unwrap, snapshot: snapshot)
+        @context.compiled_content_store.compiled_content(rep: _unwrap, snapshot:)
       end
     end
   end

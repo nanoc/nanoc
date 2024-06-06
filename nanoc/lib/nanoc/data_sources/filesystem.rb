@@ -248,8 +248,8 @@ module Nanoc::DataSources
     def extra_attributes_for(content_filename, meta_filename)
       {
         filename: content_filename,
-        content_filename: content_filename,
-        meta_filename: meta_filename,
+        content_filename:,
+        meta_filename:,
         extension: content_filename ? ext_of(content_filename)[1..] : nil,
         mtime: mtime_of(content_filename, meta_filename),
       }

@@ -72,7 +72,7 @@ module Nanoc
         # Load given environment configuration
         env_config = @wrapped[ENVIRONMENTS_CONFIG_KEY].fetch(env_name.to_sym, {})
 
-        self.class.new(hash: @wrapped, dir: @dir, env_name: env_name).merge(env_config)
+        self.class.new(hash: @wrapped, dir: @dir, env_name:).merge(env_config)
       end
 
       contract C::None => Hash
@@ -102,7 +102,7 @@ module Nanoc
       end
 
       contract C::Any, C::Maybe[C::Any], C::Maybe[C::Func[C::None => C::Any]] => C::Any
-      def fetch(key, fallback = Nanoc::Core::UNDEFINED, &_block)
+      def fetch(key, fallback = Nanoc::Core::UNDEFINED, &)
         @wrapped.fetch(key) do
           if !Nanoc::Core::UNDEFINED.equal?(fallback)
             fallback
@@ -136,8 +136,8 @@ module Nanoc
       end
 
       contract C::Func[C::Any, C::Any => C::Any] => self
-      def each(&block)
-        @wrapped.each(&block)
+      def each(&)
+        @wrapped.each(&)
         self
       end
 

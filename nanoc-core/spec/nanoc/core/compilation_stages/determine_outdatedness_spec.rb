@@ -3,9 +3,9 @@
 describe Nanoc::Core::CompilationStages::DetermineOutdatedness do
   let(:stage) do
     described_class.new(
-      reps: reps,
-      outdatedness_checker: outdatedness_checker,
-      outdatedness_store: outdatedness_store,
+      reps:,
+      outdatedness_checker:,
+      outdatedness_store:,
     )
   end
 
@@ -18,7 +18,7 @@ describe Nanoc::Core::CompilationStages::DetermineOutdatedness do
   end
 
   let(:outdatedness_store) do
-    Nanoc::Core::OutdatednessStore.new(config: config)
+    Nanoc::Core::OutdatednessStore.new(config:)
   end
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }

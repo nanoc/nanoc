@@ -64,7 +64,7 @@ module Nanoc
 
       contract C::KeywordArgs[rep: Nanoc::Core::ItemRep, snapshot: C::Optional[C::Maybe[Symbol]]] => String
       def compiled_content(rep:, snapshot: nil)
-        snapshot_content = raw_compiled_content(rep: rep, snapshot: snapshot)
+        snapshot_content = raw_compiled_content(rep:, snapshot:)
 
         if snapshot_content.binary?
           raise Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem.new(rep)

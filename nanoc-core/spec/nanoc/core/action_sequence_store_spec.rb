@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::ActionSequenceStore do
-  let(:store) { described_class.new(config: config) }
+  let(:store) { described_class.new(config:) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 

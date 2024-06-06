@@ -3,7 +3,7 @@
 module Nanoc
   module Core
     class SiteLoader
-      ENCODING_REGEX = /\A#\s+(-\*-\s+)?(en)?coding: (?<encoding>[^\s]+)(\s+-\*-\s*)?\n{0,2}/.freeze
+      ENCODING_REGEX = /\A#\s+(-\*-\s+)?(en)?coding: (?<encoding>[^\s]+)(\s+-\*-\s*)?\n{0,2}/
       # @return [Boolean]
       def self.cwd_is_nanoc_site?
         Nanoc::Core::ConfigLoader.cwd_is_nanoc_site?
@@ -33,13 +33,13 @@ module Nanoc
         data_source = gen_data_source_for_config(config)
 
         Nanoc::Core::Site.new(
-          config: config,
-          code_snippets: code_snippets,
-          data_source: data_source,
+          config:,
+          code_snippets:,
+          data_source:,
         )
       end
 
-      def with_data_sources(config, &_block)
+      def with_data_sources(config, &)
         data_sources = create_data_sources(config)
 
         begin

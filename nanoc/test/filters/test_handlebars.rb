@@ -20,9 +20,9 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
 
       # Create filter
       assigns = {
-        item: item,
-        layout: layout,
-        config: config,
+        item:,
+        layout:,
+        config:,
         content: 'No Payne No Gayne',
       }
       filter = ::Nanoc::Filters::Handlebars.new(assigns)
@@ -51,7 +51,7 @@ class Nanoc::Filters::HandlebarsTest < Nanoc::TestCase
 
       # Create filter
       assigns = {
-        item: item,
+        item:,
         content: 'No Payne No Gayne',
       }
       filter = ::Nanoc::Filters::Handlebars.new(assigns)

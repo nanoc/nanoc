@@ -17,7 +17,7 @@ describe Nanoc::Core::OutdatednessStatus do
         ]
       end
 
-      let(:status) { described_class.new(reasons: reasons) }
+      let(:status) { described_class.new(reasons:) }
 
       it { is_expected.to eql(reasons) }
     end
@@ -30,7 +30,7 @@ describe Nanoc::Core::OutdatednessStatus do
         ]
       end
 
-      let(:status) { described_class.new(reasons: reasons) }
+      let(:status) { described_class.new(reasons:) }
 
       it { is_expected.to eql(reasons) }
     end
@@ -48,7 +48,7 @@ describe Nanoc::Core::OutdatednessStatus do
         Nanoc::Core::DependencyProps.new(attributes: true)
       end
 
-      let(:status) { described_class.new(props: props) }
+      let(:status) { described_class.new(props:) }
 
       it { is_expected.to eql(Set.new([:attributes])) }
     end
@@ -57,7 +57,7 @@ describe Nanoc::Core::OutdatednessStatus do
   describe '#useful_to_apply' do
     subject { status.useful_to_apply?(rule) }
 
-    let(:status) { described_class.new(props: props) }
+    let(:status) { described_class.new(props:) }
     let(:props) { Nanoc::Core::DependencyProps.new }
 
     let(:rule) do

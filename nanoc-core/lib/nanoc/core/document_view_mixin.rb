@@ -48,7 +48,7 @@ module Nanoc
       end
 
       # @see Hash#fetch
-      def fetch(key, fallback = Nanoc::Core::UNDEFINED, &_block)
+      def fetch(key, fallback = Nanoc::Core::UNDEFINED, &)
         @context.dependency_tracker.bounce(_unwrap, attributes: [key])
 
         if _unwrap.attributes.key?(key)

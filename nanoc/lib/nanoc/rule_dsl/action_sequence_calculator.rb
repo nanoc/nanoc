@@ -62,7 +62,7 @@ module Nanoc::RuleDSL
       end
 
       recorder.snapshot(:raw)
-      rule.apply_to(rep, recorder: recorder, site: @site, view_context: view_context)
+      rule.apply_to(rep, recorder:, site: @site, view_context:)
       recorder.snapshot(:post) if recorder.any_layouts?
       recorder.snapshot(:last)
       recorder.snapshot(:pre) unless recorder.pre_snapshot?
@@ -70,7 +70,7 @@ module Nanoc::RuleDSL
       copy_paths_from_routing_rules(
         compact_snapshots(recorder.action_sequence),
         recorder.snapshots_for_which_to_skip_routing_rule,
-        rep: rep,
+        rep:,
       )
     end
 
@@ -98,7 +98,7 @@ module Nanoc::RuleDSL
           actions << action
         end
       end
-      Nanoc::Core::ActionSequence.new(actions: actions)
+      Nanoc::Core::ActionSequence.new(actions:)
     end
 
     def copy_paths_from_routing_rules(seq, snapshots_for_which_to_skip_routing_rule, rep:)
@@ -119,7 +119,7 @@ module Nanoc::RuleDSL
         # For each snapshot name, find a path from a routing rule. The routing
         # rule might return nil, so we need #compact.
         paths = action.snapshot_names.map { |sn| basic_path_from_rules_for(rep, sn) }.compact
-        action.update(snapshot_names: [], paths: paths)
+        action.update(snapshot_names: [], paths:)
       end
     end
 
@@ -136,7 +136,7 @@ module Nanoc::RuleDSL
         routing_rule.apply_to(
           rep,
           site: @site,
-          view_context: view_context,
+          view_context:,
         )
 
       if basic_path && !basic_path.start_with?('/')

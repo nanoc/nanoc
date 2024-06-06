@@ -29,7 +29,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     </report>
   EOS
 
-  SAMPLE_XML_OUT = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m.freeze
+  SAMPLE_XML_OUT = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m
 
   SAMPLE_XSL_WITH_PARAMS = <<~EOS
     <?xml version="1.0" encoding="utf-8"?>
@@ -56,7 +56,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     </report>
   EOS
 
-  SAMPLE_XML_OUT_WITH_PARAMS = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>bar</h1>\s*</body>\s*</html>\s*\Z}m.freeze
+  SAMPLE_XML_OUT_WITH_PARAMS = %r{\A<\?xml version="1.0" encoding="utf-8"\?>\s*<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>bar</h1>\s*</body>\s*</html>\s*\Z}m
 
   SAMPLE_XSL_WITH_OMIT_XML_DECL = <<~EOS
     <?xml version="1.0" encoding="utf-8"?>
@@ -83,7 +83,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     </report>
   EOS
 
-  SAMPLE_XML_OUT_WITH_OMIT_XML_DECL = %r{\A<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m.freeze
+  SAMPLE_XML_OUT_WITH_OMIT_XML_DECL = %r{\A<html>\s*<head>\s*<title>My Report</title>\s*</head>\s*<body>\s*<h1>My Report</h1>\s*</body>\s*</html>\s*\Z}m
 
   def setup
     super
@@ -109,12 +109,12 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 
     site =
       Nanoc::Core::Site.new(
-        config: config,
+        config:,
         code_snippets: [],
         data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
       )
 
-    compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config: config)
+    compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config:)
     compiled_content_store = Nanoc::Core::CompiledContentStore.new
 
     action_provider =
@@ -128,18 +128,18 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 
     compilation_context =
       Nanoc::Core::CompilationContext.new(
-        action_provider: action_provider,
-        reps: reps,
-        site: site,
-        compiled_content_cache: compiled_content_cache,
-        compiled_content_store: compiled_content_store,
+        action_provider:,
+        reps:,
+        site:,
+        compiled_content_cache:,
+        compiled_content_store:,
       )
 
     Nanoc::Core::ViewContextForCompilation.new(
       reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker: @dependency_tracker,
-      compilation_context: compilation_context,
+      compilation_context:,
       compiled_content_store: Nanoc::Core::CompiledContentStore.new,
     )
   end
@@ -154,8 +154,8 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 
       # Create an instance of the filter
       assigns = {
-        item: item,
-        layout: layout,
+        item:,
+        layout:,
         content: item.raw_content,
       }
       filter = ::Nanoc::Filters::XSL.new(assigns)
@@ -182,8 +182,8 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 
       # Create an instance of the filter
       assigns = {
-        item: item,
-        layout: layout,
+        item:,
+        layout:,
         content: item.raw_content,
       }
       filter = ::Nanoc::Filters::XSL.new(assigns)
@@ -210,8 +210,8 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
 
       # Create an instance of the filter
       assigns = {
-        item: item,
-        layout: layout,
+        item:,
+        layout:,
         content: item.raw_content,
       }
       filter = ::Nanoc::Filters::XSL.new(assigns)

@@ -20,7 +20,7 @@ module Nanoc::RuleDSL
     def initialize(rules_collection, config)
       @rules_collection = rules_collection
       @config = config
-      super({ config: config })
+      super({ config: })
     end
 
     # Creates a preprocessor block that will be executed after all data is

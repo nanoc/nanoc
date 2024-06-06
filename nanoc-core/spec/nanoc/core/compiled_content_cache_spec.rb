@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::CompiledContentCache do
-  let(:cache) { described_class.new(config: config) }
+  let(:cache) { described_class.new(config:) }
 
   let(:items) { [item] }
 

@@ -3,14 +3,14 @@
 describe Nanoc::Core::CompilationPhases::Cache do
   subject(:phase) do
     described_class.new(
-      compiled_content_cache: compiled_content_cache,
-      compiled_content_store: compiled_content_store,
-      wrapped: wrapped,
+      compiled_content_cache:,
+      compiled_content_store:,
+      wrapped:,
     )
   end
 
   let(:compiled_content_cache) do
-    Nanoc::Core::CompiledContentCache.new(config: config)
+    Nanoc::Core::CompiledContentCache.new(config:)
   end
 
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
@@ -35,7 +35,7 @@ describe Nanoc::Core::CompilationPhases::Cache do
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
 
   describe '#run' do
-    subject { phase.call(rep, is_outdated: is_outdated) }
+    subject { phase.call(rep, is_outdated:) }
 
     let(:is_outdated) { raise 'override me' }
 
@@ -50,7 +50,7 @@ describe Nanoc::Core::CompilationPhases::Cache do
 
     shared_examples 'calls wrapped' do
       it 'delegates to wrapped' do
-        expect(wrapped).to receive(:run).with(rep, is_outdated: is_outdated)
+        expect(wrapped).to receive(:run).with(rep, is_outdated:)
         subject
       end
 
