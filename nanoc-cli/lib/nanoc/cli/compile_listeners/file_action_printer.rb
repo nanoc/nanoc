@@ -55,6 +55,7 @@ module Nanoc::CLI::CompileListeners
             :low
           end
 
+        # Make path relative (to current working directory)
         # FIXME: do not depend on working directory
         if path.start_with?(Dir.getwd)
           path = path[(Dir.getwd.size + 1)..path.size]
@@ -64,10 +65,22 @@ module Nanoc::CLI::CompileListeners
       end
 
       on(:file_pruned) do |path|
+        # Make path relative (to current working directory)
+        # FIXME: do not depend on working directory
+        if path.start_with?(Dir.getwd)
+          path = path[(Dir.getwd.size + 1)..path.size]
+        end
+
         Nanoc::CLI::Logger.instance.file(:high, :delete, path)
       end
 
       on(:file_listed_for_pruning) do |path|
+        # Make path relative (to current working directory)
+        # FIXME: do not depend on working directory
+        if path.start_with?(Dir.getwd)
+          path = path[(Dir.getwd.size + 1)..path.size]
+        end
+
         Nanoc::CLI::Logger.instance.file(:high, :delete, '(dry run) ' + path)
       end
     end
