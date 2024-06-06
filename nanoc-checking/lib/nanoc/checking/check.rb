@@ -53,7 +53,7 @@ module Nanoc
       end
 
       def initialize(context)
-        super(context)
+        super
 
         @issues = Set.new
       end

@@ -799,6 +799,15 @@ RSpec/EmptyOutput: # new in 2.29
 RSpec/UndescriptiveLiteralsDescription: # new in 2.29
   Enabled: true
 
+Style/SendWithLiteralMethodName: # new in 1.64
+  Enabled: true
+
+Style/SuperArguments: # new in 1.64
+  Enabled: true
+
+RSpec/ExpectInLet: # new in 2.30
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.

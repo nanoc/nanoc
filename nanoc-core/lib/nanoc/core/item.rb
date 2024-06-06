@@ -8,7 +8,7 @@ module Nanoc
       end
 
       def identifier=(new_identifier)
-        super(new_identifier)
+        super
 
         # Invalidate memoization cache
         @_reference = nil
