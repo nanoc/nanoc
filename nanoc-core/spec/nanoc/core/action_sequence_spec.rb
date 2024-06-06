@@ -8,7 +8,7 @@ describe Nanoc::Core::ActionSequence do
 
   describe '#initialize' do
     context 'with actions' do
-      subject { described_class.new(actions: actions) }
+      subject { described_class.new(actions:) }
 
       let(:actions) do
         [

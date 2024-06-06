@@ -26,8 +26,8 @@ module Nanoc
           end
 
           {
-            reps: reps,
-            action_sequences: action_sequences,
+            reps:,
+            action_sequences:,
           }
         end
       end

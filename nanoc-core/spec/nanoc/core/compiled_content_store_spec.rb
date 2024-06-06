@@ -139,7 +139,7 @@ describe Nanoc::Core::CompiledContentStore do
     end
 
     context 'snapshot nil' do
-      subject { repo.compiled_content(rep: rep, snapshot: nil) }
+      subject { repo.compiled_content(rep:, snapshot: nil) }
 
       let(:expected_snapshot_name) { :last }
 
@@ -167,7 +167,7 @@ describe Nanoc::Core::CompiledContentStore do
     end
 
     context 'snapshot not specified' do
-      subject { repo.compiled_content(rep: rep) }
+      subject { repo.compiled_content(rep:) }
 
       let(:expected_snapshot_name) { :last }
 
@@ -195,7 +195,7 @@ describe Nanoc::Core::CompiledContentStore do
     end
 
     context 'snapshot :pre specified' do
-      subject { repo.compiled_content(rep: rep, snapshot: :pre) }
+      subject { repo.compiled_content(rep:, snapshot: :pre) }
 
       let(:expected_snapshot_name) { :pre }
 
@@ -203,7 +203,7 @@ describe Nanoc::Core::CompiledContentStore do
     end
 
     context 'snapshot :post specified' do
-      subject { repo.compiled_content(rep: rep, snapshot: :post) }
+      subject { repo.compiled_content(rep:, snapshot: :post) }
 
       let(:expected_snapshot_name) { :post }
 
@@ -211,7 +211,7 @@ describe Nanoc::Core::CompiledContentStore do
     end
 
     context 'snapshot :last specified' do
-      subject { repo.compiled_content(rep: rep, snapshot: :last) }
+      subject { repo.compiled_content(rep:, snapshot: :last) }
 
       let(:expected_snapshot_name) { :last }
 
@@ -219,7 +219,7 @@ describe Nanoc::Core::CompiledContentStore do
     end
 
     context 'snapshot :donkey specified' do
-      subject { repo.compiled_content(rep: rep, snapshot: :donkey) }
+      subject { repo.compiled_content(rep:, snapshot: :donkey) }
 
       let(:expected_snapshot_name) { :donkey }
 

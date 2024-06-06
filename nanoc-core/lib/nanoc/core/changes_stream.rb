@@ -38,16 +38,16 @@ module Nanoc
         @listener&.to_stop&.call
       end
 
-      def map(&block)
-        self.class.new(enum: @enum.map(&block))
+      def map(&)
+        self.class.new(enum: @enum.map(&))
       end
 
       def to_enum
         @enum
       end
 
-      def each(&block)
-        @enum.each(&block)
+      def each(&)
+        @enum.each(&)
         nil
       end
     end

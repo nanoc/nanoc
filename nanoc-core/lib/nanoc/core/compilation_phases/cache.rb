@@ -9,7 +9,7 @@ module Nanoc
         include Nanoc::Core::ContractsSupport
 
         def initialize(wrapped:, compiled_content_cache:, compiled_content_store:)
-          super(wrapped: wrapped)
+          super(wrapped:)
 
           @compiled_content_cache = compiled_content_cache
           @compiled_content_store = compiled_content_store
@@ -17,7 +17,7 @@ module Nanoc
 
         contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
         def run(rep, is_outdated:)
-          if can_reuse_content_for_rep?(rep, is_outdated: is_outdated)
+          if can_reuse_content_for_rep?(rep, is_outdated:)
             # If cached content can be used for this item rep, do so, and skip
             # recalculation of the item rep compiled content.
             Nanoc::Core::NotificationCenter.post(:cached_content_used, rep)

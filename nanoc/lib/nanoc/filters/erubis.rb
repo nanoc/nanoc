@@ -22,7 +22,7 @@ module Nanoc::Filters
       assigns_binding = context.get_binding(&proc)
 
       # Get result
-      erubis_with_erbout.new(content, filename: filename).result(assigns_binding)
+      erubis_with_erbout.new(content, filename:).result(assigns_binding)
     end
 
     private

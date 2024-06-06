@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::TextualCompiledContentCache do
-  let(:cache) { described_class.new(config: config) }
+  let(:cache) { described_class.new(config:) }
 
   let(:items) { [item] }
 
@@ -58,7 +58,7 @@ describe Nanoc::Core::TextualCompiledContentCache do
 
     context 'after pruning' do
       before do
-        cache.prune(items: items)
+        cache.prune(items:)
       end
 
       it 'has no content' do

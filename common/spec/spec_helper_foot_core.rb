@@ -10,7 +10,7 @@ ensure
   Dir.chdir(here)
 end
 
-def __nanoc_core_with_env_vars(hash, &_block)
+def __nanoc_core_with_env_vars(hash, &)
   orig_env_hash = ENV.to_hash
   hash.each_pair { |k, v| ENV[k] = v }
   yield

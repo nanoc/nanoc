@@ -26,7 +26,7 @@ module Nanoc
       end
 
       def raw_path(snapshot: :last)
-        @item_rep.raw_path(snapshot: snapshot)
+        @item_rep.raw_path(snapshot:)
       end
     end
   end

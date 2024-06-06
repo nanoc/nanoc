@@ -2,7 +2,7 @@
 
 describe Nanoc::Core::Configuration do
   let(:hash) { { foo: 'bar' } }
-  let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+  let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
   describe '#key?' do
     subject { config.key?(key) }
@@ -30,7 +30,7 @@ describe Nanoc::Core::Configuration do
     end
 
     context 'env' do
-      let(:config) { described_class.new(hash: hash, dir: Dir.getwd, env_name: 'giraffes') }
+      let(:config) { described_class.new(hash:, dir: Dir.getwd, env_name: 'giraffes') }
 
       it 'retains the env name' do
         expect(subject.env_name).to eql('giraffes')
@@ -97,7 +97,7 @@ describe Nanoc::Core::Configuration do
       { foo: { bar: { baz: 1 } } }
     end
 
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
     it 'works like Hash#dig' do
       expect(subject).to eq(1)
@@ -106,7 +106,7 @@ describe Nanoc::Core::Configuration do
 
   describe '#fetch' do
     let(:hash) { { foo: 123 } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
     context 'key exists' do
       subject { config.fetch(:foo) }
@@ -137,7 +137,7 @@ describe Nanoc::Core::Configuration do
 
   describe '#[]' do
     let(:hash) { { foo: 123 } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
     context 'key exists' do
       subject { config[:foo] }
@@ -156,7 +156,7 @@ describe Nanoc::Core::Configuration do
     subject { config[:foo] = 234 }
 
     let(:hash) { { foo: 123 } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
     it 'modifies' do
       expect { subject }
@@ -170,7 +170,7 @@ describe Nanoc::Core::Configuration do
     subject { config.attributes }
 
     let(:hash) { { foo: 123 } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
     it 'returns itself as a hash' do
       expect(subject).to eq(foo: 123)
@@ -181,7 +181,7 @@ describe Nanoc::Core::Configuration do
     subject { config.without(:foo) }
 
     let(:hash) { { foo: 123, bar: 234 } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
     it 'returns a new config' do
       expect(subject).to be_a(described_class)
@@ -205,7 +205,7 @@ describe Nanoc::Core::Configuration do
     subject { config.update(other_hash) }
 
     let(:hash) { { foo: 100, bar: 200 } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
     let(:other_hash) { { bar: 300, qux: 400 } }
 
     it 'retains :foo' do
@@ -233,7 +233,7 @@ describe Nanoc::Core::Configuration do
     subject { config.freeze }
 
     let(:hash) { { foo: { bar: 100 } } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
     it 'freezes' do
       expect { subject }
@@ -254,7 +254,7 @@ describe Nanoc::Core::Configuration do
     subject { config.action_provider }
 
     let(:hash) { { foo: { bar: 100 } } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
     context 'no action_provider key present' do
       let(:hash) { { foo: 123 } }
@@ -276,7 +276,7 @@ describe Nanoc::Core::Configuration do
     subject { config.reference }
 
     let(:hash) { { foo: { bar: 100 } } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
     it { is_expected.to eq('configuration') }
   end
@@ -285,7 +285,7 @@ describe Nanoc::Core::Configuration do
     subject { config.inspect }
 
     let(:hash) { { foo: { bar: 100 } } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd) }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
     it { is_expected.to eq('<Nanoc::Core::Configuration>') }
   end
@@ -307,7 +307,7 @@ describe Nanoc::Core::Configuration do
     subject { config }
 
     let(:hash) { { foo: 'bar', environments: { test: { foo: 'test-bar' }, default: { foo: 'default-bar' } } } }
-    let(:config) { described_class.new(hash: hash, dir: Dir.getwd, env_name: env_name).with_environment }
+    let(:config) { described_class.new(hash:, dir: Dir.getwd, env_name:).with_environment }
 
     context 'with existing environment' do
       let(:env_name) { 'test' }

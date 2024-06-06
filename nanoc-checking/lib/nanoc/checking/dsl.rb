@@ -5,7 +5,7 @@ module Nanoc
     # @api private
     class DSL
       def self.from_file(filename, enabled_checks:)
-        dsl = new(enabled_checks: enabled_checks)
+        dsl = new(enabled_checks:)
         absolute_filename = File.expand_path(filename)
         dsl.instance_eval(File.read(filename), absolute_filename)
         dsl
@@ -15,9 +15,9 @@ module Nanoc
         @enabled_checks = enabled_checks
       end
 
-      def check(identifier, &block)
+      def check(identifier, &)
         klass = Class.new(::Nanoc::Checking::Check)
-        klass.send(:define_method, :run, &block)
+        klass.send(:define_method, :run, &)
         klass.send(:identifier, identifier)
       end
 

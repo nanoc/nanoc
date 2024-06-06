@@ -4,7 +4,7 @@ describe Nanoc::Checking::DSL do
   it 'can read from file' do
     File.write('Checks', "check :foo do\n\nend\ndeploy_check :bar\n")
     enabled_checks = []
-    described_class.from_file('Checks', enabled_checks: enabled_checks)
+    described_class.from_file('Checks', enabled_checks:)
 
     expect(Nanoc::Checking::Check.named(:foo)).not_to be_nil
     expect(enabled_checks).to eq([:bar])

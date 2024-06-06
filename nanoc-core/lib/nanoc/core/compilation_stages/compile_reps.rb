@@ -22,7 +22,7 @@ module Nanoc
           run_phase_stack do |phase_stack|
             selector.each do |rep|
               handle_errors_while(rep) do
-                compile_rep(rep, phase_stack: phase_stack, is_outdated: @outdatedness_store.include?(rep))
+                compile_rep(rep, phase_stack:, is_outdated: @outdatedness_store.include?(rep))
               end
             end
           end
@@ -46,7 +46,7 @@ module Nanoc
         end
 
         def compile_rep(rep, phase_stack:, is_outdated:)
-          phase_stack.call(rep, is_outdated: is_outdated)
+          phase_stack.call(rep, is_outdated:)
         end
 
         def run_phase_stack

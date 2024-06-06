@@ -12,7 +12,7 @@ module Nanoc::CLI
       if @disabled
         yield
       else
-        new.handle_while(exit_on_error: exit_on_error, &block)
+        new.handle_while(exit_on_error:, &block)
       end
     end
 
@@ -66,7 +66,7 @@ module Nanoc::CLI
         puts
         exit(1)
       when StandardError, ScriptError
-        handle_error(e, exit_on_error: exit_on_error)
+        handle_error(e, exit_on_error:)
       else
         raise e
       end
@@ -283,7 +283,7 @@ module Nanoc::CLI
     end
 
     def write_error_message(stream, error, verbose: false)
-      write_section_header(stream, 'Message', verbose: verbose)
+      write_section_header(stream, 'Message', verbose:)
 
       error = unwrap_error(error)
 
@@ -317,33 +317,33 @@ module Nanoc::CLI
     def write_item_rep(stream, error, verbose: false)
       return unless error.is_a?(Nanoc::Core::Errors::CompilationError)
 
-      write_section_header(stream, 'Item being compiled', verbose: verbose)
+      write_section_header(stream, 'Item being compiled', verbose:)
 
       item_rep = error.item_rep
       stream.puts "Current item: #{item_rep.item.identifier} (#{item_rep.name.inspect} representation)"
     end
 
     def write_stack_trace(stream, error, verbose: false)
-      write_section_header(stream, 'Stack trace', verbose: verbose)
+      write_section_header(stream, 'Stack trace', verbose:)
 
       writer = Nanoc::CLI::StackTraceWriter.new(stream)
-      writer.write(unwrap_error(error), verbose: verbose)
+      writer.write(unwrap_error(error), verbose:)
     end
 
     def write_version_information(stream, verbose: false)
-      write_section_header(stream, 'Version information', verbose: verbose)
+      write_section_header(stream, 'Version information', verbose:)
       stream.puts Nanoc::Core.version_information
     end
 
     def write_system_information(stream, verbose: false)
       uname = `uname -a`
-      write_section_header(stream, 'System information', verbose: verbose)
+      write_section_header(stream, 'System information', verbose:)
       stream.puts uname
     rescue Errno::ENOENT
     end
 
     def write_installed_gems(stream, verbose: false)
-      write_section_header(stream, 'Installed gems', verbose: verbose)
+      write_section_header(stream, 'Installed gems', verbose:)
       gems_and_versions.each do |g|
         stream.puts "  #{g.first} #{g.last.join(', ')}"
       end
@@ -351,13 +351,13 @@ module Nanoc::CLI
 
     def write_gemfile_lock(stream, verbose: false)
       if File.exist?('Gemfile.lock')
-        write_section_header(stream, 'Gemfile.lock', verbose: verbose)
+        write_section_header(stream, 'Gemfile.lock', verbose:)
         stream.puts File.read('Gemfile.lock')
       end
     end
 
     def write_load_paths(stream, verbose: false)
-      write_section_header(stream, 'Load paths', verbose: verbose)
+      write_section_header(stream, 'Load paths', verbose:)
       $LOAD_PATH.each_with_index do |i, index|
         stream.puts "  #{index}. #{i}"
       end

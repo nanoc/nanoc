@@ -2,7 +2,7 @@
 
 describe Nanoc::Core::ConfigView do
   let(:config) do
-    Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: hash)
+    Nanoc::Core::Configuration.new(dir: Dir.getwd, hash:)
   end
 
   let(:hash) { { output_dir: 'ootpoot/', amount: 9000, animal: 'donkey', foo: { bar: :baz } } }
@@ -13,9 +13,9 @@ describe Nanoc::Core::ConfigView do
     Nanoc::Core::ViewContextForCompilation.new(
       reps: Nanoc::Core::ItemRepRepo.new,
       items: Nanoc::Core::ItemCollection.new(config),
-      dependency_tracker: dependency_tracker,
-      compilation_context: compilation_context,
-      compiled_content_store: compiled_content_store,
+      dependency_tracker:,
+      compilation_context:,
+      compiled_content_store:,
     )
   end
 
@@ -23,20 +23,20 @@ describe Nanoc::Core::ConfigView do
 
   let(:compilation_context) do
     Nanoc::Core::CompilationContext.new(
-      action_provider: action_provider,
-      reps: reps,
-      site: site,
-      compiled_content_cache: compiled_content_cache,
-      compiled_content_store: compiled_content_store,
+      action_provider:,
+      reps:,
+      site:,
+      compiled_content_cache:,
+      compiled_content_store:,
     )
   end
 
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
-  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config: config) }
+  let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
 
   let(:site) do
     Nanoc::Core::Site.new(
-      config: config,
+      config:,
       code_snippets: [],
       data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
     )
@@ -157,7 +157,7 @@ describe Nanoc::Core::ConfigView do
 
     context 'when configuration is constructed with an env_name' do
       let(:config) do
-        Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: hash, env_name: 'produx10n')
+        Nanoc::Core::Configuration.new(dir: Dir.getwd, hash:, env_name: 'produx10n')
       end
 
       it { is_expected.to eql('produx10n') }
@@ -165,7 +165,7 @@ describe Nanoc::Core::ConfigView do
 
     context 'when configuration is not constructed with an env_name' do
       let(:config) do
-        Nanoc::Core::Configuration.new(dir: Dir.getwd, hash: hash)
+        Nanoc::Core::Configuration.new(dir: Dir.getwd, hash:)
       end
 
       it { is_expected.to be_nil }

@@ -33,7 +33,7 @@ describe Nanoc::Core::Content do
     context 'with binary: false param' do
       context 'with filename param' do
         let(:arg) { 'foo' }
-        let(:params) { { binary: false, filename: filename } }
+        let(:params) { { binary: false, filename: } }
 
         context 'with relative filename param' do
           let(:filename) { 'foo.md' }

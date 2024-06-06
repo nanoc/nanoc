@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::DataSources::Filesystem::Parser do
-  subject(:parser) { described_class.new(config: config) }
+  subject(:parser) { described_class.new(config:) }
 
   let(:config) do
     Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults

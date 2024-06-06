@@ -16,15 +16,15 @@ describe Nanoc::Core::Checksummer do
   end
 
   context 'Nanoc::RuleDSL::CompilationRuleContext' do
-    let(:obj) { Nanoc::RuleDSL::CompilationRuleContext.new(rep: rep, site: site, recorder: recorder, view_context: view_context) }
+    let(:obj) { Nanoc::RuleDSL::CompilationRuleContext.new(rep:, site:, recorder:, view_context:) }
 
     let(:rep) { Nanoc::Core::ItemRep.new(item, :pdf) }
     let(:item) { Nanoc::Core::Item.new('stuff', {}, '/stuff.md') }
 
     let(:site) do
       Nanoc::Core::Site.new(
-        config: config,
-        code_snippets: code_snippets,
+        config:,
+        code_snippets:,
         data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
       )
     end
@@ -35,7 +35,7 @@ describe Nanoc::Core::Checksummer do
     let(:layouts) { Nanoc::Core::LayoutCollection.new(config, [Nanoc::Core::Layout.new('asdf', {}, '/foo.md')]) }
 
     let(:recorder) { Nanoc::RuleDSL::ActionRecorder.new(rep) }
-    let(:view_context) { Nanoc::Core::ViewContextForPreCompilation.new(items: items) }
+    let(:view_context) { Nanoc::Core::ViewContextForPreCompilation.new(items:) }
 
     let(:expected_item_checksum) { 'Nanoc::Core::Item#2<content=Nanoc::Core::TextualContent#3<String#4<stuff>>,attributes=Hash#5<>,identifier=Nanoc::Core::Identifier#6<String#7</stuff.md>>>' }
     let(:expected_item_rep_checksum) { 'Nanoc::Core::ItemRep#9<item=@2,name=Symbol#10<pdf>>' }

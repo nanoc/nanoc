@@ -2,7 +2,7 @@
 
 describe Nanoc::Core::CompilationStages::CalculateChecksums do
   let(:stage) do
-    described_class.new(items: items, layouts: layouts, code_snippets: code_snippets, config: config)
+    described_class.new(items:, layouts:, code_snippets:, config:)
   end
 
   let(:config) do

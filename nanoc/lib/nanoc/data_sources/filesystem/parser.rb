@@ -35,7 +35,7 @@ class Nanoc::DataSources::Filesystem
       content = content_filename ? Tools.read_file(content_filename, config: @config) : ''
       meta_raw = Tools.read_file(meta_filename, config: @config)
       meta = parse_metadata(meta_raw, meta_filename)
-      ParseResult.new(content: content, attributes: meta, attributes_data: meta_raw)
+      ParseResult.new(content:, attributes: meta, attributes_data: meta_raw)
     end
 
     # @return [ParseResult]
@@ -54,7 +54,7 @@ class Nanoc::DataSources::Filesystem
       meta = parse_metadata(pieces[2], content_filename)
       content = pieces[4].sub(/\A\n/, '')
 
-      ParseResult.new(content: content, attributes: meta, attributes_data: pieces[2])
+      ParseResult.new(content:, attributes: meta, attributes_data: pieces[2])
     end
 
     # @return [Hash]

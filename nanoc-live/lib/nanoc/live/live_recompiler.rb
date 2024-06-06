@@ -94,9 +94,9 @@ module Nanoc
         puts 'Compiling site…'
         compiler = Nanoc::Core::Compiler.new_for(site)
         listener = Nanoc::CLI::CompileListeners::Aggregate.new(
-          command_runner: command_runner,
-          site: site,
-          compiler: compiler,
+          command_runner:,
+          site:,
+          compiler:,
         )
         listener.run_while do
           compiler.run_until_end
@@ -119,7 +119,7 @@ module Nanoc
         Nanoc::Core::ChangesStream.new do |cl|
           only = /(\/|\A)(nanoc\.yaml|config\.yaml|rules|Rules|rules\.rb|Rules\.rb)\z/
 
-          listener = Listen.to('.', only: only) { |*| cl.unknown }
+          listener = Listen.to('.', only:) { |*| cl.unknown }
           listener.start
           sleep
         end

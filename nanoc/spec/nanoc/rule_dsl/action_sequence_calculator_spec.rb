@@ -2,7 +2,7 @@
 
 describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
   subject(:action_sequence_calculator) do
-    described_class.new(site: site, rules_collection: rules_collection)
+    described_class.new(site:, rules_collection:)
   end
 
   let(:rules_collection) { Nanoc::RuleDSL::RulesCollection.new }
@@ -24,12 +24,12 @@ describe(Nanoc::RuleDSL::ActionSequenceCalculator) do
   end
 
   let(:data_source) do
-    data_source_config = { items: items, layouts: layouts }
+    data_source_config = { items:, layouts: }
     data_source_class.new(config, '/', '/', data_source_config)
   end
 
   let(:site) do
-    Nanoc::Core::Site.new(config: config, code_snippets: [], data_source: data_source)
+    Nanoc::Core::Site.new(config:, code_snippets: [], data_source:)
   end
 
   describe '#[]' do

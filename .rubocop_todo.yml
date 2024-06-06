@@ -141,41 +141,10 @@ Minitest/MultipleAssertions:
   Max: 18
 
 # Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Minitest/ReturnInTestMethod:
-  Exclude:
-    - 'nanoc/test/orig_cli/commands/test_create_site.rb'
-
-# Offense count: 1
 # Configuration parameters: Severity.
 Minitest/SkipEnsure:
   Exclude:
     - 'nanoc/test/orig_cli/commands/test_create_site.rb'
-
-# Offense count: 37
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, BlockForwardingName.
-# SupportedStyles: anonymous, explicit
-Naming/BlockForwarding:
-  Exclude:
-    - 'common/spec/spec_helper_foot_core.rb'
-    - 'nanoc-checking/lib/nanoc/checking/dsl.rb'
-    - 'nanoc-checking/test/helper.rb'
-    - 'nanoc-core/lib/nanoc/core/action_sequence.rb'
-    - 'nanoc-core/lib/nanoc/core/changes_stream.rb'
-    - 'nanoc-core/lib/nanoc/core/config_view.rb'
-    - 'nanoc-core/lib/nanoc/core/configuration.rb'
-    - 'nanoc-core/lib/nanoc/core/context.rb'
-    - 'nanoc-core/lib/nanoc/core/document_view_mixin.rb'
-    - 'nanoc-core/lib/nanoc/core/identifiable_collection.rb'
-    - 'nanoc-core/lib/nanoc/core/identifiable_collection_view.rb'
-    - 'nanoc-core/lib/nanoc/core/item_rep_repo.rb'
-    - 'nanoc-core/lib/nanoc/core/mutable_identifiable_collection_view.rb'
-    - 'nanoc-core/lib/nanoc/core/notification_center.rb'
-    - 'nanoc-core/lib/nanoc/core/site_loader.rb'
-    - 'nanoc/lib/nanoc/helpers/breadcrumbs.rb'
-    - 'nanoc/lib/nanoc/helpers/capturing.rb'
-    - 'nanoc/test/helper.rb'
 
 # Offense count: 9
 # Configuration parameters: EnforcedStyle, CheckMethodNames, CheckSymbols, AllowedIdentifiers, AllowedPatterns.
@@ -565,26 +534,6 @@ RSpec/VerifiedDoubles:
     - 'nanoc/spec/nanoc/orig_cli/commands/show_rules_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
 
-# Offense count: 26
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowOnlyRestArgument, UseAnonymousForwarding, RedundantRestArgumentNames, RedundantKeywordRestArgumentNames, RedundantBlockArgumentNames.
-# RedundantRestArgumentNames: args, arguments
-# RedundantKeywordRestArgumentNames: kwargs, options, opts
-# RedundantBlockArgumentNames: blk, block, proc
-Style/ArgumentsForwarding:
-  Exclude:
-    - 'nanoc-checking/lib/nanoc/checking/dsl.rb'
-    - 'nanoc-core/lib/nanoc/core/action_sequence.rb'
-    - 'nanoc-core/lib/nanoc/core/changes_stream.rb'
-    - 'nanoc-core/lib/nanoc/core/config_view.rb'
-    - 'nanoc-core/lib/nanoc/core/configuration.rb'
-    - 'nanoc-core/lib/nanoc/core/identifiable_collection.rb'
-    - 'nanoc-core/lib/nanoc/core/identifiable_collection_view.rb'
-    - 'nanoc-core/lib/nanoc/core/item_rep_repo.rb'
-    - 'nanoc-core/lib/nanoc/core/notification_center.rb'
-    - 'nanoc/lib/nanoc/helpers/breadcrumbs.rb'
-    - 'nanoc/lib/nanoc/helpers/capturing.rb'
-
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/ArrayIntersect:
@@ -738,149 +687,6 @@ Style/HashEachMethods:
   Exclude:
     - 'nanoc-core/spec/nanoc/core/post_compile_item_rep_view_spec.rb'
 
-# Offense count: 615
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, EnforcedShorthandSyntax, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
-# SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
-# SupportedShorthandSyntax: always, never, either, consistent, either_consistent
-Style/HashSyntax:
-  Exclude:
-    - 'nanoc-checking/lib/nanoc/checking/check.rb'
-    - 'nanoc-checking/lib/nanoc/checking/dsl.rb'
-    - 'nanoc-checking/spec/nanoc/checking/check_spec.rb'
-    - 'nanoc-checking/spec/nanoc/checking/checks/css_spec.rb'
-    - 'nanoc-checking/spec/nanoc/checking/checks/external_links_spec.rb'
-    - 'nanoc-checking/spec/nanoc/checking/checks/html_spec.rb'
-    - 'nanoc-checking/spec/nanoc/checking/checks/internal_links_spec.rb'
-    - 'nanoc-checking/spec/nanoc/checking/checks/mixed_content_spec.rb'
-    - 'nanoc-checking/spec/nanoc/checking/checks/stale_spec.rb'
-    - 'nanoc-checking/spec/nanoc/checking/dsl_spec.rb'
-    - 'nanoc-cli/lib/nanoc/cli/commands/compile.rb'
-    - 'nanoc-cli/lib/nanoc/cli/commands/prune.rb'
-    - 'nanoc-cli/lib/nanoc/cli/compile_listeners/aggregate.rb'
-    - 'nanoc-cli/lib/nanoc/cli/error_handler.rb'
-    - 'nanoc-cli/spec/nanoc/cli/commands/compile_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/debug_printer_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/diff_generator_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/file_action_printer_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/timing_recorder_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/error_handler_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/stack_trace_writer_spec.rb'
-    - 'nanoc-core/lib/nanoc/core/action_sequence_store.rb'
-    - 'nanoc-core/lib/nanoc/core/basic_item_rep_view.rb'
-    - 'nanoc-core/lib/nanoc/core/binary_compiled_content_cache.rb'
-    - 'nanoc-core/lib/nanoc/core/checksum_store.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_item_rep_view.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_item_view.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_phases/abstract.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_phases/cache.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_phases/mark_done.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_phases/resume.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_phases/write.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_stages/build_reps.rb'
-    - 'nanoc-core/lib/nanoc/core/compilation_stages/compile_reps.rb'
-    - 'nanoc-core/lib/nanoc/core/compiled_content_cache.rb'
-    - 'nanoc-core/lib/nanoc/core/compiled_content_store.rb'
-    - 'nanoc-core/lib/nanoc/core/compiler.rb'
-    - 'nanoc-core/lib/nanoc/core/compiler_loader.rb'
-    - 'nanoc-core/lib/nanoc/core/configuration.rb'
-    - 'nanoc-core/lib/nanoc/core/content.rb'
-    - 'nanoc-core/lib/nanoc/core/data_source.rb'
-    - 'nanoc-core/lib/nanoc/core/dependency_props.rb'
-    - 'nanoc-core/lib/nanoc/core/dependency_store.rb'
-    - 'nanoc-core/lib/nanoc/core/dependency_tracker.rb'
-    - 'nanoc-core/lib/nanoc/core/mutable_item_collection_view.rb'
-    - 'nanoc-core/lib/nanoc/core/notification_center.rb'
-    - 'nanoc-core/lib/nanoc/core/outdatedness_store.rb'
-    - 'nanoc-core/lib/nanoc/core/post_compile_item_rep_view.rb'
-    - 'nanoc-core/lib/nanoc/core/site_loader.rb'
-    - 'nanoc-core/lib/nanoc/core/textual_compiled_content_cache.rb'
-    - 'nanoc-core/spec/nanoc/core/action_sequence_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/action_sequence_store_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/basic_outdatedness_checker_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/binary_compiled_content_cache_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/checksum_store_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_item_rep_view_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_item_view_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_phases/abstract_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_phases/cache_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_phases/resume_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_stages/calculate_checksums_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_stages/compile_reps_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_stages/determine_outdatedness_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compilation_stages/preprocess_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compiled_content_cache_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compiled_content_store_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/compiler_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/config_view_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/configuration_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/content_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/executor_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/filter_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/item_rep_router_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/outdatedness_checker_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/outdatedness_rules_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/outdatedness_status_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/outdatedness_store_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/post_compile_item_rep_view_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/post_compile_item_view_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/pruner_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/site_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/store_spec.rb'
-    - 'nanoc-core/spec/nanoc/core/support/document_view_examples.rb'
-    - 'nanoc-core/spec/nanoc/core/support/identifiable_collection_view_examples.rb'
-    - 'nanoc-core/spec/nanoc/core/support/item_rep_view_examples.rb'
-    - 'nanoc-core/spec/nanoc/core/support/mutable_document_view_examples.rb'
-    - 'nanoc-core/spec/nanoc/core/textual_compiled_content_cache_spec.rb'
-    - 'nanoc-dart-sass/lib/nanoc/dart_sass/filter.rb'
-    - 'nanoc-dart-sass/spec/nanoc/dart_sass/filter/nanoc_importer_spec.rb'
-    - 'nanoc-deploying/lib/nanoc/deploying/deployers/git.rb'
-    - 'nanoc-deploying/spec/nanoc/deploying/deployers/fog_spec.rb'
-    - 'nanoc-deploying/spec/nanoc/deploying/deployers/git_spec.rb'
-    - 'nanoc-live/lib/nanoc/live/live_recompiler.rb'
-    - 'nanoc-live/spec/nanoc/live/live_recompiler_spec.rb'
-    - 'nanoc-spec/lib/nanoc/spec.rb'
-    - 'nanoc-tilt/spec/nanoc/tilt/filter_spec.rb'
-    - 'nanoc/lib/nanoc/data_sources/filesystem.rb'
-    - 'nanoc/lib/nanoc/data_sources/filesystem/parser.rb'
-    - 'nanoc/lib/nanoc/filters/erb.rb'
-    - 'nanoc/lib/nanoc/filters/erubi.rb'
-    - 'nanoc/lib/nanoc/filters/erubis.rb'
-    - 'nanoc/lib/nanoc/filters/haml.rb'
-    - 'nanoc/lib/nanoc/filters/less.rb'
-    - 'nanoc/lib/nanoc/filters/sass.rb'
-    - 'nanoc/lib/nanoc/orig_cli/commands/show-rules.rb'
-    - 'nanoc/lib/nanoc/rule_dsl/action_provider.rb'
-    - 'nanoc/lib/nanoc/rule_dsl/action_sequence_calculator.rb'
-    - 'nanoc/lib/nanoc/rule_dsl/compilation_rule.rb'
-    - 'nanoc/lib/nanoc/rule_dsl/compilation_rule_context.rb'
-    - 'nanoc/lib/nanoc/rule_dsl/compiler_dsl.rb'
-    - 'nanoc/lib/nanoc/rule_dsl/routing_rule.rb'
-    - 'nanoc/spec/nanoc/core/checksummer_spec.rb'
-    - 'nanoc/spec/nanoc/data_sources/filesystem/parser_spec.rb'
-    - 'nanoc/spec/nanoc/data_sources/filesystem/tools_spec.rb'
-    - 'nanoc/spec/nanoc/filters/colorize_syntax/rouge_spec.rb'
-    - 'nanoc/spec/nanoc/filters/erb_spec.rb'
-    - 'nanoc/spec/nanoc/filters/relativize_paths_spec.rb'
-    - 'nanoc/spec/nanoc/filters/sass_spec.rb'
-    - 'nanoc/spec/nanoc/helpers/breadcrumbs_spec.rb'
-    - 'nanoc/spec/nanoc/orig_cli/commands/show_rules_spec.rb'
-    - 'nanoc/spec/nanoc/rule_dsl/action_sequence_calculator_spec.rb'
-    - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
-    - 'nanoc/spec/nanoc/rule_dsl/rule_spec.rb'
-    - 'nanoc/test/filters/test_erubi.rb'
-    - 'nanoc/test/filters/test_handlebars.rb'
-    - 'nanoc/test/filters/test_mustache.rb'
-    - 'nanoc/test/filters/test_pandoc.rb'
-    - 'nanoc/test/filters/test_relativize_paths.rb'
-    - 'nanoc/test/filters/test_slim.rb'
-    - 'nanoc/test/filters/test_xsl.rb'
-    - 'nanoc/test/helpers/test_blogging.rb'
-    - 'nanoc/test/helpers/test_capturing.rb'
-    - 'nanoc/test/helpers/test_xml_sitemap.rb'
-    - 'nanoc/test/orig_cli/commands/test_compile.rb'
-    - 'nanoc/test/rule_dsl/test_action_provider.rb'
-
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.
@@ -901,16 +707,6 @@ Style/RedundantArgument:
     - 'nanoc/spec/contributors_spec.rb'
     - 'nanoc/spec/nanoc/core/checksummer_spec.rb'
     - 'nanoc/spec/nanoc/helpers/capturing_spec.rb'
-
-# Offense count: 7
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantFreeze:
-  Exclude:
-    - 'nanoc-checking/lib/nanoc/checking/checks/mixed_content.rb'
-    - 'nanoc-cli/lib/nanoc/cli/transform.rb'
-    - 'nanoc-core/lib/nanoc/core/site_loader.rb'
-    - 'nanoc/lib/nanoc/extra/srcset_parser.rb'
-    - 'nanoc/test/filters/test_xsl.rb'
 
 # Offense count: 22
 # This cop supports unsafe autocorrection (--autocorrect-all).

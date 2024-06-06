@@ -24,8 +24,8 @@ module Nanoc
         @reps
       end
 
-      def each(&block)
-        @reps.each(&block)
+      def each(&)
+        @reps.each(&)
         self
       end
 

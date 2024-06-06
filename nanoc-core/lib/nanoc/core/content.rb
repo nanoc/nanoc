@@ -14,7 +14,7 @@ module Nanoc
         elsif binary
           Nanoc::Core::BinaryContent.new(content)
         else
-          Nanoc::Core::TextualContent.new(content, filename: filename)
+          Nanoc::Core::TextualContent.new(content, filename:)
         end
       end
 

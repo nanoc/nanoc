@@ -13,11 +13,11 @@ module Nanoc::Helpers
         @item = item
       end
 
-      def run(&block)
+      def run(&)
         existing_behavior = @params.fetch(:existing, :error)
 
         # Capture
-        content_string = capture(&block)
+        content_string = capture(&)
 
         # Get existing contents and prep for store
         compiled_content_store = @item._context.compiled_content_store
@@ -102,7 +102,7 @@ module Nanoc::Helpers
     # @overload content_for(item, name)
     #   @param [Symbol, String] name
     #   @return [String]
-    def content_for(*args, &block)
+    def content_for(*args, &)
       if block_given? # Set content
         name = args[0]
         params =
@@ -116,7 +116,7 @@ module Nanoc::Helpers
               "of the capture, and optionally params) but got #{args.size} instead"
           end
 
-        SetContent.new(name, params, @item).run(&block)
+        SetContent.new(name, params, @item).run(&)
       elsif args.size > 1 && (args.first.is_a?(Symbol) || args.first.is_a?(String)) # Set content
         name = args[0]
         content = args.last

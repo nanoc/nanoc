@@ -147,7 +147,7 @@ module Nanoc::TestHelpers
     end
   end
 
-  def capturing_stdio(&_block)
+  def capturing_stdio(&)
     # Store
     orig_stdout = $stdout
     orig_stderr = $stderr

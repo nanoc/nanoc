@@ -27,7 +27,7 @@ module Nanoc::Filters
 
       # Get result
       trim_mode = params[:trim_mode]
-      erb = ::ERB.new(content, trim_mode: trim_mode)
+      erb = ::ERB.new(content, trim_mode:)
       erb.filename = filename
       erb.result(assigns_binding)
     end

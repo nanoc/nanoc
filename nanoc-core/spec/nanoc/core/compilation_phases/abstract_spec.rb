@@ -2,7 +2,7 @@
 
 describe Nanoc::Core::CompilationPhases::Abstract do
   subject(:phase) do
-    described_class.new(wrapped: wrapped)
+    described_class.new(wrapped:)
   end
 
   let(:item) { Nanoc::Core::Item.new('foo', {}, '/stuff.md') }
@@ -33,7 +33,7 @@ describe Nanoc::Core::CompilationPhases::Abstract do
       end
     end
 
-    let(:phase) { phase_class.new(wrapped: wrapped) }
+    let(:phase) { phase_class.new(wrapped:) }
 
     let(:wrapped_class) do
       Class.new(described_class) do

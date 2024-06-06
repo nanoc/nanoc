@@ -4,7 +4,7 @@ describe Nanoc::Filters::RelativizePaths do
   subject(:filter) { described_class.new(assigns) }
 
   let(:assigns) do
-    { item_rep: item_rep }
+    { item_rep: }
   end
 
   let(:item) do

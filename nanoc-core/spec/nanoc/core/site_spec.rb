@@ -4,8 +4,8 @@ describe Nanoc::Core::Site do
   describe '#freeze' do
     let(:site) do
       described_class.new(
-        config: config,
-        code_snippets: code_snippets,
+        config:,
+        code_snippets:,
         data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
       )
     end

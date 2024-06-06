@@ -20,7 +20,7 @@ module Nanoc
           content,
           importer: NanocImporter.new(@items, item),
           **params,
-          syntax: syntax,
+          syntax:,
         )
         result.css
       end

@@ -3,7 +3,7 @@
 describe Nanoc::Deploying::Deployers::Git, stdio: true do
   subject { deployer.run }
 
-  let(:deployer) { described_class.new(output_dir, options, dry_run: dry_run) }
+  let(:deployer) { described_class.new(output_dir, options, dry_run:) }
 
   let(:output_dir) { 'output/' }
   let(:options) { remote_options.merge(branch_options).merge(forced_options) }
@@ -181,7 +181,7 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
 
     context 'custom branch' do
       let(:branch) { 'giraffe' }
-      let(:branch_options) { { branch: branch } }
+      let(:branch_options) { { branch: } }
 
       context 'branch does not exist' do
         it 'raises' do
@@ -292,7 +292,7 @@ describe Nanoc::Deploying::Deployers::Git, stdio: true do
       end
 
       context 'custom remote (file:// URL)' do
-        let(:remote_options) { { remote: remote } }
+        let(:remote_options) { { remote: } }
 
         let(:remote) { "file://#{Dir.getwd}/rere" }
 

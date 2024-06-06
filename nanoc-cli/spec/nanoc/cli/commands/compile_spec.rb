@@ -4,8 +4,8 @@ describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
   describe '#run' do
     let(:site) do
       Nanoc::Core::Site.new(
-        config: config,
-        code_snippets: code_snippets,
+        config:,
+        code_snippets:,
         data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
       )
     end

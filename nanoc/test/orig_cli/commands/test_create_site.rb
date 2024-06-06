@@ -68,7 +68,6 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
   def test_default_encoding
     unless defined?(Encoding)
       skip 'No Encoding class'
-      return
     end
 
     original_encoding = Encoding.default_external

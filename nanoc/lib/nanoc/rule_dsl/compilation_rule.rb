@@ -11,10 +11,10 @@ module Nanoc::RuleDSL
     ] => C::Any
     def apply_to(rep, site:, recorder:, view_context:)
       context = Nanoc::RuleDSL::CompilationRuleContext.new(
-        rep: rep,
-        recorder: recorder,
-        site: site,
-        view_context: view_context,
+        rep:,
+        recorder:,
+        site:,
+        view_context:,
       )
 
       context.instance_exec(matches(rep.item.identifier), &@block)

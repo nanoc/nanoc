@@ -35,19 +35,19 @@ describe Nanoc::Filters::ColorizeSyntax, filter: true do
 
     context 'with legacy' do
       let(:legacy) { true }
-      let(:params) { super().merge(legacy: legacy) }
+      let(:params) { super().merge(legacy:) }
 
       it { is_expected.to eql output }
 
       context 'with pygments wrapper' do
         let(:wrap) { true }
-        let(:params) { super().merge(wrap: wrap) }
+        let(:params) { super().merge(wrap:) }
 
         it { is_expected.to eql output }
 
         context 'with css_class' do
           let(:css_class) { 'nanoc' }
-          let(:params) { super().merge(css_class: css_class) }
+          let(:params) { super().merge(css_class:) }
 
           it { is_expected.to eql output }
         end
@@ -55,7 +55,7 @@ describe Nanoc::Filters::ColorizeSyntax, filter: true do
 
       context 'with line number' do
         let(:line_numbers) { true }
-        let(:params) { super().merge(line_numbers: line_numbers) }
+        let(:params) { super().merge(line_numbers:) }
         let(:output) do
           <<~EOS
             before
@@ -76,7 +76,7 @@ describe Nanoc::Filters::ColorizeSyntax, filter: true do
     end
 
     context 'with formater' do
-      let(:params) { super().merge(formatter: formatter) }
+      let(:params) { super().merge(formatter:) }
 
       context 'with inline' do
         let(:formatter) { Rouge::Formatters::HTMLInline.new(theme) }

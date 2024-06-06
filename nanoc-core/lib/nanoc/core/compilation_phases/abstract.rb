@@ -20,9 +20,9 @@ module Nanoc
 
         def call(rep, is_outdated:)
           notify(:phase_started, rep)
-          run(rep, is_outdated: is_outdated) do
+          run(rep, is_outdated:) do
             notify(:phase_yielded, rep)
-            @wrapped.call(rep, is_outdated: is_outdated)
+            @wrapped.call(rep, is_outdated:)
             notify(:phase_resumed, rep)
           end
           notify(:phase_ended, rep)

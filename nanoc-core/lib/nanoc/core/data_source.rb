@@ -144,8 +144,8 @@ module Nanoc
       #
       # @param [String, nil] attributes_checksum_data
       def new_item(content, attributes, identifier, binary: false, checksum_data: nil, content_checksum_data: nil, attributes_checksum_data: nil)
-        content = Nanoc::Core::Content.create(content, binary: binary)
-        Nanoc::Core::Item.new(content, attributes, identifier, checksum_data: checksum_data, content_checksum_data: content_checksum_data, attributes_checksum_data: attributes_checksum_data)
+        content = Nanoc::Core::Content.create(content, binary:)
+        Nanoc::Core::Item.new(content, attributes, identifier, checksum_data:, content_checksum_data:, attributes_checksum_data:)
       end
 
       # Creates a new in-memory layout instance. This is intended for use within
@@ -163,7 +163,7 @@ module Nanoc
       #
       # @param [String, nil] attributes_checksum_data
       def new_layout(raw_content, attributes, identifier, checksum_data: nil, content_checksum_data: nil, attributes_checksum_data: nil)
-        Nanoc::Core::Layout.new(raw_content, attributes, identifier, checksum_data: checksum_data, content_checksum_data: content_checksum_data, attributes_checksum_data: attributes_checksum_data)
+        Nanoc::Core::Layout.new(raw_content, attributes, identifier, checksum_data:, content_checksum_data:, attributes_checksum_data:)
       end
     end
   end

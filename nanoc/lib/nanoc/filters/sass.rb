@@ -21,7 +21,7 @@ module Nanoc::Filters
 
       options = params.merge(
         load_paths: [importer, *params[:load_paths]&.reject { |p| p.is_a?(String) && %r{^content/} =~ p }],
-        importer: importer,
+        importer:,
         filename: rep.item.identifier.to_s,
         cache: false,
       )
@@ -40,7 +40,7 @@ module Nanoc::Filters
         encoded = "data:application/json;base64,#{Base64.urlsafe_encode64(sourcemap)}"
         [css.gsub(%r{^/\*#\s+sourceMappingURL=\s*#{sourcemap_path}\s*\*/$}, "/*# sourceMappingURL=#{encoded} */")]
       else
-        sourcemap = sourcemap&.to_json(css_path: css_path, sourcemap_path: sourcemap_path, type: params[:sources_content] ? :inline : :auto)
+        sourcemap = sourcemap&.to_json(css_path:, sourcemap_path:, type: params[:sources_content] ? :inline : :auto)
         sourcemap = sourcemap&.split("\n")&.reject { |l| l =~ /^\s*"file":\s*"#{filter.object_id}"\s*$/ }&.join("\n")
         [css, sourcemap]
       end

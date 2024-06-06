@@ -15,7 +15,7 @@ module Nanoc::Filters
     # @return [String] The filtered content
     def run(content, params = {})
       # Get options
-      options = params.merge(filename: filename)
+      options = params.merge(filename:)
 
       # Create context
       context = ::Nanoc::Core::Context.new(assigns)

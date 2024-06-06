@@ -185,7 +185,7 @@ module Nanoc
           Nanoc::Core::CompilationContext.new(
             action_provider: @action_provider,
             reps: @reps,
-            site: site,
+            site:,
             compiled_content_cache: Nanoc::Core::CompiledContentCache.new(config: @config),
             compiled_content_store: @compiled_content_store,
           )
@@ -193,8 +193,8 @@ module Nanoc
         Nanoc::Core::ViewContextForCompilation.new(
           reps: @reps,
           items: @items,
-          dependency_tracker: dependency_tracker,
-          compilation_context: compilation_context,
+          dependency_tracker:,
+          compilation_context:,
           compiled_content_store: @compiled_content_store,
         )
       end

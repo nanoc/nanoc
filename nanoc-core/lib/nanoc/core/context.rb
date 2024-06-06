@@ -39,7 +39,7 @@ module Nanoc
       end
       # rubocop:enable Naming/AccessorMethodName
 
-      def method_missing(method, *args, &blk)
+      def method_missing(method, *args, &)
         ivar_name = '@' + method.to_s
         if instance_variable_defined?(ivar_name)
           instance_variable_get(ivar_name)

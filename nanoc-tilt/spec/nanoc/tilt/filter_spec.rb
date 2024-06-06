@@ -5,7 +5,7 @@ describe Nanoc::Tilt::Filter do
     item = Nanoc::Core::Item.new('stuff', {}, '/foo.erb')
     item_rep = Nanoc::Core::ItemRep.new(item, :default)
 
-    filter = described_class.new({ item: item, item_rep: item_rep })
+    filter = described_class.new({ item:, item_rep: })
 
     res = filter.run('<%= "a" * 3 %>')
     expect(res.strip).to eq('aaa')
@@ -15,7 +15,7 @@ describe Nanoc::Tilt::Filter do
     item = Nanoc::Core::Item.new('stuff', {}, '/foo.erb')
     item_rep = Nanoc::Core::ItemRep.new(item, :default)
 
-    filter = described_class.new({ item: item, item_rep: item_rep })
+    filter = described_class.new({ item:, item_rep: })
 
     res = filter.run('<%= "&" * 3 %>', args: { escape: false })
     expect(res.strip).to eq('&&&')

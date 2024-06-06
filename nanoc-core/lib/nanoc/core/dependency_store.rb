@@ -42,7 +42,7 @@ module Nanoc
 
       contract Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection, Nanoc::Core::Configuration => C::Any
       def initialize(items, layouts, config)
-        super(Nanoc::Core::Store.tmp_path_for(config: config, store_name: 'dependencies'), 6)
+        super(Nanoc::Core::Store.tmp_path_for(config:, store_name: 'dependencies'), 6)
 
         @config = config
         @items = items
@@ -142,10 +142,10 @@ module Nanoc
         end
 
         existing_props = @graph.props_for(dst_ref, src_ref)
-        new_props = Nanoc::Core::DependencyProps.new(raw_content: raw_content, attributes: attributes, compiled_content: compiled_content, path: path)
+        new_props = Nanoc::Core::DependencyProps.new(raw_content:, attributes:, compiled_content:, path:)
         props = existing_props ? existing_props.merge(new_props) : new_props
 
-        @graph.add_edge(dst_ref, src_ref, props: props)
+        @graph.add_edge(dst_ref, src_ref, props:)
       end
 
       def add_vertex_for(obj)
@@ -231,7 +231,7 @@ module Nanoc
           to    = to_index && previous_refs[to_index]
           props = Nanoc::Core::DependencyProps.new(**props)
 
-          @graph.add_edge(from, to, props: props)
+          @graph.add_edge(from, to, props:)
         end
 
         # Record dependency from all items on new items

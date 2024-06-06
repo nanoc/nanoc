@@ -9,7 +9,7 @@ module Nanoc
         WORKER_POOL_SIZE = 5
 
         def initialize(compiled_content_store:, wrapped:)
-          super(wrapped: wrapped)
+          super(wrapped:)
 
           @compiled_content_store = compiled_content_store
 

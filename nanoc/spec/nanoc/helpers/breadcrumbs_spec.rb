@@ -195,7 +195,7 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
         end
 
         context 'tiebreaker which picks the last' do
-          subject { helper.breadcrumbs_trail(tiebreaker: tiebreaker) }
+          subject { helper.breadcrumbs_trail(tiebreaker:) }
 
           let(:tiebreaker) do
             ->(items, _pattern) { items.max_by(&:identifier) }
@@ -214,7 +214,7 @@ describe Nanoc::Helpers::Breadcrumbs, helper: true, stdio: true do
         end
 
         context 'tiebreaker without pattern arg which picks the last' do
-          subject { helper.breadcrumbs_trail(tiebreaker: tiebreaker) }
+          subject { helper.breadcrumbs_trail(tiebreaker:) }
 
           let(:tiebreaker) do
             ->(items) { items.max_by(&:identifier) }

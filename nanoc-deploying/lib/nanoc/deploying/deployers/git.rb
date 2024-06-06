@@ -102,11 +102,11 @@ module Nanoc
         end
 
         def run_cmd(cmd, dry_run: false)
-          TTY::Command.new(**tty_command_options).run(*cmd, dry_run: dry_run)
+          TTY::Command.new(**tty_command_options).run(*cmd, dry_run:)
         end
 
         def run_cmd_unless_dry(cmd)
-          run_cmd(cmd, dry_run: dry_run)
+          run_cmd(cmd, dry_run:)
         end
 
         def clean_repo?

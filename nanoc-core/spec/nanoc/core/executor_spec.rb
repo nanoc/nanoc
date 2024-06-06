@@ -14,11 +14,11 @@ describe Nanoc::Core::Executor do
 
   let(:compilation_context) do
     Nanoc::Core::CompilationContext.new(
-      action_provider: action_provider,
-      reps: reps,
-      site: site,
-      compiled_content_cache: compiled_content_cache,
-      compiled_content_store: compiled_content_store,
+      action_provider:,
+      reps:,
+      site:,
+      compiled_content_cache:,
+      compiled_content_store:,
     )
   end
 
@@ -42,7 +42,7 @@ describe Nanoc::Core::Executor do
 
   let(:site) do
     Nanoc::Core::Site.new(
-      config: config,
+      config:,
       code_snippets: [],
       data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
     )
@@ -61,7 +61,7 @@ describe Nanoc::Core::Executor do
   let(:config) { Nanoc::Core::Configuration.new(hash: config_hash, dir: Dir.getwd).with_defaults }
 
   let(:compiled_content_cache) do
-    Nanoc::Core::CompiledContentCache.new(config: config)
+    Nanoc::Core::CompiledContentCache.new(config:)
   end
 
   let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }

@@ -84,7 +84,7 @@ describe Nanoc::Filters::ERB do
       filter.setup_and_run('<% raise "boom %>')
     end
 
-    let(:filter) { described_class.new(layout: layout) }
+    let(:filter) { described_class.new(layout:) }
 
     let(:layout) { Nanoc::Core::Layout.new('asdf', {}, '/default.erb') }
 
@@ -112,7 +112,7 @@ describe Nanoc::Filters::ERB do
     context 'trim mode unchanged' do
       let(:params) do
         {
-          locals: { res: res },
+          locals: { res: },
         }
       end
 
@@ -125,7 +125,7 @@ describe Nanoc::Filters::ERB do
       let(:params) do
         {
           trim_mode: '%',
-          locals: { res: res },
+          locals: { res: },
         }
       end
 

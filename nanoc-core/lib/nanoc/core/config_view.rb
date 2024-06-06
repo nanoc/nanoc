@@ -20,7 +20,7 @@ module Nanoc
       end
 
       # @see Hash#fetch
-      def fetch(key, fallback = Nanoc::Core::UNDEFINED, &_block)
+      def fetch(key, fallback = Nanoc::Core::UNDEFINED, &)
         @context.dependency_tracker.bounce(_unwrap, attributes: [key])
         @config.fetch(key) do
           if !Nanoc::Core::UNDEFINED.equal?(fallback)
@@ -46,9 +46,9 @@ module Nanoc
       end
 
       # @see Hash#each
-      def each(&block)
+      def each(&)
         @context.dependency_tracker.bounce(_unwrap, attributes: true)
-        @config.each(&block)
+        @config.each(&)
       end
 
       # @see Configuration#env_name

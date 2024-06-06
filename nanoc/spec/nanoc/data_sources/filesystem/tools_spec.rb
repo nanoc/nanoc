@@ -2,7 +2,7 @@
 
 describe Nanoc::DataSources::Filesystem::Tools do
   describe '.read_file' do
-    subject { described_class.read_file(filename, config: config) }
+    subject { described_class.read_file(filename, config:) }
 
     let(:filename) { 'foo.dat' }
     let(:config) { {} }

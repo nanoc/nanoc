@@ -62,8 +62,8 @@ module Nanoc
       end
 
       # contract C::Func[C::RespondTo[:identifier] => C::Any] => self
-      def reject(&block)
-        self.class.new(@config, @objects.reject(&block))
+      def reject(&)
+        self.class.new(@config, @objects.reject(&))
       end
 
       def object_with_identifier(identifier)
