@@ -1,0 +1,7 @@
+# This file defines the dependencies so that ddenv
+# (https://github.com/denisdefreyne/ddenv) can install and
+# set them up automatically.
+
+up:
+  - ruby
+  - bundle
