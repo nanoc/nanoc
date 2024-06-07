@@ -8,10 +8,10 @@ description <<~EOS
   two commands for details. The options are forwarded to `nanoc view` only.
 EOS
 
-required :H, :handler,       'specify the handler to use (webrick/puma/...)'
-required :o, :host,          'specify the host to listen on', default: '127.0.0.1'
-required :p, :port,          'specify the port to listen on', transform: Nanoc::CLI::Transform::Port, default: 3000
-flag     :L, :'live-reload', 'reload on changes'
+option :H, :handler,       'specify the handler to use (webrick/puma/...)', argument: :required
+option :o, :host,          'specify the host to listen on', default: '127.0.0.1', argument: :required
+option :p, :port,          'specify the port to listen on', transform: Nanoc::CLI::Transform::Port, default: 3000, argument: :required
+flag   :L, :'live-reload', 'reload on changes'
 
 module Guard
   class Nanoc
