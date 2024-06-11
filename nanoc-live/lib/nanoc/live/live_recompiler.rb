@@ -3,13 +3,14 @@
 module Nanoc
   module Live
     class LiveRecompiler
-      def initialize(command_runner:)
+      def initialize(command_runner:, focus:)
         @command_runner = command_runner
+        @focus = focus
       end
 
       def run
         run_parent do |site|
-          handle_changes(site, @command_runner)
+          handle_changes(site, @command_runner, focus: @focus)
         end
       end
 
@@ -82,17 +83,17 @@ module Nanoc
       rescue Interrupt
       end
 
-      def handle_changes(site, command_runner)
+      def handle_changes(site, command_runner, focus:)
         Nanoc::CLI::ErrorHandler.handle_while(exit_on_error: false) do
-          unsafe_handle_changes(site, command_runner)
+          unsafe_handle_changes(site, command_runner, focus:)
         end
       end
 
-      def unsafe_handle_changes(site, command_runner)
+      def unsafe_handle_changes(site, command_runner, focus:)
         time_before = Time.now
 
         puts 'Compiling site…'
-        compiler = Nanoc::Core::Compiler.new_for(site)
+        compiler = Nanoc::Core::Compiler.new_for(site, focus:)
         listener = Nanoc::CLI::CompileListeners::Aggregate.new(
           command_runner:,
           site:,
@@ -104,6 +105,10 @@ module Nanoc
 
         time_after = Time.now
         puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
+        if focus
+          warn 'CAUTION: A --focus option is specified. Not the entire site has been compiled.'
+          warn 'Re-run without --focus to compile the entire site.'
+        end
         puts
       end
 

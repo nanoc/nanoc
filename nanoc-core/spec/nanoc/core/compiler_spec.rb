@@ -19,6 +19,7 @@ describe Nanoc::Core::Compiler do
       action_provider:,
       dependency_store:,
       outdatedness_store:,
+      focus: nil,
     )
   end
 

@@ -6,16 +6,16 @@ module Nanoc
       include Nanoc::Core::ContractsSupport
 
       contract Nanoc::Core::Site => C::Any
-      def self.compile(site)
-        new_for(site).run_until_end
+      def self.compile(site, focus: nil)
+        new_for(site, focus:).run_until_end
       end
 
       contract Nanoc::Core::Site => Nanoc::Core::Compiler
-      def self.new_for(site)
-        Nanoc::Core::CompilerLoader.new.load(site)
+      def self.new_for(site, focus: nil)
+        Nanoc::Core::CompilerLoader.new.load(site, focus:)
       end
 
-      def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, outdatedness_store:)
+      def initialize(site, compiled_content_cache:, checksum_store:, action_sequence_store:, action_provider:, dependency_store:, outdatedness_store:, focus:)
         @site = site
 
         # Needed because configuration is mutable :(
@@ -27,6 +27,7 @@ module Nanoc
         @dependency_store       = dependency_store
         @action_provider        = action_provider
         @outdatedness_store     = outdatedness_store
+        @focus                  = focus
 
         @compiled_content_store = Nanoc::Core::CompiledContentStore.new
       end
@@ -184,6 +185,7 @@ module Nanoc
           action_sequences:,
           compilation_context: compilation_context(reps:),
           compiled_content_cache: @compiled_content_cache,
+          focus: @focus,
         )
       end
 

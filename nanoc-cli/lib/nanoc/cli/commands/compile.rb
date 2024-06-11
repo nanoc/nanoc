@@ -9,6 +9,7 @@ no_params
 
 flag nil, :diff, 'generate diff'
 flag :W, :watch, 'watch for changes and recompile when needed'
+option nil, :focus, 'compile only items matching the given pattern', argument: :required, multiple: true
 
 module Nanoc::CLI::Commands
   class Compile < ::Nanoc::CLI::CommandRunner
@@ -26,7 +27,7 @@ module Nanoc::CLI::Commands
 
     def run_repeat
       require 'nanoc/live'
-      Nanoc::Live::LiveRecompiler.new(command_runner: self).run
+      Nanoc::Live::LiveRecompiler.new(command_runner: self, focus: options[:focus]).run
     end
 
     def run_once
@@ -35,7 +36,7 @@ module Nanoc::CLI::Commands
       @site = load_site
 
       puts 'Compiling site…'
-      compiler = Nanoc::Core::Compiler.new_for(@site)
+      compiler = Nanoc::Core::Compiler.new_for(@site, focus: options[:focus])
       listener = Nanoc::CLI::CompileListeners::Aggregate.new(
         command_runner: self,
         site: @site,
@@ -48,6 +49,11 @@ module Nanoc::CLI::Commands
       time_after = Time.now
       puts
       puts "Site compiled in #{format('%.2f', time_after - time_before)}s."
+
+      if options[:focus]
+        warn 'CAUTION: A --focus option is specified. Not the entire site has been compiled.'
+        warn 'Re-run without --focus to compile the entire site.'
+      end
     end
   end
 end

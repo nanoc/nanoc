@@ -4,7 +4,7 @@ module Nanoc
   module Core
     # @api private
     class CompilerLoader
-      def load(site, action_provider: nil)
+      def load(site, focus: nil, action_provider: nil)
         action_sequence_store = Nanoc::Core::ActionSequenceStore.new(config: site.config)
 
         dependency_store =
@@ -30,6 +30,7 @@ module Nanoc
           dependency_store:,
           action_provider:,
           outdatedness_store:,
+          focus:,
         }
 
         Nanoc::Core::Compiler.new(site, **params)
