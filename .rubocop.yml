@@ -397,9 +397,6 @@ Style/MapToHash: # new in 1.24
 Style/OpenStructUse: # new in 1.23
   Enabled: true
 
-FactoryBot/SyntaxMethods: # new in 2.7
-  Enabled: true
-
 Gemspec/DeprecatedAttributeAssignment: # new in 1.30
   Enabled: true
 
@@ -496,9 +493,6 @@ Style/RedundantStringEscape: # new in 1.37
 RSpec/SortMetadata: # new in 2.14
   Enabled: true
 
-FactoryBot/ConsistentParenthesesStyle: # new in 2.14
-  Enabled: true
-
 Minitest/EmptyLineBeforeAssertionMethods: # new in 0.23
   Enabled: true
 
@@ -518,9 +512,6 @@ RSpec/DuplicatedMetadata: # new in 2.16
   Enabled: true
 
 RSpec/PendingWithoutReason: # new in 2.16
-  Enabled: true
-
-FactoryBot/FactoryNameStyle: # new in 2.16
   Enabled: true
 
 Gemspec/DevelopmentDependencies: # new in 1.44
@@ -554,21 +545,6 @@ Minitest/TestFileName: # new in 0.26
   Enabled: true
 
 Minitest/UselessAssertion: # new in 0.26
-  Enabled: true
-
-Capybara/NegationMatcher: # new in 2.14
-  Enabled: true
-
-Capybara/SpecificActions: # new in 2.14
-  Enabled: true
-
-Capybara/SpecificFinders: # new in 2.13
-  Enabled: true
-
-Capybara/SpecificMatcher: # new in 2.12
-  Enabled: true
-
-Capybara/MatchStyle: # new in <<next>>
   Enabled: true
 
 Minitest/NonPublicTestMethod: # new in 0.27
@@ -613,15 +589,6 @@ Minitest/LifecycleHooksOrder: # new in 0.28
 Minitest/ReturnInTestMethod: # new in 0.31
   Enabled: true
 
-FactoryBot/AssociationStyle: # new in 2.23
-  Enabled: true
-
-FactoryBot/FactoryAssociationWithStrategy: # new in 2.23
-  Enabled: true
-
-FactoryBot/RedundantFactoryOption: # new in 2.23
-  Enabled: true
-
 RSpec/BeEmpty: # new in 2.20
   Enabled: true
 
@@ -662,18 +629,6 @@ RSpec/ReceiveMessages: # new in 2.23
   Enabled: true
 
 Style/SingleLineDoEndBlock: # new in 1.57
-  Enabled: true
-
-Capybara/ClickLinkOrButtonStyle: # new in 2.19
-  Enabled: true
-
-Capybara/RSpec/HaveSelector: # new in 2.19
-  Enabled: true
-
-Capybara/RSpec/PredicateMatcher: # new in 2.19
-  Enabled: true
-
-FactoryBot/IdSequence: # new in <<next>>
   Enabled: true
 
 RSpec/EmptyMetadata: # new in 2.24
@@ -766,12 +721,6 @@ Minitest/NonExecutableTestMethod: # new in 0.34
   Enabled: true
 
 Minitest/RedundantMessageArgument: # new in 0.34
-  Enabled: true
-
-Capybara/RedundantWithinFind: # new in 2.20
-  Enabled: true
-
-FactoryBot/ExcessiveCreateList: # new in 2.25
   Enabled: true
 
 RSpec/RedundantPredicateMatcher: # new in 2.26
@@ -955,9 +904,3 @@ RSpec/DescribedClass:
 RSpec/PredicateMatcher:
   Exclude:
     - "nanoc-core/spec/nanoc/core/item_rep_writer_spec.rb"
-
-# ----- DISABLED (not useful) -----
-
-# This is not a Ruby on Rails projec.t
-RSpecRails:
-  Enabled: false

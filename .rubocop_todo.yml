@@ -324,19 +324,6 @@ RSpec/ExpectOutput:
     - 'nanoc-cli/spec/nanoc/cli/commands/compile_spec.rb'
     - 'nanoc-live/spec/nanoc/live/live_recompiler_spec.rb'
 
-# Offense count: 7
-# Configuration parameters: Include, CustomTransform, IgnoreMethods, SpecSuffixOnly.
-# Include: **/*_spec*rb*, **/spec/**/*
-RSpec/FilePath:
-  Exclude:
-    - 'guard-nanoc/spec/lib/guard/nanoc/live_command_spec.rb'
-    - 'nanoc-external/spec/filter_spec.rb'
-    - 'nanoc-live/spec/nanoc/live_spec.rb'
-    - 'nanoc/spec/nanoc/filters/asciidoc_spec.rb'
-    - 'nanoc/spec/nanoc/filters/colorize_syntax/rouge_spec.rb'
-    - 'nanoc/spec/nanoc/filters/sass_spec.rb'
-    - 'nanoc/spec/nanoc/spec_spec.rb'
-
 # Offense count: 8
 # Configuration parameters: Max, AllowedIdentifiers, AllowedPatterns.
 RSpec/IndexedLet:
