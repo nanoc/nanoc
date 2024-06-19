@@ -1,5 +1,19 @@
 # Nanoc news
 
+## 4.13.0 (2024-06-19)
+
+Features:
+
+- Added `--focus` option to the `compile` and `live` commands (#1707)
+
+Fixes:
+
+- Made `delete` log lines use relative (not absolute) paths (#1706)
+
+Changes:
+
+- Dropped support for Ruby 3.0 (EOL) (#1704)
+
 ## 4.12.21 (2024-04-27)
 
 Fixes:
