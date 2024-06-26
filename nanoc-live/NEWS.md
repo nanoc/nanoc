@@ -1,5 +1,19 @@
 # Release notes for nanoc-live
 
+## 1.1.0 (2024-06-26)
+
+Enhancements:
+
+- Added `--focus` option to the `compile` and `live` commands (#1707)
+
+Fixes:
+
+- Fixed wrong documentation regarding listening IP addresses (#1584) [Jan M. Faber]
+
+Changes:
+
+- Dropped support for Ruby 3.0 (EOL) (#1704)
+
 ## 1.0.0 (2021-02-20)
 
 Idential to 1.0.0b8.
