@@ -17,10 +17,10 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.1'
 
-  s.add_runtime_dependency('adsf-live', '~> 1.4')
-  s.add_runtime_dependency('listen', '~> 3.0')
-  s.add_runtime_dependency('nanoc-cli', '~> 4.11', '>= 4.11.14')
-  s.add_runtime_dependency('nanoc-core', '~> 4.11', '>= 4.11.14')
+  s.add_dependency('adsf-live', '~> 1.4')
+  s.add_dependency('listen', '~> 3.0')
+  s.add_dependency('nanoc-cli', '~> 4.11', '>= 4.11.14')
+  s.add_dependency('nanoc-core', '~> 4.11', '>= 4.11.14')
   s.metadata = {
     'rubygems_mfa_required' => 'true',
     'source_code_uri' => "https://github.com/nanoc/nanoc/tree/#{s.name}-v#{s.version}/#{s.name}",
