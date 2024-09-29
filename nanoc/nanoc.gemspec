@@ -19,15 +19,15 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.1'
 
-  s.add_runtime_dependency('addressable', '~> 2.5')
-  s.add_runtime_dependency('colored', '~> 1.2')
-  s.add_runtime_dependency('nanoc-checking', '~> 1.0', '>= 1.0.2')
-  s.add_runtime_dependency('nanoc-cli', "= #{Nanoc::VERSION}")
-  s.add_runtime_dependency('nanoc-core', "= #{Nanoc::VERSION}")
-  s.add_runtime_dependency('nanoc-deploying', '~> 1.0')
-  s.add_runtime_dependency('parallel', '~> 1.12')
-  s.add_runtime_dependency('tty-command', '~> 0.8')
-  s.add_runtime_dependency('tty-which', '~> 0.4')
+  s.add_dependency('addressable', '~> 2.5')
+  s.add_dependency('colored', '~> 1.2')
+  s.add_dependency('nanoc-checking', '~> 1.0', '>= 1.0.2')
+  s.add_dependency('nanoc-cli', "= #{Nanoc::VERSION}")
+  s.add_dependency('nanoc-core', "= #{Nanoc::VERSION}")
+  s.add_dependency('nanoc-deploying', '~> 1.0')
+  s.add_dependency('parallel', '~> 1.12')
+  s.add_dependency('tty-command', '~> 0.8')
+  s.add_dependency('tty-which', '~> 0.4')
   s.metadata = {
     'rubygems_mfa_required' => 'true',
     'source_code_uri' => "https://github.com/nanoc/nanoc/tree/#{s.version}/#{s.name}",

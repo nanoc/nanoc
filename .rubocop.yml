@@ -756,6 +756,9 @@ Style/SuperArguments: # new in 1.64
 RSpec/ExpectInLet: # new in 2.30
   Enabled: true
 
+Gemspec/AddRuntimeDependency: # new in 1.65
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.

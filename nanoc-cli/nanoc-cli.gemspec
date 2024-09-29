@@ -17,11 +17,11 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.1'
 
-  s.add_runtime_dependency('cri', '~> 2.15')
-  s.add_runtime_dependency('diff-lcs', '~> 1.3')
-  s.add_runtime_dependency('nanoc-core', "= #{Nanoc::CLI::VERSION}")
-  s.add_runtime_dependency('pry', '>= 0')
-  s.add_runtime_dependency('zeitwerk', '~> 2.1')
+  s.add_dependency('cri', '~> 2.15')
+  s.add_dependency('diff-lcs', '~> 1.3')
+  s.add_dependency('nanoc-core', "= #{Nanoc::CLI::VERSION}")
+  s.add_dependency('pry', '>= 0')
+  s.add_dependency('zeitwerk', '~> 2.1')
   s.metadata = {
     'rubygems_mfa_required' => 'true',
     'source_code_uri' => "https://github.com/nanoc/nanoc/tree/#{s.name}-v#{s.version}/#{s.name}",
