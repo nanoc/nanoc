@@ -179,10 +179,7 @@ describe Nanoc::Core::ConfigView do
 
     example do
       res = []
-      # rubocop:disable Style/MapIntoArray
-      # (False positive: `view` does not implement #map)
       view.each { |k, v| res << [k, v] }
-      # rubocop:enable Style/MapIntoArray
 
       expect(res).to eql([[:output_dir, 'ootpoot/'], [:amount, 9000], [:animal, 'donkey'], [:foo, { bar: :baz }]])
     end
