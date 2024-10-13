@@ -106,7 +106,7 @@ RSpec::Matchers.define :send_notification do |name, *expected_args|
   end
 
   failure_message do |_actual|
-    s = +"expected that proc would send notification #{name.inspect} with args #{expected_args.inspect}"
+    s = "expected that proc would send notification #{name.inspect} with args #{expected_args.inspect}"
     if @actual_notifications.any?
       s << " (received #{@actual_notifications.size} times with other arguments: #{@actual_notifications.map(&:inspect).join(', ')})"
     end
