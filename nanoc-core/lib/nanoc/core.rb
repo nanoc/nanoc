@@ -4,7 +4,6 @@
 require 'base64'
 require 'fiber'
 require 'find'
-require 'pstore'
 require 'singleton'
 require 'tmpdir'
 require 'yaml'
