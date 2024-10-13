@@ -51,7 +51,7 @@ describe Nanoc::Deploying::Deployers::Rsync, stdio: true do
 
       it 'runs' do
         opts = Nanoc::Deploying::Deployers::Rsync::DEFAULT_OPTIONS
-        args = ['echo', 'rsync', opts, 'output/', 'asdf'].flatten
+        args = ['rsync', '--dry-run', opts, 'output/', 'asdf'].flatten
         expect(deployer).to receive(:run_shell_cmd).with(args)
 
         deployer.run
