@@ -747,9 +747,6 @@ RSpec/IsExpectedSpecify: # new in 2.27
 RSpec/RepeatedSubjectCall: # new in 2.27
   Enabled: true
 
-Style/MapIntoArray: # new in 1.63
-  Enabled: true
-
 RSpec/EmptyOutput: # new in 2.29
   Enabled: true
 
@@ -766,6 +763,27 @@ RSpec/ExpectInLet: # new in 2.30
   Enabled: true
 
 Gemspec/AddRuntimeDependency: # new in 1.65
+  Enabled: true
+
+Lint/DuplicateSetElement: # new in 1.67
+  Enabled: true
+
+Lint/UnescapedBracketInRegexp: # new in 1.68
+  Enabled: true
+
+Style/AmbiguousEndlessMethodDefinition: # new in 1.68
+  Enabled: true
+
+Style/BitwisePredicate: # new in 1.68
+  Enabled: true
+
+Style/CombinableDefined: # new in 1.68
+  Enabled: true
+
+Style/KeywordArgumentsMerging: # new in 1.68
+  Enabled: true
+
+Style/SafeNavigationChainLength: # new in 1.68
   Enabled: true
 
 # ----- TO ENABLE LATER -----
@@ -916,3 +934,8 @@ RSpec/DescribedClass:
 RSpec/PredicateMatcher:
   Exclude:
     - "nanoc-core/spec/nanoc/core/item_rep_writer_spec.rb"
+
+# This yields false positives; a class that responds to #each does not
+# necessarily also respond to #map.
+Style/MapIntoArray:
+  Enabled: false
