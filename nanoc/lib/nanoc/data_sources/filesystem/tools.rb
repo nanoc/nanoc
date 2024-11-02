@@ -141,7 +141,7 @@ class Nanoc::DataSources::Filesystem < Nanoc::DataSource
     #   detected (something other than file, directory or link)
     def resolve_symlink(filename, recursion_limit = 5)
       target = File.readlink(filename)
-      absolute_target = File.expand_path(target, File.dirname(filename))
+      absolute_target = Nanoc::Core::Utils.expand_path_without_drive_identifier(target, File.dirname(filename))
 
       case File.ftype(absolute_target)
       when 'link'
