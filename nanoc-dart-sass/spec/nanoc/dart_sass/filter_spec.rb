@@ -71,10 +71,10 @@ describe Nanoc::DartSass::Filter, helper: true do
 
     let(:content) do
       <<~SCSS
-        @import '/defs.*';
+        @use '/defs.*';
 
         body {
-          color: $primary-color;
+          color: defs.$primary-color;
         }
       SCSS
     end
@@ -113,13 +113,13 @@ describe Nanoc::DartSass::Filter, helper: true do
 
     let(:content) do
       <<~SCSS
-        @import './defs1.*';
-        @import 'defs2.*';
-        @import 'defs3';
+        @use './defs1.*';
+        @use 'defs2.*';
+        @use 'defs3';
 
         body {
-          color: $fg-color;
-          background: $bg-color;
+          color: defs1.$fg-color;
+          background: defs2.$bg-color;
         }
       SCSS
     end
