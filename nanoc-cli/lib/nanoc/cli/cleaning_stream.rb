@@ -54,7 +54,7 @@ module Nanoc
 
       # @see IO#tty?
       def tty?
-        @cached_is_tty ||= @stream.tty?
+        @_tty_eh ||= @stream.tty? # rubocop:disable Naming/MemoizedInstanceVariableName
       end
 
       # @see IO#isatty

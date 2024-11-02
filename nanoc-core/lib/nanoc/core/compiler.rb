@@ -33,14 +33,14 @@ module Nanoc
       end
 
       def run_until_preprocessed
-        @_res_preprocessed ||= begin
+        @_run_until_preprocessed ||= begin
           preprocess_stage.call
           {}
         end
       end
 
       def run_until_reps_built
-        @_res_reps_built ||= begin
+        @_run_until_reps_built ||= begin
           prev = run_until_preprocessed
 
           res = build_reps_stage.call
@@ -53,7 +53,7 @@ module Nanoc
       end
 
       def run_until_precompiled
-        @_res_precompiled ||= begin
+        @_run_until_precompiled ||= begin
           prev = run_until_reps_built
           action_sequences = prev.fetch(:action_sequences)
           reps = prev.fetch(:reps)

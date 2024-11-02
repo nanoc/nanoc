@@ -33,6 +33,11 @@ Style/TrailingCommaInHashLiteral:
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
+# Having the leading underscore makes it clear that the instance variable is not
+# intended to be used directly.
+Naming/MemoizedInstanceVariableName:
+  EnforcedStyleForLeadingUnderscores: required
+
 Naming/MethodParameterName:
   AllowedNames:
     - "to" # destination
@@ -803,9 +808,6 @@ Naming/HeredocDelimiterNaming:
   Enabled: false
 
 Style/EvalWithLocation:
-  Enabled: false
-
-Naming/MemoizedInstanceVariableName:
   Enabled: false
 
 Layout/LineLength:

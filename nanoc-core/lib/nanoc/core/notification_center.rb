@@ -26,7 +26,7 @@ module Nanoc
       end
 
       def start
-        @thread ||= Thread.new do
+        @thread ||= Thread.new do # rubocop:disable Naming/MemoizedInstanceVariableName
           Thread.current.abort_on_exception = true
 
           loop do

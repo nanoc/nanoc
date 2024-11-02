@@ -22,7 +22,7 @@ module Nanoc
         protected
 
         def item_rep_paths
-          @item_rep_paths ||=
+          @_item_rep_paths ||=
             Set.new(
               @items
                 .flat_map(&:reps)
@@ -34,10 +34,12 @@ module Nanoc
         end
 
         def pruner
-          exclude_config = @config.fetch(:prune, {}).fetch(:exclude, [])
-          # FIXME: specifying reps this way is icky
-          reps = Nanoc::Core::ItemRepRepo.new
-          @pruner ||= Nanoc::Core::Pruner.new(@config._unwrap, reps, exclude: exclude_config)
+          @_pruner ||= begin
+            exclude_config = @config.fetch(:prune, {}).fetch(:exclude, [])
+            # FIXME: specifying reps this way is icky
+            reps = Nanoc::Core::ItemRepRepo.new
+            Nanoc::Core::Pruner.new(@config._unwrap, reps, exclude: exclude_config)
+          end
         end
       end
     end

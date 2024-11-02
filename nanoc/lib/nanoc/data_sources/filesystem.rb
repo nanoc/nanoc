@@ -407,7 +407,7 @@ module Nanoc::DataSources
     end
 
     def parser
-      @parser ||= Parser.new(config: @config)
+      @_parser ||= Parser.new(config: @config)
     end
 
     def parse(content_filename, meta_filename)

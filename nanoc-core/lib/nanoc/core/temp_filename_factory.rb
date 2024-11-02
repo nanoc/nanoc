@@ -8,7 +8,7 @@ module Nanoc
 
       # @return [Nanoc::Core::TempFilenameFactory] A common instance
       def self.instance
-        @instance ||= new
+        @_instance ||= new
       end
 
       def initialize

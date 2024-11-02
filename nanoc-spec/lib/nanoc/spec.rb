@@ -171,11 +171,11 @@ module Nanoc
       end
 
       def dependency_store
-        @dependency_store ||= Nanoc::Core::DependencyStore.new(@items, @layouts, @config)
+        @_dependency_store ||= Nanoc::Core::DependencyStore.new(@items, @layouts, @config)
       end
 
       def dependency_tracker
-        @dependency_tracker ||= Nanoc::Core::DependencyTracker.new(dependency_store)
+        @_dependency_tracker ||= Nanoc::Core::DependencyTracker.new(dependency_store)
       end
 
       private

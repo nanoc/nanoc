@@ -36,7 +36,7 @@ module Nanoc
       def dsl
         @enabled_checks_from_dsl ||= []
 
-        @dsl ||=
+        @_dsl ||=
           if dsl_present?
             Nanoc::Checking::DSL.from_file(checks_filename, enabled_checks: @enabled_checks_from_dsl)
           else

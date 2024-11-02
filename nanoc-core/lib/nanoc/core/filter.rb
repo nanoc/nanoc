@@ -159,7 +159,7 @@ module Nanoc
         #
         # @api private
         def setup
-          @setup ||= begin
+          @_setup ||= begin
             requires.each { |r| require r }
             true
           end
@@ -228,7 +228,7 @@ module Nanoc
       #
       # @return [String] The output filename
       def output_filename
-        @output_filename ||=
+        @_output_filename ||=
           Nanoc::Core::TempFilenameFactory.instance.create(TMP_BINARY_ITEMS_DIR)
       end
 
