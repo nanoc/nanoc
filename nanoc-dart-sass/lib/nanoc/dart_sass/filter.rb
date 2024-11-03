@@ -62,7 +62,7 @@ module Nanoc
               pat
             else
               dirname = File.dirname(@source_item.identifier.to_s)
-              File.expand_path(pat, dirname)
+              Nanoc::Core::Utils.expand_path_without_drive_identifier(pat, dirname)
             end
 
           items = collect_items(pat, is_extension_given)
