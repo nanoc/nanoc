@@ -1,5 +1,11 @@
 # nanoc-dart-sass news
 
+## 1.0.4 (2024-11-04)
+
+Fixes:
+
+- Fixed imports on Windows, by stripping drive identifier (#1703, #1716)
+
 ## 1.0.3 (2024-04-19)
 
 Enhancements:
