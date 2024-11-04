@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.13.1 (2024-11-04)
+
+Enhancements:
+
+- Dropped explicit dependency on `psych`, simplifying usage on Windows (#1712, #1713)
+
 ## 4.13.0 (2024-06-19)
 
 Features:
