@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.1'
 
-  s.add_dependency('nanoc-core', '~> 4.12')
+  s.add_dependency('nanoc-core', '~> 4.13', '>= 4.13.1')
   s.add_dependency('sass-embedded', '~> 1.56')
   s.metadata = {
     'rubygems_mfa_required' => 'true',
