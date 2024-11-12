@@ -14,12 +14,24 @@ module Nanoc
       def self.expand_path_without_drive_identifier(file_name, dir_string)
         res = File.expand_path(file_name, dir_string)
 
-        if Nanoc::Core.on_windows?
+        if windows_fs?
           # On Windows, strip the drive identifier, e.g. `C:`.
           res = res.sub(/^[A-Z]:/, '')
         end
 
         res
+      end
+
+      # Returns `true` if absolute file paths start with a drive identifier, like `C:`.
+      def self.windows_fs?
+        # NOTE: This isn’t memoized with ||= because @_windows_fs is a boolean.
+
+        return @_windows_fs if defined?(@_windows_fs)
+
+        absolute_path = File.expand_path('/a')
+        @_windows_fs = absolute_path.start_with?(/^[A-Z]:/)
+
+        @_windows_fs
       end
     end
   end
