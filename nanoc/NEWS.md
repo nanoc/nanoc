@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.13.2 (2024-11-12)
+
+Fixes:
+
+- Improved handling of Windows file paths (starting with a drive identifier, like C:) (#1717, #1718)
+
 ## 4.13.1 (2024-11-04)
 
 Enhancements:
