@@ -3,5 +3,7 @@
 # set them up automatically.
 
 up:
+  - homebrew: openjdk
+  - homebrew: asciidoc
   - ruby
   - bundle
