@@ -86,4 +86,52 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
 
     assert_match(/Max Payne\nMona Sax/, result)
   end
+
+  def test_filter_render
+    with_site(legacy: false) do |_site|
+      # Prepare
+      File.write('lib/helpers.rb', "include Nanoc::Helpers::Rendering\n")
+      FileUtils.mkdir_p('layouts/partials')
+      File.write('layouts/partials/foobar.haml', <<~HAML)
+        .foobar
+          %h2 This is a partial rendered from a page
+
+          - if block_given?
+            - _erbout << yield
+      HAML
+      # NOTE: Using `- _erbout << yield` instead of `= yield` above to avoid escaping.
+      File.write('content/page.haml', <<~HAML)
+        %h1 Example page
+
+        = render("/partials/foobar.haml") do
+          %h2 This should work normally
+      HAML
+      File.write('Rules', <<~RULES)
+        compile '/**/*.haml' do
+          filter :haml
+          write ext: 'html'
+        end
+
+        layout '/**/*.haml', :haml
+      RULES
+
+      # Compile
+      Nanoc::CLI.run(%w[compile])
+
+      # Check
+      expected_regex = %r{
+        <h1>Example\ page</h1>
+        .*
+        <div\ class=(['"]?)foobar\1>
+        .*
+        <h2>This\ is\ a\ partial\ rendered\ from\ a\ page</h2>
+        .*
+        <h2>This\ should\ work\ normally</h2>
+        .*
+        </div>
+      }xm
+
+      assert_match expected_regex, File.read('output/page.html')
+    end
+  end
 end

@@ -15,7 +15,11 @@ module Nanoc::Filters
     # @return [String] The filtered content
     def run(content, params = {})
       # Get options
-      options = params.merge(filename:)
+      options = params.merge(
+        filename:,
+        outvar: '_erbout',
+        disable_capture: true,
+      )
 
       # Create context
       context = ::Nanoc::Core::Context.new(assigns)
