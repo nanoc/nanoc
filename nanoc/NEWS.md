@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.13.3 (2024-11-23)
+
+Fixes:
+
+- Made the `:haml` filter work correctly in combination with the `rendering` helper (#1639, #1719)
+
 ## 4.13.2 (2024-11-12)
 
 Fixes:
