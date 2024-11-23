@@ -15,6 +15,11 @@ gemspec path: 'nanoc-spec'
 gemspec path: 'nanoc-tilt'
 gemspec path: 'guard-nanoc'
 
+group :release do
+  gem 'netrc', '~> 0.11.0'
+  gem 'octokit', '~> 9.2'
+end
+
 group :devel do
   gem 'addressable', '~> 2.8'
   gem 'contracts', '~> 0.16'
