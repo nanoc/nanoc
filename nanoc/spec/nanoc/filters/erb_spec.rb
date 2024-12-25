@@ -96,7 +96,8 @@ describe Nanoc::Filters::ERB do
           e
         end
 
-      expect(error.message).to start_with('layout /default.erb:1: unterminated string meets end of file')
+      expect(error.message).to start_with('layout /default.erb:1:')
+      expect(error.message).to include('unterminated string meets end of file')
     end
   end
 

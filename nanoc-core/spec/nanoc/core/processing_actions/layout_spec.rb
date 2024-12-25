@@ -12,7 +12,7 @@ describe Nanoc::Core::ProcessingActions::Layout do
   describe '#to_s' do
     subject { action.to_s }
 
-    it { is_expected.to eql('layout "/foo.erb", {:awesome=>true}') }
+    it { is_expected.to match(%r{\Alayout "/foo.erb", \{(:awesome=>true|awesome: true)\}\z}) }
   end
 
   describe '#inspect' do

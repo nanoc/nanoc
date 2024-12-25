@@ -205,7 +205,8 @@ describe Nanoc::Core::CompilationStages::CompileReps do
         it 'contains the right wrapped exception' do
           expect { subject }.to raise_error do |err|
             expect(err.unwrap).to be_a(SyntaxError)
-            expect(err.unwrap.message).to start_with('(erb):1: unterminated string meets end of file')
+            expect(err.unwrap.message).to start_with('(erb):1:')
+            expect(err.unwrap.message).to include('unterminated string meets end of file')
           end
         end
 
