@@ -12,7 +12,7 @@ describe Nanoc::Core::ProcessingActions::Filter do
   describe '#to_s' do
     subject { action.to_s }
 
-    it { is_expected.to eql('filter :foo, {:awesome=>true}') }
+    it { is_expected.to match(%r{\Afilter :foo, \{(:awesome=>true|awesome: true)\}\z}) }
   end
 
   describe '#inspect' do
