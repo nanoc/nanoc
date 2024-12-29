@@ -33,7 +33,7 @@ describe Nanoc::CLI::CleaningStream do
     cs.printf('cc')
     cs.puts('dd')
     cs.string
-    cs.reopen('/dev/null', 'r')
+    cs.reopen(File::NULL, 'r')
     cs.exist?
     cs.exists?
     cs.close
