@@ -42,4 +42,32 @@ describe Nanoc::Core::StringPattern do
       expect(subject).to eq('/foo/*/bar/**/*.animal')
     end
   end
+
+  describe 'case equality' do
+    it 'can match strings' do
+      input = '/software/nanoc.md'
+
+      result =
+        case input
+        when described_class.from('/software/*')
+          true
+        else
+          false
+        end
+
+      expect(result).to be(true)
+    end
+
+    it 'can match identifiers' do
+      result =
+        case Nanoc::Core::Identifier.new('/software/nanoc.md')
+        when described_class.from('/software/*')
+          true
+        else
+          false
+        end
+
+      expect(result).to be(true)
+    end
+  end
 end

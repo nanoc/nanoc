@@ -29,6 +29,11 @@ module Nanoc
         raise NotImplementedError
       end
 
+      contract C::Any => C::Bool
+      def ===(other)
+        match?(other)
+      end
+
       def captures(_identifier)
         raise NotImplementedError
       end
