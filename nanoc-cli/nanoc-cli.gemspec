@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('cri', '~> 2.15')
   s.add_dependency('diff-lcs', '~> 1.3')
+  s.add_dependency('logger', '~> 1.6')
   s.add_dependency('nanoc-core', "= #{Nanoc::CLI::VERSION}")
   s.add_dependency('pry', '>= 0')
   s.add_dependency('zeitwerk', '~> 2.1')
