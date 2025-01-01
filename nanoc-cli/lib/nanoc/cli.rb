@@ -166,7 +166,7 @@ module Nanoc
       if Nanoc::Core::SiteLoader.cwd_is_nanoc_site?
         config = Nanoc::Core::ConfigLoader.new.new_from_cwd
         config[:commands_dirs].each do |path|
-          load_commands_at(File.expand_path path)
+          load_commands_at(File.expand_path(path))
         end
       end
     end
