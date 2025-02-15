@@ -110,7 +110,7 @@ describe Nanoc::CLI::CompileListeners::DiffGenerator do
         expect(subject).to eq(<<~EOS)
           --- content/foo.md
           +++ content/foo.md
-          @@ -1,8 +1,7 @@
+          @@ -1,7 +1,6 @@
            A
            B
           -MOVED
