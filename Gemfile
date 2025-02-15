@@ -56,7 +56,6 @@ group :plugins do
   gem 'asciidoctor'
   gem 'bluecloth', platforms: :ruby
   gem 'builder'
-  gem 'clonefile', '~> 0.5.2'
   gem 'coderay'
   gem 'coffee-script'
   gem 'erubi'

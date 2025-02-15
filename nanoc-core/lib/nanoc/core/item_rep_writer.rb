@@ -79,13 +79,11 @@ module Nanoc
 
       def smart_cp(from, to)
         # Try clonefile
-        if defined?(Clonefile)
-          FileUtils.rm_f(to)
-          begin
-            res = Clonefile.always(from, to)
-            return if res
-          rescue Clonefile::UnsupportedPlatform, Errno::ENOTSUP, Errno::EXDEV, Errno::EINVAL
-          end
+        FileUtils.rm_f(to)
+        begin
+          res = Clonefile.always(from, to)
+          return if res
+        rescue Clonefile::UnsupportedPlatform, Errno::ENOTSUP, Errno::EXDEV, Errno::EINVAL
         end
 
         # Try with hardlink
