@@ -165,10 +165,14 @@ describe Nanoc::Core::SiteLoader do
     end
   end
 
-  describe '#code_snippets_from_config' do
+  shared_examples :code_snippets_from_config do |lib_dir: 'lib'|
     subject { loader.send(:code_snippets_from_config, config) }
 
-    let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+    let(:config) do
+      Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults.tap do |c|
+        c[:lib_dirs] = [lib_dir]
+      end
+    end
 
     before { FileUtils.mkdir_p('lib') }
 
@@ -210,6 +214,24 @@ describe Nanoc::Core::SiteLoader do
         expect(subject.size).to eq(1)
         expect(subject.first.data).to eq('BRØKEN')
       end
+    end
+  end
+
+  describe '#code_snippets_from_config' do
+    context 'with default lib dir' do
+      include_examples :code_snippets_from_config
+    end
+
+    context 'with tilde-prefixed lib dir' do
+      around do |example|
+        original_home = ENV['HOME']
+        ENV['HOME'] = Dir.getwd
+        example.run
+      ensure
+        ENV['HOME'] = original_home
+      end
+
+      include_examples :code_snippets_from_config, lib_dir: '~/lib'
     end
   end
 end
