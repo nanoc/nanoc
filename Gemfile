@@ -22,7 +22,7 @@ end
 
 group :devel do
   gem 'addressable', '~> 2.8'
-  gem 'contracts', '~> 0.16'
+  gem 'contracts', '~> 0.17'
   gem 'debug', '~> 1.9'
   gem 'fuubar'
   gem 'guard-rake'
@@ -34,7 +34,7 @@ group :devel do
   gem 'rake'
   gem 'rdoc', '~> 6.0'
   gem 'rspec'
-  gem 'rspec-its', '~> 1.2'
+  gem 'rspec-its', '~> 2.0'
   gem 'rspec-mocks'
   gem 'rubocop', '~> 1.31'
   gem 'rubocop-minitest'
@@ -74,7 +74,7 @@ group :plugins do
   gem 'mustache', '~> 1.0'
   gem 'nokogiri', '~> 1.12'
   gem 'pandoc-ruby'
-  gem 'pygments.rb', '~> 2.0', platforms: :ruby
+  gem 'pygments.rb', '~> 3.0', platforms: :ruby
   gem 'rack'
   gem 'rainpress'
   gem 'redcarpet', '~> 3.4', platforms: :ruby
