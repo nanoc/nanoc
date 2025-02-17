@@ -77,6 +77,7 @@ group :plugins do
   gem 'pygments.rb', '~> 3.0', platforms: :ruby
   gem 'rack'
   gem 'rainpress'
+  gem 'rdiscount', '~> 2.2', platforms: :ruby
   gem 'redcarpet', '~> 3.4', platforms: :ruby
   gem 'RedCloth', platforms: :ruby
   gem 'rouge', '~> 4.1'
@@ -89,10 +90,4 @@ group :plugins do
   gem 'w3c_validators'
   gem 'wdm', '>= 0.1.0' if Gem.win_platform?
   gem 'yuicompressor'
-
-  # TODO: remove
-  # See https://github.com/davidfstr/rdiscount/issues/155
-  unless `clang --version`.match?(/clang version 16/)
-    gem 'rdiscount', '~> 2.2', platforms: :ruby
-  end
 end
