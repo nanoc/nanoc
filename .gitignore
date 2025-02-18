@@ -3,6 +3,13 @@
 *.gemfile.lock
 *~
 
+# Nanoc supports multiple Ruby versions (as specified by the
+# `required_ruby_version` property of the individual gemspec files), and so it
+# does not make sense to lock to a single Ruby version. You can still create
+# your own .ruby-version file locally; it just won’t be (and shouldn’t be)
+# committed.
+.ruby-version
+
 coverage/
 /.yardoc/
 /Gemfile.lock
