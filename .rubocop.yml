@@ -657,7 +657,19 @@ Lint/UselessNumericOperation: # new in 1.66
 Style/RedundantInterpolationUnfreeze: # new in 1.66
   Enabled: true
 
-RSpec/StringAsInstanceDoubleConstant: # new in 3.1
+Lint/ArrayLiteralInRegexp: # new in 1.71
+  Enabled: true
+
+Lint/ConstantReassignment: # new in 1.70
+  Enabled: true
+
+Lint/SharedMutableDefault: # new in 1.70
+  Enabled: true
+
+Style/HashSlice: # new in 1.71
+  Enabled: true
+
+Style/ItAssignment: # new in 1.70
   Enabled: true
 
 # ----- DISABLED (new cops not enabled by default; to enable later) -----
@@ -807,6 +819,21 @@ Style/FileNull: # new in 1.69
   Enabled: true
 
 Style/FileTouch: # new in 1.69
+  Enabled: true
+
+Lint/CopDirectiveSyntax: # new in 1.72
+  Enabled: true
+
+Lint/RedundantTypeConversion: # new in 1.72
+  Enabled: true
+
+Lint/SuppressedExceptionInNumberConversion: # new in 1.72
+  Enabled: true
+
+Lint/UselessConstantScoping: # new in 1.72
+  Enabled: true
+
+Style/RedundantFormat: # new in 1.72
   Enabled: true
 
 # ----- TO ENABLE LATER -----

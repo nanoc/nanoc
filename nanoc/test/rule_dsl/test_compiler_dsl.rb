@@ -283,7 +283,7 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
     refute pattern.match?('/foo/aaaa/')
     refute pattern.match?('/foo/a/a/a/a')
     # rubocop:enable Minitest/RefuteMatch
-    # rubocop:enable Minitest/AssertMatch Minitest/RefuteMatch
+    # rubocop:enable Minitest/AssertMatch
   end
 
   def test_create_pattern_with_regex
