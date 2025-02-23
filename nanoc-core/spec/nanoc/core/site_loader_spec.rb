@@ -165,7 +165,7 @@ describe Nanoc::Core::SiteLoader do
     end
   end
 
-  shared_examples :code_snippets_from_config do |lib_dir: 'lib'|
+  shared_examples 'code snippets from config' do |lib_dir: 'lib'|
     subject { loader.send(:code_snippets_from_config, config) }
 
     let(:config) do
@@ -218,7 +218,7 @@ describe Nanoc::Core::SiteLoader do
   end
 
   describe '#code_snippets_from_config' do
-    def with_modified_env(vars = {}, &block)
+    def with_modified_env(vars = {}, &_block)
       original_env = ENV.to_h
       ENV.update vars.transform_keys(&:to_s)
       yield
@@ -227,15 +227,15 @@ describe Nanoc::Core::SiteLoader do
     end
 
     context 'with default lib dir' do
-      include_examples :code_snippets_from_config
+      include_examples 'code snippets from config'
     end
 
     context 'with tilde-prefixed lib dir' do
       around do |example|
-        with_modified_env HOME: Dir.getwd, &example.method(:run)
+        with_modified_env(HOME: Dir.getwd) { example.run }
       end
 
-      include_examples :code_snippets_from_config, lib_dir: '~/lib'
+      include_examples 'code snippets from config', lib_dir: '~/lib'
     end
   end
 end
