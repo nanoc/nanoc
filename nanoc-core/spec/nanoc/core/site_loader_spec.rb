@@ -218,17 +218,21 @@ describe Nanoc::Core::SiteLoader do
   end
 
   describe '#code_snippets_from_config' do
+    def with_modified_env(vars = {}, &block)
+      original_env = ENV.to_h
+      ENV.update vars.transform_keys(&:to_s)
+      yield
+    ensure
+      ENV.update original_env
+    end
+
     context 'with default lib dir' do
       include_examples :code_snippets_from_config
     end
 
     context 'with tilde-prefixed lib dir' do
       around do |example|
-        original_home = ENV['HOME']
-        ENV['HOME'] = Dir.getwd
-        example.run
-      ensure
-        ENV['HOME'] = original_home
+        with_modified_env HOME: Dir.getwd, &example.method(:run)
       end
 
       include_examples :code_snippets_from_config, lib_dir: '~/lib'
