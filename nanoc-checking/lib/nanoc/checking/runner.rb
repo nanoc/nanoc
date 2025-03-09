@@ -6,9 +6,14 @@ module Nanoc
     #
     # @api private
     class Runner
+      # Number of threads to use for running checks.
+      NUM_THREADS = 5
+
       # @param [Nanoc::Core::Site] site The Nanoc site this runner is for
       def initialize(site)
         @site = site
+
+        @log_mutex = Thread::Mutex.new
       end
 
       def any_enabled_checks?
@@ -93,23 +98,72 @@ module Nanoc
         # TODO: remove me
         Nanoc::Core::Compiler.new_for(@site).run_until_reps_built
 
-        checks = []
-        issues = Set.new
-        length = classes.map { |c| c.identifier.to_s.length }.max + 18
-        classes.each do |klass|
-          print format("  %-#{length}s", "Running check #{klass.identifier}… ")
+        checks = classes.map { _1.create(@site) }
+        length = classes.map { _1.identifier.to_s.length }.max
 
-          check = klass.create(@site)
+        puts 'Running checks…'
+
+        # Create space in terminal to print status of all checks
+        classes.count.times { puts }
+        cursor_up($stdout, classes.count)
+
+        # Print all checks (all “pending” for now)
+        checks.each_with_index do |check, index|
+          log_check(index:, topic: format("  %-#{length}s", check.class.identifier.to_s), state: 'pending')
+        end
+
+        # Run checks in parallel
+        Parallel.each_with_index(checks, in_threads: NUM_THREADS) do |check, index|
+          log_check(index:, topic: format("  %-#{length}s", check.class.identifier.to_s), state: colorizer.c('running', :blue))
+
           check.run
 
-          checks << check
-          issues.merge(check.issues)
-
-          # TODO: report progress
-
-          puts check.issues.empty? ? colorizer.c('ok', :green) : colorizer.c('error', :red)
+          state = check.issues.empty? ? colorizer.c('ok', :green) : colorizer.c('error', :red)
+          log_check(index:, topic: format("  %-#{length}s", check.class.identifier.to_s), state:)
         end
+
+        # Move cursor to below list
+        cursor_down($stdout, checks.count)
+
+        # Collect issues
+        issues = Set.new
+        checks.each do |check|
+          issues.merge(check.issues)
+        end
+
         issues
+      end
+
+      def log_check(index:, topic:, state:)
+        @log_mutex.synchronize do
+          cursor_down($stdout, index)
+
+          $stdout << "#{topic}  #{state}"
+          erase_rest_of_line($stdout)
+
+          cursor_up($stdout, index)
+          go_to_start_of_line($stdout)
+        end
+      end
+
+      def cursor_up(io, count)
+        return if count.zero?
+
+        io << "\e[#{count}A"
+      end
+
+      def cursor_down(io, count)
+        return if count.zero?
+
+        io << "\e[#{count}B"
+      end
+
+      def go_to_start_of_line(io)
+        io << "\r"
+      end
+
+      def erase_rest_of_line(io)
+        io << "\e[K"
       end
 
       def subject_to_s(str)
