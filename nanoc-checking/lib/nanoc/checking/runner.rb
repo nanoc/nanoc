@@ -87,29 +87,28 @@ module Nanoc
         end
       end
 
+      ClassID = Struct.new(:identifier)
       def run_checks(classes)
         return [] if classes.empty?
 
         # TODO: remove me
         Nanoc::Core::Compiler.new_for(@site).run_until_reps_built
-
-        checks = []
-        issues = Set.new
         length = classes.map { |c| c.identifier.to_s.length }.max + 18
-        classes.each do |klass|
-          print format("  %-#{length}s", "Running check #{klass.identifier}… ")
-
+        if classes.size==1
+          print format("  %-#{length}s", "Running check #{classes.first.identifier}… ")
+          check = classes.first.create(@site)
+          check.run
+          puts check.issues.empty? ? 'ok'.green : 'error'.red
+          return check.issues
+        end
+        Parallel.map(classes) do |klass|
           check = klass.create(@site)
           check.run
+          puts format("  %-#{length}s%s", "Check #{klass.identifier}: ",check.issues.empty? ? 'ok'.green : 'error'.red)
+          check.issues.map!{Nanoc::Checking::Issue.new(_1.description,_1.subject,ClassID.new(klass.identifier))}
+          check.issues
+        end.reduce(:union)
 
-          checks << check
-          issues.merge(check.issues)
-
-          # TODO: report progress
-
-          puts check.issues.empty? ? 'ok'.green : 'error'.red
-        end
-        issues
       end
 
       def subject_to_s(str)
