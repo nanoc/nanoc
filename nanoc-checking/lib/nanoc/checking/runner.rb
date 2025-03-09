@@ -53,6 +53,8 @@ module Nanoc
         run_check_classes(check_classes_named(check_class_names))
       end
 
+      ClassID = Struct.new(:identifier)
+
       private
 
       def loader
@@ -87,14 +89,13 @@ module Nanoc
         end
       end
 
-      ClassID = Struct.new(:identifier)
       def run_checks(classes)
         return [] if classes.empty?
 
         # TODO: remove me
         Nanoc::Core::Compiler.new_for(@site).run_until_reps_built
         length = classes.map { |c| c.identifier.to_s.length }.max + 18
-        if classes.size==1
+        if classes.size == 1
           print format("  %-#{length}s", "Running check #{classes.first.identifier}… ")
           check = classes.first.create(@site)
           check.run
@@ -104,11 +105,10 @@ module Nanoc
         Parallel.map(classes) do |klass|
           check = klass.create(@site)
           check.run
-          puts format("  %-#{length}s%s", "Check #{klass.identifier}: ",check.issues.empty? ? 'ok'.green : 'error'.red)
-          check.issues.map!{Nanoc::Checking::Issue.new(_1.description,_1.subject,ClassID.new(klass.identifier))}
+          puts format("  %-#{length}s%s", "Check #{klass.identifier}: ", check.issues.empty? ? 'ok'.green : 'error'.red)
+          check.issues.map! { Nanoc::Checking::Issue.new(_1.description, _1.subject, ClassID.new(klass.identifier)) }
           check.issues
         end.reduce(:union)
-
       end
 
       def subject_to_s(str)
