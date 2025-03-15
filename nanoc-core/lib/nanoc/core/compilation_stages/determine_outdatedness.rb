@@ -41,7 +41,7 @@ module Nanoc
         end
 
         def outdated?(rep)
-          if @outdatedness_store.include?(rep)
+          if @outdatedness_store.include?(rep) # rubocop:disable Style/RedundantCondition
             # We determined previously that this rep is outdated.
             true
           else

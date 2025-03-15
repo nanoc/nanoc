@@ -836,6 +836,9 @@ Lint/UselessConstantScoping: # new in 1.72
 Style/RedundantFormat: # new in 1.72
   Enabled: true
 
+Style/ComparableBetween: # new in 1.74
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
