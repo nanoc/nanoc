@@ -5,7 +5,7 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 3.1
 
-require:
+plugins:
   - rubocop-minitest
   - rubocop-rake
   - rubocop-rspec
