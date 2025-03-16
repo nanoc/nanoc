@@ -7,15 +7,13 @@ module Nanoc
     #
     # @api private
     class Logger
-      # Maps actions (`:create`, `:update`, `:identical`, `:cached`, `:skip` and `:delete`)
-      # onto their ANSI color codes.
       ACTION_COLORS = {
-        create: "\e[32m", # green
-        update: "\e[33m", # yellow
-        identical: '',    # (nothing)
-        cached: '',       # (nothing)
-        skip: '',         # (nothing)
-        delete: "\e[31m", # red
+        create: [:green],
+        update: [:yellow],
+        identical: [],
+        cached: [],
+        skip: [],
+        delete: [:red],
       }.freeze
 
       include Singleton
@@ -42,17 +40,17 @@ module Nanoc
       #
       # @return [void]
       def file(level, action, name, duration = nil)
-        log(
-          level,
-          format(
-            '%s%12s%s  %s%s',
-            ACTION_COLORS[action.to_sym],
-            action,
-            "\e[0m",
-            duration.nil? ? '' : format('[%2.2fs]  ', duration),
-            name,
-          ),
+        colorizer = Nanoc::CLI::ANSIStringColorizer.new($stdout)
+        colored_action = colorizer.c(action.to_s, *ACTION_COLORS[action.to_sym])
+
+        message = format(
+          '%12s  %s%s',
+          colored_action,
+          duration.nil? ? '' : format('[%2.2fs]  ', duration),
+          name,
         )
+
+        log(level, message)
       end
 
       # Logs a message.
@@ -61,15 +59,13 @@ module Nanoc
       #
       # @param [String] message The message to be logged
       #
-      # @param [#puts] io The stream to which the message should be written
-      #
       # @return [void]
-      def log(level, message, io = $stdout)
+      def log(level, message)
         return if @level == :off
         return if @level != :low && @level != level
 
         @mutex.synchronize do
-          io.puts(message)
+          puts(message)
         end
       end
     end

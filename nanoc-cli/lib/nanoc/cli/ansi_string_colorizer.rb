@@ -6,15 +6,31 @@ module Nanoc
     # attributes, it returns a colorized string.
     #
     # @api private
-    module ANSIStringColorizer
-      # TODO: complete mapping
+    class ANSIStringColorizer
+      CLEAR = "\e[0m"
+
       MAPPING = {
         bold: "\e[1m",
+
+        black: "\e[30m",
         red: "\e[31m",
         green: "\e[32m",
         yellow: "\e[33m",
         blue: "\e[34m",
+        magenta: "\e[35m",
+        cyan: "\e[36m",
+        white: "\e[37m",
       }.freeze
+
+      def initialize(io)
+        @io = io
+      end
+
+      def enabled?
+        return @_enabled if defined?(@_enabled)
+
+        @_enabled = Nanoc::CLI.enable_ansi_colors?(@io)
+      end
 
       # @param [String] str The string to colorize
       #
@@ -22,8 +38,12 @@ module Nanoc
       #   string with
       #
       # @return [String] A string colorized using the given attributes
-      def self.c(str, *attrs)
-        attrs.map { |a| MAPPING[a] }.join('') + str + "\e[0m"
+      def c(str, *attrs)
+        if enabled?
+          attrs.map { |a| MAPPING[a] }.join('') + str + CLEAR
+        else
+          str
+        end
       end
     end
   end

@@ -107,7 +107,7 @@ module Nanoc
 
           # TODO: report progress
 
-          puts check.issues.empty? ? 'ok'.green : 'error'.red
+          puts check.issues.empty? ? colorizer.c('ok', :green) : colorizer.c('error', :red)
         end
         issues
       end
@@ -116,9 +116,11 @@ module Nanoc
         str || '(global)'
       end
 
-      def print_issues(issues)
-        require 'colored'
+      def colorizer
+        @_colorizer ||= Nanoc::CLI::ANSIStringColorizer.new($stdout)
+      end
 
+      def print_issues(issues)
         return if issues.empty?
 
         puts 'Issues found!'
@@ -129,7 +131,7 @@ module Nanoc
 
           puts "  #{subject_to_s(subject)}:"
           issues.each do |i|
-            puts "    [ #{'ERROR'.red} ] #{i.check_class.identifier} - #{i.description}"
+            puts "    [ #{colorizer.c('ERROR', :red)} ] #{i.check_class.identifier} - #{i.description}"
           end
         end
       end

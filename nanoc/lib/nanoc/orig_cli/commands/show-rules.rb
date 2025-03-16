@@ -56,7 +56,11 @@ module Nanoc::OrigCLI::Commands
     end
 
     def fmt_heading(str)
-      Nanoc::CLI::ANSIStringColorizer.c(str, :bold, :yellow)
+      colorizer.c(str, :bold, :yellow)
+    end
+
+    def colorizer
+      @_colorizer ||= Nanoc::CLI::ANSIStringColorizer.new($stdout)
     end
   end
 end
