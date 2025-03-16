@@ -107,9 +107,7 @@ module Nanoc::CLI
       write_compact_error(error, $stderr)
 
       File.open('crash.log', 'w') do |io|
-        cio = Nanoc::CLI.wrap_in_cleaning_stream(io)
-        cio.add_stream_cleaner(::Nanoc::CLI::StreamCleaners::ANSIColors)
-        write_verbose_error(error, cio)
+        write_verbose_error(error, io)
       end
     end
 
@@ -289,7 +287,7 @@ module Nanoc::CLI
 
       message = "#{error.class}: #{message_for_error(error)}"
       unless verbose
-        message = "\e[1m\e[31m" + message + "\e[0m"
+        message = colorizer_for(stream).c(message, :bold, :red)
       end
       stream.puts message
       resolution = resolution_for(error)
@@ -361,6 +359,10 @@ module Nanoc::CLI
       $LOAD_PATH.each_with_index do |i, index|
         stream.puts "  #{index}. #{i}"
       end
+    end
+
+    def colorizer_for(io)
+      Nanoc::CLI::ANSIStringColorizer.new(io)
     end
 
     def unwrap_error(e)

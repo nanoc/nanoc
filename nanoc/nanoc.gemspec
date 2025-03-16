@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 3.1'
 
   s.add_dependency('addressable', '~> 2.5')
-  s.add_dependency('colored', '~> 1.2')
   s.add_dependency('nanoc-checking', '~> 1.0', '>= 1.0.2')
   s.add_dependency('nanoc-cli', "= #{Nanoc::VERSION}")
   s.add_dependency('nanoc-core', "= #{Nanoc::VERSION}")

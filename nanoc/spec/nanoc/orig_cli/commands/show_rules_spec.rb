@@ -4,6 +4,14 @@ describe Nanoc::OrigCLI::Commands::ShowRules, site: true, stdio: true do
   describe '#run' do
     subject { runner.run }
 
+    around do |ex|
+      orig_force_color = Nanoc::CLI.force_color
+      Nanoc::CLI.force_color = Nanoc::CLI::FORCE_COLOR_ENABLED
+      ex.run
+    ensure
+      Nanoc::CLI.force_color = orig_force_color
+    end
+
     let(:runner) do
       described_class.new(options, arguments, command)
     end

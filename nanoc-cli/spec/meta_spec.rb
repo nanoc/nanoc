@@ -11,7 +11,6 @@ describe 'meta', chdir: false do
     # TODO: don’t ignore anything
     ignored_regular_file_base_names = %w[
       stream_cleaners/abstract
-      stream_cleaners/ansi_colors
       ansi_string_colorizer
       commands/create_site
       commands/nanoc

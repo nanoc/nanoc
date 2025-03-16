@@ -8,12 +8,12 @@ module Nanoc::CLI::CompileListeners
     end
 
     COLOR_MAP = {
-      'compilation' => "\e[31m",
-      'content' => "\e[32m",
-      'filtering' => "\e[33m",
-      'dependency_tracking' => "\e[34m",
-      'phase' => "\e[35m",
-      'stage' => "\e[36m",
+      'compilation' => :red,
+      'content' => :green,
+      'filtering' => :yellow,
+      'dependency_tracking' => :blue,
+      'phase' => :magenta,
+      'stage' => :cyan,
     }.freeze
 
     # @see Listener#start
@@ -92,9 +92,13 @@ module Nanoc::CLI::CompileListeners
       @_logger ||=
         Logger.new($stdout).tap do |l|
           l.formatter = proc do |_severity, datetime, progname, msg|
-            "*** #{datetime.strftime('%H:%M:%S.%L')} #{COLOR_MAP[progname]}#{msg}\e[0m\n"
+            "*** #{datetime.strftime('%H:%M:%S.%L')} #{colorizer.c(msg, COLOR_MAP[progname])}\n"
           end
         end
+    end
+
+    def colorizer
+      @_colorizer ||= Nanoc::CLI::ANSIStringColorizer.new($stdout)
     end
   end
 end

@@ -16,6 +16,15 @@ end
 module Nanoc
   # @api private
   module CLI
+    FORCE_COLOR_ENABLED = :enabled
+    FORCE_COLOR_DISABLED = :disabled
+
+    class << self
+      attr_accessor :force_color
+    end
+
+    self.force_color = nil
+
     # @return [Boolean] true if debug output is enabled, false if not
     def self.debug?
       @debug || false
@@ -58,10 +67,6 @@ module Nanoc
         cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::UTF8)
       end
 
-      unless enable_ansi_colors?(io)
-        cio.add_stream_cleaner(Nanoc::CLI::StreamCleaners::ANSIColors)
-      end
-
       cio
     end
 
@@ -74,7 +79,14 @@ module Nanoc
 
     # @return [Boolean] true if color support is present, false if not
     def self.enable_ansi_colors?(io)
-      io.tty? && !ENV.key?('NO_COLOR')
+      case force_color
+      when FORCE_COLOR_ENABLED
+        true
+      when FORCE_COLOR_DISABLED
+        false
+      else
+        io.tty? && !ENV.key?('NO_COLOR')
+      end
     end
 
     # Invokes the Nanoc command-line tool with the given arguments.
@@ -218,8 +230,6 @@ inflector_class = Class.new(Zeitwerk::Inflector) do
     case basename
     when 'version', 'cli', 'utf8'
       basename.upcase
-    when 'ansi_colors'
-      'ANSIColors'
     when 'ansi_string_colorizer'
       'ANSIStringColorizer'
     else
