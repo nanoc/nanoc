@@ -5,6 +5,23 @@ module Nanoc
     # An output stream that passes output through stream cleaners. This can be
     # used to strip ANSI color sequences, for instance.
     class CleaningStream
+      extend Forwardable
+
+      def_delegator :@stream, :close
+      def_delegator :@stream, :closed?
+      def_delegator :@stream, :exist?
+      def_delegator :@stream, :exists?
+      def_delegator :@stream, :external_encoding
+      def_delegator :@stream, :printf
+      def_delegator :@stream, :reopen
+      def_delegator :@stream, :set_encoding
+      def_delegator :@stream, :string
+      def_delegator :@stream, :sync
+      def_delegator :@stream, :sync=
+      def_delegator :@stream, :tell
+      def_delegator :@stream, :winsize
+      def_delegator :@stream, :winsize=
+
       # @param [IO, StringIO] stream The stream to wrap
       def initialize(stream)
         @stream = stream
@@ -69,11 +86,6 @@ module Nanoc
         end
       end
 
-      # @see IO#tell
-      def tell
-        @stream.tell
-      end
-
       # @see IO#print
       def print(str)
         _nanoc_swallow_broken_pipe_errors_while do
@@ -81,76 +93,11 @@ module Nanoc
         end
       end
 
-      # @see IO#printf
-      def printf(*args)
-        @stream.printf(*args)
-      end
-
       # @see IO#puts
       def puts(*str)
         _nanoc_swallow_broken_pipe_errors_while do
           @stream.puts(*str.map { |ss| _nanoc_clean(ss) })
         end
-      end
-
-      # @see StringIO#string
-      def string
-        @stream.string
-      end
-
-      # @see IO#reopen
-      def reopen(*args)
-        @stream.reopen(*args)
-      end
-
-      # @see IO#close
-      def close
-        @stream.close
-      end
-
-      # @see IO#closed?
-      def closed?
-        @stream.closed?
-      end
-
-      # @see File#exist?
-      def exist?
-        @stream.exist?
-      end
-
-      # @see File.exists?
-      def exists?
-        @stream.exists?
-      end
-
-      # @see IO.winsize
-      def winsize
-        @stream.winsize
-      end
-
-      # @see IO.winsize=
-      def winsize=(arg)
-        @stream.winsize = arg
-      end
-
-      # @see IO.sync
-      def sync
-        @stream.sync
-      end
-
-      # @see IO.sync=
-      def sync=(arg)
-        @stream.sync = arg
-      end
-
-      # @see IO.sync=
-      def external_encoding
-        @stream.external_encoding
-      end
-
-      # @see ARGF.set_encoding
-      def set_encoding(*args)
-        @stream.set_encoding(*args)
       end
 
       protected

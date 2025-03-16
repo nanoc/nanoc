@@ -9,6 +9,10 @@ describe Nanoc::CLI::CleaningStream do
         @called_methods = []
       end
 
+      def printf(*_args)
+        @called_methods << :printf
+      end
+
       def method_missing(symbol, *_args)
         @called_methods << symbol
       end
@@ -20,7 +24,7 @@ describe Nanoc::CLI::CleaningStream do
   end
 
   it 'forwards methods' do
-    methods = %i[write << flush tell print printf puts string reopen exist? exists? close closed?]
+    methods = %i[write << flush tell print printf puts string reopen exist? exists? close closed? external_encoding set_encoding sync sync= winsize winsize=]
 
     s = stream_class.new
     cs = described_class.new(s)
@@ -38,6 +42,12 @@ describe Nanoc::CLI::CleaningStream do
     cs.exists?
     cs.close
     cs.closed?
+    cs.external_encoding
+    cs.set_encoding('abc')
+    cs.sync
+    cs.sync = false
+    cs.winsize
+    cs.winsize = 'fake'
 
     expect(s.called_methods).to eq(methods)
   end
