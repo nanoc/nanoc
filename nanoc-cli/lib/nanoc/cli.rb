@@ -21,30 +21,19 @@ module Nanoc
 
     class << self
       attr_accessor :force_color
+
+      # true if debug output is enabled, false if not
+      attr_accessor :debug
+
+      attr_accessor :verbosity
+
+      def debug? = debug
     end
 
+    # Set default singleton attributes
     self.force_color = nil
-
-    # @return [Boolean] true if debug output is enabled, false if not
-    def self.debug?
-      @debug || false
-    end
-
-    # @param [Boolean] boolean true if debug output should be enabled,
-    #   false if it should not
-    #
-    # @return [void]
-    def self.debug=(boolean)
-      @debug = boolean
-    end
-
-    def self.verbosity
-      @verbosity || 0
-    end
-
-    def self.verbosity=(val)
-      @verbosity = val
-    end
+    self.debug = false
+    self.verbosity = 0
 
     # Wraps `$stdout` and `$stderr` in appropriate cleaning streams.
     #
