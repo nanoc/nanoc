@@ -118,7 +118,7 @@ module Nanoc
 
           check.run
 
-          state = check.issues.empty? ? colorizer.c('ok', :green) : colorizer.c('error', :red)
+          state = check.ok? ? colorizer.c('ok', :green) : colorizer.c('error', :red)
           log_check(index:, topic: format("  %-#{length}s", check.class.identifier.to_s), state:)
         end
 
