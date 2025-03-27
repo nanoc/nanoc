@@ -143,7 +143,7 @@ module Nanoc
 
         def request_url_once(url)
           req = Net::HTTP::Get.new(path_for_url(url))
-          req['User-Agent'] = "Mozilla/5.0 Nanoc/#{Nanoc::VERSION} (link rot checker)"
+          req['User-Agent'] = user_agent
           http = Net::HTTP.new(url.host, url.port)
           if url.instance_of? URI::HTTPS
             http.use_ssl = true
@@ -160,6 +160,20 @@ module Nanoc
         def excluded_file?(file)
           excludes = @config.fetch(:checks, {}).fetch(:external_links, {}).fetch(:exclude_files, [])
           excludes.any? { |pattern| Regexp.new(pattern).match(file) }
+        end
+
+        def user_agent
+          @_user_agent ||= custom_user_agent || default_user_agent
+        end
+
+        private
+
+        def custom_user_agent
+          @config.dig(:checks, :external_links, :user_agent)
+        end
+
+        def default_user_agent
+          "Mozilla/5.0 Nanoc/#{Nanoc::VERSION} (link rot checker)"
         end
       end
     end

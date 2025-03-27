@@ -106,6 +106,9 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "user_agent" : {
+              "type": "string"
+            },
             "exclude": {
               "type": "array",
               "items": {
