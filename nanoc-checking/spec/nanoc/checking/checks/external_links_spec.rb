@@ -34,6 +34,30 @@ describe Nanoc::Checking::Checks::ExternalLinks do
     File.write('Rules', 'passthrough "/**/*"')
   end
 
+  describe '#user_agent' do
+    subject(:check) do
+      described_class.create(site)
+    end
+
+    context 'when none configured' do
+      it 'uses default' do
+        expect(check.user_agent).to eql "Mozilla/5.0 Nanoc/#{Nanoc::VERSION} (link rot checker)"
+      end
+    end
+
+    context 'when custom user agent configured' do
+      let(:config) do
+        super().merge(
+          checks: { external_links: { user_agent: 'my custom user agent' } },
+        )
+      end
+
+      it 'uses custom user agent' do
+        expect(check.user_agent).to eql 'my custom user agent'
+      end
+    end
+  end
+
   context 'found' do
     before do
       File.write('output/hi.html', '<a href="http://example.com/x">stuff</a>')
