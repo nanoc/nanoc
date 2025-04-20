@@ -1,5 +1,15 @@
 # nanoc-checking news
 
+## 1.0.6 (2025-04-20)
+
+Enhancements:
+
+- Made checks be run in parallel (#1735) [Jan M. Faber]
+
+Fixes:
+
+- Restored compatibility with Nanoc 4.13.4
+
 ## 1.0.5 (2024-04-21)
 
 Fixes:
