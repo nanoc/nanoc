@@ -17,8 +17,6 @@ module Nanoc::Filters
       # Get options
       options = params.merge(
         filename:,
-        outvar: '_erbout',
-        disable_capture: true,
       )
 
       # Create context
