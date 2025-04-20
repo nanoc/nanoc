@@ -1,5 +1,20 @@
 # Nanoc news
 
+## 4.13.4 (2025-04-20)
+
+Enhancements:
+
+- Added `id_proc:` parameter to the blogging helper’s `#atom_feed` (#1723)
+- Made `clonefile` a dependency, which will make Nanoc use less disk space (#1727)
+- Made checks be run in parallel (#1735) [Jan M. Faber]
+- Made Nanoc expand `~` in `lib_dirs` and `command_dirs` (#1725) [zor-el]
+- Allowed configuring the user agent for the external link checker (#1740) [Phil Lee]
+- Made minor speed improvements (#1742, #1741)
+
+Fixes:
+
+- Resolved a `logger` deprecation warning
+
 ## 4.13.3 (2024-11-23)
 
 Fixes:
