@@ -19,7 +19,7 @@ module Nanoc
               runner.run_all
             elsif options[:deploy]
               runner.run_for_deploy
-            elsif arguments.any?
+            elsif !arguments.empty?
               runner.run_specific(arguments)
             else
               runner.run_for_deploy

@@ -28,7 +28,7 @@ module Nanoc
             attributes = Set.new(old_checksums.keys) + Set.new(new_checksums.keys)
             changed_attributes = attributes.reject { |a| old_checksums[a] == new_checksums[a] }
 
-            if changed_attributes.any?
+            unless changed_attributes.empty?
               Nanoc::Core::OutdatednessReasons::AttributesModified.new(changed_attributes)
             end
           else

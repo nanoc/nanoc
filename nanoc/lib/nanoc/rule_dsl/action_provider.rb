@@ -39,7 +39,7 @@ module Nanoc::RuleDSL
     end
 
     def need_preprocessing?
-      @rules_collection.preprocessors.any?
+      !@rules_collection.preprocessors.empty?
     end
 
     def preprocess(site)

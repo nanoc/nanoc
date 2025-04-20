@@ -25,7 +25,7 @@ module Nanoc::Filters
         warnings = document.warnings
       end
 
-      if warnings.any?
+      unless warnings.empty?
         $stderr.puts "kramdown warning(s) for #{@item_rep.inspect}"
         warnings.each do |warning|
           $stderr.puts "  #{warning}"

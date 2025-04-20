@@ -107,7 +107,7 @@ RSpec::Matchers.define :send_notification do |name, *expected_args|
 
   failure_message do |_actual|
     s = "expected that proc would send notification #{name.inspect} with args #{expected_args.inspect}"
-    if @actual_notifications.any?
+    unless @actual_notifications.empty?
       s << " (received #{@actual_notifications.size} times with other arguments: #{@actual_notifications.map(&:inspect).join(', ')})"
     end
     s
@@ -332,10 +332,10 @@ RSpec::Matchers.define :have_a_valid_manifest do
 
   failure_message do |_actual|
     reasons = []
-    if @missing_from_manifest.any?
+    unless @missing_from_manifest.empty?
       reasons << "file(s) missing from manifest (#{@missing_from_manifest.join(', ')})"
     end
-    if @extra_in_manifest.any?
+    unless @extra_in_manifest.empty?
       reasons << "file(s) extra in manifest (#{@extra_in_manifest.join(', ')})"
     end
 
@@ -408,7 +408,7 @@ RSpec::Matchers.define :create_dependency_from do |expected|
     if @onto
       values_match?(@onto, @actual)
     else
-      @actual.any?
+      !@actual.empty?
     end
   end
 
