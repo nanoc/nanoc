@@ -120,7 +120,7 @@ module Nanoc::CLI::Commands
           if pred
             print "  [ #{format '%7s', type} ] (#{dep.props})"
 
-            if details.any?
+            unless details.empty?
               print ' '
             end
 
@@ -214,13 +214,13 @@ module Nanoc::CLI::Commands
 
     def print_outdatedness_reasons_for(obj, outdatedness_checker)
       reasons = outdatedness_checker.outdatedness_reasons_for(obj)
-      if reasons.any?
+      if reasons.empty?
+        puts '  is not outdated'
+      else
         puts '  is outdated:'
         reasons.each do |reason|
           puts "    - #{reason.message}"
         end
-      else
-        puts '  is not outdated'
       end
     end
   end

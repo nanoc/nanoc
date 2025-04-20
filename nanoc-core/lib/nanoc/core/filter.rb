@@ -146,10 +146,10 @@ module Nanoc
         #   Returns the required libraries for this filter.
         #   @return [Enumerable<String>] This filter’s list of library names that are required
         def requires(*requires)
-          if requires.any?
-            @requires = requires
-          else
+          if requires.empty?
             @requires || []
+          else
+            @requires = requires
           end
         end
 

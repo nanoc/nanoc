@@ -17,7 +17,7 @@ module Nanoc
       end
 
       def any_enabled_checks?
-        enabled_checks.any?
+        !enabled_checks.empty?
       end
 
       # Lists all available checks on stdout.

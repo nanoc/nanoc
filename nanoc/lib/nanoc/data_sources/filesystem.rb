@@ -324,7 +324,7 @@ module Nanoc::DataSources
         all[basename][0] =
           meta_filenames[0] ? 'yaml' : nil
         all[basename][1] =
-          content_filenames.any? ? content_filenames.map { |fn| ext_of(fn)[1..] || '' } : [nil]
+          content_filenames.empty? ? [nil] : content_filenames.map { |fn| ext_of(fn)[1..] || '' }
       end
 
       all

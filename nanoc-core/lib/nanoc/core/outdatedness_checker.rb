@@ -45,7 +45,7 @@ module Nanoc
       contract C_OBJ => C::IterOf[Reasons::Generic]
       def outdatedness_reasons_for(obj)
         basic_reasons = basic_outdatedness_statuses.fetch(obj).reasons
-        if basic_reasons.any?
+        if !basic_reasons.empty?
           basic_reasons
         elsif outdated_due_to_dependencies?(obj)
           [Reasons::DependenciesOutdated]
@@ -134,7 +134,7 @@ module Nanoc
 
       def attributes_unaffected?(status, dependency)
         reason = status.reasons.find { |r| r.is_a?(Nanoc::Core::OutdatednessReasons::AttributesModified) }
-        reason && dependency.props.attribute_keys.any? && (dependency.props.attribute_keys & reason.attributes).empty?
+        reason && !dependency.props.attribute_keys.empty? && (dependency.props.attribute_keys & reason.attributes).empty?
       end
 
       def raw_content_prop_causes_outdatedness?(objects, raw_content_prop)
@@ -184,7 +184,7 @@ module Nanoc
 
         pairs = attributes_prop.select { |a| a.is_a?(Array) }.to_h
 
-        unless pairs.any?
+        if pairs.empty?
           raise(
             Nanoc::Core::Errors::InternalInconsistency,
             'expected attributes_prop not to be empty',
