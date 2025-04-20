@@ -139,7 +139,7 @@ module Nanoc::CLI::Commands
       case dep.props.raw_content
       when true
         outcome << 'matching any identifier'
-      when Set
+      when Set, Array
         dep.props.raw_content.sort.each do |x|
           outcome << "matching identifier #{x}"
         end
@@ -149,7 +149,7 @@ module Nanoc::CLI::Commands
         case dep.props.attributes
         when true
           outcome << 'matching any attribute'
-        when Set
+        when Set, Array
           dep.props.attributes.each do |elem|
             case elem
             when Symbol

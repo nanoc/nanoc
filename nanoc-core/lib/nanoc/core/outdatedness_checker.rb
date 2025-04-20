@@ -175,7 +175,7 @@ module Nanoc
       def attributes_prop_causes_outdatedness?(objects, attributes_prop)
         return false unless attributes_prop
 
-        unless attributes_prop.is_a?(Set)
+        unless attributes_prop.is_a?(Set) || attributes_prop.is_a?(Array)
           raise(
             Nanoc::Core::Errors::InternalInconsistency,
             'expected attributes_prop to be a Set',

@@ -44,28 +44,10 @@ module Nanoc
 
       contract C_ARGS => C::Any
       def initialize(raw_content: false, attributes: false, compiled_content: false, path: false)
+        @raw_content = raw_content
+        @attributes = attributes
         @compiled_content = compiled_content
         @path = path
-
-        @attributes =
-          case attributes
-          when Set
-            attributes
-          when Array
-            Set.new(attributes)
-          else
-            attributes
-          end
-
-        @raw_content =
-          case raw_content
-          when Set
-            raw_content
-          when Array
-            Set.new(raw_content)
-          else
-            raw_content
-          end
       end
 
       contract C::None => String
@@ -77,7 +59,7 @@ module Nanoc
           s << (compiled_content? ? 'c' : '_')
           s << (path? ? 'p' : '_')
 
-          if @raw_content.is_a?(Set)
+          if @raw_content.is_a?(Set) || @raw_content.is_a?(Array)
             @raw_content.each do |elem|
               s << '; raw_content('
               s << elem.inspect
@@ -85,7 +67,7 @@ module Nanoc
             end
           end
 
-          if @attributes.is_a?(Set)
+          if @attributes.is_a?(Set) || @attributes.is_a?(Array)
             @attributes.each do |elem|
               s << '; attr('
               s << elem.inspect
@@ -110,7 +92,7 @@ module Nanoc
       contract C::None => C::Bool
       def raw_content?
         case @raw_content
-        when Set
+        when Array, Set
           !@raw_content.empty?
         else
           @raw_content
@@ -120,7 +102,7 @@ module Nanoc
       contract C::None => C::Bool
       def attributes?
         case @attributes
-        when Set
+        when Array, Set
           !@attributes.empty?
         else
           @attributes
@@ -168,7 +150,7 @@ module Nanoc
           when false
             own
           else
-            own + other
+            Set.new(own + other)
           end
         end
       end

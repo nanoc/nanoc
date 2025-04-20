@@ -259,7 +259,7 @@ describe Nanoc::Core::DependencyProps do
       let(:props) { props_attrs_false }
       let(:other_props) { props_attrs_list_a }
 
-      it { is_expected.to be_a(Set) }
+      it { is_expected.to be_a(Array) }
       it { is_expected.to match_array(%i[donkey giraffe]) }
     end
 
@@ -288,7 +288,7 @@ describe Nanoc::Core::DependencyProps do
       let(:props) { props_attrs_list_a }
       let(:other_props) { props_attrs_false }
 
-      it { is_expected.to be_a(Set) }
+      it { is_expected.to be_a(Array) }
       it { is_expected.to match_array(%i[donkey giraffe]) }
     end
 
@@ -345,7 +345,7 @@ describe Nanoc::Core::DependencyProps do
       let(:props) { props_raw_content_false }
       let(:other_props) { props_raw_content_list_a }
 
-      it { is_expected.to be_a(Set) }
+      it { is_expected.to be_a(Array) }
       it { is_expected.to match_array(%w[donkey giraffe]) }
     end
 
@@ -374,7 +374,7 @@ describe Nanoc::Core::DependencyProps do
       let(:props) { props_raw_content_list_a }
       let(:other_props) { props_raw_content_false }
 
-      it { is_expected.to be_a(Set) }
+      it { is_expected.to be_a(Array) }
       it { is_expected.to match_array(%w[donkey giraffe]) }
     end
 
