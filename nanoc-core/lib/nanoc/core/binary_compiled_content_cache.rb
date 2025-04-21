@@ -92,6 +92,10 @@ module Nanoc
         end
       end
 
+      def use_clonefile?
+        defined?(Clonefile)
+      end
+
       private
 
       def dirname
@@ -132,11 +136,13 @@ module Nanoc
         # changed outside of Nanoc.
 
         # Try clonefile
-        FileUtils.rm_f(to)
-        begin
-          res = Clonefile.always(from, to)
-          return if res
-        rescue Clonefile::UnsupportedPlatform, Errno::ENOTSUP, Errno::EXDEV, Errno::EINVAL
+        if use_clonefile?
+          FileUtils.rm_f(to)
+          begin
+            res = Clonefile.always(from, to)
+            return if res
+          rescue Clonefile::UnsupportedPlatform, Errno::ENOTSUP, Errno::EXDEV, Errno::EINVAL
+          end
         end
 
         # Fall back to old-school copy

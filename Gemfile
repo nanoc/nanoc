@@ -22,6 +22,7 @@ end
 
 group :devel do
   gem 'addressable', '~> 2.8'
+  gem 'clonefile', '~> 0.5.3', platforms: :ruby
   gem 'contracts', '~> 0.17'
   gem 'debug', '~> 1.9'
   gem 'fuubar', '~> 2.5'
