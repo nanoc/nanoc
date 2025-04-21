@@ -10,7 +10,6 @@ require 'yaml'
 require 'zlib'
 
 # External gems
-require 'clonefile'
 require 'concurrent-ruby'
 require 'json_schema'
 require 'ddmetrics'
@@ -20,6 +19,13 @@ require 'memo_wise'
 require 'slow_enumerator_tools'
 require 'tty-platform'
 require 'zeitwerk'
+
+# External gems (optional)
+begin
+  require 'clonefile'
+rescue LoadError
+  # ignore
+end
 
 module Nanoc
   module Core

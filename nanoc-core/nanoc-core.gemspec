@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 3.1'
 
   s.add_dependency('base64', '~> 0.2')
-  s.add_dependency('clonefile', '~> 0.5.3')
   s.add_dependency('concurrent-ruby', '~> 1.1')
   s.add_dependency('ddmetrics', '~> 1.0')
   s.add_dependency('ddplugin', '~> 1.0')
