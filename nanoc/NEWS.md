@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.13.5 (2025-04-21)
+
+Fixes:
+
+- Removed hard dependency on `clonefile`, as it is not available on Windows (#1745)
+
 ## 4.13.4 (2025-04-20)
 
 Enhancements:
