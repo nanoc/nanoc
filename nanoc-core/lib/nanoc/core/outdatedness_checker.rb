@@ -28,7 +28,7 @@ module Nanoc
         dependency_store: Nanoc::Core::DependencyStore,
         action_sequence_store: Nanoc::Core::ActionSequenceStore,
         action_sequences: C_ACTION_SEQUENCES,
-        reps: Nanoc::Core::ItemRepRepo
+        reps: Nanoc::Core::ItemRepRepo,
       ] => C::Any
       def initialize(site:, checksum_store:, checksums:, dependency_store:, action_sequence_store:, action_sequences:, reps:)
         @site = site

@@ -9,14 +9,14 @@ module Nanoc
       C_RAW_CONTENT =
         C::Or[
           C::ArrayOf[C::Or[String, Regexp]],
-          C::Bool
+          C::Bool,
         ]
 
       C_ATTR =
         C::Or[
           C::ArrayOf[Symbol],
           C::HashOf[Symbol => C::Any],
-          C::Bool
+          C::Bool,
         ]
 
       C_KEYWORD_PROPS =
@@ -24,7 +24,7 @@ module Nanoc
           raw_content: C::Optional[C_RAW_CONTENT],
           attributes: C::Optional[C_ATTR],
           compiled_content: C::Optional[C::Bool],
-          path: C::Optional[C::Bool]
+          path: C::Optional[C::Bool],
         ]
 
       C_OBJ_SRC = Nanoc::Core::Item
@@ -34,7 +34,7 @@ module Nanoc
           Nanoc::Core::Item,
           Nanoc::Core::Layout,
           Nanoc::Core::Configuration,
-          Nanoc::Core::IdentifiableCollection
+          Nanoc::Core::IdentifiableCollection,
         ]
 
       attr_reader :items

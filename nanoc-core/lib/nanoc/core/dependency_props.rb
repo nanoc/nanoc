@@ -14,24 +14,24 @@ module Nanoc
         C::Or[
           C::SetOf[C::Or[String, Regexp]],
           C::ArrayOf[C::Or[String, Regexp]],
-          C::Bool
+          C::Bool,
         ]
 
       C_ATTR =
         C::Or[
           C::SetOf[
             C::Or[
-              Symbol,          # any value
-              [Symbol, C::Any] # pair (specific value)
+              Symbol, # any value
+              [Symbol, C::Any], # pair (specific value)
             ],
           ],
           C::ArrayOf[
             C::Or[
-              Symbol,          # any value
-              [Symbol, C::Any] # pair (specific value)
+              Symbol, # any value
+              [Symbol, C::Any], # pair (specific value)
             ],
           ],
-          C::Bool
+          C::Bool,
         ]
 
       C_ARGS =
@@ -39,7 +39,7 @@ module Nanoc
           raw_content: C::Optional[C_RAW_CONTENT],
           attributes: C::Optional[C_ATTR],
           compiled_content: C::Optional[C::Bool],
-          path: C::Optional[C::Bool]
+          path: C::Optional[C::Bool],
         ]
 
       contract C_ARGS => C::Any

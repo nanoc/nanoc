@@ -10,7 +10,7 @@ module Nanoc
       contract C::Maybe[C::Or[
         Nanoc::Core::ViewContextForCompilation,
         Nanoc::Core::ViewContextForPreCompilation,
-        Nanoc::Core::ViewContextForShell
+        Nanoc::Core::ViewContextForShell,
       ]] => C::Any
       def initialize(context)
         @context = context
