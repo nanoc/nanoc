@@ -77,29 +77,27 @@ module Nanoc
         @action_sequences = action_sequences
 
         # Memoize
-        @_outdatedness_status_for = {}
+        @_apply_rules = {}
       end
 
       contract C_OBJ_MAYBE_REP => C::Maybe[Nanoc::Core::OutdatednessStatus]
       def outdatedness_status_for(obj)
-        # TODO: remove memoization (no longer needed)
-        @_outdatedness_status_for[obj] ||=
-          case obj
-          when Nanoc::Core::ItemRep
-            apply_rules(RULES_FOR_ITEM_REP, obj)
-          when Nanoc::Core::Item
-            apply_rules_multi(RULES_FOR_ITEM_REP, @reps[obj])
-          when Nanoc::Core::Layout
-            apply_rules(RULES_FOR_LAYOUT, obj)
-          when Nanoc::Core::Configuration
-            apply_rules(RULES_FOR_CONFIG, obj)
-          when Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection
-            # Collections are never outdated. Objects inside them might be,
-            # however.
-            apply_rules([], obj)
-          else
-            raise Nanoc::Core::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
-          end
+        case obj
+        when Nanoc::Core::ItemRep
+          apply_rules(RULES_FOR_ITEM_REP, obj)
+        when Nanoc::Core::Item
+          apply_rules_multi(RULES_FOR_ITEM_REP, @reps[obj])
+        when Nanoc::Core::Layout
+          apply_rules(RULES_FOR_LAYOUT, obj)
+        when Nanoc::Core::Configuration
+          apply_rules(RULES_FOR_CONFIG, obj)
+        when Nanoc::Core::ItemCollection, Nanoc::Core::LayoutCollection
+          # Collections are never outdated. Objects inside them might be,
+          # however.
+          apply_rules([], obj)
+        else
+          raise Nanoc::Core::Errors::InternalInconsistency, "do not know how to check outdatedness of #{obj.inspect}"
+        end
       end
 
       def action_sequence_for(rep)
@@ -110,18 +108,19 @@ module Nanoc
 
       contract C::ArrayOf[Class], C_OBJ_MAYBE_REP, Nanoc::Core::OutdatednessStatus => C::Maybe[Nanoc::Core::OutdatednessStatus]
       def apply_rules(rules, obj, status = Nanoc::Core::OutdatednessStatus.new)
-        rules.inject(status) do |acc, rule|
-          if acc.useful_to_apply?(rule)
-            reason = rule.instance.call(obj, self)
-            if reason
-              acc.update(reason)
+        @_apply_rules[obj] ||=
+          rules.inject(status) do |acc, rule|
+            if acc.useful_to_apply?(rule)
+              reason = rule.instance.call(obj, self)
+              if reason
+                acc.update(reason)
+              else
+                acc
+              end
             else
               acc
             end
-          else
-            acc
           end
-        end
       end
 
       contract C::ArrayOf[Class], C::ArrayOf[C_OBJ_MAYBE_REP] => C::Maybe[Nanoc::Core::OutdatednessStatus]
