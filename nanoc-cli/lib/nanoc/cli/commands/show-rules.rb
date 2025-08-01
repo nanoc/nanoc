@@ -8,7 +8,7 @@ Prints the rules used for all items and layouts in the current site.
 "
 no_params
 
-module Nanoc::OrigCLI::Commands
+module Nanoc::CLI::Commands
   class ShowRules < ::Nanoc::CLI::CommandRunner
     def run
       site = load_site
@@ -65,4 +65,4 @@ module Nanoc::OrigCLI::Commands
   end
 end
 
-runner Nanoc::OrigCLI::Commands::ShowRules
+runner Nanoc::CLI::Commands::ShowRules

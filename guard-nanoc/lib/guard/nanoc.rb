@@ -3,7 +3,6 @@
 require 'guard/compat/plugin'
 
 require 'nanoc'
-require 'nanoc/orig_cli'
 
 module Guard
   class Nanoc < Plugin

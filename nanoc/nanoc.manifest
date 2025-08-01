@@ -5,8 +5,6 @@ README.md
 bin/nanoc
 
 lib/nanoc.rb
-lib/nanoc/orig_cli.rb
-lib/nanoc/orig_cli/commands/show-rules.rb
 lib/nanoc/data_sources.rb
 lib/nanoc/data_sources/filesystem.rb
 lib/nanoc/data_sources/filesystem/errors.rb

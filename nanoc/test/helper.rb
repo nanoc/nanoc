@@ -19,7 +19,6 @@ VCR.configure do |c|
 end
 
 require 'nanoc'
-require 'nanoc/orig_cli'
 
 Nanoc::CLI.setup
 

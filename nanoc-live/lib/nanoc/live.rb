@@ -3,7 +3,6 @@
 require 'adsf/live'
 require 'listen'
 require 'nanoc'
-require 'nanoc/orig_cli'
 
 module Nanoc
   module Live

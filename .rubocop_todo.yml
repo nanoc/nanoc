@@ -48,6 +48,7 @@ Lint/MissingSuper:
     - 'nanoc-cli/lib/nanoc/cli/compile_listeners/aggregate.rb'
     - 'nanoc-cli/lib/nanoc/cli/compile_listeners/file_action_printer.rb'
     - 'nanoc-cli/lib/nanoc/cli/compile_listeners/timing_recorder.rb'
+    - 'nanoc-cli/spec/nanoc/cli/commands/show_rules_spec.rb'
     - 'nanoc-cli/spec/nanoc/cli/compile_listeners/abstract_spec.rb'
     - 'nanoc-core/lib/nanoc/core/assertions.rb'
     - 'nanoc-core/lib/nanoc/core/compilation_stages/build_reps.rb'
@@ -94,7 +95,6 @@ Lint/MissingSuper:
     - 'nanoc/lib/nanoc/helpers/breadcrumbs.rb'
     - 'nanoc/lib/nanoc/rule_dsl/action_provider.rb'
     - 'nanoc/spec/nanoc/filters/sass_spec.rb'
-    - 'nanoc/spec/nanoc/orig_cli/commands/show_rules_spec.rb'
     - 'nanoc/test/filters/test_slim.rb'
     - 'nanoc/test/filters/test_xsl.rb'
     - 'nanoc/test/helpers/test_blogging.rb'
@@ -284,7 +284,7 @@ RSpec/EmptyExampleGroup:
     - 'nanoc-core/spec/nanoc/core/outdatedness_rules_spec.rb'
     - 'nanoc/spec/nanoc/helpers/text_spec.rb'
 
-# Offense count: 191
+# Offense count: 190
 # Configuration parameters: CountAsOne.
 RSpec/ExampleLength:
   Max: 29
@@ -361,6 +361,7 @@ RSpec/NamedSubject:
     - 'nanoc-cli/spec/nanoc/cli/command_runner_spec.rb'
     - 'nanoc-cli/spec/nanoc/cli/commands/shell_spec.rb'
     - 'nanoc-cli/spec/nanoc/cli/commands/show_data_spec.rb'
+    - 'nanoc-cli/spec/nanoc/cli/commands/show_rules_spec.rb'
     - 'nanoc-cli/spec/nanoc/cli/compile_listeners/abstract_spec.rb'
     - 'nanoc-cli/spec/nanoc/cli/compile_listeners/diff_generator_spec.rb'
     - 'nanoc-cli/spec/nanoc/cli/error_handler_spec.rb'
@@ -434,7 +435,6 @@ RSpec/NamedSubject:
     - 'nanoc/spec/nanoc/helpers/link_to_spec.rb'
     - 'nanoc/spec/nanoc/helpers/rendering_spec.rb'
     - 'nanoc/spec/nanoc/helpers/text_spec.rb'
-    - 'nanoc/spec/nanoc/orig_cli/commands/show_rules_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/action_recorder_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/action_sequence_calculator_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
@@ -475,19 +475,20 @@ RSpec/RepeatedExampleGroupDescription:
 RSpec/StubbedMock:
   Exclude:
     - 'nanoc-cli/spec/nanoc/cli/commands/compile_spec.rb'
+    - 'nanoc-cli/spec/nanoc/cli/commands/show_rules_spec.rb'
     - 'nanoc-core/spec/nanoc/core/compilation_stages/determine_outdatedness_spec.rb'
     - 'nanoc-core/spec/nanoc/core/compilation_stages/preprocess_spec.rb'
     - 'nanoc-core/spec/nanoc/core/config_loader_spec.rb'
     - 'nanoc-core/spec/nanoc/core/executor_spec.rb'
     - 'nanoc-core/spec/nanoc/core/site_loader_spec.rb'
     - 'nanoc-deploying/spec/nanoc/deploying/deployers/fog_spec.rb'
-    - 'nanoc/spec/nanoc/orig_cli/commands/show_rules_spec.rb'
 
 # Offense count: 73
 # Configuration parameters: IgnoreNameless, IgnoreSymbolicNames.
 RSpec/VerifiedDoubles:
   Exclude:
     - 'nanoc-cli/spec/nanoc/cli/commands/show_data_spec.rb'
+    - 'nanoc-cli/spec/nanoc/cli/commands/show_rules_spec.rb'
     - 'nanoc-cli/spec/nanoc/cli/compile_listeners/diff_generator_spec.rb'
     - 'nanoc-cli/spec/nanoc/cli_spec.rb'
     - 'nanoc-core/spec/nanoc/core/basic_outdatedness_checker_spec.rb'
@@ -503,7 +504,6 @@ RSpec/VerifiedDoubles:
     - 'nanoc-core/spec/nanoc/core/support/mutable_document_view_examples.rb'
     - 'nanoc-core/spec/nanoc/core/support/mutable_identifiable_collection_view_examples.rb'
     - 'nanoc-deploying/spec/nanoc/deploying/deployers/fog_spec.rb'
-    - 'nanoc/spec/nanoc/orig_cli/commands/show_rules_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
 
 # Offense count: 1
@@ -512,7 +512,7 @@ Style/ArrayIntersect:
   Exclude:
     - 'nanoc-core/lib/nanoc/core/outdatedness_checker.rb'
 
-# Offense count: 127
+# Offense count: 125
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle, EnforcedStyleForClasses, EnforcedStyleForModules.
 # SupportedStyles: nested, compact
@@ -526,6 +526,7 @@ Style/ClassAndModuleChildren:
     - 'nanoc-cli/lib/nanoc/cli/commands/shell.rb'
     - 'nanoc-cli/lib/nanoc/cli/commands/show-data.rb'
     - 'nanoc-cli/lib/nanoc/cli/commands/show-plugins.rb'
+    - 'nanoc-cli/lib/nanoc/cli/commands/show-rules.rb'
     - 'nanoc-cli/lib/nanoc/cli/commands/view.rb'
     - 'nanoc-cli/lib/nanoc/cli/compile_listeners/abstract.rb'
     - 'nanoc-cli/lib/nanoc/cli/compile_listeners/aggregate.rb'
@@ -586,8 +587,6 @@ Style/ClassAndModuleChildren:
     - 'nanoc/lib/nanoc/helpers/tagging.rb'
     - 'nanoc/lib/nanoc/helpers/text.rb'
     - 'nanoc/lib/nanoc/helpers/xml_sitemap.rb'
-    - 'nanoc/lib/nanoc/orig_cli.rb'
-    - 'nanoc/lib/nanoc/orig_cli/commands/show-rules.rb'
     - 'nanoc/lib/nanoc/rule_dsl/action_provider.rb'
     - 'nanoc/lib/nanoc/rule_dsl/action_sequence_calculator.rb'
     - 'nanoc/lib/nanoc/rule_dsl/compilation_rule.rb'
@@ -640,7 +639,6 @@ Style/ClassAndModuleChildren:
     - 'nanoc/test/orig_cli/commands/test_create_site.rb'
     - 'nanoc/test/orig_cli/commands/test_help.rb'
     - 'nanoc/test/orig_cli/commands/test_prune.rb'
-    - 'nanoc/test/orig_cli/test_cli.rb'
     - 'nanoc/test/orig_cli/test_error_handler.rb'
     - 'nanoc/test/orig_cli/test_logger.rb'
     - 'nanoc/test/rule_dsl/test_action_provider.rb'
@@ -724,6 +722,7 @@ Style/StringConcatenation:
     - 'nanoc-checking/spec/nanoc/checking/checks/mixed_content_spec.rb'
     - 'nanoc-cli/lib/nanoc/cli.rb'
     - 'nanoc-cli/lib/nanoc/cli/commands/create-site.rb'
+    - 'nanoc-cli/lib/nanoc/cli/commands/show-rules.rb'
     - 'nanoc-cli/lib/nanoc/cli/compile_listeners/file_action_printer.rb'
     - 'nanoc-cli/lib/nanoc/cli/error_handler.rb'
     - 'nanoc-cli/spec/nanoc/cli/error_handler_spec.rb'
@@ -759,7 +758,6 @@ Style/StringConcatenation:
     - 'nanoc/lib/nanoc/helpers/breadcrumbs.rb'
     - 'nanoc/lib/nanoc/helpers/child_parent.rb'
     - 'nanoc/lib/nanoc/helpers/link_to.rb'
-    - 'nanoc/lib/nanoc/orig_cli/commands/show-rules.rb'
     - 'nanoc/lib/nanoc/rule_dsl/compilation_rule_context.rb'
     - 'nanoc/lib/nanoc/rule_dsl/compiler_dsl.rb'
     - 'nanoc/spec/nanoc/core/checksummer_spec.rb'

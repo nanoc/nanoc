@@ -13,7 +13,6 @@ plugins:
 # We use filenames such as “create-site.rb” that translate to method names.
 Naming/FileName:
   Exclude:
-    - "nanoc/lib/nanoc/orig_cli/commands/*.rb"
     - "nanoc-cli/lib/nanoc/cli/commands/*.rb"
     - "nanoc-*/lib/nanoc-*.rb"
     - "nanoc-dart-sass/lib/nanoc/dart-sass.rb"
