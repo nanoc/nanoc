@@ -39,8 +39,8 @@ module Nanoc
           end
 
           # Read prio B
-          @this = @prio_b.shift
-          @this = @prio_b.shift while @seen.include?(@this)
+          @this = @prio_b.pop
+          @this = @prio_b.pop while @seen.include?(@this)
           if @this
             return @this
           end
