@@ -11,6 +11,7 @@
 .ruby-version
 
 coverage/
+/.bundle/
 /.yardoc/
 /Gemfile.lock
 /doc/yardoc/
