@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rake/testtask'
+require 'minitest/test_task'
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 
@@ -10,8 +10,8 @@ RSpec::Core::RakeTask.new(:spec) do |t|
   t.verbose = false
 end
 
-Rake::TestTask.new(:test_all) do |t|
-  t.test_files = Dir['test/**/test_*.rb']
+Minitest::TestTask.create :test_all do |t|
+  t.test_globs = Dir['test/**/test_*.rb']
   t.libs << 'test'
   t.verbose = false
 end
