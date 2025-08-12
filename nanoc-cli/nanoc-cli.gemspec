@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.files         = ['NEWS.md', 'README.md'] + Dir['lib/**/*.rb']
   s.require_paths = ['lib']
 
-  s.required_ruby_version = '>= 3.1'
+  s.required_ruby_version = '>= 3.2'
 
   s.add_dependency('cri', '~> 2.15')
   s.add_dependency('diff-lcs', '~> 1.3')
