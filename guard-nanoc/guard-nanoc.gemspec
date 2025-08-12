@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.author        = 'Denis Defreyne'
   s.email         = 'denis.defreyne@stoneship.org'
 
-  s.required_ruby_version = '>= 3.1'
+  s.required_ruby_version = '>= 3.2'
 
   s.add_dependency 'guard', '~> 2.8'
   s.add_dependency 'guard-compat', '~> 1.0'

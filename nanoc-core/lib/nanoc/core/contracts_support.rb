@@ -78,8 +78,8 @@ module Nanoc
           end
         end
 
-        def contract(*args)
-          Contract(*args)
+        def contract(*)
+          Contract(*)
         end
       end
 

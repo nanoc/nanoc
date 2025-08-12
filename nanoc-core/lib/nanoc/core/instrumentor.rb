@@ -23,7 +23,7 @@ module Nanoc
         @enabled = false
       end
 
-      def self.call(key, *args)
+      def self.call(key, *)
         return yield unless @enabled
 
         begin
@@ -32,7 +32,7 @@ module Nanoc
           yield
         ensure
           stopwatch.stop
-          Nanoc::Core::NotificationCenter.post(key, stopwatch.duration, *args)
+          Nanoc::Core::NotificationCenter.post(key, stopwatch.duration, *)
         end
       end
     end

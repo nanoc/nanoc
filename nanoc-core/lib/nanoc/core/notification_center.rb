@@ -79,8 +79,8 @@ module Nanoc
           instance.on(name, id, &)
         end
 
-        def post(name, *args)
-          instance.post(name, *args)
+        def post(name, *)
+          instance.post(name, *)
         end
 
         def remove(name, id)
