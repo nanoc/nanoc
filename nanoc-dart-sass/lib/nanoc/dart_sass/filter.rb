@@ -18,30 +18,30 @@ module Nanoc
 
         result = Sass.compile_string(
           content,
-          importer: NanocImporter.new(@items, item),
           **params,
+          importers: [NanocImporter.new(@items)].concat(params.fetch(:importers, [])),
           syntax:,
+          url: Addressable::URI.new({ scheme: 'nanoc', path: item.identifier.to_s }).to_s,
         )
         result.css
       end
 
       class NanocImporter
-        def initialize(items, source_item)
+        def initialize(items)
           @items = items
-          @source_item = source_item
         end
 
-        def canonicalize(url, *, **)
-          # Construct proper URL with `nanoc:` prefix if needed
-          if url.start_with?('nanoc:')
-            url
-          else
-            "nanoc:#{url}"
-          end
+        def canonicalize(url, context)
+          uri = Addressable::URI.parse(context.containing_url).join(url)
+          return unless uri.scheme == 'nanoc'
+
+          resolved = resolve_path(uri.path, context.from_import)
+          Addressable::URI.new({ scheme: 'nanoc', path: resolved }).to_s unless resolved.nil?
         end
 
         def load(url)
-          item = find_item_for_url(url)
+          uri = Addressable::URI.parse(url)
+          item = @items[uri.path]
 
           {
             contents: item.raw_content,
@@ -51,62 +51,72 @@ module Nanoc
 
         private
 
-        def find_item_for_url(url)
-          pat = url.sub(/\Ananoc:/, '')
-
-          is_extension_given = !pat.match?(%r{(/|^)[^.]+$})
-
-          # Convert to absolute pattern
-          pat =
-            if pat.start_with?('/')
-              pat
-            else
-              dirname = File.dirname(@source_item.identifier.to_s)
-              Nanoc::Core::Utils.expand_path_without_drive_identifier(pat, dirname)
+        # https://github.com/sass-contrib/sassc-embedded-shim-ruby/blob/594632bb896fb765462253b16ea0451f5f93316d/lib/sassc/embedded.rb#L228
+        def resolve_path(path, from_import)
+          ext = File.extname(path)
+          if ext == '.*'
+            if from_import
+              result = exactly_one(try_path_with_ext("#{without_ext(path)}.import") + try_path_with_ext("#{path}.import"))
+              return result unless result.nil?
             end
 
-          items = collect_items(pat, is_extension_given)
+            result = exactly_one(try_path_with_ext(without_ext(path)) + try_path_with_ext(path))
+            return result unless result.nil?
 
-          # Get the single matching item, or error if there isn’t exactly one
-          items = items.compact
-          case items.size
-          when 0
-            raise "Could not find an item matching pattern `#{pat}`"
-          when 1
-            items.first
-          else
-            raise "It is not clear which item to import. Multiple items match `#{pat}`: #{items.map { _1.identifier.to_s }.sort.join(', ')}"
+            return try_path_as_dir(path, from_import)
           end
+
+          if ['.sass', '.scss', '.css'].include?(ext)
+            if from_import
+              result = exactly_one(try_path("#{without_ext(path)}.import#{ext}"))
+              return result unless result.nil?
+            end
+            return exactly_one(try_path(path))
+          end
+
+          if from_import
+            result = exactly_one(try_path_with_ext("#{path}.import"))
+            return result unless result.nil?
+          end
+
+          result = exactly_one(try_path_with_ext(path))
+          return result unless result.nil?
+
+          try_path_as_dir(path, from_import)
         end
 
-        # Given a pattern, return a collection of items that match this pattern.
-        # This goes beyond what Nanoc patterns typically support by e.g.
-        # supporting partials and index imports.
-        def collect_items(pat, is_extension_given)
-          items = []
-
-          # Try as a regular path
-          items.concat(try_pat(pat, is_extension_given))
-
-          # Try as a partial
-          partial_pat = File.join(File.dirname(pat), "_#{File.basename(pat)}")
-          items.concat(try_pat(partial_pat, is_extension_given))
-
-          # Try as index
-          unless is_extension_given
-            items.concat(@items.find_all(File.join(pat, '/index.*')))
-            items.concat(@items.find_all(File.join(pat, '/_index.*')))
-          end
-
-          items
+        def try_path_with_ext(path)
+          result = try_path("#{path}.sass") + try_path("#{path}.scss")
+          result.empty? ? try_path("#{path}.css") : result
         end
 
-        def try_pat(pat, is_extension_given)
-          if is_extension_given
-            @items.find_all(pat)
-          else
-            @items.find_all("#{pat}.*")
+        def try_path(path)
+          partial = File.join(File.dirname(path), "_#{File.basename(path)}")
+          result = []
+          result.concat(@items.find_all(partial).map(&:identifier).map(&:to_s))
+          result.concat(@items.find_all(path).map(&:identifier).map(&:to_s))
+          result
+        end
+
+        def try_path_as_dir(path, from_import)
+          if from_import
+            result = exactly_one(try_path_with_ext(File.join(path, 'index.import')))
+            return result unless result.nil?
           end
+
+          exactly_one(try_path_with_ext(File.join(path, 'index')))
+        end
+
+        def exactly_one(paths)
+          return if paths.empty?
+          return paths.first if paths.one?
+
+          raise "It's not clear which file to import. Found:\n#{paths.map { |path| "  #{path}" }.join("\n")}"
+        end
+
+        def without_ext(path)
+          ext = File.extname(path)
+          path.delete_suffix(ext)
         end
       end
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::DartSass::Filter::NanocImporter do
-  let(:importer) { described_class.new(items_view, source_item) }
+  let(:importer) { described_class.new(items_view) }
 
   let(:items_view) { Nanoc::Core::ItemCollectionWithoutRepsView.new(items, view_context) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
@@ -66,23 +66,30 @@ describe Nanoc::DartSass::Filter::NanocImporter do
   end
 
   describe '#canonicalize' do
-    subject { importer.canonicalize(url) }
+    subject { importer.canonicalize(url, Struct.new(:containing_url, :from_import).new(containing_url: "nanoc:#{source_item.identifier}", from_import: false)) }
 
     context 'when given a URL with nanoc: prefix' do
-      let(:url) { 'nanoc:foo' }
+      let(:url) { 'nanoc:/assets/style/colors.scss' }
 
-      it { is_expected.to eq('nanoc:foo') }
+      it { is_expected.to eq('nanoc:/assets/style/colors.scss') }
     end
 
     context 'when given a URL without nanoc: prefix' do
-      let(:url) { 'foo' }
+      let(:url) { 'colors.scss' }
 
-      it { is_expected.to eq('nanoc:foo') }
+      it { is_expected.to eq('nanoc:/assets/style/colors.scss') }
     end
   end
 
   describe '#load' do
-    subject(:load_call) { importer.load(url) }
+    subject(:load_call) do
+      canonicalized_url = importer.canonicalize(url, Struct.new(:containing_url, :from_import).new(containing_url: "nanoc:#{source_item.identifier}", from_import: false))
+      if canonicalized_url.nil?
+        raise "Could not find an item matching pattern `#{url}`"
+      end
+
+      importer.load(canonicalized_url)
+    end
 
     context 'when importing absolute path with extension' do
       let(:url) { '/assets/style/colors.scss' }
@@ -153,7 +160,7 @@ describe Nanoc::DartSass::Filter::NanocImporter do
         let(:url) { 'foundation.*' }
 
         it 'raises' do
-          expect { load_call }.to raise_error('Could not find an item matching pattern `/assets/style/foundation.*`')
+          expect { load_call }.to raise_error('Could not find an item matching pattern `foundation.*`')
         end
       end
     end
@@ -179,7 +186,7 @@ describe Nanoc::DartSass::Filter::NanocImporter do
         let(:url) { 'foundation.*' }
 
         it 'raises' do
-          expect { load_call }.to raise_error('Could not find an item matching pattern `/assets/style/foundation.*`')
+          expect { load_call }.to raise_error('Could not find an item matching pattern `foundation.*`')
         end
       end
     end
@@ -200,7 +207,7 @@ describe Nanoc::DartSass::Filter::NanocImporter do
       let(:url) { 'color.*' }
 
       it 'raises' do
-        expect { load_call }.to raise_error('It is not clear which item to import. Multiple items match `/assets/style/color.*`: /assets/style/color.sass, /assets/style/color.scss')
+        expect { load_call }.to raise_error("It's not clear which file to import. Found:\n  /assets/style/color.sass\n  /assets/style/color.scss")
       end
     end
   end
