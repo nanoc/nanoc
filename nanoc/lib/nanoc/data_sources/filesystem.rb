@@ -152,6 +152,7 @@ module Nanoc::DataSources
       is_binary = content_filename && !@site_config[:text_extensions].include?(File.extname(content_filename)[1..])
 
       if is_binary && klass == Nanoc::Core::Item
+        # NOTE: TOML support is explicitly not added here, in case there are existing sites with `.toml` files.
         meta = (meta_filename && Nanoc::Core::YamlLoader.load_file(meta_filename)) || {}
 
         ProtoDocument.new(is_binary: true, filename: content_filename, attributes: meta)

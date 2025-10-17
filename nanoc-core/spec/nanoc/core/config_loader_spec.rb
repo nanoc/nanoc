@@ -32,6 +32,24 @@ describe Nanoc::Core::ConfigLoader do
       end
     end
 
+    context 'TOML config file present' do
+      before do
+        File.write('nanoc.toml', 'foo = "bar"')
+      end
+
+      it 'returns a configuration' do
+        expect(subject).to be_a(Nanoc::Core::Configuration)
+      end
+
+      it 'has the defaults' do
+        expect(subject[:output_dir]).to eq('output')
+      end
+
+      it 'has the custom option' do
+        expect(subject[:foo]).to eq('bar')
+      end
+    end
+
     context 'YAML config file and YAML parent present' do
       before do
         File.write('nanoc.yaml', YAML.dump(parent_config_file: 'parent.yaml'))
@@ -52,6 +70,25 @@ describe Nanoc::Core::ConfigLoader do
 
       it 'does not include parent config option' do
         expect(subject[:parent_config_file]).to be_nil
+      end
+    end
+
+    context 'TOML config file present and TOML parent present' do
+      before do
+        File.write('nanoc.toml', 'parent_config_file = "parent.toml"')
+        File.write('parent.toml', 'foo = "bar"')
+      end
+
+      it 'returns a configuration' do
+        expect(subject).to be_a(Nanoc::Core::Configuration)
+      end
+
+      it 'has the defaults' do
+        expect(subject[:output_dir]).to eq('output')
+      end
+
+      it 'has the custom option' do
+        expect(subject[:foo]).to eq('bar')
       end
     end
 

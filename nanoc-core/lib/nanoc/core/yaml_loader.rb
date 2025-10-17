@@ -11,8 +11,8 @@ module Nanoc
 
       private_constant :OPTIONS
 
-      def self.load(yaml_string)
-        YAML.safe_load(yaml_string, **OPTIONS)
+      def self.load(string)
+        YAML.safe_load(string, **OPTIONS)
       end
 
       def self.load_file(filename)
