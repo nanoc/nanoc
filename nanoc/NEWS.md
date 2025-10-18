@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.14.0 (2025-10-18)
+
+Features:
+
+- Added support for TOML in frontmatter (with `+++` separators rather than `---`) and in the configuration file (`nanoc.toml`) (#1757)
+
 ## 4.13.5 (2025-04-21)
 
 Fixes:
