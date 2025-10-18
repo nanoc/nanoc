@@ -153,7 +153,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
     FileUtils.cd('foo') do
       assert File.file?('Gemfile')
-      assert_match(/^gem 'nanoc', '~> 4.13'$/, File.read('Gemfile'))
+      assert_match(/^gem 'nanoc', '~> 4.14'$/, File.read('Gemfile'))
     end
   end
 end
