@@ -31,6 +31,7 @@ group :devel do
   gem 'm', '~> 1.5'
   gem 'minitest', '~> 5.11'
   gem 'mocha', '~> 2.7'
+  gem 'perfect_toml', '~> 0.9.0'
   gem 'pry', '~> 0.15.2'
   gem 'rake', '~> 13.2'
   gem 'rdoc', '~> 6.0'

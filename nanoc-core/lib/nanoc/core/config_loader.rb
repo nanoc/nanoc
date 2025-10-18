@@ -29,7 +29,11 @@ module Nanoc
 
       # @return [String]
       def self.config_filename_for_cwd
-        filenames = %w[nanoc.yaml config.yaml]
+        filenames = [
+          'nanoc.yaml',
+          'nanoc.toml',
+          'config.yaml',
+        ]
         candidate = filenames.find { |f| File.file?(f) }
         candidate && File.expand_path(candidate)
       end
@@ -54,7 +58,8 @@ module Nanoc
       end
 
       def load_file(filename)
-        YamlLoader.load_file(filename)
+        loader = StructuredDataLoader.for_extension(File.extname(filename))
+        loader.load_file(filename)
       end
 
       # @api private

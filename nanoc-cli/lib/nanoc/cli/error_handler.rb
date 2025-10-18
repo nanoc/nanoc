@@ -203,6 +203,7 @@ module Nanoc::CLI
       'nanoc/live' => 'nanoc-live',
       'nokogiri' => 'nokogiri',
       'pandoc-ruby' => 'pandoc-ruby',
+      'perfect_toml' => 'perfect_toml',
       'pry' => 'pry',
       'rack' => 'rack',
       'rack/cache' => 'rack-cache',

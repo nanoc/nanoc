@@ -3,7 +3,7 @@
 # @api private
 class Nanoc::DataSources::Filesystem
   class Parser
-    SEPARATOR = /(-{5}|-{3})/.source
+    SEPARATOR = /(-{5}|-{3}|\+{3})/.source
 
     class ParseResult
       attr_reader :content
@@ -34,7 +34,7 @@ class Nanoc::DataSources::Filesystem
     def parse_with_separate_meta_filename(content_filename, meta_filename)
       content = content_filename ? Tools.read_file(content_filename, config: @config) : ''
       meta_raw = Tools.read_file(meta_filename, config: @config)
-      meta = parse_metadata(meta_raw, meta_filename)
+      meta = parse_metadata(meta_raw, meta_filename, :yaml)
       ParseResult.new(content:, attributes: meta, attributes_data: meta_raw)
     end
 
@@ -42,28 +42,39 @@ class Nanoc::DataSources::Filesystem
     def parse_with_frontmatter(content_filename)
       data = Tools.read_file(content_filename, config: @config)
 
-      unless /\A#{SEPARATOR}\s*$/.match?(data)
+      separator = /\A#{SEPARATOR}\s*$/.match(data)
+      unless separator
         return ParseResult.new(content: data, attributes: {}, attributes_data: '')
       end
+
+      frontmatter_language =
+        case separator[1]
+        when '+++'
+          :toml
+        else
+          :yaml
+        end
 
       pieces = data.split(/^#{SEPARATOR}[ \t]*\r?\n?/, 3)
       if pieces.size < 4
         raise Errors::InvalidFormat.new(content_filename)
       end
 
-      meta = parse_metadata(pieces[2], content_filename)
+      meta = parse_metadata(pieces[2], content_filename, frontmatter_language)
       content = pieces[4].sub(/\A\n/, '')
 
       ParseResult.new(content:, attributes: meta, attributes_data: pieces[2])
     end
 
     # @return [Hash]
-    def parse_metadata(data, filename)
-      begin
-        meta = Nanoc::Core::YamlLoader.load(data) || {}
-      rescue => e
-        raise Errors::UnparseableMetadata.new(filename, e)
-      end
+    def parse_metadata(data, filename, frontmatter_language)
+      loader = Nanoc::Core::StructuredDataLoader.for_language(frontmatter_language)
+      meta =
+        begin
+          loader.load(data) || {}
+        rescue => e
+          raise Errors::UnparseableMetadata.new(filename, e)
+        end
 
       verify_meta(meta, filename)
 

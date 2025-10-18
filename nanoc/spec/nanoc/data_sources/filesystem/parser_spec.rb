@@ -173,6 +173,18 @@ describe Nanoc::DataSources::Filesystem::Parser do
           end
         end
 
+        context 'three pluses (TOML)' do
+          let(:content) { "+++\ntitle = \"Welcome\"\n+++\nHello!\n" }
+
+          it 'has attributes' do
+            expect(subject.attributes).to eq('title' => 'Welcome')
+          end
+
+          it 'has content' do
+            expect(subject.content).to eq("Hello!\n")
+          end
+        end
+
         context 'separator not at beginning' do
           let(:content) { "foo\n---\ntitle: Welcome\n---\nStuff\n" }
 

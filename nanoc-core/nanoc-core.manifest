@@ -132,9 +132,11 @@ lib/nanoc/core/site.rb
 lib/nanoc/core/snapshot_def.rb
 lib/nanoc/core/store.rb
 lib/nanoc/core/string_pattern.rb
+lib/nanoc/core/structured_data_loader.rb
 lib/nanoc/core/temp_filename_factory.rb
 lib/nanoc/core/textual_compiled_content_cache.rb
 lib/nanoc/core/textual_content.rb
+lib/nanoc/core/toml_loader.rb
 lib/nanoc/core/trivial_error.rb
 lib/nanoc/core/utils.rb
 lib/nanoc/core/view_context_for_compilation.rb

@@ -3,7 +3,7 @@
 describe Nanoc::Core::YamlLoader do
   subject(:loader) { described_class }
 
-  let(:yaml_input) do
+  let(:input) do
     <<~YAML
       point: &point_data
         x: 42
@@ -13,6 +13,7 @@ describe Nanoc::Core::YamlLoader do
         extent: {w: 10, h: 11}
     YAML
   end
+
   let(:expected_output) do
     {
       'point' => { 'x' => 42, 'y' => 43 },
@@ -25,7 +26,7 @@ describe Nanoc::Core::YamlLoader do
 
   describe 'load' do
     it 'accepts YAML aliases' do
-      expect(loader.load(yaml_input)).to eq expected_output
+      expect(loader.load(input)).to eq expected_output
     end
   end
 end
