@@ -421,7 +421,7 @@ RSpec::Matchers.define :create_dependency_from do |expected|
   end
 
   failure_message do |_actual|
-    "expected a dependency to be created from #{expected.inspect}#{@onto ? " onto #{@onto.inspect}" : nil}, but generated #{@actual.inspect}"
+    "expected a dependency to be created from #{expected.inspect}#{" onto #{@onto.inspect}" if @onto}, but generated #{@actual.inspect}"
   end
 
   failure_message_when_negated do |_actual|

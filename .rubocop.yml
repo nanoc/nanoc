@@ -839,6 +839,33 @@ Style/RedundantFormat: # new in 1.72
 Style/ComparableBetween: # new in 1.74
   Enabled: true
 
+Gemspec/AttributeAssignment: # new in 1.77
+  Enabled: true
+
+Layout/EmptyLinesAfterModuleInclusion: # new in 1.79
+  Enabled: true
+
+Lint/UselessDefaultValueArgument: # new in 1.76
+  Enabled: true
+
+Lint/UselessOr: # new in 1.76
+  Enabled: true
+
+Style/CollectionQuerying: # new in 1.77
+  Enabled: true
+
+Style/EmptyStringInsideInterpolation: # new in 1.76
+  Enabled: true
+
+Style/HashFetchChain: # new in 1.75
+  Enabled: true
+
+Style/ItBlockParameter: # new in 1.75
+  Enabled: true
+
+Style/RedundantArrayFlatten: # new in 1.76
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
@@ -964,6 +991,10 @@ Style/FormatStringToken:
 Minitest/AssertEmptyLiteral:
   Enabled: false
 
+# This is not directly replaceable with `it_behaves_like`.
+RSpec/IncludeExamples: # new in 3.6
+  Enabled: false
+
 # ----- DISABLED (buggy) -----
 
 # This cop attempts to replace Nanoc::VERSION with described_class, which makes
@@ -988,4 +1019,8 @@ RSpec/PredicateMatcher:
 # This yields false positives; a class that responds to #each does not
 # necessarily also respond to #map.
 Style/MapIntoArray:
+  Enabled: false
+
+# This incorrectly identifies some methods that return true/false as being predicate methods.
+Naming/PredicateMethod:
   Enabled: false

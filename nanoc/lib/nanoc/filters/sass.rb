@@ -51,6 +51,7 @@ module Nanoc::Filters
     identifier :sass
 
     include SassCommon
+
     requires(*SassCommon::REQUIRES)
 
     def run(content, params = {})
@@ -62,6 +63,7 @@ module Nanoc::Filters
     identifier :sass_sourcemap
 
     include SassCommon
+
     requires(*SassCommon::REQUIRES)
 
     def run(content, params = {})
