@@ -91,4 +91,4 @@ module Nanoc
   end
 end
 
-Nanoc::Core::Feature.define('where', version: '4.13')
+Nanoc::Core::Feature.define('where', version: '4.14')
