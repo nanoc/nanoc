@@ -33,6 +33,8 @@ module Nanoc
     #   graph.predecessors_of('e').sort
     #     # => %w( c d )
     class DirectedGraph
+      EMPTY_SET = Set.new.freeze
+
       # @group Creating a graph
 
       # Creates a new directed graph with the given vertices.
@@ -121,7 +123,7 @@ module Nanoc
       #
       # @return [Array] Direct predecessors of the given vertex
       def direct_predecessors_of(to)
-        @to_graph.fetch(to, Set.new)
+        @to_graph.fetch(to, EMPTY_SET)
       end
 
       # Returns the predecessors of the given vertex, i.e. the vertices x for
