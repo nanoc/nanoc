@@ -866,6 +866,9 @@ Style/ItBlockParameter: # new in 1.75
 Style/RedundantArrayFlatten: # new in 1.76
   Enabled: true
 
+Style/ArrayIntersectWithSingleElement: # new in 1.81
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
