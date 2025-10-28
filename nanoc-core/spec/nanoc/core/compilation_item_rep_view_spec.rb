@@ -64,7 +64,7 @@ describe Nanoc::Core::CompilationItemRepView do
   it_behaves_like 'an item rep view'
 
   describe '#raw_path' do
-    subject { Fiber.new { view.raw_path }.resume }
+    subject { view.raw_path }
 
     let(:view) { described_class.new(rep, view_context) }
 
@@ -82,11 +82,11 @@ describe Nanoc::Core::CompilationItemRepView do
 
     context 'rep is not compiled' do
       it 'creates a dependency' do
-        expect { subject }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
+        expect { subject rescue nil }.to change { dependency_store.objects_causing_outdatedness_of(base_item) }.from([]).to([item])
       end
 
       it 'creates a dependency with the right props' do
-        subject
+        subject rescue nil
         dep = dependency_store.dependencies_causing_outdatedness_of(base_item)[0]
 
         expect(dep.props.compiled_content?).to be(true)
@@ -96,7 +96,9 @@ describe Nanoc::Core::CompilationItemRepView do
         expect(dep.props.path?).to be(false)
       end
 
-      it { is_expected.to be_a(Nanoc::Core::Errors::UnmetDependency) }
+      it 'raises a dependency error' do
+        expect { subject }.to raise_error(Nanoc::Core::Errors::UnmetDependency)
+      end
     end
 
     context 'rep is compiled' do

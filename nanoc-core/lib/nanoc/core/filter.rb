@@ -249,11 +249,6 @@ module Nanoc
         end
       end
 
-      # @api private
-      def on_main_fiber(&block)
-        Fiber.yield(block)
-      end
-
       contract C::ArrayOf[C::Named['Nanoc::Core::BasicItemView']] => C::Any
       # Creates a dependency from the item that is currently being filtered onto
       # the given collection of items. In other words, require the given items

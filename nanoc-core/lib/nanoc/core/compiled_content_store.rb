@@ -57,9 +57,8 @@ module Nanoc
         content = get(rep, snapshot_name)
         return content if content
 
-        # Content is unavailable; notify and try again
-        Fiber.yield(Nanoc::Core::Errors::UnmetDependency.new(rep, snapshot_name))
-        get(rep, snapshot_name)
+        # Content is unavailable
+        raise Nanoc::Core::Errors::UnmetDependency.new(rep, snapshot_name)
       end
 
       contract C::KeywordArgs[rep: Nanoc::Core::ItemRep, snapshot: C::Optional[C::Maybe[Symbol]]] => String

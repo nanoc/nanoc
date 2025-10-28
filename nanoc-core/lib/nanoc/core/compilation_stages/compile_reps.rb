@@ -87,13 +87,9 @@ module Nanoc
             wrapped: recalculate_phase,
           )
 
-          resume_phase = Nanoc::Core::CompilationPhases::Resume.new(
-            wrapped: cache_phase,
-          )
-
           write_phase = Nanoc::Core::CompilationPhases::Write.new(
             compiled_content_store: @compilation_context.compiled_content_store,
-            wrapped: resume_phase,
+            wrapped: cache_phase,
           )
 
           mark_done_phase = Nanoc::Core::CompilationPhases::MarkDone.new(

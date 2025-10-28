@@ -68,8 +68,7 @@ module Nanoc::Helpers
 
           unless rep.compiled?
             # FIXME: is :last appropriate?
-            Fiber.yield(Nanoc::Core::Errors::UnmetDependency.new(rep, :last))
-            return run
+            raise Nanoc::Core::Errors::UnmetDependency.new(rep, :last)
           end
         end
 

@@ -111,7 +111,7 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
     mock_time(1)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :inner).sync
     mock_time(3)
-    Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, :__anything__).sync
+    Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep).sync
     mock_time(6)
     Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
     mock_time(10)
@@ -130,7 +130,7 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
     mock_time(0)
     Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, :__anything__).sync
+    Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep).sync
     mock_time(3)
     Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
     mock_time(7)

@@ -12,6 +12,9 @@ module Nanoc
           Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
           yield
           Nanoc::Core::NotificationCenter.post(:compilation_ended, rep)
+        rescue Nanoc::Core::Errors::UnmetDependency
+          Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep)
+          raise
         end
       end
     end
