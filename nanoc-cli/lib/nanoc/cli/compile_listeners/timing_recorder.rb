@@ -36,18 +36,21 @@ module Nanoc::CLI::CompileListeners
         @outdatedness_rules_summary.observe(duration, name: klass.to_s.sub(/.*::/, ''))
       end
 
-      filter_stopwatches = {}
+      stopwatches_stack = []
 
-      on(:filtering_started) do |rep, _filter_name|
-        stopwatch_stack = filter_stopwatches.fetch(rep) { filter_stopwatches[rep] = [] }
-        stopwatch_stack << DDMetrics::Stopwatch.new
-        stopwatch_stack.last.start
+      on(:filtering_started) do |_rep, _filter_name|
+        # Add new stopwatch and start it
+        stopwatch = DDMetrics::Stopwatch.new
+        stopwatches_stack << stopwatch
+        stopwatch.start
       end
 
-      on(:filtering_ended) do |rep, filter_name|
-        stopwatch = filter_stopwatches.fetch(rep).pop
+      on(:filtering_ended) do |_rep, filter_name|
+        # Get topmost stopwatch and stop it
+        stopwatch = stopwatches_stack.pop
         stopwatch.stop
 
+        # Record duration
         @filters_summary.observe(stopwatch.duration, name: filter_name.to_s)
       end
 
@@ -57,14 +60,6 @@ module Nanoc::CLI::CompileListeners
 
       on(:store_stored) do |duration, klass|
         @store_stores_summary.observe(duration, name: klass.to_s)
-      end
-
-      on(:compilation_suspended) do |rep|
-        filter_stopwatches.fetch(rep).each(&:stop)
-      end
-
-      on(:compilation_started) do |rep|
-        filter_stopwatches.fetch(rep, []).each(&:start)
       end
 
       setup_phase_notifications
