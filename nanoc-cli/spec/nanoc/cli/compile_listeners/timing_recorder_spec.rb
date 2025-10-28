@@ -39,13 +39,13 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
 
   it 'prints filters table' do
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb)
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb)
     mock_time(100)
-    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb)
     mock_time(102)
-    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb)
 
     expect { listener.stop_safely }
       .to output(/^\s*erb │     2   1\.00s   1\.50s   1\.90s   1\.95s   2\.00s   3\.00s$/).to_stdout
@@ -53,9 +53,9 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records single from filtering_started to filtering_ended' do
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb)
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb)
 
     expect(listener.filters_summary.get(name: 'erb').min).to eq(1.00)
     expect(listener.filters_summary.get(name: 'erb').avg).to eq(1.00)
@@ -66,13 +66,13 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records multiple from filtering_started to filtering_ended' do
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb)
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb)
     mock_time(100)
-    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :erb)
     mock_time(102)
-    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :erb)
 
     expect(listener.filters_summary.get(name: 'erb').min).to eq(1.00)
     expect(listener.filters_summary.get(name: 'erb').avg).to eq(1.50)
@@ -83,13 +83,13 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records filters in nested filtering_started/filtering_ended' do
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :outer).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :outer)
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :inner).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_started, rep, :inner)
     mock_time(3)
-    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :inner).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :inner)
     mock_time(6)
-    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :outer).sync
+    Nanoc::Core::NotificationCenter.post(:filtering_ended, rep, :outer)
 
     expect(listener.filters_summary.get(name: 'inner').min).to eq(2.00)
     expect(listener.filters_summary.get(name: 'inner').avg).to eq(2.00)
@@ -106,9 +106,9 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records single phase start+stop' do
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep)
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep)
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(1.00)
     expect(listener.phases_summary.get(name: 'donkey').avg).to eq(1.00)
@@ -119,13 +119,13 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records multiple phase start+stop' do
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep)
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep)
     mock_time(100)
-    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep)
     mock_time(102)
-    Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep)
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(1.00)
     expect(listener.phases_summary.get(name: 'donkey').avg).to eq(1.50)
@@ -136,13 +136,13 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records single phase start+yield+resume+stop' do
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep)
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:phase_yielded, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_yielded, 'donkey', rep)
     mock_time(100)
-    Nanoc::Core::NotificationCenter.post(:phase_resumed, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_resumed, 'donkey', rep)
     mock_time(102)
-    Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep)
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(3.00)
     expect(listener.phases_summary.get(name: 'donkey').avg).to eq(3.00)
@@ -153,15 +153,15 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
 
   it 'records single phase start+yield+abort+start+stop' do
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep)
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:phase_yielded, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_yielded, 'donkey', rep)
     mock_time(100)
-    Nanoc::Core::NotificationCenter.post(:phase_aborted, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_aborted, 'donkey', rep)
     mock_time(200)
-    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_started, 'donkey', rep)
     mock_time(203)
-    Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep).sync
+    Nanoc::Core::NotificationCenter.post(:phase_ended, 'donkey', rep)
 
     expect(listener.phases_summary.get(name: 'donkey').min).to eq(1.00)
     expect(listener.phases_summary.get(name: 'donkey').avg).to eq(2.00)
@@ -171,28 +171,28 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records stage duration' do
-    Nanoc::Core::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage').sync
+    Nanoc::Core::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage')
 
     expect(listener.stages_summary.get(name: 'donkey_stage').sum).to eq(1.23)
     expect(listener.stages_summary.get(name: 'donkey_stage').count).to eq(1)
   end
 
   it 'prints stage durations' do
-    Nanoc::Core::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage').sync
+    Nanoc::Core::NotificationCenter.post(:stage_ran, 1.23, 'donkey_stage')
 
     expect { listener.stop_safely }
       .to output(/^\s*donkey_stage │ 1\.23s$/).to_stdout
   end
 
   it 'prints out outdatedness rule durations' do
-    Nanoc::Core::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Core::OutdatednessRules::CodeSnippetsModified).sync
+    Nanoc::Core::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Core::OutdatednessRules::CodeSnippetsModified)
 
     expect { listener.stop_safely }
       .to output(/^\s*CodeSnippetsModified │     1   1\.00s   1\.00s   1\.00s   1\.00s   1\.00s   1\.00s$/).to_stdout
   end
 
   it 'records single outdatedness rule duration' do
-    Nanoc::Core::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Core::OutdatednessRules::CodeSnippetsModified).sync
+    Nanoc::Core::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Core::OutdatednessRules::CodeSnippetsModified)
 
     expect(listener.outdatedness_rules_summary.get(name: 'CodeSnippetsModified').min).to eq(1.00)
     expect(listener.outdatedness_rules_summary.get(name: 'CodeSnippetsModified').avg).to eq(1.00)
@@ -202,8 +202,8 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'records multiple outdatedness rule duration' do
-    Nanoc::Core::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Core::OutdatednessRules::CodeSnippetsModified).sync
-    Nanoc::Core::NotificationCenter.post(:outdatedness_rule_ran, 3.0, Nanoc::Core::OutdatednessRules::CodeSnippetsModified).sync
+    Nanoc::Core::NotificationCenter.post(:outdatedness_rule_ran, 1.0, Nanoc::Core::OutdatednessRules::CodeSnippetsModified)
+    Nanoc::Core::NotificationCenter.post(:outdatedness_rule_ran, 3.0, Nanoc::Core::OutdatednessRules::CodeSnippetsModified)
 
     expect(listener.outdatedness_rules_summary.get(name: 'CodeSnippetsModified').min).to eq(1.00)
     expect(listener.outdatedness_rules_summary.get(name: 'CodeSnippetsModified').avg).to eq(2.00)
@@ -213,14 +213,14 @@ describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
   end
 
   it 'prints load store durations' do
-    Nanoc::Core::NotificationCenter.post(:store_loaded, 1.23, Nanoc::Core::ChecksumStore).sync
+    Nanoc::Core::NotificationCenter.post(:store_loaded, 1.23, Nanoc::Core::ChecksumStore)
 
     expect { listener.stop_safely }
       .to output(/^\s*Nanoc::Core::ChecksumStore │ 1\.23s$/).to_stdout
   end
 
   it 'prints store store durations' do
-    Nanoc::Core::NotificationCenter.post(:store_stored, 2.34, Nanoc::Core::ChecksumStore).sync
+    Nanoc::Core::NotificationCenter.post(:store_stored, 2.34, Nanoc::Core::ChecksumStore)
 
     expect { listener.stop_safely }
       .to output(/^\s*Nanoc::Core::ChecksumStore │ 2\.34s$/).to_stdout

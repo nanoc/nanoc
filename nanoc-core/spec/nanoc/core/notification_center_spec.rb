@@ -7,7 +7,7 @@ shared_examples 'a notification center' do
       res = true
     end
 
-    subject.post(:ping_received).sync
+    subject.post(:ping_received)
     expect(res).to be(true)
   end
 
@@ -19,7 +19,7 @@ shared_examples 'a notification center' do
 
     subject.remove :ping_received, :test
 
-    subject.post(:ping_received).sync
+    subject.post(:ping_received)
     expect(res).to be(false)
   end
 end

@@ -10,46 +10,9 @@ module Nanoc
     # table of subscribers is not stored in the observable object itself, but in
     # the notification center.
     class NotificationCenter
-      DONE = Object.new
-      SYNC = Object.new
-
       def initialize
-        @thread = nil
-
         # name => observers dictionary
         @notifications = Hash.new { |hash, name| hash[name] = [] }
-
-        @queue = Queue.new
-
-        @sync_queue = Queue.new
-        on(SYNC, self) { @sync_queue << true }
-      end
-
-      def start
-        @thread ||= Thread.new do # rubocop:disable Naming/MemoizedInstanceVariableName
-          Thread.current.abort_on_exception = true
-
-          loop do
-            elem = @queue.pop
-            break if DONE.equal?(elem)
-
-            name = elem[0]
-            args = elem[1]
-
-            @notifications[name].each do |observer|
-              observer[:block].call(*args)
-            end
-          end
-        end
-      end
-
-      def stop
-        @queue << DONE
-        @thread.join
-      end
-
-      def force_stop
-        @queue << DONE
       end
 
       def on(name, id = nil, &block)
@@ -61,18 +24,16 @@ module Nanoc
       end
 
       def post(name, *args)
-        @queue << [name, args]
-        self
-      end
+        @notifications[name].each do |observer|
+          observer[:block].call(*args)
+        end
 
-      def sync
-        post(SYNC)
-        @sync_queue.pop
+        self
       end
 
       class << self
         def instance
-          @_instance ||= new.tap(&:start)
+          @_instance ||= new
         end
 
         def on(name, id = nil, &)
@@ -88,17 +49,7 @@ module Nanoc
         end
 
         def reset
-          instance.stop
           @_instance = nil
-        end
-
-        def force_reset
-          instance.force_stop
-          @_instance = nil
-        end
-
-        def sync
-          instance.sync
         end
       end
     end
