@@ -159,22 +159,7 @@ describe Nanoc::Helpers::Capturing, helper: true do
         context 'other item is not yet compiled' do
           it 'raises an unmet dependency error' do
             expect(ctx.dependency_tracker).to receive(:bounce).with(item._unwrap, compiled_content: true)
-            expect { subject }.to raise_error(FiberError)
-          end
-
-          it 're-runs when fiber is resumed' do
-            expect(ctx.dependency_tracker).to receive(:bounce).with(item._unwrap, compiled_content: true).twice
-
-            fiber = Fiber.new { subject }
-            expect(fiber.resume).to be_a(Nanoc::Core::Errors::UnmetDependency)
-
-            item.reps[:default]._unwrap.compiled = true
-            ctx.compiled_content_store.set(
-              item.reps[:default]._unwrap,
-              :__capture_foo,
-              Nanoc::Core::TextualContent.new('content after compilation'),
-            )
-            expect(fiber.resume).to eql('content after compilation')
+            expect { subject }.to raise_error(Nanoc::Core::Errors::UnmetDependency)
           end
         end
 

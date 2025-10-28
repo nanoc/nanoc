@@ -23,10 +23,16 @@ module Nanoc
 
           executor = Nanoc::Core::Executor.new(rep, @compilation_context, dependency_tracker)
 
-          @compilation_context.compiled_content_store.set_current(rep, rep.item.content)
+          # Set initial content, if not already present
+          compiled_content_store = @compilation_context.compiled_content_store
+          unless compiled_content_store.get_current(rep)
+            compiled_content_store.set_current(rep, rep.item.content)
+          end
 
-          actions = @action_sequences[rep]
-          actions.each do |action|
+          actions = pending_action_sequence_for(rep:)
+          until actions.empty?
+            action = actions.first
+
             case action
             when Nanoc::Core::ProcessingActions::Filter
               executor.filter(action.filter_name, action.params)
@@ -39,9 +45,16 @@ module Nanoc
             else
               raise Nanoc::Core::Errors::InternalInconsistency, "unknown action #{action.inspect}"
             end
+
+            actions.shift
           end
         ensure
           dependency_tracker.exit
+        end
+
+        def pending_action_sequence_for(rep:)
+          @_pending_action_sequences ||= {}
+          @_pending_action_sequences[rep] ||= @action_sequences[rep].to_a
         end
       end
     end

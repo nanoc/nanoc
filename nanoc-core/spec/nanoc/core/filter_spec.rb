@@ -249,7 +249,7 @@ describe Nanoc::Core::Filter do
         end
 
         example do
-          expect { subject }.not_to yield_from_fiber(an_instance_of(Nanoc::Core::Errors::UnmetDependency))
+          expect { subject }.not_to raise_error
         end
 
         it 'creates dependency' do
@@ -260,15 +260,7 @@ describe Nanoc::Core::Filter do
 
       context 'rep is not compiled' do
         example do
-          fiber = Fiber.new { subject }
-
-          # resume 1
-          res = fiber.resume
-          expect(res).to be_a(Nanoc::Core::Errors::UnmetDependency)
-          expect(res.rep).to eql(rep)
-
-          # resume 2
-          expect(fiber.resume).not_to be_a(Nanoc::Core::Errors::UnmetDependency)
+          expect { subject }.to raise_error(Nanoc::Core::Errors::UnmetDependency)
         end
       end
 
@@ -282,20 +274,7 @@ describe Nanoc::Core::Filter do
         end
 
         it 'yields an unmet dependency error twice' do
-          fiber = Fiber.new { subject }
-
-          # resume 1
-          res = fiber.resume
-          expect(res).to be_a(Nanoc::Core::Errors::UnmetDependency)
-          expect(res.rep).to eql(rep)
-
-          # resume 2
-          res = fiber.resume
-          expect(res).to be_a(Nanoc::Core::Errors::UnmetDependency)
-          expect(res.rep).to eql(other_rep)
-
-          # resume 3
-          expect(fiber.resume).not_to be_a(Nanoc::Core::Errors::UnmetDependency)
+          expect { subject }.to raise_error(Nanoc::Core::Errors::UnmetDependency)
         end
       end
     end

@@ -143,7 +143,8 @@ describe Nanoc::Core::Compiler do
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_started, rep, :simple_erb_ob3rqra0yc).ordered
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:dependency_created, item, other_item).ordered
-        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_suspended, rep, anything, anything).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :simple_erb_ob3rqra0yc).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_suspended, rep).ordered
 
         # rep 2
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_started, other_rep).ordered
@@ -153,6 +154,7 @@ describe Nanoc::Core::Compiler do
 
         # rep 1 (again)
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_started, rep).ordered
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_started, rep, :simple_erb_ob3rqra0yc).ordered
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :simple_erb_ob3rqra0yc).ordered
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:compilation_ended, rep).ordered
 

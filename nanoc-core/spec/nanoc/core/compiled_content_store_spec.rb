@@ -109,7 +109,7 @@ describe Nanoc::Core::CompiledContentStore do
           end
 
           it 'errors' do
-            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Core::Errors::UnmetDependency))
+            expect { subject }.to raise_error(Nanoc::Core::Errors::UnmetDependency)
           end
         end
 
@@ -160,7 +160,7 @@ describe Nanoc::Core::CompiledContentStore do
           end
 
           it 'does not use :last' do
-            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Core::Errors::UnmetDependency))
+            expect { subject }.to raise_error(Nanoc::Core::Errors::UnmetDependency)
           end
         end
       end
@@ -188,7 +188,7 @@ describe Nanoc::Core::CompiledContentStore do
           end
 
           it 'does not use :last' do
-            expect { subject }.to yield_from_fiber(an_instance_of(Nanoc::Core::Errors::UnmetDependency))
+            expect { subject }.to raise_error(Nanoc::Core::Errors::UnmetDependency)
           end
         end
       end
