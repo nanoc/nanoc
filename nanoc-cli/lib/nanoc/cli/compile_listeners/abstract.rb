@@ -26,8 +26,6 @@ module Nanoc::CLI::CompileListeners
     def wrapped_stop
       stop
 
-      Nanoc::Core::NotificationCenter.sync
-
       @_notification_names.each do |name|
         Nanoc::Core::NotificationCenter.remove(name, self)
       end

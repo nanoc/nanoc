@@ -31,10 +31,10 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
     listener.start_safely
 
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
+    Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
     mock_time(1)
 
-    expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true).sync }
+    expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true) }
       .to output(/create.*\[1\.00s\]/).to_stdout
   end
 
@@ -42,9 +42,9 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
     listener.start_safely
     listener.stop_safely
 
-    Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
+    Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
 
-    expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true).sync }
+    expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true) }
       .not_to output(/create/).to_stdout
   end
 
@@ -52,14 +52,14 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
     listener.start_safely
 
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
+    Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, :__irrelevant__).sync
+    Nanoc::Core::NotificationCenter.post(:compilation_suspended, rep, :__irrelevant__)
     mock_time(3)
-    Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
+    Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
     mock_time(6)
 
-    expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true).sync }
+    expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true) }
       .to output(/create.*\[4\.00s\]/).to_stdout
   end
 
@@ -67,14 +67,14 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
     listener.start_safely
 
     mock_time(0)
-    Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
+    Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
     mock_time(1)
-    Nanoc::Core::NotificationCenter.post(:rep_write_enqueued, rep).sync
+    Nanoc::Core::NotificationCenter.post(:rep_write_enqueued, rep)
     mock_time(3)
-    Nanoc::Core::NotificationCenter.post(:rep_write_started, rep).sync
+    Nanoc::Core::NotificationCenter.post(:rep_write_started, rep)
     mock_time(6)
 
-    expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true).sync }
+    expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', true, true) }
       .to output(/create.*\[4\.00s\]/).to_stdout
   end
 
@@ -90,19 +90,19 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
     end
 
     it 'prints nothing' do
-      Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
+      Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
       mock_time(1)
 
-      expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false).sync }
+      expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false) }
         .not_to output(/identical/).to_stdout
     end
 
     it 'prints nothing' do
-      Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
-      Nanoc::Core::NotificationCenter.post(:cached_content_used, rep).sync
+      Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
+      Nanoc::Core::NotificationCenter.post(:cached_content_used, rep)
       mock_time(1)
 
-      expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false).sync }
+      expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false) }
         .not_to output(/cached/).to_stdout
     end
   end
@@ -119,19 +119,19 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
     end
 
     it 'prints “identical” if not cached' do
-      Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
+      Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
       mock_time(1)
 
-      expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false).sync }
+      expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false) }
         .to output(/identical/).to_stdout
     end
 
     it 'prints “cached” if cached' do
-      Nanoc::Core::NotificationCenter.post(:compilation_started, rep).sync
-      Nanoc::Core::NotificationCenter.post(:cached_content_used, rep).sync
+      Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
+      Nanoc::Core::NotificationCenter.post(:cached_content_used, rep)
       mock_time(1)
 
-      expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false).sync }
+      expect { Nanoc::Core::NotificationCenter.post(:rep_write_ended, rep, false, '/foo.html', false, false) }
         .to output(/cached/).to_stdout
     end
   end

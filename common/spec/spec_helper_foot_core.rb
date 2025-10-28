@@ -96,7 +96,6 @@ RSpec::Matchers.define :send_notification do |name, *expected_args|
     end
 
     actual.call
-    Nanoc::Core::NotificationCenter.sync
 
     @actual_notifications.any? { |c| c == expected_args }
   end

@@ -13,42 +13,42 @@ describe Nanoc::CLI::CompileListeners::DebugPrinter, stdio: true do
   it 'records snapshot_created' do
     listener.start_safely
 
-    expect { Nanoc::Core::NotificationCenter.post(:snapshot_created, rep, :last).sync }
+    expect { Nanoc::Core::NotificationCenter.post(:snapshot_created, rep, :last) }
       .to output(%r{Snapshot last created for /donkey.md \(rep name :latex\)}).to_stdout
   end
 
   it 'prints with timestamp' do
     listener.start_safely
 
-    expect { Nanoc::Core::NotificationCenter.post(:snapshot_created, rep, :last).sync }
+    expect { Nanoc::Core::NotificationCenter.post(:snapshot_created, rep, :last) }
       .to output(%r{^\*\*\* \d{2}:\d{2}:\d{2}\.\d{3} .*Snapshot last created for /donkey.md \(rep name :latex\)}).to_stdout
   end
 
   it 'records cached_content_used' do
     listener.start_safely
 
-    expect { Nanoc::Core::NotificationCenter.post(:cached_content_used, rep).sync }
+    expect { Nanoc::Core::NotificationCenter.post(:cached_content_used, rep) }
       .to output(%r{Used cached compiled content for /donkey.md \(rep name :latex\) instead of recompiling}).to_stdout
   end
 
   it 'records stage_started' do
     listener.start_safely
 
-    expect { Nanoc::Core::NotificationCenter.post(:stage_started, 'Moo').sync }
+    expect { Nanoc::Core::NotificationCenter.post(:stage_started, 'Moo') }
       .to output(/Stage started: Moo/).to_stdout
   end
 
   it 'records stage_ended' do
     listener.start_safely
 
-    expect { Nanoc::Core::NotificationCenter.post(:stage_ended, 'Moo').sync }
+    expect { Nanoc::Core::NotificationCenter.post(:stage_ended, 'Moo') }
       .to output(/Stage ended: Moo/).to_stdout
   end
 
   it 'records stage_aborted' do
     listener.start_safely
 
-    expect { Nanoc::Core::NotificationCenter.post(:stage_aborted, 'Moo').sync }
+    expect { Nanoc::Core::NotificationCenter.post(:stage_aborted, 'Moo') }
       .to output(/Stage aborted: Moo/).to_stdout
   end
 end
