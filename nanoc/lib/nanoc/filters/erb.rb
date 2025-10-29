@@ -7,6 +7,12 @@ module Nanoc::Filters
 
     requires 'erb'
 
+    class << self
+      attr_accessor :_erb_cache
+    end
+
+    self._erb_cache = {}
+
     # Runs the content through [ERB](http://ruby-doc.org/stdlib/libdoc/erb/rdoc/classes/ERB.html).
     #
     # @param [String] content The content to filter
@@ -27,9 +33,19 @@ module Nanoc::Filters
 
       # Get result
       trim_mode = params[:trim_mode]
-      erb = ::ERB.new(content, trim_mode:)
-      erb.filename = filename
-      erb.result(assigns_binding)
+      erb_for(content, trim_mode:).result(assigns_binding)
+    end
+
+    private
+
+    def erb_for(content, trim_mode:)
+      cache_key = [content, trim_mode]
+      self.class._erb_cache.fetch(cache_key) do
+        erb = ::ERB.new(content, trim_mode:)
+        erb.filename = filename
+        self.class._erb_cache[cache_key] = erb
+        erb
+      end
     end
   end
 end
