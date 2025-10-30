@@ -55,7 +55,7 @@ module Nanoc
           # Run
           if dry_run
             warn 'Performing a dry-run; no actions will actually be performed'
-            run_shell_cmd(['echo', 'rsync', options, src, dst].flatten)
+            run_shell_cmd(['rsync', '--dry-run', options, src, dst].flatten)
           else
             run_shell_cmd(['rsync', options, src, dst].flatten)
           end
@@ -64,7 +64,7 @@ module Nanoc
         private
 
         def run_shell_cmd(cmd)
-          TTY::Command.new(printer: :null).run(*cmd)
+          TTY::Command.new(uuid: false).run(*cmd)
         end
       end
     end
