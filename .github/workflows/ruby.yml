@@ -10,7 +10,28 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  test-style:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
+
+      - name: Test style
+        if: ${{ matrix.ruby-version == '3.4' }}
+        run: bundle exec rake rubocop
+
+  test-nanoc-core:
     runs-on: ubuntu-latest
 
     strategy:
@@ -27,53 +48,236 @@ jobs:
           rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
           bundler-cache: true
 
-      - name: Test style
-        if: ${{ matrix.ruby-version == '3.4' }}
-        run: bundle exec rake rubocop
-
       - name: Test nanoc-core
         run: bundle exec rake nanoc_core:test
         timeout-minutes: 3
+
+  test-nanoc:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
 
       - name: Test nanoc
         run: bundle exec rake nanoc:test
         timeout-minutes: 3
 
+  test-nanoc-cli:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
+
       - name: Test nanoc-cli
         run: bundle exec rake nanoc_cli:test
         timeout-minutes: 3
+
+  test-nanoc-checking:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
 
       - name: Test nanoc-checking
         run: bundle exec rake nanoc_checking:test
         timeout-minutes: 3
 
+  test-nanoc-dart-sass:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
+
       - name: Test nanoc-dart-sass
         run: bundle exec rake nanoc_dart_sass:test
         timeout-minutes: 3
+
+  test-nanoc-deploying:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
 
       - name: Test nanoc-deploying
         run: bundle exec rake nanoc_deploying:test
         timeout-minutes: 3
 
+  test-nanoc-external:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
+
       - name: Test nanoc-external
         run: bundle exec rake nanoc_external:test
         timeout-minutes: 3
+
+  test-nanoc-org-mode:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
 
       - name: Test nanoc-org-mode
         run: bundle exec rake nanoc_org_mode:test
         timeout-minutes: 3
 
+  test-nanoc-live:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
+
       - name: Test nanoc-live
         run: bundle exec rake nanoc_live:test
         timeout-minutes: 3
+
+  test-nanoc-tilt:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
 
       - name: Test nanoc-tilt
         run: bundle exec rake nanoc_tilt:test
         timeout-minutes: 3
 
+  test-nanoc-spec:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
+
       - name: Test nanoc-spec
         run: bundle exec rake nanoc_spec:test
         timeout-minutes: 3
+
+  test-guard-nanoc:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: ["3.2", "3.3", "3.4"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          rubygems: 3.4.9 # https://github.com/ruby/psych/discussions/607
+          bundler-cache: true
 
       - name: Test guard-nanoc
         run: bundle exec rake guard_nanoc:test
