@@ -1,5 +1,16 @@
 # Nanoc news
 
+## 4.14.1 (2025-10-30)
+
+Fixes:
+
+- Fixed issue which would cause timings reported `--verbose --verbose` to be inaccurate (#1760, #1761)
+
+Enhancements:
+
+- Improved ERB filter performance through memoization (#1762)
+- Improved performance (#1759, #1758, #1761)
+
 ## 4.14.0 (2025-10-18)
 
 Features:
