@@ -1,5 +1,11 @@
 # nanoc-deploying news
 
+## 1.0.3 (2025-10-30)
+
+Enhancements:
+
+- Made rsync deployer print rsync output (#1764)
+
 ## 1.0.2 (2022-05-28)
 
 - Made the Git deployer perform `git push` even if there is nothing to commit (#1575)
