@@ -5,6 +5,8 @@ require 'helper'
 class Nanoc::Filters::ColorizeSyntax::PygmentsTest < Nanoc::TestCase
   def test_pygmentsrb
     skip 'pygments.rb does not support Windows' if Nanoc::Core.on_windows?
+    skip 'pygments.rb fails with spaces in paths' if __dir__.match?(/ /)
+
     if_have 'pygments', 'nokogiri' do
       # Create filter
       filter = ::Nanoc::Filters::ColorizeSyntax.new
