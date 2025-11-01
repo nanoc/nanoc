@@ -1,5 +1,9 @@
 # guard-nanoc Release Notes
 
+## 2.1.10 (2025-11-01)
+
+- Fixed compatibility with Nanoc 4.14.1.
+
 ## 2.1.9 (2020-03-08)
 
 - Fixed an incompatibility with Nanoc 4.11.15.
