@@ -16,22 +16,30 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
       Nanoc::Core::Item.new('item C', {}, '/c.md'),
       Nanoc::Core::Item.new('item D', {}, '/d.md'),
       Nanoc::Core::Item.new('item E', {}, '/e.md'),
+      Nanoc::Core::Item.new('item F', {}, '/f.md'),
+      Nanoc::Core::Item.new('item G', {}, '/g.md'),
     ]
   end
 
   let(:outdated_reps) do
+    reps.take(5)
+  end
+
+  let(:reps) do
     [
       Nanoc::Core::ItemRep.new(items[0], :default),
       Nanoc::Core::ItemRep.new(items[1], :default),
       Nanoc::Core::ItemRep.new(items[2], :default),
       Nanoc::Core::ItemRep.new(items[3], :default),
       Nanoc::Core::ItemRep.new(items[4], :default),
+      Nanoc::Core::ItemRep.new(items[5], :default),
+      Nanoc::Core::ItemRep.new(items[6], :default),
     ]
   end
 
   let(:item_rep_repo) do
-    Nanoc::Core::ItemRepRepo.new.tap do |reps|
-      reps.each { reps << _1 }
+    Nanoc::Core::ItemRepRepo.new.tap do |repo|
+      reps.each { repo << _1 }
     end
   end
 
@@ -40,8 +48,6 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
   let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
 
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
-
-  let(:reps) { outdated_reps }
 
   context 'when there are no dependencies' do
     it 'runs through reps in order' do
@@ -298,6 +304,109 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
       priority_queue.mark_ok
 
       expect(priority_queue.next).to eq(reps[1])
+      priority_queue.mark_ok
+
+      expect(priority_queue.next).to be_nil
+    end
+  end
+
+  context 'when there is a dependency on non-enqueued items' do
+    before do
+      dependency_store.record_dependency(
+        reps[3].item,
+        reps[6].item,
+        compiled_content: true,
+      )
+    end
+
+    it 'schedules the dependency next up' do
+      expect(priority_queue.next).to eq(reps[0])
+      priority_queue.mark_failed(needed_rep: reps[3])
+
+      # outdated dependency that got prioritized
+      expect(priority_queue.next).to eq(reps[3])
+      priority_queue.mark_failed(needed_rep: reps[5])
+
+      # outdated dependency that got prioritized
+      expect(priority_queue.next).to eq(reps[5])
+      priority_queue.mark_ok
+
+      # NON-outdated dependency that got pulled in
+      expect(priority_queue.next).to eq(reps[6])
+      priority_queue.mark_ok
+
+      expect(priority_queue.next).to eq(reps[1])
+      priority_queue.mark_ok
+
+      expect(priority_queue.next).to eq(reps[2])
+      priority_queue.mark_ok
+
+      expect(priority_queue.next).to eq(reps[4])
+      priority_queue.mark_ok
+
+      expect(priority_queue.next).to eq(reps[3])
+      priority_queue.mark_ok
+
+      expect(priority_queue.next).to eq(reps[0])
+      priority_queue.mark_ok
+
+      expect(priority_queue.next).to be_nil
+    end
+  end
+
+  context 'when there is a dependency on enqueued and non-enqueued items' do
+    before do
+      dependency_store.record_dependency(
+        reps[3].item,
+        reps[6].item,
+        compiled_content: true,
+      )
+
+      dependency_store.record_dependency(
+        reps[3].item,
+        reps[2].item,
+        compiled_content: true,
+      )
+    end
+
+    it 'schedules the dependency next up' do
+      expect(priority_queue.next).to eq(reps[0])
+      priority_queue.mark_failed(needed_rep: reps[3])
+
+      # outdated dependency that got prioritized
+      expect(priority_queue.next).to eq(reps[3])
+      priority_queue.mark_failed(needed_rep: reps[5])
+
+      # outdated dependency that got prioritized
+      expect(priority_queue.next).to eq(reps[5])
+      priority_queue.mark_ok
+
+      n = priority_queue.next
+      # There is an `if` here because the order of dependencies (2 then 6, or 6 then 2) is not defined.
+      if n == reps[6]
+        priority_queue.mark_ok
+
+        expect(priority_queue.next).to eq(reps[2])
+        priority_queue.mark_ok
+      elsif n == reps[2]
+        priority_queue.mark_ok
+
+        expect(priority_queue.next).to eq(reps[6])
+        priority_queue.mark_ok
+      else
+        raise "expected rep 2 or rep 6, but got #{n}"
+      end
+
+      expect(priority_queue.next).to eq(reps[1])
+      priority_queue.mark_ok
+
+      expect(priority_queue.next).to eq(reps[4])
+      priority_queue.mark_ok
+
+      expect(priority_queue.next).to eq(reps[3])
+      priority_queue.mark_ok
+
+      expect(priority_queue.next).to eq(reps[0])
       priority_queue.mark_ok
 
       expect(priority_queue.next).to be_nil

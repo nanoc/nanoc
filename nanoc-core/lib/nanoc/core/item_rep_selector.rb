@@ -45,7 +45,7 @@ module Nanoc
 
           # Read prio B
           @this = @prio_b.shift
-          @this = @prio_b.shift while @seen.include?(@this)
+          @this = @prio_b.shift while @seen.include?(@this) || @completed.include?(@this)
           if @this
             return @this
           end
@@ -83,6 +83,18 @@ module Nanoc
           # element will come from @prio_b at some point in the future, so we’ll
           # have to skip it then.
           @seen << needed_rep
+
+          # Add everything else that `@this` depends on to the queue. It is OK
+          # if there are duplicates; `#next` will filter them out.
+          @dependency_store.objects_causing_outdatedness_of(@this.item).each do |obj|
+            if obj.is_a?(Nanoc::Core::Item)
+              item = obj
+
+              @reps[item].each do |rep|
+                @prio_b.unshift(rep)
+              end
+            end
+          end
         end
 
         private
