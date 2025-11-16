@@ -4,14 +4,19 @@ module Nanoc
   module Core
     # Yields item reps to compile.
     class ItemRepSelector
-      def initialize(outdated_reps:)
+      def initialize(outdated_reps:, reps:, dependency_store:)
         @outdated_reps = outdated_reps
+        @reps = reps
+        @dependency_store = dependency_store
       end
 
       # A priority queue that tracks dependencies and can detect circular
       # dependencies.
       class ItemRepPriorityQueue
-        def initialize(outdated_reps:)
+        def initialize(outdated_reps:, reps:, dependency_store:)
+          @reps = reps
+          @dependency_store = dependency_store
+
           # Prio A: most important; prio C: least important.
           @prio_a = nil
           @prio_b = outdated_reps.dup
@@ -102,7 +107,11 @@ module Nanoc
       end
 
       def each
-        pq = ItemRepPriorityQueue.new(outdated_reps: @outdated_reps)
+        pq = ItemRepPriorityQueue.new(
+          outdated_reps: @outdated_reps,
+          reps: @reps,
+          dependency_store: @dependency_store,
+        )
 
         loop do
           rep = pq.next

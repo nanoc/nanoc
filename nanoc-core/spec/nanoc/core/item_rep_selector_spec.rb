@@ -1,7 +1,25 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::ItemRepSelector do
-  let(:selector) { described_class.new(outdated_reps: reps_for_selector) }
+  let(:selector) do
+    described_class.new(
+      outdated_reps: reps_for_selector,
+      reps: item_rep_repo,
+      dependency_store:,
+    )
+  end
+
+  let(:item_rep_repo) do
+    Nanoc::Core::ItemRepRepo.new.tap do |reps|
+      reps_array.each { reps << _1 }
+    end
+  end
+
+  let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+  let(:empty_layouts) { Nanoc::Core::LayoutCollection.new(config) }
+  let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
+
+  let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
 
   let(:item) do
     Nanoc::Core::Item.new('stuff', {}, '/foo.md')
