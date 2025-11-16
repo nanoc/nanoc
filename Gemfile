@@ -65,7 +65,7 @@ group :plugins do
   gem 'execjs', '~> 2.7'
   gem 'fog-aws', '~> 3.30'
   gem 'fog-local', '~> 0.6'
-  gem 'haml', '~> 6.0'
+  gem 'haml', '~> 7.0'
   gem 'kramdown', '~> 2.5'
   gem 'less', '~> 2.6', platforms: :ruby
   gem 'listen', '~> 3.1'
