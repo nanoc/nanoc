@@ -72,7 +72,7 @@ group :plugins do
   gem 'markaby', '~> 0.9.4'
   gem 'maruku', '~> 0.7.3'
   gem 'mime-types', '~> 3.6'
-  gem 'mini_racer', '~> 0.16.0'
+  gem 'mini_racer', '~> 0.19'
   gem 'mustache', '~> 1.0'
   gem 'nokogiri', '~> 1.12'
   gem 'pandoc-ruby', '~> 2.1'
