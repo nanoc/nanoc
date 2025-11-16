@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.14.2 (2025-11-16)
+
+Enhancements:
+
+- Improved compilation performance of items that depend on many other items, like sitemaps (#1768)
+
 ## 4.14.1 (2025-10-30)
 
 Fixes:
