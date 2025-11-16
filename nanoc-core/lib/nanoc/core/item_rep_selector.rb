@@ -64,30 +64,30 @@ module Nanoc
           @completed << @this
         end
 
-        def mark_failed(dep)
-          record_dependency(dep)
+        def mark_failed(rep)
+          record_dependency(rep)
 
-          # `@this` depends on `dep`, so `dep` has to be compiled first. Thus,
-          # move `@this` into priority C, and `dep` into priority A.
+          # `@this` depends on `rep`, so `rep` has to be compiled first. Thus,
+          # move `@this` into priority C, and `rep` into priority A.
 
-          # Put `@this` (item rep that needs `dep` to be compiled first) into
+          # Put `@this` (item rep that needs `rep` to be compiled first) into
           # priority C (lowest prio).
           @prio_c.push(@this) unless @prio_c.include?(@this)
 
-          # Put `dep` (item rep that needs to be compiled first, before
+          # Put `rep` (item rep that needs to be compiled first, before
           # `@this`) into priority A (highest prio).
-          @prio_a = dep
+          @prio_a = rep
 
-          # Remember that we’ve prioritised `dep`. This particular element will
+          # Remember that we’ve prioritised `rep`. This particular element will
           # come from @prio_b at some point in the future, so we’ll have to skip
           # it then.
-          @seen << dep
+          @seen << rep
         end
 
         private
 
-        def record_dependency(dep)
-          @dependencies[@this] << dep
+        def record_dependency(rep)
+          @dependencies[@this] << rep
 
           find_cycle(@this, [@this])
         end
