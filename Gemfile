@@ -76,7 +76,7 @@ group :plugins do
   gem 'mustache', '~> 1.0'
   gem 'nokogiri', '~> 1.12'
   gem 'pandoc-ruby', '~> 2.1'
-  gem 'pygments.rb', '~> 3.0', platforms: :ruby
+  gem 'pygments.rb', '~> 4.0', platforms: :ruby
   gem 'rack', '~> 3.1'
   gem 'rainpress', '~> 1.0'
   gem 'rdiscount', '~> 2.2', platforms: :ruby
