@@ -3,7 +3,7 @@
 describe Nanoc::Core::ItemRepSelector do
   let(:selector) do
     described_class.new(
-      outdated_reps: reps_for_selector,
+      outdated_reps:,
       reps: item_rep_repo,
       dependency_store:,
     )
@@ -35,7 +35,7 @@ describe Nanoc::Core::ItemRepSelector do
     ]
   end
 
-  let(:reps_for_selector) { reps_array }
+  let(:outdated_reps) { reps_array }
 
   let(:names_to_reps) do
     reps_array.each_with_object({}) do |rep, acc|
@@ -211,7 +211,7 @@ describe Nanoc::Core::ItemRepSelector do
     end
 
     context 'star dependencies; selectively recompiling' do
-      let(:reps_for_selector) { reps_array.first(1) }
+      let(:outdated_reps) { reps_array.first(1) }
 
       let(:dependencies) do
         {
