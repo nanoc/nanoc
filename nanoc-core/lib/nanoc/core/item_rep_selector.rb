@@ -64,24 +64,25 @@ module Nanoc
           @completed << @this
         end
 
-        def mark_failed(rep)
-          record_dependency(rep)
+        def mark_failed(needed_rep:)
+          record_dependency(needed_rep)
 
-          # `@this` depends on `rep`, so `rep` has to be compiled first. Thus,
-          # move `@this` into priority C, and `rep` into priority A.
+          # `@this` depends on `needed_rep`, so `needed_rep` has to be compiled
+          # first. Thus, move `@this` into priority C, and `needed_rep` into
+          # priority A.
 
-          # Put `@this` (item rep that needs `rep` to be compiled first) into
-          # priority C (lowest prio).
+          # Put `@this` (item rep that needs `needed_rep` to be compiled first)
+          # into priority C (lowest prio).
           @prio_c.push(@this) unless @prio_c.include?(@this)
 
-          # Put `rep` (item rep that needs to be compiled first, before
+          # Put `needed_rep` (item rep that needs to be compiled first, before
           # `@this`) into priority A (highest prio).
-          @prio_a = rep
+          @prio_a = needed_rep
 
-          # Remember that we’ve prioritised `rep`. This particular element will
-          # come from @prio_b at some point in the future, so we’ll have to skip
-          # it then.
-          @seen << rep
+          # Remember that we’ve prioritised `needed_rep`. This particular
+          # element will come from @prio_b at some point in the future, so we’ll
+          # have to skip it then.
+          @seen << needed_rep
         end
 
         private
@@ -124,7 +125,7 @@ module Nanoc
             actual_error = e.is_a?(Nanoc::Core::Errors::CompilationError) ? e.unwrap : e
 
             if actual_error.is_a?(Nanoc::Core::Errors::UnmetDependency)
-              pq.mark_failed(actual_error.rep)
+              pq.mark_failed(needed_rep: actual_error.rep)
             else
               raise(e)
             end

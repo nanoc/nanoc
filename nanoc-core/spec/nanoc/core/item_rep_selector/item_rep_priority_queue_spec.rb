@@ -67,7 +67,7 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
   context 'when is a simple dependency' do
     it 'schedules the dependency next up' do
       expect(priority_queue.next).to eq(reps[0])
-      priority_queue.mark_failed(reps[2])
+      priority_queue.mark_failed(needed_rep: reps[2])
 
       expect(priority_queue.next).to eq(reps[2])
       priority_queue.mark_ok
@@ -91,10 +91,10 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
   context 'when is a transitive dependency' do
     it 'schedules the dependency next up' do
       expect(priority_queue.next).to eq(reps[0])
-      priority_queue.mark_failed(reps[2])
+      priority_queue.mark_failed(needed_rep: reps[2])
 
       expect(priority_queue.next).to eq(reps[2])
-      priority_queue.mark_failed(reps[4])
+      priority_queue.mark_failed(needed_rep: reps[4])
 
       expect(priority_queue.next).to eq(reps[4])
       priority_queue.mark_ok
@@ -118,10 +118,10 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
   context 'when is a circular dependency of size 2' do
     it 'schedules the dependency next up' do
       expect(priority_queue.next).to eq(reps[0])
-      priority_queue.mark_failed(reps[2])
+      priority_queue.mark_failed(needed_rep: reps[2])
 
       expect(priority_queue.next).to eq(reps[2])
-      expect { priority_queue.mark_failed(reps[0]) }
+      expect { priority_queue.mark_failed(needed_rep: reps[0]) }
         .to raise_error(Nanoc::Core::Errors::DependencyCycle)
     end
   end
@@ -129,13 +129,13 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
   context 'when is a circular dependency of size 3' do
     it 'schedules the dependency next up' do
       expect(priority_queue.next).to eq(reps[0])
-      priority_queue.mark_failed(reps[2])
+      priority_queue.mark_failed(needed_rep: reps[2])
 
       expect(priority_queue.next).to eq(reps[2])
-      priority_queue.mark_failed(reps[4])
+      priority_queue.mark_failed(needed_rep: reps[4])
 
       expect(priority_queue.next).to eq(reps[4])
-      expect { priority_queue.mark_failed(reps[0]) }
+      expect { priority_queue.mark_failed(needed_rep: reps[0]) }
         .to raise_error(Nanoc::Core::Errors::DependencyCycle)
     end
   end
@@ -143,16 +143,16 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
   context 'when is a circular dependency of size 4' do
     it 'schedules the dependency next up' do
       expect(priority_queue.next).to eq(reps[0])
-      priority_queue.mark_failed(reps[2])
+      priority_queue.mark_failed(needed_rep: reps[2])
 
       expect(priority_queue.next).to eq(reps[2])
-      priority_queue.mark_failed(reps[4])
+      priority_queue.mark_failed(needed_rep: reps[4])
 
       expect(priority_queue.next).to eq(reps[4])
-      priority_queue.mark_failed(reps[3])
+      priority_queue.mark_failed(needed_rep: reps[3])
 
       expect(priority_queue.next).to eq(reps[3])
-      expect { priority_queue.mark_failed(reps[0]) }
+      expect { priority_queue.mark_failed(needed_rep: reps[0]) }
         .to raise_error(Nanoc::Core::Errors::DependencyCycle)
     end
   end
@@ -160,13 +160,13 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
   context 'when there are two regular dependencies' do
     it 'schedules the dependency next up' do
       expect(priority_queue.next).to eq(reps[0])
-      priority_queue.mark_failed(reps[2])
+      priority_queue.mark_failed(needed_rep: reps[2])
 
       expect(priority_queue.next).to eq(reps[2])
       priority_queue.mark_ok
 
       expect(priority_queue.next).to eq(reps[1])
-      priority_queue.mark_failed(reps[4])
+      priority_queue.mark_failed(needed_rep: reps[4])
 
       expect(priority_queue.next).to eq(reps[4])
       priority_queue.mark_ok
@@ -187,16 +187,16 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
   context 'when there is one regular dependency and one cyclical dependency' do
     it 'schedules the dependency next up' do
       expect(priority_queue.next).to eq(reps[0])
-      priority_queue.mark_failed(reps[2])
+      priority_queue.mark_failed(needed_rep: reps[2])
 
       expect(priority_queue.next).to eq(reps[2])
       priority_queue.mark_ok
 
       expect(priority_queue.next).to eq(reps[1])
-      priority_queue.mark_failed(reps[4])
+      priority_queue.mark_failed(needed_rep: reps[4])
 
       expect(priority_queue.next).to eq(reps[4])
-      expect { priority_queue.mark_failed(reps[1]) }
+      expect { priority_queue.mark_failed(needed_rep: reps[1]) }
         .to raise_error(Nanoc::Core::Errors::DependencyCycle)
     end
   end
@@ -204,16 +204,16 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
   context 'when there is a transitive dependency' do
     it 'schedules the dependency next up' do
       expect(priority_queue.next).to eq(reps[0])
-      priority_queue.mark_failed(reps[1])
+      priority_queue.mark_failed(needed_rep: reps[1])
 
       expect(priority_queue.next).to eq(reps[1])
-      priority_queue.mark_failed(reps[2])
+      priority_queue.mark_failed(needed_rep: reps[2])
 
       expect(priority_queue.next).to eq(reps[2])
-      priority_queue.mark_failed(reps[3])
+      priority_queue.mark_failed(needed_rep: reps[3])
 
       expect(priority_queue.next).to eq(reps[3])
-      priority_queue.mark_failed(reps[4])
+      priority_queue.mark_failed(needed_rep: reps[4])
 
       expect(priority_queue.next).to eq(reps[4])
       priority_queue.mark_ok
@@ -243,19 +243,19 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
     # 3 OK
     it 'schedules the dependency next up' do
       expect(priority_queue.next).to eq(reps[0])
-      priority_queue.mark_failed(reps[2])
+      priority_queue.mark_failed(needed_rep: reps[2])
 
       expect(priority_queue.next).to eq(reps[2])
-      priority_queue.mark_failed(reps[4])
+      priority_queue.mark_failed(needed_rep: reps[4])
 
       expect(priority_queue.next).to eq(reps[4])
       priority_queue.mark_ok
 
       expect(priority_queue.next).to eq(reps[1])
-      priority_queue.mark_failed(reps[2])
+      priority_queue.mark_failed(needed_rep: reps[2])
 
       expect(priority_queue.next).to eq(reps[2])
-      priority_queue.mark_failed(reps[3])
+      priority_queue.mark_failed(needed_rep: reps[3])
 
       expect(priority_queue.next).to eq(reps[3])
       priority_queue.mark_ok
@@ -280,13 +280,13 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
     # 0 OK
     it 'schedules the dependency next up' do
       expect(priority_queue.next).to eq(reps[0])
-      priority_queue.mark_failed(reps[3])
+      priority_queue.mark_failed(needed_rep: reps[3])
 
       expect(priority_queue.next).to eq(reps[3])
       priority_queue.mark_ok
 
       expect(priority_queue.next).to eq(reps[1])
-      priority_queue.mark_failed(reps[0])
+      priority_queue.mark_failed(needed_rep: reps[0])
 
       expect(priority_queue.next).to eq(reps[0])
       priority_queue.mark_ok
