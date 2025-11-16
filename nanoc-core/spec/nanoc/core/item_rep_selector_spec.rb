@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::ItemRepSelector do
-  let(:selector) { described_class.new(reps_for_selector) }
+  let(:selector) { described_class.new(outdated_reps: reps_for_selector) }
 
   let(:item) do
     Nanoc::Core::Item.new('stuff', {}, '/foo.md')

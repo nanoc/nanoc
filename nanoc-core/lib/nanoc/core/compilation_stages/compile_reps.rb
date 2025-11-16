@@ -33,7 +33,7 @@ module Nanoc
             end
           end
 
-          selector = Nanoc::Core::ItemRepSelector.new(outdated_reps)
+          selector = Nanoc::Core::ItemRepSelector.new(outdated_reps:)
           run_phase_stack do |phase_stack|
             selector.each do |rep|
               handle_errors_while(rep) do

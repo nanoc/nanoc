@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
-  subject(:priority_queue) { described_class.new(reps) }
+  subject(:priority_queue) { described_class.new(outdated_reps:) }
 
   let(:items) do
     [
@@ -13,7 +13,7 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
     ]
   end
 
-  let(:reps) do
+  let(:outdated_reps) do
     [
       Nanoc::Core::ItemRep.new(items[0], :default),
       Nanoc::Core::ItemRep.new(items[1], :default),
@@ -22,6 +22,8 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
       Nanoc::Core::ItemRep.new(items[4], :default),
     ]
   end
+
+  let(:reps) { outdated_reps }
 
   context 'when there are no dependencies' do
     it 'runs through reps in order' do
