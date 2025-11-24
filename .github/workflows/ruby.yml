@@ -19,7 +19,7 @@ jobs:
         ruby-version: ["3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -40,7 +40,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -61,7 +61,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -82,7 +82,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -103,7 +103,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -124,7 +124,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -145,7 +145,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -166,7 +166,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -187,7 +187,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -208,7 +208,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -229,7 +229,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -250,7 +250,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
@@ -271,7 +271,7 @@ jobs:
         ruby-version: ["3.2", "3.3", "3.4"]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ruby/setup-ruby@v1
         with:
