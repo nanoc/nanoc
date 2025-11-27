@@ -124,6 +124,7 @@ module Nanoc::CLI
       stream.puts 'Captain! We’ve been hit!'
 
       write_error_message(stream, error)
+      write_error_detail(stream, error)
       write_item_rep(stream, error)
       write_stack_trace(stream, error)
 
@@ -142,6 +143,7 @@ module Nanoc::CLI
       stream.puts "Crash log created at #{Time.now}"
 
       write_error_message(stream, error, verbose: true)
+      write_error_detail(stream, error)
       write_item_rep(stream, error, verbose: true)
       write_stack_trace(stream, error, verbose: true)
       write_version_information(stream, verbose: true)
@@ -299,6 +301,15 @@ module Nanoc::CLI
         "\n" + error.errors.map { |e| "  * #{e.pointer}: #{e.message}" }.join("\n")
       else
         error.message
+      end
+    end
+
+    def write_error_detail(stream, error)
+      error = unwrap_error(error)
+
+      if error.respond_to?(:extended_message)
+        stream.puts
+        stream.puts error.extended_message
       end
     end
 
