@@ -28,6 +28,10 @@ module Nanoc
       def raw_path(snapshot: :last)
         @item_rep.raw_path(snapshot:)
       end
+
+      def snapshot_names
+        @item_rep.snapshot_defs.map(&:name)
+      end
     end
   end
 end

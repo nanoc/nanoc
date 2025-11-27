@@ -256,4 +256,12 @@ describe Nanoc::Core::PostCompileItemRepView do
       end
     end
   end
+
+  describe '#snapshot_names' do
+    subject { view.snapshot_names }
+
+    it 'returns snapshot names' do
+      expect(subject).to contain_exactly(:donkey, :last, :pre)
+    end
+  end
 end
