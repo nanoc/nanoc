@@ -56,11 +56,6 @@ module Nanoc::CLI
       # Run
       yield
     rescue Exception => e # rubocop:disable Lint/RescueException
-      # The exception could be wrapped in a
-      # Nanoc::Core::Errors::CompilationError, so find the
-      # underlying exception and handle that one instead.
-      e = unwrap_error(e)
-
       case e
       when Interrupt
         puts

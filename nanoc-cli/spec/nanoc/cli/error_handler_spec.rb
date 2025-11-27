@@ -166,6 +166,47 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
     end
   end
 
+  describe '#write_error_detail' do
+    subject { error_handler.send(:write_error_detail, $stdout, error) }
+
+    context 'with error that has no error detail' do
+      let(:error) do
+        Nanoc::Core::Configuration.new(dir: '/oink', hash: { enable_output_diff: 'yeah' })
+      rescue => e
+        return e
+      end
+
+      example do
+        expect { subject }.not_to output.to_stdout
+      end
+    end
+
+    context 'with error that has error detail' do
+      let(:error_class) do
+        Class.new(StandardError) do
+          def message
+            'wow'
+          end
+
+          def extended_message
+            # doge meme from before it got stolen from us
+            "much\nwow\nsuch\nerror"
+          end
+        end
+      end
+
+      let(:error) do
+        raise error_class.new('aah')
+      rescue => e
+        return e
+      end
+
+      example do
+        expect { subject }.to output("\nmuch\nwow\nsuch\nerror\n").to_stdout
+      end
+    end
+  end
+
   describe 'GEM_NAMES' do
     example do
       requires = Nanoc::Core::Filter.all.flat_map(&:requires)
@@ -180,12 +221,67 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
   end
 
   describe '#handle_while' do
-    it 'makes #exit bubble up a SystemExit' do
-      expect do
-        error_handler.handle_while(exit_on_error: false) do
-          exit(0)
+    subject do
+      error_handler.handle_while(exit_on_error:) { core.call }
+    end
+
+    let(:exit_on_error) { false }
+
+    let(:core) do
+      lambda do
+        raise Nanoc::Core::Errors::CompilationError.new(wrapped_error, item_rep)
+      end
+    end
+
+    let(:item) do
+      Nanoc::Core::Item.new('contentz', {}, '/sub/page.html')
+    end
+
+    let(:item_rep) do
+      Nanoc::Core::ItemRep.new(item, :default).tap do |rep|
+        rep.paths = { last: ['/sub/page.html'] }
+      end
+    end
+
+    let(:error_class) do
+      Class.new(StandardError) do
+        def message
+          'wow'
         end
-      end.to raise_error(SystemExit)
+
+        def extended_message
+          # doge meme from before it got stolen from us
+          "much\nwow\nsuch\nerror"
+        end
+      end
+    end
+
+    let(:wrapped_error) do
+      raise error_class.new('aah')
+    rescue => e
+      return e
+    end
+
+    it 'prints stack trace' do
+      expect { subject }.to output(/spec\/nanoc\/cli\/error_handler_spec\.rb:/).to_stderr
+    end
+
+    it 'prints current item' do
+      expect { subject }.to output(/sub\/page\.html/).to_stderr
+    end
+
+    it 'prints extended message' do
+      expect { subject }.to output(/much\nwow\nsuch\nerror/).to_stderr
+    end
+
+    context 'with SystemExit' do
+      let(:core) do
+        -> { exit(0) }
+      end
+
+      it 'makes #exit bubble up a SystemExit' do
+        expect { subject }.to raise_error(SystemExit)
+      end
     end
   end
 end
