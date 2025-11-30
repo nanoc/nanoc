@@ -1,5 +1,17 @@
 # Nanoc news
 
+## 4.14.3 (2025-11-30)
+
+Enhancements:
+
+- Added support fot Haml 7 in the `:haml` filter (#1769) [Roger Que]
+- Add #snapshot_names to item rep views (#1771)
+
+Fixes:
+
+- Fixed issue which could cause the crash log not to contain a mention of the current item rep
+- Made the crash log mention the item rep being compiled before the stack track
+
 ## 4.14.3 (2025-11-16)
 
 Enhancements:
