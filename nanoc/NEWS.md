@@ -477,7 +477,7 @@ Fixes:
 
 - Ensured breadcrumb trail always ends in item itself (#1367)
 
-Enhancemens:
+Enhancements:
 
 - Made Nanoc error when meta-file cannot be unambiguously associated (#1370)
 
