@@ -241,7 +241,7 @@ module Nanoc::Helpers
         raise Nanoc::Core::TrivialError.new('Cannot build Atom feed: site configuration has no base_url')
       end
 
-      @item[:feed_url] || @config[:base_url] + @item.path
+      @item[:feed_url] || (@config[:base_url] + @item.path)
     end
 
     # @return [String]

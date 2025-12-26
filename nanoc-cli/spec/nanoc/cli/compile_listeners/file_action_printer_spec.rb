@@ -20,7 +20,7 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
     allow(Process)
       .to receive(:clock_gettime)
       .with(Process::CLOCK_MONOTONIC, :nanosecond)
-      .and_return(original_timestamp + seconds * 1_000_000_000)
+      .and_return(original_timestamp + (seconds * 1_000_000_000))
   end
 
   after do

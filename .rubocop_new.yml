@@ -20,6 +20,8 @@ Layout/SpaceBeforeBrackets: # new in 1.7
   Enabled: true
 Lint/AmbiguousAssignment: # new in 1.7
   Enabled: true
+Lint/AmbiguousOperatorPrecedence: # new in 1.21
+  Enabled: true
 Lint/ArrayLiteralInRegexp: # new in 1.71
   Enabled: true
 Lint/ConstantOverwrittenInRescue: # new in 1.31

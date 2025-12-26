@@ -119,9 +119,6 @@ RSpec/Focus:
 
 # ----- DISABLED (new cops not enabled by default; to enable later) -----
 
-Lint/AmbiguousOperatorPrecedence: # new in 1.21
-  Enabled: false
-
 Lint/AmbiguousRange: # new in 1.19
   Enabled: false
 
