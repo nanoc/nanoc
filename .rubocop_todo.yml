@@ -961,12 +961,7 @@ Style/ClassAndModuleChildren:
 # Configuration parameters: Methods.
 Style/RedundantArgument:
   Exclude:
-    - 'nanoc-cli/lib/nanoc/cli/ansi_string_colorizer.rb'
-    - 'nanoc-core/lib/nanoc/core/errors.rb'
-    - 'nanoc/lib/nanoc/filters/relativize_paths.rb'
     - 'nanoc/lib/nanoc/helpers/capturing.rb'
-    - 'nanoc/spec/contributors_spec.rb'
-    - 'nanoc/spec/nanoc/core/checksummer_spec.rb'
     - 'nanoc/spec/nanoc/helpers/capturing_spec.rb'
 
 # Offense count: 22

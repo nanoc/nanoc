@@ -81,7 +81,7 @@ module Nanoc
           end
           msg_bits << (msg_bits.pop + ' (1)')
 
-          super(msg_bits.map { |x| x + "\n" }.join(''))
+          super(msg_bits.map { |x| x + "\n" }.join)
         end
       end
 

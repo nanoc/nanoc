@@ -40,7 +40,7 @@ module Nanoc
       # @return [String] A string colorized using the given attributes
       def c(str, *attrs)
         if enabled?
-          attrs.map { |a| MAPPING[a] }.join('') + str + CLEAR
+          attrs.map { |a| MAPPING[a] }.join + str + CLEAR
         else
           str
         end

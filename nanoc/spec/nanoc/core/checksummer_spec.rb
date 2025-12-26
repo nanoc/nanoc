@@ -56,7 +56,7 @@ describe Nanoc::Core::Checksummer do
         ',config=',
         'Nanoc::Core::ConfigView#20<' + expected_config_checksum + '>',
         '>',
-      ].join('')
+      ].join
     end
 
     it { is_expected.to eql(expected_checksum) }

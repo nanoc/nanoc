@@ -220,7 +220,7 @@ module Nanoc::Filters
 
       if parsed.is_a?(Array)
         parsed.map do |pair|
-          [relative_path_to(pair[:url]), pair[:rest]].join('')
+          [relative_path_to(pair[:url]), pair[:rest]].join
         end.join(',')
       else
         relative_path_to(parsed)
