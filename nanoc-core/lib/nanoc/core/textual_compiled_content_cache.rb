@@ -32,16 +32,12 @@ module Nanoc
         item_cache.key?(rep.name)
       end
 
-      contract Nanoc::Core::ItemRep, C::HashOf[Symbol => Nanoc::Core::Content] => C::Any
+      contract Nanoc::Core::ItemRep, C::HashOf[Symbol => Nanoc::Core::TextualContent] => C::Any
       # Sets the compiled content for the given representation.
       #
       # This cached compiled content is a hash where the keys are the snapshot
       # names, and the values the compiled content at the given snapshot.
       def []=(rep, content)
-        # FIXME: once the binary content cache is properly enabled (no longer
-        # behind a feature flag), change contract to be TextualContent, rather
-        # than Content.
-
         @cache[rep.item.identifier] ||= {}
         @cache[rep.item.identifier][rep.name] = content
       end
