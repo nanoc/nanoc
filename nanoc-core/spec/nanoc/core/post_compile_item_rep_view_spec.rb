@@ -10,9 +10,11 @@ describe Nanoc::Core::PostCompileItemRepView do
     snapshot_contents
       .select { |_, content| content.binary? }
       .each_value do |binary_content|
-        allow(FileUtils).to receive(:cp).with(binary_content.filename, anything)
-                                        .and_wrap_original do |_meth, _src, dst|
-          File.new(dst, 'w').close
+        allow(FileUtils)
+          .to receive(:cp)
+          .with(binary_content.filename, anything)
+          .and_wrap_original do |_meth, _src, dst|
+            File.new(dst, 'w').close
         end
       end
 
@@ -164,7 +166,11 @@ describe Nanoc::Core::PostCompileItemRepView do
       end
 
       it 'raises error' do
-        expect { subject }.to raise_error(Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem, 'You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is /foo (rep name :jacques).')
+        expect { subject }
+          .to raise_error(
+            Nanoc::Core::Errors::CannotGetCompiledContentOfBinaryItem,
+            'You cannot access the compiled content of a binary item representation (but you can access the path). The offending item rep is /foo (rep name :jacques).',
+          )
       end
     end
 
