@@ -184,6 +184,8 @@ Style/HashSlice: # new in 1.71
   Enabled: true
 Style/IfWithBooleanLiteralBranches: # new in 1.9
   Enabled: true
+Style/InPatternThen: # new in 1.16
+  Enabled: true
 Style/ItAssignment: # new in 1.70
   Enabled: true
 Style/ItBlockParameter: # new in 1.75
@@ -202,17 +204,25 @@ Style/MinMaxComparison: # new in 1.42
   Enabled: true
 Style/ModuleMemberExistenceCheck: # new in 1.82
   Enabled: true
+Style/MultilineInPatternThen: # new in 1.16
+  Enabled: true
 Style/NegatedIfElseCondition: # new in 1.2
   Enabled: true
 Style/NestedFileDirname: # new in 1.26
   Enabled: true
 Style/NilLambda: # new in 1.3
   Enabled: true
+Style/NumberedParameters: # new in 1.22
+  Enabled: true
+Style/NumberedParametersLimit: # new in 1.22
+  Enabled: true
 Style/ObjectThen: # new in 1.28
   Enabled: true
 Style/OpenStructUse: # new in 1.23
   Enabled: true
 Style/OperatorMethodCall: # new in 1.37
+  Enabled: true
+Style/QuotedSymbols: # new in 1.16
   Enabled: true
 Style/RedundantArgument: # new in 1.4
   Enabled: true
@@ -244,11 +254,15 @@ Style/RedundantRegexpArgument: # new in 1.53
   Enabled: true
 Style/RedundantRegexpConstructor: # new in 1.52
   Enabled: true
+Style/RedundantSelfAssignmentBranch: # new in 1.19
+  Enabled: true
 Style/RedundantStringEscape: # new in 1.37
   Enabled: true
 Style/ReturnNilInPredicateMethodDefinition: # new in 1.53
   Enabled: true
 Style/SafeNavigationChainLength: # new in 1.68
+  Enabled: true
+Style/SelectByRegexp: # new in 1.22
   Enabled: true
 Style/SendWithLiteralMethodName: # new in 1.64
   Enabled: true

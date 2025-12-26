@@ -302,7 +302,7 @@ module Nanoc::DataSources
 
       by_basename =
         all_files_in(dir_name)
-        .reject   { |fn| fn =~ /(~|\.orig|\.rej|\.bak)$/ }
+        .grep_v(/(~|\.orig|\.rej|\.bak)$/)
         .group_by { |fn| basename_of(fn) }
 
       all = {}

@@ -20,7 +20,7 @@ module Nanoc::Filters
 
       if warning_filters
         r = Regexp.union(warning_filters)
-        warnings = document.warnings.reject { |warning| r =~ warning }
+        warnings = document.warnings.grep_v(r)
       else
         warnings = document.warnings
       end

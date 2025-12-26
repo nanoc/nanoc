@@ -119,27 +119,6 @@ RSpec/Focus:
 
 # ----- DISABLED (new cops not enabled by default; to enable later) -----
 
-Style/InPatternThen: # new in 1.16
-  Enabled: false
-
-Style/MultilineInPatternThen: # new in 1.16
-  Enabled: false
-
-Style/NumberedParameters: # new in 1.22
-  Enabled: false
-
-Style/NumberedParametersLimit: # new in 1.22
-  Enabled: false
-
-Style/QuotedSymbols: # new in 1.16
-  Enabled: false
-
-Style/RedundantSelfAssignmentBranch: # new in 1.19
-  Enabled: false
-
-Style/SelectByRegexp: # new in 1.22
-  Enabled: false
-
 Minitest/UnreachableAssertion: # new in 0.14
   Enabled: false
 
