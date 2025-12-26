@@ -57,13 +57,6 @@ module Nanoc
         end
       end
 
-      # True if there is cached compiled content available for this item, and
-      # all entries are textual.
-      def full_cache_available?(rep)
-        cache = self[rep]
-        cache ? cache.none? { |_snapshot_name, content| content.binary? } : false
-      end
-
       protected
 
       def data
