@@ -42,6 +42,7 @@ group :devel do
   gem 'rubocop-minitest', '~> 0.37'
   gem 'rubocop-rake', '~> 0.7'
   gem 'rubocop-rspec', '~> 3.5'
+  gem 'ruby-lsp', '~> 0.26.4'
   gem 'simplecov', '~> 0.22'
   gem 'timecop', '~> 0.9'
   gem 'tty-command', '~> 0.8'
