@@ -869,6 +869,9 @@ Style/RedundantArrayFlatten: # new in 1.76
 Style/ArrayIntersectWithSingleElement: # new in 1.81
   Enabled: true
 
+Style/ModuleMemberExistenceCheck: # new in 1.82
+  Enabled: true
+
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.
@@ -892,6 +895,9 @@ Layout/LineLength:
   Enabled: false
 
 Lint/MixedRegexpCaptureTypes:
+  Enabled: false
+
+RSpec/LeakyLocalVariable:
   Enabled: false
 
 # ----- DISABLED (security) -----
