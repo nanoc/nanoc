@@ -3,12 +3,6 @@
 module Nanoc
   module Core
     class CompilationItemRepView < ::Nanoc::Core::BasicItemRepView
-      # How long to wait before the requested file appears.
-      #
-      # This is a bit of a hack -- ideally, Nanoc would know that the file is
-      # being generated, and wait the appropriate amount of time.
-      FILE_APPEAR_TIMEOUT = 10.0
-
       # @abstract
       def item_view_class
         Nanoc::Core::CompilationItemView
@@ -24,20 +18,19 @@ module Nanoc
       def raw_path(snapshot: :last)
         @context.dependency_tracker.bounce(_unwrap.item, compiled_content: true)
 
-        res = @item_rep.raw_path(snapshot:)
+        raw_path = @item_rep.raw_path(snapshot:)
 
         unless @item_rep.compiled?
           raise Nanoc::Core::Errors::UnmetDependency.new(@item_rep, snapshot)
         end
 
-        # Wait for file to exist
-        if res
-          start = Time.now
-          sleep 0.05 until File.file?(res) || Time.now - start > FILE_APPEAR_TIMEOUT
-          raise Nanoc::Core::Errors::InternalInconsistency, "File raw_path did not appear in time (#{FILE_APPEAR_TIMEOUT}s): #{res}" unless File.file?(res)
+        # Ensure file exists
+        if raw_path && !File.file?(raw_path)
+          raise Nanoc::Core::Errors::InternalInconsistency,
+                "File `#{raw_path}` expected to exist, but did not."
         end
 
-        res
+        raw_path
       end
 
       # Returns the compiled content.
