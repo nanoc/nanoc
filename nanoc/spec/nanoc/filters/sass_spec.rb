@@ -328,11 +328,6 @@ describe Nanoc::Filters::SassCommon do
           .to match(/\A\*\s*\{\s*margin:\s+0;\s*\}\s*\z/)
       end
 
-      it 'cannot import partials by relative path without extension' do
-        expect { sass.setup_and_run('@import anonymous-sass-partial') }
-          .to raise_error(Sass::SyntaxError, /File to import not found/)
-      end
-
       it 'cannot import partials by nested relative path with SCSS extension' do
         expect { sass.setup_and_run('@import content/style/partial.scss') }
           .to raise_error(Sass::SyntaxError, /File to import not found/)
