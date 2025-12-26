@@ -32,7 +32,8 @@ module Nanoc
         end
 
         def canonicalize(url, context)
-          uri = Addressable::URI.parse(context.containing_url).join(url)
+          uri = Addressable::URI.parse(url)
+          uri = Addressable::URI.parse(context.containing_url).join(uri) unless context.containing_url.nil?
           return unless uri.scheme == 'nanoc'
 
           resolved = resolve_path(uri.path, context.from_import)
