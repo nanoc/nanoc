@@ -1,5 +1,11 @@
 # nanoc-dart-sass news
 
+## 2.0.0 (???)
+
+Changes:
+
+- Changed the importer to be in line with the spec [ntkme] (#1755)
+
 ## 1.0.4 (2024-11-04)
 
 Fixes:
