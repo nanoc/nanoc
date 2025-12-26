@@ -50,7 +50,7 @@ module Nanoc
       # @return [String] The content at the given snapshot.
       def compiled_content(snapshot: nil)
         @context.dependency_tracker.bounce(_unwrap.item, compiled_content: true)
-        @context.compiled_content_store.compiled_content(rep: _unwrap, snapshot:)
+        @context.compiled_content_repo.compiled_content(rep: _unwrap, snapshot:)
       end
     end
   end

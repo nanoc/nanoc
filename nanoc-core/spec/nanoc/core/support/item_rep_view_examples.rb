@@ -9,7 +9,7 @@ shared_examples 'an item rep view' do
       items:,
       dependency_tracker:,
       compilation_context:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
@@ -19,7 +19,7 @@ shared_examples 'an item rep view' do
       reps:,
       site:,
       compiled_content_cache:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
@@ -27,7 +27,7 @@ shared_examples 'an item rep view' do
   let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
   let(:reps) { Nanoc::Core::ItemRepRepo.new }
 
-  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+  let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
   let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
 
   let(:action_provider) do
@@ -165,7 +165,7 @@ shared_examples 'an item rep view' do
     let(:snapshot_name) { raise 'override me' }
 
     before do
-      compiled_content_store.set(rep, :last, Nanoc::Core::TextualContent.new('Hallo'))
+      compiled_content_repo.set(rep, :last, Nanoc::Core::TextualContent.new('Hallo'))
     end
 
     context 'snapshot exists' do

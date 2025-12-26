@@ -20,7 +20,7 @@ module Nanoc::Helpers
         content_string = capture(&)
 
         # Get existing contents and prep for store
-        compiled_content_store = @item._context.compiled_content_store
+        compiled_content_repo = @item._context.compiled_content_repo
         rep = @item.reps[:default]._unwrap
         capture_name = :"__capture_#{@name}"
         old_content_string =
@@ -28,10 +28,10 @@ module Nanoc::Helpers
           when :overwrite
             ''
           when :append
-            c = compiled_content_store.get(rep, capture_name)
+            c = compiled_content_repo.get(rep, capture_name)
             c ? c.string : ''
           when :error
-            contents = compiled_content_store.get(rep, capture_name)
+            contents = compiled_content_repo.get(rep, capture_name)
             if contents && contents.string != content_string
               # FIXME: get proper exception
               raise "a capture named #{@name.inspect} for #{@item.identifier} already exists"
@@ -45,7 +45,7 @@ module Nanoc::Helpers
 
         # Store
         new_content = Nanoc::Core::TextualContent.new(old_content_string + content_string)
-        compiled_content_store.set(rep, capture_name, new_content)
+        compiled_content_repo.set(rep, capture_name, new_content)
       end
     end
 
@@ -72,8 +72,8 @@ module Nanoc::Helpers
           end
         end
 
-        compiled_content_store = @config._context.compiled_content_store
-        content = compiled_content_store.get(rep, :"__capture_#{@name}")
+        compiled_content_repo = @config._context.compiled_content_repo
+        content = compiled_content_repo.get(rep, :"__capture_#{@name}")
         content&.string
       end
     end

@@ -22,7 +22,7 @@ describe Nanoc::Core::CompilationItemRepView do
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker:,
       compilation_context:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
@@ -32,11 +32,11 @@ describe Nanoc::Core::CompilationItemRepView do
       reps:,
       site:,
       compiled_content_cache:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
-  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+  let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
   let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
 
   let(:site) do
@@ -155,7 +155,7 @@ describe Nanoc::Core::CompilationItemRepView do
     end
 
     before do
-      compiled_content_store.set(rep, :last, Nanoc::Core::TextualContent.new('Hallo'))
+      compiled_content_repo.set(rep, :last, Nanoc::Core::TextualContent.new('Hallo'))
     end
 
     it 'creates a dependency' do

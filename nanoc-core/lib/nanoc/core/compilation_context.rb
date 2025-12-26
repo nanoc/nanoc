@@ -27,7 +27,7 @@ module Nanoc
       attr_reader :site
       attr_reader :reps
       attr_reader :compiled_content_cache
-      attr_reader :compiled_content_store
+      attr_reader :compiled_content_repo
 
       C_COMPILED_CONTENT_CACHE =
         C::Or[
@@ -41,14 +41,14 @@ module Nanoc
         reps: Nanoc::Core::ItemRepRepo,
         site: Nanoc::Core::Site,
         compiled_content_cache: C_COMPILED_CONTENT_CACHE,
-        compiled_content_store: Nanoc::Core::CompiledContentStore,
+        compiled_content_repo: Nanoc::Core::CompiledContentRepo,
       ] => C::Any
-      def initialize(action_provider:, reps:, site:, compiled_content_cache:, compiled_content_store:)
+      def initialize(action_provider:, reps:, site:, compiled_content_cache:, compiled_content_repo:)
         @action_provider = action_provider
         @reps = reps
         @site = site
         @compiled_content_cache = compiled_content_cache
-        @compiled_content_store = compiled_content_store
+        @compiled_content_repo = compiled_content_repo
       end
 
       contract Nanoc::Core::Layout => FilterNameAndArgs

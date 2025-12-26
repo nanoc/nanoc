@@ -42,7 +42,7 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
         reps:,
         site:,
         compiled_content_cache:,
-        compiled_content_store:,
+        compiled_content_repo:,
       )
 
     Nanoc::Core::ViewContextForCompilation.new(
@@ -50,12 +50,12 @@ class Nanoc::Helpers::CapturingTest < Nanoc::TestCase
       items:,
       dependency_tracker: Nanoc::Core::DependencyTracker::Null.new,
       compilation_context:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
-  def compiled_content_store
-    @_compiled_content_store ||= Nanoc::Core::CompiledContentStore.new
+  def compiled_content_repo
+    @_compiled_content_repo ||= Nanoc::Core::CompiledContentRepo.new
   end
 
   def before

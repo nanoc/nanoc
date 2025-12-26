@@ -16,7 +16,7 @@ module Nanoc
           Nanoc::Core::NotificationCenter.post(:filtering_started, @rep, filter_name)
 
           # Run filter
-          last = @compilation_context.compiled_content_store.get_current(@rep)
+          last = @compilation_context.compiled_content_repo.get_current(@rep)
           source = last.binary? ? last.filename : last.string
           filter_args.freeze
           result = filter.setup_and_run(source, filter_args)
@@ -28,7 +28,7 @@ module Nanoc
             end
 
           # Store
-          @compilation_context.compiled_content_store.set_current(@rep, last)
+          @compilation_context.compiled_content_repo.set_current(@rep, last)
         ensure
           Nanoc::Core::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
@@ -47,7 +47,7 @@ module Nanoc
         filter_args.freeze
 
         # Check whether item can be laid out
-        last = @compilation_context.compiled_content_store.get_current(@rep)
+        last = @compilation_context.compiled_content_repo.get_current(@rep)
         raise Nanoc::Core::Errors::CannotLayoutBinaryItem.new(@rep) if last.binary?
 
         # Create filter
@@ -68,15 +68,15 @@ module Nanoc
 
           # Store
           last = Nanoc::Core::TextualContent.new(res).tap(&:freeze)
-          @compilation_context.compiled_content_store.set_current(@rep, last)
+          @compilation_context.compiled_content_repo.set_current(@rep, last)
         ensure
           Nanoc::Core::NotificationCenter.post(:filtering_ended, @rep, filter_name)
         end
       end
 
       def snapshot(snapshot_name)
-        last = @compilation_context.compiled_content_store.get_current(@rep)
-        @compilation_context.compiled_content_store.set(@rep, snapshot_name, last)
+        last = @compilation_context.compiled_content_repo.get_current(@rep)
+        @compilation_context.compiled_content_repo.set(@rep, snapshot_name, last)
         Nanoc::Core::NotificationCenter.post(:snapshot_created, @rep, snapshot_name)
       end
 
@@ -106,7 +106,7 @@ module Nanoc
       def filter_for_filtering(filter_name)
         klass = Nanoc::Core::Filter.named!(filter_name)
 
-        last = @compilation_context.compiled_content_store.get_current(@rep)
+        last = @compilation_context.compiled_content_repo.get_current(@rep)
         if klass.from_binary? && !last.binary?
           raise Nanoc::Core::Errors::CannotUseBinaryFilter.new(@rep, klass)
         elsif !klass.from_binary? && last.binary?
@@ -127,7 +127,7 @@ module Nanoc
             items: @compilation_context.site.items,
             dependency_tracker: @dependency_tracker,
             compilation_context: @compilation_context,
-            compiled_content_store: @compilation_context.compiled_content_store,
+            compiled_content_repo: @compilation_context.compiled_content_repo,
           )
       end
     end

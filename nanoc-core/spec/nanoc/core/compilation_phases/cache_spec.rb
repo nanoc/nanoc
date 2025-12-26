@@ -4,7 +4,7 @@ describe Nanoc::Core::CompilationPhases::Cache do
   subject(:phase) do
     described_class.new(
       compiled_content_cache:,
-      compiled_content_store:,
+      compiled_content_repo:,
       wrapped:,
     )
   end
@@ -13,21 +13,21 @@ describe Nanoc::Core::CompilationPhases::Cache do
     Nanoc::Core::CompiledContentCache.new(config:)
   end
 
-  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+  let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
 
   let(:wrapped_class) do
     Class.new(Nanoc::Core::CompilationPhases::Abstract) do
-      def initialize(compiled_content_store)
-        @compiled_content_store = compiled_content_store
+      def initialize(compiled_content_repo)
+        @compiled_content_repo = compiled_content_repo
       end
 
       def run(rep, is_outdated:) # rubocop:disable Lint/UnusedMethodArgument
-        @compiled_content_store.set(rep, :last, Nanoc::Core::TextualContent.new('wrapped content'))
+        @compiled_content_repo.set(rep, :last, Nanoc::Core::TextualContent.new('wrapped content'))
       end
     end
   end
 
-  let(:wrapped) { wrapped_class.new(compiled_content_store) }
+  let(:wrapped) { wrapped_class.new(compiled_content_repo) }
 
   let(:item) { Nanoc::Core::Item.new('item content', {}, '/donkey.md') }
   let(:rep) { Nanoc::Core::ItemRep.new(item, :latex) }
@@ -92,7 +92,7 @@ describe Nanoc::Core::CompilationPhases::Cache do
         it 'reads content from cache' do
           expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
-            .to change { compiled_content_store.get(rep, :last) }
+            .to change { compiled_content_repo.get(rep, :last) }
             .from(nil)
             .to(some_textual_content('cached'))
         end
@@ -135,7 +135,7 @@ describe Nanoc::Core::CompilationPhases::Cache do
         it 'reads content from cache' do
           expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
           expect { subject }
-            .to change { compiled_content_store.get(rep, :last) }
+            .to change { compiled_content_repo.get(rep, :last) }
             .from(nil)
             .to(some_binary_content(binary_content))
         end

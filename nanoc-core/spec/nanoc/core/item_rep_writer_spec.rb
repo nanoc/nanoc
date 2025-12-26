@@ -2,7 +2,7 @@
 
 describe Nanoc::Core::ItemRepWriter do
   describe '#write' do
-    subject { described_class.new.write(item_rep, compiled_content_store, snapshot_name, written_paths) }
+    subject { described_class.new.write(item_rep, compiled_content_repo, snapshot_name, written_paths) }
 
     let(:raw_path) { Dir.getwd + '/output/blah.dat' }
 
@@ -27,7 +27,7 @@ describe Nanoc::Core::ItemRepWriter do
       { snapshot_name => [raw_path] }
     end
 
-    let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+    let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
 
     let(:written_paths) { [] }
 
@@ -35,7 +35,7 @@ describe Nanoc::Core::ItemRepWriter do
       expect(File.directory?('output')).to be_falsy
 
       snapshot_contents.each_pair do |key, value|
-        compiled_content_store.set(item_rep, key, value)
+        compiled_content_repo.set(item_rep, key, value)
       end
     end
 

@@ -24,9 +24,9 @@ module Nanoc
           executor = Nanoc::Core::Executor.new(rep, @compilation_context, dependency_tracker)
 
           # Set initial content, if not already present
-          compiled_content_store = @compilation_context.compiled_content_store
-          unless compiled_content_store.get_current(rep)
-            compiled_content_store.set_current(rep, rep.item.content)
+          compiled_content_repo = @compilation_context.compiled_content_repo
+          unless compiled_content_repo.get_current(rep)
+            compiled_content_repo.set_current(rep, rep.item.content)
           end
 
           actions = pending_action_sequence_for(rep:)

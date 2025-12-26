@@ -152,7 +152,7 @@ describe Nanoc::Filters::SassCommon do
         items:,
         dependency_tracker:,
         compilation_context:,
-        compiled_content_store:,
+        compiled_content_repo:,
       )
     end
 
@@ -178,7 +178,7 @@ describe Nanoc::Filters::SassCommon do
         reps:,
         site:,
         compiled_content_cache:,
-        compiled_content_store:,
+        compiled_content_repo:,
       )
     end
 
@@ -194,8 +194,8 @@ describe Nanoc::Filters::SassCommon do
 
     let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
 
-    let(:compiled_content_store) do
-      Nanoc::Core::CompiledContentStore.new.tap do |repo|
+    let(:compiled_content_repo) do
+      Nanoc::Core::CompiledContentRepo.new.tap do |repo|
         repo.set(reps[item_blue].first, :last, content_blue)
         repo.set(reps[item_red].first, :last, content_red)
         repo.set(reps[item_partial_scss].first, :last, content_partial_scss)

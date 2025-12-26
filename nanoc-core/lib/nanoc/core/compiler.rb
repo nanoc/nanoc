@@ -29,7 +29,7 @@ module Nanoc
         @outdatedness_store     = outdatedness_store
         @focus                  = focus
 
-        @compiled_content_store = Nanoc::Core::CompiledContentStore.new
+        @compiled_content_repo = Nanoc::Core::CompiledContentRepo.new
       end
 
       def run_until_preprocessed
@@ -99,7 +99,7 @@ module Nanoc
           reps:,
           site: @site,
           compiled_content_cache: @compiled_content_cache,
-          compiled_content_store: @compiled_content_store,
+          compiled_content_repo: @compiled_content_repo,
         )
       end
 

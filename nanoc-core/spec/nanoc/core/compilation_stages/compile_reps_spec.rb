@@ -30,7 +30,7 @@ describe Nanoc::Core::CompilationStages::CompileReps do
       reps:,
       site:,
       compiled_content_cache:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
@@ -47,7 +47,7 @@ describe Nanoc::Core::CompilationStages::CompileReps do
   let(:action_sequences) { double(:action_sequences) }
   let(:reps) { Nanoc::Core::ItemRepRepo.new }
   let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
-  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+  let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
 
   let(:outdatedness_store) { Nanoc::Core::OutdatednessStore.new(config:) }
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
@@ -138,7 +138,7 @@ describe Nanoc::Core::CompilationStages::CompileReps do
         let(:focus) { nil }
 
         it 'compiles individual reps' do
-          expect { subject }.to change { compiled_content_store.get(rep, :last) }
+          expect { subject }.to change { compiled_content_repo.get(rep, :last) }
             .from(nil)
             .to(some_textual_content('3'))
         end
@@ -152,7 +152,7 @@ describe Nanoc::Core::CompilationStages::CompileReps do
         let(:focus) { ['/hi.*'] }
 
         it 'compiles individual reps' do
-          expect { subject }.to change { compiled_content_store.get(rep, :last) }
+          expect { subject }.to change { compiled_content_repo.get(rep, :last) }
             .from(nil)
             .to(some_textual_content('3'))
         end
@@ -166,7 +166,7 @@ describe Nanoc::Core::CompilationStages::CompileReps do
         let(:focus) { ['/hi.*', '/unrelated.*'] }
 
         it 'compiles individual reps' do
-          expect { subject }.to change { compiled_content_store.get(rep, :last) }
+          expect { subject }.to change { compiled_content_repo.get(rep, :last) }
             .from(nil)
             .to(some_textual_content('3'))
         end
@@ -180,7 +180,7 @@ describe Nanoc::Core::CompilationStages::CompileReps do
         let(:focus) { ['/other.*'] }
 
         it 'does not compile individual reps' do
-          expect { subject }.not_to change { compiled_content_store.get(rep, :last) }
+          expect { subject }.not_to change { compiled_content_repo.get(rep, :last) }
             .from(nil)
         end
 

@@ -23,7 +23,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       )
 
     compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config:)
-    compiled_content_store = Nanoc::Core::CompiledContentStore.new
+    compiled_content_repo = Nanoc::Core::CompiledContentRepo.new
 
     action_provider =
       Class.new(Nanoc::Core::ActionProvider) do
@@ -40,7 +40,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
         reps: @reps,
         site:,
         compiled_content_cache:,
-        compiled_content_store:,
+        compiled_content_repo:,
       )
 
     @view_context = Nanoc::Core::ViewContextForCompilation.new(
@@ -48,7 +48,7 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
       items: Nanoc::Core::ItemCollection.new(config),
       dependency_tracker:,
       compilation_context:,
-      compiled_content_store: Nanoc::Core::CompiledContentStore.new,
+      compiled_content_repo: Nanoc::Core::CompiledContentRepo.new,
     )
 
     @items = nil

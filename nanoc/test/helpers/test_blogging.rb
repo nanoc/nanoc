@@ -48,7 +48,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
     dependency_tracker = Nanoc::Core::DependencyTracker.new(dep_store)
 
     compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config:)
-    compiled_content_store = Nanoc::Core::CompiledContentStore.new
+    compiled_content_repo = Nanoc::Core::CompiledContentRepo.new
 
     action_provider =
       Class.new(Nanoc::Core::ActionProvider) do
@@ -65,7 +65,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
         reps:,
         site:,
         compiled_content_cache:,
-        compiled_content_store:,
+        compiled_content_repo:,
       )
 
     @view_context = Nanoc::Core::ViewContextForCompilation.new(
@@ -73,7 +73,7 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
       items:,
       dependency_tracker:,
       compilation_context:,
-      compiled_content_store: Nanoc::Core::CompiledContentStore.new,
+      compiled_content_repo: Nanoc::Core::CompiledContentRepo.new,
     )
   end
 

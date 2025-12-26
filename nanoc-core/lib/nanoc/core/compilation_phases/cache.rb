@@ -8,11 +8,11 @@ module Nanoc
       class Cache < Abstract
         include Nanoc::Core::ContractsSupport
 
-        def initialize(wrapped:, compiled_content_cache:, compiled_content_store:)
+        def initialize(wrapped:, compiled_content_cache:, compiled_content_repo:)
           super(wrapped:)
 
           @compiled_content_cache = compiled_content_cache
-          @compiled_content_store = compiled_content_store
+          @compiled_content_repo = compiled_content_repo
         end
 
         contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
@@ -21,14 +21,14 @@ module Nanoc
             # If cached content can be used for this item rep, do so, and skip
             # recalculation of the item rep compiled content.
             Nanoc::Core::NotificationCenter.post(:cached_content_used, rep)
-            @compiled_content_store.set_all(rep, @compiled_content_cache[rep])
+            @compiled_content_repo.set_all(rep, @compiled_content_cache[rep])
           else
             # Cached content couldn’t be used for this rep. Continue as usual with
             # recalculation of the item rep compiled content.
             yield
 
             # Update compiled content cache, now that the item rep is compiled.
-            @compiled_content_cache[rep] = @compiled_content_store.get_all(rep)
+            @compiled_content_cache[rep] = @compiled_content_repo.get_all(rep)
           end
 
           rep.compiled = true

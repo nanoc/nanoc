@@ -3,7 +3,7 @@
 module Nanoc
   module Core
     # @api private
-    class CompiledContentStore
+    class CompiledContentRepo
       include Nanoc::Core::ContractsSupport
 
       def initialize

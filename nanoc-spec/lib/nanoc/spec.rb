@@ -60,7 +60,7 @@ module Nanoc
         @reps = Nanoc::Core::ItemRepRepo.new
         @items = Nanoc::Core::ItemCollection.new(@config)
         @layouts = Nanoc::Core::LayoutCollection.new(@config)
-        @compiled_content_store = Nanoc::Core::CompiledContentStore.new
+        @compiled_content_repo = Nanoc::Core::CompiledContentRepo.new
         @action_provider = new_action_provider
       end
 
@@ -155,8 +155,8 @@ module Nanoc
         @action_sequence[obj] = memory
       end
 
-      def compiled_content_store
-        view_context.compiled_content_store
+      def compiled_content_repo
+        view_context.compiled_content_repo
       end
 
       def assigns
@@ -187,7 +187,7 @@ module Nanoc
             reps: @reps,
             site:,
             compiled_content_cache: Nanoc::Core::CompiledContentCache.new(config: @config),
-            compiled_content_store: @compiled_content_store,
+            compiled_content_repo: @compiled_content_repo,
           )
 
         Nanoc::Core::ViewContextForCompilation.new(
@@ -195,7 +195,7 @@ module Nanoc
           items: @items,
           dependency_tracker:,
           compilation_context:,
-          compiled_content_store: @compiled_content_store,
+          compiled_content_repo: @compiled_content_repo,
         )
       end
 

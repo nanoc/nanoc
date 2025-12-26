@@ -8,10 +8,10 @@ module Nanoc
 
         WORKER_POOL_SIZE = 5
 
-        def initialize(compiled_content_store:, wrapped:)
+        def initialize(compiled_content_repo:, wrapped:)
           super(wrapped:)
 
-          @compiled_content_store = compiled_content_store
+          @compiled_content_repo = compiled_content_repo
 
           @pool = Concurrent::FixedThreadPool.new(WORKER_POOL_SIZE)
 
@@ -35,7 +35,7 @@ module Nanoc
           Nanoc::Core::NotificationCenter.post(:rep_write_enqueued, rep)
 
           @pool.post do
-            @writer.write_all(rep, @compiled_content_store)
+            @writer.write_all(rep, @compiled_content_repo)
           end
         end
       end

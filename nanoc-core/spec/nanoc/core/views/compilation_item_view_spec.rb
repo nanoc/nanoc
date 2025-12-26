@@ -22,7 +22,7 @@ describe Nanoc::Core::CompilationItemView do
       items:,
       dependency_tracker:,
       compilation_context:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
@@ -32,11 +32,11 @@ describe Nanoc::Core::CompilationItemView do
       reps:,
       site:,
       compiled_content_cache:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
-  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+  let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
   let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
 
   let(:site) do
@@ -270,10 +270,10 @@ describe Nanoc::Core::CompilationItemView do
     end
 
     before do
-      compiled_content_store.set(rep, :last, Nanoc::Core::TextualContent.new('Last Hallo'))
-      compiled_content_store.set(rep, :pre, Nanoc::Core::TextualContent.new('Pre Hallo'))
-      compiled_content_store.set(rep, :post, Nanoc::Core::TextualContent.new('Post Hallo'))
-      compiled_content_store.set(rep, :specific, Nanoc::Core::TextualContent.new('Specific Hallo'))
+      compiled_content_repo.set(rep, :last, Nanoc::Core::TextualContent.new('Last Hallo'))
+      compiled_content_repo.set(rep, :pre, Nanoc::Core::TextualContent.new('Pre Hallo'))
+      compiled_content_repo.set(rep, :post, Nanoc::Core::TextualContent.new('Post Hallo'))
+      compiled_content_repo.set(rep, :specific, Nanoc::Core::TextualContent.new('Specific Hallo'))
     end
 
     context 'requesting implicit default rep' do

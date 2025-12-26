@@ -18,7 +18,7 @@ describe Nanoc::Core::Executor do
       reps:,
       site:,
       compiled_content_cache:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
@@ -64,7 +64,7 @@ describe Nanoc::Core::Executor do
     Nanoc::Core::CompiledContentCache.new(config:)
   end
 
-  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+  let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
 
   let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store)) }
 
@@ -82,27 +82,27 @@ describe Nanoc::Core::Executor do
         expect(Nanoc::Core::NotificationCenter)
           .to receive(:post).with(:filtering_ended, rep, :simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei)
 
-        compiled_content_store.set_current(rep, content)
+        compiled_content_repo.set_current(rep, content)
       end
 
       it 'does not set :pre in repo' do
-        expect(compiled_content_store.get(rep, :pre)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :pre) }
+        expect(compiled_content_repo.get(rep, :pre)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :pre) }
       end
 
       it 'does not set :post in repo' do
-        expect(compiled_content_store.get(rep, :post)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :post) }
+        expect(compiled_content_repo.get(rep, :post)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :post) }
       end
 
       it 'does not set :last in repo' do
-        expect(compiled_content_store.get(rep, :last)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :last) }
+        expect(compiled_content_repo.get(rep, :last)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :last) }
       end
 
       it 'updates current content in repo' do
         expect { subject }
-          .to change { compiled_content_store.get_current(rep).string }
+          .to change { compiled_content_repo.get_current(rep).string }
           .from('<%= "Donkey" %> Power')
           .to('Donkey Power')
       end
@@ -110,7 +110,7 @@ describe Nanoc::Core::Executor do
       it 'returns frozen data' do
         executor.filter(:simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei)
 
-        expect(compiled_content_store.get_current(rep)).to be_frozen
+        expect(compiled_content_repo.get_current(rep)).to be_frozen
       end
     end
 
@@ -137,27 +137,27 @@ describe Nanoc::Core::Executor do
 
         expect(Nanoc::Core::Filter).to receive(:named).with(:whatever) { filter_class }
 
-        compiled_content_store.set_current(rep, content)
+        compiled_content_repo.set_current(rep, content)
       end
 
       it 'does not set :pre in repo' do
-        expect(compiled_content_store.get(rep, :pre)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :pre) }
+        expect(compiled_content_repo.get(rep, :pre)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :pre) }
       end
 
       it 'does not set :post in repo' do
-        expect(compiled_content_store.get(rep, :post)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :post) }
+        expect(compiled_content_repo.get(rep, :post)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :post) }
       end
 
       it 'does not set :last in repo' do
-        expect(compiled_content_store.get(rep, :last)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :last) }
+        expect(compiled_content_repo.get(rep, :last)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :last) }
       end
 
       it 'updates current content in repo' do
         expect { subject }
-          .to change { File.read(compiled_content_store.get_current(rep).filename) }
+          .to change { File.read(compiled_content_repo.get_current(rep).filename) }
           .from('Foo Data')
           .to(%r{\ACompiled data for (C:)?/.*/foo.dat\z})
       end
@@ -165,7 +165,7 @@ describe Nanoc::Core::Executor do
       it 'returns frozen data' do
         executor.filter(:whatever)
 
-        expect(compiled_content_store.get_current(rep)).to be_frozen
+        expect(compiled_content_repo.get_current(rep)).to be_frozen
       end
     end
 
@@ -192,27 +192,27 @@ describe Nanoc::Core::Executor do
 
         expect(Nanoc::Core::Filter).to receive(:named).with(:whatever) { filter_class }
 
-        compiled_content_store.set_current(rep, content)
+        compiled_content_repo.set_current(rep, content)
       end
 
       it 'does not set :pre in repo' do
-        expect(compiled_content_store.get(rep, :pre)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :pre) }
+        expect(compiled_content_repo.get(rep, :pre)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :pre) }
       end
 
       it 'does not set :post in repo' do
-        expect(compiled_content_store.get(rep, :post)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :post) }
+        expect(compiled_content_repo.get(rep, :post)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :post) }
       end
 
       it 'does not set :last in repo' do
-        expect(compiled_content_store.get(rep, :last)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :last) }
+        expect(compiled_content_repo.get(rep, :last)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :last) }
       end
 
       it 'updates current content repo' do
         expect { subject }
-          .to change { compiled_content_store.get_current(rep) }
+          .to change { compiled_content_repo.get_current(rep) }
           .from(some_binary_content('Foo Data'))
           .to(some_textual_content(%r{\ACompiled data for (C:)?/.*/foo.dat\z}))
       end
@@ -237,27 +237,27 @@ describe Nanoc::Core::Executor do
 
         expect(Nanoc::Core::Filter).to receive(:named).with(:whatever) { filter_class }
 
-        compiled_content_store.set_current(rep, content)
+        compiled_content_repo.set_current(rep, content)
       end
 
       it 'does not set :pre in repo' do
-        expect(compiled_content_store.get(rep, :pre)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :pre) }
+        expect(compiled_content_repo.get(rep, :pre)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :pre) }
       end
 
       it 'does not set :post in repo' do
-        expect(compiled_content_store.get(rep, :post)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :post) }
+        expect(compiled_content_repo.get(rep, :post)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :post) }
       end
 
       it 'does not set :last in repo' do
-        expect(compiled_content_store.get(rep, :last)).to be_nil
-        expect { subject }.not_to change { compiled_content_store.get(rep, :last) }
+        expect(compiled_content_repo.get(rep, :last)).to be_nil
+        expect { subject }.not_to change { compiled_content_repo.get(rep, :last) }
       end
 
       it 'updates current content in repo' do
         expect { subject }
-          .to change { compiled_content_store.get_current(rep) }
+          .to change { compiled_content_repo.get_current(rep) }
           .from(some_textual_content('<%= "Donkey" %> Power'))
           .to(some_binary_content('Binary <%= "Donkey" %> Power'))
       end
@@ -280,7 +280,7 @@ describe Nanoc::Core::Executor do
 
         expect(Nanoc::Core::Filter).to receive(:named).with(:whatever) { filter_class }
 
-        compiled_content_store.set_current(rep, content)
+        compiled_content_repo.set_current(rep, content)
       end
 
       it 'raises' do
@@ -293,7 +293,7 @@ describe Nanoc::Core::Executor do
       let(:content) { Nanoc::Core::BinaryContent.new(File.expand_path('foo.md')) }
 
       before do
-        compiled_content_store.set_current(rep, content)
+        compiled_content_repo.set_current(rep, content)
       end
 
       it 'raises' do
@@ -320,7 +320,7 @@ describe Nanoc::Core::Executor do
           def run(_filename, _params = {}); end
         end
 
-        compiled_content_store.set_current(rep, content)
+        compiled_content_repo.set_current(rep, content)
 
         expect(Nanoc::Core::Filter).to receive(:named).with(:whatever) { filter_class }
       end
@@ -333,7 +333,7 @@ describe Nanoc::Core::Executor do
 
     context 'content is frozen' do
       before do
-        compiled_content_store.set_current(rep, item.content)
+        compiled_content_repo.set_current(rep, item.content)
       end
 
       let(:item) do
@@ -382,7 +382,7 @@ describe Nanoc::Core::Executor do
     before do
       rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:pre, binary: false)]
 
-      compiled_content_store.set_current(rep, content)
+      compiled_content_repo.set_current(rep, content)
 
       allow(action_provider).to receive(:action_sequence_for).with(layout).and_return(action_sequence)
     end
@@ -397,29 +397,29 @@ describe Nanoc::Core::Executor do
           .with(layout, raw_content: false, attributes: [:bug], compiled_content: false, path: false)
         allow(dependency_tracker).to receive(:exit)
         subject
-        expect(compiled_content_store.get_current(rep).string).to eq('head Gum Emperor foot')
+        expect(compiled_content_repo.get_current(rep).string).to eq('head Gum Emperor foot')
       end
     end
 
     context 'normal flow' do
       it 'updates :last in repo' do
         expect { subject }
-          .to change { compiled_content_store.get_current(rep) }
+          .to change { compiled_content_repo.get_current(rep) }
           .from(some_textual_content('Donkey Power'))
           .to(some_textual_content('head Donkey Power foot'))
       end
 
       it 'sets frozen content' do
         subject
-        expect(compiled_content_store.get_current(rep)).to be_frozen
-        expect(compiled_content_store.get(rep, :pre)).to be_frozen
+        expect(compiled_content_repo.get_current(rep)).to be_frozen
+        expect(compiled_content_repo.get(rep, :pre)).to be_frozen
       end
 
       it 'does not create pre snapshot' do
         # a #layout is followed by a #snapshot(:pre, …)
-        expect(compiled_content_store.get(rep, :pre)).to be_nil
+        expect(compiled_content_repo.get(rep, :pre)).to be_nil
         subject
-        expect(compiled_content_store.get(rep, :pre)).to be_nil
+        expect(compiled_content_repo.get(rep, :pre)).to be_nil
       end
 
       it 'sends notifications' do
@@ -441,13 +441,13 @@ describe Nanoc::Core::Executor do
         end
 
         it 'does not set :last in repo' do
-          expect(compiled_content_store.get(rep, :last)).to be_nil
-          expect { subject }.not_to change { compiled_content_store.get(rep, :last) }
+          expect(compiled_content_repo.get(rep, :last)).to be_nil
+          expect { subject }.not_to change { compiled_content_repo.get(rep, :last) }
         end
 
         it 'updates current content in repo' do
           expect { subject }
-            .to change { compiled_content_store.get_current(rep) }
+            .to change { compiled_content_repo.get_current(rep) }
             .from(some_textual_content('Donkey Power'))
             .to(some_textual_content('head Donkey Power foot'))
         end
@@ -457,13 +457,13 @@ describe Nanoc::Core::Executor do
         let(:layout_content) { 'head <%= @layout.identifier %> foot' }
 
         it 'does not set :last in repo' do
-          expect(compiled_content_store.get(rep, :last)).to be_nil
-          expect { subject }.not_to change { compiled_content_store.get(rep, :last) }
+          expect(compiled_content_repo.get(rep, :last)).to be_nil
+          expect { subject }.not_to change { compiled_content_repo.get(rep, :last) }
         end
 
         it 'updates current content in repo' do
           expect { subject }
-            .to change { compiled_content_store.get_current(rep) }
+            .to change { compiled_content_repo.get_current(rep) }
             .from(some_textual_content('Donkey Power'))
             .to(some_textual_content('head /default.erb foot'))
         end
@@ -522,7 +522,7 @@ describe Nanoc::Core::Executor do
     subject { executor.snapshot(:something) }
 
     before do
-      compiled_content_store.set_current(rep, content)
+      compiled_content_repo.set_current(rep, content)
 
       File.write('donkey.dat', 'binary donkey')
     end
@@ -532,7 +532,7 @@ describe Nanoc::Core::Executor do
 
       it 'creates snapshots in repo' do
         expect { subject }
-          .to change { compiled_content_store.get(rep, :something) }
+          .to change { compiled_content_repo.get(rep, :something) }
           .from(nil)
           .to(some_binary_content('binary donkey'))
       end
@@ -543,7 +543,7 @@ describe Nanoc::Core::Executor do
 
       it 'creates snapshots in repo' do
         expect { subject }
-          .to change { compiled_content_store.get(rep, :something) }
+          .to change { compiled_content_repo.get(rep, :something) }
           .from(nil)
           .to(some_textual_content('Donkey Power'))
       end

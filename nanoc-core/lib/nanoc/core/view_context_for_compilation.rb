@@ -9,26 +9,26 @@ module Nanoc
       attr_reader :items
       attr_reader :dependency_tracker
       attr_reader :compilation_context
-      attr_reader :compiled_content_store
+      attr_reader :compiled_content_repo
 
       contract C::KeywordArgs[
         reps: Nanoc::Core::ItemRepRepo,
         items: Nanoc::Core::IdentifiableCollection,
         dependency_tracker: Nanoc::Core::DependencyTracker,
         compilation_context: Nanoc::Core::CompilationContext,
-        compiled_content_store: Nanoc::Core::CompiledContentStore,
+        compiled_content_repo: Nanoc::Core::CompiledContentRepo,
       ] => C::Any
-      def initialize(reps:, items:, dependency_tracker:, compilation_context:, compiled_content_store:)
+      def initialize(reps:, items:, dependency_tracker:, compilation_context:, compiled_content_repo:)
         @reps = reps
         @items = items
         @dependency_tracker = dependency_tracker
         @compilation_context = compilation_context
-        @compiled_content_store = compiled_content_store
+        @compiled_content_repo = compiled_content_repo
       end
 
       contract Nanoc::Core::ItemRep, C::KeywordArgs[site: Nanoc::Core::Site] => Hash
       def assigns_for(rep, site:)
-        last_content = @compiled_content_store.get_current(rep)
+        last_content = @compiled_content_repo.get_current(rep)
         content_or_filename_assigns =
           if last_content.binary?
             { filename: last_content.filename }

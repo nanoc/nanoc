@@ -88,12 +88,12 @@ module Nanoc
 
           cache_phase = Nanoc::Core::CompilationPhases::Cache.new(
             compiled_content_cache: @compiled_content_cache,
-            compiled_content_store: @compilation_context.compiled_content_store,
+            compiled_content_repo: @compilation_context.compiled_content_repo,
             wrapped: recalculate_phase,
           )
 
           write_phase = Nanoc::Core::CompilationPhases::Write.new(
-            compiled_content_store: @compilation_context.compiled_content_store,
+            compiled_content_repo: @compilation_context.compiled_content_repo,
             wrapped: cache_phase,
           )
 

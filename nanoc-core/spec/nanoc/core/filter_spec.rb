@@ -189,7 +189,7 @@ describe Nanoc::Core::Filter do
         items: Nanoc::Core::ItemCollection.new(config),
         dependency_tracker:,
         compilation_context:,
-        compiled_content_store:,
+        compiled_content_repo:,
       )
     end
 
@@ -199,7 +199,7 @@ describe Nanoc::Core::Filter do
         reps:,
         site:,
         compiled_content_cache:,
-        compiled_content_store:,
+        compiled_content_repo:,
       )
     end
 
@@ -214,7 +214,7 @@ describe Nanoc::Core::Filter do
     end
 
     let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
-    let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+    let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
 
     let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
     let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }

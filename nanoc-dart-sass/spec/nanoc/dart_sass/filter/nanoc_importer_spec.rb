@@ -19,7 +19,7 @@ describe Nanoc::DartSass::Filter::NanocImporter do
       items:,
       dependency_tracker:,
       compilation_context:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
@@ -29,11 +29,11 @@ describe Nanoc::DartSass::Filter::NanocImporter do
       reps:,
       site:,
       compiled_content_cache:,
-      compiled_content_store:,
+      compiled_content_repo:,
     )
   end
 
-  let(:compiled_content_store) { Nanoc::Core::CompiledContentStore.new }
+  let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
   let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
 
   let(:site) do
