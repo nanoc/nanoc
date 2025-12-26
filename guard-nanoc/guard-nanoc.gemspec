@@ -15,10 +15,10 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.2'
 
-  s.add_dependency 'guard', '~> 2.8'
-  s.add_dependency 'guard-compat', '~> 1.0'
-  s.add_dependency 'nanoc-cli', '~> 4.11', '>= 4.11.14'
-  s.add_dependency 'nanoc-core', '~> 4.11', '>= 4.11.14'
+  s.add_dependency('guard', '~> 2.8')
+  s.add_dependency('guard-compat', '~> 1.0')
+  s.add_dependency('nanoc-cli', '~> 4.14')
+  s.add_dependency('nanoc-core', '~> 4.14')
 
   s.files         = Dir['[A-Z]*'] + Dir['lib/**/*'] + ['guard-nanoc.gemspec']
   s.require_paths = ['lib']

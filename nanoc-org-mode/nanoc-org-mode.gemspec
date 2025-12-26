@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.2'
 
-  s.add_dependency('nanoc-core', '~> 4.12')
+  s.add_dependency('nanoc-core', '~> 4.14')
   s.add_dependency('org-ruby', '~> 0.9')
   s.metadata = {
     'rubygems_mfa_required' => 'true',

@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.2'
 
-  s.add_dependency('nanoc-core', '~> 4.11', '>= 4.11.14')
+  s.add_dependency('nanoc-core', '~> 4.14')
   s.add_dependency('tilt', '~> 2.0')
   s.metadata = {
     'rubygems_mfa_required' => 'true',
