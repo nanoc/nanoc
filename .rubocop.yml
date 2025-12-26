@@ -119,9 +119,6 @@ RSpec/Focus:
 
 # ----- DISABLED (new cops not enabled by default; to enable later) -----
 
-Security/IoMethods: # new in 1.22
-  Enabled: false
-
 Style/InPatternThen: # new in 1.16
   Enabled: false
 

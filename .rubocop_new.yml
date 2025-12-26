@@ -120,6 +120,8 @@ Naming/BlockForwarding: # new in 1.24
   Enabled: true
 Security/CompoundHash: # new in 1.28
   Enabled: true
+Security/IoMethods: # new in 1.22
+  Enabled: true
 Style/AmbiguousEndlessMethodDefinition: # new in 1.68
   Enabled: true
 Style/ArgumentsForwarding: # new in 1.1
