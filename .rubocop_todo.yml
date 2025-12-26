@@ -956,14 +956,6 @@ Style/ClassAndModuleChildren:
     - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
     - 'nanoc/test/rule_dsl/test_rules_collection.rb'
 
-# Offense count: 2
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: literals, strict
-Style/MutableConstant:
-  Exclude:
-    - 'nanoc-cli/lib/nanoc/cli/commands/create-site.rb'
-
 # Offense count: 7
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: Methods.

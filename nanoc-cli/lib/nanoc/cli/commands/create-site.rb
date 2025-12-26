@@ -18,7 +18,7 @@ module Nanoc::CLI::Commands
       end
     end
 
-    DEFAULT_GEMFILE = <<~EOS unless defined? DEFAULT_GEMFILE
+    DEFAULT_GEMFILE = <<~EOS.freeze unless defined? DEFAULT_GEMFILE
       # frozen_string_literal: true
 
       source 'https://rubygems.org'
@@ -26,7 +26,7 @@ module Nanoc::CLI::Commands
       gem 'nanoc', '~> #{Nanoc::CLI::VERSION.split('.').take(2).join('.')}'
     EOS
 
-    DEFAULT_CONFIG = <<~EOS unless defined? DEFAULT_CONFIG
+    DEFAULT_CONFIG = <<~EOS.freeze unless defined? DEFAULT_CONFIG
       # A list of file extensions that Nanoc will consider to be textual rather than
       # binary. If an item with an extension not in this list is found,  the file
       # will be considered as binary.
