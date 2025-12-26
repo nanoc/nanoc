@@ -398,8 +398,8 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
     # rubocop:disable Minitest/AssertMatch
     # rubocop:disable Minitest/RefuteMatch
-    assert('/foo/bar/' =~ actual)
-    refute('/foo/' =~ actual)
+    assert_operator('/foo/bar/', :=~, actual)
+    refute_operator('/foo/', :=~, actual)
     # rubocop:enable Minitest/RefuteMatch
     # rubocop:enable Minitest/AssertMatch
   end
@@ -415,9 +415,9 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
     # rubocop:disable Minitest/AssertMatch
     # rubocop:disable Minitest/RefuteMatch
-    assert('/favicon.ico' =~ actual)
-    assert('/favicon.ico/' =~ actual)
-    refute('/faviconxico' =~ actual)
+    assert_operator('/favicon.ico', :=~, actual)
+    assert_operator('/favicon.ico/', :=~, actual)
+    refute_operator('/faviconxico', :=~, actual)
     # rubocop:enable Minitest/RefuteMatch
     # rubocop:enable Minitest/AssertMatch
   end

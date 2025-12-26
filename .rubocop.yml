@@ -119,9 +119,6 @@ RSpec/Focus:
 
 # ----- DISABLED (new cops not enabled by default; to enable later) -----
 
-Minitest/UnreachableAssertion: # new in 0.14
-  Enabled: false
-
 RSpec/ExcessiveDocstringSpacing: # new in 2.5
   Enabled: false
 
@@ -134,13 +131,7 @@ RSpec/SubjectDeclaration: # new in 2.5
 RSpec/MetadataStyle: # new in 2.24
   Enabled: false
 
-Minitest/AssertOperator: # new in 0.32
-  Enabled: false
-
 RSpec/SpecFilePathFormat: # new in 2.24
-  Enabled: false
-
-Minitest/RefuteOperator: # new in 0.32
   Enabled: false
 
 # ----- TO ENABLE LATER -----
