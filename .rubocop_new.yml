@@ -52,6 +52,8 @@ Lint/EmptyInPattern: # new in 1.16
   Enabled: true
 Lint/HashNewWithKeywordArgumentsAsDefault: # new in 1.69
   Enabled: true
+Lint/IncompatibleIoSelectWithFiberScheduler: # new in 1.21
+  Enabled: true
 Lint/ItWithoutArgumentsInBlock: # new in 1.59
   Enabled: true
 Lint/LambdaWithoutLiteralBlock: # new in 1.8
