@@ -158,38 +158,11 @@ Security/Eval:
     - "*/spec/**/*.rb"
     - "nanoc/lib/nanoc/filters/erubi.rb"
 
-# ----- DISABLED (metrics) -----
+# ----- DISABLED (opinionated) -----
 
 # Cops for metrics are disabled because they should not cause tests to fail.
-
-Metrics/AbcSize:
+Metrics:
   Enabled: false
-
-Metrics/BlockLength:
-  Enabled: false
-
-Metrics/BlockNesting:
-  Enabled: false
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Metrics/ModuleLength:
-  Enabled: false
-
-Metrics/ParameterLists:
-  Enabled: false
-
-Metrics/PerceivedComplexity:
-  Enabled: false
-
-# ----- DISABLED (opinionated) -----
 
 # We should embrace UTF-8, not avoid it. Since the Encoding cop is enabled,
 # there’s no point in enforcing ASCII comments.
