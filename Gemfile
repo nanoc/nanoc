@@ -34,7 +34,7 @@ group :devel do
   gem 'perfect_toml', '~> 0.9'
   gem 'pry', '~> 0.15'
   gem 'rake', '~> 13.2'
-  gem 'rdoc', '~> 6.0'
+  gem 'rdoc', '~> 7.0'
   gem 'rspec', '~> 3.13'
   gem 'rspec-its', '~> 2.0'
   gem 'rspec-mocks', '~> 3.13'
