@@ -68,7 +68,7 @@ describe Nanoc::Core::ItemRepSelector do
 
   describe 'error' do
     context 'plain error' do
-      subject { selector.each { |_rep| raise 'heh' } }
+      subject { selector.each { |_rep| raise 'heh' } } # rubocop:disable Lint/UnreachableLoop
 
       it 'raises' do
         expect { subject }.to raise_error(RuntimeError, 'heh')
@@ -130,7 +130,7 @@ describe Nanoc::Core::ItemRepSelector do
   describe 'cycle' do
     context 'dependency on self' do
       subject do
-        selector.each { |r| raise Nanoc::Core::Errors::UnmetDependency.new(r, :foo) }
+        selector.each { |r| raise Nanoc::Core::Errors::UnmetDependency.new(r, :foo) } # rubocop:disable Lint/UnreachableLoop
       end
 
       example do
