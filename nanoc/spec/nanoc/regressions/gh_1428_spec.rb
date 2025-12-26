@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1428', site: true, stdio: true do
+describe 'GH-1428', :site, :stdio do
   before do
     FileUtils.mkdir_p('layouts')
     File.write('layouts/default.erb', 'layout stuff')

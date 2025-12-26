@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-776', site: true do
+describe 'GH-776', :site do
   before do
     File.write('content/donkey.md', 'Donkey!')
 

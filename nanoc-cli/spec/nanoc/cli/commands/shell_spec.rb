@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::CLI::Commands::Shell, site: true, stdio: true do
+describe Nanoc::CLI::Commands::Shell, :site, :stdio do
   describe '#run' do
     before do
       # Prevent double-loading

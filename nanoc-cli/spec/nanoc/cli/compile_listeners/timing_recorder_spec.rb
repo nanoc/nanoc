@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::CLI::CompileListeners::TimingRecorder, stdio: true do
+describe Nanoc::CLI::CompileListeners::TimingRecorder, :stdio do
   let(:listener) { described_class.new(reps:) }
   let(:reps) do
     Nanoc::Core::ItemRepRepo.new.tap do |reps|

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Helpers::Blogging, helper: true do
+describe Nanoc::Helpers::Blogging, :helper do
   before do
     allow(ctx.dependency_tracker).to receive(:enter)
     allow(ctx.dependency_tracker).to receive(:exit)

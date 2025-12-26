@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1045', site: true, stdio: true do
+describe 'GH-1045', :site, :stdio do
   before do
     File.write('content/foo.txt', 'foo')
     FileUtils.touch('content/foo.txt', mtime: Time.parse('2015-03-02 10:00:00Z'))

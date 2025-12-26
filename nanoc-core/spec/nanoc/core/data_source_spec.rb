@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Core::DataSource, stdio: true do
+describe Nanoc::Core::DataSource, :stdio do
   subject(:data_source) do
     described_class.new({}, nil, nil, {})
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::CLI::Commands::ShowPlugins, site: true, stdio: true do
+describe Nanoc::CLI::Commands::ShowPlugins, :site, :stdio do
   describe '#run' do
     it 'can be invoked' do # rubocop:disable RSpec/NoExpectationExample
       Nanoc::CLI.run(['show-plugins'])

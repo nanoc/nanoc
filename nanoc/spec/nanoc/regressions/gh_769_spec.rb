@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-769', site: true do
+describe 'GH-769', :site do
   before do
     File.write('content/index.md', 'Index!')
     File.write('content/donkey.md', 'Donkey! [<%= @item.parent.identifier %>]')

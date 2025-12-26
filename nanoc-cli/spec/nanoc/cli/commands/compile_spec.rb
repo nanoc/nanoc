@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
+describe Nanoc::CLI::Commands::Compile, :site, :stdio do
   describe '#run' do
     let(:site) do
       Nanoc::Core::Site.new(
@@ -55,7 +55,7 @@ describe Nanoc::CLI::Commands::Compile, site: true, stdio: true do
       expect(listener).to be_stopped
     end
 
-    describe '--watch', fork: true do
+    describe '--watch', :fork do
       it 'watches with --watch' do
         pipe_stdout_read, pipe_stdout_write = IO.pipe
         pid = fork do

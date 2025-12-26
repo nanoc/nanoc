@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Core::PrefixedDataSource, stdio: true do
+describe Nanoc::Core::PrefixedDataSource, :stdio do
   subject(:data_source) do
     described_class.new(original_data_source, '/itemz', '/layoutz')
   end

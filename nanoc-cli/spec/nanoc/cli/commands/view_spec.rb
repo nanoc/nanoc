@@ -2,7 +2,7 @@
 
 require 'net/http'
 
-describe Nanoc::CLI::Commands::View, fork: true, site: true, stdio: true do
+describe Nanoc::CLI::Commands::View, :fork, :site, :stdio do
   describe '#run' do
     def run_nanoc_cmd(cmd)
       pid = fork { Nanoc::CLI.run(cmd) }

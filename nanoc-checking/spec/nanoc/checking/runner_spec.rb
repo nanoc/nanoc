@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Checking::Runner, site: true do
+describe Nanoc::Checking::Runner, :site do
   subject(:runner) { described_class.new(site) }
 
   let(:site) { Nanoc::Core::SiteLoader.new.new_from_cwd }

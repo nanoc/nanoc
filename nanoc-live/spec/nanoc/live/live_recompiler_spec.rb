@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Live::LiveRecompiler, fork: true, site: true, stdio: true do
+describe Nanoc::Live::LiveRecompiler, :fork, :site, :stdio do
   before do
     Nanoc::CLI::ErrorHandler.enable
   end

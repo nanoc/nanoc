@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1374', site: true, stdio: true do
+describe 'GH-1374', :site, :stdio do
   before do
     FileUtils.mkdir_p('content')
     File.write('content/test.md', 'hello')

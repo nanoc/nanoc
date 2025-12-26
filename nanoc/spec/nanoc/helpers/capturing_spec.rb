@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Helpers::Capturing, helper: true do
+describe Nanoc::Helpers::Capturing, :helper do
   describe '#content_for' do
     before do
       ctx.create_item('some content', {}, '/about.md')

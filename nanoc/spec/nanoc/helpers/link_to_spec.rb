@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Helpers::LinkTo, helper: true do
+describe Nanoc::Helpers::LinkTo, :helper do
   describe '#link_to' do
     subject { helper.link_to(text, target, attributes) }
 

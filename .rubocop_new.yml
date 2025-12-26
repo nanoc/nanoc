@@ -348,3 +348,13 @@ Minitest/UnspecifiedException: # new in 0.10
   Enabled: true
 Minitest/UselessAssertion: # new in 0.26
   Enabled: true
+RSpec/ExcessiveDocstringSpacing: # new in 2.5
+  Enabled: true
+RSpec/IdenticalEqualityAssertion: # new in 2.4
+  Enabled: true
+RSpec/MetadataStyle: # new in 2.24
+  Enabled: true
+RSpec/SpecFilePathFormat: # new in 2.24
+  Enabled: true
+RSpec/SubjectDeclaration: # new in 2.5
+  Enabled: true

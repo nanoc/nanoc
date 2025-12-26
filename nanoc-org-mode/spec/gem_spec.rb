@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'nanoc-org-mode.gem', chdir: false, stdio: true do
+describe 'nanoc-org-mode.gem', :stdio, chdir: false do
   subject(:build_gem) do
     TTY::Command.new.run('gem build nanoc-org-mode.gemspec')
   end

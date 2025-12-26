@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Outdatedness integration', site: true, stdio: true do
+describe 'Outdatedness integration', :site, :stdio do
   context 'only attribute dependency' do
     let(:time) { Time.now }
 

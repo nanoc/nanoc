@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Deploying::Deployers::Git, stdio: true do
+describe Nanoc::Deploying::Deployers::Git, :stdio do
   subject { deployer.run }
 
   let(:deployer) { described_class.new(output_dir, options, dry_run:) }

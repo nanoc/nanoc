@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1097', site: true, stdio: true do
+describe 'GH-1097', :site, :stdio do
   before do
     File.write('content/a.dat', 'foo')
     File.write('content/index.html', '<%= @items.find_all("/*.dat").flat_map(&:reps).all? { |r| File.file?(r.raw_path) } %>')

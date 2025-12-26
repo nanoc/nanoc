@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Helpers::HTMLEscape, helper: true do
+describe Nanoc::Helpers::HTMLEscape, :helper do
   describe '#html_escape' do
     subject { helper.html_escape(string) }
 

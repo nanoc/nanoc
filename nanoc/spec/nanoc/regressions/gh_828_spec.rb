@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-828', site: true, stdio: true do
+describe 'GH-828', :site, :stdio do
   before do
     File.write('content/bad.md', "---\nbad: true\n---\n\nI am bad!")
     File.write('content/good.md', "---\nbad: false\n---\n\nI am good!")

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Compile command', site: true, stdio: true do
+describe 'Compile command', :site, :stdio do
   describe 'diff generation' do
     before do
       File.write('content/foo.md', "I am foo!\n")

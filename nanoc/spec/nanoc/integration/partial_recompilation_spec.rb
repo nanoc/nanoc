@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Partial recompilation', site: true, stdio: true do
+describe 'Partial recompilation', :site, :stdio do
   before do
     File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoo")
     File.write('content/bar.md', '<%= @items["/foo.*"].compiled_content %><% raise "boom" %>')

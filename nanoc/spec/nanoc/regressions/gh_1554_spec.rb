@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1554', site: true, stdio: true do
+describe 'GH-1554', :site, :stdio do
   example do
     FileUtils.mkdir_p('content')
     FileUtils.mkdir_p('content/parts')

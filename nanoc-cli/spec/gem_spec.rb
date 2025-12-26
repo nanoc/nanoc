@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'nanoc-cli.gem', chdir: false, stdio: true do
+describe 'nanoc-cli.gem', :stdio, chdir: false do
   subject do
     TTY::Command.new.run('gem build nanoc-cli.gemspec')
   end

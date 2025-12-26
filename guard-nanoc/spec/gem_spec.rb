@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'guard-nanoc.gem', chdir: false, stdio: true do
+describe 'guard-nanoc.gem', :stdio, chdir: false do
   subject do
     TTY::Command.new.run('gem build guard-nanoc.gemspec')
   end

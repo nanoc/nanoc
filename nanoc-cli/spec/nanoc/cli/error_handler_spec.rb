@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::CLI::ErrorHandler, stdio: true do
+describe Nanoc::CLI::ErrorHandler, :stdio do
   subject(:error_handler) { described_class.new }
 
   describe '#trivial?' do
@@ -118,7 +118,7 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
         end
       end
 
-      context 'when error implements #extended_message', stdio: true do
+      context 'when error implements #extended_message', :stdio do
         let(:klass) do
           Class.new(StandardError) do
             def self.to_s

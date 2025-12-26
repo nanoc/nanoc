@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-924', site: true, stdio: true do
+describe 'GH-924', :site, :stdio do
   before do
     File.write('nanoc.yaml', <<~EOS)
       text_extensions: [ 'xml', 'xsl' ]

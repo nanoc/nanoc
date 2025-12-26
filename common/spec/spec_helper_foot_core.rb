@@ -29,7 +29,7 @@ RSpec.configure do |c|
   c.threadsafe = false
 
   # TODO: Only really relevant when using the filesystem data source
-  c.before(:each, site: true) do
+  c.before(:each, :site) do
     FileUtils.mkdir_p('content')
     FileUtils.mkdir_p('layouts')
     FileUtils.mkdir_p('lib')
@@ -44,7 +44,7 @@ RSpec.configure do |c|
     format: '%c/%C |<%b>%i| %p%%',
   }
 
-  c.before(:each, fork: true) do
+  c.before(:each, :fork) do
     skip 'fork() is not supported on Windows' if Nanoc::Core.on_windows?
   end
 
@@ -66,7 +66,7 @@ RSpec.configure do |c|
     end
   end
 
-  c.around(:each, stdio: true) do |example|
+  c.around(:each, :stdio) do |example|
     orig_stdout = $stdout
     orig_stderr = $stderr
 

@@ -117,23 +117,6 @@ Style/GlobalVars:
 RSpec/Focus:
   Enabled: false
 
-# ----- DISABLED (new cops not enabled by default; to enable later) -----
-
-RSpec/ExcessiveDocstringSpacing: # new in 2.5
-  Enabled: false
-
-RSpec/IdenticalEqualityAssertion: # new in 2.4
-  Enabled: false
-
-RSpec/SubjectDeclaration: # new in 2.5
-  Enabled: false
-
-RSpec/MetadataStyle: # new in 2.24
-  Enabled: false
-
-RSpec/SpecFilePathFormat: # new in 2.24
-  Enabled: false
-
 # ----- TO ENABLE LATER -----
 
 # Valid cops, but fixing the offenses they report is non-trivial.

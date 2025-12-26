@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Helpers::Filtering, helper: true do
+describe Nanoc::Helpers::Filtering, :helper do
   describe '#filter' do
     subject { ERB.new(content).result(helper.get_binding) }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1082', site: true, stdio: true do
+describe 'GH-1082', :site, :stdio do
   before do
     File.write('content/a.erb', '<%= @items["/b.*"].binary? %>')
     File.write('content/b.dat', 'stuff')

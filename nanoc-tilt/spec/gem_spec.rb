@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'nanoc-tilt.gem', chdir: false, stdio: true do
+describe 'nanoc-tilt.gem', :stdio, chdir: false do
   subject(:build_gem) do
     TTY::Command.new.run('gem build nanoc-tilt.gemspec')
   end

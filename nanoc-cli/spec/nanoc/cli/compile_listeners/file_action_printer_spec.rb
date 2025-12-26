@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
+describe Nanoc::CLI::CompileListeners::FileActionPrinter, :stdio do
   let(:listener) { described_class.new(reps:) }
   let(:reps) do
     Nanoc::Core::ItemRepRepo.new.tap do |reps|

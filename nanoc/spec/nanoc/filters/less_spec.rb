@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Filters::Less, site: true, stdio: true do
+describe Nanoc::Filters::Less, :site, :stdio do
   before do
     skip_unless_gem_available('less')
     File.open('Rules', 'w') do |io|

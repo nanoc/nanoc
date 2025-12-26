@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1037', site: true, stdio: true do
+describe 'GH-1037', :site, :stdio do
   before do
     File.write('content/foo.png', 'stuff')
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-815', site: true, stdio: true do
+describe 'GH-815', :site, :stdio do
   before do
     File.write('nanoc.yaml', "animal: \"donkey\"\n")
     File.write('content/foo.md', '<%= @config.key?(:animal) %>')

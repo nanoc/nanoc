@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'write nil (skip routing rule)', site: true, stdio: true do
+describe 'write nil (skip routing rule)', :site, :stdio do
   context 'write non-nil + write nil' do
     before do
       File.write('content/foo.md', 'foo')

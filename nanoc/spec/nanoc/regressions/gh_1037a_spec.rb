@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1037', site: true, stdio: true do
+describe 'GH-1037', :site, :stdio do
   before do
     File.write('content/giraffe.md', 'I am a giraffe!')
     File.write('content/donkey.erb', '[<%= @items["/giraffe.*"].compiled_content(snapshot: :last) %>]')

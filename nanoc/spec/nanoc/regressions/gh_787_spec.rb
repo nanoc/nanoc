@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-787', site: true, stdio: true do
+describe 'GH-787', :site, :stdio do
   before do
     File.write('Rules', <<EOS)
   preprocess do

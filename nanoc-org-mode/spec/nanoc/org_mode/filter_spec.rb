@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::OrgMode::Filter, helper: true do
+describe Nanoc::OrgMode::Filter, :helper do
   it 'converts org-mode to HTML' do
     # Create item
     ctx.create_item('stuff', {}, '/foo.scss')

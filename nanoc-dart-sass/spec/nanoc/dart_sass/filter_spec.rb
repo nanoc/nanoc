@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::DartSass::Filter, helper: true do
+describe Nanoc::DartSass::Filter, :helper do
   it 'supports simple .scss' do
     # Create item
     ctx.create_item('stuff', {}, '/foo.scss')

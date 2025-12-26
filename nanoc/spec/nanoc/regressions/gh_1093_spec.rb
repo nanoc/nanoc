@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1093', site: true, stdio: true do
+describe 'GH-1093', :site, :stdio do
   before do
     File.write('content/index.html', '<%= @items["/z.dat"].reps.all? { |r| File.file?(r.raw_path) } %>')
     File.write('content/z.dat', 'asdf')

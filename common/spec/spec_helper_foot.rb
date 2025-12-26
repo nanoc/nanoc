@@ -11,7 +11,7 @@ RSpec.configure do |c|
     Nanoc::CLI::ErrorHandler.enable
   end
 
-  c.before(:each, fork: true) do
+  c.before(:each, :fork) do
     skip 'fork() is not supported on Windows' if Nanoc::Core.on_windows?
   end
 end

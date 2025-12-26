@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Core::InMemoryDataSource, stdio: true do
+describe Nanoc::Core::InMemoryDataSource, :stdio do
   subject(:data_source) do
     described_class.new(items, layouts, original_data_source)
   end

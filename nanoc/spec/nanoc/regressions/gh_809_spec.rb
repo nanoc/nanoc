@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-809', site: true, stdio: true do
+describe 'GH-809', :site, :stdio do
   before do
     File.write('content/greeting.md', 'Hallöchen!')
     File.write('Rules', <<EOS)

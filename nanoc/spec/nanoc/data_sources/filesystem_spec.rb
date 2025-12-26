@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::DataSources::Filesystem, site: true do
+describe Nanoc::DataSources::Filesystem, :site do
   let(:data_source) { described_class.new(site.config, nil, nil, params) }
   let(:now) { Time.local(2008, 1, 2, 14, 5, 0) }
   let(:params) { {} }

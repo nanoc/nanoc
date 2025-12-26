@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-970 (show-data)', site: true, stdio: true do
+describe 'GH-970 (show-data)', :site, :stdio do
   before do
     File.write('content/foo.md', 'foo')
     File.write('content/bar.md', '<%= @items["/foo.*"].compiled_content %>')

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-795', site: true, stdio: true do
+describe 'GH-795', :site, :stdio do
   before do
     File.write('content/items.md', 'Frozen? <%= @items._unwrap.frozen? %>!')
     File.write('content/items-view.md', 'Frozen? <%= @items.frozen? %>!')

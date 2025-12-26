@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1352', site: true, stdio: true do
+describe 'GH-1352', :site, :stdio do
   before do
     File.write('nanoc.yaml', <<~EOS)
       environments:

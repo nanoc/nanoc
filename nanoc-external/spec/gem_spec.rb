@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'nanoc-external.gem', chdir: false, stdio: true do
+describe 'nanoc-external.gem', :stdio, chdir: false do
   subject do
     TTY::Command.new.run('gem build nanoc-external.gemspec')
   end

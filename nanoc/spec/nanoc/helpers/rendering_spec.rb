@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Helpers::Rendering, helper: true do
+describe Nanoc::Helpers::Rendering, :helper do
   describe '#render' do
     subject { helper.instance_eval { render('/partial.erb') } }
 

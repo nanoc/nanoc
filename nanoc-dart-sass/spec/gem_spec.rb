@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'nanoc-dart-sass.gem', chdir: false, stdio: true do
+describe 'nanoc-dart-sass.gem', :stdio, chdir: false do
   subject(:build_gem) do
     TTY::Command.new.run('gem build nanoc-dart-sass.gemspec')
   end

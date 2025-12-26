@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1064', site: true, stdio: true do
+describe 'GH-1064', :site, :stdio do
   before do
     File.write('content/foo.erb', '*<%= @items["/bar.*"].compiled_content(snapshot: :pre) %>*')
     File.write('content/bar.erb', 'Bar!')

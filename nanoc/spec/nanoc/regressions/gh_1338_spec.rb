@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1338', site: true, stdio: true do
+describe 'GH-1338', :site, :stdio do
   before do
     File.write('lib/default.rb', <<~EOS)
       Nanoc::Filter.define(:gh_1338) do |content, params = {}|

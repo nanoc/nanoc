@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-1313', site: true, stdio: true do
+describe 'GH-1313', :site, :stdio do
   before do
     File.write('nanoc.yaml', <<~CONFIG)
       output_dir: build/bin/web/bin

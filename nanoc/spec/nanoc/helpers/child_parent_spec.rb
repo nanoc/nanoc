@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Helpers::ChildParent, helper: true do
+describe Nanoc::Helpers::ChildParent, :helper do
   describe '#children_of' do
     subject { helper.children_of(item) }
 

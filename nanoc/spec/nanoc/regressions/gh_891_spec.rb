@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'GH-891', site: true, stdio: true do
+describe 'GH-891', :site, :stdio do
   before do
     File.write('layouts/foo.erb', 'giraffes? <%= yield %>')
     File.write('Rules', <<EOS)

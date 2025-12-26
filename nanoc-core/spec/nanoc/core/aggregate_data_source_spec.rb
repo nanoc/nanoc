@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Core::AggregateDataSource, stdio: true do
+describe Nanoc::Core::AggregateDataSource, :stdio do
   subject(:data_source) do
     described_class.new([data_source_1, data_source_2], {})
   end

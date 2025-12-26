@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Nanoc::Deploying::Deployers::Fog, stdio: true do
+describe Nanoc::Deploying::Deployers::Fog, :stdio do
   subject { deployer.run }
 
   let(:deployer) do
