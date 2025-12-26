@@ -119,9 +119,6 @@ RSpec/Focus:
 
 # ----- DISABLED (new cops not enabled by default; to enable later) -----
 
-Lint/RequireRelativeSelfPath: # new in 1.22
-  Enabled: false
-
 Security/IoMethods: # new in 1.22
   Enabled: false
 

@@ -82,6 +82,8 @@ Lint/RefinementImportMethods: # new in 1.27
   Enabled: true
 Lint/RequireRangeParentheses: # new in 1.32
   Enabled: true
+Lint/RequireRelativeSelfPath: # new in 1.22
+  Enabled: true
 Lint/SharedMutableDefault: # new in 1.70
   Enabled: true
 Lint/SuppressedExceptionInNumberConversion: # new in 1.72
