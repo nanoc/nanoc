@@ -6,23 +6,12 @@ module Nanoc
       class Write < Abstract
         include Nanoc::Core::ContractsSupport
 
-        WORKER_POOL_SIZE = 5
-
         def initialize(compiled_content_repo:, wrapped:)
           super(wrapped:)
 
           @compiled_content_repo = compiled_content_repo
 
-          @pool = Concurrent::FixedThreadPool.new(WORKER_POOL_SIZE)
-
           @writer = Nanoc::Core::ItemRepWriter.new
-        end
-
-        def stop
-          @pool.shutdown
-          @pool.wait_for_termination
-
-          super
         end
 
         contract Nanoc::Core::ItemRep, C::KeywordArgs[is_outdated: C::Bool], C::Func[C::None => C::Any] => C::Any
@@ -34,9 +23,7 @@ module Nanoc
           # notification happens before the :rep_write_enqueued one.
           Nanoc::Core::NotificationCenter.post(:rep_write_enqueued, rep)
 
-          @pool.post do
-            @writer.write_all(rep, @compiled_content_repo)
-          end
+          @writer.write_all(rep, @compiled_content_repo)
         end
       end
     end
