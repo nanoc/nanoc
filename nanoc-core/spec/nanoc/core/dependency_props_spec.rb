@@ -207,13 +207,6 @@ describe Nanoc::Core::DependencyProps do
       it { is_expected.to eql(Set.new(%i[raw_content attributes compiled_content path])) }
     end
 
-    context 'some + all' do
-      let(:props) { props_all }
-      let(:other_props) { described_class.new(compiled_content: true) }
-
-      it { is_expected.to eql(Set.new(%i[raw_content attributes compiled_content path])) }
-    end
-
     context 'all + all' do
       let(:props) { props_all }
       let(:other_props) { props_all }

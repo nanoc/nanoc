@@ -437,7 +437,7 @@ describe Nanoc::Core::DependencyStore do
       end
     end
 
-    context 'attribute prop (true)' do
+    context 'attribute prop (symbol)' do
       subject { store.record_dependency(source_obj, target_obj, attributes: [:giraffe]) }
 
       it 'records a dependency' do

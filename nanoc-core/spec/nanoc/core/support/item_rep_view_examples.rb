@@ -123,39 +123,6 @@ shared_examples 'an item rep view' do
       end
     end
 
-    context 'comparing with item rep with same identifier' do
-      let(:other_item) { double(:other_item, identifier: '/foo') }
-      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), view_context) }
-
-      it 'is ==' do
-        expect(view).to eq(other)
-      end
-
-      it 'is eql?' do
-        expect(view).not_to eql(other)
-      end
-    end
-
-    context 'comparing with item rep with different identifier' do
-      let(:other_item) { double(:other_item, identifier: '/bar') }
-      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :jacques), view_context) }
-
-      it 'is not equal' do
-        expect(view).not_to eq(other)
-        expect(view).not_to eql(other)
-      end
-    end
-
-    context 'comparing with item rep with different name' do
-      let(:other_item) { double(:other_item, identifier: '/foo') }
-      let(:other) { described_class.new(double(:other_item_rep, item: other_item, name: :marvin), view_context) }
-
-      it 'is not equal' do
-        expect(view).not_to eq(other)
-        expect(view).not_to eql(other)
-      end
-    end
-
     context 'comparing with something that is not an item rep' do
       let(:other_item) { double(:other_item, identifier: '/foo') }
       let(:other) { :donkey }

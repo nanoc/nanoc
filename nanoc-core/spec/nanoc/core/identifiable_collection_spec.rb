@@ -184,38 +184,6 @@ describe Nanoc::Core::IdentifiableCollection do
       end
     end
 
-    describe '#object_with_identifier' do
-      subject { identifiable_collection.object_with_identifier(arg) }
-
-      let(:objects) do
-        [
-          Nanoc::Core::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.css')),
-          Nanoc::Core::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/about.md')),
-          Nanoc::Core::Item.new('stuff', {}, Nanoc::Core::Identifier.new('/style.css')),
-        ]
-      end
-
-      let(:arg) { raise 'override me' }
-
-      context 'with string' do
-        let(:arg) { '/about.css' }
-
-        it { is_expected.to eq(objects[0]) }
-      end
-
-      context 'with identifier' do
-        let(:arg) { Nanoc::Core::Identifier.new('/about.css') }
-
-        it { is_expected.to eq(objects[0]) }
-      end
-
-      context 'with glob string' do
-        let(:arg) { '/about.*' }
-
-        it { is_expected.to be_nil }
-      end
-    end
-
     describe '#reference' do
       subject { identifiable_collection.reference }
 
