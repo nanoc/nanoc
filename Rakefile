@@ -53,6 +53,9 @@ end
 desc 'Run tests for all packages'
 task test: packages.map { |p| p.tr('-', '_') + ':test' }
 
+desc 'Run tests for most important packages'
+task test_quick: ['nanoc:test', 'nanoc_core:test', 'nanoc_cli:test', 'rubocop']
+
 desc 'Build gems all packages'
 task gem: packages.map { |p| p.tr('-', '_') + ':gem' }
 
