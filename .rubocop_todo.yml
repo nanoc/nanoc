@@ -747,11 +747,6 @@ RSpec/NestedGroups:
     - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
     - 'nanoc/spec/nanoc/rule_dsl/rules_collection_spec.rb'
 
-# Offense count: 1
-RSpec/OverwritingSetup:
-  Exclude:
-    - 'nanoc/spec/nanoc/rule_dsl/rule_context_spec.rb'
-
 # Offense count: 2
 RSpec/RepeatedExample:
   Exclude:

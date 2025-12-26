@@ -189,8 +189,6 @@ describe(Nanoc::RuleDSL::CompilationRuleContext) do
     Nanoc::Core::InMemoryDataSource.new(items, layouts)
   end
 
-  let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
-
   let(:view_context) do
     Nanoc::Core::ViewContextForPreCompilation.new(items:)
   end
