@@ -31,8 +31,10 @@ describe Nanoc::Core::PostCompileItemRepView do
     }
   end
 
-  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store)) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store), root: root_item) }
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
+
+  let(:root_item) { Nanoc::Core::Item.new('root', {}, '/root.md') }
 
   let(:items) { Nanoc::Core::ItemCollection.new(config) }
   let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }

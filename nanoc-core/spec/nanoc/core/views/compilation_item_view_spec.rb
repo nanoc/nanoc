@@ -11,7 +11,7 @@ describe Nanoc::Core::CompilationItemView do
   let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
-  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store, root: base_item) }
   let(:items) { Nanoc::Core::ItemCollection.new(config) }
   let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
   let(:reps) { Nanoc::Core::ItemRepRepo.new }
@@ -55,10 +55,6 @@ describe Nanoc::Core::CompilationItemView do
 
       def initialize; end
     end.new
-  end
-
-  before do
-    dependency_tracker.enter(base_item)
   end
 
   it_behaves_like 'a document view'

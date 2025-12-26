@@ -92,12 +92,10 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
     items = Nanoc::Core::ItemCollection.new(config)
     layouts = Nanoc::Core::LayoutCollection.new(config)
 
+    @root_item = Nanoc::Core::Item.new('base', {}, '/base.md')
+
     @dependency_store = Nanoc::Core::DependencyStore.new(items, layouts, config)
-    @dependency_tracker = Nanoc::Core::DependencyTracker.new(@dependency_store)
-
-    @base_item = Nanoc::Core::Item.new('base', {}, '/base.md')
-
-    @dependency_tracker.enter(@base_item)
+    @dependency_tracker = Nanoc::Core::DependencyTracker.new(@dependency_store, root: @root_item)
   end
 
   def new_view_context
@@ -166,7 +164,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
       assert_match SAMPLE_XML_OUT, result
 
       # Verify dependencies
-      dep = @dependency_store.dependencies_causing_outdatedness_of(@base_item)[0]
+      dep = @dependency_store.dependencies_causing_outdatedness_of(@root_item)[0]
 
       refute_nil dep
     end
@@ -194,7 +192,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
       assert_match SAMPLE_XML_OUT_WITH_PARAMS, result
 
       # Verify dependencies
-      dep = @dependency_store.dependencies_causing_outdatedness_of(@base_item)[0]
+      dep = @dependency_store.dependencies_causing_outdatedness_of(@root_item)[0]
 
       refute_nil dep
     end
@@ -222,7 +220,7 @@ class Nanoc::Filters::XSLTest < Nanoc::TestCase
       assert_match SAMPLE_XML_OUT_WITH_OMIT_XML_DECL, result
 
       # Verify dependencies
-      dep = @dependency_store.dependencies_causing_outdatedness_of(@base_item)[0]
+      dep = @dependency_store.dependencies_causing_outdatedness_of(@root_item)[0]
 
       refute_nil dep
     end

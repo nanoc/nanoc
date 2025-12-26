@@ -3,7 +3,7 @@
 shared_examples 'a document view' do
   let(:view) { described_class.new(document, view_context) }
 
-  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store, root: base_item) }
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
 
@@ -52,10 +52,6 @@ shared_examples 'a document view' do
 
       def initialize; end
     end.new
-  end
-
-  before do
-    dependency_tracker.enter(base_item)
   end
 
   describe '#frozen?' do

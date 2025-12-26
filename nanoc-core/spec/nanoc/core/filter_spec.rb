@@ -180,6 +180,7 @@ describe Nanoc::Core::Filter do
     let(:item_views) { [item_view] }
 
     let(:item) { Nanoc::Core::Item.new('foo', {}, '/stuff.md') }
+    let(:root_item) { Nanoc::Core::Item.new('root', {}, '/root.md') }
     let(:item_view) { Nanoc::Core::CompilationItemView.new(item, view_context) }
     let(:rep) { Nanoc::Core::ItemRep.new(item, :default) }
 
@@ -216,7 +217,7 @@ describe Nanoc::Core::Filter do
     let(:compiled_content_cache) { Nanoc::Core::CompiledContentCache.new(config:) }
     let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
 
-    let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
+    let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store, root: root_item) }
     let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
 
     let(:empty_items) { Nanoc::Core::ItemCollection.new(config) }

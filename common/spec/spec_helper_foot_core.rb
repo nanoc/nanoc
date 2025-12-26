@@ -325,24 +325,17 @@ RSpec::Matchers.define :create_dependency_on do |expected|
   include RSpec::Matchers::Composable
 
   match do |actual|
-    @to = expected
-    dependency_tracker = @to._context.dependency_tracker
+    to = expected
+    dependency_tracker = to._context.dependency_tracker
     dependency_store = dependency_tracker.dependency_store
 
-    from = Nanoc::Core::Item.new('x', {}, '/x.md')
+    a = dependency_store.objects_causing_outdatedness_of(dependency_tracker.root)
 
-    a = dependency_store.objects_causing_outdatedness_of(from)
+    actual.call
 
-    begin
-      dependency_tracker.enter(from)
-      actual.call
-    ensure
-      dependency_tracker.exit
-    end
+    b = dependency_store.objects_causing_outdatedness_of(dependency_tracker.root)
 
-    b = dependency_store.objects_causing_outdatedness_of(from)
-
-    (b - a).include?(@to)
+    (b - a).include?(to)
   end
 
   description do
@@ -370,12 +363,7 @@ RSpec::Matchers.define :create_dependency_from do |expected|
 
     a = dependency_store.objects_causing_outdatedness_of(@from)
 
-    begin
-      dependency_tracker.enter(@from._unwrap)
-      actual.call
-    ensure
-      dependency_tracker.exit
-    end
+    actual.call
 
     b = dependency_store.objects_causing_outdatedness_of(@from)
 

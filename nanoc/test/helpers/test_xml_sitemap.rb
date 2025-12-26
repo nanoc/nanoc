@@ -8,11 +8,13 @@ class Nanoc::Helpers::XMLSitemapTest < Nanoc::TestCase
   def setup
     super
 
+    root_item = Nanoc::Core::Item.new('base', {}, '/base.md')
+
     config = Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults
     items = Nanoc::Core::ItemCollection.new(config)
     layouts = Nanoc::Core::LayoutCollection.new(config)
     dep_store = Nanoc::Core::DependencyStore.new(items, layouts, config)
-    dependency_tracker = Nanoc::Core::DependencyTracker.new(dep_store)
+    dependency_tracker = Nanoc::Core::DependencyTracker.new(dep_store, root: root_item)
     @reps = Nanoc::Core::ItemRepRepo.new
 
     site =

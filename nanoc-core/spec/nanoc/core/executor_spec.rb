@@ -23,6 +23,7 @@ describe Nanoc::Core::Executor do
   end
 
   let(:item) { Nanoc::Core::Item.new(content, {}, '/index.md') }
+  let(:root_item) { Nanoc::Core::Item.new('root', {}, '/root.md') }
   let(:rep) { Nanoc::Core::ItemRep.new(item, :donkey) }
   let(:content) { Nanoc::Core::TextualContent.new('Donkey Power').tap(&:freeze) }
 
@@ -66,7 +67,8 @@ describe Nanoc::Core::Executor do
 
   let(:compiled_content_repo) { Nanoc::Core::CompiledContentRepo.new }
 
-  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store)) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store, root: root_item) }
+  let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
 
   describe '#filter' do
     let(:assigns) { {} }
@@ -423,6 +425,7 @@ describe Nanoc::Core::Executor do
       end
 
       it 'sends notifications' do
+        expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:dependency_created, root_item, layout).ordered
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_started, rep, :simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei).ordered
         expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:filtering_ended, rep, :simple_erb_uy2wbp6dcf4hlc4gbluauh07zuz2wvei).ordered
 
