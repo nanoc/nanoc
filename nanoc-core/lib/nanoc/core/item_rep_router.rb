@@ -57,22 +57,18 @@ module Nanoc
         # Encode
         paths = paths.map { |path| path.encode('UTF-8') }
 
-        # Validate format
         paths.each do |path|
+          # Validate format
           unless path.start_with?('/')
             raise RouteWithoutSlashError.new(path, rep)
           end
-        end
 
-        # Validate uniqueness
-        paths.each do |path|
+          # Validate uniqueness
           if assigned_paths.include?(path)
             # TODO: Include snapshot names in error message
             reps = [assigned_paths[path], rep].sort_by { |r| [r.item.identifier, r.name] }
             raise IdenticalRoutesError.new(path, *reps)
           end
-        end
-        paths.each do |path|
           assigned_paths[path] = rep
         end
 

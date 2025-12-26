@@ -956,12 +956,6 @@ Style/ClassAndModuleChildren:
     - 'nanoc/test/rule_dsl/test_compiler_dsl.rb'
     - 'nanoc/test/rule_dsl/test_rules_collection.rb'
 
-# Offense count: 2
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/CombinableLoops:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core/item_rep_router.rb'
-
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowedReceivers.
