@@ -58,7 +58,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     actual_out = data_source.send(:load_objects, 'foo', klass).sort_by { |i| i.stuff[0].string }
 
     # Check
-    (0..expected_out.size - 1).each do |i|
+    (0..(expected_out.size - 1)).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0].string, 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
       ['num', :filename, :extension, :mtime].each do |key|
@@ -380,7 +380,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     actual_out = data_source.send(:load_objects, 'foo', klass).sort_by { |i| i.stuff[2] }
 
     # Check
-    (0..expected_out.size - 1).each do |i|
+    (0..(expected_out.size - 1)).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0].string, 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
 
@@ -463,7 +463,7 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
     actual_out = data_source.send(:load_objects, 'foo', klass).sort_by { |i| i.stuff[2] }
 
     # Check
-    (0..expected_out.size - 1).each do |i|
+    (0..(expected_out.size - 1)).each do |i|
       assert_equal expected_out[i].stuff[0], actual_out[i].stuff[0].string, 'content must match'
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
 

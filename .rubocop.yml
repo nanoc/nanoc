@@ -119,9 +119,6 @@ RSpec/Focus:
 
 # ----- DISABLED (new cops not enabled by default; to enable later) -----
 
-Lint/AmbiguousRange: # new in 1.19
-  Enabled: false
-
 Lint/EmptyInPattern: # new in 1.16
   Enabled: false
 

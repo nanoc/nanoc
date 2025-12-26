@@ -152,7 +152,7 @@ module Nanoc
         if extname.empty?
           @string
         else
-          @string[0..-extname.size - 1]
+          @string[0..(-extname.size - 1)]
         end
       end
 
@@ -174,7 +174,7 @@ module Nanoc
         if extname.empty?
           @string
         else
-          @string[0..-extname.size - 2]
+          @string[0..(-extname.size - 2)]
         end
       end
 
