@@ -57,6 +57,24 @@ describe Nanoc::DartSass::Filter, :helper do
     expect(res.strip).to match(/color: #333/m)
   end
 
+  it 'supports source_map' do
+    # Create item
+    ctx.create_item('stuff', {}, '/foo.sass')
+    ctx.create_rep(ctx.items['/foo.sass'], '/assets/foo.css')
+    ctx.item = ctx.items['/foo.sass']
+
+    filter = described_class.new(ctx.assigns)
+
+    res = filter.run(<<~SASS, source_map: true)
+      $primary-color: #333
+
+      body
+        color: $primary-color
+    SASS
+
+    expect(res.strip).to match(/sourceMappingURL/m)
+  end
+
   context 'when one item depends on another with absolute path' do
     before do
       # Create item

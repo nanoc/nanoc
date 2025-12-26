@@ -2,6 +2,10 @@
 
 ## 2.0.0 (???)
 
+Features:
+
+- Added support for `source_map` option [ntkme] (#1749, #1775)
+
 Changes:
 
 - Changed the importer to be in line with the spec [ntkme] (#1755)

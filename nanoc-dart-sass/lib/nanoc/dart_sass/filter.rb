@@ -18,12 +18,18 @@ module Nanoc
 
         result = Sass.compile_string(
           content,
+          source_map_include_sources: true,
           **params,
           importers: [NanocImporter.new(@items)].concat(params.fetch(:importers, [])),
           syntax:,
           url: Addressable::URI.new({ scheme: 'nanoc', path: item.identifier.to_s }).to_s,
         )
-        result.css
+
+        if result.source_map
+          "#{result.css}\n/*# sourceMappingURL=data:application/json;base64,#{[result.source_map].pack('m0')} */"
+        else
+          result.css
+        end
       end
 
       class NanocImporter
