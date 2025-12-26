@@ -110,12 +110,6 @@ Lint/RedundantDirGlobSort:
     - 'nanoc-core/spec/nanoc/core/compilation_stages/cleanup_spec.rb'
     - 'nanoc-deploying/spec/nanoc/deploying/deployers/fog_spec.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantRequireStatement:
-  Exclude:
-    - 'nanoc-core/lib/nanoc/core.rb'
-
 # Offense count: 2
 # Configuration parameters: AllowedPatterns.
 # AllowedPatterns: (?-mix:(exactly|at_least|at_most)\(\d+\)\.times)

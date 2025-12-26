@@ -2,7 +2,6 @@
 
 # Ruby stdlib
 require 'base64'
-require 'fiber'
 require 'find'
 require 'singleton'
 require 'tmpdir'
