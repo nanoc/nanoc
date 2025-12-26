@@ -9,7 +9,7 @@ describe Nanoc::Core::PostCompileItemRepView do
     # Pretend binary snapshots exist on disk so the binary cache can cache them.
     snapshot_contents
       .select { |_, content| content.binary? }
-      .each do |_, binary_content|
+      .each_value do |binary_content|
         allow(FileUtils).to receive(:cp).with(binary_content.filename, anything)
                                         .and_wrap_original do |_meth, _src, dst|
           File.new(dst, 'w').close
