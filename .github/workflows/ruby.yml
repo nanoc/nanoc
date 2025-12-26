@@ -58,7 +58,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
@@ -79,7 +79,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
@@ -100,7 +100,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
@@ -121,7 +121,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
@@ -142,7 +142,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
@@ -163,7 +163,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
@@ -184,7 +184,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
@@ -205,7 +205,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
@@ -226,7 +226,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
@@ -247,7 +247,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
@@ -268,7 +268,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby-version: ["3.2", "3.3", "3.4"]
+        ruby-version: ["3.2", "3.3", "3.4", "4.0"]
 
     steps:
       - uses: actions/checkout@v6
