@@ -134,7 +134,7 @@ module Nanoc
 
       def attributes_unaffected?(status, dependency)
         reason = status.reasons.find { |r| r.is_a?(Nanoc::Core::OutdatednessReasons::AttributesModified) }
-        reason && !dependency.props.attribute_keys.empty? && (dependency.props.attribute_keys & reason.attributes).empty?
+        reason && !dependency.props.attribute_keys.empty? && !dependency.props.attribute_keys.intersect?(reason.attributes)
       end
 
       def raw_content_prop_causes_outdatedness?(objects, raw_content_prop)
