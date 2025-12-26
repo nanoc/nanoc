@@ -90,7 +90,7 @@ describe Nanoc::Core::BinaryCompiledContentCache do
         .to(true)
     end
 
-    it 'retains content for known item' do
+    it 'retains content for known textual item' do
       expect { subject }
         .not_to change { cache[item_rep].nil? }
         .from(false)
@@ -106,7 +106,7 @@ describe Nanoc::Core::BinaryCompiledContentCache do
         .to(false)
     end
 
-    it 'retains content for known item' do
+    it 'retains content for known binary item' do
       pattern = 'tmp/nanoc/*/binary_content_data/*'
       is_foo_md = ->(fn) { fn.end_with?('/binary_content_data/_foo_md-299726ada7') }
 

@@ -89,7 +89,7 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, :stdio do
         .not_to output(/skip/).to_stdout
     end
 
-    it 'prints nothing' do
+    it 'prints nothing after compilation_started' do
       Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
       mock_time(1)
 
@@ -97,7 +97,7 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, :stdio do
         .not_to output(/identical/).to_stdout
     end
 
-    it 'prints nothing' do
+    it 'prints nothing after compilation_started and cached_content_used' do
       Nanoc::Core::NotificationCenter.post(:compilation_started, rep)
       Nanoc::Core::NotificationCenter.post(:cached_content_used, rep)
       mock_time(1)

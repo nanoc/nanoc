@@ -65,7 +65,7 @@ describe Nanoc::Live::LiveRecompiler, :fork, :site, :stdio do
     Process.waitpid(pid)
   end
 
-  it 'detects lib changes' do
+  it 'works if lib is not present' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
     live_recompiler = described_class.new(command_runner:, focus:)
