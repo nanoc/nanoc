@@ -39,10 +39,17 @@ module Nanoc::Filters
         sourcemap = sourcemap&.to_json(css_uri: css_path)
         encoded = "data:application/json;base64,#{Base64.urlsafe_encode64(sourcemap)}"
         [css.gsub(%r{^/\*#\s+sourceMappingURL=\s*#{sourcemap_path}\s*\*/$}, "/*# sourceMappingURL=#{encoded} */")]
-      else
-        sourcemap = sourcemap&.to_json(css_path:, sourcemap_path:, type: params[:sources_content] ? :inline : :auto)
-        sourcemap = sourcemap&.split("\n")&.grep_v(/^\s*"file":\s*"#{filter.object_id}"\s*$/)&.join("\n")
+      elsif sourcemap
+        sourcemap =
+          sourcemap
+          .to_json(css_path:, sourcemap_path:, type: params[:sources_content] ? :inline : :auto)
+          .split("\n")
+          .grep_v(/^\s*"file":\s*"#{filter.object_id}"\s*$/)
+          .join("\n")
         [css, sourcemap]
+      else
+        [css, nil]
+
       end
     end
   end
