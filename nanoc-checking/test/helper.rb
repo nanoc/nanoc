@@ -5,6 +5,7 @@ $VERBOSE = false
 require 'simplecov'
 SimpleCov.start
 
+require 'minitest/mock'
 require 'minitest/autorun'
 require 'mocha/minitest'
 require 'vcr'

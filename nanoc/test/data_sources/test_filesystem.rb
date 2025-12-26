@@ -385,7 +385,14 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
 
       ['num', :content_filename, :meta_filename, :extension, :mtime].each do |key|
-        assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
+        expected = expected_out[i].stuff[1][key]
+        actual = actual_out[i].stuff[1][key]
+
+        if expected
+          assert_equal expected, actual, "attribute key #{key} must match"
+        else
+          assert_nil actual, "attribute key #{key} must match"
+        end
       end
     end
   end
@@ -468,7 +475,14 @@ class Nanoc::DataSources::FilesystemTest < Nanoc::TestCase
       assert_equal expected_out[i].stuff[2], actual_out[i].stuff[2], 'identifier must match'
 
       ['num', :content_filename, :meta_filename, :extension, :mtime].each do |key|
-        assert_equal expected_out[i].stuff[1][key], actual_out[i].stuff[1][key], "attribute key #{key} must match"
+        expected = expected_out[i].stuff[1][key]
+        actual = actual_out[i].stuff[1][key]
+
+        if expected
+          assert_equal expected, actual, "attribute key #{key} must match"
+        else
+          assert_nil actual, "attribute key #{key} must match"
+        end
       end
     end
   end
