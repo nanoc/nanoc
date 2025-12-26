@@ -10,7 +10,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
     # Run filter (no assigns)
     result = filter.setup_and_run('html')
 
-    assert_match(/<html>.*<\/html>/, result)
+    assert_match(%r{<html>.*</html>}, result)
 
     # Run filter (assigns without @)
     result = filter.setup_and_run('p = rabbit')

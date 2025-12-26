@@ -155,7 +155,7 @@ describe Nanoc::Core::IdentifiableCollection do
       end
 
       context 'with regex' do
-        let(:arg) { %r{\.css\z} }
+        let(:arg) { /\.css\z/ }
 
         it 'contains objects' do
           expect(subject.size).to be(2)

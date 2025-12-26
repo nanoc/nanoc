@@ -24,12 +24,12 @@ describe 'write nil (skip routing rule)', site: true, stdio: true do
 
     it 'outputs creation of correct file' do
       expect { Nanoc::CLI.run(%w[compile --verbose]) rescue nil }
-        .to output(/create.*output\/foo-via-compilation-rule\.txt/).to_stdout
+        .to output(%r{create.*output/foo-via-compilation-rule\.txt}).to_stdout
     end
 
     it 'does not output creation of incorrect file' do
       expect { Nanoc::CLI.run(%w[compile --verbose]) rescue nil }
-        .not_to output(/create.*output\/foo-via-routing-rule\.txt/).to_stdout
+        .not_to output(%r{create.*output/foo-via-routing-rule\.txt}).to_stdout
     end
 
     it 'creates correct file' do
@@ -67,7 +67,7 @@ describe 'write nil (skip routing rule)', site: true, stdio: true do
 
     it 'does not output creation of incorrect file' do
       expect { Nanoc::CLI.run(%w[compile --verbose]) rescue nil }
-        .not_to output(/create.*output\/foo-via-routing-rule\.txt/).to_stdout
+        .not_to output(%r{create.*output/foo-via-routing-rule\.txt}).to_stdout
     end
 
     it 'does not create incorrect file' do

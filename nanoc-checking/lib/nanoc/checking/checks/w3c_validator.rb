@@ -14,7 +14,7 @@ module Nanoc
             results.errors.each do |e|
               line_num = e.line.to_i - 1
               line = lines[line_num]
-              message = e.message.gsub(%r{\s+}, ' ').strip.sub(/\s+:$/, '')
+              message = e.message.gsub(/\s+/, ' ').strip.sub(/\s+:$/, '')
               desc = "line #{line_num + 1}: #{message}: #{line}"
               add_issue(desc, subject: filename)
             end

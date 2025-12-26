@@ -290,10 +290,10 @@ shared_examples 'an identifiable collection view' do
     end
 
     context 'with regex' do
-      subject { view.find_all(%r{\.css\z}) }
+      subject { view.find_all(/\.css\z/) }
 
       it 'creates dependency' do
-        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: [%r{\.css\z}])
+        expect(dependency_tracker).to receive(:bounce).with(wrapped, raw_content: [/\.css\z/])
         subject
       end
 

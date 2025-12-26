@@ -14,13 +14,13 @@ Class.new(Nanoc::Core::DataSource) do
 
   def items
     Dir['content/*'].map do |filename|
-      Nanoc::Core::Item.new(File.read(filename), {}, filename.sub(/^content\//, '/'))
+      Nanoc::Core::Item.new(File.read(filename), {}, filename.sub(%r{^content/}, '/'))
     end
   end
 
   def layouts
     Dir['layouts/*'].map do |filename|
-      Nanoc::Core::Layout.new(File.read(filename), {}, filename.sub(/^layouts\//, '/'))
+      Nanoc::Core::Layout.new(File.read(filename), {}, filename.sub(%r{^layouts/}, '/'))
     end
   end
 end

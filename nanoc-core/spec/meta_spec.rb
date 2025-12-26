@@ -4,10 +4,10 @@ describe 'meta', chdir: false do
   # rubocop:disable RSpec/ExampleLength
   it 'is covered by specs' do
     regular_files = Dir['lib/nanoc/core/**/*.rb']
-    regular_file_base_names = regular_files.map { |fn| fn.gsub(/^lib\/nanoc\/core\/|\.rb$/, '') }
+    regular_file_base_names = regular_files.map { |fn| fn.gsub(%r{^lib/nanoc/core/|\.rb$}, '') }
 
     spec_files = Dir['spec/nanoc/core/**/*_spec.rb']
-    spec_file_base_names = spec_files.map { |fn| fn.gsub(/^spec\/nanoc\/core\/|_spec\.rb$/, '') }
+    spec_file_base_names = spec_files.map { |fn| fn.gsub(%r{^spec/nanoc/core/|_spec\.rb$}, '') }
 
     # TODO: don’t ignore anything
     ignored_regular_file_base_names = %w[

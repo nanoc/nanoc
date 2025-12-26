@@ -19,7 +19,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
     # Run filter
     result = filter.setup_and_run('> Quote')
 
-    assert_match(/<blockquote>\s*<p>Quote<\/p>\s*<\/blockquote>/, result)
+    assert_match(%r{<blockquote>\s*<p>Quote</p>\s*</blockquote>}, result)
   end
 
   def test_with_extensions
@@ -28,7 +28,7 @@ class Nanoc::Filters::RedcarpetTest < Nanoc::TestCase
 
     # Run filter
     input           = 'this is ~~good~~ bad'
-    output_expected = /this is <del>good<\/del> bad/
+    output_expected = %r{this is <del>good</del> bad}
     output_actual   = filter.setup_and_run(input, options: { strikethrough: true })
 
     assert_match(output_expected, output_actual)

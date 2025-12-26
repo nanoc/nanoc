@@ -115,7 +115,7 @@ describe Nanoc::CLI::CompileListeners::FileActionPrinter, stdio: true do
 
     it 'prints skipped (uncompiled) reps' do
       expect { listener.stop_safely }
-        .to output(/skip.*\/hi\.html/).to_stdout
+        .to output(%r{skip.*/hi\.html}).to_stdout
     end
 
     it 'prints “identical” if not cached' do

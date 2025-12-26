@@ -98,7 +98,7 @@ module Nanoc
         private
 
         def remote_is_name?(remote)
-          remote !~ /:\/\/|@.+:/
+          remote !~ %r{://|@.+:}
         end
 
         def run_cmd(cmd, dry_run: false)

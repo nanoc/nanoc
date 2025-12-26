@@ -122,7 +122,7 @@ module Nanoc
 
       def gen_config_and_rules_changes
         Nanoc::Core::ChangesStream.new do |cl|
-          only = /(\/|\A)(nanoc\.yaml|config\.yaml|rules|Rules|rules\.rb|Rules\.rb)\z/
+          only = %r{(/|\A)(nanoc\.yaml|config\.yaml|rules|Rules|rules\.rb|Rules\.rb)\z}
 
           listener = Listen.to('.', only:) { |*| cl.unknown }
           listener.start

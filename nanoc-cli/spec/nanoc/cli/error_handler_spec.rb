@@ -141,7 +141,7 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
           subject
 
           expect($stderr.string).to match(
-            %r{SubclassOfStandardError: it is broken.*okay so what I mean is that it is broken}m,
+            /SubclassOfStandardError: it is broken.*okay so what I mean is that it is broken/m,
           )
         end
       end
@@ -263,11 +263,11 @@ describe Nanoc::CLI::ErrorHandler, stdio: true do
     end
 
     it 'prints stack trace' do
-      expect { subject }.to output(/spec\/nanoc\/cli\/error_handler_spec\.rb:/).to_stderr
+      expect { subject }.to output(%r{spec/nanoc/cli/error_handler_spec\.rb:}).to_stderr
     end
 
     it 'prints current item' do
-      expect { subject }.to output(/sub\/page\.html/).to_stderr
+      expect { subject }.to output(%r{sub/page\.html}).to_stderr
     end
 
     it 'prints extended message' do

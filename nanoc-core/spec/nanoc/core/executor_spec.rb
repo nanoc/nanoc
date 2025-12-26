@@ -159,7 +159,7 @@ describe Nanoc::Core::Executor do
         expect { subject }
           .to change { File.read(compiled_content_store.get_current(rep).filename) }
           .from('Foo Data')
-          .to(/\ACompiled data for (C:)?\/.*\/foo.dat\z/)
+          .to(%r{\ACompiled data for (C:)?/.*/foo.dat\z})
       end
 
       it 'returns frozen data' do
@@ -214,7 +214,7 @@ describe Nanoc::Core::Executor do
         expect { subject }
           .to change { compiled_content_store.get_current(rep) }
           .from(some_binary_content('Foo Data'))
-          .to(some_textual_content(/\ACompiled data for (C:)?\/.*\/foo.dat\z/))
+          .to(some_textual_content(%r{\ACompiled data for (C:)?/.*/foo.dat\z}))
       end
     end
 

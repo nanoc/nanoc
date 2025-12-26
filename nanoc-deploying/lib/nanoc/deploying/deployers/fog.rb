@@ -152,7 +152,7 @@ module Nanoc
         end
 
         def remote_key_for_local_filename(local_filename, src, path)
-          relative_local_filename = local_filename.sub(/\A#{src}\//, '')
+          relative_local_filename = local_filename.sub(%r{\A#{src}/}, '')
 
           if path
             File.join(path, relative_local_filename)

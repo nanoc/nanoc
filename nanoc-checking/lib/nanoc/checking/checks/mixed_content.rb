@@ -10,7 +10,7 @@ module Nanoc
       class MixedContent < ::Nanoc::Checking::Check
         identifier :mixed_content
 
-        PROTOCOL_PATTERN = /^(\w+):\/\//
+        PROTOCOL_PATTERN = %r{^(\w+)://}
 
         def run
           filenames = output_html_filenames

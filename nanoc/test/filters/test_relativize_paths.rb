@@ -400,8 +400,8 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
     raw_content    = %(<object data="/example"><param name="movie" value="/example"></object>)
     actual_content = filter.setup_and_run(raw_content, type: :html)
 
-    assert_match(/<object data="..\/..\/example">/, actual_content)
-    assert_match(/<param (name="movie" )?value="..\/..\/example"/, actual_content)
+    assert_match(%r{<object data="../../example">}, actual_content)
+    assert_match(%r{<param (name="movie" )?value="../../example"}, actual_content)
   end
 
   def test_filter_form
@@ -625,7 +625,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       end
 
       # Set content
-      expected = /<bar boo="\.\.\/\.\.">baz<\/bar>/
+      expected = %r{<bar boo="\.\./\.\.">baz</bar>}
       raw_content = <<~XML
         <?xml version="1.0" encoding="utf-8"?>
         <foo>
@@ -667,7 +667,7 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       actual_content = filter.setup_and_run(raw_content, type: :xml, select: ['far/@href'])
 
       assert_match(/<foo>/, actual_content)
-      assert_match(/<bar><far href="..\/..">baz<\/far><\/bar>/, actual_content)
+      assert_match(%r{<bar><far href="../..">baz</far></bar>}, actual_content)
     end
   end
 
@@ -703,8 +703,8 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
       }
       actual_content = filter.setup_and_run(raw_content, options)
 
-      assert_match(/<foo xmlns="http:\/\/example.org">/,    actual_content)
-      assert_match(/<bar><a href="..\/..">baz<\/a><\/bar>/, actual_content)
+      assert_match(%r{<foo xmlns="http://example.org">}, actual_content)
+      assert_match(%r{<bar><a href="../..">baz</a></bar>}, actual_content)
     end
   end
 
@@ -743,10 +743,10 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
       actual_content = filter.setup_and_run(raw_content, type: :xhtml)
 
-      assert_match(/<link[^>]*href="..\/..\/..\/css"[^>]*\/>/, actual_content)
-      assert_match(/<script src="..\/..\/..\/js">/,            actual_content)
-      assert_match(/<img src="..\/..\/..\/img"[^>]*\/>/,       actual_content)
-      assert_match(/<a href="..\/..">bar<\/a>/,                actual_content)
+      assert_match(%r{<link[^>]*href="../../../css"[^>]*/>}, actual_content)
+      assert_match(%r{<script src="../../../js">}, actual_content)
+      assert_match(%r{<img src="../../../img"[^>]*/>}, actual_content)
+      assert_match(%r{<a href="../..">bar</a>}, actual_content)
     end
   end
 
@@ -814,8 +814,8 @@ class Nanoc::Filters::RelativizePathsTest < Nanoc::TestCase
 
       actual_content = filter.setup_and_run(raw_content.freeze, type: :xhtml)
 
-      assert_match(/<link (rel="stylesheet" )?href="..\/..\/foo.css" /,      actual_content)
-      assert_match(/<script src="..\/..\/js\/lib\/html5shiv.js"><\/script>/, actual_content)
+      assert_match(%r{<link (rel="stylesheet" )?href="../../foo.css" }, actual_content)
+      assert_match(%r{<script src="../../js/lib/html5shiv.js"></script>}, actual_content)
     end
   end
 

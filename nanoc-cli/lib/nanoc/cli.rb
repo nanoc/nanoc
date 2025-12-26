@@ -178,7 +178,7 @@ module Nanoc
         command = Cri::Command.load_file(filename, infer_name: true)
 
         # Get supercommand
-        pieces = filename.gsub(/^#{path}\/|\.rb$/, '').split('/')
+        pieces = filename.gsub(%r{^#{path}/|\.rb$}, '').split('/')
         pieces = pieces[0, pieces.size - 1] || []
         root = Nanoc::CLI.root_command
         supercommand = pieces.reduce(root) do |cmd, piece|

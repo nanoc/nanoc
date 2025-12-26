@@ -115,11 +115,11 @@ module Nanoc
           case location
           when nil
             nil
-          when /^https?:\/\//
+          when %r{^https?://}
             location
           else
             base_url = url.dup
-            base_url.path = (/^\//.match?(location) ? '' : '/')
+            base_url.path = (%r{^/}.match?(location) ? '' : '/')
             base_url.query = nil
             base_url.fragment = nil
             base_url.to_s + location

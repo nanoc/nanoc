@@ -16,7 +16,7 @@ describe Nanoc::Core::TempFilenameFactory do
     it 'returns absolute paths' do
       path = subject.create(prefix)
 
-      expect(path).to match(/\A(C:)?\//)
+      expect(path).to match(%r{\A(C:)?/})
     end
 
     it 'creates the containing directory' do

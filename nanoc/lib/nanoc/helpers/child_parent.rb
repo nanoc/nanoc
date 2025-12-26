@@ -7,7 +7,7 @@ module Nanoc::Helpers
       if item.identifier.legacy?
         item.parent
       else
-        path_without_last_component = item.identifier.to_s.sub(/[^\/]+$/, '').chop
+        path_without_last_component = item.identifier.to_s.sub(%r{[^/]+$}, '').chop
         @items[path_without_last_component + '.*']
       end
     end

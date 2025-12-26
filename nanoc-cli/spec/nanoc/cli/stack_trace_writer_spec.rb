@@ -49,7 +49,7 @@ describe Nanoc::CLI::StackTraceWriter do
         expect { subject }
           .to change(io, :string)
           .from('')
-          .to(match(%r{^  11\. }))
+          .to(match(/^  11\. /))
       end
 
       it 'does not contain a see-more explanation' do

@@ -121,7 +121,7 @@ class Nanoc::OrigCLITest < Nanoc::TestCase
       end
 
       # Check error output
-      assert_match(/commands\/_test.rb/, tmp_stderr.string)
+      assert_match(%r{commands/_test.rb}, tmp_stderr.string)
     end
   end
 

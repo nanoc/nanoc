@@ -27,10 +27,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
 
     it 'shows default rep outdatedness' do
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is not outdated}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is not outdated}).to_stdout,
       )
     end
 
@@ -39,10 +39,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
       FileUtils.touch('content/bar.md', mtime: time)
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is not outdated}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout,
       )
     end
 
@@ -51,10 +51,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
       FileUtils.touch('content/foo.md', mtime: time)
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is outdated:}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is not outdated}).to_stdout,
       )
     end
 
@@ -63,10 +63,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
       FileUtils.touch('content/foo.md', mtime: time)
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is outdated:}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout,
       )
     end
   end
@@ -99,7 +99,7 @@ describe 'Outdatedness integration', site: true, stdio: true do
 
     it 'shows default rep outdatedness' do
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is not outdated}).to_stdout,
       )
     end
 
@@ -108,7 +108,7 @@ describe 'Outdatedness integration', site: true, stdio: true do
       FileUtils.touch('content/bar.md', mtime: time)
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout,
       )
     end
 
@@ -117,7 +117,7 @@ describe 'Outdatedness integration', site: true, stdio: true do
       FileUtils.touch('nanoc.yaml', mtime: time)
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout,
       )
     end
   end
@@ -143,10 +143,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
 
     it 'shows default rep outdatedness' do
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is not outdated}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is not outdated}).to_stdout,
       )
     end
 
@@ -154,10 +154,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
       File.write('content/bar.md', 'JUST BAR!')
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is not outdated}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout,
       )
     end
 
@@ -165,10 +165,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoooOoooOOoooOooo")
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is outdated:}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout,
       )
     end
 
@@ -176,10 +176,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
       File.write('content/foo.md', "---\ntitle: bye\n---\n\nfoo")
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is outdated:}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is not outdated}).to_stdout,
       )
     end
   end
@@ -205,10 +205,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
 
     it 'shows default rep outdatedness' do
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is not outdated}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is not outdated}).to_stdout,
       )
     end
 
@@ -216,10 +216,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
       File.write('content/bar.md', 'JUST BAR!')
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is not outdated}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout,
       )
     end
 
@@ -227,10 +227,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoooOoooOOoooOooo")
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is outdated:}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout,
       )
     end
 
@@ -238,10 +238,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
       File.write('content/foo.md', "---\ntitle: bye\n---\n\nfoo")
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is outdated:}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout,
       )
     end
 
@@ -259,10 +259,10 @@ describe 'Outdatedness integration', site: true, stdio: true do
       EOS
 
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout,
+        output(%r{^item /foo\.md, rep default:\n  is outdated:}).to_stdout,
       )
       expect { Nanoc::CLI.run(%w[show-data --no-color]) }.to(
-        output(/^item \/bar\.md, rep default:\n  is not outdated/).to_stdout,
+        output(%r{^item /bar\.md, rep default:\n  is not outdated}).to_stdout,
       )
     end
   end

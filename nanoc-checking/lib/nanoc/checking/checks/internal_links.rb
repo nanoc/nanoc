@@ -45,7 +45,7 @@ module Nanoc
           output_dir += '/' unless output_dir.end_with?('/')
           # FIXME: escape is hacky
           base_uri = URI("file://#{output_dir.gsub(' ', '%20')}")
-          path = href.sub(/#{base_uri}/, '').sub(/file:\/{1,3}/, '')
+          path = href.sub(/#{base_uri}/, '').sub(%r{file:/{1,3}}, '')
 
           path = "/#{path}" unless path.start_with?('/')
 

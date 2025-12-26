@@ -106,7 +106,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
       Nanoc::CLI.run %w[compile]
 
       assert File.file?('content/stylesheet.css')
-      assert_match(/\/stylesheet.css/, File.read('output/index.html'))
+      assert_match(%r{/stylesheet.css}, File.read('output/index.html'))
     end
   end
 

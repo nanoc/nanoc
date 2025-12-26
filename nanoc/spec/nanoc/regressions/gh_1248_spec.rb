@@ -17,6 +17,6 @@ describe 'GH-1248', site: true, stdio: true do
 
   example do
     expect { Nanoc::CLI.run(%w[compile --verbose]) }
-      .not_to output(/identical .* ootpoot\/stuff.html/).to_stdout
+      .not_to output(%r{identical .* ootpoot/stuff.html}).to_stdout
   end
 end

@@ -8,7 +8,7 @@ module Nanoc
         #
         # @return [String] The identifier generated from the receiver
         def __nanoc_cleaned_identifier
-          "/#{self}/".gsub(/^\/+|\/+$/, '/')
+          "/#{self}/".gsub(%r{^/+|/+$}, '/')
         end
       end
     end

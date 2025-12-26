@@ -407,7 +407,7 @@ describe Nanoc::Filters::SassCommon do
     context 'sourcemaps' do
       it 'generates proper sourcemaps' do
         expect(sass.setup_and_run(".foo #bar\n  color: #f00", sourcemap_path: 'main.css.map'))
-          .to match(/.foo\s+#bar\s*\{\s*color:\s+(red|#f00);?\s*\}\s*\/\*# sourceMappingURL=main.css.map \*\//)
+          .to match(%r{.foo\s+#bar\s*\{\s*color:\s+(red|#f00);?\s*\}\s*/\*# sourceMappingURL=main.css.map \*/})
 
         expect(sass_sourcemap.setup_and_run(".foo #bar\n  color: #f00", css_path: 'main.css', sourcemap_path: 'main.css.map'))
           .to match(/{.*?"sources": \["#{item_main_default_rep.raw_path}"\].*?"file": "main\.css".*?}/m)
@@ -418,7 +418,7 @@ describe Nanoc::Filters::SassCommon do
 
       it 'generates inlined sourcemaps' do
         expect(sass.setup_and_run(".foo #bar\n  color: #f00", css_path: 'main.css', sourcemap_path: :inline))
-          .to match(/.foo\s+#bar\s*\{\s*color:\s+(red|#f00);?\s*\}\s*\/\*# sourceMappingURL=data:application\/json;base64.*? \*\//)
+          .to match(%r{.foo\s+#bar\s*\{\s*color:\s+(red|#f00);?\s*\}\s*/\*# sourceMappingURL=data:application/json;base64.*? \*/})
       end
     end
 
@@ -430,7 +430,7 @@ describe Nanoc::Filters::SassCommon do
 
       it 'can inspect @items' do
         expect(sass.setup_and_run(".foo\n  content: nanoc('@items[\"/style/main.*\"][:content_filename]')"))
-          .to match(/.foo\s*\{\s*content:\s+"content\/style\/main\.sass";?\s*\}/)
+          .to match(%r{.foo\s*\{\s*content:\s+"content/style/main\.sass";?\s*\}})
       end
     end
   end

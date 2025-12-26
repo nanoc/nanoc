@@ -65,7 +65,7 @@ module Nanoc::Filters
 
     def relativize_css(content, params)
       # FIXME: parse CSS the proper way using csspool or something
-      content.gsub(/url\((['"]?)(\/(?:[^\/].*?)?)\1\)/) do
+      content.gsub(%r{url\((['"]?)(/(?:[^/].*?)?)\1\)}) do
         quote = Regexp.last_match[1]
         path = Regexp.last_match[2]
 
@@ -84,7 +84,7 @@ module Nanoc::Filters
         when Regexp
           exclusion
         when String
-          /\A#{exclusion}(\z|\/)/
+          %r{\A#{exclusion}(\z|/)}
         end
       end
     end
@@ -193,7 +193,7 @@ module Nanoc::Filters
     end
 
     def nokogiri_process_comment(node, doc, selectors, namespaces, klass, type, params)
-      content = node.content.dup.sub(%r{^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])}m) do |_m|
+      content = node.content.dup.sub(/^(\s*\[.+?\]>\s*)(.+?)(\s*<!\[endif\])/m) do |_m|
         beginning = Regexp.last_match[1]
         body = Regexp.last_match[2]
         ending = Regexp.last_match[3]
@@ -228,7 +228,7 @@ module Nanoc::Filters
     end
 
     def path_is_relativizable?(path, params)
-      path.match?(/\A\s*\//) && !exclude?(path, params)
+      path.match?(%r{\A\s*/}) && !exclude?(path, params)
     end
   end
 end

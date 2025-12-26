@@ -876,9 +876,6 @@ Style/ModuleMemberExistenceCheck: # new in 1.82
 
 # Valid cops, but fixing the offenses they report is non-trivial.
 
-Style/RegexpLiteral:
-  Enabled: false
-
 Style/EmptyElse:
   Enabled: false
 

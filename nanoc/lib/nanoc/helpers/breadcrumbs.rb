@@ -112,7 +112,7 @@ module Nanoc::Helpers
       if @item.identifier.legacy?
         prefixes.map { |pr| @items[Nanoc::Core::Identifier.new('/' + pr, type: :legacy)] }
       else
-        ancestral_prefixes = prefixes.reject { |pr| pr =~ /^\/index\./ }[0..-2]
+        ancestral_prefixes = prefixes.reject { |pr| pr =~ %r{^/index\.} }[0..-2]
         ancestral_items =
           ancestral_prefixes.map do |pr|
             if pr == ''

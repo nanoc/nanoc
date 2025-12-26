@@ -56,9 +56,9 @@ module Nanoc::Filters
         has_class = true if language
       else
         # Get language from comment line
-        match = element.inner_text.strip.split[0].match(/^#!([^\/][^\n]*)$/)
+        match = element.inner_text.strip.split[0].match(%r{^#!([^/][^\n]*)$})
         language = match[1] if match
-        element.content = element.content.sub(/^#!([^\/][^\n]*)$\n/, '') if language
+        element.content = element.content.sub(%r{^#!([^/][^\n]*)$\n}, '') if language
       end
 
       language ? ExtractedLanguage.new(language, has_class) : nil

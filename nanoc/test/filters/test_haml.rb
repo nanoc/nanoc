@@ -10,7 +10,7 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
     # Run filter (no assigns)
     result = filter.setup_and_run('%html')
 
-    assert_match(/<html>.*<\/html>/, result)
+    assert_match(%r{<html>.*</html>}, result)
 
     # Run filter (assigns without @)
     result = filter.setup_and_run('%p= question')
@@ -35,7 +35,7 @@ class Nanoc::Filters::HamlTest < Nanoc::TestCase
     # Check with XHTML
     result = filter.setup_and_run('%img', format: :xhtml)
 
-    assert_match(/<img\s*\/>/, result)
+    assert_match(%r{<img\s*/>}, result)
   end
 
   def test_filter_error

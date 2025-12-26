@@ -25,7 +25,7 @@ describe Nanoc::Checking::Runner, site: true do
 
     it 'lists all checks' do
       expect { runner.list_checks }
-        .to output(%r{Available checks:$.*^  css$.*^  my_foo_check$}m).to_stdout
+        .to output(/Available checks:$.*^  css$.*^  my_foo_check$/m).to_stdout
     end
   end
 

@@ -364,10 +364,10 @@ module Nanoc::DataSources
       end
 
       regex =
-        if /(^|\/)index(\.[^\/]+)?$/.match?(filename)
-          allow_periods_in_identifiers? ? /\/?(index)?(\.[^\/.]+)?$/ : /\/?index(\.[^\/]+)?$/
+        if %r{(^|/)index(\.[^/]+)?$}.match?(filename)
+          allow_periods_in_identifiers? ? %r{/?(index)?(\.[^/.]+)?$} : %r{/?index(\.[^/]+)?$}
         else
-          allow_periods_in_identifiers? ? /\.[^\/.]+$/ : /\.[^\/]+$/
+          allow_periods_in_identifiers? ? %r{\.[^/.]+$} : %r{\.[^/]+$}
         end
       Nanoc::Core::Identifier.new(filename.sub(regex, ''), type: :legacy)
     end
@@ -393,9 +393,9 @@ module Nanoc::DataSources
     # @return [Regex]
     def extension_regex
       if allow_periods_in_identifiers?
-        /(\.[^\/.]+$)/
+        %r{(\.[^/.]+$)}
       else
-        /(\.[^\/]+$)/
+        %r{(\.[^/]+$)}
       end
     end
 

@@ -60,10 +60,10 @@ module Nanoc
 
         case @type
         when :legacy
-          @string = "/#{string}/".gsub(/^\/+|\/+$/, '/').freeze
+          @string = "/#{string}/".gsub(%r{^/+|/+$}, '/').freeze
         when :full
-          raise InvalidIdentifierError.new(string) if string !~ /\A\//
-          raise InvalidFullIdentifierError.new(string) if string =~ /\/\z/
+          raise InvalidIdentifierError.new(string) if string !~ %r{\A/}
+          raise InvalidFullIdentifierError.new(string) if string =~ %r{/\z}
 
           @string = string.dup.freeze
         else
@@ -133,11 +133,11 @@ module Nanoc
       contract String => self
       # @return [Nanoc::Core::Identifier]
       def prefix(string)
-        unless /\A\//.match?(string)
+        unless %r{\A/}.match?(string)
           raise InvalidPrefixError.new(string)
         end
 
-        Nanoc::Core::Identifier.new(string.sub(/\/+\z/, '') + @string, type: @type)
+        Nanoc::Core::Identifier.new(string.sub(%r{/+\z}, '') + @string, type: @type)
       end
 
       contract C::None => String

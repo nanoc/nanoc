@@ -22,17 +22,17 @@ describe 'Partial recompilation', site: true, stdio: true do
     expect(File.file?('output/bar.html')).not_to be
 
     expect { Nanoc::CLI.run(%w[show-data --no-color]) }
-      .to(output(/^item \/foo\.md, rep default:\n  is outdated:/).to_stdout)
+      .to(output(%r{^item /foo\.md, rep default:\n  is outdated:}).to_stdout)
     expect { Nanoc::CLI.run(%w[show-data --no-color]) }
-      .to(output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout)
+      .to(output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout)
 
     expect { Nanoc::CLI.run(%w[compile --verbose]) rescue nil }
-      .to output(/create.*output\/foo\.html/).to_stdout
+      .to output(%r{create.*output/foo\.html}).to_stdout
 
     expect { Nanoc::CLI.run(%w[show-data --no-color]) }
-      .to(output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout)
+      .to(output(%r{^item /foo\.md, rep default:\n  is not outdated}).to_stdout)
     expect { Nanoc::CLI.run(%w[show-data --no-color]) }
-      .to(output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout)
+      .to(output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout)
 
     expect(File.file?('output/foo.html')).to be
     expect(File.file?('output/bar.html')).not_to be
@@ -40,11 +40,11 @@ describe 'Partial recompilation', site: true, stdio: true do
     File.write('content/bar.md', '<% raise "boom" %>')
 
     expect { Nanoc::CLI.run(%w[compile --verbose --debug]) rescue nil }
-      .to output(/skip.*output\/foo\.html/).to_stdout
+      .to output(%r{skip.*output/foo\.html}).to_stdout
 
     expect { Nanoc::CLI.run(%w[show-data --no-color]) }
-      .to(output(/^item \/foo\.md, rep default:\n  is not outdated/).to_stdout)
+      .to(output(%r{^item /foo\.md, rep default:\n  is not outdated}).to_stdout)
     expect { Nanoc::CLI.run(%w[show-data --no-color]) }
-      .to(output(/^item \/bar\.md, rep default:\n  is outdated:/).to_stdout)
+      .to(output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout)
   end
 end

@@ -3,10 +3,10 @@
 describe 'meta', chdir: false do
   it 'is covered by specs' do
     regular_files = Dir['lib/nanoc/cli/**/*.rb']
-    regular_file_base_names = regular_files.map { |fn| fn.gsub(/^lib\/nanoc\/cli\/|\.rb$/, '').tr('-', '_') }
+    regular_file_base_names = regular_files.map { |fn| fn.gsub(%r{^lib/nanoc/cli/|\.rb$}, '').tr('-', '_') }
 
     spec_files = Dir['spec/nanoc/cli/**/*_spec.rb']
-    spec_file_base_names = spec_files.map { |fn| fn.gsub(/^spec\/nanoc\/cli\/|_spec\.rb$/, '').tr('-', '_') }
+    spec_file_base_names = spec_files.map { |fn| fn.gsub(%r{^spec/nanoc/cli/|_spec\.rb$}, '').tr('-', '_') }
 
     # TODO: don’t ignore anything
     ignored_regular_file_base_names = %w[

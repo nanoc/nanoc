@@ -38,7 +38,7 @@ describe Nanoc::CLI::Commands::ShowData, stdio: true do
     end
 
     it 'prints a legend' do
-      expect { subject }.to output(%r{Item dependencies =+\n\nLegend:}).to_stdout
+      expect { subject }.to output(/Item dependencies =+\n\nLegend:/).to_stdout
     end
 
     context 'no dependencies' do
