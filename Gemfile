@@ -31,7 +31,7 @@ group :devel do
   gem 'm', '~> 1.5'
   gem 'minitest', '~> 6.0'
   gem 'minitest-mock', '~> 5.27'
-  gem 'mocha', '~> 2.7'
+  gem 'mocha', '~> 3.0'
   gem 'perfect_toml', '~> 0.9'
   gem 'pry', '~> 0.15'
   gem 'rake', '~> 13.2'
