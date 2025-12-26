@@ -119,9 +119,6 @@ RSpec/Focus:
 
 # ----- DISABLED (new cops not enabled by default; to enable later) -----
 
-Lint/EmptyInPattern: # new in 1.16
-  Enabled: false
-
 Lint/IncompatibleIoSelectWithFiberScheduler: # new in 1.21
   Enabled: false
 

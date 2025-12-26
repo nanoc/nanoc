@@ -48,6 +48,8 @@ Lint/EmptyBlock: # new in 1.1
   Enabled: true
 Lint/EmptyClass: # new in 1.3
   Enabled: true
+Lint/EmptyInPattern: # new in 1.16
+  Enabled: true
 Lint/HashNewWithKeywordArgumentsAsDefault: # new in 1.69
   Enabled: true
 Lint/ItWithoutArgumentsInBlock: # new in 1.59
