@@ -243,8 +243,8 @@ module Nanoc::CLI
       when RuntimeError
         if /^can't modify frozen/.match?(error.message)
           'You attempted to modify immutable data. Some data cannot ' \
-          'be modified once compilation has started. Such data includes ' \
-          'content and attributes of items and layouts, and filter arguments.'
+            'be modified once compilation has started. Such data includes ' \
+            'content and attributes of items and layouts, and filter arguments.'
         end
       when Errno::EADDRINUSE
         'There already is a server running. Either shut down that one, or ' \

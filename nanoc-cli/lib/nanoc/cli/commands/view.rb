@@ -46,14 +46,14 @@ module Nanoc::CLI::Commands
         return
       rescue LoadError
         $stderr.puts "Could not find the required 'adsf' gem, " \
-          'which is necessary for the view command.'
+                     'which is necessary for the view command.'
       end
 
       # Check asdf
       begin
         require 'asdf'
         $stderr.puts "You appear to have 'asdf' installed, " \
-          "but not 'adsf'. Please install 'adsf' (check the spelling)!"
+                     "but not 'adsf'. Please install 'adsf' (check the spelling)!"
       rescue LoadError
       end
 

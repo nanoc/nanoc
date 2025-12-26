@@ -21,7 +21,7 @@ module Nanoc::Helpers
       elsif string
         unless string.is_a? String
           raise ArgumentError, 'The #html_escape or #h function needs either a ' \
-            "string or a block to HTML-escape, but #{string.class} was given"
+                               "string or a block to HTML-escape, but #{string.class} was given"
         end
 
         string
@@ -32,7 +32,7 @@ module Nanoc::Helpers
           .gsub("'", '&#39;')
       else
         raise 'The #html_escape or #h function needs either a ' \
-          'string or a block to HTML-escape, but neither a string nor a block was given'
+              'string or a block to HTML-escape, but neither a string nor a block was given'
       end
     end
 

@@ -32,7 +32,7 @@ module Nanoc::RuleDSL
     def preprocess(&block)
       if @rules_collection.preprocessors[rules_filename]
         warn 'WARNING: A preprocess block is already defined. Defining ' \
-          'another preprocess block overrides the previously one.'
+             'another preprocess block overrides the previously one.'
       end
       @rules_collection.preprocessors[rules_filename] = block
     end
@@ -245,7 +245,7 @@ module Nanoc::RuleDSL
     def postprocess(&block)
       if @rules_collection.postprocessors[rules_filename]
         warn 'WARNING: A postprocess block is already defined. Defining ' \
-          'another postprocess block overrides the previously one.'
+             'another postprocess block overrides the previously one.'
       end
       @rules_collection.postprocessors[rules_filename] = block
     end

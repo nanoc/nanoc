@@ -93,8 +93,8 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
       File.write(
         'Rules',
         "include_rules 'more_rules'\n\n" \
-          "route '/**/*' do ; nil ; end\n\n" \
-          "compile '/**/*' do ; end\n",
+        "route '/**/*' do ; nil ; end\n\n" \
+        "compile '/**/*' do ; end\n",
       )
 
       # Create items
