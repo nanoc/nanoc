@@ -36,50 +36,31 @@ module Nanoc
         ]
 
       attr_reader :dependency_store
+      attr_reader :root
 
-      def initialize(dependency_store)
+      def initialize(dependency_store, root:)
         @dependency_store = dependency_store
-        @stack = []
-      end
-
-      contract C_OBJ, C_ARGS => C::Any
-      def enter(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
-        unless @stack.empty?
-          Nanoc::Core::NotificationCenter.post(:dependency_created, @stack.last, obj)
-          @dependency_store.record_dependency(
-            @stack.last,
-            obj,
-            raw_content:,
-            attributes:,
-            compiled_content:,
-            path:,
-          )
-        end
-
-        @stack.push(obj)
-      end
-
-      contract C_OBJ => C::Any
-      def exit
-        @stack.pop
+        @root = root
       end
 
       contract C_OBJ, C_ARGS => C::Any
       def bounce(obj, raw_content: false, attributes: false, compiled_content: false, path: false)
-        enter(obj, raw_content:, attributes:, compiled_content:, path:)
-        exit
+        Nanoc::Core::NotificationCenter.post(:dependency_created, @root, obj)
+
+        @dependency_store.record_dependency(
+          @root,
+          obj,
+          raw_content:,
+          attributes:,
+          compiled_content:,
+          path:,
+        )
       end
 
       class Null < DependencyTracker
         include Nanoc::Core::ContractsSupport
 
         def initialize; end
-
-        contract C_OBJ, C_ARGS => C::Any
-        def enter(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end
-
-        contract C_OBJ => C::Any
-        def exit; end
 
         contract C_OBJ, C_ARGS => C::Any
         def bounce(_obj, raw_content: false, attributes: false, compiled_content: false, path: false); end

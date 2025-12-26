@@ -7,7 +7,7 @@ describe Nanoc::DartSass::Filter::NanocImporter do
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
-  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store, root: source_item) }
 
   let(:items) { Nanoc::Core::ItemCollection.new(config, items_array) }
   let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }

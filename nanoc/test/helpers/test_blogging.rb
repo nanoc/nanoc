@@ -44,8 +44,10 @@ class Nanoc::Helpers::BloggingTest < Nanoc::TestCase
         data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
       )
 
+    root_item = Nanoc::Core::Item.new('base', {}, '/base.md')
+
     dep_store = Nanoc::Core::DependencyStore.new(items, layouts, config)
-    dependency_tracker = Nanoc::Core::DependencyTracker.new(dep_store)
+    dependency_tracker = Nanoc::Core::DependencyTracker.new(dep_store, root: root_item)
 
     compiled_content_cache = Nanoc::Core::CompiledContentCache.new(config:)
     compiled_content_repo = Nanoc::Core::CompiledContentRepo.new

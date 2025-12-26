@@ -175,7 +175,10 @@ module Nanoc
       end
 
       def dependency_tracker
-        @_dependency_tracker ||= Nanoc::Core::DependencyTracker.new(dependency_store)
+        @_dependency_tracker ||= Nanoc::Core::DependencyTracker.new(
+          dependency_store,
+          root: Nanoc::Core::Item.new('root', {}, '/root.md'),
+        )
       end
 
       private

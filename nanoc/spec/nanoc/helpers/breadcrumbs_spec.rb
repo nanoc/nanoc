@@ -1,11 +1,6 @@
 # frozen_string_literal: true
 
 describe Nanoc::Helpers::Breadcrumbs, :helper, :stdio do
-  before do
-    allow(ctx.dependency_tracker).to receive(:enter)
-    allow(ctx.dependency_tracker).to receive(:exit)
-  end
-
   describe '#breadcrumbs_trail' do
     subject { helper.breadcrumbs_trail }
 

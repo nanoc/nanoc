@@ -13,12 +13,15 @@ shared_examples 'a mutable document view' do
     )
   end
 
-  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(double(:dependency_store)) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store, root: root_item) }
+  let(:dependency_store) { Nanoc::Core::DependencyStore.new(items, layouts, config) }
 
   let(:config) { Nanoc::Core::Configuration.new(dir: Dir.getwd).with_defaults }
   let(:items) { Nanoc::Core::ItemCollection.new(config) }
   let(:layouts) { Nanoc::Core::LayoutCollection.new(config) }
   let(:reps) { Nanoc::Core::ItemRepRepo.new }
+
+  let(:root_item) { Nanoc::Core::Item.new('root', {}, '/root.md') }
 
   let(:compilation_context) do
     Nanoc::Core::CompilationContext.new(

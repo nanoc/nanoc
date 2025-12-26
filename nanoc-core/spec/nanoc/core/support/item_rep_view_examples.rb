@@ -40,7 +40,7 @@ shared_examples 'an item rep view' do
     end.new
   end
 
-  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store) }
+  let(:dependency_tracker) { Nanoc::Core::DependencyTracker.new(dependency_store, root: base_item) }
   let(:dependency_store) { Nanoc::Core::DependencyStore.new(empty_items, empty_layouts, config) }
   let(:base_item) { Nanoc::Core::Item.new('base', {}, '/base.md') }
 
@@ -55,10 +55,6 @@ shared_examples 'an item rep view' do
       code_snippets: [],
       data_source: Nanoc::Core::InMemoryDataSource.new(items, layouts),
     )
-  end
-
-  before do
-    dependency_tracker.enter(base_item)
   end
 
   describe '#frozen?' do

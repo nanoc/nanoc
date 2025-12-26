@@ -104,12 +104,23 @@ describe Nanoc::DartSass::Filter, :helper do
       expect(res.strip).to match(/color: #900/m)
     end
 
-    it 'creates Nanoc dependencies' do
+    it 'creates dependencies' do
       filter = described_class.new(ctx.assigns)
 
-      expect { filter.run(content) }
-        .to create_dependency_from(ctx.items['/foo.scss'])
-        .onto([instance_of(Nanoc::Core::ItemCollection), ctx.items['/defs.scss']])
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, { raw_content: ['/_defs.sass'] })
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, { raw_content: ['/_defs.scss'] })
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, { raw_content: ['/_defs.*.sass'] })
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, { raw_content: ['/_defs.*.scss'] })
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, { raw_content: ['/_defs.*.css'] })
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, { raw_content: ['/defs.sass'] })
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, { raw_content: ['/defs.scss'] })
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, { raw_content: ['/defs.*.sass'] })
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, { raw_content: ['/defs.*.scss'] })
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, { raw_content: ['/defs.*.css'] })
+
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items['/defs.scss']._unwrap, raw_content: true)
+
+      filter.run(content)
     end
   end
 
@@ -150,19 +161,16 @@ describe Nanoc::DartSass::Filter, :helper do
       expect(res.strip).to match(/background: #dff/m)
     end
 
-    it 'creates Nanoc dependencies' do
+    it 'creates dependencies' do
       filter = described_class.new(ctx.assigns)
 
-      expect { filter.run(content) }
-        .to create_dependency_from(ctx.items['/assets/style/foo.scss'])
-        .onto(
-          [
-            instance_of(Nanoc::Core::ItemCollection),
-            ctx.items['/assets/style/defs1.scss'],
-            ctx.items['/assets/style/defs2.scss'],
-            ctx.items['/assets/style/defs3.scss'],
-          ],
-        )
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items._unwrap, anything).at_least(:once)
+
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items['/assets/style/defs1.scss']._unwrap, raw_content: true)
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items['/assets/style/defs2.scss']._unwrap, raw_content: true)
+      expect(ctx.dependency_tracker).to receive(:bounce).with(ctx.items['/assets/style/defs3.scss']._unwrap, raw_content: true)
+
+      filter.run(content)
     end
   end
 end
