@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 3.2'
 
   s.add_dependency('nanoc-core', '~> 4.13', '>= 4.13.1')
-  s.add_dependency('sass-embedded', '~> 1.56')
+  s.add_dependency('sass-embedded', '~> 1.80')
   s.metadata = {
     'rubygems_mfa_required' => 'true',
     'source_code_uri' => "https://github.com/nanoc/nanoc/tree/#{s.name}-v#{s.version}/#{s.name}",
