@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'support/mutable_document_view_examples'
+require_relative '../support/mutable_document_view_examples'
 
 describe Nanoc::Core::MutableItemView do
   let(:entity_class) { Nanoc::Core::Item }

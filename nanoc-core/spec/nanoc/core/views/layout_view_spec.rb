@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'support/document_view_examples'
+require_relative '../support/document_view_examples'
 
 describe Nanoc::Core::LayoutView do
   let(:entity_class) { Nanoc::Core::Layout }

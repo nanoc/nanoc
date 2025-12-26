@@ -13,7 +13,6 @@ describe 'meta', chdir: false do
     ignored_regular_file_base_names = %w[
       action_provider
       assertions
-      basic_item_view
       checksum_collection
       compilation_context
       compilation_phases/mark_done
@@ -26,12 +25,10 @@ describe 'meta', chdir: false do
       document_view_mixin
       error
       errors
-      identifiable_collection_view
       item_collection
       item_rep_repo
       layout_collection
       mutable_document_view_mixin
-      mutable_identifiable_collection_view
       outdatedness_reasons
       outdatedness_rule
       outdatedness_rules/attributes_modified
@@ -42,7 +39,6 @@ describe 'meta', chdir: false do
       outdatedness_rules/not_written
       outdatedness_rules/rules_modified
       outdatedness_rules/uses_always_outdated_filter
-      post_compile_item_collection_view
       processing_actions
       snapshot_def
       trivial_error
@@ -58,6 +54,10 @@ describe 'meta', chdir: false do
       compilation_stages/prune
       compilation_stages/store_post_compilation_state
       compilation_stages/store_pre_compilation_state
+      views/basic_item_view
+      views/identifiable_collection_view
+      views/mutable_identifiable_collection_view
+      views/post_compile_item_collection_view
     ]
 
     ignored_spec_file_base_names = %w[

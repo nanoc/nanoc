@@ -73,6 +73,7 @@ end
 loader = Zeitwerk::Loader.new
 loader.inflector = inflector_class.new
 loader.push_dir(__dir__ + '/..')
+loader.push_dir(__dir__ + '/core/views', namespace: Nanoc::Core)
 loader.ignore(__dir__ + '/../nanoc-core.rb')
 loader.ignore(__dir__ + '/core/core_ext')
 loader.setup

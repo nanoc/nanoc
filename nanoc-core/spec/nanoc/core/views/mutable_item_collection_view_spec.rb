@@ -1,28 +1,27 @@
 # frozen_string_literal: true
 
-require_relative 'support/identifiable_collection_view_examples'
-require_relative 'support/mutable_identifiable_collection_view_examples'
+require_relative '../support/identifiable_collection_view_examples'
+require_relative '../support/mutable_identifiable_collection_view_examples'
 
-describe Nanoc::Core::MutableLayoutCollectionView do
-  let(:view_class) { Nanoc::Core::MutableLayoutView }
-  let(:collection_class) { Nanoc::Core::LayoutCollection }
+describe Nanoc::Core::MutableItemCollectionView do
+  let(:view_class) { Nanoc::Core::MutableItemView }
+  let(:collection_class) { Nanoc::Core::ItemCollection }
   let(:config) do
     { string_pattern_type: 'glob' }
   end
 
   it_behaves_like 'an identifiable collection view' do
-    let(:element_class) { Nanoc::Core::Layout }
+    let(:element_class) { Nanoc::Core::Item }
   end
-
   it_behaves_like 'a mutable identifiable collection view'
 
   describe '#create' do
-    let(:layout) do
+    let(:item) do
       Nanoc::Core::Layout.new('content', {}, '/asdf')
     end
 
     let(:wrapped) do
-      Nanoc::Core::LayoutCollection.new(config, [layout])
+      Nanoc::Core::ItemCollection.new(config, [item])
     end
 
     let(:view) { described_class.new(wrapped, nil) }
@@ -51,13 +50,13 @@ describe Nanoc::Core::MutableLayoutCollectionView do
     subject { view.inspect }
 
     let(:wrapped) do
-      Nanoc::Core::LayoutCollection.new(config)
+      Nanoc::Core::ItemCollection.new(config)
     end
 
     let(:view) { described_class.new(wrapped, view_context) }
     let(:view_context) { nil }
     let(:config) { { string_pattern_type: 'glob' } }
 
-    it { is_expected.to eql('<Nanoc::Core::MutableLayoutCollectionView>') }
+    it { is_expected.to eql('<Nanoc::Core::MutableItemCollectionView>') }
   end
 end

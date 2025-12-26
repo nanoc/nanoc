@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'support/identifiable_collection_view_examples'
+require_relative '../support/identifiable_collection_view_examples'
 
 describe Nanoc::Core::ItemCollectionWithRepsView do
   let(:view_class) { Nanoc::Core::CompilationItemView }
