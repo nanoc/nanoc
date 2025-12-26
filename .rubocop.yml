@@ -5,7 +5,7 @@ inherit_from:
 # ----- CONFIGURED -----
 
 AllCops:
-  TargetRubyVersion: "3.2"
+  TargetRubyVersion: 3.2
 
 plugins:
   - rubocop-minitest
