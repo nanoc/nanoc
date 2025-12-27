@@ -18,16 +18,12 @@ describe Nanoc::Deploying::Deployers::Git, :stdio do
   end
 
   def add_changes_to_remote
-    system('git', 'init', '--quiet', 'rere_tmp')
+    system('git', 'init', '--quiet', '--initial-branch=master', 'rere_tmp')
+
     Dir.chdir('rere_tmp') do
       system('git', 'config', 'user.name', 'Zebra Platypus')
       system('git', 'config', 'user.email', 'zebra@platypus.example.com')
       system('git', 'remote', 'add', 'origin', '../rere')
-
-      # Ensure we’re on the master branch (--initial-branch is not supported by all Git versions)
-      unless `git symbolic-ref --short HEAD` == 'master'
-        system('git', 'checkout', '--quiet', '-b', 'master')
-      end
 
       File.write('evil.txt', 'muaha')
       system('git', 'add', 'evil.txt')
@@ -148,7 +144,7 @@ describe Nanoc::Deploying::Deployers::Git, :stdio do
 
   shared_examples 'remote configured properly' do
     before do
-      system('git', 'init', '--bare', '--quiet', 'rere')
+      system('git', 'init', '--bare', '--quiet', '--initial-branch=master', 'rere')
     end
 
     context 'default branch' do
@@ -165,11 +161,6 @@ describe Nanoc::Deploying::Deployers::Git, :stdio do
         before do
           Dir.chdir(output_dir) do
             system('git', 'commit', '--quiet', '-m', 'init', '--allow-empty')
-
-            # Ensure we’re on the master branch (--initial-branch is not supported by all Git versions)
-            unless `git symbolic-ref --short HEAD` == 'master'
-              system('git', 'checkout', '--quiet', '-b', 'master')
-            end
           end
         end
 
@@ -231,12 +222,7 @@ describe Nanoc::Deploying::Deployers::Git, :stdio do
     context 'output dir is a Git repo' do
       before do
         Dir.chdir(output_dir) do
-          system('git', 'init', '--quiet')
-
-          # Ensure we’re on the master branch (--initial-branch is not supported by all Git versions)
-          unless `git symbolic-ref --short HEAD` == 'master'
-            system('git', 'checkout', '--quiet', '-b', 'master')
-          end
+          system('git', 'init', '--quiet', '--initial-branch=master')
 
           system('git', 'config', 'user.name', 'Donkey Giraffe')
           system('git', 'config', 'user.email', 'donkey@giraffe.example.com')
