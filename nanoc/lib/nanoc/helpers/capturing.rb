@@ -59,13 +59,20 @@ module Nanoc::Helpers
       end
 
       def run
-        rep = @requested_item.reps[:default]._unwrap
+        rep_view = @requested_item.reps[:default]
+        rep = rep_view._unwrap
 
         # Create dependency
         if @item.nil? || @requested_item != @item._unwrap
           dependency_tracker = @config._context.dependency_tracker
           dependency_tracker.bounce(@requested_item._unwrap, compiled_content: true)
 
+          unless rep.compiled?
+            rep_view._try_load_from_cache
+          end
+
+          # If the item rep still isn’t compiled by now, then it can’t be loaded
+          # from the cache and needs to compiled as usual.
           unless rep.compiled?
             # FIXME: is :last appropriate?
             raise Nanoc::Core::Errors::UnmetDependency.new(rep, :last)
