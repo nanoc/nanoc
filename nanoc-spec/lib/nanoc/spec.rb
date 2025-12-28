@@ -191,6 +191,7 @@ module Nanoc
             site:,
             compiled_content_cache: Nanoc::Core::CompiledContentCache.new(config: @config),
             compiled_content_repo: @compiled_content_repo,
+            outdatedness_store: Nanoc::Core::OutdatednessStore.new(config: @config),
           )
 
         Nanoc::Core::ViewContextForCompilation.new(

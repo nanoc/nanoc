@@ -28,6 +28,7 @@ module Nanoc
       attr_reader :reps
       attr_reader :compiled_content_cache
       attr_reader :compiled_content_repo
+      attr_reader :outdatedness_store
 
       C_COMPILED_CONTENT_CACHE =
         C::Or[
@@ -42,13 +43,22 @@ module Nanoc
         site: Nanoc::Core::Site,
         compiled_content_cache: C_COMPILED_CONTENT_CACHE,
         compiled_content_repo: Nanoc::Core::CompiledContentRepo,
+        outdatedness_store: Nanoc::Core::OutdatednessStore,
       ] => C::Any
-      def initialize(action_provider:, reps:, site:, compiled_content_cache:, compiled_content_repo:)
+      def initialize(
+        action_provider:,
+        reps:,
+        site:,
+        compiled_content_cache:,
+        compiled_content_repo:,
+        outdatedness_store:
+      )
         @action_provider = action_provider
         @reps = reps
         @site = site
         @compiled_content_cache = compiled_content_cache
         @compiled_content_repo = compiled_content_repo
+        @outdatedness_store = outdatedness_store
       end
 
       contract Nanoc::Core::Layout => FilterNameAndArgs
