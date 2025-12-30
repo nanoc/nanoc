@@ -31,6 +31,7 @@ describe Nanoc::Core::CompilationStages::CompileReps do
       site:,
       compiled_content_cache:,
       compiled_content_repo:,
+      outdatedness_store:,
     )
   end
 

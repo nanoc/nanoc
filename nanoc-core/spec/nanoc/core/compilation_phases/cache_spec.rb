@@ -37,7 +37,7 @@ describe Nanoc::Core::CompilationPhases::Cache do
   describe '#run' do
     subject { phase.call(rep, is_outdated:) }
 
-    let(:is_outdated) { raise 'override me' }
+    let(:is_outdated) { false } # NOTE: not used
 
     before do
       rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
@@ -48,17 +48,19 @@ describe Nanoc::Core::CompilationPhases::Cache do
       allow(Nanoc::Core::NotificationCenter).to receive(:post).with(:phase_ended, anything, anything)
     end
 
-    shared_examples 'calls wrapped' do
+    context 'when already compiled' do
+      before { rep.compiled = true }
+
+      it 'does not call wrapped' do
+        expect(wrapped).not_to receive(:run).with(rep, is_outdated:)
+        subject
+      end
+    end
+
+    context 'when not yet compiled' do
       it 'delegates to wrapped' do
         expect(wrapped).to receive(:run).with(rep, is_outdated:)
         subject
-      end
-
-      it 'marks rep as compiled' do
-        expect { subject }
-          .to change(rep, :compiled?)
-          .from(false)
-          .to(true)
       end
 
       it 'sends no other notifications' do # rubocop:disable RSpec/NoExpectationExample
@@ -71,93 +73,12 @@ describe Nanoc::Core::CompilationPhases::Cache do
           .from(nil)
           .to(last: some_textual_content('wrapped content'))
       end
-    end
 
-    context 'outdated' do
-      let(:is_outdated) { true }
-
-      include_examples 'calls wrapped'
-    end
-
-    context 'not outdated' do
-      let(:is_outdated) { false }
-
-      context 'textual cached compiled content available' do
-        before do
-          rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: false)]
-
-          compiled_content_cache[rep] = { last: Nanoc::Core::TextualContent.new('cached') }
-        end
-
-        it 'reads content from cache' do
-          expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
-          expect { subject }
-            .to change { compiled_content_repo.get(rep, :last) }
-            .from(nil)
-            .to(some_textual_content('cached'))
-        end
-
-        it 'marks rep as compiled' do
-          expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
-          expect { subject }
-            .to change(rep, :compiled?)
-            .from(false)
-            .to(true)
-        end
-
-        it 'does not change compiled content cache' do
-          expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
-          expect { subject }
-            .not_to change { compiled_content_cache[rep] }
-        end
-      end
-
-      context 'binary cached compiled content available' do
-        let!(:temp_dir) do
-          Dir.mktmpdir('nanoc-phase-cache-spec')
-        end
-
-        let(:binary_content) { 'b1n4ry' }
-        let(:binary_filename) { File.join(temp_dir, 'test') }
-
-        before do
-          File.write(binary_filename, binary_content)
-
-          rep.snapshot_defs = [Nanoc::Core::SnapshotDef.new(:last, binary: true)]
-
-          compiled_content_cache[rep] = { last: Nanoc::Core::BinaryContent.new(binary_filename) }
-        end
-
-        after do
-          FileUtils.rm_rf(temp_dir)
-        end
-
-        it 'reads content from cache' do
-          expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
-          expect { subject }
-            .to change { compiled_content_repo.get(rep, :last) }
-            .from(nil)
-            .to(some_binary_content(binary_content))
-        end
-
-        it 'marks rep as compiled' do
-          expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
-          expect { subject }
-            .to change(rep, :compiled?)
-            .from(false)
-            .to(true)
-        end
-
-        it 'does not change compiled content cache' do
-          expect(Nanoc::Core::NotificationCenter).to receive(:post).with(:cached_content_used, rep)
-
-          expect { subject }
-            .not_to change { compiled_content_cache[rep][:last].filename }
-        end
-      end
-
-      context 'no cached compiled content available' do
-        include_examples 'calls wrapped'
+      it 'marks rep as compiled' do
+        expect { subject }
+          .to change(rep, :compiled?)
+          .from(false)
+          .to(true)
       end
     end
   end

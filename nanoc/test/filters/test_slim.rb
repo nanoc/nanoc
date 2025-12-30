@@ -64,6 +64,7 @@ class Nanoc::Filters::SlimTest < Nanoc::TestCase
         site:,
         compiled_content_cache:,
         compiled_content_repo:,
+        outdatedness_store: Nanoc::Core::OutdatednessStore.new(config:),
       )
 
     Nanoc::Core::ViewContextForCompilation.new(

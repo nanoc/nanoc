@@ -19,6 +19,7 @@ describe Nanoc::Core::Executor do
       site:,
       compiled_content_cache:,
       compiled_content_repo:,
+      outdatedness_store: Nanoc::Core::OutdatednessStore.new(config:),
     )
   end
 
