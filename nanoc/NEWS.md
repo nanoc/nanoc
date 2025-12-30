@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.14.6 (2025-12-31)
+
+Enhancements:
+
+- Sped up incremental compilation (#1776)
+
 ## 4.14.5 (2025-11-30)
 
 Identical to 4.14.4 but with corrected release notes.
