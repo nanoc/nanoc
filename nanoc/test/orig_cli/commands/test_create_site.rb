@@ -61,6 +61,7 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
       site = Nanoc::Core::SiteLoader.new.new_from_cwd
       Nanoc::Core::Compiler.compile(site)
 
+      assert File.file?('output/robots.txt')
       assert File.file?('output/index.html')
     end
   end
@@ -107,6 +108,17 @@ class Nanoc::CLI::Commands::CreateSiteTest < Nanoc::TestCase
 
       assert File.file?('content/stylesheet.css')
       assert_match(%r{/stylesheet.css}, File.read('output/index.html'))
+    end
+  end
+
+  def test_new_site_has_correct_robots_txt
+    Nanoc::CLI.run %w[create_site foo]
+    FileUtils.cd('foo') do
+      Nanoc::CLI.run %w[compile]
+
+      assert File.file?('content/robots.txt')
+      assert File.file?('output/robots.txt')
+      assert_match(%r{User-agent: \*\nAllow: /}, File.read('output/robots.txt'))
     end
   end
 

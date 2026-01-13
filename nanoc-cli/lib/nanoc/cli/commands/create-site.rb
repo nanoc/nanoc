@@ -43,6 +43,8 @@ module Nanoc::CLI::Commands
     DEFAULT_RULES = <<~EOS unless defined? DEFAULT_RULES
       #!/usr/bin/env ruby
 
+      passthrough '/robos.txt'
+
       compile '/**/*.html' do
         layout '/default.*'
 
@@ -71,6 +73,11 @@ module Nanoc::CLI::Commands
       passthrough '/**/*'
 
       layout '/**/*', :erb
+    EOS
+
+    ROBOTS_TXT_ITEM = <<~EOS unless defined? ROBOTS_TXT_ITEM
+      User-agent: *
+      Allow: /
     EOS
 
     DEFAULT_ITEM = <<~EOS unless defined? DEFAULT_ITEM
@@ -250,6 +257,7 @@ module Nanoc::CLI::Commands
         write('nanoc.yaml', DEFAULT_CONFIG)
         write('Rules', DEFAULT_RULES)
         write('content/index.html', DEFAULT_ITEM)
+        write('content/robots.txt', ROBOTS_TXT_ITEM)
         write('content/stylesheet.css', DEFAULT_STYLESHEET)
         write('layouts/default.html', DEFAULT_LAYOUT)
       end
