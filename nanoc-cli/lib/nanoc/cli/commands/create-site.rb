@@ -43,7 +43,7 @@ module Nanoc::CLI::Commands
     DEFAULT_RULES = <<~EOS unless defined? DEFAULT_RULES
       #!/usr/bin/env ruby
 
-      passthrough '/robos.txt'
+      passthrough '/robots.txt'
 
       compile '/**/*.html' do
         layout '/default.*'
