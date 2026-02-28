@@ -1,3 +1,4 @@
+dir/geromeysmaelfiles
 [![Gem version](https://img.shields.io/gem/v/nanoc.svg)](http://rubygems.org/gems/nanoc)
 [![Gem downloads](https://img.shields.io/gem/dt/nanoc.svg)](http://rubygems.org/gems/nanoc)
 [![Code Coverage](https://img.shields.io/codecov/c/github/nanoc/nanoc.svg)](https://codecov.io/gh/nanoc/nanoc)
