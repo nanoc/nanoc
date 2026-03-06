@@ -12,13 +12,13 @@ describe Nanoc::CLI do
       def io.tty?
         true
       end
-      expect(described_class.enable_utf8?(io)).not_to be
+      expect(described_class.enable_utf8?(io)).to be(false)
 
       io = StringIO.new
       def io.tty?
         false
       end
-      expect(described_class.enable_utf8?(io)).to be
+      expect(described_class.enable_utf8?(io)).to be(true)
     end
   end
 
@@ -34,19 +34,19 @@ describe Nanoc::CLI do
       'LANG' => 'en_US.ISO-8859-1',
     }
     __nanoc_core_with_env_vars(new_env_diff) do
-      expect(described_class.enable_utf8?(io)).not_to be
+      expect(described_class.enable_utf8?(io)).to be(false)
 
-      __nanoc_core_with_env_vars('LC_ALL'   => 'en_US.UTF-8') { expect(described_class.enable_utf8?(io)).to be }
-      __nanoc_core_with_env_vars('LC_CTYPE' => 'en_US.UTF-8') { expect(described_class.enable_utf8?(io)).to be }
-      __nanoc_core_with_env_vars('LANG'     => 'en_US.UTF-8') { expect(described_class.enable_utf8?(io)).to be }
+      __nanoc_core_with_env_vars('LC_ALL'   => 'en_US.UTF-8') { expect(described_class.enable_utf8?(io)).to be(true) }
+      __nanoc_core_with_env_vars('LC_CTYPE' => 'en_US.UTF-8') { expect(described_class.enable_utf8?(io)).to be(true) }
+      __nanoc_core_with_env_vars('LANG'     => 'en_US.UTF-8') { expect(described_class.enable_utf8?(io)).to be(true) }
 
-      __nanoc_core_with_env_vars('LC_ALL'   => 'en_US.utf-8') { expect(described_class.enable_utf8?(io)).to be }
-      __nanoc_core_with_env_vars('LC_CTYPE' => 'en_US.utf-8') { expect(described_class.enable_utf8?(io)).to be }
-      __nanoc_core_with_env_vars('LANG'     => 'en_US.utf-8') { expect(described_class.enable_utf8?(io)).to be }
+      __nanoc_core_with_env_vars('LC_ALL'   => 'en_US.utf-8') { expect(described_class.enable_utf8?(io)).to be(true) }
+      __nanoc_core_with_env_vars('LC_CTYPE' => 'en_US.utf-8') { expect(described_class.enable_utf8?(io)).to be(true) }
+      __nanoc_core_with_env_vars('LANG'     => 'en_US.utf-8') { expect(described_class.enable_utf8?(io)).to be(true) }
 
-      __nanoc_core_with_env_vars('LC_ALL'   => 'en_US.utf8') { expect(described_class.enable_utf8?(io)).to be }
-      __nanoc_core_with_env_vars('LC_CTYPE' => 'en_US.utf8') { expect(described_class.enable_utf8?(io)).to be }
-      __nanoc_core_with_env_vars('LANG'     => 'en_US.utf8') { expect(described_class.enable_utf8?(io)).to be }
+      __nanoc_core_with_env_vars('LC_ALL'   => 'en_US.utf8') { expect(described_class.enable_utf8?(io)).to be(true) }
+      __nanoc_core_with_env_vars('LC_CTYPE' => 'en_US.utf8') { expect(described_class.enable_utf8?(io)).to be(true) }
+      __nanoc_core_with_env_vars('LANG'     => 'en_US.utf8') { expect(described_class.enable_utf8?(io)).to be(true) }
     end
   end
 

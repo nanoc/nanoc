@@ -16,8 +16,8 @@ describe 'Partial recompilation', :site, :stdio do
       end
     EOS
 
-    expect(File.file?('output/foo.html')).not_to be
-    expect(File.file?('output/bar.html')).not_to be
+    expect(File.file?('output/foo.html')).to be(false)
+    expect(File.file?('output/bar.html')).to be(false)
 
     expect { Nanoc::CLI.run(['show-data', '--no-color']) }
       .to(output(%r{^item /foo\.md, rep default:\n  is outdated:}).to_stdout)
@@ -32,8 +32,8 @@ describe 'Partial recompilation', :site, :stdio do
     expect { Nanoc::CLI.run(['show-data', '--no-color']) }
       .to(output(%r{^item /bar\.md, rep default:\n  is outdated:}).to_stdout)
 
-    expect(File.file?('output/foo.html')).to be
-    expect(File.file?('output/bar.html')).not_to be
+    expect(File.file?('output/foo.html')).to be(true)
+    expect(File.file?('output/bar.html')).to be(false)
 
     File.write('content/bar.md', '<% raise "boom" %>')
 
@@ -57,14 +57,14 @@ describe 'Partial recompilation', :site, :stdio do
       end
     EOS
 
-    expect(File.file?('output/aaa.html')).not_to be
-    expect(File.file?('output/bbb.html')).not_to be
+    expect(File.file?('output/aaa.html')).to be(false)
+    expect(File.file?('output/bbb.html')).to be(false)
 
     Nanoc::CLI.run(['compile', '--verbose'])
 
-    expect(File.file?('output/aaa.html')).to be
-    expect(File.file?('output/bbb.html')).to be
-    expect(File.file?('output/ccc.html')).not_to be
+    expect(File.file?('output/aaa.html')).to be(true)
+    expect(File.file?('output/bbb.html')).to be(true)
+    expect(File.file?('output/ccc.html')).to be(false)
     expect(File.read('output/aaa.html')).to eq('aaa')
     expect(File.read('output/bbb.html')).to eq('aaa=aaa')
 
@@ -72,9 +72,9 @@ describe 'Partial recompilation', :site, :stdio do
     Nanoc::CLI.run(['compile', '--verbose'])
     Nanoc::CLI.run(['prune', '--yes'])
 
-    expect(File.file?('output/aaa.html')).to be
-    expect(File.file?('output/bbb.html')).not_to be
-    expect(File.file?('output/ccc.html')).to be
+    expect(File.file?('output/aaa.html')).to be(true)
+    expect(File.file?('output/bbb.html')).to be(false)
+    expect(File.file?('output/ccc.html')).to be(true)
     expect(File.read('output/aaa.html')).to eq('aaa')
     expect(File.read('output/ccc.html')).to eq('aaa=aaa')
 
@@ -82,9 +82,9 @@ describe 'Partial recompilation', :site, :stdio do
     Nanoc::CLI.run(['compile', '--verbose'])
     Nanoc::CLI.run(['prune', '--yes'])
 
-    expect(File.file?('output/aaa.html')).to be
-    expect(File.file?('output/bbb.html')).to be
-    expect(File.file?('output/ccc.html')).not_to be
+    expect(File.file?('output/aaa.html')).to be(true)
+    expect(File.file?('output/bbb.html')).to be(true)
+    expect(File.file?('output/ccc.html')).to be(false)
     expect(File.read('output/aaa.html')).to eq('aaa')
     expect(File.read('output/bbb.html')).to eq('aaa=aaa')
   end

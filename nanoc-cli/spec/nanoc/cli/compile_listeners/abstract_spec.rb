@@ -40,24 +40,24 @@ describe Nanoc::CLI::CompileListeners::Abstract do
 
     it 'starts' do
       subject.start
-      expect(subject.started).to be
+      expect(subject.started).to be(true)
     end
 
     it 'stops' do
       subject.start
       subject.stop
-      expect(subject.stopped).to be
+      expect(subject.stopped).to be(true)
     end
 
     it 'starts safely' do
       subject.start_safely
-      expect(subject.started).to be
+      expect(subject.started).to be(true)
     end
 
     it 'stops safely' do
       subject.start_safely
       subject.stop_safely
-      expect(subject.stopped).to be
+      expect(subject.stopped).to be(true)
     end
 
     context 'listener that notifies' do

@@ -38,7 +38,7 @@ describe Nanoc::Core::TempFilenameFactory do
 
     it 'does not create the file' do
       path = subject.create(prefix)
-      expect(File.file?(path)).not_to be(true)
+      expect(File.file?(path)).to be(false)
     end
 
     it 'is threadsafe' do

@@ -30,7 +30,7 @@ describe 'GH-1045', :site, :stdio do
   it 'creates the sitemap' do
     Nanoc::CLI.run(['compile'])
 
-    expect(File.file?('output/sitemap.xml')).to be
+    expect(File.file?('output/sitemap.xml')).to be(true)
     contents = File.read('output/sitemap.xml')
     expect(contents).to match(%r{<loc>http://example.com/foo/</loc>})
     expect(contents).to match(%r{<lastmod>2015-03-02</lastmod>})
@@ -42,7 +42,7 @@ describe 'GH-1045', :site, :stdio do
     FileUtils.touch('content/foo.txt', mtime: Time.parse('2016-04-03 10:00:00Z'))
     Nanoc::CLI.run(['compile'])
 
-    expect(File.file?('output/sitemap.xml')).to be
+    expect(File.file?('output/sitemap.xml')).to be(true)
     contents = File.read('output/sitemap.xml')
     expect(contents).to match(%r{<loc>http://example.com/foo/</loc>})
     expect(contents).to match(%r{<lastmod>2016-04-03</lastmod>})

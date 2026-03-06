@@ -18,8 +18,8 @@ describe 'write nil (skip routing rule)', :site, :stdio do
     end
 
     it 'starts off empty' do
-      expect(File.file?('output/foo-via-compilation-rule.txt')).not_to be
-      expect(File.file?('output/foo-via-routing-rule.txt')).not_to be
+      expect(File.file?('output/foo-via-compilation-rule.txt')).to be(false)
+      expect(File.file?('output/foo-via-routing-rule.txt')).to be(false)
     end
 
     it 'outputs creation of correct file' do
@@ -61,8 +61,8 @@ describe 'write nil (skip routing rule)', :site, :stdio do
     end
 
     it 'starts off empty' do
-      expect(File.file?('output/foo-via-compilation-rule.txt')).not_to be
-      expect(File.file?('output/foo-via-routing-rule.txt')).not_to be
+      expect(File.file?('output/foo-via-compilation-rule.txt')).to be(false)
+      expect(File.file?('output/foo-via-routing-rule.txt')).to be(false)
     end
 
     it 'does not output creation of incorrect file' do

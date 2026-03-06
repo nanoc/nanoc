@@ -15,15 +15,15 @@ describe 'GH-1134', :site, :stdio do
 
   it 'detects missing output file of non-default rep' do
     Nanoc::CLI.run(['compile'])
-    expect(File.file?('output/first.html')).to be
-    expect(File.file?('output/last.html')).to be
+    expect(File.file?('output/first.html')).to be(true)
+    expect(File.file?('output/last.html')).to be(true)
 
     FileUtils.rm_f('output/first.html')
-    expect(File.file?('output/first.html')).not_to be
-    expect(File.file?('output/last.html')).to be
+    expect(File.file?('output/first.html')).to be(false)
+    expect(File.file?('output/last.html')).to be(true)
 
     Nanoc::CLI.run(['compile'])
-    expect(File.file?('output/first.html')).to be
-    expect(File.file?('output/last.html')).to be
+    expect(File.file?('output/first.html')).to be(true)
+    expect(File.file?('output/last.html')).to be(true)
   end
 end

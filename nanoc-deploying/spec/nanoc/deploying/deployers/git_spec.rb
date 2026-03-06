@@ -293,15 +293,15 @@ describe Nanoc::Deploying::Deployers::Git, :stdio do
     end
 
     it 'recognises names' do
-      expect(val('denis')).to be
+      expect(val('denis')).to be(true)
     end
 
     it 'recognises URLs' do
-      expect(val('git@github.com:/foo')).not_to be
-      expect(val('http://example.com/donkey.git')).not_to be
-      expect(val('https://example.com/donkey.git')).not_to be
-      expect(val('ssh://example.com/donkey.git')).not_to be
-      expect(val('file:///example.com/donkey.git')).not_to be
+      expect(val('git@github.com:/foo')).to be(false)
+      expect(val('http://example.com/donkey.git')).to be(false)
+      expect(val('https://example.com/donkey.git')).to be(false)
+      expect(val('ssh://example.com/donkey.git')).to be(false)
+      expect(val('file:///example.com/donkey.git')).to be(false)
     end
   end
 end

@@ -18,7 +18,7 @@ describe 'Compile command', :site, :stdio do
 
       Nanoc::CLI.run(['compile'])
 
-      expect(File.file?('output.diff')).not_to be
+      expect(File.file?('output.diff')).to be(false)
     end
 
     it 'honors --diff' do
@@ -27,7 +27,7 @@ describe 'Compile command', :site, :stdio do
 
       Nanoc::CLI.run(['compile', '--diff'])
 
-      expect(File.file?('output.diff')).to be
+      expect(File.file?('output.diff')).to be(true)
     end
   end
 

@@ -39,13 +39,13 @@ shared_examples 'a generic rule' do
     context 'pattern matches' do
       let(:pattern) { Nanoc::Core::Pattern.from(%r{^/foo.*}) }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'pattern does not match' do
       let(:pattern) { Nanoc::Core::Pattern.from(%r{^/bar.*}) }
 
-      it { is_expected.not_to be }
+      it { is_expected.to be(false) }
     end
   end
 end

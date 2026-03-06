@@ -20,19 +20,19 @@ describe Nanoc::CLI::CompileListeners::DiffGenerator do
     end
 
     context 'default' do
-      it { is_expected.not_to be }
+      it { is_expected.to be_nil }
     end
 
     context 'enabled in config' do
       let(:config_hash) { { enable_output_diff: true } }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
 
     context 'enabled on command line' do
       let(:options) { { diff: true } }
 
-      it { is_expected.to be }
+      it { is_expected.to be(true) }
     end
   end
 

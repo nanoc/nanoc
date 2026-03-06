@@ -14,6 +14,6 @@ EOS
 
   it 'errors' do
     expect { Nanoc::CLI.run(['compile', '--verbose']) }.to raise_exception(Nanoc::Core::ItemRepRouter::RouteWithoutSlashError)
-    expect(File.file?('outputfoo.html')).not_to be
+    expect(File.file?('outputfoo.html')).to be(false)
   end
 end

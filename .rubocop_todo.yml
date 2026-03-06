@@ -12,24 +12,6 @@ RSpec/AnyInstance:
     - 'nanoc-cli/spec/nanoc/cli/commands/shell_spec.rb'
     - 'nanoc/spec/nanoc/regressions/gh_1572_spec.rb'
 
-# Offense count: 66
-RSpec/Be:
-  Exclude:
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/abstract_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli/compile_listeners/diff_generator_spec.rb'
-    - 'nanoc-cli/spec/nanoc/cli_spec.rb'
-    - 'nanoc-deploying/spec/nanoc/deploying/deployers/git_spec.rb'
-    - 'nanoc/spec/nanoc/integration/compile_command_spec.rb'
-    - 'nanoc/spec/nanoc/integration/partial_recompilation_spec.rb'
-    - 'nanoc/spec/nanoc/integration/write_nil_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1015_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1022_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1031_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1045_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_1134_spec.rb'
-    - 'nanoc/spec/nanoc/regressions/gh_828_spec.rb'
-    - 'nanoc/spec/nanoc/rule_dsl/rule_spec.rb'
-
 # Offense count: 1154
 # Configuration parameters: Prefixes, AllowedPatterns.
 # Prefixes: when, with, without
