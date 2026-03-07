@@ -36,6 +36,10 @@ module Nanoc
         textual_content_map.merge(binary_content_map)
       end
 
+      def include?(rep)
+        @textual_cache.include?(rep) || @binary_cache.include?(rep)
+      end
+
       contract Nanoc::Core::ItemRep,
                C::HashOf[Symbol => Nanoc::Core::Content] => C::Any
       # Sets the compiled content for the given representation.

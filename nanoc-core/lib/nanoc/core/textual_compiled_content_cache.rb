@@ -9,6 +9,34 @@ module Nanoc
     class TextualCompiledContentCache < ::Nanoc::Core::Store
       include Nanoc::Core::ContractsSupport
 
+      class LazyCompressedValue
+        def initialize(uncompressed: nil, compressed: nil)
+          if uncompressed.nil? && compressed.nil?
+            raise ArgumentError, 'must specify at least uncompressed or compressed'
+          end
+
+          @_uncompressed = uncompressed
+          @_compressed = compressed
+        end
+
+        def compressed
+          @_compressed ||= Zlib::Deflate.deflate(Marshal.dump(@_uncompressed), Zlib::BEST_SPEED)
+        end
+
+        def uncompressed
+          @_uncompressed ||= Marshal.load(Zlib::Inflate.inflate(@_compressed))
+        end
+
+        def marshal_dump
+          [compressed]
+        end
+
+        def marshal_load(array)
+          @_compressed = array[0]
+          @_uncompressed = nil
+        end
+      end
+
       contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
       def initialize(config:)
         super(
@@ -16,7 +44,7 @@ module Nanoc
             config:,
             store_name: 'compiled_content',
           ),
-          4,
+          5,
         )
 
         @cache = {}
@@ -30,7 +58,7 @@ module Nanoc
       # names, and the values the compiled content at the given snapshot.
       def [](rep)
         item_cache = @cache[rep.item.identifier] || {}
-        item_cache[rep.name]
+        item_cache[rep.name]&.uncompressed
       end
 
       contract Nanoc::Core::ItemRep => C::Bool
@@ -47,7 +75,7 @@ module Nanoc
       # names, and the values the compiled content at the given snapshot.
       def []=(rep, content)
         @cache[rep.item.identifier] ||= {}
-        @cache[rep.item.identifier][rep.name] = content
+        @cache[rep.item.identifier][rep.name] = LazyCompressedValue.new(uncompressed: content)
       end
 
       def prune(items:)
@@ -59,6 +87,25 @@ module Nanoc
 
           @cache.delete(key)
         end
+      end
+
+      # Similar to Store#load_data, but does not use zlib compression on the
+      # data itself (instead, values are compressed individually).
+      def load_data
+        raw_data = File.binread(data_filename)
+        self.data = Marshal.load(raw_data)
+      end
+
+      # Similar to Store#store_data, but does not use zlib compression on the
+      # data itself (instead, values are compressed individually).
+      def store_data
+        raw_data = Marshal.dump(data)
+        write_data_to_file(data_filename, raw_data)
+      end
+
+      # Identical to Store#store_data; replicated for clarity.
+      def reset_data
+        FileUtils.rm_f(data_filename)
       end
 
       protected
