@@ -2,5 +2,5 @@
 
 module Nanoc
   # The current Nanoc version.
-  VERSION = '4.14.6'
+  VERSION = '4.14.7'
 end
