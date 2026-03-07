@@ -12,8 +12,9 @@ module Nanoc
       contract C::KeywordArgs[config: Nanoc::Core::Configuration] => C::Any
       def initialize(config:)
         super(
-          Nanoc::Core::Store.tmp_path_for(config:, store_name: 'rule_memory'),
-          2)
+          self.class.tmp_path_for(config:, store_name: 'rule_memory'),
+          2,
+        )
 
         @action_sequences = {}
       end

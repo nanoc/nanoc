@@ -23,7 +23,7 @@ module Nanoc
         objects: C::IterOf[c_obj]] => C::Any
       def initialize(config:, objects:)
         super(
-          Nanoc::Core::Store.tmp_path_for(
+          self.class.tmp_path_for(
             config:,
             store_name: 'checksums',
           ),

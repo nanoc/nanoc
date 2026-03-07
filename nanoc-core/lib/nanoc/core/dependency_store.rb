@@ -46,7 +46,7 @@ module Nanoc
                Nanoc::Core::Configuration => C::Any
       def initialize(items, layouts, config)
         super(
-          Nanoc::Core::Store.tmp_path_for(config:, store_name: 'dependencies'),
+          self.class.tmp_path_for(config:, store_name: 'dependencies'),
           6,
         )
 
