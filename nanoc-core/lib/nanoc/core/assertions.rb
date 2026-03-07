@@ -42,7 +42,7 @@ module Nanoc
         contract C::None => C::Bool
         def call
           @item_reps.all? do |rep|
-            @compiled_content_cache[rep]
+            @compiled_content_cache.include?(rep)
           end
         end
       end
