@@ -1,5 +1,13 @@
 # Nanoc news
 
+## 4.14.7 (2026-03-07)
+
+Enhancements:
+
+- Add default `robots.txt`
+- Sped up incremental compilation
+- Improved verbose compilation output
+
 ## 4.14.6 (2025-12-31)
 
 Enhancements:
