@@ -105,7 +105,7 @@ module Nanoc
       rescue
         # An error occurred! Remove the database and try again
         FileUtils.rm_f(version_filename)
-        FileUtils.rm_f(data_filename)
+        reset_data
 
         # Try again
         unsafe_load_uninstrumented
@@ -115,7 +115,7 @@ module Nanoc
         FileUtils.mkdir_p(File.dirname(filename))
 
         write_obj_to_file(version_filename, version)
-        write_obj_to_file(data_filename, data)
+        store_data
 
         # Remove old file (back from the PStore days), if there are any.
         FileUtils.rm_f(filename)
@@ -131,8 +131,28 @@ module Nanoc
         read_version = read_obj_from_file(version_filename)
         return if read_version != version
 
-        # Load data
+        load_data
+      end
+
+      # Can be overridden by subclasses for finer-grained control over how data
+      # get (de)serialized. #load_data, #store_data and #reset_data must be
+      # implemented all together.
+      def load_data
         self.data = read_obj_from_file(data_filename)
+      end
+
+      # Can be overridden by subclasses for finer-grained control over how data
+      # get (de)serialized. #load_data, #store_data and #reset_data must be
+      # implemented all together.
+      def store_data
+        write_obj_to_file(data_filename, data)
+      end
+
+      # Can be overridden by subclasses for finer-grained control over how data
+      # get (de)serialized. #load_data, #store_data and #reset_data must be
+      # implemented all together.
+      def reset_data
+        FileUtils.rm_f(data_filename)
       end
 
       def write_obj_to_file(filename, obj)
