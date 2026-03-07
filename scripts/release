@@ -8,9 +8,9 @@ require 'octokit'
 require 'shellwords'
 require 'uri'
 
-def run(*)
+def run(*args)
   puts("<exec> #{args.map { |s| Shellwords.escape(s) }.join(' + ')}")
-  system(*)
+  system(*args)
 end
 
 if ARGV.size != 1
