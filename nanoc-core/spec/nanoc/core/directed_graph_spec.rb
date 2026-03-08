@@ -147,42 +147,6 @@ describe Nanoc::Core::DirectedGraph do
     end
   end
 
-  describe '#predecessors_of' do
-    subject { graph.predecessors_of('2') }
-
-    context 'requested for non-existant vertex' do
-      subject { graph.predecessors_of('12345') }
-
-      it { is_expected.to be_empty }
-      it { is_expected.to be_a(Set) }
-    end
-
-    context 'no predecessors' do
-      before do
-        graph.add_edge('2', '3')
-      end
-
-      it { is_expected.to be_empty }
-    end
-
-    context 'direct predecessor' do
-      before do
-        graph.add_edge('2', '3')
-        graph.add_edge('1', '2')
-      end
-
-      context 'no indirect predecessors' do
-        it { is_expected.to contain_exactly('1') }
-      end
-
-      context 'indirect predecessors' do
-        before { graph.add_edge('3', '1') }
-
-        it { is_expected.to contain_exactly('1', '2', '3') }
-      end
-    end
-  end
-
   describe '#delete_edges_to' do
     subject { graph.delete_edges_to('1') }
 

@@ -21,8 +21,6 @@ module Nanoc
     #   # Get (direct) predecessors
     #   graph.direct_predecessors_of('b').sort
     #     # => %w( a )
-    #   graph.predecessors_of('e').sort
-    #     # => %w( a b c d )
     #
     #   # Modify edges
     #   graph.delete_edges_to('c')
@@ -30,8 +28,6 @@ module Nanoc
     #   # Get (direct) predecessors again
     #   graph.direct_predecessors_of('e').sort
     #     # => %w( d )
-    #   graph.predecessors_of('e').sort
-    #     # => %w( c d )
     class DirectedGraph
       EMPTY_SET = Set.new.freeze
 
@@ -52,8 +48,6 @@ module Nanoc
         @from_graph = {}
 
         @edge_props = {}
-
-        invalidate_caches
       end
 
       def inspect
@@ -93,8 +87,6 @@ module Nanoc
         if props
           @edge_props[[from, to]] = props
         end
-
-        invalidate_caches
       end
 
       # Adds the given vertex to the graph.
@@ -123,8 +115,6 @@ module Nanoc
           @from_graph.delete(from)
         end
         @to_graph.delete(to)
-
-        invalidate_caches
       end
 
       # @group Querying the graph
@@ -141,17 +131,6 @@ module Nanoc
 
       def direct_successors_of(from)
         @from_graph.fetch(from, EMPTY_SET)
-      end
-
-      # Returns the predecessors of the given vertex, i.e. the vertices x for
-      # which there is a path from x to the given vertex y.
-      #
-      # @param to The vertex of which the predecessors should be calculated
-      #
-      # @return [Array] Predecessors of the given vertex
-      def predecessors_of(to)
-        @predecessors[to] ||=
-          recursively_find_vertices(to, :direct_predecessors_of)
       end
 
       def props_for(from, to)
@@ -177,40 +156,6 @@ module Nanoc
             end
         end
         result
-      end
-
-      private
-
-      # Invalidates cached data. This method should be called when the internal
-      # graph representation is changed.
-      def invalidate_caches
-        @predecessors = {}
-      end
-
-      # Recursively finds vertices, starting at the vertex start, using the
-      # given method, which should be a symbol to a method that takes a vertex
-      # and returns related vertices (e.g. predecessors, successors).
-      def recursively_find_vertices(start, method)
-        all_vertices = Set.new
-
-        processed_vertices   = Set.new
-        unprocessed_vertices = [start]
-
-        until unprocessed_vertices.empty?
-          # Get next unprocessed vertex
-          vertex = unprocessed_vertices.pop
-          next if processed_vertices.include?(vertex)
-
-          processed_vertices << vertex
-
-          # Add predecessors of this vertex
-          send(method, vertex).each do |v|
-            all_vertices << v unless all_vertices.include?(v)
-            unprocessed_vertices << v
-          end
-        end
-
-        all_vertices
       end
     end
   end
