@@ -40,8 +40,10 @@ module Nanoc
       # Creates a new directed graph with the given vertices.
       def initialize(vertices)
         @vertex_to_idx_map = {}
+        @vertices = []
         @next_vertex_idx = 0
         vertices.each do |v|
+          @vertices << v
           @vertex_to_idx_map[v] = @next_vertex_idx
           @next_vertex_idx += 1
         end
@@ -57,7 +59,7 @@ module Nanoc
       def inspect
         s = []
 
-        @vertex_to_idx_map.each_pair do |v2, _|
+        @vertices.each do |v2|
           direct_predecessors_of(v2).each do |v1|
             s << [
               "#{v1.inspect} -> #{v2.inspect} " \
@@ -103,6 +105,7 @@ module Nanoc
       def add_vertex(vertex)
         return if @vertex_to_idx_map.key?(vertex)
 
+        @vertices << vertex
         @vertex_to_idx_map[vertex] = @next_vertex_idx
         @next_vertex_idx += 1
       end
@@ -157,7 +160,7 @@ module Nanoc
 
       # @return [Array] The list of all vertices in this graph.
       def vertices
-        @vertex_to_idx_map.keys.sort_by { |v| @vertex_to_idx_map[v] }
+        @vertices
       end
 
       # Returns an array of tuples representing the edges. The result of this
@@ -166,7 +169,7 @@ module Nanoc
       # @return [Array] The list of all edges in this graph.
       def edges
         result = []
-        @vertex_to_idx_map.each_pair do |v2, i2|
+        @vertices.each_with_index do |v2, i2|
           direct_predecessors_of(v2)
             .map { |v1| [@vertex_to_idx_map[v1], v1] }
             .each do |i1, v1|
