@@ -278,7 +278,7 @@ describe Nanoc::Core::Configuration do
     let(:hash) { { foo: { bar: 100 } } }
     let(:config) { described_class.new(hash:, dir: Dir.getwd) }
 
-    it { is_expected.to eq('configuration') }
+    it { is_expected.to eq(:configuration) }
   end
 
   describe '#inspect' do

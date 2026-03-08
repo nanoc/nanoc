@@ -10,7 +10,7 @@ module Nanoc
       end
 
       def reference
-        'layouts'
+        :layouts
       end
     end
   end

@@ -95,7 +95,7 @@ module Nanoc
 
       # Returns an object that can be used for uniquely identifying objects.
       def reference
-        "item_rep:#{item.identifier}:#{name}"
+        :"item_rep:#{item.identifier}:#{name}"
       end
 
       def to_s

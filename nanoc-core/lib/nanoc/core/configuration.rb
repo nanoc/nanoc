@@ -188,7 +188,7 @@ module Nanoc
       #
       # @return [Object] An unique reference to this object
       def reference
-        'configuration'
+        :configuration
       end
 
       def inspect

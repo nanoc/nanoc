@@ -10,7 +10,7 @@ module Nanoc
       end
 
       def reference
-        'items'
+        :items
       end
     end
   end

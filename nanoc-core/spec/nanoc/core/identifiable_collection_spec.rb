@@ -252,13 +252,13 @@ describe Nanoc::Core::IdentifiableCollection do
   end
 
   describe Nanoc::Core::ItemCollection do
-    let(:expected_reference) { 'items' }
+    let(:expected_reference) { :items }
 
     it_behaves_like 'a generic identifiable collection'
   end
 
   describe Nanoc::Core::LayoutCollection do
-    let(:expected_reference) { 'layouts' }
+    let(:expected_reference) { :layouts }
 
     it_behaves_like 'a generic identifiable collection'
   end

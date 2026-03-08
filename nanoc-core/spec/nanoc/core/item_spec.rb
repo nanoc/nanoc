@@ -7,14 +7,14 @@ describe Nanoc::Core::Item do
     let(:item) { described_class.new('hi', {}, '/foo.md') }
 
     it 'has the proper reference' do
-      expect(item.reference).to eql('item:/foo.md')
+      expect(item.reference).to be(:'item:/foo.md')
     end
 
     it 'updates reference after updating identifier' do
       expect { item.identifier = '/foo2.md' }
         .to change(item, :reference)
-        .from('item:/foo.md')
-        .to('item:/foo2.md')
+        .from(:'item:/foo.md')
+        .to(:'item:/foo2.md')
     end
   end
 end
