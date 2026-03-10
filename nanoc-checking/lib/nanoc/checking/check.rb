@@ -42,6 +42,8 @@ module Nanoc
             reps:,
           )
 
+        @store = Nanoc::Core::Store.tmp_path_for(config: site.config, store_name: 'last_good_check')
+
         context = {
           items: Nanoc::Core::PostCompileItemCollectionView.new(site.items, view_context),
           layouts: Nanoc::Core::LayoutCollectionView.new(site.layouts, view_context),
@@ -91,6 +93,25 @@ module Nanoc
       def output_html_filenames
         output_filenames.select { |f| File.extname(f) =~ /\A\.x?html?\z/ }
       end
+
+      def output_changed_filenames
+        if File.exist?(store_record)
+          latest_good = File.mtime(store_record)
+          output_filenames.reject { |f| File.mtime(f) < latest_good }
+        else
+          output_filenames
+        end
+      end
+
+      def ok?
+        if @issues.empty?
+          FileUtils.mkdir_p(self.class.store)
+          FileUtils.touch(store_record)
+        end
+      end
+
+      def self.store = @store
+      def store_record = File.join(self.class.store, self.class.identifier.to_s)
     end
   end
 end
