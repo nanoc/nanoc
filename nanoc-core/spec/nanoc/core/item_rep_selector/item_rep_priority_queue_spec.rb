@@ -11,13 +11,13 @@ describe Nanoc::Core::ItemRepSelector::ItemRepPriorityQueue do
 
   let(:items) do
     [
-      Nanoc::Core::Item.new('item A', {}, '/a.md'),
-      Nanoc::Core::Item.new('item B', {}, '/b.md'),
-      Nanoc::Core::Item.new('item C', {}, '/c.md'),
-      Nanoc::Core::Item.new('item D', {}, '/d.md'),
-      Nanoc::Core::Item.new('item E', {}, '/e.md'),
-      Nanoc::Core::Item.new('item F', {}, '/f.md'),
-      Nanoc::Core::Item.new('item G', {}, '/g.md'),
+      Nanoc::Core::Item.new('item 0', {}, '/item-0.md'),
+      Nanoc::Core::Item.new('item 1', {}, '/item-1.md'),
+      Nanoc::Core::Item.new('item 2', {}, '/item-2.md'),
+      Nanoc::Core::Item.new('item 3', {}, '/item-3.md'),
+      Nanoc::Core::Item.new('item 4', {}, '/item-4.md'),
+      Nanoc::Core::Item.new('item 5', {}, '/item-5.md'),
+      Nanoc::Core::Item.new('item 6', {}, '/item-6.md'),
     ]
   end
 
