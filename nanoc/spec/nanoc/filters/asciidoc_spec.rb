@@ -9,6 +9,6 @@ describe Nanoc::Filters::AsciiDoc do
 
   example do
     expect(subject.setup_and_run('== Blah blah'))
-      .to match(%r{<h2 id="_blah_blah">Blah blah</h2>})
+      .to include('<h2 id="_blah_blah">Blah blah</h2>')
   end
 end

@@ -55,12 +55,11 @@ module Nanoc
         # the suggested alternative (Array#include?) carries a measurable
         # performance penatly.
         #
-        # rubocop:disable Style/MultipleComparison
+        # rubocop:disable-next Style/MultipleComparison
         klass == Nanoc::Core::Item ||
           klass == Nanoc::Core::Layout ||
           klass == Nanoc::Core::CompilationItemView ||
           klass == Nanoc::Core::LayoutView
-        # rubocop:enable Style/MultipleComparison
       end
     end
   end

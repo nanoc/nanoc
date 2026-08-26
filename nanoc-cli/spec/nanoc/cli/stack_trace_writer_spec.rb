@@ -57,7 +57,7 @@ describe Nanoc::CLI::StackTraceWriter do
 
       it 'does not contain a see-more explanation' do
         subject
-        expect(io.string).not_to match(/crash\.log/)
+        expect(io.string).not_to include('crash.log')
       end
     end
 

@@ -392,3 +392,19 @@ Style/SelectByRange: # new in 1.85
   Enabled: true
 Style/TallyMethod: # new in 1.85
   Enabled: true
+Lint/ArgumentMismatch: # new in 1.90
+  Enabled: true
+Lint/DeprecatedReference: # new in 1.89
+  Enabled: true
+Lint/NameTypo: # new in 1.89
+  Enabled: true
+Lint/SuperArgumentMismatch: # new in 1.90
+  Enabled: true
+Style/DirectiveScope: # new in 1.90
+  Enabled: true
+Style/TimeNow: # new in 1.90
+  Enabled: true
+RSpec/DiscardedMatcher: # new in 3.10
+  Enabled: true
+RSpec/MatchWithSimpleRegex: # new in 3.10
+  Enabled: true

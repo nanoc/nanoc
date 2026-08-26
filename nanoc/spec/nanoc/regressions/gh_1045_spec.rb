@@ -33,7 +33,7 @@ describe 'GH-1045', :site, :stdio do
     expect(File.file?('output/sitemap.xml')).to be(true)
     contents = File.read('output/sitemap.xml')
     expect(contents).to match(%r{<loc>http://example.com/foo/</loc>})
-    expect(contents).to match(%r{<lastmod>2015-03-02</lastmod>})
+    expect(contents).to include('<lastmod>2015-03-02</lastmod>')
   end
 
   it 'updates the sitemap' do
@@ -45,6 +45,6 @@ describe 'GH-1045', :site, :stdio do
     expect(File.file?('output/sitemap.xml')).to be(true)
     contents = File.read('output/sitemap.xml')
     expect(contents).to match(%r{<loc>http://example.com/foo/</loc>})
-    expect(contents).to match(%r{<lastmod>2016-04-03</lastmod>})
+    expect(contents).to include('<lastmod>2016-04-03</lastmod>')
   end
 end

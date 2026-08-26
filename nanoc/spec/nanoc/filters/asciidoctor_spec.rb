@@ -8,5 +8,5 @@ describe Nanoc::Filters::Asciidoctor do
   let(:input) { '== Blah blah' }
   let(:params) { {} }
 
-  it { is_expected.to match(%r{<h2 id="_blah_blah">Blah blah</h2>}) }
+  it { is_expected.to include('<h2 id="_blah_blah">Blah blah</h2>') }
 end

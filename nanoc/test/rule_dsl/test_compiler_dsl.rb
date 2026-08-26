@@ -299,9 +299,8 @@ class Nanoc::RuleDSL::CompilerDSLTest < Nanoc::TestCase
 
     pattern = compiler_dsl.create_pattern(%r{\A/foo/a*/})
 
-    # rubocop:disable Minitest/AssertMatch
+    # rubocop:disable-next Minitest/AssertMatch
     assert pattern.match?('/foo/aaaa/')
-    # rubocop:enable Minitest/AssertMatch
   end
 
   def test_create_pattern_with_string_with_unknown_string_pattern_type

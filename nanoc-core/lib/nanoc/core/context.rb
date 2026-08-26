@@ -33,11 +33,10 @@ module Nanoc
       # Returns a binding for this instance.
       #
       # @return [Binding] A binding for this instance
-      # rubocop:disable Naming/AccessorMethodName
+      # rubocop:disable-next Naming/AccessorMethodName
       def get_binding
         binding
       end
-      # rubocop:enable Naming/AccessorMethodName
 
       def method_missing(method, *args, &)
         ivar_name = "@#{method}"

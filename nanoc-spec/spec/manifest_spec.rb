@@ -2,6 +2,6 @@
 
 describe 'manifest', chdir: false do
   example do
-    expect('nanoc-spec').to have_a_valid_manifest
+    expect('nanoc-spec').to have_a_valid_manifest # rubocop:disable RSpec/ExpectActual
   end
 end

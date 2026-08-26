@@ -104,7 +104,7 @@ describe Nanoc::Checking::Checks::ExternalLinks do
 
     let(:check) do
       described_class.create(site).tap do |c|
-        # rubocop:disable RSpec/InstanceVariable
+        # rubocop:disable-next RSpec/InstanceVariable
         def c.request_url_once(_url)
           @enum ||= Enumerator.new do |y|
             y << Net::HTTPResponse.new('1.1', '302', 'look elsewhere').tap do |h|
@@ -114,7 +114,6 @@ describe Nanoc::Checking::Checks::ExternalLinks do
           end
           @enum.next
         end
-        # rubocop:enable RSpec/InstanceVariable
       end
     end
 
@@ -132,14 +131,13 @@ describe Nanoc::Checking::Checks::ExternalLinks do
 
     let(:check) do
       described_class.create(site).tap do |c|
-        # rubocop:disable RSpec/InstanceVariable
+        # rubocop:disable-next RSpec/InstanceVariable
         def c.request_url_once(_url)
           @enum ||= Enumerator.new do |y|
             y << Net::HTTPResponse.new('1.1', '302', 'look elsewhere')
           end
           @enum.next
         end
-        # rubocop:enable RSpec/InstanceVariable
       end
     end
 
@@ -212,7 +210,7 @@ describe Nanoc::Checking::Checks::ExternalLinks do
 
       expect(check.issues.size).to eq(1)
       expect(check.issues.first.description)
-        .to match(%r{broken reference to <http://localhost:1234/ink_luded>: Failed to open TCP connection})
+        .to include('broken reference to <http://localhost:1234/ink_luded>: Failed to open TCP connection')
     end
   end
 
