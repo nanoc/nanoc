@@ -99,13 +99,18 @@ describe Nanoc::Live::LiveRecompiler, :fork, :site, :stdio do
     Process.waitpid(pid)
   end
 
-  it 'detects lib changes' do
+  it 'detects changes in configured lib directories' do
     command = nil
     command_runner = Nanoc::CLI::CommandRunner.new({}, [], command)
     live_recompiler = described_class.new(command_runner:, focus:)
 
-    FileUtils.mkdir_p('lib')
-    File.write('lib/lol.rb', 'def greeting; "hi"; end')
+    File.write('nanoc.yaml', <<~YAML)
+      lib_dirs:
+        - custom_lib
+        - shared_lib
+    YAML
+    FileUtils.mkdir_p(%w[custom_lib shared_lib])
+    File.write('shared_lib/lol.rb', 'def greeting; "hi"; end')
     File.write('content/lol.html', '<%= greeting %>')
     File.write('Rules', <<~RULES)
       compile '/**/*' do
@@ -126,7 +131,7 @@ describe Nanoc::Live::LiveRecompiler, :fork, :site, :stdio do
     expect(File.read('output/lol.html')).to eq('hi')
 
     sleep 1.0 # HFS+ mtime resolution is 1s
-    File.write('lib/lol.rb', 'def greeting; "yo"; end')
+    File.write('shared_lib/lol.rb', 'def greeting; "yo"; end')
     sleep 0.1 until File.file?('output/lol.html') && File.read('output/lol.html') == 'yo'
 
     # Stop

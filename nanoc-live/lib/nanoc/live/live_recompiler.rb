@@ -113,7 +113,8 @@ module Nanoc
 
       def gen_lib_changes
         Nanoc::Core::ChangesStream.new do |cl|
-          listener = Listen.to('lib') { |*| cl.lib }
+          lib_dirs = Nanoc::Core::ConfigLoader.new.new_from_cwd[:lib_dirs]
+          listener = Listen.to(*lib_dirs) { |*| cl.lib }
           listener.start
           sleep
         end
