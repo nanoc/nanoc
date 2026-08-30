@@ -109,7 +109,7 @@ describe Nanoc::Live::LiveRecompiler, :fork, :site, :stdio do
         - custom_lib
         - shared_lib
     YAML
-    FileUtils.mkdir_p(%w[custom_lib shared_lib])
+    FileUtils.mkdir_p(['custom_lib', 'shared_lib'])
     File.write('shared_lib/lol.rb', 'def greeting; "hi"; end')
     File.write('content/lol.html', '<%= greeting %>')
     File.write('Rules', <<~RULES)
