@@ -64,7 +64,7 @@ module Nanoc
       def run_parent(&block)
         # create initial child
         pipe_read, pipe_write = IO.pipe
-        fork { run_child(pipe_write, pipe_read, &block) }
+        child_pid = fork { run_child(pipe_write, pipe_read, &block) }
         pipe_read.close
 
         changes = gen_lib_changes
@@ -73,14 +73,20 @@ module Nanoc
           # stop child
           pipe_write.write('q')
           pipe_write.close
-          Process.wait
+          Process.waitpid(child_pid)
 
           # create new child
           pipe_read, pipe_write = IO.pipe
-          fork { run_child(pipe_write, pipe_read, &block) }
+          child_pid = fork { run_child(pipe_write, pipe_read, &block) }
           pipe_read.close
         end
       rescue Interrupt
+      ensure
+        changes&.stop
+
+        pipe_write&.write('q')
+        pipe_write&.close
+        Process.waitpid(child_pid) if child_pid
       end
 
       def handle_changes(site, command_runner, focus:)
@@ -115,6 +121,7 @@ module Nanoc
         Nanoc::Core::ChangesStream.new do |cl|
           lib_dirs = Nanoc::Core::ConfigLoader.new.new_from_cwd[:lib_dirs]
           listener = Listen.to(*lib_dirs) { |*| cl.lib }
+          cl.to_stop { listener.stop }
           listener.start
           sleep
         end
