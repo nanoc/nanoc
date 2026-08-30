@@ -137,7 +137,7 @@ module Nanoc
         file_a = File.join(Dir.pwd, 'file-a.html')
         File.open(file_a, 'w') do |io|
           io << %(<blockquote cite="urn:uuid:6650eb58-86e6-416c-906a-35336e5ac8b2">A 1</blockquote>)
-          io << %(<a href="ms-settings:windows-update" ping="https://tracking.nanoc.ws/ping">A 2</a>)
+          io << %(<a href="ms-settings:windows-update" ping="https://tracking.nanoc.denisdefreyne.com/ping">A 2</a>)
           io << %(<div about="https://nanoc.denisdefreyne.com/#static-generator">A 3</div>)
           io << %(<base href="https://nanoc.denisdefreyne.com/all-your-base-are-belong-to-us" />)
         end
@@ -150,7 +150,7 @@ module Nanoc
 
         assert_includes hrefs, 'urn:uuid:6650eb58-86e6-416c-906a-35336e5ac8b2'
         assert_includes hrefs, 'ms-settings:windows-update'
-        assert_includes hrefs, 'https://tracking.nanoc.ws/ping'
+        assert_includes hrefs, 'https://tracking.nanoc.denisdefreyne.com/ping'
         refute_includes hrefs, 'https://nanoc.denisdefreyne.com/#static-generator'
         assert_includes hrefs, 'https://nanoc.denisdefreyne.com/'
         assert_includes hrefs, 'https://nanoc.denisdefreyne.com/all-your-base-are-belong-to-us'

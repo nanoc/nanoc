@@ -59,13 +59,13 @@ describe Nanoc::Checking::Checks::MixedContent do
 
   it 'handles protocol-relative paths' do
     create_output_file('foo.html', [
-      '<img src="//nanoc.ws/logo.png" />',
-      '<link href="//nanoc.ws/style.css" />',
-      '<script src="//nanoc.ws/app.js"></script>',
-      '<form action="//nanoc.ws/process.cgi"></form>',
-      '<iframe src="//nanoc.ws/preview.html"></iframe>',
-      '<audio src="//nanoc.ws/theme-song.flac"></audio>',
-      '<video src="//nanoc.ws/screen-cast.mkv"></video>',
+      '<img src="//nanoc.denisdefreyne.com/logo.png" />',
+      '<link href="//nanoc.denisdefreyne.com/style.css" />',
+      '<script src="//nanoc.denisdefreyne.com/app.js"></script>',
+      '<form action="//nanoc.denisdefreyne.com/process.cgi"></form>',
+      '<iframe src="//nanoc.denisdefreyne.com/preview.html"></iframe>',
+      '<audio src="//nanoc.denisdefreyne.com/theme-song.flac"></audio>',
+      '<video src="//nanoc.denisdefreyne.com/screen-cast.mkv"></video>',
     ])
 
     check.run
@@ -119,13 +119,13 @@ describe Nanoc::Checking::Checks::MixedContent do
 
   it 'handles HTTP URLs' do
     create_output_file('foo.html', [
-      '<img src="HTTP://nanoc.ws/logo.png" />',
-      '<link href="http://nanoc.ws/style.css" />',
-      '<script src="http://nanoc.ws/app.js"></script>',
-      '<form action="http://nanoc.ws/process.cgi"></form>',
-      '<iframe src="http://nanoc.ws/preview.html"></iframe>',
-      '<audio src="http://nanoc.ws/theme-song.flac"></audio>',
-      '<video src="http://nanoc.ws/screencast.mkv"></video>',
+      '<img src="HTTP://nanoc.denisdefreyne.com/logo.png" />',
+      '<link href="http://nanoc.denisdefreyne.com/style.css" />',
+      '<script src="http://nanoc.denisdefreyne.com/app.js"></script>',
+      '<form action="http://nanoc.denisdefreyne.com/process.cgi"></form>',
+      '<iframe src="http://nanoc.denisdefreyne.com/preview.html"></iframe>',
+      '<audio src="http://nanoc.denisdefreyne.com/theme-song.flac"></audio>',
+      '<video src="http://nanoc.denisdefreyne.com/screencast.mkv"></video>',
     ])
 
     check.run
@@ -135,30 +135,30 @@ describe Nanoc::Checking::Checks::MixedContent do
     descriptions = issues.map(&:description)
     expect(issues.map(&:subject)).to all(eq('output/foo.html'))
 
-    expect(descriptions).to include('mixed content include: http://nanoc.ws/logo.png')
-    expect(descriptions).to include('mixed content include: http://nanoc.ws/style.css')
-    expect(descriptions).to include('mixed content include: http://nanoc.ws/app.js')
-    expect(descriptions).to include('mixed content include: http://nanoc.ws/process.cgi')
-    expect(descriptions).to include('mixed content include: http://nanoc.ws/preview.html')
-    expect(descriptions).to include('mixed content include: http://nanoc.ws/theme-song.flac')
-    expect(descriptions).to include('mixed content include: http://nanoc.ws/screencast.mkv')
+    expect(descriptions).to include('mixed content include: http://nanoc.denisdefreyne.com/logo.png')
+    expect(descriptions).to include('mixed content include: http://nanoc.denisdefreyne.com/style.css')
+    expect(descriptions).to include('mixed content include: http://nanoc.denisdefreyne.com/app.js')
+    expect(descriptions).to include('mixed content include: http://nanoc.denisdefreyne.com/process.cgi')
+    expect(descriptions).to include('mixed content include: http://nanoc.denisdefreyne.com/preview.html')
+    expect(descriptions).to include('mixed content include: http://nanoc.denisdefreyne.com/theme-song.flac')
+    expect(descriptions).to include('mixed content include: http://nanoc.denisdefreyne.com/screencast.mkv')
 
-    expect(descriptions).not_to include('mixed content include: HTTP://nanoc.ws/logo.png')
+    expect(descriptions).not_to include('mixed content include: HTTP://nanoc.denisdefreyne.com/logo.png')
   end
 
   it 'ignores inert content' do
     create_output_file('foo.html', [
-      '<a href="http://nanoc.ws">The homepage</a>',
+      '<a href="http://nanoc.denisdefreyne.com">The homepage</a>',
       '<a name="Not a link">Content</a>',
       '<script>// inline JavaScript</script>',
-      '<img href="http://nanoc.ws/logo.png" />',
-      '<link src="http://nanoc.ws/style.css" />',
-      '<script href="http://nanoc.ws/app.js"></script>',
-      '<form src="http://nanoc.ws/process.cgi"></form>',
-      '<iframe href="http://nanoc.ws/preview.html"></iframe>',
-      '<audio href="http://nanoc.ws/theme-song.flac"></audio>',
-      '<video target="http://nanoc.ws/screen-cast.mkv"></video>',
-      '<p>http://nanoc.ws/harmless-text</p>',
+      '<img href="http://nanoc.denisdefreyne.com/logo.png" />',
+      '<link src="http://nanoc.denisdefreyne.com/style.css" />',
+      '<script href="http://nanoc.denisdefreyne.com/app.js"></script>',
+      '<form src="http://nanoc.denisdefreyne.com/process.cgi"></form>',
+      '<iframe href="http://nanoc.denisdefreyne.com/preview.html"></iframe>',
+      '<audio href="http://nanoc.denisdefreyne.com/theme-song.flac"></audio>',
+      '<video target="http://nanoc.denisdefreyne.com/screen-cast.mkv"></video>',
+      '<p>http://nanoc.denisdefreyne.com/harmless-text</p>',
     ])
 
     check.run
