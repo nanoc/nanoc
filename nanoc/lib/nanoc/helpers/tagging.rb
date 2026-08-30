@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nanoc::Helpers
-  # @see https://nanoc.app/doc/reference/helpers/#tagging
+  # @see https://nanoc.denisdefreyne.com/doc/reference/helpers/#tagging
   module Tagging
     require 'nanoc/helpers/html_escape'
     include Nanoc::Helpers::HTMLEscape

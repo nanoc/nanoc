@@ -5,7 +5,7 @@ require_relative 'lib/guard/nanoc/version'
 Gem::Specification.new do |s|
   s.name          = 'guard-nanoc'
   s.version       = Guard::GUARD_NANOC_VERSION
-  s.homepage      = 'https://nanoc.app/'
+  s.homepage      = 'https://nanoc.denisdefreyne.com/'
   s.summary       = 'guard gem for Nanoc'
   s.description   = 'Automatically rebuilds Nanoc sites'
   s.license       = 'MIT'

@@ -51,9 +51,9 @@ describe Nanoc::Helpers::Tagging, :helper do
       end
 
       context 'explicit other base_url' do
-        let(:params) { { base_url: 'https://nanoc.app/tag/' } }
+        let(:params) { { base_url: 'https://nanoc.denisdefreyne.com/tag/' } }
 
-        it { is_expected.to eql('<a href="https://nanoc.app/tag/donkey" rel="tag">donkey</a>') }
+        it { is_expected.to eql('<a href="https://nanoc.denisdefreyne.com/tag/donkey" rel="tag">donkey</a>') }
       end
     end
 
@@ -105,14 +105,14 @@ describe Nanoc::Helpers::Tagging, :helper do
     subject { helper.link_for_tag(tag, base_url) }
 
     let(:tag) { 'foo' }
-    let(:base_url) { 'https://nanoc.app/tag/' }
+    let(:base_url) { 'https://nanoc.denisdefreyne.com/tag/' }
 
-    it { is_expected.to eql('<a href="https://nanoc.app/tag/foo" rel="tag">foo</a>') }
+    it { is_expected.to eql('<a href="https://nanoc.denisdefreyne.com/tag/foo" rel="tag">foo</a>') }
 
     context 'tag with special HTML characters' do
       let(:tag) { 'R&D' }
 
-      it { is_expected.to eql('<a href="https://nanoc.app/tag/R&amp;D" rel="tag">R&amp;D</a>') }
+      it { is_expected.to eql('<a href="https://nanoc.denisdefreyne.com/tag/R&amp;D" rel="tag">R&amp;D</a>') }
     end
   end
 end

@@ -210,14 +210,14 @@ module Nanoc::CLI::Commands
           <div id="sidebar">
             <h2>Documentation</h2>
             <ul>
-              <li><a href="https://nanoc.app/doc/">Documentation</a></li>
-              <li><a href="https://nanoc.app/doc/tutorial/">Tutorial</a></li>
+              <li><a href="https://nanoc.denisdefreyne.com/doc/">Documentation</a></li>
+              <li><a href="https://nanoc.denisdefreyne.com/doc/tutorial/">Tutorial</a></li>
             </ul>
             <h2>Community</h2>
             <ul>
               <li><a href="http://groups.google.com/group/nanoc/">Discussion group</a></li>
               <li><a href="https://gitter.im/nanoc/nanoc">Gitter channel</a></li>
-              <li><a href="https://nanoc.app/contributing/">Contributing</a></li>
+              <li><a href="https://nanoc.denisdefreyne.com/contributing/">Contributing</a></li>
             </ul>
           </div>
         </body>

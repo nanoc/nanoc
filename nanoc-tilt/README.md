@@ -1,6 +1,6 @@
 # nanoc-tilt
 
-This provides a filter that allows [Nanoc](https://nanoc.app) to process content via [Tilt](https://github.com/rtomayko/tilt).
+This provides a filter that allows [Nanoc](https://nanoc.denisdefreyne.com) to process content via [Tilt](https://github.com/rtomayko/tilt).
 
 ## Installation
 

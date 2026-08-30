@@ -5,7 +5,7 @@ require_relative 'lib/nanoc/org_mode/version'
 Gem::Specification.new do |s|
   s.name        = 'nanoc-org-mode'
   s.version     = Nanoc::OrgMode::VERSION
-  s.homepage    = 'https://nanoc.app/'
+  s.homepage    = 'https://nanoc.denisdefreyne.com/'
   s.summary     = 'Org Mode filter for Nanoc'
   s.description = 'Provides an :org_mode filter for Nanoc'
   s.author      = 'Denis Defreyne'

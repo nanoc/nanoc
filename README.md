@@ -7,9 +7,9 @@
 
 # Nanoc
 
-Nanoc is a flexible static-site generator written in Ruby. See the [Nanoc web site](https://nanoc.app) for more information.
+Nanoc is a flexible static-site generator written in Ruby. See the [Nanoc web site](https://nanoc.denisdefreyne.com) for more information.
 
-Contributions are greatly appreciated! Consult the [guidelines](https://nanoc.app/contributing/) for information on how you can contribute.
+Contributions are greatly appreciated! Consult the [guidelines](https://nanoc.denisdefreyne.com/contributing/) for information on how you can contribute.
 
 Many thanks to everyone who has contributed to Nanoc in one way or another:
 

@@ -1,6 +1,6 @@
 # nanoc-org-mode
 
-This provides a filter that allows [Nanoc](https://nanoc.app) to process content via [Org Mode](https://orgmode.org/).
+This provides a filter that allows [Nanoc](https://nanoc.denisdefreyne.com) to process content via [Org Mode](https://orgmode.org/).
 
 ## Installation
 

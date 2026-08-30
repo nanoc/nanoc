@@ -1,6 +1,6 @@
 # nanoc-dart-sass
 
-This provides a filter that allows [Nanoc](https://nanoc.app) to process content via [Dart Sass](https://sass-lang.com/dart-sass).
+This provides a filter that allows [Nanoc](https://nanoc.denisdefreyne.com) to process content via [Dart Sass](https://sass-lang.com/dart-sass).
 
 This filter offers similar functionality to Nanoc’s built-in `:sass` filter. The built-in `:sass` filter, however, uses the [Ruby Sass](https://sass-lang.com/ruby-sass) implementation, which has reached end of life.
 
