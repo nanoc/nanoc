@@ -215,8 +215,8 @@ module Nanoc::CLI::Commands
             </ul>
             <h2>Community</h2>
             <ul>
-              <li><a href="http://groups.google.com/group/nanoc/">Discussion group</a></li>
-              <li><a href="https://gitter.im/nanoc/nanoc">Gitter channel</a></li>
+              <li><a href="https://github.com/nanoc/nanoc/discussions">GitHub Discussions</a></li>
+              <li><a href="http://groups.google.com/group/nanoc/">Google Discussions</a></li>
               <li><a href="https://nanoc.denisdefreyne.com/contributing/">Contributing</a></li>
             </ul>
           </div>
