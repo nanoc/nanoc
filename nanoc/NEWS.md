@@ -1,5 +1,11 @@
 # Nanoc news
 
+## 4.14.8 (2026-08-30)
+
+Fixes:
+
+- Fixed an issue which would not fully propagate outdatedness through dependencies that use (feature-flagged) `#where` (#1787)
+
 ## 4.14.7 (2026-03-07)
 
 Enhancements:
