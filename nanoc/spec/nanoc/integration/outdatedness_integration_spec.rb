@@ -122,6 +122,49 @@ describe 'Outdatedness integration', :site, :stdio do
     end
   end
 
+  context 'attribute dependency on an item collection' do
+    let(:time) { Time.now }
+
+    around do |example|
+      Nanoc::Core::Feature.enable('where') { example.run }
+    end
+
+    before do
+      File.write('content/nanoc.md', "---\ntitle: Nanoc\nkind: bork\n---\n")
+      File.write(
+        'content/index.erb',
+        '<% @items.where(kind: "work").each do |item| %><%= item[:title] %><% end %>',
+      )
+
+      FileUtils.touch('content/nanoc.md', mtime: time)
+      FileUtils.touch('content/index.erb', mtime: time)
+
+      File.write('Rules', <<~EOS)
+        compile '/nanoc.md' do
+          write '/work.html'
+        end
+
+        compile '/index.erb' do
+          filter :erb
+          write '/index.html'
+        end
+      EOS
+
+      Nanoc::CLI.run(['compile'])
+    end
+
+    it 'recompiles correctly when an item enters a filtered collection' do
+      expect(File.read('output/index.html')).to eq('')
+
+      File.write('content/nanoc.md', "---\ntitle: Nanoc\nkind: work\n---\n")
+      FileUtils.touch('content/nanoc.md', mtime: time + 1)
+
+      Nanoc::CLI.run(['compile'])
+
+      expect(File.read('output/index.html')).to eq('Nanoc')
+    end
+  end
+
   context 'only raw content dependency' do
     before do
       File.write('content/foo.md', "---\ntitle: hello\n---\n\nfoo")
