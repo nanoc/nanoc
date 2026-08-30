@@ -93,7 +93,7 @@ module Nanoc
         objs_outdated_due_to_dependencies = Set.new
 
         seen = Set.new
-        pending = [nil] + basic_outdated_objs.to_a
+        pending = [nil, @site.items, @site.layouts] + basic_outdated_objs.to_a
         until pending.empty?
           obj = pending.shift
           obj = obj.item if obj.is_a?(Nanoc::Core::ItemRep)

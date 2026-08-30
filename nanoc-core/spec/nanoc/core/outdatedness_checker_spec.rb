@@ -633,6 +633,52 @@ describe Nanoc::Core::OutdatednessChecker do
     end
   end
 
+  context 'when an item enters an attribute-filtered item collection' do
+    let(:item_article_a_before) do
+      Nanoc::Core::Item.new(
+        'Article A', { kind: 'note' }, '/articles/2019-a.md'
+      )
+    end
+
+    let(:item_article_a_after) do
+      Nanoc::Core::Item.new(
+        'Article A', { kind: 'article' }, '/articles/2019-a.md'
+      )
+    end
+
+    let(:item_article_a_rep_after) do
+      Nanoc::Core::ItemRep.new(item_article_a_after, :default)
+    end
+
+    before do
+      old_dependency_store = Nanoc::Core::DependencyStore.new(
+        items_before_coll,
+        layouts_before_coll,
+        config_before,
+      )
+      old_dependency_store.record_dependency(
+        items_before_coll,
+        item_articles_before,
+        attributes: { kind: 'article' },
+      )
+      old_dependency_store.store
+
+      dependency_store.items = items_after_coll
+      dependency_store.layouts = layouts_after_coll
+      dependency_store.load
+    end
+
+    it 'marks the item as outdated' do
+      expect(oc.outdatedness_reasons_for(item_article_a_after))
+        .to contain_exactly(Nanoc::Core::OutdatednessReasons::AttributesModified)
+    end
+
+    it 'marks the item that depends on the collection as outdated' do
+      expect(oc.outdatedness_reasons_for(item_articles_after))
+        .to contain_exactly(Nanoc::Core::OutdatednessReasons::DependenciesOutdated)
+    end
+  end
+
   context 'when layout has changed raw content' do
     let(:layout_default_after) do
       Nanoc::Core::Layout.new('Default UPDATED', { kind: 'default' }, '/default.html.erb')
