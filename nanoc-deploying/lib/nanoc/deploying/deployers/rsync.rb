@@ -36,9 +36,9 @@ module Nanoc
           '--times',
           '--verbose',
           '--compress',
-          '--exclude=".hg"',
-          '--exclude=".svn"',
-          '--exclude=".git"',
+          '--exclude=.hg',
+          '--exclude=.svn',
+          '--exclude=.git',
         ].freeze
 
         # @see Nanoc::Deploying::Deployer#run
@@ -64,7 +64,26 @@ module Nanoc
         private
 
         def run_shell_cmd(cmd)
-          TTY::Command.new(uuid: false).run(*cmd)
+          status = nil
+
+          Open3.popen3(*cmd) do |_stdin, stdout, stderr, wait_thr|
+            stdout_thread = Thread.new do
+              stdout.each_line { $stdout << _1 }
+            end
+
+            stderr_thread = Thread.new do
+              stderr.each_line { $stderr << _1 }
+            end
+
+            stdout_thread.join
+            stderr_thread.join
+
+            status = wait_thr.value
+          end
+
+          unless status.success?
+            raise "Command failed with exit status #{status.exitstatus}"
+          end
         end
       end
     end
