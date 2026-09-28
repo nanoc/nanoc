@@ -1,5 +1,11 @@
 # nanoc-deploying news
 
+## 1.0.4 (2026-09-28)
+
+Fixes:
+
+- Fix the incorrect escaping of the rsync deployer’s default `--exclude` options (#1789, #1790)
+
 ## 1.0.3 (2025-10-30)
 
 Enhancements:
