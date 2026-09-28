@@ -44,27 +44,49 @@ describe Nanoc::Deploying::Deployers::Rsync, :stdio do
   end
 
   context 'destination is correct' do
-    let(:config) { { dst: 'asdf' } }
+    let(:dst_dir) { Dir.mktmpdir('nanoc-rsync-test') }
+    let(:config) { { dst: dst_dir } }
 
     context 'dry run' do
       let(:extra_opts) { { dry_run: true } }
 
-      it 'runs' do
-        opts = Nanoc::Deploying::Deployers::Rsync::DEFAULT_OPTIONS
-        args = ['rsync', '--dry-run', opts, 'output/', 'asdf'].flatten
-        expect(deployer).to receive(:run_shell_cmd).with(args)
+      it 'writes output' do
+        expect { deployer.run }.to output(%r{^etc/meow$}).to_stdout
+      end
 
+      it 'does not copy files' do
         deployer.run
+
+        expect(File.file?("#{dst_dir}/woof")).to be(false)
+        expect(File.file?("#{dst_dir}/etc/meow")).to be(false)
       end
     end
 
     context 'actual run' do
-      it 'runs' do
-        opts = Nanoc::Deploying::Deployers::Rsync::DEFAULT_OPTIONS
-        args = ['rsync', opts, 'output/', 'asdf'].flatten
-        expect(deployer).to receive(:run_shell_cmd).with(args)
+      it 'copies files' do
+        deployer.run
+
+        expect(File.file?("#{dst_dir}/woof")).to be(true)
+        expect(File.read("#{dst_dir}/woof")).to eq('I am a dog!')
+        expect(File.file?("#{dst_dir}/etc/meow")).to be(true)
+        expect(File.read("#{dst_dir}/etc/meow")).to eq('I am a cat!')
+      end
+
+      it 'writes output' do
+        expect { deployer.run }.to output(%r{^etc/meow$}).to_stdout
+      end
+
+      it 'does not copy .git' do
+        FileUtils.mkdir_p('output/.git')
+        File.write('output/.git/HEAD', 'The head!')
 
         deployer.run
+
+        expect(File.file?("#{dst_dir}/woof")).to be(true)
+        expect(File.read("#{dst_dir}/woof")).to eq('I am a dog!')
+        expect(File.file?("#{dst_dir}/etc/meow")).to be(true)
+        expect(File.read("#{dst_dir}/etc/meow")).to eq('I am a cat!')
+        expect(File.file?("#{dst_dir}/.git/HEAD")).to be(false)
       end
     end
   end
